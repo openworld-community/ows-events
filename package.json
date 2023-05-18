@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run start:watch",
+    "i": "cd frontend && npm i && cd ../backend && npm i"
+  }
+}

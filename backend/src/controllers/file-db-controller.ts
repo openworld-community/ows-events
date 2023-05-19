@@ -103,6 +103,7 @@ export class FileDbController {
     const json = await fs.readFile("assets/db/events.json", {
       encoding: "utf-8",
     });
+    if(json.trim() === '') return;
     const events = JSON.parse(json);
     eventsStateController.events = events;
   }

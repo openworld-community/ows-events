@@ -1,14 +1,32 @@
-import {EventOnPoster} from "@common/types/event";
 import fs from "node:fs/promises";
-import {EventsStateController} from "./events-state-controller";
+import { eventsStateController } from "./events-state-controller";
+import { getTimestamp, TIMESTAMP_TYPES } from "../utils/get-timestamp";
 
-type Task = {
-  data: any,
-  action: string,
-  time: number,
+export enum TASK_TYPES {
+  READ_FILE = "read",
+  WRITE_FILE = "write",
+  SAVE_BACKUP = "backup",
 }
 
+type Task = {
+  action: TASK_TYPES;
+  time: number;
+};
+
 export class FileDbController {
+  constructor() {
+    this.addTask(TASK_TYPES.READ_FILE);
+    this.addTask(
+      TASK_TYPES.SAVE_BACKUP,
+      Date.now() + getTimestamp({ value: 12, type: TIMESTAMP_TYPES.HOURS })
+    );
+
+    setInterval(
+      this.checkTasks.bind(this),
+      getTimestamp({ value: 1, type: TIMESTAMP_TYPES.SECONDS })
+    );
+  }
+
   _tasks: Task[] = [];
 
   get tasks() {
@@ -19,22 +37,75 @@ export class FileDbController {
     this._tasks = value;
   }
 
-  addTask(task: Task) {
-    this.tasks.push(task)
+  private addTask(type: TASK_TYPES, delay?: number) {
+    this.tasks.push({ action: type, time: delay || 0 });
+    this.tasks.sort((a, b) => a.time - b.time);
   }
 
   getTasks() {
     return this.tasks;
   }
 
-  async saveToDrive() {
-    const events = eventsStateController.getEvents();
-    await fs.writeFile('assets/db/events.json', JSON.stringify(events), {encoding: 'utf-8',flag:'w'});
+  private checkTasks() {
+    const tasks = this.getTasks();
+
+    if (tasks[0].time > Date.now()) return;
+    const currentTask = tasks.shift();
+
+    if (!currentTask) return;
+    this.runTask(currentTask);
   }
 
-  async loadFromDrive() {
-    const json = await fs.readFile('assets/db/events.json', {encoding: 'utf-8'});
+  private async runTask(task: Task) {
+    switch (task.action) {
+      case TASK_TYPES.READ_FILE:
+        await this.loadFromDrive();
+        break;
+
+      case TASK_TYPES.WRITE_FILE:
+        await this.saveToDrive();
+        break;
+
+      case TASK_TYPES.SAVE_BACKUP:
+        await this.makeBackup();
+        this.addTask(
+          TASK_TYPES.SAVE_BACKUP,
+          Date.now() + getTimestamp({ value: 12, type: TIMESTAMP_TYPES.HOURS })
+        );
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  updateDB() {
+    this.addTask(TASK_TYPES.WRITE_FILE);
+  }
+
+  private async saveToDrive() {
+    const events = eventsStateController.getEvents();
+    await fs.writeFile("assets/db/events.json", JSON.stringify(events), {
+      encoding: "utf-8",
+      flag: "w",
+    });
+  }
+
+  private async makeBackup() {
+    const dateString = new Date().toISOString();
+    await fs.copyFile(
+      "assets/db/events.json",
+      `assets/db/backup-${dateString}.json`
+    );
+  }
+
+  private async loadFromDrive() {
+    const json = await fs.readFile("assets/db/events.json", {
+      encoding: "utf-8",
+    });
     const events = JSON.parse(json);
-    this.events = events;
+    eventsStateController.events = events;
   }
 }
+
+export const fileDBController = new FileDbController();

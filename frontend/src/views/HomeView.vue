@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { EventOnPoster } from '@common/types/event'
+import { type EventOnPoster } from '@common/types/event'
 import { ref } from 'vue'
 
-const posterEvents = ref<EventOnPoster>([])
+const posterEvents = ref<EventOnPoster[]>([])
+const search = ref<string>('')
 
 const loadPosterEvents = () => {
   fetch('http://localhost:7080/api/events')
@@ -13,12 +14,23 @@ const loadPosterEvents = () => {
 }
 
 loadPosterEvents()
+
+const getFilteredEvents = (events: EventOnPoster[], search: string) => {
+  if (!search) {
+    return events
+  }
+
+  return events.filter((event) => {
+    return event.title.toLowerCase().includes(search.toLowerCase())
+  })
+}
 </script>
 
 <template>
   <main>
+    <input type="text" placeholder="Search" v-model="search" />
     <ul>
-      <li v-for="event in posterEvents" v-bind:key="event.id">
+      <li v-for="event in getFilteredEvents(posterEvents, search)" v-bind:key="event.id">
         <h2>{{ event.title }}</h2>
         <p>{{ event.description }}</p>
         <p>

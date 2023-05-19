@@ -1,3 +1,4 @@
+import fs from 'node:fs/promises';
 import { EventOnPoster } from "@common/types/event";
 import { v4 as uuid } from "uuid";
 
@@ -31,10 +32,23 @@ export class EventsStateController {
       .forEach((event) => {
         this.addEvent(event);
       });
+    this.saveToDrive()
+  }
+
+  async saveToDrive() {
+    const events = this.getEvents();
+    await fs.writeFile('assets/db/events.json', JSON.stringify(events), {encoding: 'utf-8',flag:'w'});
+  }
+
+  async loadFromDrive() {
+    const json = await fs.readFile('assets/db/events.json', {encoding: 'utf-8'});
+    const events = JSON.parse(json);
+    this.events = events;
   }
 
   addEvent(event: EventOnPoster) {
     this.events.push({ ...event, id: uuid() });
+    this.saveToDrive();
   }
 
   getEvents() {
@@ -52,10 +66,13 @@ export class EventsStateController {
     }
 
     Object.assign(event, data);
+
+    this.saveToDrive();
   }
 
   deleteEvent(id: string) {
     const index = this.events.findIndex((event) => event.id === id);
     this.events.splice(index, 1);
+    this.saveToDrive();
   }
 }

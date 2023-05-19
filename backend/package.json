@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:watch": "nodemon server.ts",
+    "start:watch": "nodemon --ignore assets/* server.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,5 +24,8 @@
     "@types/node": "^20.2.0",
     "@types/uuid": "^9.0.1",
     "typescript": "^5.0.4"
+  },
+  "nodemonConfig": {
+    "ignore": ["assets/**"]
   }
 }

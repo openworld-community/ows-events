@@ -1,7 +1,7 @@
 import fastify from "fastify";
 import { EventOnPoster } from "@common/types/event";
 import cors from "@fastify/cors";
-import { EventsStateController } from "./src/controllers/events-state-controller";
+import {EventsStateController, FindEventParams} from "./src/controllers/events-state-controller";
 import { StandardResponse } from "@common/types/standard-response";
 import path from "path";
 import Static from "@fastify/static";
@@ -21,8 +21,26 @@ server.register(Static, {
 server.get<{
   Reply: EventOnPoster[];
 }>("/api/events", async (request, reply): Promise<EventOnPoster[]> => {
+  const {searchLine, country, city} = request.query as FindEventParams;
+
+  if(searchLine || country || city)
+    return eventsStateController.findEvents({searchLine, country, city})
+
   return eventsStateController.getEvents();
 });
+
+server.post<{
+  Reply: EventOnPoster[];
+}>("/api/events/find", async (request, reply): Promise<EventOnPoster[]> => {
+  const {searchLine, country, city} = request.body as FindEventParams;
+
+  if(searchLine || country || city)
+    return eventsStateController.findEvents({searchLine, country, city})
+
+  return eventsStateController.getEvents();
+
+});
+
 
 server.post<{
   Body: { event: EventOnPoster };

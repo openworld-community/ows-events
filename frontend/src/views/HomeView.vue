@@ -40,7 +40,8 @@ const getFilteredEvents = (events: EventOnPoster[], search: string) => {
           {{ new Date(event.date).toLocaleString() }} ->>
           {{ new Date(event.date + event.durationInSeconds).toLocaleString() }}
         </p>
-        <p>{{ event.location }}</p>
+        <p>{{ event.location.country }}</p>
+        <p>{{ event.location.city }}</p>
         <p>{{ event.price }} €</p>
         <img v-bind:src="event.image" v-if="event.image" />
       </li>

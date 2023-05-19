@@ -6,6 +6,11 @@ import { StandardResponse } from "@common/types/standard-response";
 import path from "path";
 import Static from "@fastify/static";
 
+
+interface eventParams {
+  id: string;
+}
+
 const server = fastify({
   logger: true,
 });
@@ -22,6 +27,14 @@ server.get<{
   Reply: EventOnPoster[];
 }>("/api/events", async (request, reply): Promise<EventOnPoster[]> => {
   return eventsStateController.getEvents();
+});
+
+server.get<{
+  Reply: EventOnPoster;
+  Params: eventParams,
+}>("/api/events/:id", async (request, reply): Promise<EventOnPoster|undefined> => {
+  const eventId = request.params.id;
+  return eventsStateController.getEvent(eventId);
 });
 
 server.post<{

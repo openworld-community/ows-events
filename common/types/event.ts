@@ -4,7 +4,10 @@ export type EventOnPoster = {
   description: string;
   date: number;
   durationInSeconds: number;
-  location: string;
+  location: {
+    country: string,
+    city: string
+  };
   image: string | null;
   price: number;
 };

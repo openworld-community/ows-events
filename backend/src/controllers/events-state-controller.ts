@@ -21,7 +21,10 @@ export class EventsStateController {
           date: Date.now() + 1000 * 60 * 60 * 24,
           durationInSeconds: 60 * 60,
           image: "https://picsum.photos/200/300",
-          location: "location " + i.toString(),
+          location: {
+            country: "country " + i.toString(),
+            city: "city " + i.toString(),
+          },
           price: 1,
         };
       })

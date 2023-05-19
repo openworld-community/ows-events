@@ -24,7 +24,7 @@ const inputValues = ref({
 // TODO: определить обязательные поля
 
 const checkFormFilling = computed(() => {
-  if (inputValues.value.title && inputValues.value.description && inputValues.value.startTime) {
+  if (inputValues.value.title && inputValues.value.startDate && inputValues.value.startTime && inputValues.value.country && inputValues.value.city) {
     return true
   } else {
     return false
@@ -32,7 +32,7 @@ const checkFormFilling = computed(() => {
 })
 
 const submitEvent = () => {
-  postEvent({title: inputValues.value.title,
+  postEvent({event: {title: inputValues.value.title,
     description: inputValues.value.description,
     date: dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
     durationInSeconds: dateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() - dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
@@ -41,7 +41,7 @@ const submitEvent = () => {
       city: inputValues.value.city,
     },
     image: inputValues.value.image,
-    price: inputValues.value.price,}
+    price: inputValues.value.price,}}
   )
   emit('closeModal')
 }

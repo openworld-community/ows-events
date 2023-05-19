@@ -5,6 +5,7 @@ import {computed, ref} from "vue";
 import CustomButton from "@/components/common/button/CustomButton.vue";
 import {dateTime} from "@/helpers/dates";
 import {postEvent} from "@/services/events.services";
+import ImageLoader from "@/components/common/button/ImageLoader.vue";
 
 const emit = defineEmits(['closeModal'])
 
@@ -40,6 +41,7 @@ const submitEvent = () => {
       country: inputValues.value.country,
       city: inputValues.value.city,
     },
+      //TODO: добавить img
     image: '',
     price: inputValues.value.price,}}
   )
@@ -96,12 +98,6 @@ const eventInputs = [
     required: true,
   },
   {
-    type: 'file',
-    label: 'Image:',
-    name: 'image',
-    required: false,
-  },
-  {
     type: 'text',
     label: 'Price, currency:',
     name: 'price',
@@ -125,6 +121,9 @@ const eventInputs = [
         :input-name="input.name"
         v-model="inputValues[input.name]"
         :is-required="input.required"
+      />
+      <ImageLoader
+        v-model="inputValues.image"
       />
     </form>
       <div class="modal-card-foot">

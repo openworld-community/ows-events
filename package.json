@@ -7,6 +7,7 @@
     "prod:run": "cd backend && npm run start:watch"
   },
   "dependencies": {
-    "eslint": "^8.40.0"
+    "eslint": "^8.40.0",
+    "vue-final-modal": "^4.4.2"
   }
 }

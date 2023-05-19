@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { API_URL } from '@/constants/url'
 import { type EventOnPoster } from '@common/types/event'
 import { ref } from 'vue'
 import {getEvents} from "@/services/events.services";

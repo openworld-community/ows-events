@@ -2,6 +2,11 @@ import { EventOnPoster } from "@common/types/event";
 import { v4 as uuid } from "uuid";
 import { fileDBController } from "./file-db-controller";
 
+export type FindEventParams = {
+  searchLine?: string,
+  city?: string,
+  country?: string
+}
 class EventsStateController {
   _events: EventOnPoster[] = [];
 
@@ -35,7 +40,7 @@ class EventsStateController {
   }
 
   addEvent(event: EventOnPoster) {
-    this.events.push({ ...event, id: uuid() });
+    this.events.push({...event, id: uuid()});
     fileDBController.updateDB();
   }
 
@@ -56,6 +61,28 @@ class EventsStateController {
     Object.assign(event, data);
 
     fileDBController.updateDB();
+  }
+
+  findEvents(query: FindEventParams) {
+    let events = [...this.getEvents()];
+    if (query.searchLine) {
+      const lowerCaseSearchLine = query.searchLine.toLowerCase()
+      events = events.filter(event => {
+        return [event.title, event.description, event.location.country, event.location.city]
+          .join(' ')
+          .toLowerCase()
+          .includes(lowerCaseSearchLine)
+      })
+    }
+    if (query.country) {
+      const lowerCaseCountry = query.country.toLowerCase()
+      events = events.filter(event => event.location.country.toLowerCase() === lowerCaseCountry);
+    }
+    if (query.city) {
+      const lowerCaseCity = query.city.toLowerCase()
+      events = events.filter(event => event.location.city.toLowerCase() === lowerCaseCity);
+    }
+    return events
   }
 
   deleteEvent(id: string) {

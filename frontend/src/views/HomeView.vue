@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { API_URL } from '@/constants/url'
 import { type EventOnPoster } from '@common/types/event'
 import { ref } from 'vue'
 import {getEvents} from "@/services/events.services";
+import CustomButton from "@/components/common/button/CustomButton.vue";
+import NewEventModal from "@/components/modal/NewEventModal.vue";
+import CustomInput from "@/components/common/input/CustomInput.vue";
+import {VueFinalModal} from "vue-final-modal";
 
 const posterEvents = ref<EventOnPoster[]>([])
 const search = ref<string>('')
@@ -25,11 +28,28 @@ const getFilteredEvents = (events: EventOnPoster[], search: string) => {
       .includes(search.toLowerCase())
   })
 }
+
+const isModalOpen = ref<Boolean>(false)
+
 </script>
 
 <template>
   <main>
-    <input type="text" placeholder="Search" class="input is-info search-input" v-model="search" />
+    <div class="header">
+      <h1 class="header">Upcoming events</h1>
+      <CustomButton
+        button-class="button is-success"
+        button-text="New event"
+        @click="isModalOpen = true"
+      />
+    </div>
+    <CustomInput
+      input-class="input is-info search-input"
+      input-type="text"
+      input-name="search"
+      input-placeholder="Search"
+      v-model="search"
+    />
     <ul>
       <li
         v-for="event in getFilteredEvents(posterEvents, search)"
@@ -60,14 +80,31 @@ const getFilteredEvents = (events: EventOnPoster[], search: string) => {
       </li>
     </ul>
   </main>
+  <vue-final-modal
+    :hideOverlay="false"
+    overlayTransition="vfm-fade"
+    contentTransition="vfm-fade"
+    :clickToClose="false"
+    :escToClose="false"
+    :lockScroll="false"
+    v-model="isModalOpen"
+    >
+    <NewEventModal @close-modal="isModalOpen = false"/>
+  </vue-final-modal>
 </template>
 
 <style lang="less" scoped>
-main {
+  main {
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  .header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
 
   .search-input {
     max-width: 300px;

@@ -21,7 +21,10 @@ const getFilteredEvents = (events: EventOnPoster[], search: string) => {
   }
 
   return events.filter((event) => {
-    return event.title.toLowerCase().includes(search.toLowerCase())
+    return [event.title, event.description, event.location]
+      .join(' ')
+      .toLowerCase()
+      .includes(search.toLowerCase())
   })
 }
 </script>

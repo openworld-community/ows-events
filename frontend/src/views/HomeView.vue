@@ -35,16 +35,16 @@ const isModalOpen = ref<Boolean>(false)
 
 <template>
   <main>
-<!--   передать класс input is-info search-input-->
     <div class="header">
-      <h1>Upcoming events</h1>
+      <h1 class="header">Upcoming events</h1>
       <CustomButton
-        button-class="button button--green"
+        button-class="button is-success"
         button-text="New event"
         @click="isModalOpen = true"
       />
     </div>
     <CustomInput
+      input-class="input is-info search-input"
       input-type="text"
       input-name="search"
       input-placeholder="Search"
@@ -102,7 +102,7 @@ const isModalOpen = ref<Boolean>(false)
 
   .header {
     display: flex;
-    width: 76.3%;
+    width: 100%;
     justify-content: space-between;
   }
 

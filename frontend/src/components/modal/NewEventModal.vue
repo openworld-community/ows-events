@@ -1,9 +1,10 @@
 <script setup lang="ts">
 
 import CustomInput from "@/components/common/input/CustomInput.vue";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import CustomButton from "@/components/common/button/CustomButton.vue";
 import {dateTime} from "@/helpers/dates";
+import {postEvent} from "@/services/events.services";
 
 const emit = defineEmits(['closeModal'])
 
@@ -20,12 +21,18 @@ const inputValues = ref({
   price: 0,
 })
 
+// TODO: определить обязательные поля
+
+const checkFormFilling = computed(() => {
+  if (inputValues.value.title && inputValues.value.description && inputValues.value.startTime) {
+    return true
+  } else {
+    return false
+  }
+})
+
 const submitEvent = () => {
-
-  // тут запрос на сервер полетит
-
-  const eventData = {
-    title: inputValues.value.title,
+  postEvent({title: inputValues.value.title,
     description: inputValues.value.description,
     date: dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
     durationInSeconds: dateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() - dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
@@ -34,9 +41,8 @@ const submitEvent = () => {
       city: inputValues.value.city,
     },
     image: inputValues.value.image,
-    price: inputValues.value.price,
-  }
-
+    price: inputValues.value.price,}
+  )
   emit('closeModal')
 }
 
@@ -106,9 +112,11 @@ const eventInputs = [
 </script>
 
 <template>
-  <div class="event-modal">
-    <h2 class="event-modal__title">Describe your event</h2>
-    <form class="event-modal__form">
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <h2 class="event-modal__title title is-3">Describe your event</h2>
+      </header>
+    <form class="modal-card-body">
       <CustomInput
         v-for="input in eventInputs"
         :key="input.name"
@@ -118,44 +126,23 @@ const eventInputs = [
         v-model="inputValues[input.name]"
         :is-required="input.required"
       />
-      <div class="event-modal__buttons">
+    </form>
+      <div class="modal-card-foot">
         <CustomButton
-          button-class="button button--grey"
+          button-class="button"
           button-text="Cancel"
           @click="emit('closeModal')"
         />
         <CustomButton
-          button-class="button button--green"
+          button-class="button is-success"
           button-text="Submit"
+          :is-active="checkFormFilling"
           @click="submitEvent"
         />
       </div>
-    </form>
-  </div>
+    </div>
 </template>
 
 <style scoped lang="less">
-.event-modal {
-  width: 600px;
-  height: 80vh;
-  overflow: scroll;
-  padding: 20px 30px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: white;
 
-  &__title {
-    margin: 10px 0;
-  }
-
-  &__form {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &__buttons {
-    display: flex;
-    justify-content: flex-end;
-  }
-}
 </style>

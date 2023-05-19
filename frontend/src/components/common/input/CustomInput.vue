@@ -13,7 +13,7 @@ const props = defineProps({
   },
   inputClass: {
     type: String,
-    default: 'input'
+    default: 'input is-normal'
   },
   inputLabel: {
     type: String,
@@ -31,16 +31,15 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  inputMin: {
-    type: String,
-    default: ''
-  }
 })
 
 </script>
 
 <template>
-  <label :for="props.inputName">
+  <label
+    :for="props.inputName"
+    class="label"
+  >
     {{ props.inputLabel }}
   </label>
     <input
@@ -48,8 +47,7 @@ const props = defineProps({
       :name="props.inputName"
       :type="props.inputType"
       :placeholder="props.inputPlaceholder"
-      :required="isRequired"
-      :min="props.inputMin"
+      :required="props.isRequired"
       @input="emit('update:modelValue', $event.target.value)"
     />
 </template>

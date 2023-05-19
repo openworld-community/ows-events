@@ -22,7 +22,7 @@
 <template>
   <button
     :type="props.buttonType"
-    :class="props.buttonClass"
+    :class="[props.buttonClass, props.isActive ? '' : 'is-light']"
     :disabled="!props.isActive"
   >
     {{ props.buttonText }}
@@ -30,32 +30,5 @@
 </template>
 
 <style lang="less" scoped>
-.button {
-  width: 130px;
-  height: 45px;
-  padding: 10px 10px;
-  margin-left: 15px;
-  font-size: 18px;
-  border: none;
-  border-radius: 5px;
 
-  &--green {
-    background-color: #41B619;
-    color: white;
-
-    &:hover {
-      background-color: #48D618;
-    }
-  }
-
-  &--grey {
-    background-color: #ccc;
-    color: black;
-
-    &:hover {
-      background-color: #cccd;
-    }
-  }
-
-}
 </style>

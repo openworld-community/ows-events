@@ -1,7 +1,8 @@
 import axios from 'axios';
+import {API_URL} from "@/constants/url";
 
 const api = axios.create({
-    baseURL: 'http://localhost:7080/api',
+    baseURL: API_URL,
 });
 
 // TODO: код для авторизации с токеном:

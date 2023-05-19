@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { type EventOnPoster } from '@common/types/event'
 import { ref } from 'vue'
+import CustomButton from "@/components/common/button/CustomButton.vue";
+import NewEventModal from "@/components/modal/NewEventModal.vue";
+import CustomInput from "@/components/common/input/CustomInput.vue";
+import {VueFinalModal} from "vue-final-modal";
 
 const posterEvents = ref<EventOnPoster[]>([])
 const search = ref<string>('')
@@ -27,11 +31,27 @@ const getFilteredEvents = (events: EventOnPoster[], search: string) => {
       .includes(search.toLowerCase())
   })
 }
+
+const isModalOpen = ref<Boolean>(false)
+
 </script>
 
 <template>
   <main>
-    <input type="text" placeholder="Search" v-model="search" />
+    <div class="main main__header">
+      <h1>Upcoming events</h1>
+      <CustomButton
+        button-class="button button--green"
+        button-text="New event"
+        @click="isModalOpen = true"
+      />
+    </div>
+    <CustomInput
+      input-type="text"
+      input-name="search"
+      input-placeholder="Search"
+      v-model="search"
+    />
     <ul>
       <li v-for="event in getFilteredEvents(posterEvents, search)" v-bind:key="event.id">
         <h2>{{ event.title }}</h2>
@@ -47,9 +67,27 @@ const getFilteredEvents = (events: EventOnPoster[], search: string) => {
       </li>
     </ul>
   </main>
+  <vue-final-modal
+    :hideOverlay="false"
+    overlayTransition="vfm-fade"
+    contentTransition="vfm-fade"
+    :clickToClose="false"
+    :escToClose="false"
+    :lockScroll="false"
+    v-model="isModalOpen"
+    >
+    <NewEventModal @close-modal="isModalOpen = false"/>
+  </vue-final-modal>
 </template>
 
 <style lang="less" scoped>
+  .main {
+    &__header {
+      display: flex;
+      width: 76.3%;
+      justify-content: space-between;
+    }
+  }
 ul {
   list-style: none;
   padding: 0;

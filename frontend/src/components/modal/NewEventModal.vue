@@ -40,7 +40,7 @@ const submitEvent = () => {
       country: inputValues.value.country,
       city: inputValues.value.city,
     },
-    image: inputValues.value.image,
+    image: '',
     price: inputValues.value.price,}}
   )
   emit('closeModal')

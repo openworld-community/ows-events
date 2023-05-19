@@ -16,10 +16,12 @@
     "@fastify/cors": "^8.2.1",
     "fastify": "^4.17.0",
     "nodemon": "^2.0.22",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.2.0",
+    "@types/uuid": "^9.0.1",
     "typescript": "^5.0.4"
   }
 }

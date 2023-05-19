@@ -1,5 +1,13 @@
 {
   "files": [],
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.vue",
+    "src/**/*",
+    "src/**/*.ts",
+    "./../common/**/*"
+  ],
   "references": [
     {
       "path": "./tsconfig.node.json"
@@ -12,8 +20,12 @@
     }
   ],
   "compilerOptions": {
+    "rootDir": "../.",
+    "composite": true,
+    "baseUrl": ".",
     "paths": {
-      "@common": ["../common/"]
+      "@/*": ["./src/*"],
+      "@common/*": ["./../common/*"]
     }
   }
 }

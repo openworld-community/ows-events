@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { API_URL } from '@/constants/url'
 import { type EventOnPoster } from '@common/types/event'
 import { ref } from 'vue'
 
@@ -6,7 +7,7 @@ const posterEvents = ref<EventOnPoster[]>([])
 const search = ref<string>('')
 
 const loadPosterEvents = () => {
-  fetch('http://localhost:7080/api/events')
+  fetch(API_URL + '/events')
     .then((res) => res.json())
     .then((data) => {
       posterEvents.value = data

@@ -2,16 +2,13 @@
 import { API_URL } from '@/constants/url'
 import { type EventOnPoster } from '@common/types/event'
 import { ref } from 'vue'
+import {getEvents} from "@/services/events.services";
 
 const posterEvents = ref<EventOnPoster[]>([])
 const search = ref<string>('')
 
-const loadPosterEvents = () => {
-  fetch(API_URL + '/events')
-    .then((res) => res.json())
-    .then((data) => {
-      posterEvents.value = data
-    })
+const loadPosterEvents = async () => {
+  posterEvents.value = await getEvents()
 }
 
 loadPosterEvents()

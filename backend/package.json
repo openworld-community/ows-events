@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/cors": "^8.2.1",
+    "@fastify/static": "^6.10.1",
     "fastify": "^4.17.0",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",

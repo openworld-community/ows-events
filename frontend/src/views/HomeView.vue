@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { type EventOnPoster } from '@common/types/event'
 import { ref } from 'vue'
+import {getEvents} from "@/services/events.services";
 import CustomButton from "@/components/common/button/CustomButton.vue";
 import NewEventModal from "@/components/modal/NewEventModal.vue";
 import CustomInput from "@/components/common/input/CustomInput.vue";
@@ -9,12 +10,8 @@ import {VueFinalModal} from "vue-final-modal";
 const posterEvents = ref<EventOnPoster[]>([])
 const search = ref<string>('')
 
-const loadPosterEvents = () => {
-  fetch('http://localhost:7080/api/events')
-    .then((res) => res.json())
-    .then((data) => {
-      posterEvents.value = data
-    })
+const loadPosterEvents = async () => {
+  posterEvents.value = await getEvents()
 }
 
 loadPosterEvents()
@@ -38,7 +35,8 @@ const isModalOpen = ref<Boolean>(false)
 
 <template>
   <main>
-    <div class="main main__header">
+<!--   передать класс input is-info search-input-->
+    <div class="header">
       <h1>Upcoming events</h1>
       <CustomButton
         button-class="button button--green"
@@ -53,17 +51,32 @@ const isModalOpen = ref<Boolean>(false)
       v-model="search"
     />
     <ul>
-      <li v-for="event in getFilteredEvents(posterEvents, search)" v-bind:key="event.id">
-        <h2>{{ event.title }}</h2>
-        <p>{{ event.description }}</p>
-        <p>
-          {{ new Date(event.date).toLocaleString() }} ->>
-          {{ new Date(event.date + event.durationInSeconds).toLocaleString() }}
-        </p>
-        <p>{{ event.location.country }}</p>
-        <p>{{ event.location.city }}</p>
-        <p>{{ event.price }} €</p>
-        <img v-bind:src="event.image" v-if="event.image" />
+      <li
+        v-for="event in getFilteredEvents(posterEvents, search)"
+        v-bind:key="event.id"
+        class="card"
+      >
+        <div class="card-image">
+          <img v-bind:src="event.image" v-if="event.image" />
+        </div>
+
+        <h2 class="card-header-title">{{ event.title }}</h2>
+        <div class="card-content">
+          <p>{{ event.description }}</p>
+          <div>
+            <p>From: {{ new Date(event.date).toLocaleString() }}</p>
+            <p>
+              To:
+              {{ new Date(event.date + event.durationInSeconds).toLocaleString() }}
+            </p>
+          </div>
+          <p>
+            <span>{{ event.location.country }}</span
+            >,
+            <span>{{ event.location.city }}</span>
+          </p>
+          <p>{{ event.price }} €</p>
+        </div>
       </li>
     </ul>
   </main>
@@ -81,26 +94,38 @@ const isModalOpen = ref<Boolean>(false)
 </template>
 
 <style lang="less" scoped>
-  .main {
-    &__header {
-      display: flex;
-      width: 76.3%;
-      justify-content: space-between;
-    }
-  }
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  main {
+  padding: 20px;
   display: flex;
-  gap: 50px;
-  flex-wrap: wrap;
-  li {
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    h2 {
-      margin: 0;
+  flex-direction: column;
+  gap: 20px;
+
+  .header {
+    display: flex;
+    width: 76.3%;
+    justify-content: space-between;
+  }
+
+  .search-input {
+    max-width: 300px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    flex-wrap: wrap;
+
+    li {
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      h2 {
+        margin: 0;
+      }
     }
   }
 }

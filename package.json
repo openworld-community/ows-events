@@ -2,7 +2,9 @@
   "scripts": {
     "dev:frontend": "cd frontend && npm run dev",
     "dev:backend": "cd backend && npm run start:watch",
-    "i": "cd frontend && npm i && cd ../backend && npm i"
+    "i": "cd frontend && npm i && cd ../backend && npm i",
+    "prod:build": "cd frontend && npm run build",
+    "prod:run": "cd backend && npm run start:watch"
   },
   "dependencies": {
     "eslint": "^8.40.0"

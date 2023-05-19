@@ -3,6 +3,8 @@ import { EventOnPoster } from "@common/types/event";
 import cors from "@fastify/cors";
 import { EventsStateController } from "./src/controllers/events-state-controller";
 import { StandardResponse } from "@common/types/standard-response";
+import path from "path";
+import Static from "@fastify/static";
 
 const server = fastify({
   logger: true,
@@ -11,6 +13,10 @@ const server = fastify({
 const eventsStateController = new EventsStateController();
 
 server.register(cors, {});
+
+server.register(Static, {
+  root: path.join(__dirname, "../frontend/dist/"),
+});
 
 server.get<{
   Reply: EventOnPoster[];
@@ -83,7 +89,7 @@ server.post<{
   }
 );
 
-server.listen({ port: 7080 }, (err, address) => {
+server.listen({ port: 7080, host: "0.0.0.0" }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);

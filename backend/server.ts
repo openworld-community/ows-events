@@ -8,6 +8,7 @@ import {
 import { StandardResponse } from "@common/types/standard-response";
 import path from "path";
 import Static from "@fastify/static";
+import { countriesAndCitiesController } from "./src/controllers/countries-and-cities.controller";
 
 interface eventParams {
   id: string;
@@ -21,6 +22,22 @@ server.register(cors, {});
 
 server.register(Static, {
   root: path.join(__dirname, "../frontend/dist/"),
+});
+
+server.get<{ Reply: string[] }>(
+  "/api/location/countries",
+  async (request, reply) => {
+    return countriesAndCitiesController.countries;
+  }
+);
+
+server.get<{
+  Params: { country: string };
+  Body: { country: string };
+}>("/api/location/cities/:country", async (request, reply) => {
+  const { country } = request.params;
+
+  return countriesAndCitiesController.getCitiesByCountry(country);
 });
 
 server.get("/event/*", function (req, reply) {

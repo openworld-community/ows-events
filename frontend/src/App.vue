@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import 'vue-final-modal/style.css';
+import 'vue-final-modal/style.css'
 </script>
 
 <template>

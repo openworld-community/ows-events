@@ -4,10 +4,10 @@
     "dev:backend": "cd backend && npm run start:watch",
     "i": "cd frontend && npm i && cd ../backend && npm i",
     "prod:build": "cd frontend && npm run build",
-    "prod:run": "cd backend && npm run start:watch"
+    "prod:run": "cd backend && npm run start:watch",
+    "demo:build": "cd frontend && npm run build:only"
   },
   "dependencies": {
-    "eslint": "^8.40.0",
-    "vue-final-modal": "^4.4.2"
+    "eslint": "^8.40.0"
   }
 }

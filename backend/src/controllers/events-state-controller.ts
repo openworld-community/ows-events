@@ -1,12 +1,13 @@
 import { EventOnPoster } from "@common/types/event";
 import { v4 as uuid } from "uuid";
+import { fileDBController } from "./file-db-controller";
 
 export type FindEventParams = {
   searchLine?: string,
   city?: string,
   country?: string
 }
-export class EventsStateController {
+class EventsStateController {
   _events: EventOnPoster[] = [];
 
   get events() {
@@ -40,6 +41,7 @@ export class EventsStateController {
 
   addEvent(event: EventOnPoster) {
     this.events.push({...event, id: uuid()});
+    fileDBController.updateDB();
   }
 
   getEvents() {
@@ -57,6 +59,8 @@ export class EventsStateController {
     }
 
     Object.assign(event, data);
+
+    fileDBController.updateDB();
   }
 
   findEvents(query: FindEventParams) {
@@ -84,5 +88,9 @@ export class EventsStateController {
   deleteEvent(id: string) {
     const index = this.events.findIndex((event) => event.id === id);
     this.events.splice(index, 1);
+    fileDBController.updateDB();
   }
 }
+
+
+export const eventsStateController = new EventsStateController();

@@ -19,13 +19,20 @@ const inputValues = ref({
   country: '',
   city: '',
   image: '',
-  price: 0,
+  // TODO: Здесь будет точно число, но пусть тайпскрипт пока думает, что это строка
+  price: 0 as unknown as string // Тут хрень с типами, но мне сейчас неохота разбираться с этим вопросом :)
 })
 
 // TODO: определить обязательные поля
 
 const checkFormFilling = computed(() => {
-  if (inputValues.value.title && inputValues.value.startDate && inputValues.value.startTime && inputValues.value.country && inputValues.value.city) {
+  if (
+    inputValues.value.title &&
+    inputValues.value.startDate &&
+    inputValues.value.startTime &&
+    inputValues.value.country &&
+    inputValues.value.city
+  ) {
     return true
   } else {
     return false
@@ -33,22 +40,31 @@ const checkFormFilling = computed(() => {
 })
 
 const submitEvent = () => {
-  postEvent({event: {title: inputValues.value.title,
-    description: inputValues.value.description,
-    date: dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
-    durationInSeconds: dateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() - dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
-    location: {
-      country: inputValues.value.country,
-      city: inputValues.value.city,
-    },
-      //TODO: добавить img
-    image: '',
-    price: inputValues.value.price,}}
-  )
+  postEvent({
+    event: {
+      title: inputValues.value.title,
+      description: inputValues.value.description,
+      date: dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
+      durationInSeconds:
+        dateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() -
+        dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
+      location: {
+        country: inputValues.value.country,
+        city: inputValues.value.city
+      },
+      image: '',
+      price: inputValues.value.price
+    }
+  })
   emit('closeModal')
 }
 
-const eventInputs = [
+const eventInputs: {
+  type: 'text' | 'date' | 'time' | 'file' | 'number'
+  label: string
+  name: keyof typeof inputValues.value
+  required: boolean
+}[] = [
   {
     type: 'text',
     label: 'Title:',
@@ -65,53 +81,53 @@ const eventInputs = [
     type: 'date',
     label: 'Starts:',
     name: 'startDate',
-    required: true,
+    required: true
   },
   {
     type: 'time',
     label: 'Starts:',
     name: 'startTime',
-    required: true,
+    required: true
   },
   {
     type: 'date',
     label: 'Ends:',
     name: 'endDate',
-    required: true,
+    required: true
   },
   {
     type: 'time',
     label: 'Ends:',
     name: 'endTime',
-    required: true,
+    required: true
   },
   {
     type: 'text',
     label: 'Country:',
     name: 'country',
-    required: true,
+    required: true
   },
   {
     type: 'text',
     label: 'City:',
     name: 'city',
-    required: true,
+    required: true
   },
   {
     type: 'text',
     label: 'Price, currency:',
     name: 'price',
-    required: true,
-  },
+    required: true
+  }
 ]
 
 </script>
 
 <template>
-    <div class="modal-card">
-      <header class="modal-card-head">
-        <h2 class="event-modal__title title is-3">Describe your event</h2>
-      </header>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <h2 class="event-modal__title title is-3">Describe your event</h2>
+    </header>
     <form class="modal-card-body">
       <CustomInput
         v-for="input in eventInputs"
@@ -122,26 +138,20 @@ const eventInputs = [
         v-model="inputValues[input.name]"
         :is-required="input.required"
       />
-      <ImageLoader
-        v-model="inputValues.image"
-      />
+      <ImageLoader v-model="inputValues.image"/>
     </form>
-      <div class="modal-card-foot">
-        <CustomButton
-          button-class="button"
-          button-text="Cancel"
-          @click="emit('closeModal')"
-        />
-        <CustomButton
-          button-class="button is-success"
-          button-text="Submit"
-          :is-active="checkFormFilling"
-          @click="submitEvent"
-        />
-      </div>
+    <div class="modal-card-foot">
+      <CustomButton button-class="button" button-text="Cancel" @click="emit('closeModal')" />
+      <CustomButton
+        button-class="button is-success"
+        button-text="Submit"
+        :is-active="checkFormFilling"
+        @click="submitEvent"
+      />
     </div>
+  </div>
 </template>
 
-<style scoped lang="less">
+<style scoped lang="less"></style>
 
 </style>

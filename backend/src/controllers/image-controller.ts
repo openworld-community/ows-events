@@ -2,7 +2,6 @@ import fs from "node:fs/promises";
 
 import fsSync from "fs";
 
-import { eventsStateController } from "./events-state-controller";
 import { v4 as uuid } from "uuid";
 
 
@@ -18,8 +17,9 @@ export class FileDbController {
   }
 
   async saveImg({data, filetype}: AddImageParams) {
-    const realPath = `assets/img/${uuid()}.${filetype}`
-    const staticPath = `image/${uuid()}.${filetype}`
+    const imgId = uuid();
+    const realPath = `assets/img/${imgId}.${filetype}`
+    const staticPath = `image/${imgId}.${filetype}`
     await fs.writeFile(realPath, Buffer.from(data), {
       flag: "w",
     });

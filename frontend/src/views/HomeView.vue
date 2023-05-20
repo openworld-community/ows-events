@@ -11,7 +11,7 @@ import { useRoute, useRouter } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
 const posterEvents = ref<EventOnPoster[]>([])
-const search = ref<string>(route.query.search.toString() || '')
+const search = ref<string>(route.query.search?.toString() || '')
 const isModalOpen = ref<Boolean>(false)
 
 const loadPosterEvents = async () => {

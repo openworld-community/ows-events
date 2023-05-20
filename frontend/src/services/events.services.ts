@@ -23,6 +23,13 @@ export const getEvent = async (id: string): Promise<EventOnPoster> => {
   return data
 }
 
+export const postEventImage = async (img: File): Promise<string> => {
+  const formData = new FormData()
+  formData.append('image', img)
+  const { data } = await api.post('/image/add', formData)
+  return data.data.path
+}
+
 export const postEvent = async (data: any) => {
   await api.post('/events/add', data)
 }

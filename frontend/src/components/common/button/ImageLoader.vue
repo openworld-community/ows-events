@@ -1,30 +1,37 @@
 <script setup lang="ts">
-  import {defineProps, defineEmits, ref} from 'vue';
+  // не ясно, почему ругается на defineEmits при билде
+  //@ts-ignore
+  import {defineEmits, ref} from 'vue';
   import CustomButton from "@/components/common/button/CustomButton.vue";
 
-  const input = ref(null);
+  const input = ref<HTMLInputElement | null>(null);
 
-  const imageSrc = ref(null)
+  const imageSrc = ref<string | null>(null)
   const showImage = ref(false);
 
   const emit = defineEmits(['update:modelValue']);
   const fileIsLoading = ref(false);
 
-  const loadImage = (event) => {
+  const loadImage = (event: Event) => {
+    // говорит, что возможно null
+    //@ts-ignore
+    const file = (event.target as HTMLInputElement).files[0]
     const reader = new FileReader()
 
     // TODO: определить тип при загрузке изображения
-    reader.addEventListener('load', (e: any) => {
-      imageSrc.value = e.target.result;
+    reader.addEventListener('load', (e: ProgressEvent<FileReader>) => {
+      // говорит, что возможно null
+      //@ts-ignore
+      imageSrc.value = e.target.result as string;
     }, {once: true})
-    reader.readAsDataURL(event.target.files[0])
-    emit('update:modelValue', event.target.files[0])
+    reader.readAsDataURL(file)
+    emit('update:modelValue', file)
     showImage.value = true
   }
 
   const removeImage = () => {
     imageSrc.value = null
-    emit('update:modelValue', '')
+    emit('update:modelValue', null)
   }
 
 </script>
@@ -36,7 +43,6 @@
       class="loader__preview"
     >
       <img
-
         :src="imageSrc"
         class="avatar"
         @load="showImage = true"
@@ -55,7 +61,7 @@
         button-class="button is-success is-small"
         button-text="Add image"
         :is-active="!imageSrc"
-        @click="fileIsLoading ? null : input.click()"
+        @click="fileIsLoading ? null : input?.click()"
       />
       <CustomButton
         v-if="imageSrc"

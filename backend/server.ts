@@ -9,6 +9,7 @@ import { StandardResponse } from "@common/types/standard-response";
 import path from "path";
 import Static from "@fastify/static";
 import { countriesAndCitiesController } from "./src/controllers/countries-and-cities.controller";
+import {AddImageParams, imageController} from "./src/controllers/image-controller";
 
 interface eventParams {
   id: string;
@@ -22,6 +23,12 @@ server.register(cors, {});
 
 server.register(Static, {
   root: path.join(__dirname, "../frontend/dist/"),
+});
+
+server.register(Static, {
+  root: path.join(__dirname, "./assets/img"),
+  prefix: '/image/',
+  decorateReply: false
 });
 
 server.get<{ Reply: string[] }>(
@@ -58,6 +65,38 @@ server.get<{
   async (request, reply): Promise<EventOnPoster | undefined> => {
     const eventId = request.params.id;
     return eventsStateController.getEvent(eventId);
+  }
+);
+
+server.post<{
+  Body: { image: AddImageParams };
+  Reply: StandardResponse;
+}>(
+  "/api/image/add",
+  async (request, reply): Promise<{ status: "success" | "error" }> => {
+    const body = request.body;
+    if (!body) {
+      return {
+        status: "error",
+      };
+    }
+    const image = body.image;
+    if (!image) {
+      return {
+        status: "error",
+      };
+    }
+
+    try {
+      await imageController.saveImg(image);
+      return {
+        status: "success",
+      };
+    } catch (e) {
+      return {
+        status: "error",
+      }
+    }
   }
 );
 

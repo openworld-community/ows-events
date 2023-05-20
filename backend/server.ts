@@ -8,6 +8,7 @@ import {
 import { StandardResponse } from "@common/types/standard-response";
 import path from "path";
 import Static from "@fastify/static";
+import Multipart, {MultipartFile} from "@fastify/multipart"
 import { countriesAndCitiesController } from "./src/controllers/countries-and-cities.controller";
 import {AddImageParams, imageController} from "./src/controllers/image-controller";
 
@@ -20,6 +21,8 @@ const server = fastify({
 });
 
 server.register(cors, {});
+
+server.register(Multipart)
 
 server.register(Static, {
   root: path.join(__dirname, "../frontend/dist/"),
@@ -69,26 +72,54 @@ server.get<{
 );
 
 server.post<{
-  Body: { image: AddImageParams };
-  Reply: StandardResponse;
+  Reply: StandardResponse<{path: string}>;
 }>(
   "/api/image/add",
-  async (request, reply): Promise<{ status: "success" | "error" }> => {
-    const body = request.body;
-    if (!body) {
+  async (request, reply): Promise<StandardResponse<{path: string}>> => {
+    const data = await request.file();
+    console.log(data);
+    if (!data) {
       return {
         status: "error",
       };
     }
-    const image = body.image;
-    if (!image) {
+    const buffer = await data.toBuffer()
+    if (!buffer) {
       return {
         status: "error",
       };
     }
 
     try {
-      await imageController.saveImg(image);
+      const path = await imageController.saveImg({data: buffer, filetype: data.filename.split('.').reverse()[0]});
+      return {
+        status: "success",
+        data: {
+          path
+        }
+      };
+    } catch (e) {
+      return {
+        status: "error",
+      }
+    }
+  }
+);
+
+server.post<{
+  Body: {path: string}
+  Reply: StandardResponse;
+}>(
+  "/api/image/delete",
+  async (request, reply): Promise<{ status: "success" | "error" }> => {
+    const path = await request.body.path;
+    if (!path) {
+      return {
+        status: "error",
+      };
+    }
+    try {
+      await imageController.deleteImg(path);
       return {
         status: "success",
       };
@@ -99,6 +130,7 @@ server.post<{
     }
   }
 );
+
 
 server.post<{
   Body: FindEventParams;

@@ -25,7 +25,6 @@ const deleteCard = async () => {
 }
 
 const share = async () => {
-  console.log('share', window.location.href)
   await navigator.clipboard.writeText(window.location.href)
   alert('Link copied to clipboard!')
 }

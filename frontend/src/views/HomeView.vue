@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { type EventOnPoster } from '@common/types/event'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { getEvents } from '@/services/events.services'
 import CustomButton from '@/components/common/button/CustomButton.vue'
 import NewEventModal from '@/components/modal/NewEventModal.vue'
 import CustomInput from '@/components/common/input/CustomInput.vue'
 import { VueFinalModal } from 'vue-final-modal'
+import { useRoute, useRouter } from 'vue-router'
 
+const router = useRouter()
+const route = useRoute()
 const posterEvents = ref<EventOnPoster[]>([])
-const search = ref<string>('')
+const search = ref<string>(route.query.search.toString() || '')
 const isModalOpen = ref<Boolean>(false)
 
 const loadPosterEvents = async () => {
@@ -16,6 +19,14 @@ const loadPosterEvents = async () => {
 }
 
 loadPosterEvents()
+
+watch(
+  search,
+  async (_search) => {
+    await router.push({ query: { ...route.query, search: _search || 'None' } })
+  },
+  { deep: true }
+)
 
 const getFilteredEvents = (events: EventOnPoster[], search: string) => {
   if (!search) {
@@ -30,9 +41,8 @@ const getFilteredEvents = (events: EventOnPoster[], search: string) => {
   })
 }
 
-const share = () => {
-  console.log('share', window.location.href)
-  navigator.clipboard.writeText(window.location.href)
+const share = async () => {
+  await navigator.clipboard.writeText(window.location.href)
   alert('Link copied to clipboard!')
 }
 </script>

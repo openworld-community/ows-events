@@ -9,6 +9,7 @@ import NewEventModal from '@/components/modal/NewEventModal.vue'
 import CustomInput from '@/components/common/input/CustomInput.vue'
 import { VueFinalModal } from 'vue-final-modal'
 import { useRoute, useRouter } from 'vue-router'
+import DatalistInput from '@/components/common/input/DatalistInput.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -139,27 +140,20 @@ const share = async () => {
       input-placeholder="Search"
       v-model="search"
     />
-    <input
-      placeholder="Country"
-      class="input is-info search-input"
+    <DatalistInput
+      :options-list="countries"
+      input-name="countries"
+      input-class="input is-info search-input"
+      input-placeholder="Country"
       v-model="country"
-      type="search"
-      list="countries"
     />
-    <datalist id="countries">
-      <option v-for="country in countries" :value="country" v-bind:key="country" />
-    </datalist>
-
-    <input
-      placeholder="City"
-      class="input is-info search-input"
+    <DatalistInput
+      :options-list="cities"
+      input-name="cities"
+      input-class="input is-info search-input"
+      input-placeholder="City"
       v-model="city"
-      type="search"
-      list="cities"
     />
-    <datalist id="cities">
-      <option v-for="country in cities" :value="country" v-bind:key="country" />
-    </datalist>
 
     <ul>
       <li v-for="event in filteredValues" v-bind:key="event.id" class="card">
@@ -233,6 +227,7 @@ main {
       padding: 20px;
       border: 1px solid #ccc;
       border-radius: 5px;
+
       h2 {
         margin: 0;
       }

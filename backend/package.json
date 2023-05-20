@@ -24,5 +24,8 @@
     "@types/node": "^20.2.0",
     "@types/uuid": "^9.0.1",
     "typescript": "^5.0.4"
+  },
+  "nodemonConfig": {
+    "ignore": ["assets/**"]
   }
 }

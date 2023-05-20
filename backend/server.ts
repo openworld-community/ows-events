@@ -2,7 +2,7 @@ import fastify from "fastify";
 import { EventOnPoster } from "@common/types/event";
 import cors from "@fastify/cors";
 import {
-  EventsStateController,
+  eventsStateController,
   FindEventParams,
 } from "./src/controllers/events-state-controller";
 import { StandardResponse } from "@common/types/standard-response";
@@ -12,8 +12,6 @@ import Static from "@fastify/static";
 const server = fastify({
   logger: true,
 });
-
-const eventsStateController = new EventsStateController();
 
 server.register(cors, {});
 

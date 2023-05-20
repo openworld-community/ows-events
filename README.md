@@ -10,6 +10,8 @@ npm run i
 
 ## How to run
 
+Copy `.env.example` to `.env` in frontend package
+
 ```bash
 npm run dev:frontend
 ```

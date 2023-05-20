@@ -3,9 +3,14 @@ import CustomInput from '@/components/common/input/CustomInput.vue'
 import { computed, ref } from 'vue'
 import CustomButton from '@/components/common/button/CustomButton.vue'
 import { dateTime } from '@/helpers/dates'
-import { postEvent } from '@/services/events.services'
+import { postEvent, postEventImage } from '@/services/events.services'
+import ImageLoader from '@/components/common/button/ImageLoader.vue'
 
 const emit = defineEmits(['closeModal'])
+
+const isLoading = ref(false)
+
+const image = ref<null | File>(null)
 
 const inputValues = ref({
   title: '',
@@ -21,8 +26,6 @@ const inputValues = ref({
   price: 0 as unknown as string // Тут хрень с типами, но мне сейчас неохота разбираться с этим вопросом :)
 })
 
-// TODO: определить обязательные поля
-
 const checkFormFilling = computed(() => {
   if (
     inputValues.value.title &&
@@ -37,31 +40,43 @@ const checkFormFilling = computed(() => {
   }
 })
 
-const submitEvent = () => {
-  postEvent({
-    event: {
-      title: inputValues.value.title,
-      description: inputValues.value.description,
-      date: dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
-      durationInSeconds:
-        dateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() -
-        dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
-      location: {
-        country: inputValues.value.country,
-        city: inputValues.value.city
-      },
-      image: '',
-      price: inputValues.value.price
-    }
-  })
-  emit('closeModal')
+const submitEvent = async () => {
+  //TODO: проверьте тип плиз
+  isLoading.value = true
+  try {
+    const imageURL = await postEventImage(image.value as File)
+
+    await postEvent({
+      event: {
+        title: inputValues.value.title,
+        description: inputValues.value.description,
+        date: dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
+        durationInSeconds:
+          dateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() -
+          dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
+        location: {
+          country: inputValues.value.country,
+          city: inputValues.value.city
+        },
+        image: imageURL,
+        price: inputValues.value.price
+      }
+    })
+
+    emit('closeModal')
+  } catch (e) {
+    alert(e) // временно выводим ошибки через alert
+  } finally {
+    isLoading.value = false
+  }
 }
 
 const eventInputs: {
-  type: 'text' | 'date' | 'time' | 'file' | 'number'
+  type: 'text' | 'date' | 'time' | 'number'
   label: string
   name: keyof typeof inputValues.value
   required: boolean
+  min?: number
 }[] = [
   {
     type: 'text',
@@ -112,16 +127,11 @@ const eventInputs: {
     required: true
   },
   {
-    type: 'file',
-    label: 'Image:',
-    name: 'image',
-    required: false
-  },
-  {
     type: 'number',
     label: 'Price, currency:',
     name: 'price',
-    required: true
+    required: true,
+    min: 0
   }
 ]
 </script>
@@ -141,15 +151,25 @@ const eventInputs: {
         v-model="inputValues[input.name]"
         :is-required="input.required"
       />
+      <ImageLoader v-model="image" />
     </form>
     <div class="modal-card-foot">
-      <CustomButton button-class="button" button-text="Cancel" @click="emit('closeModal')" />
+      <CustomButton
+        button-class="button"
+        button-text="Cancel"
+        :is-active="!isLoading"
+        @click="emit('closeModal')"
+      />
       <CustomButton
         button-class="button is-success"
         button-text="Submit"
-        :is-active="checkFormFilling"
-        @click="submitEvent"
+        :is-active="checkFormFilling && !isLoading"
+        @click="isLoading ? null : submitEvent()"
       />
+
+      <span class="icon" v-if="isLoading">
+        <i class="fas fa-spinner fa-pulse"></i>
+      </span>
     </div>
   </div>
 </template>

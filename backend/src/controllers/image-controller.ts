@@ -18,13 +18,14 @@ export class FileDbController {
   }
 
   async saveImg({data, filetype, eventID}: AddImageParams) {
-    const path = `assets/img/${eventID}.${filetype}`
-    await fs.writeFile(path, Buffer.from(data), {
+    const realPath = `assets/img/${eventID}.${filetype}`
+    const staticPath = `image/${eventID}.${filetype}`
+    await fs.writeFile(realPath, Buffer.from(data), {
       flag: "w",
     });
     const event = eventsStateController.getEvent(eventID);
     if(!event) return;
-    event.image = path;
+    event.image = staticPath;
     eventsStateController.updateEvent(event);
   }
 

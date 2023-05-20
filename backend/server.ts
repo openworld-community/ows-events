@@ -25,6 +25,12 @@ server.register(Static, {
   root: path.join(__dirname, "../frontend/dist/"),
 });
 
+server.register(Static, {
+  root: path.join(__dirname, "./assets/img"),
+  prefix: '/image/',
+  decorateReply: false
+});
+
 server.get<{ Reply: string[] }>(
   "/api/location/countries",
   async (request, reply) => {
@@ -85,39 +91,6 @@ server.post<{
       await imageController.saveImg(image);
       return {
         status: "success",
-      };
-    } catch (e) {
-      return {
-        status: "error",
-      }
-    }
-  }
-);
-
-server.post<{
-  Body: { image: string };
-  Reply: StandardResponse<Buffer>;
-}>(
-  "/api/image/get",
-  async (request, reply): Promise<StandardResponse<Buffer>> => {
-    const body = request.body;
-    if (!body) {
-      return {
-        status: "error",
-      };
-    }
-    const image = body.image;
-    if (!image) {
-      return {
-        status: "error",
-      };
-    }
-
-    try {
-      const file = await imageController.getImg(image);
-      return {
-        status: 'success',
-        data: file,
       };
     } catch (e) {
       return {

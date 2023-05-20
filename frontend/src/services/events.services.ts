@@ -6,6 +6,18 @@ export const getEvents = async (): Promise<EventOnPoster[]> => {
   return data
 }
 
+export const getEventsByParams = async ({
+  searchLine,
+  country,
+  city
+}: {
+  searchLine?: string
+  country?: string
+  city?: string
+}): Promise<EventOnPoster[]> => {
+  const { data } = await api.post('/events/find', { searchLine, country, city })
+  return data
+}
 export const getEvent = async (id: string): Promise<EventOnPoster> => {
   const { data } = await api.get(`/events/${id}`)
   return data

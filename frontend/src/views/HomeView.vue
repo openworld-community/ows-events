@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { type EventOnPoster } from '@common/types/event'
 import { ref, watch } from 'vue'
-import { getEvents } from '@/services/events.services'
+import { getEvents, getEventsByParams } from '@/services/events.services'
 import CustomButton from '@/components/common/button/CustomButton.vue'
 import NewEventModal from '@/components/modal/NewEventModal.vue'
 import CustomInput from '@/components/common/input/CustomInput.vue'
@@ -14,8 +14,14 @@ const posterEvents = ref<EventOnPoster[]>([])
 const search = ref<string>(route.query.search?.toString() || '')
 const isModalOpen = ref<boolean>(false)
 
+let lasyLoadTimeout: NodeJS.Timeout | null = null
+
 const loadPosterEvents = async () => {
-  posterEvents.value = await getEvents()
+  if (search.value) {
+    posterEvents.value = await getEventsByParams({ searchLine: search.value })
+  } else {
+    posterEvents.value = await getEvents()
+  }
 }
 
 loadPosterEvents()
@@ -23,6 +29,11 @@ loadPosterEvents()
 watch(
   search,
   async (_search) => {
+    lasyLoadTimeout && clearTimeout(lasyLoadTimeout)
+
+    lasyLoadTimeout = setTimeout(async () => {
+      loadPosterEvents()
+    }, 500)
     await router.push({ query: { ...route.query, search: _search || 'None' } })
   },
   { deep: true }

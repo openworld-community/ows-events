@@ -30,7 +30,7 @@ server.get("/event/*", function (req, reply) {
 server.get<{
   Reply: EventOnPoster[];
 }>("/api/events", async (request, reply): Promise<EventOnPoster[]> => {
-  return eventsStateController.getEvents();
+  return eventsStateController.getEvents().slice(0, 100);
 });
 
 server.get<{
@@ -51,9 +51,11 @@ server.post<{
   const { searchLine, country, city } = request.body;
 
   if (searchLine || country || city)
-    return eventsStateController.findEvents({ searchLine, country, city });
+    return eventsStateController
+      .findEvents({ searchLine, country, city })
+      .slice(0, 100);
 
-  return eventsStateController.getEvents();
+  return eventsStateController.getEvents().slice(0, 100);
 });
 
 server.post<{

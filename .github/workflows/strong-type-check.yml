@@ -1,0 +1,13 @@
+name: strong-type-check
+run-name: strong-type-check
+on: [push]
+jobs:
+  check-build-ability:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - run: npm run i
+      - run: npm run prod:build

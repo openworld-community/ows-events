@@ -102,8 +102,18 @@ const getFilteredEvents = (
 }
 
 const share = async () => {
+  if (
+    !(
+      window.location.href.includes('https') ||
+      window.location.href.includes('localhost') ||
+      window.location.href.includes('127.0.0.1')
+    )
+  ) {
+    alert('Ой, что-то пошло не так, попробуйте скопировать ссылку вручную')
+    return
+  }
   await navigator.clipboard.writeText(window.location.href)
-  alert('Link copied to clipboard!')
+  alert('Ссылка скопирована!')
 }
 </script>
 

@@ -1,17 +1,34 @@
 <script setup lang="ts">
-import { API_URL } from '@/constants/url'
 import { type EventOnPoster } from '@common/types/event'
-import { ref } from 'vue'
-import {getEvents} from "@/services/events.services";
+import { ref, watch } from 'vue'
+import { getEvents, getEventsByParams } from '@/services/events.services'
 
 const posterEvents = ref<EventOnPoster[]>([])
 const search = ref<string>('')
 
+let lasyLoadTimeout
+
 const loadPosterEvents = async () => {
-  posterEvents.value = await getEvents()
+  if (search.value) {
+    posterEvents.value = await getEventsByParams({ searchLine: search.value })
+  } else {
+    posterEvents.value = await getEvents()
+  }
 }
 
 loadPosterEvents()
+
+watch(
+  search,
+  async (_search) => {
+    lasyLoadTimeout && clearTimeout(lasyLoadTimeout)
+
+    lasyLoadTimeout = setTimeout(async () => {
+      loadPosterEvents()
+    }, 500)
+  },
+  { deep: true }
+)
 
 const getFilteredEvents = (events: EventOnPoster[], search: string) => {
   if (!search) {

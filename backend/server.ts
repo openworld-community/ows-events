@@ -2,18 +2,20 @@ import fastify from "fastify";
 import { EventOnPoster } from "@common/types/event";
 import cors from "@fastify/cors";
 import {
-  EventsStateController,
+  eventsStateController,
   FindEventParams,
 } from "./src/controllers/events-state-controller";
 import { StandardResponse } from "@common/types/standard-response";
 import path from "path";
 import Static from "@fastify/static";
 
+interface eventParams {
+  id: string;
+}
+
 const server = fastify({
   logger: true,
 });
-
-const eventsStateController = new EventsStateController();
 
 server.register(cors, {});
 
@@ -21,11 +23,26 @@ server.register(Static, {
   root: path.join(__dirname, "../frontend/dist/"),
 });
 
+server.get("/event/*", function (req, reply) {
+  reply.sendFile("index.html");
+});
+
 server.get<{
   Reply: EventOnPoster[];
 }>("/api/events", async (request, reply): Promise<EventOnPoster[]> => {
   return eventsStateController.getEvents().slice(0, 100);
 });
+
+server.get<{
+  Reply: EventOnPoster;
+  Params: eventParams;
+}>(
+  "/api/events/:id",
+  async (request, reply): Promise<EventOnPoster | undefined> => {
+    const eventId = request.params.id;
+    return eventsStateController.getEvent(eventId);
+  }
+);
 
 server.post<{
   Body: FindEventParams;

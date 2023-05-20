@@ -1,5 +1,5 @@
 name: strong-type-check
-run-name: ${{ github.actor }} is learning GitHub Actions
+run-name: strong-type-check
 on: [push]
 jobs:
   check-bats-version:

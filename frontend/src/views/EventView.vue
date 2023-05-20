@@ -15,7 +15,7 @@ loadPosterEvent()
 
 <template>
   <main>
-    <h2 class="title">{{ posterEvent.title }}</h2>
+    <h2 class="title">{{ posterEvent?.title }}</h2>
     <pre>{{ posterEvent }}</pre>
   </main>
 </template>

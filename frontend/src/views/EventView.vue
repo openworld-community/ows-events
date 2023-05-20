@@ -23,16 +23,22 @@ const deleteCard = async () => {
   await deleteEvent(id)
   router.push({ path: '/' })
 }
+
+const share = async () => {
+  console.log('share', window.location.href)
+  await navigator.clipboard.writeText(window.location.href)
+  alert('Link copied to clipboard!')
+}
 </script>
 
 <template>
   <main v-if="posterEvent">
     <h2 class="title">
       {{ posterEvent.title }}
-
-      <button class="delete is-small" @click="deleteCard()"></button>
+      <button class="button" @click="share()">Share it!</button>
     </h2>
     <pre>{{ posterEvent }}</pre>
+    <button class="delete is-small" @click="deleteCard()"></button>
   </main>
 </template>
 

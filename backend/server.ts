@@ -8,9 +8,9 @@ import {
 import { StandardResponse } from "@common/types/standard-response";
 import path from "path";
 import Static from "@fastify/static";
-import Multipart, {MultipartFile} from "@fastify/multipart"
+import Multipart, { MultipartFile } from "@fastify/multipart";
 import { countriesAndCitiesController } from "./src/controllers/countries-and-cities.controller";
-import {AddImageParams, imageController} from "./src/controllers/image-controller";
+import { imageController } from "./src/controllers/image-controller";
 
 interface eventParams {
   id: string;
@@ -77,7 +77,6 @@ server.post<{
   "/api/image/add",
   async (request, reply): Promise<StandardResponse<{path: string}>> => {
     const data = await request.file();
-    console.log(data);
     if (!data) {
       return {
         status: "error",

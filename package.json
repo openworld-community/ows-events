@@ -6,8 +6,5 @@
     "prod:build": "cd frontend && npm run build",
     "prod:run": "cd backend && npm run start:watch",
     "demo:build": "cd frontend && npm run build:only"
-  },
-  "dependencies": {
-    "eslint": "^8.40.0"
   }
 }

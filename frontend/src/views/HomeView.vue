@@ -56,27 +56,29 @@ const isModalOpen = ref<Boolean>(false)
         v-bind:key="event.id"
         class="card"
       >
-        <div class="card-image">
-          <img v-bind:src="event.image" v-if="event.image" />
-        </div>
-
-        <h2 class="card-header-title">{{ event.title }}</h2>
-        <div class="card-content">
-          <p>{{ event.description }}</p>
-          <div>
-            <p>From: {{ new Date(event.date).toLocaleString() }}</p>
-            <p>
-              To:
-              {{ new Date(event.date + event.durationInSeconds).toLocaleString() }}
-            </p>
+        <a :href="`/event/${event.id}`">
+          <div class="card-image">
+            <img v-bind:src="event.image" v-if="event.image" />
           </div>
-          <p>
-            <span>{{ event.location.country }}</span
-            >,
-            <span>{{ event.location.city }}</span>
-          </p>
-          <p>{{ event.price }} €</p>
-        </div>
+
+          <h2 class="card-header-title">{{ event.title }}</h2>
+          <div class="card-content">
+            <p>{{ event.description }}</p>
+            <div>
+              <p>From: {{ new Date(event.date).toLocaleString() }}</p>
+              <p>
+                To:
+                {{ new Date(event.date + event.durationInSeconds).toLocaleString() }}
+              </p>
+            </div>
+            <p>
+              <span>{{ event.location.country }}</span
+              >,
+              <span>{{ event.location.city }}</span>
+            </p>
+            <p>{{ event.price }} €</p>
+          </div>
+        </a>
       </li>
     </ul>
   </main>

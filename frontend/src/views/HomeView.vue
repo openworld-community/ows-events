@@ -1,20 +1,32 @@
 <script setup lang="ts">
 import { type EventOnPoster } from '@common/types/event'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { getEvents } from '@/services/events.services'
 import CustomButton from '@/components/common/button/CustomButton.vue'
 import NewEventModal from '@/components/modal/NewEventModal.vue'
 import CustomInput from '@/components/common/input/CustomInput.vue'
 import { VueFinalModal } from 'vue-final-modal'
+import { useRoute, useRouter } from 'vue-router'
 
+const router = useRouter()
+const route = useRoute()
 const posterEvents = ref<EventOnPoster[]>([])
-const search = ref<string>('')
+const search = ref<string>(route.query.search?.toString() || '')
+const isModalOpen = ref<boolean>(false)
 
 const loadPosterEvents = async () => {
   posterEvents.value = await getEvents()
 }
 
 loadPosterEvents()
+
+watch(
+  search,
+  async (_search) => {
+    await router.push({ query: { ...route.query, search: _search || 'None' } })
+  },
+  { deep: true }
+)
 
 const getFilteredEvents = (events: EventOnPoster[], search: string) => {
   if (!search) {
@@ -29,7 +41,10 @@ const getFilteredEvents = (events: EventOnPoster[], search: string) => {
   })
 }
 
-const isModalOpen = ref<boolean>(false)
+const share = async () => {
+  await navigator.clipboard.writeText(window.location.href)
+  alert('Link copied to clipboard!')
+}
 </script>
 
 <template>
@@ -38,7 +53,12 @@ const isModalOpen = ref<boolean>(false)
       <h1 class="header">Upcoming events</h1>
       <CustomButton
         button-class="button is-success"
-        button-text="New event"
+        button-text="Поделиться ссылкой на поиск"
+        @click="share()"
+      />
+      <CustomButton
+        button-class="button is-success"
+        button-text="Добавить событие"
         @click="isModalOpen = true"
       />
     </div>
@@ -105,6 +125,7 @@ main {
     display: flex;
     width: 100%;
     justify-content: space-between;
+    gap: 20px;
   }
 
   .search-input {

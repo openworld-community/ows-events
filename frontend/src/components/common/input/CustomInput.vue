@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 const emit = defineEmits(['update:modelValue'])
 
 const props = defineProps({
@@ -30,39 +29,35 @@ const props = defineProps({
   isRequired: {
     type: Boolean,
     default: false
-  },
+  }
 })
-
 </script>
 
 <template>
-  <label
-    :for="props.inputName"
-    class="label"
-  >
+  <label :for="props.inputName" class="label">
     {{ props.inputLabel }}
   </label>
-    <input
-      :class="props.inputClass"
-      :name="props.inputName"
-      :type="props.inputType"
-      :placeholder="props.inputPlaceholder"
-      :required="props.isRequired"
-      @input="emit('update:modelValue', $event.target.value)"
-    />
+  <input
+    :class="props.inputClass"
+    :name="props.inputName"
+    :type="props.inputType"
+    :placeholder="props.inputPlaceholder"
+    :required="props.isRequired"
+    @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+  />
 </template>
 
 <style lang="less" scoped>
-  label {
-    padding-top: 5px;
-    margin-bottom: 5px;
-  }
-  .input {
-    width: 100%;
-    min-width: 100%;
-    height: 25px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
+label {
+  padding-top: 5px;
+  margin-bottom: 5px;
+}
+.input {
+  width: 100%;
+  min-width: 100%;
+  height: 25px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
 </style>

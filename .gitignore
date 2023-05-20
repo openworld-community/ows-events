@@ -129,8 +129,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-#Webstorm config
+# Webstorm config
 .idea/
 
-#DB directory
+# DB directory
 ./backend/assets/db/

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type EventOnPoster } from '@common/types/event'
+import { type EventOnPoster } from '@common/types'
 import { computed, ref, watch } from 'vue'
 import { getEvents, getEventsByParams } from '@/services/events.services'
 import { useLocationStore } from '@/stores/location.store'

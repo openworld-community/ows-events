@@ -6,10 +6,10 @@ import { useRoute, useRouter } from 'vue-router'
 
 const posterEvent = ref<EventOnPoster | null>(null)
 const route = useRoute()
-const id = route.params.id
+const id = route.params.id as string
 const router = useRouter()
 
-if (!(typeof id === 'string' || id instanceof String)) {
+if (!(typeof id === 'string')) {
   router.push({ path: '/' })
 }
 
@@ -28,7 +28,7 @@ const deleteCard = async () => {
 <template>
   <main v-if="posterEvent">
     <h2 class="title">
-      {{ posterEvent.title }}
+      {{ posterEvent?.title }}
 
       <button class="delete is-small" @click="deleteCard()"></button>
     </h2>

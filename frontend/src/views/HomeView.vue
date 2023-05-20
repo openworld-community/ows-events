@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { type EventOnPoster } from '@common/types/event'
 import { ref } from 'vue'
-import {getEvents} from "@/services/events.services";
-import CustomButton from "@/components/common/button/CustomButton.vue";
-import NewEventModal from "@/components/modal/NewEventModal.vue";
-import CustomInput from "@/components/common/input/CustomInput.vue";
-import {VueFinalModal} from "vue-final-modal";
+import { getEvents } from '@/services/events.services'
+import CustomButton from '@/components/common/button/CustomButton.vue'
+import NewEventModal from '@/components/modal/NewEventModal.vue'
+import CustomInput from '@/components/common/input/CustomInput.vue'
+import { VueFinalModal } from 'vue-final-modal'
 
 const posterEvents = ref<EventOnPoster[]>([])
 const search = ref<string>('')
@@ -29,8 +29,7 @@ const getFilteredEvents = (events: EventOnPoster[], search: string) => {
   })
 }
 
-const isModalOpen = ref<Boolean>(false)
-
+const isModalOpen = ref<boolean>(false)
 </script>
 
 <template>
@@ -90,13 +89,13 @@ const isModalOpen = ref<Boolean>(false)
     :escToClose="false"
     :lockScroll="false"
     v-model="isModalOpen"
-    >
-    <NewEventModal @close-modal="isModalOpen = false"/>
+  >
+    <NewEventModal @close-modal="isModalOpen = false" />
   </vue-final-modal>
 </template>
 
 <style lang="less" scoped>
-  main {
+main {
   padding: 20px;
   display: flex;
   flex-direction: column;

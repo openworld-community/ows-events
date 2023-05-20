@@ -1,22 +1,25 @@
 <script setup lang="ts">
-  const props = defineProps({
-    buttonType: {
-      type: String,
-      default: 'button'
-    },
-    buttonClass: {
-      type: String,
-      required: true
-    },
-    buttonText: {
-      type: String,
-      default: ''
-    },
-    isActive: {
-      type: Boolean,
-      default: true
-    }
-  })
+import { type PropType } from 'vue'
+type ButtonType = 'button' | 'submit' | 'reset' | undefined
+
+const props = defineProps({
+  buttonType: {
+    type: String as PropType<ButtonType>,
+    default: 'button'
+  },
+  buttonClass: {
+    type: String,
+    required: true
+  },
+  buttonText: {
+    type: String,
+    default: ''
+  },
+  isActive: {
+    type: Boolean,
+    default: true
+  }
+})
 </script>
 
 <template>
@@ -29,6 +32,4 @@
   </button>
 </template>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="less" scoped></style>

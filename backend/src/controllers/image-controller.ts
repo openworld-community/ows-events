@@ -3,12 +3,12 @@ import fs from "node:fs/promises";
 import fsSync from "fs";
 
 import { eventsStateController } from "./events-state-controller";
+import { v4 as uuid } from "uuid";
 
 
 export type AddImageParams = {
   data: ArrayBuffer,
   filetype: string,
-  eventID: string
 }
 export class FileDbController {
   constructor() {
@@ -17,20 +17,18 @@ export class FileDbController {
     }
   }
 
-  async saveImg({data, filetype, eventID}: AddImageParams) {
-    const realPath = `assets/img/${eventID}.${filetype}`
-    const staticPath = `image/${eventID}.${filetype}`
+  async saveImg({data, filetype}: AddImageParams) {
+    const realPath = `assets/img/${uuid()}.${filetype}`
+    const staticPath = `image/${uuid()}.${filetype}`
     await fs.writeFile(realPath, Buffer.from(data), {
       flag: "w",
     });
-    const event = eventsStateController.getEvent(eventID);
-    if(!event) return;
-    event.image = staticPath;
-    eventsStateController.updateEvent(event);
+    return staticPath
   }
 
-  async getImg(path: string) {
-    return await fs.readFile(path);
+  async deleteImg(path: string) {
+    const realPath = path.replace('image/', 'assets/img/')
+    return await fs.unlink(realPath);
   }
 }
 

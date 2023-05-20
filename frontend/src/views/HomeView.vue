@@ -14,7 +14,7 @@ const posterEvents = ref<EventOnPoster[]>([])
 const search = ref<string>(route.query.search?.toString() || '')
 const isModalOpen = ref<boolean>(false)
 
-let lasyLoadTimeout
+let lasyLoadTimeout: NodeJS.Timeout | null = null
 
 const loadPosterEvents = async () => {
   if (search.value) {

@@ -1,4 +1,7 @@
 import fs from "node:fs/promises";
+
+import fsSync from "fs";
+
 import { eventsStateController } from "./events-state-controller";
 import { getTimestamp, TIMESTAMP_TYPES } from "../utils/get-timestamp";
 
@@ -15,7 +18,14 @@ type Task = {
 
 export class FileDbController {
   constructor() {
-    this.addTask(TASK_TYPES.READ_FILE);
+    if (!fsSync.existsSync("assets/db")) {
+      fsSync.mkdirSync("assets/db");
+      fsSync.writeFileSync("assets/db/events.json", "[]", {});
+    } else if (!fsSync.existsSync("assets/db/events.json")) {
+      fsSync.writeFileSync("assets/db/events.json", "[]", {});
+    } else {
+      this.addTask(TASK_TYPES.READ_FILE);
+    }
     this.addTask(
       TASK_TYPES.SAVE_BACKUP,
       Date.now() + getTimestamp({ value: 12, type: TIMESTAMP_TYPES.HOURS })
@@ -103,7 +113,7 @@ export class FileDbController {
     const json = await fs.readFile("assets/db/events.json", {
       encoding: "utf-8",
     });
-    if(json.trim() === '') return;
+    if (json.trim() === "") return;
     const events = JSON.parse(json);
     eventsStateController.events = events;
   }

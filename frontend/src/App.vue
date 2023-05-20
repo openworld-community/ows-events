@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import 'vue-final-modal/style.css'
+import { RouterLink, RouterView } from 'vue-router';
+import UserLocation from '@/components/location/UserLocation.vue';
+import 'vue-final-modal/style.css';
 </script>
 
 <template>
   <header>
     <div class="wrapper">
       <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand name">Poster</div>
+        <div class="navbar-info">
+          <span class="name">Poster</span>
+          <UserLocation />
+        </div>
         <div class="navbar-menu">
           <RouterLink to="/">Home</RouterLink>
           <RouterLink to="/about">About</RouterLink>
@@ -33,6 +37,13 @@ nav {
   margin-left: 0;
   padding: 20px;
 
+  .navbar-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline-end: 15px;
+  }
+
   .name {
     font-size: 1.5rem;
     font-weight: bold;
@@ -44,6 +55,7 @@ nav {
     justify-content: flex-start;
     align-items: center;
     gap: 20px;
+    padding-inline: 15px;
   }
 }
 </style>

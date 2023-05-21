@@ -8,23 +8,29 @@ import CustomButton from '@/components/common/button/CustomButton.vue'
 import NewEventModal from '@/components/modal/NewEventModal.vue'
 import CustomInput from '@/components/common/input/CustomInput.vue'
 import { VueFinalModal } from 'vue-final-modal'
+import UserLocation from '@/components/location/UserLocation.vue'
+
 import { useRoute, useRouter } from 'vue-router'
 import DatalistInput from '@/components/common/input/DatalistInput.vue'
-import {BASE_URL} from "@/constants/url";
-
-const router = useRouter()
-const route = useRoute()
-const posterEvents = ref<EventOnPoster[]>([])
-const search = ref<string>(route.query.search?.toString() || '')
-const country = ref<string>('')
-const city = ref<string>('')
-const isModalOpen = ref<boolean>(false)
+import { BASE_URL } from '@/constants/url'
 
 let lasyLoadTimeout: NodeJS.Timeout | null = null
 
 const locationStore = useLocationStore()
 locationStore.loadCountries()
-const { countries, cities } = storeToRefs(locationStore)
+const { countries, cities, pickedCountry, pickedCity } = storeToRefs(locationStore)
+
+const router = useRouter()
+const route = useRoute()
+const posterEvents = ref<EventOnPoster[]>([])
+
+const searchFromRoute = route.query.search?.toString()
+const search = ref<string>(searchFromRoute === 'None' ? '' : searchFromRoute || '')
+const country = ref<string>(pickedCountry.value || '')
+const city = ref<string>(pickedCity.value || '')
+const isModalOpen = ref<boolean>(false)
+
+locationStore.pickCountry(pickedCountry.value)
 
 const loadPosterEvents = async () => {
   if (search.value) {
@@ -53,6 +59,8 @@ watch(
   country,
   async (_country) => {
     locationStore.pickCountry(_country)
+
+    city.value = pickedCity.value
   },
   { deep: true }
 )
@@ -121,40 +129,40 @@ const share = async () => {
 
 <template>
   <main>
-    <div class="header">
-      <h1 class="header">Upcoming events</h1>
-      <CustomButton
-        button-class="button is-success"
-        button-text="Поделиться ссылкой на поиск"
-        @click="share()"
-      />
-      <CustomButton
-        button-class="button is-success"
-        button-text="Добавить событие"
-        @click="isModalOpen = true"
-      />
+    <div class="location-conteiner">
+      <div>
+        <UserLocation class="user-location" />
+      </div>
+      <div>
+        <CustomInput
+          input-class="input is-info search-input"
+          input-type="text"
+          input-name="search"
+          input-placeholder="Search"
+          v-model="search"
+        />
+      </div>
     </div>
-    <CustomInput
-      input-class="input is-info search-input"
-      input-type="text"
-      input-name="search"
-      input-placeholder="Search"
-      v-model="search"
-    />
-    <DatalistInput
-      :options-list="countries"
-      input-name="countries"
-      input-class="input is-info search-input"
-      input-placeholder="Country"
-      v-model="country"
-    />
-    <DatalistInput
-      :options-list="cities"
-      input-name="cities"
-      input-class="input is-info search-input"
-      input-placeholder="City"
-      v-model="city"
-    />
+    <div class="location-conteiner">
+      <div>
+        <DatalistInput
+          :options-list="countries"
+          input-name="countries"
+          input-class="input is-info search-input"
+          input-placeholder="Country"
+          v-model="country"
+        />
+      </div>
+      <div>
+        <DatalistInput
+          :options-list="cities"
+          input-name="cities"
+          input-class="input is-info search-input"
+          input-placeholder="City"
+          v-model="city"
+        />
+      </div>
+    </div>
 
     <ul>
       <li v-for="event in filteredValues" v-bind:key="event.id" class="card">
@@ -199,16 +207,35 @@ const share = async () => {
 
 <style lang="less" scoped>
 main {
-  padding: 20px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  align-items: flex-end;
+  gap: 10px;
 
   .header {
     display: flex;
     width: 100%;
     justify-content: space-between;
-    gap: 20px;
+    gap: 10px;
+  }
+
+  .location-conteiner {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+
+    .user-location {
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: space-around;
+      gap: 10px;
+    }
+    div {
+      flex: 1;
+    }
   }
 
   .search-input {

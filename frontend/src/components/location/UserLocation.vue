@@ -1,14 +1,20 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { getUserLocation } from '@/services/location.services';
+import { ref, onMounted } from 'vue'
+import { userLocation, UserLocation } from '@/services/location.services'
 
-const countryCode = ref('');
+const countryCode = ref<UserLocation>(null)
 
 onMounted(async () => {
-  countryCode.value = await getUserLocation();
+  countryCode.value = userLocation
 })
 </script>
 
 <template>
-  <flag :iso="countryCode" />
+  <div>
+    <div v-if="countryCode?.city">{{ countryCode?.country }}, {{ countryCode?.city }}</div>
+    <div v-else-if="countryCode?.country">{{ countryCode.country }}</div>
+    <flag class="flag" :iso="countryCode?.code" />
+  </div>
 </template>
+
+<style lang="less" scoped></style>

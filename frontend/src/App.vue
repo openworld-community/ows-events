@@ -46,8 +46,8 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-inline-end: 15px;
-    align-items: baseline;
+    padding-inline: 10px 15px;
+    align-items: center;
 
     gap: 20px;
   }

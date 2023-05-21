@@ -246,7 +246,6 @@ main {
       display: flex;
       flex-direction: row;
       align-items: baseline;
-      justify-content: space-around;
       gap: 10px;
     }
     div {

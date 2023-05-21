@@ -227,6 +227,8 @@ main {
     padding: 25px;
     width: 50px;
     height: 50px;
+    box-shadow: rgb(38, 57, 77, .4) 0 0 20px;
+    border: unset;
   }
 
   .header {

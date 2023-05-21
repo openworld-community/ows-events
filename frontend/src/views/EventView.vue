@@ -156,7 +156,7 @@ const share = async () => {
   }
 
   .card-geolink {
-    font-family: SF Pro Display;
+    font-family: Inter;
     font-size: 12px;
     font-weight: 400;
     line-height: 14px;

@@ -9,8 +9,22 @@ import 'vue-final-modal/style.css'
       <span class="name title">Poster</span>
     </div>
     <nav class="navbar" role="navigation" aria-label="main navigation">
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
+      <RouterLink to="/" class="icon-text">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-home"></i>
+          </span>
+          <span>Home</span>
+        </span></RouterLink
+      >
+      <RouterLink to="/about" class="icon-text">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-solid fa-info"></i>
+          </span>
+          <span>About</span>
+        </span></RouterLink
+      >
     </nav>
   </header>
 

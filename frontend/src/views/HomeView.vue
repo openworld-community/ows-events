@@ -4,7 +4,6 @@ import { computed, ref, watch } from 'vue'
 import { getEvents, getEventsByParams } from '@/services/events.services'
 import { useLocationStore } from '@/stores/location.store'
 import { storeToRefs } from 'pinia'
-import CustomButton from '@/components/common/button/CustomButton.vue'
 import NewEventModal from '@/components/modal/NewEventModal.vue'
 import CustomInput from '@/components/common/input/CustomInput.vue'
 import { VueFinalModal } from 'vue-final-modal'
@@ -129,6 +128,11 @@ const share = async () => {
 
 <template>
   <main>
+    <button class="button is-rounded add-event-button" @click="isModalOpen = true">
+      <span class="icon">
+        <i class="fas is-size-1 fa-thin fa-plus fa-flip"></i>
+      </span>
+    </button>
     <div class="location-conteiner">
       <div>
         <UserLocation class="user-location" />
@@ -212,6 +216,16 @@ main {
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
+
+  .add-event-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 100;
+    padding: 25px;
+    width: 50px;
+    height: 50px;
+  }
 
   .header {
     display: flex;

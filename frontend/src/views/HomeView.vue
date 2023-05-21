@@ -127,88 +127,90 @@ const share = async () => {
 </script>
 
 <template>
-  <main class="container">
-    <button class="button is-rounded add-event-button" @click="isModalOpen = true">
-      <span class="icon">
-        <i class="fas is-size-1 fa-thin fa-plus"></i>
-      </span>
-    </button>
-    <div class="location-conteiner">
-      <div>
-        <UserLocation class="user-location" />
+  <div>
+    <main>
+      <button class="button is-rounded add-event-button" @click="isModalOpen = true">
+        <span class="icon">
+          <i class="fas is-size-1 fa-thin fa-plus"></i>
+        </span>
+      </button>
+      <div class="location-conteiner">
+        <div>
+          <UserLocation class="user-location" />
+        </div>
+        <div>
+          <CustomInput
+            input-class="input is-info search-input"
+            input-type="text"
+            input-name="search"
+            input-placeholder="Search"
+            v-model="search"
+          />
+        </div>
       </div>
-      <div>
-        <CustomInput
-          input-class="input is-info search-input"
-          input-type="text"
-          input-name="search"
-          input-placeholder="Search"
-          v-model="search"
-        />
+      <div class="location-conteiner">
+        <div>
+          <DatalistInput
+            :options-list="countries"
+            input-name="countries"
+            input-class="input is-info search-input"
+            input-placeholder="Country"
+            v-model="country"
+          />
+        </div>
+        <div>
+          <DatalistInput
+            :options-list="cities"
+            input-name="cities"
+            input-class="input is-info search-input"
+            input-placeholder="City"
+            v-model="city"
+          />
+        </div>
       </div>
-    </div>
-    <div class="location-conteiner">
-      <div>
-        <DatalistInput
-          :options-list="countries"
-          input-name="countries"
-          input-class="input is-info search-input"
-          input-placeholder="Country"
-          v-model="country"
-        />
-      </div>
-      <div>
-        <DatalistInput
-          :options-list="cities"
-          input-name="cities"
-          input-class="input is-info search-input"
-          input-placeholder="City"
-          v-model="city"
-        />
-      </div>
-    </div>
-
-    <ul>
-      <li v-for="event in filteredValues" v-bind:key="event.id" class="card">
-        <a :href="`/event/${event.id}`">
-          <div class="card-image">
-            <img class="image" v-bind:src="`${BASE_URL}${event.image}`" v-if="event.image" />
-          </div>
-
-          <h2 class="card-header-title">{{ event.title }}</h2>
-          <div class="card-content">
-            <p>{{ event.description }}</p>
-            <div>
-              <p>From: {{ new Date(event.date).toLocaleString() }}</p>
-              <p>
-                To:
-                {{ new Date(event.date + event.durationInSeconds).toLocaleString() }}
-              </p>
+  
+      <ul>
+        <li v-for="event in filteredValues" v-bind:key="event.id" class="card">
+          <a :href="`/event/${event.id}`">
+            <div class="card-image">
+              <img class="image" v-bind:src="`${BASE_URL}${event.image}`" v-if="event.image" />
             </div>
-            <p>
-              <span>{{ event.location.country }}</span
-              >,
-              <span>{{ event.location.city }}</span>
-            </p>
-            <p>{{ event.price }} €</p>
-          </div>
-        </a>
-      </li>
-    </ul>
-  </main>
-  <vue-final-modal
-    :hideOverlay="false"
-    overlayTransition="vfm-fade"
-    overlayTransitionDuration="2600"
-    contentTransition="vfm-fade"
-    swipeToClose="down"
-    :clickToClose="true"
-    :escToClose="true"
-    :lockScroll="true"
-    v-model="isModalOpen"
-  >
-    <NewEventModal @close-modal="isModalOpen = false" />
-  </vue-final-modal>
+  
+            <h2 class="card-header-title">{{ event.title }}</h2>
+            <div class="card-content">
+              <p>{{ event.description }}</p>
+              <div>
+                <p>From: {{ new Date(event.date).toLocaleString() }}</p>
+                <p>
+                  To:
+                  {{ new Date(event.date + event.durationInSeconds).toLocaleString() }}
+                </p>
+              </div>
+              <p>
+                <span>{{ event.location.country }}</span
+                >,
+                <span>{{ event.location.city }}</span>
+              </p>
+              <p>{{ event.price }} €</p>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </main>
+    <vue-final-modal
+      :hideOverlay="false"
+      overlayTransition="vfm-fade"
+      overlayTransitionDuration="2600"
+      contentTransition="vfm-fade"
+      swipeToClose="down"
+      :clickToClose="true"
+      :escToClose="true"
+      :lockScroll="true"
+      v-model="isModalOpen"
+    >
+      <NewEventModal @close-modal="isModalOpen = false" />
+    </vue-final-modal>
+  </div>
 </template>
 
 <style lang="less" scoped>

@@ -38,6 +38,7 @@ const props = defineProps({
     {{ props.inputLabel }}
   </label>
   <input
+    v-if="props.inputType !== 'textarea'"
     :class="props.inputClass"
     :name="props.inputName"
     :type="props.inputType"
@@ -45,6 +46,15 @@ const props = defineProps({
     :required="props.isRequired"
     @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
   />
+  <textarea
+    v-else
+    class="textarea"
+    :class="props.inputClass"
+    :name="props.inputName"
+    :placeholder="props.inputPlaceholder"
+    :required="props.isRequired"
+    @input="emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
+  ></textarea>
 </template>
 
 <style lang="less" scoped>
@@ -56,6 +66,14 @@ label {
   width: 100%;
   min-width: 100%;
   height: 25px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+.textarea {
+  width: 100%;
+  min-width: 100%;
+  height: 50px;
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-bottom: 10px;

@@ -34,6 +34,8 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 10px;
+
   section {
     max-width: 500px;
   }

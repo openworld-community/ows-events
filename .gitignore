@@ -133,4 +133,5 @@ dist
 .idea/
 
 # DB directory
-./backend/assets/db/
+backend/assets/db/
+backend/assets/img/

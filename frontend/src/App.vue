@@ -1,61 +1,80 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router';
-import UserLocation from '@/components/location/UserLocation.vue';
-import 'vue-final-modal/style.css';
+import { RouterLink, RouterView } from 'vue-router'
+import 'vue-final-modal/style.css'
 </script>
 
 <template>
   <header>
-    <div class="wrapper">
-      <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-info">
-          <span class="name">Poster</span>
-          <UserLocation />
-        </div>
-        <div class="navbar-menu">
-          <RouterLink to="/">Home</RouterLink>
-          <RouterLink to="/about">About</RouterLink>
-        </div>
-      </nav>
+    <div class="navbar-info">
+      <span class="name title">Poster</span>
     </div>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <RouterLink to="/" class="icon-text">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-home"></i>
+          </span>
+          <span>Home</span>
+        </span></RouterLink
+      >
+      <RouterLink to="/about" class="icon-text">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fas fa-solid fa-info"></i>
+          </span>
+          <span>About</span>
+        </span></RouterLink
+      >
+    </nav>
   </header>
 
-  <RouterView />
+  <RouterView class="container" />
 </template>
 
 <style lang="less" scoped>
 header {
   line-height: 1.5;
   max-height: 100vh;
-}
-
-nav {
   width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-  margin-left: 0;
-  padding: 20px;
+
+  justify-content: space-between;
+
+  display: flex;
+  flex-direction: row;
 
   .navbar-info {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding-inline-end: 15px;
-  }
+    align-items: baseline;
 
-  .name {
-    font-size: 1.5rem;
-    font-weight: bold;
-    width: 120px;
-  }
-
-  .navbar-menu {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
     gap: 20px;
-    padding-inline: 15px;
+  }
+
+  .navbar {
+    font-size: 12px;
+    text-align: center;
+    padding: 20px;
+
+    display: flex;
+    gap: 20px;
+
+    font-size: 125%;
+
+    .name {
+      font-size: 1.5rem;
+      font-weight: bold;
+      width: 120px;
+    }
+
+    .navbar-menu {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 20px;
+      padding-inline: 15px;
+    }
   }
 }
 </style>

@@ -13,10 +13,14 @@ export const getUserLocation = async (): Promise<UserLocation> => {
 
   try {
     const { data } = await api.get(url)
+
+    const location = data?.location
+    const country = location?.country
+
     return {
-      code: data?.location?.country?.code,
-      city: data?.location?.city.name,
-      country: data?.location?.country.name
+      code: country?.code,
+      city: location?.city.name,
+      country: country.name
     }
   } catch (e) {
     throw e

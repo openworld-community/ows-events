@@ -262,6 +262,8 @@ setTimeout(() => {
   width: 100%;
   max-width: 600px;
 
+  border-radius: 30px 30px 0 0;
+
   height: 80vh;
 
   margin: 0;

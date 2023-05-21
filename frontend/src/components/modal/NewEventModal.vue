@@ -17,6 +17,7 @@ const { countries, cities } = storeToRefs(locationStore)
 
 const isLoading = ref(false)
 const image = ref<null | File>(null)
+const isModalOpen = ref(false)
 
 const inputValues = ref({
   title: '',
@@ -62,6 +63,13 @@ const checkFormFilling = computed(() => {
   }
 })
 
+const closeModal = () => {
+  isModalOpen.value = false
+  setTimeout(() => {
+    emit('closeModal')
+  }, 300)
+}
+
 const submitEvent = async () => {
   //TODO: проверьте тип плиз
   isLoading.value = true
@@ -85,7 +93,7 @@ const submitEvent = async () => {
       }
     })
 
-    emit('closeModal')
+    closeModal()
   } catch (e) {
     alert(e) // временно выводим ошибки через alert
   } finally {
@@ -93,13 +101,22 @@ const submitEvent = async () => {
   }
 }
 
-const eventInputs: {
-  type: 'text' | 'date' | 'time' | 'number'
+type InputEvent = {
+  type: 'text' | 'date' | 'time' | 'number' | 'textarea'
   label: string
   name: keyof typeof inputValues.value
   required: boolean
   min?: number
-}[] = [
+}
+
+const eventInputs: (
+  | InputEvent
+  | {
+      type: 'row'
+      name: string
+      child: InputEvent[]
+    }
+)[] = [
   {
     type: 'text',
     label: 'Title',
@@ -107,34 +124,46 @@ const eventInputs: {
     required: true
   },
   {
-    type: 'text',
+    type: 'textarea',
     label: 'Description',
     name: 'description',
     required: true
   },
   {
-    type: 'date',
-    label: 'Starts:',
+    type: 'row',
     name: 'startDate',
-    required: true
+    child: [
+      {
+        type: 'date',
+        label: 'Starts:',
+        name: 'startDate',
+        required: true
+      },
+      {
+        type: 'time',
+        label: 'Starts:',
+        name: 'startTime',
+        required: true
+      }
+    ]
   },
   {
-    type: 'time',
-    label: 'Starts:',
-    name: 'startTime',
-    required: true
-  },
-  {
-    type: 'date',
-    label: 'Ends:',
+    type: 'row',
     name: 'endDate',
-    required: true
-  },
-  {
-    type: 'time',
-    label: 'Ends:',
-    name: 'endTime',
-    required: true
+    child: [
+      {
+        type: 'date',
+        label: 'Ends:',
+        name: 'endDate',
+        required: true
+      },
+      {
+        type: 'time',
+        label: 'Ends:',
+        name: 'endTime',
+        required: true
+      }
+    ]
   },
   {
     type: 'number',
@@ -144,45 +173,69 @@ const eventInputs: {
     min: 0
   }
 ]
+setTimeout(() => {
+  isModalOpen.value = true
+}, 100)
 </script>
 
 <template>
-  <div class="modal-card">
+  <div
+    class="modal-card new-event-container"
+    :class="!isModalOpen ? 'new-event-container-hidden' : 'new-event-container-open'"
+  >
     <header class="modal-card-head">
       <h2 class="event-modal__title title is-3">Describe your event</h2>
     </header>
     <form class="modal-card-body">
-      <CustomInput
-        v-for="input in eventInputs"
-        :key="input.name"
-        :input-type="input.type"
-        :input-placeholder="input.label"
-        :input-name="input.name"
-        v-model="inputValues[input.name]"
-        :is-required="input.required"
-      />
-      <DatalistInput
-        :options-list="countries"
-        input-name="countries"
-        input-class="input search-input is-small"
-        input-placeholder="Country"
-        v-model="inputValues.country"
-      />
-      <DatalistInput
-        :options-list="cities"
-        input-name="cities"
-        input-class="input search-input is-small"
-        input-placeholder="City"
-        v-model="inputValues.city"
-      />
+      <div v-for="input in eventInputs" :key="input.name">
+        <CustomInput
+          v-if="input.type !== 'row'"
+          :input-type="input.type"
+          :input-placeholder="input.label"
+          :input-name="input.name"
+          v-model="inputValues[input.name]"
+          :is-required="input.required"
+        />
+        <div v-else>
+          <h3 class="subtitle is-small">{{ input.name }}</h3>
+          <div class="row">
+            <div v-for="c in input.child" :key="c.name">
+              <CustomInput
+                :input-type="c.type"
+                :input-placeholder="c.label"
+                :input-name="c.name"
+                v-model="inputValues[c.name]"
+                :is-required="c.required"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <DatalistInput
+          :options-list="countries"
+          input-name="countries"
+          input-class="input search-input is-small"
+          input-placeholder="Country"
+          v-model="inputValues.country"
+        />
+        <DatalistInput
+          :options-list="cities"
+          input-name="cities"
+          input-class="input search-input is-small"
+          input-placeholder="City"
+          v-model="inputValues.city"
+        />
+      </div>
+
       <ImageLoader v-model="image" />
     </form>
-    <div class="modal-card-foot">
+    <div class="modal-card-foot card-custom-footer">
       <CustomButton
         button-class="button"
         button-text="Cancel"
         :is-active="!isLoading"
-        @click="emit('closeModal')"
+        @click="closeModal()"
       />
       <CustomButton
         button-class="button is-success"
@@ -198,4 +251,37 @@ const eventInputs: {
   </div>
 </template>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.new-event-container-hidden {
+  top: 100vh;
+}
+.new-event-container-open {
+  top: 20vh;
+}
+.new-event-container {
+  width: 100%;
+  max-width: 600px;
+
+  height: 80vh;
+
+  margin: 0;
+
+  position: fixed;
+  z-index: 1000;
+  transition-property: top;
+  transition-duration: 0.3s;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-custom-footer {
+  justify-content: flex-end;
+}
+</style>

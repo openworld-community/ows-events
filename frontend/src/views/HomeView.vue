@@ -199,10 +199,12 @@ const share = async () => {
   <vue-final-modal
     :hideOverlay="false"
     overlayTransition="vfm-fade"
+    overlayTransitionDuration="2600"
     contentTransition="vfm-fade"
-    :clickToClose="false"
-    :escToClose="false"
-    :lockScroll="false"
+    swipeToClose="down"
+    :clickToClose="true"
+    :escToClose="true"
+    :lockScroll="true"
     v-model="isModalOpen"
   >
     <NewEventModal @close-modal="isModalOpen = false" />

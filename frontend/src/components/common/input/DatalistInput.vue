@@ -19,7 +19,7 @@ const props = defineProps({
     required: true
   },
   optionsList: {
-    type: [Array, Object],
+    type: [Array, String],
     required: true
   },
   modelValue: {
@@ -39,7 +39,7 @@ const props = defineProps({
     @change="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
   />
   <datalist :id="props.inputName">
-    <option v-for="i in props.optionsList" :value="i" :key="i" />
+    <option v-for="i in props.optionsList" :value="i" :key="i as string" />
   </datalist>
 </template>
 

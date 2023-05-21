@@ -1,14 +1,26 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import CustomButton from '@/components/common/button/CustomButton.vue'
+import { BASE_URL } from '@/constants/url'
+
+type Props = {
+  externalImage?: string
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits(['update:modelValue'])
 
 const input = ref<HTMLInputElement | null>(null)
 
 const imageSrc = ref<string | null>(null)
-const showImage = ref(false)
-
-const emit = defineEmits(['update:modelValue'])
 const fileIsLoading = ref(false)
+
+watch(
+  () => props.externalImage,
+  () => {
+    imageSrc.value = `${BASE_URL}${props.externalImage}`
+  }
+)
 
 const loadImage = (event: Event) => {
   // не ясно, почему ругается при билде
@@ -29,7 +41,6 @@ const loadImage = (event: Event) => {
   )
   reader.readAsDataURL(file)
   emit('update:modelValue', file)
-  showImage.value = true
 }
 
 const removeImage = () => {
@@ -41,7 +52,7 @@ const removeImage = () => {
 <template>
   <div class="row align-items-center">
     <div v-if="imageSrc" class="loader__preview">
-      <img :src="imageSrc" class="avatar" @load="showImage = true" />
+      <img :src="imageSrc" class="avatar" />
     </div>
 
     <input accept="image/*" ref="input" type="file" @change="loadImage" class="d-none" />

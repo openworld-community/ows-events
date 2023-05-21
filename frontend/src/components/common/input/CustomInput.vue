@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 const emit = defineEmits(['update:modelValue'])
 
 const props = defineProps({
@@ -31,6 +33,15 @@ const props = defineProps({
     default: false
   }
 })
+
+const inputData = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value) {
+    emit('update:modelValue', value)
+  }
+})
 </script>
 
 <template>
@@ -44,7 +55,7 @@ const props = defineProps({
     :type="props.inputType"
     :placeholder="props.inputPlaceholder"
     :required="props.isRequired"
-    @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+    v-model="inputData"
   />
   <textarea
     v-else
@@ -53,7 +64,7 @@ const props = defineProps({
     :name="props.inputName"
     :placeholder="props.inputPlaceholder"
     :required="props.isRequired"
-    @input="emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
+    v-model="inputData"
   ></textarea>
 </template>
 
@@ -62,6 +73,7 @@ label {
   padding-top: 5px;
   margin-bottom: 5px;
 }
+
 .input {
   width: 100%;
   min-width: 100%;
@@ -70,6 +82,7 @@ label {
   border-radius: 5px;
   margin-bottom: 10px;
 }
+
 .textarea {
   width: 100%;
   min-width: 100%;

@@ -1,14 +1,13 @@
 import { api } from '@/plugins/axios'
-import { userLocation } from '@/services/location.services'
+import { getUserLocation } from '@/services/location.services'
 import { defineStore } from 'pinia'
 
 if (!localStorage.getItem('LOCATIONS_PICKED_COUNTRY')) {
-  console.log('userLocation', userLocation)
-  localStorage.setItem('LOCATIONS_PICKED_COUNTRY', userLocation?.country || '')
+  localStorage.setItem('LOCATIONS_PICKED_COUNTRY', getUserLocation()?.country || '')
 }
 
 if (!localStorage.getItem('LOCATIONS_PICKED_CITY')) {
-  localStorage.setItem('LOCATIONS_PICKED_CITY', userLocation?.city || '')
+  localStorage.setItem('LOCATIONS_PICKED_CITY', getUserLocation()?.city || '')
 }
 
 const useLocationStore = defineStore('counter', {

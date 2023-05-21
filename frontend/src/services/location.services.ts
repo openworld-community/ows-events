@@ -6,7 +6,7 @@ export type UserLocation = {
   country: string
 }
 
-export const getUserLocation = async (): Promise<UserLocation> => {
+const _getUserLocation = async (): Promise<UserLocation> => {
   const url = `https://api.ipregistry.co/?key=${
     import.meta.env.VITE_IPREGISTRY_API_KEY ?? 'ryy5dlbl3v8y55x4'
   }`
@@ -27,4 +27,18 @@ export const getUserLocation = async (): Promise<UserLocation> => {
   }
 }
 
-export const userLocation = await getUserLocation()
+let userLocation: UserLocation = {
+  code: '',
+  city: '',
+  country: ''
+}
+
+_getUserLocation().then((location) => {
+  userLocation = location
+})
+
+const getUserLocation = (): UserLocation => {
+  return userLocation
+}
+
+export { getUserLocation }

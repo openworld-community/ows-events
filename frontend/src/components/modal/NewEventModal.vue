@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import CustomInput from '@/components/common/input/CustomInput.vue'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import CustomButton from '@/components/common/button/CustomButton.vue'
 import { dateTime } from '@/helpers/dates'
 import { postEvent, postEventImage } from '@/services/events.services'
 import ImageLoader from '@/components/common/button/ImageLoader.vue'
+import DatalistInput from '@/components/common/input/DatalistInput.vue'
+import { storeToRefs } from 'pinia'
+import { useLocationStore } from '@/stores/location.store'
 
 const emit = defineEmits(['closeModal'])
 
-const isLoading = ref(false)
+const locationStore = useLocationStore()
+locationStore.loadCountries()
+const { countries, cities } = storeToRefs(locationStore)
 
+const isLoading = ref(false)
 const image = ref<null | File>(null)
 
 const inputValues = ref({
@@ -25,6 +31,22 @@ const inputValues = ref({
   // TODO: Здесь будет точно число, но пусть тайпскрипт пока думает, что это строка
   price: 0 as unknown as string // Тут хрень с типами, но мне сейчас неохота разбираться с этим вопросом :)
 })
+
+watch(
+  () => inputValues.value.country,
+  async (_country) => {
+    await locationStore.pickCountry(_country)
+  },
+  { deep: true }
+)
+
+watch(
+  () => inputValues.value.city,
+  async (_city) => {
+    await locationStore.pickCity(_city)
+  },
+  { deep: true }
+)
 
 const checkFormFilling = computed(() => {
   if (
@@ -80,13 +102,13 @@ const eventInputs: {
 }[] = [
   {
     type: 'text',
-    label: 'Title:',
+    label: 'Title',
     name: 'title',
     required: true
   },
   {
     type: 'text',
-    label: 'Description:',
+    label: 'Description',
     name: 'description',
     required: true
   },
@@ -115,20 +137,8 @@ const eventInputs: {
     required: true
   },
   {
-    type: 'text',
-    label: 'Country:',
-    name: 'country',
-    required: true
-  },
-  {
-    type: 'text',
-    label: 'City:',
-    name: 'city',
-    required: true
-  },
-  {
     type: 'number',
-    label: 'Price, currency:',
+    label: 'Price, currency',
     name: 'price',
     required: true,
     min: 0
@@ -146,10 +156,24 @@ const eventInputs: {
         v-for="input in eventInputs"
         :key="input.name"
         :input-type="input.type"
-        :input-label="input.label"
+        :input-placeholder="input.label"
         :input-name="input.name"
         v-model="inputValues[input.name]"
         :is-required="input.required"
+      />
+      <DatalistInput
+        :options-list="countries"
+        input-name="countries"
+        input-class="input search-input is-small"
+        input-placeholder="Country"
+        v-model="inputValues.country"
+      />
+      <DatalistInput
+        :options-list="cities"
+        input-name="cities"
+        input-class="input search-input is-small"
+        input-placeholder="City"
+        v-model="inputValues.city"
       />
       <ImageLoader v-model="image" />
     </form>

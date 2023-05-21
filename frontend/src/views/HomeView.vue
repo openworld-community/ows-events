@@ -127,7 +127,7 @@ const share = async () => {
 </script>
 
 <template>
-  <main>
+  <main class="container">
     <button class="button is-rounded add-event-button" @click="isModalOpen = true">
       <span class="icon">
         <i class="fas is-size-1 fa-thin fa-plus"></i>

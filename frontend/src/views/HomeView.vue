@@ -10,6 +10,7 @@ import CustomInput from '@/components/common/input/CustomInput.vue'
 import { VueFinalModal } from 'vue-final-modal'
 import { useRoute, useRouter } from 'vue-router'
 import DatalistInput from '@/components/common/input/DatalistInput.vue'
+import {BASE_URL} from "@/constants/url";
 
 const router = useRouter()
 const route = useRoute()
@@ -159,7 +160,7 @@ const share = async () => {
       <li v-for="event in filteredValues" v-bind:key="event.id" class="card">
         <a :href="`/event/${event.id}`">
           <div class="card-image">
-            <img v-bind:src="event.image" v-if="event.image" />
+            <img class="image" v-bind:src="`${BASE_URL}${event.image}`" v-if="event.image" />
           </div>
 
           <h2 class="card-header-title">{{ event.title }}</h2>
@@ -212,6 +213,13 @@ main {
 
   .search-input {
     max-width: 300px;
+  }
+
+  .image {
+    max-width: 200px;
+    max-height: 300px;
+    height: 100%;
+    object-fit: cover;
   }
 
   ul {

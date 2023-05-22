@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import {type EventOnPoster} from '@common/types'
-import {computed, ref, watch} from 'vue'
-import {getEvents, getEventsByParams} from '@/services/events.services'
-import {useLocationStore} from '@/stores/location.store'
-import {storeToRefs} from 'pinia'
+import { type EventOnPoster } from '@common/types'
+import { computed, ref, watch } from 'vue'
+import { getEvents, getEventsByParams } from '@/services/events.services'
+import { useLocationStore } from '@/stores/location.store'
+import { storeToRefs } from 'pinia'
 import NewEventModal from '@/components/modal/NewEventModal.vue'
 import CustomInput from '@/components/common/input/CustomInput.vue'
-import {VueFinalModal} from 'vue-final-modal'
+import { VueFinalModal } from 'vue-final-modal'
 import UserLocation from '@/components/location/UserLocation.vue'
 
-import {useRoute, useRouter} from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import DatalistInput from '@/components/common/input/DatalistInput.vue'
-import {BASE_URL} from '@/constants/url'
+import { BASE_URL } from '@/constants/url'
 
 let lasyLoadTimeout: ReturnType<typeof setTimeout> | undefined
 
 const locationStore = useLocationStore()
 locationStore.loadCountries()
-const {countries, cities, pickedCountry, pickedCity} = storeToRefs(locationStore)
+const { countries, cities, pickedCountry, pickedCity } = storeToRefs(locationStore)
 
 const router = useRouter()
 const route = useRoute()
@@ -33,7 +33,7 @@ locationStore.pickCountry(pickedCountry.value)
 
 const loadPosterEvents = async () => {
   if (search.value) {
-    posterEvents.value = await getEventsByParams({searchLine: search.value})
+    posterEvents.value = await getEventsByParams({ searchLine: search.value })
   } else {
     posterEvents.value = await getEvents()
   }
@@ -42,34 +42,42 @@ const loadPosterEvents = async () => {
 loadPosterEvents()
 
 watch(
-    search,
-    async (_search) => {
-      lasyLoadTimeout && clearTimeout(lasyLoadTimeout)
-
-      lasyLoadTimeout = setTimeout(async () => {
-        loadPosterEvents()
-      }, 500)
-      await router.push({query: {...route.query, search: _search || 'None'}})
-    },
-    {deep: true}
+  pickedCountry,
+  async (_country) => {
+    country.value = _country
+  },
+  { deep: true }
 )
 
 watch(
-    country,
-    async (_country) => {
-      locationStore.pickCountry(_country)
+  search,
+  async (_search) => {
+    lasyLoadTimeout && clearTimeout(lasyLoadTimeout)
 
-      city.value = pickedCity.value
-    },
-    {deep: true}
+    lasyLoadTimeout = setTimeout(async () => {
+      loadPosterEvents()
+    }, 500)
+    await router.push({ query: { ...route.query, search: _search || 'None' } })
+  },
+  { deep: true }
 )
 
 watch(
-    city,
-    async (_city) => {
-      locationStore.pickCity(_city)
-    },
-    {deep: true}
+  country,
+  async (_country) => {
+    locationStore.pickCountry(_country)
+
+    city.value = pickedCity.value
+  },
+  { deep: true }
+)
+
+watch(
+  city,
+  async (_city) => {
+    locationStore.pickCity(_city)
+  },
+  { deep: true }
 )
 
 const filteredValues = computed(() => {
@@ -77,19 +85,19 @@ const filteredValues = computed(() => {
 })
 
 const getFilteredEvents = (
-    events: EventOnPoster[],
-    search: string,
-    country: string,
-    city: string
+  events: EventOnPoster[],
+  search: string,
+  country: string,
+  city: string
 ) => {
   if (!search && !country && !city) {
     return events
   }
 
   const searchSource = (event: EventOnPoster) =>
-      [event.title, event.description, event.location.city, event.location.country]
-          .join(' ')
-          .toLowerCase()
+    [event.title, event.description, event.location.city, event.location.country]
+      .join(' ')
+      .toLowerCase()
 
   let searchResult = events.filter((event) => {
     return searchSource(event).includes(search.toLowerCase())
@@ -112,11 +120,11 @@ const getFilteredEvents = (
 
 const share = async () => {
   if (
-      !(
-          window.location.href.includes('https') ||
-          window.location.href.includes('localhost') ||
-          window.location.href.includes('127.0.0.1')
-      )
+    !(
+      window.location.href.includes('https') ||
+      window.location.href.includes('localhost') ||
+      window.location.href.includes('127.0.0.1')
+    )
   ) {
     alert('Ой, что-то пошло не так, попробуйте скопировать ссылку вручную')
     return
@@ -130,41 +138,41 @@ const share = async () => {
   <main>
     <div class="header">
       <button class="button is-rounded add-event-button" @click="isModalOpen = true">
-      <span class="icon">
-        <i class="fas is-size-1 fa-thin fa-plus"></i>
-      </span>
+        <span class="icon">
+          <i class="fas is-size-1 fa-thin fa-plus"></i>
+        </span>
       </button>
       <div class="location-conteiner">
         <div>
-          <UserLocation class="user-location"/>
+          <UserLocation class="user-location" />
         </div>
         <div>
           <CustomInput
-              input-class="input is-info search-input"
-              input-type="text"
-              input-name="search"
-              input-placeholder="Search"
-              v-model="search"
+            input-class="input is-info search-input"
+            input-type="text"
+            input-name="search"
+            input-placeholder="Search"
+            v-model="search"
           />
         </div>
       </div>
       <div class="location-conteiner">
         <div>
           <DatalistInput
-              :options-list="countries"
-              input-name="countries"
-              input-class="input is-info search-input"
-              input-placeholder="Country"
-              v-model="country"
+            :options-list="countries"
+            input-name="countries"
+            input-class="input is-info search-input"
+            input-placeholder="Country"
+            v-model="country"
           />
         </div>
         <div>
           <DatalistInput
-              :options-list="cities"
-              input-name="cities"
-              input-class="input is-info search-input"
-              input-placeholder="City"
-              v-model="city"
+            :options-list="cities"
+            input-name="cities"
+            input-class="input is-info search-input"
+            input-placeholder="City"
+            v-model="city"
           />
         </div>
       </div>
@@ -175,24 +183,33 @@ const share = async () => {
         <a :href="`/event/${event.id}`">
           <div class="card-image">
             <div class="card-price">{{ event.price }} €</div>
-            <img alt="Event image" class="image" v-bind:src="`${BASE_URL}${event.image}`" v-if="event.image"/>
+            <img
+              alt="Event image"
+              class="image"
+              v-bind:src="`${BASE_URL}${event.image}`"
+              v-if="event.image"
+            />
           </div>
 
           <div class="card-content">
             <div class="card-author">Peredelano</div>
-            <h2><span class="card-title">{{ event.title }}</span></h2>
+            <h2>
+              <span class="card-title">{{ event.title }}</span>
+            </h2>
             <div class="card-datetime">
               {{
                 new Date(event.date).toLocaleString('ru-RU', {
-                  month: "long",
-                  day: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit"
+                  month: 'long',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
                 })
               }}
             </div>
             <div class="card-geolink">
-              <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt">Место встречи (изменить нельзя)</a>
+              <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"
+                >Место встречи (изменить нельзя)</a
+              >
             </div>
           </div>
         </a>
@@ -200,17 +217,17 @@ const share = async () => {
     </ul>
   </main>
   <vue-final-modal
-      :hideOverlay="false"
-      overlayTransition="vfm-fade"
-      overlayTransitionDuration="2600"
-      contentTransition="vfm-fade"
-      swipeToClose="down"
-      :clickToClose="true"
-      :escToClose="true"
-      :lockScroll="true"
-      v-model="isModalOpen"
+    :hideOverlay="false"
+    overlayTransition="vfm-fade"
+    overlayTransitionDuration="2600"
+    contentTransition="vfm-fade"
+    swipeToClose="down"
+    :clickToClose="true"
+    :escToClose="true"
+    :lockScroll="true"
+    v-model="isModalOpen"
   >
-    <NewEventModal @close-modal="isModalOpen = false"/>
+    <NewEventModal @close-modal="isModalOpen = false" />
   </vue-final-modal>
 </template>
 
@@ -229,7 +246,7 @@ main {
     padding: 25px;
     width: 50px;
     height: 50px;
-    box-shadow: rgb(38, 57, 77, .4) 0 0 20px;
+    box-shadow: rgb(38, 57, 77, 0.4) 0 0 20px;
     border: unset;
   }
 
@@ -269,22 +286,22 @@ main {
     width: 100%;
     box-shadow: none;
 
-    .card-content{
+    .card-content {
       padding: 12px 16px 12px 16px;
     }
 
     .card-image {
-      background-color: #CACACA;
+      background-color: #cacaca;
     }
 
-    .card-author{
+    .card-author {
       font-family: Inter;
       font-size: 12px;
       font-weight: 500;
       line-height: 16px;
       letter-spacing: 0;
       text-align: left;
-      color: #ACACAC;
+      color: #acacac;
     }
 
     .card-price {
@@ -304,8 +321,8 @@ main {
       z-index: 200;
     }
 
-    .card-title{
-      color: #4E4E4E;
+    .card-title {
+      color: #4e4e4e;
       font-family: Inter;
       font-size: 18px;
       font-weight: 500;
@@ -314,17 +331,17 @@ main {
       text-align: left;
     }
 
-    .card-datetime{
+    .card-datetime {
       font-family: Inter;
       font-size: 12px;
       font-weight: 500;
       line-height: 16px;
       letter-spacing: 0;
       text-align: left;
-      color: #ACACAC;
+      color: #acacac;
     }
 
-    .card-geolink{
+    .card-geolink {
       font-family: Inter;
       font-size: 12px;
       font-weight: 400;
@@ -336,8 +353,9 @@ main {
   }
 
   .image {
-    height: 100%;
+    width: 100%;
     min-height: 176px;
+    max-height: 200px;
     object-fit: cover;
     border-radius: 0;
   }

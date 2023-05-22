@@ -1,13 +1,31 @@
 import { api } from '@/plugins/axios'
-import { getUserLocation } from '@/services/location.services'
 import { defineStore } from 'pinia'
 
-if (!localStorage.getItem('LOCATIONS_PICKED_COUNTRY')) {
-  localStorage.setItem('LOCATIONS_PICKED_COUNTRY', getUserLocation()?.country || '')
+export type UserLocation = {
+  code?: string
+  city?: string
+  country?: string
 }
 
-if (!localStorage.getItem('LOCATIONS_PICKED_CITY')) {
-  localStorage.setItem('LOCATIONS_PICKED_CITY', getUserLocation()?.city || '')
+const _getUserLocation = async (): Promise<UserLocation> => {
+  const url = `https://api.ipregistry.co/?key=${
+    import.meta.env.VITE_IPREGISTRY_API_KEY ?? 'ryy5dlbl3v8y55x4'
+  }`
+
+  try {
+    const { data } = await api.get(url)
+
+    const location = data?.location
+    const country = location?.country
+
+    return {
+      code: country?.code,
+      city: location?.city.name,
+      country: country.name
+    }
+  } catch (e) {
+    throw e
+  }
 }
 
 const useLocationStore = defineStore('counter', {
@@ -17,7 +35,10 @@ const useLocationStore = defineStore('counter', {
       countries: JSON.parse(localStorage.getItem('LOCATIONS_COUNTRIES') || '[]'),
       cities: JSON.parse(localStorage.getItem('LOCATIONS_CITIES') || '[]'),
       citiesByCountry: JSON.parse(localStorage.getItem('LOCATIONS_CITIES_BY_COUNTRY') || '{}'),
-      pickedCity: localStorage.getItem('LOCATIONS_PICKED_CITY') || ''
+      pickedCity: localStorage.getItem('LOCATIONS_PICKED_CITY') || '',
+      userLocation:
+        (JSON.parse(localStorage.getItem('LOCATIONS_USER_LOCATION') || '{}') as UserLocation) ||
+        null
     }
   },
   getters: {},
@@ -64,6 +85,18 @@ const useLocationStore = defineStore('counter', {
       })
     },
     async init() {
+      this.userLocation = await _getUserLocation()
+
+      if (!localStorage.getItem('LOCATIONS_PICKED_COUNTRY')) {
+        localStorage.setItem('LOCATIONS_PICKED_COUNTRY', this.userLocation?.country || '')
+      }
+      this.pickedCountry = localStorage.getItem('LOCATIONS_PICKED_COUNTRY') || ''
+
+      if (!localStorage.getItem('LOCATIONS_PICKED_CITY')) {
+        localStorage.setItem('LOCATIONS_PICKED_CITY', this.userLocation?.city || '')
+      }
+      this.pickedCity = localStorage.getItem('LOCATIONS_PICKED_CITY') || ''
+
       await this.loadCountries()
       if (!this.pickedCountry) {
         return

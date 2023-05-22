@@ -7,26 +7,15 @@ import 'vue-final-modal/style.css'
   <header>
     <div class="navbar-info">
       <RouterLink to="/">
-        <span class="name title">Poster</span>
+        <span class="name subtitle">Poster</span>
       </RouterLink>
     </div>
     <nav class="navbar" role="navigation" aria-label="main navigation">
-      <RouterLink to="/" class="icon-text">
-        <span class="icon-text">
-          <span class="icon">
-            <i class="fas fa-home"></i>
-          </span>
-          <span>Home</span>
-        </span></RouterLink
-      >
       <RouterLink to="/about" class="icon-text">
-        <span class="icon-text">
-          <span class="icon">
-            <i class="fas fa-solid fa-info"></i>
-          </span>
-          <span>About</span>
-        </span></RouterLink
-      >
+        <span class="icon">
+          <i class="fas fa-solid fa-info"></i>
+        </span>
+      </RouterLink>
     </nav>
   </header>
 

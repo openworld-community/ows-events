@@ -353,8 +353,9 @@ main {
   }
 
   .image {
-    height: 100%;
+    width: 100%;
     min-height: 176px;
+    max-height: 200px;
     object-fit: cover;
     border-radius: 0;
   }

@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import 'vue-final-modal/style.css'
+import { useI18n } from 'vue-i18n';
+const i18n = useI18n();
+i18n.locale.value=navigator.language;
+console.log(i18n)
 </script>
 
 <template>
   <header>
     <div class="navbar-info">
+      <input v-model="i18n.locale.value"/>
+      <span>{{ i18n.t("hello") }}</span>
       <RouterLink to="/">
         <span class="name title">Poster</span>
       </RouterLink>

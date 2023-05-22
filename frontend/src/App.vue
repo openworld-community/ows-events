@@ -28,7 +28,9 @@ import 'vue-final-modal/style.css'
     </nav>
   </header>
 
-  <RouterView class="container" />
+  <div class="container">
+    <RouterView />
+  </div>
 </template>
 
 <style lang="less" scoped>

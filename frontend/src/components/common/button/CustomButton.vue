@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { type PropType } from 'vue'
+
 type ButtonType = 'button' | 'submit' | 'reset' | undefined
 
 const props = defineProps({
@@ -8,7 +9,7 @@ const props = defineProps({
     default: 'button'
   },
   buttonClass: {
-    type: String,
+    type: [String, Array],
     required: true
   },
   buttonText: {
@@ -18,6 +19,10 @@ const props = defineProps({
   isActive: {
     type: Boolean,
     default: true
+  },
+  isLoading: {
+    type: Boolean,
+    default: false
   }
 })
 </script>
@@ -25,7 +30,7 @@ const props = defineProps({
 <template>
   <button
     :type="props.buttonType"
-    :class="[props.buttonClass, props.isActive ? '' : 'is-light']"
+    :class="[props.buttonClass, { 'is-loading': isLoading }]"
     :disabled="!props.isActive"
   >
     {{ props.buttonText }}

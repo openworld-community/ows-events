@@ -13,7 +13,7 @@ import {useRoute, useRouter} from 'vue-router'
 import DatalistInput from '@/components/common/input/DatalistInput.vue'
 import {BASE_URL} from '@/constants/url'
 
-let lasyLoadTimeout: NodeJS.Timeout | null = null
+let lasyLoadTimeout: ReturnType<typeof setTimeout> | undefined
 
 const locationStore = useLocationStore()
 locationStore.loadCountries()

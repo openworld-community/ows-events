@@ -225,7 +225,7 @@ main {
     position: fixed;
     bottom: 20px;
     left: 20px;
-    z-index: 100;
+    z-index: 300;
     padding: 25px;
     width: 50px;
     height: 50px;

@@ -78,7 +78,7 @@ const useLocationStore = defineStore('counter', {
 
       await api.get(`/location/cities/${country}`).then((response) => {
         this.citiesByCountry[country] = response.data
-        this.cities = this.citiesByCountry[country]
+        this.cities = this.citiesByCountry[country] || []
         this.citiesByCountry = { ...this.citiesByCountry }
         localStorage.setItem('LOCATIONS_CITIES_BY_COUNTRY', JSON.stringify(this.citiesByCountry))
         localStorage.setItem('LOCATIONS_CITIES', JSON.stringify(response.data))

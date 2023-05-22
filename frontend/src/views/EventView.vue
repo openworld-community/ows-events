@@ -48,7 +48,6 @@ const share = async () => {
 
 <template>
   <main v-if="posterEvent">
-    <a href="/">Назад (иконка)</a>
     <!--    <button class="delete is-small" @click="deleteCard()"></button>-->
     <div v-bind:key="posterEvent.id" class="card">
       <div class="card-image">

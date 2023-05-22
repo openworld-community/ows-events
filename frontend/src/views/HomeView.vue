@@ -12,6 +12,7 @@ import UserLocation from '@/components/location/UserLocation.vue'
 import { useRoute, useRouter } from 'vue-router'
 import DatalistInput from '@/components/common/input/DatalistInput.vue'
 import { BASE_URL } from '@/constants/url'
+import { Z_ASCII } from 'zlib'
 
 let lasyLoadTimeout: ReturnType<typeof setTimeout> | undefined
 
@@ -82,6 +83,34 @@ watch(
 
 const filteredValues = computed(() => {
   return getFilteredEvents(posterEvents.value, search.value, country.value, city.value)
+})
+
+const eventsWithAdd = computed(() => {
+  const events = [...filteredValues.value]
+  const newEvents: (
+    | (EventOnPoster & { type: 'event' })
+    | {
+        id: 'add'
+        type: 'add'
+        title: string
+        description: string
+        link: string
+      }
+  )[] = []
+  for (let i = 0; i < events.length; i++) {
+    if (i % 2 === 0) {
+      newEvents.push({
+        id: 'add',
+        type: 'add',
+        title: 'Peredelano Startups',
+        description:
+          'Тут мы объединяемся, чтобы вместе сделать проекты. Рынок и мир сейчас сложные, с работой туго, со смыслами тоже — поэтому мы решили делать и то и другое сами.',
+        link: 'https://t.me/peredelanoconfjunior'
+      })
+    }
+    newEvents.push({ ...events[i], type: 'event' })
+  }
+  return newEvents
 })
 
 const getFilteredEvents = (
@@ -171,40 +200,54 @@ const getFilteredEvents = (
     </div>
 
     <ul class="card-list">
-      <li v-for="event in filteredValues" v-bind:key="event.id" class="card">
-        <a :href="`/event/${event.id}`">
-          <div class="card-image">
-            <div class="card-price">{{ event.price }} €</div>
-            <img
-              alt="Event image"
-              class="image"
-              v-bind:src="`${BASE_URL}${event.image}`"
-              v-if="event.image"
-            />
-          </div>
+      <li v-for="event in eventsWithAdd" v-bind:key="event.id" class="card">
+        <div v-if="event.type !== 'add'">
+          <a :href="`/event/${event.id}`">
+            <div class="card-image">
+              <div class="card-price">{{ event.price }} €</div>
+              <img
+                alt="Event image"
+                class="image"
+                v-bind:src="`${BASE_URL}${event.image}`"
+                v-if="event.image"
+              />
+            </div>
 
-          <div class="card-content">
-            <div class="card-author">Peredelano</div>
-            <h2>
-              <span class="card-title">{{ event.title }}</span>
-            </h2>
-            <div class="card-datetime">
-              {{
-                new Date(event.date).toLocaleString('ru-RU', {
-                  month: 'long',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit'
-                })
-              }}
+            <div class="card-content">
+              <div class="card-author">Peredelano</div>
+              <h2>
+                <span class="card-title">{{ event.title }}</span>
+              </h2>
+              <div class="card-datetime">
+                {{
+                  new Date(event.date).toLocaleString('ru-RU', {
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })
+                }}
+              </div>
+              <div class="card-geolink">
+                <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"
+                  >Место встречи (изменить нельзя)</a
+                >
+              </div>
             </div>
-            <div class="card-geolink">
-              <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"
-                >Место встречи (изменить нельзя)</a
-              >
-            </div>
+          </a>
+        </div>
+        <div v-else class="add-block">
+          <span class="add-label">add</span>
+          <div class="card-title">
+            {{ event.title }}
           </div>
-        </a>
+          <div class="card-content description">
+            {{ event.description }}
+          </div>
+          <div class="card-action">
+            <a :href="event.link"> Перейти в чат! </a>
+          </div>
+        </div>
       </li>
     </ul>
   </main>
@@ -229,6 +272,20 @@ main {
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
+
+  .add-block {
+    border: 1px solid grey;
+    .add-label {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      opacity: 0.5;
+    }
+
+    .description {
+      font-size: 80%;
+    }
+  }
 
   .add-event-button {
     position: fixed;

@@ -33,6 +33,20 @@ const deleteCard = async () => {
 
 <template>
   <main v-if="posterEvent">
+    <div class="actions">
+      <div>
+        <a href="/" class="button is-rounded"><i class="fas fa-arrow-left"></i></a>
+      </div>
+      <div>
+        <button @click="deleteCard()" class="button is-rounded is-small">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+
+        <button @click="isModalOpen = true" class="button is-rounded is-small">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </button>
+      </div>
+    </div>
     <div v-bind:key="posterEvent.id" class="card">
       <div class="card-image">
         <div class="card-price">{{ posterEvent.price }} €</div>

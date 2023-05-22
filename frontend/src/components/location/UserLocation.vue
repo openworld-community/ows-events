@@ -1,20 +1,21 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { getUserLocation, type UserLocation } from '@/services/location.services'
+import { useLocationStore } from '@/stores/location.store'
+import { storeToRefs } from 'pinia'
 
-const location = ref<UserLocation | null>(null)
-
-onMounted(async () => {
-  location.value = getUserLocation()
-})
+const { userLocation } = storeToRefs(useLocationStore())
 </script>
 
 <template>
-  <div>
-    <div v-if="location?.city">{{ location?.country }}, {{ location?.city }}</div>
-    <div v-else-if="location?.country">{{ location.country }}</div>
-    <flag class="flag" :iso="location?.code" />
+  <div class="user-location-container">
+    <div v-if="userLocation?.city">{{ userLocation?.country }}, {{ userLocation?.city }}</div>
+    <div v-else-if="userLocation?.country">{{ userLocation.country }}</div>
+    <div v-else>Мы не смогли найти вас(</div>
+    <flag class="flag" :iso="userLocation?.code" />
   </div>
 </template>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.user-location-container {
+  opacity: 0.5;
+}
+</style>

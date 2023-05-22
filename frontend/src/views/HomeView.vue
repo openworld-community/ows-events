@@ -108,7 +108,11 @@ const eventsWithAdd = computed(() => {
         link: 'https://t.me/peredelanoconfjunior'
       })
     }
-    newEvents.push({ ...events[i], type: 'event' })
+    newEvents.push({
+      ...events[i],
+      type: 'event',
+      image: events[i].image ? `${BASE_URL}${events[i].image}` : 'https://picsum.photos/200/300'
+    })
   }
   return newEvents
 })
@@ -205,12 +209,7 @@ const getFilteredEvents = (
           <a :href="`/event/${event.id}`">
             <div class="card-image">
               <div class="card-price">{{ event.price }} €</div>
-              <img
-                alt="Event image"
-                class="image"
-                v-bind:src="`${BASE_URL}${event.image}`"
-                v-if="event.image"
-              />
+              <img alt="Event image" class="image" v-bind:src="event.image" v-if="event.image" />
             </div>
 
             <div class="card-content">

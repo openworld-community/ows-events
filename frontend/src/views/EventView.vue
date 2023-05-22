@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { type EventOnPoster } from '@common/types/event'
 import { deleteEvent, getEvent } from '@/services/events.services'
 import { useRoute, useRouter } from 'vue-router'
-import { BASE_URL } from "@/constants/url";
+import { BASE_URL } from '@/constants/url'
 
 const posterEvent = ref<EventOnPoster | null>(null)
 const route = useRoute()
@@ -16,25 +16,22 @@ if (!(typeof id === 'string')) {
 
 const loadPosterEvent = async () => {
   posterEvent.value = await getEvent(id)
-  console.log(posterEvent.value.date)
-  console.log(posterEvent.value.durationInSeconds)
-  console.log(posterEvent.value.date + posterEvent.value.durationInSeconds)
 }
 
 loadPosterEvent()
 
 const deleteCard = async () => {
   await deleteEvent(id)
-  router.push({path: '/'})
+  router.push({ path: '/' })
 }
 
 const share = async () => {
   if (
-      !(
-          window.location.href.includes('https') ||
-          window.location.href.includes('localhost') ||
-          window.location.href.includes('127.0.0.1')
-      )
+    !(
+      window.location.href.includes('https') ||
+      window.location.href.includes('localhost') ||
+      window.location.href.includes('127.0.0.1')
+    )
   ) {
     alert('Ой, что-то пошло не так, попробуйте скопировать ссылку вручную')
     return
@@ -51,39 +48,48 @@ const share = async () => {
     <div v-bind:key="posterEvent.id" class="card">
       <div class="card-image">
         <div class="card-price">{{ posterEvent.price }} €</div>
-        <img alt="Event image" class="image" v-bind:src="`${BASE_URL}${posterEvent.image}`" v-if="posterEvent.image"/>
+        <img
+          alt="Event image"
+          class="image"
+          v-bind:src="`${BASE_URL}${posterEvent.image}`"
+          v-if="posterEvent.image"
+        />
       </div>
 
       <div class="card-content">
         <div class="card-author">Peredelano</div>
-        <h2><span class="card-title">{{ posterEvent.title }}</span></h2>
+        <h2>
+          <span class="card-title">{{ posterEvent.title }}</span>
+        </h2>
         <div class="card-datetime">
           {{
             new Date(posterEvent.date).toLocaleString('ru-RU', {
-              month: "long",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit"
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
             })
-          }} - {{
+          }}
+          -
+          {{
             new Date(posterEvent.date + posterEvent.durationInSeconds).toLocaleString('ru-RU', {
-              month: "long",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit"
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
             })
           }}
         </div>
         <div class="card-geolink">
-          <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt">Место встречи (изменить нельзя)</a>
+          <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"
+            >Место встречи (изменить нельзя)</a
+          >
         </div>
         <div class="card-description">
           {{ posterEvent.description }}
         </div>
       </div>
-      <button class="card-contact-btn">
-        Связаться
-      </button>
+      <button class="card-contact-btn">Связаться</button>
     </div>
   </main>
 </template>
@@ -105,7 +111,7 @@ const share = async () => {
   }
 
   .card-image {
-    background-color: #CACACA;
+    background-color: #cacaca;
   }
 
   .card-author {
@@ -115,7 +121,7 @@ const share = async () => {
     line-height: 16px;
     letter-spacing: 0;
     text-align: left;
-    color: #ACACAC;
+    color: #acacac;
   }
 
   .card-price {
@@ -136,7 +142,7 @@ const share = async () => {
   }
 
   .card-title {
-    color: #4E4E4E;
+    color: #4e4e4e;
     font-family: Inter;
     font-size: 18px;
     font-weight: 500;
@@ -152,7 +158,7 @@ const share = async () => {
     line-height: 16px;
     letter-spacing: 0;
     text-align: left;
-    color: #ACACAC;
+    color: #acacac;
   }
 
   .card-geolink {
@@ -166,7 +172,7 @@ const share = async () => {
   }
 
   .card-description {
-    color: #4E4E4E;
+    color: #4e4e4e;
     font-family: Inter;
     font-size: 12px;
     font-weight: 500;
@@ -176,7 +182,7 @@ const share = async () => {
     min-height: 202px;
   }
 
-  .card-contact-btn{
+  .card-contact-btn {
     color: white;
     background: #363636;
     height: 40px;

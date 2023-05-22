@@ -35,7 +35,6 @@ const modelValue = ref(props.modelValue)
 
 watch(modelValue, () => {
   emit('update:modelValue', modelValue.value)
-  console.log(modelValue.value)
 })
 </script>
 

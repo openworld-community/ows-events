@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { watch } from 'vue'
+import { ref } from 'vue'
+
 const emit = defineEmits(['update:modelValue'])
 
 const props = defineProps({
@@ -27,6 +30,13 @@ const props = defineProps({
     default: ''
   }
 })
+
+const modelValue = ref(props.modelValue)
+
+watch(modelValue, () => {
+  emit('update:modelValue', modelValue.value)
+  console.log(modelValue.value)
+})
 </script>
 
 <template>
@@ -35,7 +45,7 @@ const props = defineProps({
     :class="props.inputClass"
     :type="props.inputType"
     :list="props.inputName"
-    :value="props.modelValue"
+    v-model="modelValue"
     @change="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
   />
   <datalist :id="props.inputName">

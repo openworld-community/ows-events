@@ -6,7 +6,9 @@ import 'vue-final-modal/style.css'
 <template>
   <header>
     <div class="navbar-info">
-      <span class="name title">Poster</span>
+      <RouterLink to="/">
+        <span class="name title">Poster</span>
+      </RouterLink>
     </div>
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <RouterLink to="/" class="icon-text">

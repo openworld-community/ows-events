@@ -117,21 +117,6 @@ const getFilteredEvents = (
 
   return searchResult
 }
-
-const share = async () => {
-  if (
-    !(
-      window.location.href.includes('https') ||
-      window.location.href.includes('localhost') ||
-      window.location.href.includes('127.0.0.1')
-    )
-  ) {
-    alert('Ой, что-то пошло не так, попробуйте скопировать ссылку вручную')
-    return
-  }
-  await navigator.clipboard.writeText(window.location.href)
-  alert('Ссылка скопирована!')
-}
 </script>
 
 <template>
@@ -146,6 +131,8 @@ const share = async () => {
         <div>
           <UserLocation class="user-location" />
         </div>
+      </div>
+      <div class="location-conteiner">
         <div>
           <CustomInput
             input-class="input is-info search-input"
@@ -156,6 +143,8 @@ const share = async () => {
           />
         </div>
       </div>
+
+      <h1 class="title">Мероприятия</h1>
       <div class="location-conteiner">
         <div>
           <DatalistInput
@@ -164,6 +153,7 @@ const share = async () => {
             input-class="input is-info search-input"
             input-placeholder="Country"
             v-model="country"
+            v-bind:key="country"
           />
         </div>
         <div>
@@ -172,7 +162,9 @@ const share = async () => {
             input-name="cities"
             input-class="input is-info search-input"
             input-placeholder="City"
+            v-bind:input-disable="!country"
             v-model="city"
+            v-bind:key="city"
           />
         </div>
       </div>

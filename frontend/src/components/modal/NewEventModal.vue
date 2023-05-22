@@ -1,25 +1,47 @@
 <script setup lang="ts">
 import CustomInput from '@/components/common/input/CustomInput.vue'
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import CustomButton from '@/components/common/button/CustomButton.vue'
-import { dateTime } from '@/helpers/dates'
-import { postEvent, postEventImage } from '@/services/events.services'
+import { dateTime, timestampParse } from '@/helpers/dates'
+import { deleteEventImage, editEvent, postEvent, postEventImage } from '@/services/events.services'
 import ImageLoader from '@/components/common/button/ImageLoader.vue'
 import DatalistInput from '@/components/common/input/DatalistInput.vue'
 import { storeToRefs } from 'pinia'
 import { useLocationStore } from '@/stores/location.store'
+import { type EventOnPoster } from '@common/types'
 
 const emit = defineEmits(['closeModal'])
+
+type Props = {
+  dataForEdit?: EventOnPoster
+}
+
+const props = defineProps<Props>()
 
 const locationStore = useLocationStore()
 locationStore.loadCountries()
 const { countries, cities } = storeToRefs(locationStore)
 
 const isLoading = ref(false)
-const image = ref<null | File>(null)
+const newImageFile = ref<null | File>(null)
 const isModalOpen = ref(false)
 
-const inputValues = ref({
+type inputValuesType = {
+  id: string
+  title: string
+  description: string
+  startDate: string
+  startTime: string
+  endDate: string
+  endTime: string
+  country: string
+  city: string
+  image: string
+  price: number
+}
+
+const inputValues = ref<inputValuesType>({
+  id: '',
   title: '',
   description: '',
   startDate: '',
@@ -29,9 +51,31 @@ const inputValues = ref({
   country: '',
   city: '',
   image: '',
-  // TODO: Здесь будет точно число, но пусть тайпскрипт пока думает, что это строка
-  price: 0 as unknown as string // Тут хрень с типами, но мне сейчас неохота разбираться с этим вопросом :)
+  price: 0
 })
+
+onMounted(() => {
+  if (props.dataForEdit) {
+    setEventData(props.dataForEdit)
+  }
+})
+
+const setEventData = (data: EventOnPoster) => {
+  const start = timestampParse(data.date)
+  const end = timestampParse(data.date + data.durationInSeconds)
+
+  inputValues.value.id = data.id
+  inputValues.value.title = data.title
+  inputValues.value.description = data.description
+  inputValues.value.country = data.location.country
+  inputValues.value.city = data.location.city
+  inputValues.value.price = data.price
+  inputValues.value.startDate = start[0]
+  inputValues.value.startTime = start[1]
+  inputValues.value.endDate = end[0]
+  inputValues.value.endTime = end[1]
+  inputValues.value.image = data.image as string
+}
 
 watch(
   () => inputValues.value.country,
@@ -50,17 +94,11 @@ watch(
 )
 
 const checkFormFilling = computed(() => {
-  if (
-    inputValues.value.title &&
+  return !!(inputValues.value.title &&
     inputValues.value.startDate &&
     inputValues.value.startTime &&
     inputValues.value.country &&
-    inputValues.value.city
-  ) {
-    return true
-  } else {
-    return false
-  }
+    inputValues.value.city);
 })
 
 const closeModal = () => {
@@ -74,24 +112,45 @@ const submitEvent = async () => {
   //TODO: проверьте тип плиз
   isLoading.value = true
   try {
-    const imageURL = await postEventImage(image.value as File)
+    let imageURL
 
-    await postEvent({
-      event: {
-        title: inputValues.value.title,
-        description: inputValues.value.description,
-        date: dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
-        durationInSeconds:
-          dateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() -
-          dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
-        location: {
-          country: inputValues.value.country,
-          city: inputValues.value.city
-        },
-        image: imageURL,
-        price: inputValues.value.price
+    const params = {
+      title: inputValues.value.title,
+      description: inputValues.value.description,
+      date: dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
+      durationInSeconds:
+        dateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() -
+        dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
+      location: {
+        country: inputValues.value.country,
+        city: inputValues.value.city
+      },
+      price: inputValues.value.price
+    }
+
+    if (props.dataForEdit) {
+      if (newImageFile.value) {
+        if (props.dataForEdit.image) {
+          await deleteEventImage(props.dataForEdit.image)
+        }
+        imageURL = await postEventImage(newImageFile.value as File)
       }
-    })
+      await editEvent({
+        event: {
+          ...params,
+          id: inputValues.value.id,
+          image: imageURL
+        }
+      })
+    } else {
+      imageURL = await postEventImage(newImageFile.value as File)
+      await postEvent({
+        event: {
+          ...params,
+          image: imageURL
+        }
+      })
+    }
 
     closeModal()
   } catch (e) {
@@ -103,7 +162,7 @@ const submitEvent = async () => {
 
 type InputEvent = {
   type: 'text' | 'date' | 'time' | 'number' | 'textarea'
-  label: string
+  label?: string
   name: keyof typeof inputValues.value
   required: boolean
   min?: number
@@ -114,6 +173,7 @@ const eventInputs: (
   | {
       type: 'row'
       name: string
+      label?: string
       child: InputEvent[]
     }
 )[] = [
@@ -132,16 +192,15 @@ const eventInputs: (
   {
     type: 'row',
     name: 'startDate',
+    label: 'Starts:',
     child: [
       {
         type: 'date',
-        label: 'Starts:',
         name: 'startDate',
         required: true
       },
       {
         type: 'time',
-        label: 'Starts:',
         name: 'startTime',
         required: true
       }
@@ -150,16 +209,15 @@ const eventInputs: (
   {
     type: 'row',
     name: 'endDate',
+    label: 'Ends:',
     child: [
       {
         type: 'date',
-        label: 'Ends:',
         name: 'endDate',
         required: true
       },
       {
         type: 'time',
-        label: 'Ends:',
         name: 'endTime',
         required: true
       }
@@ -197,7 +255,7 @@ setTimeout(() => {
           :is-required="input.required"
         />
         <div v-else>
-          <h3 class="subtitle is-small">{{ input.name }}</h3>
+          <h3 class="subtitle is-small">{{ input.label }}</h3>
           <div class="row">
             <div v-for="c in input.child" :key="c.name">
               <CustomInput
@@ -228,7 +286,7 @@ setTimeout(() => {
         />
       </div>
 
-      <ImageLoader v-model="image" />
+      <ImageLoader v-model="newImageFile" :external-image="inputValues.image" />
     </form>
     <div class="modal-card-foot card-custom-footer">
       <CustomButton
@@ -255,9 +313,11 @@ setTimeout(() => {
 .new-event-container-hidden {
   top: 100vh;
 }
+
 .new-event-container-open {
   top: 20vh;
 }
+
 .new-event-container {
   width: 100%;
   max-width: 600px;

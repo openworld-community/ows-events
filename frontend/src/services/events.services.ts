@@ -30,8 +30,16 @@ export const postEventImage = async (img: File): Promise<string> => {
   return data.data.path
 }
 
+export const deleteEventImage = async (path: string) => {
+  await api.post('/image/delete', { path: path })
+}
+
 export const postEvent = async (data: any) => {
   await api.post('/events/add', data)
+}
+
+export const editEvent = async (data: any) => {
+  await api.post('/events/update', data)
 }
 
 export const deleteEvent = async (id: string) => {

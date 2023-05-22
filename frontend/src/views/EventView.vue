@@ -3,12 +3,17 @@ import { ref } from 'vue'
 import { type EventOnPoster } from '@common/types/event'
 import { deleteEvent, getEvent } from '@/services/events.services'
 import { useRoute, useRouter } from 'vue-router'
+import CustomButton from '@/components/common/button/CustomButton.vue'
+import NewEventModal from '@/components/modal/NewEventModal.vue'
+import { VueFinalModal } from 'vue-final-modal'
 import { BASE_URL } from '@/constants/url'
 
 const posterEvent = ref<EventOnPoster | null>(null)
 const route = useRoute()
 const id = route.params.id as string
 const router = useRouter()
+
+const isModalOpen = ref(false)
 
 if (!(typeof id === 'string')) {
   router.push({ path: '/' })
@@ -91,6 +96,21 @@ const share = async () => {
       </div>
       <button class="card-contact-btn">Связаться</button>
     </div>
+    <CustomButton button-class="button is-small" button-text="Change" @click="isModalOpen = true" />
+    <button class="delete is-small" @click="deleteCard()"></button>
+    <vue-final-modal
+      :hideOverlay="false"
+      overlayTransition="vfm-fade"
+      overlayTransitionDuration="2600"
+      contentTransition="vfm-fade"
+      swipeToClose="down"
+      :clickToClose="true"
+      :escToClose="true"
+      :lockScroll="true"
+      v-model="isModalOpen"
+    >
+      <NewEventModal v-if="isModalOpen" :data-for-edit="posterEvent" />
+    </vue-final-modal>
   </main>
 </template>
 

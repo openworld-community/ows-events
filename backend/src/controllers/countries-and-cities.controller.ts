@@ -13,6 +13,29 @@ class CountriesAndCitiesController {
   getCitiesByCountry(country: string) {
     return this.citiesByCountry[country];
   }
+
+  getRandomPair({ country, city }: { country?: string; city?: string }) {
+    const getRandomCountry = () => {
+      const randomCountryIndex = Math.floor(
+        Math.random() * this.countries.length
+      );
+      const randomCountry = this.countries[randomCountryIndex];
+      return randomCountry;
+    };
+
+    const getRandomCity = (randomCountry: string) => {
+      const randomCityIndex = Math.floor(
+        Math.random() * this.citiesByCountry[randomCountry].length
+      );
+      const randomCity = this.citiesByCountry[randomCountry][randomCityIndex];
+      return randomCity;
+    };
+
+    const newCountry = country || getRandomCountry();
+    const newCity = city || getRandomCity(newCountry);
+
+    return { country: newCountry, city: newCity };
+  }
 }
 
 export const countriesAndCitiesController = new CountriesAndCitiesController();

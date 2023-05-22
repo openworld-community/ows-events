@@ -22,7 +22,7 @@ const server = fastify({
 
 server.register(cors, {});
 
-server.register(Multipart)
+server.register(Multipart);
 
 server.register(Static, {
   root: path.join(__dirname, "../frontend/dist/"),
@@ -30,8 +30,8 @@ server.register(Static, {
 
 server.register(Static, {
   root: path.join(__dirname, "./assets/img"),
-  prefix: '/image/',
-  decorateReply: false
+  prefix: "/image/",
+  decorateReply: false,
 });
 
 server.get<{ Reply: string[] }>(
@@ -72,17 +72,17 @@ server.get<{
 );
 
 server.post<{
-  Reply: StandardResponse<{path: string}>;
+  Reply: StandardResponse<{ path: string }>;
 }>(
   "/api/image/add",
-  async (request, reply): Promise<StandardResponse<{path: string}>> => {
+  async (request, reply): Promise<StandardResponse<{ path: string }>> => {
     const data = await request.file();
     if (!data) {
       return {
         status: "error",
       };
     }
-    const buffer = await data.toBuffer()
+    const buffer = await data.toBuffer();
     if (!buffer) {
       return {
         status: "error",
@@ -90,23 +90,26 @@ server.post<{
     }
 
     try {
-      const path = await imageController.saveImg({data: buffer, filetype: data.filename.split('.').reverse()[0]});
+      const path = await imageController.saveImg({
+        data: buffer,
+        filetype: data.filename.split(".").reverse()[0],
+      });
       return {
         status: "success",
         data: {
-          path
-        }
+          path,
+        },
       };
     } catch (e) {
       return {
         status: "error",
-      }
+      };
     }
   }
 );
 
 server.post<{
-  Body: {path: string}
+  Body: { path: string };
   Reply: StandardResponse;
 }>(
   "/api/image/delete",
@@ -125,11 +128,10 @@ server.post<{
     } catch (e) {
       return {
         status: "error",
-      }
+      };
     }
   }
 );
-
 
 server.post<{
   Body: FindEventParams;
@@ -139,7 +141,7 @@ server.post<{
 
   if (searchLine || country || city)
     return eventsStateController
-      .findEvents({ searchLine, country, city })
+      .getEvents({ searchLine, country, city })
       .slice(0, 100);
 
   return eventsStateController.getEvents().slice(0, 100);

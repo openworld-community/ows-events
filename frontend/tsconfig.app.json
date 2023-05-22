@@ -17,6 +17,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@common/*": ["./../common/*"]
-    }
+    }, 
+    "resolvePackageJsonExports": false, 
+    "moduleResolution": "bundler"
   }
 }

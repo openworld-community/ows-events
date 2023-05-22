@@ -21,6 +21,7 @@
     "vue": "^3.3.2",
     "vue-final-modal": "^4.4.2",
     "vue-flag-icon": "^2.1.0",
+    "vue-i18n": "^9.2.2",
     "vue-router": "^4.2.0"
   },
   "devDependencies": {
@@ -38,6 +39,7 @@
     "eslint-plugin-vue": "^9.11.0",
     "jsdom": "^22.0.0",
     "npm-run-all": "^4.1.5",
+    "patch-package": "^7.0.0",
     "prettier": "^2.8.8",
     "typescript": "~5.0.4",
     "vite": "^4.3.5",

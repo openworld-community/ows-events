@@ -12,7 +12,6 @@ import UserLocation from '@/components/location/UserLocation.vue'
 import { useRoute, useRouter } from 'vue-router'
 import DatalistInput from '@/components/common/input/DatalistInput.vue'
 import { BASE_URL } from '@/constants/url'
-import { Z_ASCII } from 'zlib'
 
 let lasyLoadTimeout: ReturnType<typeof setTimeout> | undefined
 

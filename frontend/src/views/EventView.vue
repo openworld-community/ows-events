@@ -133,6 +133,7 @@ const picture = computed(() => {
   margin-bottom: 20px;
   width: 100%;
 }
+
 .image {
   height: 100%;
   min-height: 232px;

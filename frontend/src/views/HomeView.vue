@@ -10,7 +10,6 @@ import { VueFinalModal } from 'vue-final-modal'
 import UserLocation from '@/components/location/UserLocation.vue'
 import { useTranslation } from '@/i18n'
 import { useRoute, useRouter } from 'vue-router'
-import DatalistInput from '@/components/common/input/DatalistInput.vue'
 import { BASE_URL } from '@/constants/url'
 
 const { t } = useTranslation()
@@ -178,7 +177,7 @@ const now = Date.now()
           <i class="fas is-size-1 fa-thin fa-plus"></i>
         </span>
       </button>
-      <div class="location-conteiner">
+      <div class="location-container">
         <div>
           <UserLocation class="user-location" />
         </div>
@@ -196,28 +195,24 @@ const now = Date.now()
       </div>
 
       <h1 class="title">{{ t('home.title') }}</h1>
-      <div class="location-conteiner">
-        <div>
-          <DatalistInput
-            :options-list="countries"
-            input-name="countries"
-            input-class="input is-info search-input"
-            :input-placeholder="t('home.input.country-placeholder')"
-            v-model="country"
-            v-bind:key="country"
-          />
-        </div>
-        <div>
-          <DatalistInput
-            :options-list="cities"
-            input-name="cities"
-            input-class="input is-info search-input"
-            :input-placeholder="t('home.input.city-placeholder')"
-            v-bind:input-disable="!country"
-            v-model="city"
-            v-bind:key="city"
-          />
-        </div>
+      <div class="location-container">
+        <CustomInput
+          input-type="datalist"
+          input-name="country"
+          :input-placeholder="t('home.input.country-placeholder')"
+          :options-list="countries"
+          v-model="country"
+          v-bind:key="country"
+        />
+        <CustomInput
+          input-type="datalist"
+          input-name="city"
+          :input-placeholder="t('home.input.city-placeholder')"
+          :options-list="cities"
+          v-model="city"
+          v-bind:key="city"
+          v-bind:input-disable="!country"
+        />
       </div>
     </div>
 
@@ -337,11 +332,9 @@ main {
     padding: 5px;
   }
 
-  .location-conteiner {
+  .location-container {
     display: flex;
-    gap: 10px;
-    width: 100%;
-    align-items: center;
+    gap: 16px;
 
     .user-location {
       display: flex;

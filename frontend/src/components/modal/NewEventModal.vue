@@ -9,6 +9,7 @@ import DatalistInput from '@/components/common/input/DatalistInput.vue'
 import { storeToRefs } from 'pinia'
 import { useLocationStore } from '@/stores/location.store'
 import { type EventOnPoster } from '@common/types'
+import { useRouter } from 'vue-router'
 
 const emit = defineEmits(['closeModal'])
 
@@ -21,6 +22,7 @@ const props = defineProps<Props>()
 const locationStore = useLocationStore()
 locationStore.loadCountries()
 const { countries, cities } = storeToRefs(locationStore)
+const router = useRouter()
 
 const isLoading = ref(false)
 const newImageFile = ref<null | File>(null)
@@ -110,25 +112,30 @@ const closeModal = () => {
   }, 300)
 }
 
+const paramsForSubmit = computed(() => {
+  return {
+    title: inputValues.value.title,
+    description: inputValues.value.description,
+    date: dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
+    durationInSeconds:
+      dateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() -
+      dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
+    location: {
+      country: inputValues.value.country,
+      city: inputValues.value.city
+    },
+    price: inputValues.value.price
+  }
+})
+
 const submitEvent = async () => {
   //TODO: проверьте тип плиз
   isLoading.value = true
   try {
     let imageURL
 
-    const params = {
-      title: inputValues.value.title,
-      description: inputValues.value.description,
-      date: dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
-      durationInSeconds:
-        dateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() -
-        dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
-      location: {
-        country: inputValues.value.country,
-        city: inputValues.value.city
-      },
-      price: inputValues.value.price
-    }
+    const params = paramsForSubmit.value
+    console.log(params)
 
     if (props.dataForEdit) {
       if (newImageFile.value) {
@@ -146,12 +153,21 @@ const submitEvent = async () => {
       })
     } else {
       imageURL = await postEventImage(newImageFile.value as File)
-      await postEvent({
+      const res = await postEvent({
         event: {
           ...params,
           image: imageURL
         }
       })
+
+      if (res.status === 'success') {
+        const id = res.data.id
+
+        const oldUsersPosts = JSON.parse(localStorage.getItem('USES_POSTS') || '[]')
+        localStorage.setItem('USES_POSTS', JSON.stringify([...oldUsersPosts, id]))
+
+        router.push(`/event/${id}`)
+      }
     }
 
     closeModal()

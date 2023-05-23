@@ -26,30 +26,13 @@ class EventsStateController {
     this.autogenEventsBase = JSON.parse(
       fs.readFileSync("./assets/presets/autogen-base.json", "utf-8")
     );
-
-    // [(1, 2, 3, 4, 5, 6, 7)].map((i) => {
-    //   return {
-    //     id: i.toString(),
-    //     title: "title " + i.toString(),
-    //     description: "description " + i.toString(),
-    //     date: Date.now() + 1000 * 60 * 60 * 24,
-    //     durationInSeconds: 60 * 60,
-    //     image: "https://picsum.photos/200/300",
-    //     location: {
-    //       country: "country " + i.toString(),
-    //       city: "city " + i.toString(),
-    //     },
-    //     price: 1,
-    //   };
-    // })
-    // .forEach((event) => {
-    //   this.addEvent(event);
-    // });
   }
 
   addEvent(event: EventOnPoster) {
-    this.events.push({ ...event, id: uuid() });
+    const id = uuid();
+    this.events.push({ ...event, id });
     fileDBController.updateDB();
+    return id;
   }
 
   getEvents(query?: FindEventParams | undefined): EventOnPoster[] {

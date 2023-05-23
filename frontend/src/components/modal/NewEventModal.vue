@@ -94,11 +94,13 @@ watch(
 )
 
 const checkFormFilling = computed(() => {
-  return !!(inputValues.value.title &&
+  return !!(
+    inputValues.value.title &&
     inputValues.value.startDate &&
     inputValues.value.startTime &&
     inputValues.value.country &&
-    inputValues.value.city);
+    inputValues.value.city
+  )
 })
 
 const closeModal = () => {
@@ -299,12 +301,9 @@ setTimeout(() => {
         button-class="button is-success"
         button-text="Submit"
         :is-active="checkFormFilling && !isLoading"
+        :is-loading="isLoading"
         @click="isLoading ? null : submitEvent()"
       />
-
-      <span class="icon" v-if="isLoading">
-        <i class="fas fa-spinner fa-pulse"></i>
-      </span>
     </div>
   </div>
 </template>

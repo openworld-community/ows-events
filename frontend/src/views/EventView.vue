@@ -29,32 +29,29 @@ const deleteCard = async () => {
   await deleteEvent(id)
   router.push({ path: '/' })
 }
-
-const share = async () => {
-  if (
-    !(
-      window.location.href.includes('https') ||
-      window.location.href.includes('localhost') ||
-      window.location.href.includes('127.0.0.1')
-    )
-  ) {
-    alert('Ой, что-то пошло не так, попробуйте скопировать ссылку вручную')
-    return
-  }
-  await navigator.clipboard.writeText(window.location.href)
-  alert('Ссылка скопирована!')
-}
 </script>
 
 <template>
   <main v-if="posterEvent">
-    <a href="/">Назад (иконка)</a>
-    <!--    <button class="delete is-small" @click="deleteCard()"></button>-->
+    <div class="actions">
+      <div>
+        <a href="/" class="button is-rounded"><i class="fas fa-arrow-left"></i></a>
+      </div>
+      <div>
+        <button @click="deleteCard()" class="button is-rounded is-small">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+
+        <button @click="isModalOpen = true" class="button is-rounded is-small">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </button>
+      </div>
+    </div>
     <div v-bind:key="posterEvent.id" class="card">
       <div class="card-image">
         <div class="card-price">{{ posterEvent.price }} €</div>
         <img
-          alt="Event image"
+          alt="Картинка эвента"
           class="image"
           v-bind:src="`${BASE_URL}${posterEvent.image}`"
           v-if="posterEvent.image"
@@ -97,7 +94,7 @@ const share = async () => {
       <button class="card-contact-btn">Связаться</button>
     </div>
     <CustomButton button-class="button is-small" button-text="Change" @click="isModalOpen = true" />
-    <button class="delete is-small" @click="deleteCard()"></button>
+    <button class="delete is-small"></button>
     <vue-final-modal
       :hideOverlay="false"
       overlayTransition="vfm-fade"
@@ -115,6 +112,12 @@ const share = async () => {
 </template>
 
 <style lang="less" scoped>
+.actions {
+  display: flex;
+  align-items: stretch;
+  margin-bottom: 20px;
+  width: 100%;
+}
 .image {
   height: 100%;
   min-height: 232px;

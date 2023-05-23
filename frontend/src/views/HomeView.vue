@@ -228,7 +228,7 @@ const getFilteredEvents = (
               </div>
               <div class="card-geolink">
                 <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"
-                  >Место встречи (изменить нельзя)</a
+                  >{{ event.location.country }}, {{ event.location.city }}</a
                 >
               </div>
             </div>

@@ -16,7 +16,6 @@ export const resources: Record<
 
 export function useTranslation() {
   const { i18next, t } = useTranslationNative()
-  console.log(navigator.language)
   i18next.changeLanguage(navigator.language)
 
   function translate(key: TranslationKeys) {

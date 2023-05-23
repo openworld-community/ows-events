@@ -159,6 +159,8 @@ const getFilteredEvents = (
 
   return searchResult
 }
+
+const now = Date.now()
 </script>
 
 <template>
@@ -214,7 +216,7 @@ const getFilteredEvents = (
 
     <ul class="card-list">
       <li v-for="event in eventsWithAdd" v-bind:key="event.id" class="card">
-        <div v-if="event.type !== 'add'">
+        <div v-if="event.type !== 'add'" :class="event.date < now ? 'expired' : ''">
           <a :href="`/event/${event.id}`">
             <div class="card-image">
               <div class="card-price">{{ event.price }} €</div>
@@ -295,6 +297,10 @@ main {
     .description {
       font-size: 80%;
     }
+  }
+
+  .expired {
+    opacity: 0.5;
   }
 
   .add-event-button {

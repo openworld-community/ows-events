@@ -7,6 +7,7 @@ import {
   deleteEventImage,
   editEvent,
   getAllTimezones,
+  getTimezoneByCountryAndCity,
   postEvent,
   postEventImage
 } from '@/services/events.services'
@@ -35,15 +36,26 @@ const isModalOpen = ref(false)
 
 const allTimezones = ref<string[]>([])
 
+const timezoneConverter = (timezone: { timezoneName: string; timezoneOffset: string }) => {
+  return timezone.timezoneName + ' ' + timezone.timezoneOffset
+}
+
+const timezoneDeconverter = (timezone: string) => {
+  const timezoneName = timezone.split(' ')[0]
+  const timezoneOffset = timezone.split(' ')[1]
+  return {
+    timezoneName,
+    timezoneOffset
+  }
+}
+
 const loadAllTimezones = async () => {
   const _allTimezones = await getAllTimezones()
   if (!_allTimezones) {
     return
   }
 
-  allTimezones.value = _allTimezones.map(
-    (timezone) => timezone.timezoneName + ' ' + timezone.timezoneOffset
-  )
+  allTimezones.value = _allTimezones.map((timezone) => timezoneConverter(timezone))
 }
 
 loadAllTimezones()
@@ -85,8 +97,8 @@ onMounted(() => {
 })
 
 const setEventData = (data: EventOnPoster) => {
-  const start = timestampParse(data.date)
-  const end = timestampParse(data.date + data.durationInSeconds)
+  const start = timestampParse(data.date, data.timezone)
+  const end = timestampParse(data.date + data.durationInSeconds, data.timezone)
 
   inputValues.value.id = data.id
   inputValues.value.title = data.title
@@ -117,6 +129,30 @@ watch(
   { deep: true }
 )
 
+watch(
+  () => inputValues.value.country && inputValues.value.city,
+  async () => {
+    inputValues.value.timezone = ''
+
+    await getTimezoneByCountryAndCity({
+      country: inputValues.value.country,
+      city: inputValues.value.city
+    })
+      .then((timezone) => {
+        if (timezone.type === 'error') {
+          inputValues.value.timezone = ''
+          return
+        }
+        const _timezone = timezone.data
+        inputValues.value.timezone = timezoneConverter(_timezone)
+      })
+      .catch(() => {
+        inputValues.value.timezone = ''
+      })
+  },
+  { deep: true }
+)
+
 const checkFormFilling = computed(() => {
   return !!(
     inputValues.value.title &&
@@ -135,18 +171,28 @@ const closeModal = () => {
 }
 
 const paramsForSubmit = computed(() => {
+  const tz = timezoneDeconverter(inputValues.value.timezone)
   return {
     title: inputValues.value.title,
     description: inputValues.value.description,
-    date: dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
+    date: dateTime(
+      inputValues.value.startDate,
+      inputValues.value.startTime,
+      tz.timezoneOffset
+    ).getTime(),
     durationInSeconds:
-      dateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() -
-      dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
+      dateTime(inputValues.value.endDate, inputValues.value.endTime, tz.timezoneOffset).getTime() -
+      dateTime(
+        inputValues.value.startDate,
+        inputValues.value.startTime,
+        tz.timezoneOffset
+      ).getTime(),
     location: {
       country: inputValues.value.country,
       city: inputValues.value.city
     },
-    price: inputValues.value.price
+    price: inputValues.value.price,
+    timezone: tz
   }
 })
 
@@ -303,6 +349,15 @@ setTimeout(() => {
           v-bind:key="inputValues.city"
           v-bind:input-disable="!inputValues.country"
         />
+        <CustomInput
+          input-type="datalist"
+          input-name="timezone"
+          input-placeholder="Таймзона"
+          :options-list="allTimezones"
+          v-model="inputValues.timezone"
+          v-bind:key="inputValues.timezone"
+          v-bind:input-disable="!inputValues.city"
+        />
       </div>
 
       <div v-for="input in eventInputs" :key="input.name">
@@ -328,29 +383,6 @@ setTimeout(() => {
             />
           </div>
         </div>
-      </div>
-      <div class="row">
-        <DatalistInput
-          :options-list="countries"
-          input-name="countries"
-          input-class="input search-input is-small"
-          input-placeholder="Country"
-          v-model="inputValues.country"
-        />
-        <DatalistInput
-          :options-list="cities"
-          input-name="cities"
-          input-class="input search-input is-small"
-          input-placeholder="City"
-          v-model="inputValues.city"
-        />
-        <DatalistInput
-          :options-list="allTimezones"
-          input-name="timezone"
-          input-class="input search-input is-small"
-          input-placeholder="Timezone"
-          v-model="inputValues.timezone"
-        />
       </div>
 
       <ImageLoader v-model="newImageFile" :external-image="inputValues.image" />
@@ -400,11 +432,11 @@ setTimeout(() => {
   transition-property: top;
   transition-duration: 0.4s;
 
-.row {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 10px;
-}
+  .row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
 
   .card-custom-footer {
     justify-content: flex-end;

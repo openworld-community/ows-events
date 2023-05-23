@@ -96,7 +96,12 @@ export const getTimezoneByCountryAndCity = async ({
 }) => {
   return (
     await api.get<
-      StandardResponse<{ country: string; city: string; timezone: string; timezoneOffset: string }>
+      StandardResponse<{
+        country: string
+        city: string
+        timezoneName: string
+        timezoneOffset: string
+      }>
     >('/location/meta/' + country + '/' + city)
   ).data
 }

@@ -328,21 +328,25 @@ setTimeout(() => {
   margin: 0;
 
   position: fixed;
+  left: 50%;
+  transform: translate(-50%, 0);
+
   z-index: 1000;
   transition-property: top;
-  transition-duration: 0.3s;
-}
+  transition-duration: 0.4s;
 
-.row {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
+  .row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
 
-.card-custom-footer {
-  justify-content: flex-end;
+  .card-custom-footer {
+    justify-content: flex-end;
+    border-radius: 0;
+  }
 }
 </style>

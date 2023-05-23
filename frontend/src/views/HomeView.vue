@@ -282,7 +282,9 @@ main {
   gap: 10px;
 
   .add-block {
-    border: 1px solid grey;
+    border: 1px solid rgba(128, 128, 128, 0.663);
+    border-radius: 5px;
+    padding: 10px;
     .add-label {
       position: absolute;
       top: 10px;
@@ -308,7 +310,7 @@ main {
   }
 
   .header {
-    padding: 10px;
+    padding: 5px;
   }
 
   .location-conteiner {
@@ -336,7 +338,7 @@ main {
   .card-list {
     display: flex;
     flex-direction: column;
-    width: 100vw;
+    width: 100%;
   }
 
   .card {
@@ -419,7 +421,7 @@ main {
 
   ul {
     list-style: none;
-    padding: 0;
+    padding: 5px;
     margin: 0;
     display: flex;
     justify-content: space-around;

@@ -32,14 +32,26 @@ const isModalOpen = ref<boolean>(false)
 locationStore.pickCountry(pickedCountry.value)
 
 const loadPosterEvents = async () => {
-  if (search.value) {
-    posterEvents.value = await getEventsByParams({ searchLine: search.value })
+  if (search.value || country.value || city.value) {
+    posterEvents.value = await getEventsByParams({
+      searchLine: search.value,
+      country: country.value,
+      city: city.value
+    })
   } else {
     posterEvents.value = await getEvents()
   }
 }
 
 loadPosterEvents()
+
+const planToLoasEvents = () => {
+  lasyLoadTimeout && clearTimeout(lasyLoadTimeout)
+
+  lasyLoadTimeout = setTimeout(async () => {
+    loadPosterEvents()
+  }, 500)
+}
 
 watch(
   pickedCountry,
@@ -52,11 +64,7 @@ watch(
 watch(
   search,
   async (_search) => {
-    lasyLoadTimeout && clearTimeout(lasyLoadTimeout)
-
-    lasyLoadTimeout = setTimeout(async () => {
-      loadPosterEvents()
-    }, 500)
+    planToLoasEvents()
     await router.push({ query: { ...route.query, search: _search || 'None' } })
   },
   { deep: true }
@@ -68,6 +76,7 @@ watch(
     locationStore.pickCountry(_country)
 
     city.value = pickedCity.value
+    planToLoasEvents()
   },
   { deep: true }
 )
@@ -76,6 +85,7 @@ watch(
   city,
   async (_city) => {
     locationStore.pickCity(_city)
+    planToLoasEvents()
   },
   { deep: true }
 )

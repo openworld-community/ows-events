@@ -1,7 +1,13 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useTranslation } from '../i18n/index'
+const { i18next, t } = useTranslation()
+const language = i18next.language
+</script>
 
 <template>
   <main>
+    <input v-model="language" @input="i18next.changeLanguage(language)" />
+    <span>{{ (() => t('greeting.short'))() }}</span>
     <section>
       <h2 class="title">Об Aфише</h2>
       <p>

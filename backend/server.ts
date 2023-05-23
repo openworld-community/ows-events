@@ -139,12 +139,9 @@ server.post<{
 }>("/api/events/find", async (request, reply): Promise<EventOnPoster[]> => {
   const { searchLine, country, city } = request.body;
 
-  if (searchLine || country || city)
-    return eventsStateController
-      .getEvents({ searchLine, country, city })
-      .slice(0, 100);
-
-  return eventsStateController.getEvents().slice(0, 100);
+  return eventsStateController
+    .getEvents({ searchLine, country, city })
+    .slice(0, 100);
 });
 
 server.post<{

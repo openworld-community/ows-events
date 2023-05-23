@@ -166,7 +166,13 @@ const now = Date.now()
 <template>
   <main>
     <div class="header">
-      <button class="button is-rounded add-event-button" @click="isModalOpen = true">
+      <button
+        id="add-event-button"
+        aria-label="добавить событие"
+        aria-haspopup="true"
+        class="button is-rounded add-event-button"
+        @click="isModalOpen = true"
+      >
         <span class="icon">
           <i class="fas is-size-1 fa-thin fa-plus"></i>
         </span>
@@ -247,7 +253,7 @@ const now = Date.now()
           </a>
         </div>
         <div v-else class="add-block">
-          <span class="add-label">add</span>
+          <span class="add-label" role="button" tabindex="0" aria-label="добавить блок">add</span>
           <div class="card-title">
             {{ event.title }}
           </div>

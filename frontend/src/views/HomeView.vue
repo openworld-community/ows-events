@@ -41,6 +41,7 @@ const loadPosterEvents = async () => {
   } else {
     posterEvents.value = await getEvents()
   }
+  console.log(posterEvents.value)
 }
 
 loadPosterEvents()

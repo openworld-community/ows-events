@@ -9,7 +9,6 @@ const { t } = useTranslation()
     <LanguageSelector />
     <section>
       <h2 class="title">{{ t('about.title') }}</h2>
-      <h2 class="title">{{ $t('about.title') }}</h2>
       <p>{{ t('about.p1') }}</p>
       <br />
       <p>{{ t('about.p2') }}</p>

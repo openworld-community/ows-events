@@ -13,5 +13,4 @@ watch(language, (language) => i18next.changeLanguage(language))
       {{ locale }}
     </option>
   </select>
-  <input v-model="language" />
 </template>

@@ -2,10 +2,10 @@ import { defineTranslation } from '..'
 
 export default defineTranslation({
   about: {
-    title: 'What is Afisha',
-    p1: 'Идея проекта "Афиши" заключается в создании удобной площадки для поиска мероприятий, которые проходят в интересующем пользователя регионе (с упором на IT-мероприятия, но в целом мы хотим добавлять все: от конференций до музыкальных вечеров).',
-    p2: 'На странице каждого мероприятия будет доступна информация о дате начала и окончания, локации, описании и цене. Пользователь сможет записаться на мероприятие и добавить его в избранное. Организатор мероприятия сможет добавлять информацию о нем на площадку.',
-    p3: 'Монетизация проекта будет осуществляться за счет рекламы мероприятий, которые будут подниматься в начало списка.',
-    github: 'Ссылка на GitHub проекта'
+    title: 'About Afisha',
+    p1: 'The idea of the "Afisha" project is to create a convenient platform for searching events that are happening in the user\'s region of interest (with a focus on IT events, but we want to add everything from conferences to music evenings).',
+    p2: 'Information about the start and end dates, location, description, and price will be available on the page of each event. Users will be able to sign up for the event and add it to favorites. The event organizer will be able to add information about it to the platform.',
+    p3: 'The project will be monetized through advertising of events that will be promoted to the top of the list.',
+    github: "Link to the project's GitHub"
   }
 })

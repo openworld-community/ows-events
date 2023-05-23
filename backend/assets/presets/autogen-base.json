@@ -1,86 +1,112 @@
 [
   {
     "title": "Большой концерт в честь дня города!",
-    "description": "Концерт с участием популярных исполнителей в честь городского праздника."
+    "description": "Концерт с участием популярных исполнителей в честь городского праздника.",
+    "image": "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
   },
   {
     "title": "Ночь кино под открытым небом",
-    "description": "Вечерний показ фильмов на открытом воздухе в кинотеатре."
+    "description": "Вечерний показ фильмов на открытом воздухе в кинотеатре.",
+    "image": "https://images.unsplash.com/photo-1527979809431-ea3d5c0c01c9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1509&q=80"
   },
   {
     "title": "Фестиваль музыки и искусства",
-    "description": "Длительный фестиваль, на котором будут выступать музыкальные коллективы и проводиться мастер-классы по искусству."
+    "description": "Длительный фестиваль, на котором будут выступать музыкальные коллективы и проводиться мастер-классы по искусству.",
+    "image": "https://images.unsplash.com/photo-1505224628533-c4fc42c389e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1634&q=80"
   },
   {
     "title": "Выставка современного искусства",
-    "description": "Выставка современных художников, дизайнеров и скульпторов с возможностью приобретения работ."
+    "description": "Выставка современных художников, дизайнеров и скульпторов с возможностью приобретения работ.",
+    "image": "https://images.unsplash.com/photo-1597415018997-cdc2189fe3f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
   },
   {
     "title": "Театральный фестиваль",
-    "description": "Мероприятие, на котором будут представлены лучшие спектакли театров города и других регионов."
+    "description": "Мероприятие, на котором будут представлены лучшие спектакли театров города и других регионов.",
+    "image": "https://images.unsplash.com/photo-1503095396549-807759245b35?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80"
   },
   {
     "title": "Кулинарный фестиваль национальных блюд",
-    "description": "Фестиваль, на котором будут представлены блюда разных национальностей и проводиться мастер-классы по приготовлению."
+    "description": "Фестиваль, на котором будут представлены блюда разных национальностей и проводиться мастер-классы по приготовлению.",
+    "image": "https://images.unsplash.com/photo-1507048331197-7d4ac70811cf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
+
   },
   {
     "title": "Детский праздник",
-    "description": "Праздничное мероприятие для детей с аттракционами, развлекательными программами и подарками."
+    "description": "Праздничное мероприятие для детей с аттракционами, развлекательными программами и подарками.",
+    "image": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
   },
   {
     "title": "Ярмарка ремесел и увлечений",
-    "description": "Мероприятие, на котором можно приобрести уникальные изделия ручной работы и узнать больше о ремеслах и увлечениях."
+    "description": "Мероприятие, на котором можно приобрести уникальные изделия ручной работы и узнать больше о ремеслах и увлечениях.",
+    "image": "https://images.unsplash.com/photo-1474128670149-7082a8d370ea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
   },
   {
     "title": "Конференция по научным исследованиям",
-    "description": "Мероприятие, на котором ведущие ученые будут давать доклады и обсуждать свои научные исследования."
+    "description": "Мероприятие, на котором ведущие ученые будут давать доклады и обсуждать свои научные исследования.",
+    "image": "https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
   },
   {
     "title": "Танцевальный марафон",
-    "description": "Мероприятие, на котором можно насладиться танцевальной музыкой, танцевать и участвовать в конкурсах."
+    "description": "Мероприятие, на котором можно насладиться танцевальной музыкой, танцевать и участвовать в конкурсах.",
+    "image": "https://images.unsplash.com/photo-1504609813442-a8924e83f76e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
   },
   {
     "title": "Фестиваль цветов",
-    "description": "Выставка цветов и растений с мастер-классами, лекциями и конкурсами."
+    "description": "Выставка цветов и растений с мастер-классами, лекциями и конкурсами.",
+    "image": "https://images.unsplash.com/photo-1644485494394-fa0dc78378ee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
   },
   {
     "title": "Выставка антиквариата",
-    "description": "Выставка антикварных предметов, которые можно приобрести."
+    "description": "Выставка антикварных предметов, которые можно приобрести.",
+    "image": "https://images.unsplash.com/photo-1597945161640-9366e6d4253b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
   },
   {
     "title": "Фестиваль джазовой музыки",
-    "description": "Мероприятие, посвященное джазовой музыке, с выступлениями музыкальных коллективов."
+    "description": "Мероприятие, посвященное джазовой музыке, с выступлениями музыкальных коллективов.",
+    "image": "https://images.unsplash.com/photo-1511192336575-5a79af67a629?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80"
   },
   {
     "title": "Выставка костюмов",
-    "description": "Выставка различных костюмов, которые использовались в кино и театре."
+    "description": "Выставка различных костюмов, которые использовались в кино и театре.",
+    "image": "https://images.unsplash.com/photo-1523260578934-e9318da58c8d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
   },
   {
     "title": "Фестиваль театрального и киноискусства",
-    "description": "Мероприятие, на котором будут представлены лучшие спектакли театров и фильмы."
+    "description": "Мероприятие, на котором будут представлены лучшие спектакли театров и фильмы.",
+    "image": "https://images.unsplash.com/photo-1514306191717-452ec28c7814?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80"
+
   },
   {
     "title": "Кинофестиваль",
-    "description": "Мероприятие, на котором будут показываться фильмы разных жанров."
+    "description": "Мероприятие, на котором будут показываться фильмы разных жанров.",
+    "image": "https://images.unsplash.com/photo-1478720568477-152d9b164e26?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+
   },
   {
     "title": "Фестиваль народных традиций",
-    "description": "Мероприятие, на котором можно познакомиться с народными традициями и обычаями."
+    "description": "Мероприятие, на котором можно познакомиться с народными традициями и обычаями.",
+    "image": "https://images.unsplash.com/photo-1622279487170-dbccd34eda0e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
   },
   {
     "title": "Выставка фотографий",
-    "description": "Выставка лучших фотографий с возможностью приобретения."
+    "description": "Выставка лучших фотографий с возможностью приобретения.",
+    "image": "https://images.unsplash.com/photo-1495579010035-041553be82da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+
   },
   {
     "title": "Музыкальный фестиваль",
-    "description": "Мероприятие, на котором будут выступать музыкальные коллективы."
+    "description": "Мероприятие, на котором будут выступать музыкальные коллективы.",
+    "image": "https://images.unsplash.com/photo-1465147836063-7ca3784f01af?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=706&q=80"
+
   },
   {
     "title": "Фестиваль сказок",
-    "description": "Мероприятие, на котором будут рассказывать сказки и проводиться мастер-классы по их написанию."
+    "description": "Мероприятие, на котором будут рассказывать сказки и проводиться мастер-классы по их написанию.",
+    "image": "https://images.unsplash.com/photo-1525191418710-6207a5bf377d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
   },
   {
     "title": "Выставка живописи",
-    "description": "Выставка картин с возможностью приобретения."
+    "description": "Выставка картин с возможностью приобретения.",
+    "image": "https://images.unsplash.com/photo-1630253303562-c8e9fd52c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
   }
 ]

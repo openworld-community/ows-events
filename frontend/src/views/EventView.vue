@@ -7,6 +7,8 @@ import CustomButton from '@/components/common/button/CustomButton.vue'
 import NewEventModal from '@/components/modal/NewEventModal.vue'
 import { VueFinalModal } from 'vue-final-modal'
 import { BASE_URL } from '@/constants/url'
+import { useTranslation } from '@/i18n'
+const { t } = useTranslation()
 
 const posterEvent = ref<EventOnPoster | null>(null)
 const route = useRoute()

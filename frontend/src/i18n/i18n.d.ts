@@ -8,9 +8,8 @@ declare module 'i18next' {
 
 type DeepReadonly<T> = { readonly [K in keyof T]: DeepReadonly<T[K]> }
 type DefaultTranslation = DeepReadonly<typeof defaultTranslation>
-type KeyStrings<D extends object> = D extends object
-  ? {
-      [K in keyof D]: `${Extract<K, string>}${D[K] extends object ? `.${KeyStrings<D[K]>}` : ''}`
-    }[keyof D]
+type KeyStrings<D extends object, K = keyof D> = K extends K
+  ? `${Extract<K, string>}${D[K] extends object ? `.${KeyStrings<D[K]>}` : ''}`
   : never
+
 type TranslationKeys = KeyStrings<DefaultTranslation>

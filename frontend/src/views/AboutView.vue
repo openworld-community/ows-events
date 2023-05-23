@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { useTranslation } from '@/i18n'
-import LanguageSelector from '../components/header/languageSelector.vue'
 const { t } = useTranslation()
 </script>
 
 <template>
   <main>
-    <LanguageSelector />
     <section>
       <h2 class="title">{{ t('about.title') }}</h2>
       <p>{{ t('about.p1') }}</p>

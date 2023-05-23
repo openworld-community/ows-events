@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { watch } from 'vue'
-import { useTranslation, supportedLocales } from '../../i18n'
+import { supportedLocales } from '../../i18n'
 import { ref } from 'vue'
-const { i18next } = useTranslation()
+import i18next from 'i18next'
+
 const language = ref(i18next.language)
 watch(language, (language) => i18next.changeLanguage(language))
 </script>

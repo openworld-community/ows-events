@@ -8,12 +8,14 @@ import NewEventModal from '@/components/modal/NewEventModal.vue'
 import CustomInput from '@/components/common/input/CustomInput.vue'
 import { VueFinalModal } from 'vue-final-modal'
 import UserLocation from '@/components/location/UserLocation.vue'
-
+import { useTranslation } from '@/i18n'
 import { useRoute, useRouter } from 'vue-router'
 import DatalistInput from '@/components/common/input/DatalistInput.vue'
 import { BASE_URL } from '@/constants/url'
 
-let lasyLoadTimeout: ReturnType<typeof setTimeout> | undefined
+const { t } = useTranslation()
+
+let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined
 
 const locationStore = useLocationStore()
 locationStore.loadCountries()
@@ -46,9 +48,9 @@ const loadPosterEvents = async () => {
 loadPosterEvents()
 
 const planToLoasEvents = () => {
-  lasyLoadTimeout && clearTimeout(lasyLoadTimeout)
+  lazyLoadTimeout && clearTimeout(lazyLoadTimeout)
 
-  lasyLoadTimeout = setTimeout(async () => {
+  lazyLoadTimeout = setTimeout(async () => {
     loadPosterEvents()
   }, 500)
 }
@@ -168,7 +170,7 @@ const now = Date.now()
     <div class="header">
       <button
         id="add-event-button"
-        aria-label="добавить событие"
+        :aria-label="t('home.button.add-event-aria')"
         aria-haspopup="true"
         class="button is-rounded add-event-button"
         @click="isModalOpen = true"
@@ -188,20 +190,20 @@ const now = Date.now()
             input-class="input is-info search-input"
             input-type="text"
             input-name="search"
-            input-placeholder="Search"
+            :input-placeholder="t('home.input.search-placeholder')"
             v-model="search"
           />
         </div>
       </div>
 
-      <h1 class="title">Мероприятия</h1>
+      <h1 class="title">{{ t('home.title') }}</h1>
       <div class="location-conteiner">
         <div>
           <DatalistInput
             :options-list="countries"
             input-name="countries"
             input-class="input is-info search-input"
-            input-placeholder="Country"
+            :input-placeholder="t('home.input.country-placeholder')"
             v-model="country"
             v-bind:key="country"
           />
@@ -211,7 +213,7 @@ const now = Date.now()
             :options-list="cities"
             input-name="cities"
             input-class="input is-info search-input"
-            input-placeholder="City"
+            :input-placeholder="t('home.input.city-placeholder')"
             v-bind:input-disable="!country"
             v-model="city"
             v-bind:key="city"
@@ -226,7 +228,12 @@ const now = Date.now()
           <a :href="`/event/${event.id}`">
             <div class="card-image">
               <div class="card-price">{{ event.price }} €</div>
-              <img alt="Event image" class="image" v-bind:src="event.image" v-if="event.image" />
+              <img
+                :alt="t('home.events.image-alt')"
+                class="image"
+                v-bind:src="event.image"
+                v-if="event.image"
+              />
             </div>
 
             <div class="card-content">
@@ -253,7 +260,13 @@ const now = Date.now()
           </a>
         </div>
         <div v-else class="add-block">
-          <span class="add-label" role="button" tabindex="0" aria-label="добавить блок">add</span>
+          <span
+            class="add-label"
+            role="button"
+            tabindex="0"
+            :aria-label="t('home.events.add-block-aria-label')"
+            >{{ t('home.events.add-block-label') }}</span
+          >
           <div class="card-title">
             {{ event.title }}
           </div>
@@ -261,7 +274,7 @@ const now = Date.now()
             {{ event.description }}
           </div>
           <div class="card-action">
-            <a :href="event.link"> Перейти в чат! </a>
+            <a :href="event.link"> {{ t('home.events.anchor-chat') }}! </a>
           </div>
         </div>
       </li>

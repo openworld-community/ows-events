@@ -5,7 +5,7 @@ import calendar from '@/assets/img/icon/calendar.svg'
 import clock from '@/assets/img/icon/clock.svg'
 import container from '@/assets/img/icon/container.svg'
 
-const ICON_DICTIONARY = {
+const ICON_DICTIONARY: { [key: string]: string } = {
   search: search,
   date: calendar,
   endDate: calendar,
@@ -63,13 +63,13 @@ const inputData = computed({
   }
 })
 
-const input = ref(null)
+const input = ref<null | HTMLInputElement>(null)
 
 const showPicker = () => {
   if (props.inputType === 'text') {
-    input.value.focus()
+    input.value?.focus()
   } else {
-    input.value.showPicker()
+    input.value?.showPicker()
   }
 }
 </script>

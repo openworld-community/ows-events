@@ -80,15 +80,12 @@ server.post<{
     if (!data) {
       return {
         type: "error",
-        status: "error",
       };
     }
     const buffer = await data.toBuffer();
     if (!buffer) {
       return {
         type: "error",
-
-        status: "error",
       };
     }
 
@@ -100,7 +97,6 @@ server.post<{
       return {
         type: "success",
 
-        status: "success",
         data: {
           path,
         },
@@ -108,8 +104,6 @@ server.post<{
     } catch (e) {
       return {
         type: "error",
-
-        status: "error",
       };
     }
   }
@@ -130,13 +124,11 @@ server.post<{
     await imageController.deleteImg(path);
     return {
       type: "success",
-      status: "success",
       data: undefined,
     };
   } catch (e) {
     return {
       type: "error",
-      status: "error",
     };
   }
 });
@@ -160,21 +152,18 @@ server.post<{
   if (!body) {
     return {
       type: "error",
-      status: "error",
     };
   }
   const event = body.event;
   if (!event) {
     return {
       type: "error",
-      status: "error",
     };
   }
 
   const newPostId = eventsStateController.addEvent(event);
   return {
     type: "success",
-    status: "success",
     data: { id: newPostId },
   };
 });
@@ -187,21 +176,18 @@ server.post<{
   if (!body) {
     return {
       type: "error",
-      status: "error",
     };
   }
   const event = body.event;
   if (!event) {
     return {
       type: "error",
-      status: "error",
     };
   }
 
   eventsStateController.updateEvent(event);
   return {
     type: "success",
-    status: "success",
     data: undefined,
   };
 });
@@ -213,7 +199,6 @@ server.post<{
   eventsStateController.deleteEvent(request.body.id);
   return {
     type: "success",
-    status: "success",
     data: undefined,
   };
 });

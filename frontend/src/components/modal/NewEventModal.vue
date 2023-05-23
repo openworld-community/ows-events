@@ -160,7 +160,7 @@ const submitEvent = async () => {
         }
       })
 
-      if (res.status === 'success') {
+      if (res.type === 'success') {
         const id = res.data.id
 
         const oldUsersPosts = JSON.parse(localStorage.getItem('USES_POSTS') || '[]')

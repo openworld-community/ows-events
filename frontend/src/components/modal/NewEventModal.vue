@@ -3,7 +3,13 @@ import CustomInput from '@/components/common/input/CustomInput.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import CustomButton from '@/components/common/button/CustomButton.vue'
 import { dateTime, timestampParse } from '@/helpers/dates'
-import { deleteEventImage, editEvent, postEvent, postEventImage } from '@/services/events.services'
+import {
+  deleteEventImage,
+  editEvent,
+  getAllTimezones,
+  postEvent,
+  postEventImage
+} from '@/services/events.services'
 import ImageLoader from '@/components/common/button/ImageLoader.vue'
 import DatalistInput from '@/components/common/input/DatalistInput.vue'
 import { storeToRefs } from 'pinia'
@@ -28,6 +34,21 @@ const isLoading = ref(false)
 const newImageFile = ref<null | File>(null)
 const isModalOpen = ref(false)
 
+const allTimezones = ref<string[]>([])
+
+const loadAllTimezones = async () => {
+  const _allTimezones = await getAllTimezones()
+  if (!_allTimezones) {
+    return
+  }
+
+  allTimezones.value = _allTimezones.map(
+    (timezone) => timezone.timezoneName + ' ' + timezone.timezoneOffset
+  )
+}
+
+loadAllTimezones()
+
 type inputValuesType = {
   id: string
   title: string
@@ -40,6 +61,7 @@ type inputValuesType = {
   city: string
   image: string
   price: number
+  timezone: string
 }
 
 const inputValues = ref<inputValuesType>({
@@ -53,7 +75,8 @@ const inputValues = ref<inputValuesType>({
   country: '',
   city: '',
   image: '',
-  price: 0
+  price: 0,
+  timezone: ''
 })
 
 onMounted(() => {
@@ -301,6 +324,13 @@ setTimeout(() => {
           input-class="input search-input is-small"
           input-placeholder="City"
           v-model="inputValues.city"
+        />
+        <DatalistInput
+          :options-list="allTimezones"
+          input-name="timezone"
+          input-class="input search-input is-small"
+          input-placeholder="Timezone"
+          v-model="inputValues.timezone"
         />
       </div>
 

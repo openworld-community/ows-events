@@ -16,7 +16,9 @@
     "@fastify/cors": "^8.2.1",
     "@fastify/multipart": "^7.6.0",
     "@fastify/static": "^6.10.1",
+    "city-timezones": "^1.2.1",
     "fastify": "^4.17.0",
+    "moment-timezone": "^0.5.43",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
     "uuid": "^9.0.0"

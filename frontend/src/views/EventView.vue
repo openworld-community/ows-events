@@ -35,14 +35,23 @@ const deleteCard = async () => {
   <main v-if="posterEvent">
     <div class="actions">
       <div>
-        <a href="/" class="button is-rounded"><i class="fas fa-arrow-left"></i></a>
+        <a href="/" class="button is-rounded" title="назад"><i class="fas fa-arrow-left"></i></a>
       </div>
       <div>
-        <button @click="deleteCard()" class="button is-rounded is-small">
+        <button
+          aria-label="удалить событие"
+          @click="deleteCard()"
+          class="button is-rounded is-small"
+        >
           <i class="fa-solid fa-trash"></i>
         </button>
 
-        <button @click="isModalOpen = true" class="button is-rounded is-small">
+        <button
+          aria-label="управление событием"
+          aria-haspopup="true"
+          @click="isModalOpen = true"
+          class="button is-rounded is-small"
+        >
           <i class="fa-solid fa-pen-to-square"></i>
         </button>
       </div>
@@ -94,7 +103,7 @@ const deleteCard = async () => {
       <button class="card-contact-btn">Связаться</button>
     </div>
     <CustomButton button-class="button is-small" button-text="Change" @click="isModalOpen = true" />
-    <button class="delete is-small"></button>
+    <button class="delete is-small" aria-label="удалить событие"></button>
     <vue-final-modal
       :hideOverlay="false"
       overlayTransition="vfm-fade"

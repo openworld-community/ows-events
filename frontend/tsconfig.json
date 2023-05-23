@@ -9,7 +9,7 @@
     "./../common/**/*"
   ],
   "references": [
-        {
+    {
       "path": "./tsconfig.app.json"
     },
     {
@@ -23,6 +23,6 @@
     "paths": {
       "@/*": ["./src/*"],
       "@common/*": ["./../common/*"]
-    },
+    }
   }
 }

@@ -87,16 +87,6 @@ const useLocationStore = defineStore('counter', {
     async init() {
       this.userLocation = await _getUserLocation()
 
-      if (!localStorage.getItem('LOCATIONS_PICKED_COUNTRY')) {
-        localStorage.setItem('LOCATIONS_PICKED_COUNTRY', this.userLocation?.country || '')
-      }
-      this.pickedCountry = localStorage.getItem('LOCATIONS_PICKED_COUNTRY') || ''
-
-      if (!localStorage.getItem('LOCATIONS_PICKED_CITY')) {
-        localStorage.setItem('LOCATIONS_PICKED_CITY', this.userLocation?.city || '')
-      }
-      this.pickedCity = localStorage.getItem('LOCATIONS_PICKED_CITY') || ''
-
       await this.loadCountries()
       if (!this.pickedCountry) {
         return

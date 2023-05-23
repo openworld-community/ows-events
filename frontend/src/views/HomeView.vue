@@ -30,14 +30,26 @@ const isModalOpen = ref<boolean>(false)
 locationStore.pickCountry(pickedCountry.value)
 
 const loadPosterEvents = async () => {
-  if (search.value) {
-    posterEvents.value = await getEventsByParams({ searchLine: search.value })
+  if (search.value || country.value || city.value) {
+    posterEvents.value = await getEventsByParams({
+      searchLine: search.value,
+      country: country.value,
+      city: city.value
+    })
   } else {
     posterEvents.value = await getEvents()
   }
 }
 
 loadPosterEvents()
+
+const planToLoasEvents = () => {
+  lasyLoadTimeout && clearTimeout(lasyLoadTimeout)
+
+  lasyLoadTimeout = setTimeout(async () => {
+    loadPosterEvents()
+  }, 500)
+}
 
 watch(
   pickedCountry,
@@ -50,11 +62,7 @@ watch(
 watch(
   search,
   async (_search) => {
-    lasyLoadTimeout && clearTimeout(lasyLoadTimeout)
-
-    lasyLoadTimeout = setTimeout(async () => {
-      loadPosterEvents()
-    }, 500)
+    planToLoasEvents()
     await router.push({ query: { ...route.query, search: _search || 'None' } })
   },
   { deep: true }
@@ -66,6 +74,7 @@ watch(
     locationStore.pickCountry(_country)
 
     city.value = pickedCity.value
+    planToLoasEvents()
   },
   { deep: true }
 )
@@ -74,6 +83,7 @@ watch(
   city,
   async (_city) => {
     locationStore.pickCity(_city)
+    planToLoasEvents()
   },
   { deep: true }
 )
@@ -147,12 +157,20 @@ const getFilteredEvents = (
 
   return searchResult
 }
+
+const now = Date.now()
 </script>
 
 <template>
   <main>
     <div class="header">
-      <button class="button is-rounded add-event-button" @click="isModalOpen = true">
+      <button
+        id="add-event-button"
+        aria-label="добавить событие"
+        aria-haspopup="true"
+        class="button is-rounded add-event-button"
+        @click="isModalOpen = true"
+      >
         <span class="icon">
           <i class="fas is-size-1 fa-thin fa-plus"></i>
         </span>
@@ -198,7 +216,7 @@ const getFilteredEvents = (
 
     <ul class="card-list">
       <li v-for="event in eventsWithAdd" v-bind:key="event.id" class="card">
-        <div v-if="event.type !== 'add'">
+        <div v-if="event.type !== 'add'" :class="event.date < now ? 'expired' : ''">
           <a :href="`/event/${event.id}`">
             <div class="card-image">
               <div class="card-price">{{ event.price }} €</div>
@@ -222,14 +240,14 @@ const getFilteredEvents = (
               </div>
               <div class="card-geolink">
                 <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"
-                  >Место встречи (изменить нельзя)</a
+                  >{{ event.location.country }}, {{ event.location.city }}</a
                 >
               </div>
             </div>
           </a>
         </div>
         <div v-else class="add-block">
-          <span class="add-label">add</span>
+          <span class="add-label" role="button" tabindex="0" aria-label="добавить блок">add</span>
           <div class="card-title">
             {{ event.title }}
           </div>
@@ -266,8 +284,9 @@ main {
   gap: 10px;
 
   .add-block {
-    border: 1px solid grey;
-
+    border: 1px solid rgba(128, 128, 128, 0.663);
+    border-radius: 5px;
+    padding: 10px;
     .add-label {
       position: absolute;
       top: 10px;
@@ -278,6 +297,10 @@ main {
     .description {
       font-size: 80%;
     }
+  }
+
+  .expired {
+    opacity: 0.5;
   }
 
   .add-event-button {
@@ -293,7 +316,7 @@ main {
   }
 
   .header {
-    padding: 10px;
+    padding: 5px;
   }
 
   .location-container {
@@ -319,7 +342,7 @@ main {
   .card-list {
     display: flex;
     flex-direction: column;
-    width: 100vw;
+    width: 100%;
   }
 
   .card {
@@ -402,7 +425,7 @@ main {
 
   ul {
     list-style: none;
-    padding: 0;
+    padding: 5px;
     margin: 0;
     display: flex;
     justify-content: space-around;

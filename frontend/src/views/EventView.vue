@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { type EventOnPoster } from '@common/types/event'
 import { deleteEvent, getEvent } from '@/services/events.services'
 import { useRoute, useRouter } from 'vue-router'
@@ -29,6 +29,13 @@ const deleteCard = async () => {
   await deleteEvent(id)
   router.push({ path: '/' })
 }
+
+const picture = computed(() => {
+  if (posterEvent.value?.image) {
+    return `${BASE_URL}${posterEvent.value.image}`
+  }
+  return 'https://picsum.photos/400/300'
+})
 </script>
 
 <template>
@@ -50,12 +57,7 @@ const deleteCard = async () => {
     <div v-bind:key="posterEvent.id" class="card">
       <div class="card-image">
         <div class="card-price">{{ posterEvent.price }} €</div>
-        <img
-          alt="Картинка эвента"
-          class="image"
-          v-bind:src="`${BASE_URL}${posterEvent.image}`"
-          v-if="posterEvent.image"
-        />
+        <img alt="Картинка эвента" class="image" v-bind:src="picture" />
       </div>
 
       <div class="card-content">
@@ -123,6 +125,7 @@ const deleteCard = async () => {
   min-height: 232px;
   object-fit: cover;
   border-radius: 0;
+  width: 100%;
 }
 
 .card {

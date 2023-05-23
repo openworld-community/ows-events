@@ -1,5 +1,9 @@
-export type StandardResponse<T = undefined> = {
-    status: "success" | "error";
-    errors?: string[];
-    data?: T;
-}
+export type StandardResponse<T> =
+  | {
+      type: "success";
+      data: T;
+    }
+  | {
+      type: "error";
+      errors?: string[];
+    };

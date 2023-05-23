@@ -1,10 +1,14 @@
 {
   "scripts": {
+    "dev": "concurrently -n \"frontend,backend\" -c \"red,blue\" \"npm run dev:frontend\" \"npm run dev:backend\"",
     "dev:frontend": "cd frontend && npm run dev",
     "dev:backend": "cd backend && npm run start:watch",
     "i": "cd frontend && npm i && cd ../backend && npm i",
     "prod:build": "cd frontend && npm run build",
     "prod:run": "cd backend && npm run start:watch",
     "demo:build": "cd frontend && npm run build:only"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.1"
   }
 }

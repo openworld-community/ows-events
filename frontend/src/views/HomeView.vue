@@ -8,9 +8,7 @@ import NewEventModal from '@/components/modal/NewEventModal.vue'
 import CustomInput from '@/components/common/input/CustomInput.vue'
 import { VueFinalModal } from 'vue-final-modal'
 import UserLocation from '@/components/location/UserLocation.vue'
-
 import { useRoute, useRouter } from 'vue-router'
-import DatalistInput from '@/components/common/input/DatalistInput.vue'
 import { BASE_URL } from '@/constants/url'
 
 let lasyLoadTimeout: ReturnType<typeof setTimeout> | undefined
@@ -177,7 +175,7 @@ const now = Date.now()
           <i class="fas is-size-1 fa-thin fa-plus"></i>
         </span>
       </button>
-      <div class="location-conteiner">
+      <div class="location-container">
         <div>
           <UserLocation class="user-location" />
         </div>
@@ -195,28 +193,24 @@ const now = Date.now()
       </div>
 
       <h1 class="title">Мероприятия</h1>
-      <div class="location-conteiner">
-        <div>
-          <DatalistInput
-            :options-list="countries"
-            input-name="countries"
-            input-class="input is-info search-input"
-            input-placeholder="Country"
-            v-model="country"
-            v-bind:key="country"
-          />
-        </div>
-        <div>
-          <DatalistInput
-            :options-list="cities"
-            input-name="cities"
-            input-class="input is-info search-input"
-            input-placeholder="City"
-            v-bind:input-disable="!country"
-            v-model="city"
-            v-bind:key="city"
-          />
-        </div>
+      <div class="location-container">
+        <CustomInput
+          input-type="datalist"
+          input-name="country"
+          input-placeholder="Страна"
+          :options-list="countries"
+          v-model="country"
+          v-bind:key="country"
+        />
+        <CustomInput
+          input-type="datalist"
+          input-name="city"
+          input-placeholder="Город"
+          :options-list="cities"
+          v-model="city"
+          v-bind:key="city"
+          v-bind:input-disable="!country"
+        />
       </div>
     </div>
 
@@ -325,11 +319,9 @@ main {
     padding: 5px;
   }
 
-  .location-conteiner {
+  .location-container {
     display: flex;
-    gap: 10px;
-    width: 100%;
-    align-items: center;
+    gap: 16px;
 
     .user-location {
       display: flex;

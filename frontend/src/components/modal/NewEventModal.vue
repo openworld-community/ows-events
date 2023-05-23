@@ -11,7 +11,6 @@ import {
   postEventImage
 } from '@/services/events.services'
 import ImageLoader from '@/components/common/button/ImageLoader.vue'
-import DatalistInput from '@/components/common/input/DatalistInput.vue'
 import { storeToRefs } from 'pinia'
 import { useLocationStore } from '@/stores/location.store'
 import { type EventOnPoster } from '@common/types'
@@ -286,6 +285,26 @@ setTimeout(() => {
       <h2 class="event-modal__title title is-3">Describe your event</h2>
     </header>
     <form class="modal-card-body">
+      <div class="row">
+        <CustomInput
+          input-type="datalist"
+          input-name="country"
+          input-placeholder="Страна"
+          :options-list="countries"
+          v-model="inputValues.country"
+          v-bind:key="inputValues.country"
+        />
+        <CustomInput
+          input-type="datalist"
+          input-name="city"
+          input-placeholder="Город"
+          :options-list="cities"
+          v-model="inputValues.city"
+          v-bind:key="inputValues.city"
+          v-bind:input-disable="!inputValues.country"
+        />
+      </div>
+
       <div v-for="input in eventInputs" :key="input.name">
         <CustomInput
           v-if="input.type !== 'row'"
@@ -298,15 +317,15 @@ setTimeout(() => {
         <div v-else>
           <h3 class="subtitle is-small">{{ input.label }}</h3>
           <div class="row">
-            <div v-for="c in input.child" :key="c.name">
-              <CustomInput
-                :input-type="c.type"
-                :input-placeholder="c.label"
-                :input-name="c.name"
-                v-model="inputValues[c.name]"
-                :is-required="c.required"
-              />
-            </div>
+            <CustomInput
+              v-for="c in input.child"
+              :key="c.name"
+              :input-type="c.type"
+              :input-placeholder="c.label"
+              :input-name="c.name"
+              v-model="inputValues[c.name]"
+              :is-required="c.required"
+            />
           </div>
         </div>
       </div>
@@ -381,14 +400,11 @@ setTimeout(() => {
   transition-property: top;
   transition-duration: 0.4s;
 
-  .row {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
+.row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+}
 
   .card-custom-footer {
     justify-content: flex-end;

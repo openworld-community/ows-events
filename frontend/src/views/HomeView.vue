@@ -47,7 +47,7 @@ const loadPosterEvents = async () => {
 
 loadPosterEvents()
 
-const planToLoasEvents = () => {
+const planToLoadEvents = () => {
   lazyLoadTimeout && clearTimeout(lazyLoadTimeout)
 
   lazyLoadTimeout = setTimeout(async () => {
@@ -66,7 +66,7 @@ watch(
 watch(
   search,
   async (_search) => {
-    planToLoasEvents()
+    planToLoadEvents()
     await router.push({ query: { ...route.query, search: _search || 'None' } })
   },
   { deep: true }
@@ -78,7 +78,7 @@ watch(
     locationStore.pickCountry(_country)
 
     city.value = pickedCity.value
-    planToLoasEvents()
+    planToLoadEvents()
   },
   { deep: true }
 )
@@ -87,7 +87,7 @@ watch(
   city,
   async (_city) => {
     locationStore.pickCity(_city)
-    planToLoasEvents()
+    planToLoadEvents()
   },
   { deep: true }
 )
@@ -114,8 +114,7 @@ const eventsWithAdd = computed(() => {
         id: 'add',
         type: 'add',
         title: 'Peredelano Startups',
-        description:
-          'Тут мы объединяемся, чтобы вместе сделать проекты. Рынок и мир сейчас сложные, с работой туго, со смыслами тоже — поэтому мы решили делать и то и другое сами.',
+        description: t('home.peredelano.description'),
         link: 'https://t.me/peredelanoconfjunior'
       })
     }

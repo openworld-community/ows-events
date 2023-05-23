@@ -2,9 +2,13 @@
 import { RouterView } from 'vue-router'
 import 'vue-final-modal/style.css'
 import CommonHeader from '@/components/header/CommonHeader.vue'
+
+// todo - delete this
+import LanguageSelector from './components/header/languageSelector.vue'
 </script>
 
 <template>
+  <LanguageSelector />
   <CommonHeader />
   <div class="container">
     <RouterView />

@@ -102,11 +102,8 @@ export class FileDbController {
   }
 
   private async makeBackup() {
-    const dateString = new Date().toISOString();
-    await fs.copyFile(
-      "assets/db/events.json",
-      `assets/db/backup-${dateString}.json`
-    );
+    const dateString = new Date().toISOString().replaceAll(":", "_");
+    await fs.copyFile("assets/db/events.json", `assets/db/backup-${dateString}.json`);
   }
 
   private async loadFromDrive() {

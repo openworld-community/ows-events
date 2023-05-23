@@ -1,34 +1,22 @@
 <script setup lang="ts">
-import { useTranslation } from '../i18n/index'
-const { i18next, t } = useTranslation()
-const language = i18next.language
+import { useTranslation } from '@/i18n'
+import LanguageSelector from '../components/header/languageSelector.vue'
+const { t } = useTranslation()
 </script>
 
 <template>
   <main>
-    <input v-model="language" @input="i18next.changeLanguage(language)" />
-    <span>{{ (() => t('greeting.short'))() }}</span>
+    <LanguageSelector />
     <section>
-      <h2 class="title">Об Aфише</h2>
-      <p>
-        Идея проекта "Афиши" заключается в создании удобной площадки для поиска мероприятий, которые
-        проходят в интересующем пользователя регионе (с упором на IT-мероприятия, но в целом мы
-        хотим добавлять все: от конференций до музыкальных вечеров).
-      </p>
+      <h2 class="title">{{ t('about.title') }}</h2>
+      <p>{{ t('about.p1') }}</p>
+      <br />
+      <p>{{ t('about.p2') }}</p>
+      <br />
+      <p>{{ t('about.p3') }}</p>
       <br />
       <p>
-        На странице каждого мероприятия будет доступна информация о дате начала и окончания,
-        локации, описании и цене. Пользователь сможет записаться на мероприятие и добавить его в
-        избранное. Организатор мероприятия сможет добавлять информацию о нем на площадку.
-      </p>
-      <br />
-      <p>
-        Монетизация проекта будет осуществляться за счет рекламы мероприятий, которые будут
-        подниматься в начало списка.
-      </p>
-      <br />
-      <p>
-        Ссылка на GitHub проекта:
+        {{ t('about.github') }}:
         <a href="https://github.com/openworld-community/ows-events">Repo</a>
       </p>
     </section>

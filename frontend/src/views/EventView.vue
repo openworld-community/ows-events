@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { type EventOnPoster } from '@common/types/event'
 import { deleteEvent, getEvent } from '@/services/events.services'
 import { useRoute, useRouter } from 'vue-router'
@@ -29,20 +29,36 @@ const deleteCard = async () => {
   await deleteEvent(id)
   router.push({ path: '/' })
 }
+
+const picture = computed(() => {
+  if (posterEvent.value?.image) {
+    return `${BASE_URL}${posterEvent.value.image}`
+  }
+  return 'https://picsum.photos/400/300'
+})
 </script>
 
 <template>
   <main v-if="posterEvent">
     <div class="actions">
       <div>
-        <a href="/" class="button is-rounded"><i class="fas fa-arrow-left"></i></a>
+        <a href="/" class="button is-rounded" title="назад"><i class="fas fa-arrow-left"></i></a>
       </div>
       <div>
-        <button @click="deleteCard()" class="button is-rounded is-small">
+        <button
+          aria-label="удалить событие"
+          @click="deleteCard()"
+          class="button is-rounded is-small"
+        >
           <i class="fa-solid fa-trash"></i>
         </button>
 
-        <button @click="isModalOpen = true" class="button is-rounded is-small">
+        <button
+          aria-label="управление событием"
+          aria-haspopup="true"
+          @click="isModalOpen = true"
+          class="button is-rounded is-small"
+        >
           <i class="fa-solid fa-pen-to-square"></i>
         </button>
       </div>
@@ -50,12 +66,7 @@ const deleteCard = async () => {
     <div v-bind:key="posterEvent.id" class="card">
       <div class="card-image">
         <div class="card-price">{{ posterEvent.price }} €</div>
-        <img
-          alt="Картинка эвента"
-          class="image"
-          v-bind:src="`${BASE_URL}${posterEvent.image}`"
-          v-if="posterEvent.image"
-        />
+        <img alt="Картинка эвента" class="image" v-bind:src="picture" />
       </div>
 
       <div class="card-content">
@@ -94,7 +105,7 @@ const deleteCard = async () => {
       <button class="card-contact-btn">Связаться</button>
     </div>
     <CustomButton button-class="button is-small" button-text="Change" @click="isModalOpen = true" />
-    <button class="delete is-small"></button>
+    <button class="delete is-small" aria-label="удалить событие"></button>
     <vue-final-modal
       :hideOverlay="false"
       overlayTransition="vfm-fade"
@@ -123,6 +134,7 @@ const deleteCard = async () => {
   min-height: 232px;
   object-fit: cover;
   border-radius: 0;
+  width: 100%;
 }
 
 .card {

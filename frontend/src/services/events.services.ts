@@ -1,5 +1,5 @@
 import { api } from '@/plugins/axios'
-import { type EventOnPoster } from '@common/types'
+import { type EventOnPoster, type StandardResponse } from '@common/types'
 
 export const getEvents = async (): Promise<EventOnPoster[]> => {
   const { data } = await api.get('/events')
@@ -23,7 +23,11 @@ export const getEvent = async (id: string): Promise<EventOnPoster> => {
   return data
 }
 
-export const postEventImage = async (img: File): Promise<string> => {
+export const postEventImage = async (img?: File): Promise<string> => {
+  if (!img) {
+    return ''
+  }
+
   const formData = new FormData()
   formData.append('image', img)
   const { data } = await api.post('/image/add', formData)
@@ -35,7 +39,7 @@ export const deleteEventImage = async (path: string) => {
 }
 
 export const postEvent = async (data: any) => {
-  await api.post('/events/add', data)
+  return (await api.post<StandardResponse<{ id: string }>>('/events/add', data)).data
 }
 
 export const editEvent = async (data: any) => {

@@ -5,9 +5,13 @@ export type EventOnPoster = {
   date: number;
   durationInSeconds: number;
   location: {
-    country: string,
-    city: string
+    country: string;
+    city: string;
   };
   image: string | null;
   price: number;
+  timezone?: {
+    timezoneName: string;
+    timezoneOffset: string;
+  };
 };

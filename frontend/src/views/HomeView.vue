@@ -159,6 +159,20 @@ const getFilteredEvents = (
 }
 
 const now = Date.now()
+
+const convertToLocaleString = (
+  date: number,
+  timezone: { timezoneName: string; timezoneOffset: string } | undefined
+) => {
+  const localDate = new Date(date)
+  return localDate.toLocaleString('ru-RU', {
+    timeZone: timezone?.timezoneName,
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
 </script>
 
 <template>
@@ -229,14 +243,11 @@ const now = Date.now()
                 <span class="card-title">{{ event.title }}</span>
               </h2>
               <div class="card-datetime">
-                {{
-                  new Date(event.date).toLocaleString('ru-RU', {
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  })
+                {{ convertToLocaleString(event.date, event.timezone) }} ({{
+                  event.timezone?.timezoneOffset
                 }}
+
+                {{ event.timezone?.timezoneName }})
               </div>
               <div class="card-geolink">
                 <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"

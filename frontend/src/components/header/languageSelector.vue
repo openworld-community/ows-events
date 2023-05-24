@@ -13,7 +13,7 @@ watch(language, (language) => i18next.changeLanguage(language))
 
 <template>
   <label>
-    {{ t('component.language-selector.label') }}
+    {{ t('component.language_selector.label') }}
     <select v-model="language">
       <option v-for="locale in supportedLocales" :key="`select-locale-${locale}`" :value="locale">
         {{ locale }}

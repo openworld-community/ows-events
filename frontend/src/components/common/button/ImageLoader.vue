@@ -65,14 +65,14 @@ const removeImage = () => {
     <div class="loader__buttons">
       <CustomButton
         button-class="button is-success is-small"
-        :button-text="t('component.new-event-modal.add-image')"
+        :button-text="t('component.new_event_modal.add_image')"
         :is-active="!imageSrc"
         @click="fileIsLoading ? null : input?.click()"
       />
       <CustomButton
         v-if="imageSrc"
         button-class="button is-small"
-        :button-text="t('component.new-event-modal.remove-image')"
+        :button-text="t('component.new_event_modal.remove_image')"
         @click="removeImage"
       />
     </div>

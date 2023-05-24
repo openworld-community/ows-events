@@ -15,7 +15,7 @@ const props = defineProps({
     <div class="card__image-container">
       <span class="card__price">{{ props.eventData.price }} €</span>
       <img
-        :alt="t('home.events.image-alt')"
+        :alt="t('home.events.image_alt')"
         class="card__image"
         :src="props.eventData.image"
         v-if="props.eventData.image"

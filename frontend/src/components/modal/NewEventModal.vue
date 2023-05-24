@@ -266,20 +266,20 @@ const eventInputs: (
 )[] = [
   {
     type: 'text',
-    label: t('component.new-event-modal.fields.title'),
+    label: t('component.new_event_modal.fields.title'),
     name: 'title',
     required: true
   },
   {
     type: 'textarea',
-    label: t('component.new-event-modal.fields.description'),
+    label: t('component.new_event_modal.fields.description'),
     name: 'description',
     required: true
   },
   {
     type: 'row',
     name: 'startDate',
-    label: t('component.new-event-modal.fields.start'),
+    label: t('component.new_event_modal.fields.start'),
     child: [
       {
         type: 'date',
@@ -296,7 +296,7 @@ const eventInputs: (
   {
     type: 'row',
     name: 'endDate',
-    label: t('component.new-event-modal.fields.end'),
+    label: t('component.new_event_modal.fields.end'),
     child: [
       {
         type: 'date',
@@ -312,7 +312,7 @@ const eventInputs: (
   },
   {
     type: 'number',
-    label: t('component.new-event-modal.fields.price'),
+    label: t('component.new_event_modal.fields.price'),
     name: 'price',
     required: true,
     min: 0
@@ -329,7 +329,7 @@ setTimeout(() => {
     :class="!isModalOpen ? 'new-event-container-hidden' : 'new-event-container-open'"
   >
     <header class="modal-card-head">
-      <h2 class="event-modal__title title is-3">{{ t('component.new-event-modal.title') }}</h2>
+      <h2 class="event-modal__title title is-3">{{ t('component.new_event_modal.title') }}</h2>
     </header>
     <form class="modal-card-body">
       <div class="row">
@@ -390,13 +390,13 @@ setTimeout(() => {
     <div class="modal-card-foot card-custom-footer">
       <CustomButton
         button-class="button"
-        :button-text="t('component.new-event-modal.cancel')"
+        :button-text="t('component.new_event_modal.cancel')"
         :is-active="!isLoading"
         @click="closeModal()"
       />
       <CustomButton
         button-class="button is-success"
-        :button-text="t('component.new-event-modal.submit')"
+        :button-text="t('component.new_event_modal.submit')"
         :is-active="checkFormFilling && !isLoading"
         :is-loading="isLoading"
         @click="isLoading ? null : submitEvent()"

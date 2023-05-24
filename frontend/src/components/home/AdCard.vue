@@ -21,7 +21,7 @@ const props = defineProps({
       {{ props.adData.description }}
     </div>
     <div class="card-action">
-      <a :href="props.adData.link"> {{ t('home.events.anchor-chat') }}! </a>
+      <a :href="props.adData.link"> {{ t('home.events.anchor_chat') }}! </a>
     </div>
   </div>
 </template>

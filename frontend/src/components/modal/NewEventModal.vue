@@ -160,7 +160,8 @@ const checkFormFilling = computed(() => {
     inputValues.value.startDate &&
     inputValues.value.startTime &&
     inputValues.value.country &&
-    inputValues.value.city
+    inputValues.value.city &&
+    inputValues.value.timezone
   )
 })
 
@@ -204,7 +205,6 @@ const submitEvent = async () => {
     let imageURL
 
     const params = paramsForSubmit.value
-    console.log(params)
 
     if (props.dataForEdit) {
       if (newImageFile.value) {
@@ -339,7 +339,6 @@ setTimeout(() => {
           :input-placeholder="t('global.country')"
           :options-list="countries"
           v-model="inputValues.country"
-          v-bind:key="inputValues.country"
         />
         <CustomInput
           input-type="datalist"
@@ -347,8 +346,8 @@ setTimeout(() => {
           :input-placeholder="t('global.city')"
           :options-list="cities"
           v-model="inputValues.city"
-          v-bind:key="inputValues.city"
-          v-bind:input-disable="!inputValues.country"
+          v-bind:key="inputValues.country"
+          :inputDisabled="!inputValues.country"
         />
         <CustomInput
           input-type="datalist"
@@ -356,8 +355,8 @@ setTimeout(() => {
           :input-placeholder="t('global.timezone')"
           :options-list="allTimezones"
           v-model="inputValues.timezone"
-          v-bind:key="inputValues.timezone"
-          v-bind:input-disable="!inputValues.city"
+          v-bind:key="inputValues.city"
+          :inputDisabled="!inputValues.city"
         />
       </div>
 

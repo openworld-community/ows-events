@@ -8,6 +8,8 @@ x-logging: &default-logging
 
 services:
   frontend:
+    container_name: frontend
+#    image: 
     build:
       context: ./
       dockerfile: Dockerfile

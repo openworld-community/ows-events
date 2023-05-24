@@ -7,9 +7,13 @@ import CommonHeader from '@/components/header/CommonHeader.vue'
 
 <template>
   <CommonHeader />
-  <div class="container">
+  <main class="main">
     <RouterView />
-  </div>
+  </main>
 </template>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.main {
+  padding-top: var(--header-height);
+}
+</style>

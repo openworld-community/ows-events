@@ -8,51 +8,58 @@ const route = useRoute()
 
 <template>
   <header class="header">
-    <div class="header__left">
-      <RouterLink to="/">
+    <div class="header__container">
+      <div class="header__left">
+        <RouterLink to="/">
+          <img
+            v-if="route.name === 'home'"
+            src="@/assets/img/PeredelanoAfisha.svg"
+            width="142"
+            height="24"
+            alt="Peredelano Афиша"
+          />
+          <img
+            v-else
+            src="@/assets/img/icon/back.svg"
+            width="24"
+            height="24"
+            :alt="t('global.button.back')"
+          />
+        </RouterLink>
+      </div>
+      <nav
+        v-if="route.name === 'home'"
+        class="header__right"
+        role="navigation"
+        :aria-label="t('global.nav')"
+      >
+        <RouterLink to="/about" class="icon-text">
+          <img
+            src="@/assets/img/icon/info.svg"
+            width="24"
+            height="24"
+            :alt="t('component.header.about')"
+          />
+        </RouterLink>
+      </nav>
+      <div
+        v-if="route.name === 'event'"
+        class="header__right"
+        :aria-label="t('component.header.event.manage')"
+      >
         <img
-          v-if="route.name === 'home'"
-          src="@/assets/img/PeredelanoAfisha.svg"
-          width="142"
-          height="24"
-          alt="Peredelano Афиша"
-        />
-        <img
-          v-else
-          src="@/assets/img/icon/back.svg"
+          src="@/assets/img/icon/edit.svg"
           width="24"
           height="24"
-          :alt="t('global.button.back')"
+          :alt="t('event.button.edit')"
         />
-      </RouterLink>
-    </div>
-    <nav
-      v-if="route.name === 'home'"
-      class="header__right"
-      role="navigation"
-      :aria-label="t('global.nav')"
-    >
-      <RouterLink to="/about" class="icon-text">
         <img
-          src="@/assets/img/icon/info.svg"
+          src="@/assets/img/icon/share.svg"
           width="24"
           height="24"
-          :alt="t('component.header.about')"
+          :alt="t('global.button.share')"
         />
-      </RouterLink>
-    </nav>
-    <div
-      v-if="route.name === 'event'"
-      class="header__right"
-      :aria-label="t('component.header.event.manage')"
-    >
-      <img src="@/assets/img/icon/edit.svg" width="24" height="24" :alt="t('event.button.edit')" />
-      <img
-        src="@/assets/img/icon/share.svg"
-        width="24"
-        height="24"
-        :alt="t('global.button.share')"
-      />
+      </div>
     </div>
   </header>
 </template>
@@ -65,24 +72,39 @@ a {
 }
 
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  line-height: 0; // временно из-за bulma
-  min-height: 52px;
-  max-height: 100vh;
   width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: var(--width-mobile);
+    height: var(--header-height);
+    //TODO: пока верстка только мобилки
+    max-width: 480px;
+    background-color: var(--color-white);
+    padding-left: var(--padding-side);
+    padding-right: var(--padding-side);
+    margin-left: auto;
+    margin-right: auto;
+  }
 
   &__left {
     display: flex;
-    padding: 14px 12px;
+    padding: 14px 0;
+    margin-right: 12px;
     align-items: center;
   }
 
   &__right {
     display: flex;
     text-align: center;
-    padding: 14px;
+    padding: 14px 0;
+    margin-left: 12px;
     gap: 18px;
   }
 }

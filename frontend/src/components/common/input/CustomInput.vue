@@ -48,6 +48,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  inputDisabled: {
+    type: Boolean,
+    default: false
+  },
   optionsList: {
     type: [Array<string>, String],
     default: null
@@ -108,9 +112,11 @@ const showPicker = () => {
         :type="props.inputType"
         :placeholder="props.inputPlaceholder"
         :list="props.inputName"
+        :disabled="props.inputDisabled"
         v-model="inputData"
         @change="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       />
+
       <datalist :id="props.inputName">
         <option v-for="i in props.optionsList" :value="i" :key="i" />
       </datalist>

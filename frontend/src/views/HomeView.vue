@@ -8,10 +8,13 @@ import NewEventModal from '@/components/modal/NewEventModal.vue'
 import CustomInput from '@/components/common/input/CustomInput.vue'
 import { VueFinalModal } from 'vue-final-modal'
 import UserLocation from '@/components/location/UserLocation.vue'
+import { useTranslation } from '@/i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { BASE_URL } from '@/constants/url'
 
-let lasyLoadTimeout: ReturnType<typeof setTimeout> | undefined
+const { t } = useTranslation()
+
+let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined
 
 const locationStore = useLocationStore()
 locationStore.loadCountries()
@@ -43,10 +46,10 @@ const loadPosterEvents = async () => {
 
 loadPosterEvents()
 
-const planToLoasEvents = () => {
-  lasyLoadTimeout && clearTimeout(lasyLoadTimeout)
+const planToLoadEvents = () => {
+  lazyLoadTimeout && clearTimeout(lazyLoadTimeout)
 
-  lasyLoadTimeout = setTimeout(async () => {
+  lazyLoadTimeout = setTimeout(async () => {
     loadPosterEvents()
   }, 500)
 }
@@ -62,7 +65,7 @@ watch(
 watch(
   search,
   async (_search) => {
-    planToLoasEvents()
+    planToLoadEvents()
     await router.push({ query: { ...route.query, search: _search || 'None' } })
   },
   { deep: true }
@@ -74,7 +77,7 @@ watch(
     locationStore.pickCountry(_country)
 
     city.value = pickedCity.value
-    planToLoasEvents()
+    planToLoadEvents()
   },
   { deep: true }
 )
@@ -83,7 +86,7 @@ watch(
   city,
   async (_city) => {
     locationStore.pickCity(_city)
-    planToLoasEvents()
+    planToLoadEvents()
   },
   { deep: true }
 )
@@ -110,8 +113,7 @@ const eventsWithAdd = computed(() => {
         id: 'add',
         type: 'add',
         title: 'Peredelano Startups',
-        description:
-          'Тут мы объединяемся, чтобы вместе сделать проекты. Рынок и мир сейчас сложные, с работой туго, со смыслами тоже — поэтому мы решили делать и то и другое сами.',
+        description: t('home.peredelano.description'),
         link: 'https://t.me/peredelanoconfjunior'
       })
     }
@@ -180,7 +182,7 @@ const convertToLocaleString = (
     <div class="header">
       <button
         id="add-event-button"
-        aria-label="добавить событие"
+        :aria-label="t('home.button.add-event-aria')"
         aria-haspopup="true"
         class="button is-rounded add-event-button"
         @click="isModalOpen = true"
@@ -200,18 +202,18 @@ const convertToLocaleString = (
             input-class="input is-info search-input"
             input-type="text"
             input-name="search"
-            input-placeholder="Search"
+            :input-placeholder="t('home.input.search-placeholder')"
             v-model="search"
           />
         </div>
       </div>
 
-      <h1 class="title">Мероприятия</h1>
+      <h1 class="title">{{ t('home.title') }}</h1>
       <div class="location-container">
         <CustomInput
           input-type="datalist"
           input-name="country"
-          input-placeholder="Страна"
+          :input-placeholder="t('home.input.country-placeholder')"
           :options-list="countries"
           v-model="country"
           v-bind:key="country"
@@ -219,7 +221,7 @@ const convertToLocaleString = (
         <CustomInput
           input-type="datalist"
           input-name="city"
-          input-placeholder="Город"
+          :input-placeholder="t('home.input.city-placeholder')"
           :options-list="cities"
           v-model="city"
           v-bind:key="city"
@@ -234,7 +236,12 @@ const convertToLocaleString = (
           <a :href="`/event/${event.id}`">
             <div class="card-image">
               <div class="card-price">{{ event.price }} €</div>
-              <img alt="Event image" class="image" v-bind:src="event.image" v-if="event.image" />
+              <img
+                :alt="t('home.events.image-alt')"
+                class="image"
+                v-bind:src="event.image"
+                v-if="event.image"
+              />
             </div>
 
             <div class="card-content">
@@ -258,7 +265,9 @@ const convertToLocaleString = (
           </a>
         </div>
         <div v-else class="add-block">
-          <span class="add-label" role="button" tabindex="0" aria-label="добавить блок">add</span>
+          <span class="add-label" role="button" tabindex="0" :aria-label="t('home.events.ad')">{{
+            t('home.events.ad')
+          }}</span>
           <div class="card-title">
             {{ event.title }}
           </div>
@@ -266,7 +275,7 @@ const convertToLocaleString = (
             {{ event.description }}
           </div>
           <div class="card-action">
-            <a :href="event.link"> Перейти в чат! </a>
+            <a :href="event.link"> {{ t('home.events.anchor-chat') }}! </a>
           </div>
         </div>
       </li>

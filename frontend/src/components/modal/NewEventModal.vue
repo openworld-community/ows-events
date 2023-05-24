@@ -16,6 +16,9 @@ import { storeToRefs } from 'pinia'
 import { useLocationStore } from '@/stores/location.store'
 import { type EventOnPoster } from '@common/types'
 import { useRouter } from 'vue-router'
+import { useTranslation } from '@/i18n'
+
+const { t } = useTranslation()
 
 const emit = defineEmits(['closeModal'])
 
@@ -265,20 +268,20 @@ const eventInputs: (
 )[] = [
   {
     type: 'text',
-    label: 'Title',
+    label: t('event.new.fields.title'),
     name: 'title',
     required: true
   },
   {
     type: 'textarea',
-    label: 'Description',
+    label: t('event.new.fields.description'),
     name: 'description',
     required: true
   },
   {
     type: 'row',
     name: 'startDate',
-    label: 'Starts:',
+    label: t('event.new.fields.start'),
     child: [
       {
         type: 'date',
@@ -295,7 +298,7 @@ const eventInputs: (
   {
     type: 'row',
     name: 'endDate',
-    label: 'Ends:',
+    label: t('event.new.fields.end'),
     child: [
       {
         type: 'date',
@@ -311,7 +314,7 @@ const eventInputs: (
   },
   {
     type: 'number',
-    label: 'Price, currency',
+    label: t('event.new.fields.price'),
     name: 'price',
     required: true,
     min: 0
@@ -328,7 +331,7 @@ setTimeout(() => {
     :class="!isModalOpen ? 'new-event-container-hidden' : 'new-event-container-open'"
   >
     <header class="modal-card-head">
-      <h2 class="event-modal__title title is-3">Describe your event</h2>
+      <h2 class="event-modal__title title is-3">{{t('event.new.title')}}</h2>
     </header>
     <form class="modal-card-body">
       <div class="row">
@@ -390,13 +393,13 @@ setTimeout(() => {
     <div class="modal-card-foot card-custom-footer">
       <CustomButton
         button-class="button"
-        button-text="Cancel"
+        :button-text="t('event.new.cancel')"
         :is-active="!isLoading"
         @click="closeModal()"
       />
       <CustomButton
         button-class="button is-success"
-        button-text="Submit"
+        :button-text="t('event.new.submit')"
         :is-active="checkFormFilling && !isLoading"
         :is-loading="isLoading"
         @click="isLoading ? null : submitEvent()"

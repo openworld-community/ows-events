@@ -7,6 +7,8 @@ import CustomButton from '@/components/common/button/CustomButton.vue'
 import NewEventModal from '@/components/modal/NewEventModal.vue'
 import { VueFinalModal } from 'vue-final-modal'
 import { BASE_URL } from '@/constants/url'
+import { useTranslation } from '@/i18n'
+const { t } = useTranslation()
 
 const posterEvent = ref<EventOnPoster | null>(null)
 const route = useRoute()
@@ -56,11 +58,13 @@ const convertToLocaleString = (
   <main v-if="posterEvent">
     <div class="actions">
       <div>
-        <a href="/" class="button is-rounded" title="назад"><i class="fas fa-arrow-left"></i></a>
+        <a href="/" class="button is-rounded" :aria-label="t('event.button.back')"
+          ><i class="fas fa-arrow-left"></i
+        ></a>
       </div>
       <div>
         <button
-          aria-label="удалить событие"
+          :aria-label="t('event.button.delete')"
           @click="deleteCard()"
           class="button is-rounded is-small"
         >
@@ -68,7 +72,7 @@ const convertToLocaleString = (
         </button>
 
         <button
-          aria-label="управление событием"
+          :aria-label="t('event.button.edit')"
           aria-haspopup="true"
           @click="isModalOpen = true"
           class="button is-rounded is-small"
@@ -80,7 +84,7 @@ const convertToLocaleString = (
     <div v-bind:key="posterEvent.id" class="card">
       <div class="card-image">
         <div class="card-price">{{ posterEvent.price }} €</div>
-        <img alt="Картинка эвента" class="image" v-bind:src="picture" />
+        <img :alt="t('event.image.event')" class="image" v-bind:src="picture" />
       </div>
 
       <div class="card-content">

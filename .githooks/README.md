@@ -6,14 +6,16 @@
 
 Set path to the git hooks script directory at local repository on your workstation
 
-```
-$ cd <RepoDir>
-$ git config --local core.hooksPath .githooks
+```bash
+#!/bin/bash
+cd <RepoDir>
+git config --local core.hooksPath .githooks
 ```
 
 Check changes at git configuration
 
-```
+```bash
+#!/bin/bash
 git config --list --local |grep -i hooksPath
 ```
 
@@ -21,8 +23,9 @@ git config --list --local |grep -i hooksPath
 
 Make commit and git will call this local pre-commit hook
 
-```
-$ git commit -m "Local pre-commit hook check"
+```bash
+#!/bin/bash
+git commit -m "Local pre-commit hook check"
 ```
 
 ### Links

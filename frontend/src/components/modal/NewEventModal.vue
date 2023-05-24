@@ -17,6 +17,7 @@ import { useLocationStore } from '@/stores/location.store'
 import { type EventOnPoster } from '@common/types'
 import { useRouter } from 'vue-router'
 import { useTranslation } from '@/i18n'
+import { addUserEvent } from '../../helpers/events'
 
 const { t } = useTranslation()
 
@@ -231,10 +232,7 @@ const submitEvent = async () => {
 
       if (res.type === 'success') {
         const id = res.data.id
-
-        const oldUsersPosts = JSON.parse(localStorage.getItem('USES_POSTS') || '[]')
-        localStorage.setItem('USES_POSTS', JSON.stringify([...oldUsersPosts, id]))
-
+        addUserEvent(id)
         router.push(`/event/${id}`)
       }
     }

@@ -8,6 +8,7 @@ import NewEventModal from '@/components/modal/NewEventModal.vue'
 import { VueFinalModal } from 'vue-final-modal'
 import { BASE_URL } from '@/constants/url'
 import { useTranslation } from '@/i18n'
+import { getUserEvents } from '@/helpers/events'
 
 const { t } = useTranslation()
 
@@ -53,6 +54,8 @@ const convertToLocaleString = (
     minute: '2-digit'
   })
 }
+
+const isManaged = getUserEvents().includes(id)
 </script>
 
 <template>
@@ -91,7 +94,15 @@ const convertToLocaleString = (
     <button class="card-contact-btn">{{ t('event.button.contact') }}</button>
 
     <CustomButton button-class="button is-small" button-text="Change" @click="isModalOpen = true" />
-    <button class="delete is-small" :aria-label="t('event.button.delete')"></button>
+    <!-- please style me 🥺🙏 -->
+    <button
+      v-if="isManaged"
+      class="delete is-small"
+      style="padding: 4px; background-color: lightgray; border: 1px solid black"
+      @click="deleteCard"
+    >
+      {{ t('event.button.delete') }}
+    </button>
     <vue-final-modal
       :hideOverlay="false"
       overlayTransition="vfm-fade"

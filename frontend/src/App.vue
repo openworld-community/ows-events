@@ -3,9 +3,6 @@ import { RouterView } from 'vue-router'
 import 'vue-final-modal/style.css'
 import '@/assets/less/app.less'
 import CommonHeader from '@/components/header/CommonHeader.vue'
-
-// todo - delete this
-import LanguageSelector from './components/header/LanguageSelector.vue'
 </script>
 
 <template>

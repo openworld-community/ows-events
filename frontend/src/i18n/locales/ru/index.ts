@@ -20,6 +20,7 @@ export const defaultTranslation = {
     },
     events: {
       'image-alt': 'Фото мероприятия',
+      ad: 'Реклама',
       'add-block-aria-label': 'Добавить блок',
       'add-block-label': 'Добавить блок',
       'anchor-chat': 'Перейти в чат'
@@ -37,6 +38,21 @@ export const defaultTranslation = {
     },
     image: {
       event: 'изображение мероприятия'
+    },
+    new: {
+      title: 'Новое мероприятие',
+      cancel: 'Отмена',
+      submit: 'Отправить',
+      'add-image': 'Добавить изображение',
+      fields: {
+        title: 'Название',
+        description: 'Описание',
+        start: 'Начало',
+        end: 'Окончание',
+        country: 'Страна',
+        city: 'Город',
+        price: 'Цена'
+      }
     }
   }
 }

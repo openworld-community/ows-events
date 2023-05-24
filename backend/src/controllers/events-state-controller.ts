@@ -89,6 +89,11 @@ class EventsStateController {
           city: randomPair.city,
         },
         price: 1,
+        timezone: {
+          //# TODO: add timezone
+          timezoneName: "Europe/Moscow",
+          timezoneOffset: "+03:00",
+        },
       });
     }
 

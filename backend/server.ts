@@ -11,6 +11,9 @@ import Static from "@fastify/static";
 import Multipart, { MultipartFile } from "@fastify/multipart";
 import { countriesAndCitiesController } from "./src/controllers/countries-and-cities.controller";
 import { imageController } from "./src/controllers/image-controller";
+import cityTimezones from "city-timezones";
+
+import moment from "moment-timezone";
 
 interface eventParams {
   id: string;
@@ -50,6 +53,72 @@ server.get<{
   return countriesAndCitiesController.getCitiesByCountry(country);
 });
 
+server.get<{
+  Params: { country: string; city: string };
+  Body: StandardResponse<{
+    country: string;
+    city: string;
+    timezone: string;
+    timezoneOffset: string;
+  }>;
+}>("/api/location/meta/:country/:city", async (request, reply) => {
+  const _country = request.params.country;
+  const _city = request.params.city;
+
+  const cities = cityTimezones.lookupViaCity(_city);
+  const city = cities.find((c) => c.country === _country);
+
+  let timezone = "";
+
+  if (!city) {
+    const byProvince = cityTimezones.findFromCityStateProvince(_country)[0];
+    if (!byProvince) {
+      return {
+        type: "error",
+      };
+    }
+
+    timezone = byProvince.timezone;
+
+    return {
+      type: "error",
+    };
+  } else {
+    timezone = city.timezone;
+  }
+
+  const timezoneOffset = moment.tz(timezone).format("Z");
+
+  return {
+    type: "success",
+    data: {
+      country: _country,
+      city: _city,
+      timezoneName: timezone,
+      timezoneOffset,
+    },
+  };
+});
+
+const allTimezones = moment.tz.names().map((name) => {
+  return {
+    timezoneName: name,
+    timezoneOffset: moment.tz(name).format("Z"),
+  };
+});
+
+server.get<{
+  Params: { country: string; city: string };
+  Body: StandardResponse<
+    {
+      timezone: string;
+      timezoneOffset: string;
+    }[]
+  >;
+}>("/api/timezones", async (request, reply) => {
+  return allTimezones;
+});
+
 server.get("/event/*", function (req, reply) {
   reply.sendFile("index.html");
 });
@@ -82,6 +151,7 @@ server.post<{
         type: "error",
       };
     }
+
     const buffer = await data.toBuffer();
     if (!buffer) {
       return {

@@ -5,6 +5,8 @@ import FlagIcon from 'vue-flag-icon'
 import App from './App.vue'
 import router from './router'
 
+import 'virtual:svg-icons-register'
+
 import I18NextVue from 'i18next-vue'
 import i18next from 'i18next'
 import { resources, defaultLocale } from './i18n/index'

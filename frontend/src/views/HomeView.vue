@@ -7,10 +7,13 @@ import { storeToRefs } from 'pinia'
 import NewEventModal from '@/components/modal/NewEventModal.vue'
 import CustomInput from '@/components/common/input/CustomInput.vue'
 import { VueFinalModal } from 'vue-final-modal'
-import UserLocation from '@/components/location/UserLocation.vue'
+import UserLocation from '@/components/home/UserLocation.vue'
 import { useTranslation } from '@/i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { BASE_URL } from '@/constants/url'
+import EventPreviewCard from '@/components/home/EventPreviewCard.vue'
+import AdCard from '@/components/home/AdCard.vue'
+import ButtonIcon from '@/components/common/button/ButtonIcon.vue'
 
 const { t } = useTranslation()
 
@@ -120,7 +123,7 @@ const eventsWithAdd = computed(() => {
     newEvents.push({
       ...events[i],
       type: 'event',
-      image: events[i].image ? `${BASE_URL}${events[i].image}` : 'https://picsum.photos/200/300'
+      image: events[i].image ? `${BASE_URL}/${events[i].image}` : 'https://picsum.photos/200/300'
     })
   }
   return newEvents
@@ -161,126 +164,69 @@ const getFilteredEvents = (
 }
 
 const now = Date.now()
-
-const convertToLocaleString = (
-  date: number,
-  timezone: { timezoneName: string; timezoneOffset: string } | undefined
-) => {
-  const localDate = new Date(date)
-  return localDate.toLocaleString('ru-RU', {
-    timeZone: timezone?.timezoneName,
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
-}
 </script>
 
 <template>
-  <main>
-    <div class="header">
-      <button
-        id="add-event-button"
-        :aria-label="t('home.button.add-event-aria')"
-        aria-haspopup="true"
-        class="button is-rounded add-event-button"
-        @click="isModalOpen = true"
-      >
-        <span class="icon">
-          <i class="fas is-size-1 fa-thin fa-plus"></i>
-        </span>
-      </button>
-      <div class="location-container">
-        <div>
-          <UserLocation class="user-location" />
-        </div>
-      </div>
-      <div class="location-conteiner">
-        <div>
-          <CustomInput
-            input-class="input is-info search-input"
-            input-type="text"
-            input-name="search"
-            :input-placeholder="t('home.input.search-placeholder')"
-            v-model="search"
-          />
-        </div>
-      </div>
+  <div class="location">
+    <UserLocation />
+  </div>
 
-      <h1 class="title">{{ t('home.title') }}</h1>
-      <div class="location-container">
-        <CustomInput
-          input-type="datalist"
-          input-name="country"
-          :input-placeholder="t('home.input.country-placeholder')"
-          :options-list="countries"
-          v-model="country"
-          v-bind:key="country"
-        />
-        <CustomInput
-          input-type="datalist"
-          input-name="city"
-          :input-placeholder="t('home.input.city-placeholder')"
-          :options-list="cities"
-          v-model="city"
-          v-bind:key="city"
-          v-bind:input-disable="!country"
-        />
-      </div>
+  <section class="search">
+    <h1 class="search__title">{{ t('home.title') }}</h1>
+
+    <CustomInput
+      class="search__field"
+      input-class="input is-info search-input"
+      input-type="text"
+      input-name="search"
+      :input-placeholder="t('home.input.search-placeholder')"
+      v-model="search"
+    />
+
+    <div class="search__container">
+      <CustomInput
+        class="search__field"
+        input-type="datalist"
+        input-name="country"
+        :input-placeholder="t('home.input.country-placeholder')"
+        :options-list="countries"
+        v-model="country"
+        v-bind:key="country"
+      />
+      <CustomInput
+        class="search__field"
+        input-type="datalist"
+        input-name="city"
+        :input-placeholder="t('home.input.city-placeholder')"
+        :options-list="cities"
+        v-model="city"
+        v-bind:key="city"
+        v-bind:input-disable="!country"
+      />
     </div>
+  </section>
 
-    <ul class="card-list">
-      <li v-for="event in eventsWithAdd" v-bind:key="event.id" class="card">
-        <div v-if="event.type !== 'add'" :class="event.date < now ? 'expired' : ''">
-          <a :href="`/event/${event.id}`">
-            <div class="card-image">
-              <div class="card-price">{{ event.price }} €</div>
-              <img
-                :alt="t('home.events.image-alt')"
-                class="image"
-                v-bind:src="event.image"
-                v-if="event.image"
-              />
-            </div>
+  <ul class="card-list">
+    <li v-for="event in eventsWithAdd" v-bind:key="event.id">
+      <EventPreviewCard
+        v-if="event.type !== 'add'"
+        :class="event.date < now ? 'expired' : ''"
+        :event-data="event"
+      />
+      <AdCard v-else :ad-data="event" class="ad-block" />
+    </li>
+  </ul>
 
-            <div class="card-content">
-              <div class="card-author">Peredelano</div>
-              <h2>
-                <span class="card-title">{{ event.title }}</span>
-              </h2>
-              <div class="card-datetime">
-                {{ convertToLocaleString(event.date, event.timezone) }} ({{
-                  event.timezone?.timezoneOffset
-                }}
+  <ButtonIcon
+    class="add-event-button"
+    icon-name="button-plus"
+    icon-width="56"
+    icon-height="56"
+    aria-haspopup="true"
+    :aria-label="t('home.button.add-event-aria')"
+    @click="isModalOpen = true"
+  />
 
-                {{ event.timezone?.timezoneName }})
-              </div>
-              <div class="card-geolink">
-                <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"
-                  >{{ event.location.country }}, {{ event.location.city }}</a
-                >
-              </div>
-            </div>
-          </a>
-        </div>
-        <div v-else class="add-block">
-          <span class="add-label" role="button" tabindex="0" :aria-label="t('home.events.ad')">{{
-            t('home.events.ad')
-          }}</span>
-          <div class="card-title">
-            {{ event.title }}
-          </div>
-          <div class="card-content description">
-            {{ event.description }}
-          </div>
-          <div class="card-action">
-            <a :href="event.link"> {{ t('home.events.anchor-chat') }}! </a>
-          </div>
-        </div>
-      </li>
-    </ul>
-  </main>
   <vue-final-modal
     :hideOverlay="false"
     overlayTransition="vfm-fade"
@@ -297,166 +243,50 @@ const convertToLocaleString = (
 </template>
 
 <style lang="less" scoped>
-main {
+.location {
+  display: flex;
+  width: 100%;
+  padding-top: 16px;
+  margin-bottom: 36px;
+}
+
+.search {
+  margin-bottom: 8px;
+
+  &__title {
+    font-size: var(--font-size-XXL);
+    line-height: 40px;
+    margin-bottom: 24px;
+  }
+
+  &__container {
+    display: flex;
+    gap: 15px;
+  }
+
+  &__field {
+    margin-bottom: 16px;
+  }
+}
+
+.card-list {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 10px;
+  width: 100%;
+}
 
-  .add-block {
-    border: 1px solid rgba(128, 128, 128, 0.663);
-    border-radius: 5px;
-    padding: 10px;
-    .add-label {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      opacity: 0.5;
-    }
+.add-event-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1;
+}
 
-    .description {
-      font-size: 80%;
-    }
-  }
+.modal-card {
+  background-color: var(--background-color);
+}
 
-  .expired {
-    opacity: 0.5;
-  }
-
-  .add-event-button {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 300;
-    padding: 25px;
-    width: 50px;
-    height: 50px;
-    box-shadow: rgb(38, 57, 77, 0.4) 0 0 20px;
-    border: unset;
-  }
-
-  .header {
-    padding: 5px;
-  }
-
-  .location-container {
-    display: flex;
-    gap: 16px;
-
-    .user-location {
-      display: flex;
-      flex-direction: row;
-      align-items: baseline;
-      gap: 10px;
-    }
-
-    div {
-      flex: 1;
-    }
-  }
-
-  .search-input {
-    max-width: 300px;
-  }
-
-  .card-list {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .card {
-    width: 100%;
-    box-shadow: none;
-
-    .card-content {
-      padding: 12px 16px 12px 16px;
-    }
-
-    .card-image {
-      background-color: #cacaca;
-    }
-
-    .card-author {
-      font-family: Inter;
-      font-size: 12px;
-      font-weight: 500;
-      line-height: 16px;
-      letter-spacing: 0;
-      text-align: left;
-      color: #acacac;
-    }
-
-    .card-price {
-      position: absolute;
-      font-family: Inter;
-      font-size: 12px;
-      font-weight: 400;
-      line-height: 16px;
-      letter-spacing: 0;
-      text-align: center;
-      color: #737373;
-      left: 16px;
-      top: 16px;
-      border-radius: 16px;
-      padding: 4px 10px 4px 10px;
-      background-color: white;
-      z-index: 200;
-    }
-
-    .card-title {
-      color: #4e4e4e;
-      font-family: Inter;
-      font-size: 18px;
-      font-weight: 500;
-      line-height: 24px;
-      letter-spacing: 0;
-      text-align: left;
-    }
-
-    .card-datetime {
-      font-family: Inter;
-      font-size: 12px;
-      font-weight: 500;
-      line-height: 16px;
-      letter-spacing: 0;
-      text-align: left;
-      color: #acacac;
-    }
-
-    .card-geolink {
-      font-family: Inter;
-      font-size: 12px;
-      font-weight: 400;
-      line-height: 14px;
-      letter-spacing: 0;
-      text-align: left;
-      text-decoration-line: underline;
-    }
-  }
-
-  .image {
-    width: 100%;
-    min-height: 176px;
-    max-height: 200px;
-    object-fit: cover;
-    border-radius: 0;
-  }
-
-  ul {
-    list-style: none;
-    padding: 5px;
-    margin: 0;
-    display: flex;
-    justify-content: space-around;
-    gap: 20px;
-    flex-wrap: wrap;
-
-    li {
-      h2 {
-        margin: 0;
-      }
-    }
-  }
+.expired {
+  opacity: 0.5;
 }
 </style>

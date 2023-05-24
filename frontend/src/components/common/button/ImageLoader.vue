@@ -21,7 +21,7 @@ const fileIsLoading = ref(false)
 watch(
   () => props.externalImage,
   () => {
-    imageSrc.value = `${BASE_URL}${props.externalImage}`
+    imageSrc.value = `${BASE_URL}/${props.externalImage}`
   }
 )
 

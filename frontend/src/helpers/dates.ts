@@ -27,3 +27,17 @@ export const timestampParse = (
 
   return [date, time]
 }
+
+export const convertToLocaleString = (
+  date: number,
+  timezone: { timezoneName: string; timezoneOffset: string } | undefined
+) => {
+  const localDate = new Date(date)
+  return localDate.toLocaleString('ru-RU', {
+    timeZone: timezone?.timezoneName,
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}

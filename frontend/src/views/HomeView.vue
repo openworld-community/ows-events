@@ -16,7 +16,6 @@ import AdCard from '@/components/home/AdCard.vue'
 import ButtonIcon from '@/components/common/button/ButtonIcon.vue'
 
 const { t } = useTranslation()
-
 let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined
 
 const locationStore = useLocationStore()
@@ -190,7 +189,7 @@ const now = Date.now()
       input-class="input is-info search-input"
       input-type="text"
       input-name="search"
-      :input-placeholder="t('home.input.search-placeholder')"
+      :input-placeholder="t('global.search')"
       v-model="search"
     />
 
@@ -199,7 +198,7 @@ const now = Date.now()
         class="search__field"
         input-type="datalist"
         input-name="country"
-        :input-placeholder="t('home.input.country-placeholder')"
+        :input-placeholder="t('global.country')"
         :options-list="countries"
         v-model="country"
       />
@@ -207,7 +206,7 @@ const now = Date.now()
         class="search__field"
         input-type="datalist"
         input-name="city"
-        :input-placeholder="t('home.input.city-placeholder')"
+        :input-placeholder="t('global.city')"
         :options-list="cities"
         v-model="city"
         v-bind:key="country"
@@ -218,11 +217,8 @@ const now = Date.now()
 
   <ul class="card-list">
     <li v-for="event in eventsWithAdd" v-bind:key="event.id">
-      <EventPreviewCard
-        :class="event.date < now ? 'expired' : ''"
-        :event-data="event"
-      />
-<!--      <AdCard v-else :ad-data="event" class="ad-block" />-->
+      <EventPreviewCard :class="event.date < now ? 'expired' : ''" :event-data="event" />
+      <!--      <AdCard v-else :ad-data="event" class="ad-block" />-->
     </li>
   </ul>
 

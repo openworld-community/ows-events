@@ -9,7 +9,7 @@ const props = defineProps({
     default: 'button'
   },
   buttonClass: {
-    type: [String, Array],
+    type: [String, Array<string>],
     required: true
   },
   buttonText: {

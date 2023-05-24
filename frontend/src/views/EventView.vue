@@ -88,10 +88,10 @@ const convertToLocaleString = (
         {{ posterEvent.description }}
       </div>
     </div>
-    <button class="card-contact-btn">Связаться</button>
+    <button class="card-contact-btn">{{ t('event.button.contact') }}</button>
 
     <CustomButton button-class="button is-small" button-text="Change" @click="isModalOpen = true" />
-    <button class="delete is-small" aria-label="удалить событие"></button>
+    <button class="delete is-small" :aria-label="t('event.button.delete')"></button>
     <vue-final-modal
       :hideOverlay="false"
       overlayTransition="vfm-fade"

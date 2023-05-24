@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { useTranslation } from '@/i18n'
 import { RouterLink, useRoute } from 'vue-router'
 
+const { t } = useTranslation()
 const route = useRoute()
 </script>
 
@@ -16,22 +18,47 @@ const route = useRoute()
             height="24"
             alt="Peredelano Афиша"
           />
-          <img v-else src="@/assets/img/icon/back.svg" width="24" height="24" alt="Назад" />
+          <img
+            v-else
+            src="@/assets/img/icon/back.svg"
+            width="24"
+            height="24"
+            :alt="t('global.button.back')"
+          />
         </RouterLink>
       </div>
       <nav
         v-if="route.name === 'home'"
         class="header__right"
         role="navigation"
-        aria-label="Навигация"
+        :aria-label="t('global.nav')"
       >
         <RouterLink to="/about" class="icon-text">
-          <img src="@/assets/img/icon/info.svg" width="24" height="24" alt="Подробнее об Афише" />
+          <img
+            src="@/assets/img/icon/info.svg"
+            width="24"
+            height="24"
+            :alt="t('component.header.about')"
+          />
         </RouterLink>
       </nav>
-      <div v-if="route.name === 'event'" class="header__right" aria-label="Управление событием">
-        <img src="@/assets/img/icon/edit.svg" width="24" height="24" alt="Редактировать" />
-        <img src="@/assets/img/icon/share.svg" width="24" height="24" alt="Поделиться" />
+      <div
+        v-if="route.name === 'event'"
+        class="header__right"
+        :aria-label="t('component.header.event.manage')"
+      >
+        <img
+          src="@/assets/img/icon/edit.svg"
+          width="24"
+          height="24"
+          :alt="t('event.button.edit')"
+        />
+        <img
+          src="@/assets/img/icon/share.svg"
+          width="24"
+          height="24"
+          :alt="t('global.button.share')"
+        />
       </div>
     </div>
   </header>

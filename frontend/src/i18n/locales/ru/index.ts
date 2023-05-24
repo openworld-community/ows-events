@@ -1,6 +1,14 @@
 import { defineTranslation } from '..'
 
 export const defaultTranslation = {
+  global: {
+    country: 'Страна',
+    city: 'Город',
+    search: 'Поиск',
+    timezone: 'Часовой пояс',
+    button: { back: 'Назад', share: 'Поделиться', cancel: 'Отмена' },
+    nav: 'Навигация'
+  },
   about: {
     title: 'Об Aфише',
     p1: 'Идея проекта "Афиши" заключается в создании удобной площадки для поиска мероприятий, которые проходят в интересующем пользователя регионе (с упором на IT-мероприятия, но в целом мы хотим добавлять все: от конференций до музыкальных вечеров).',
@@ -13,16 +21,9 @@ export const defaultTranslation = {
     button: {
       'add-event-aria': 'добавить мероприятие'
     },
-    input: {
-      'search-placeholder': 'Поиск',
-      'country-placeholder': 'Страна',
-      'city-placeholder': 'Город'
-    },
     events: {
       'image-alt': 'Фото мероприятия',
       ad: 'Реклама',
-      'add-block-aria-label': 'Добавить блок',
-      'add-block-label': 'Добавить блок',
       'anchor-chat': 'Перейти в чат'
     },
     peredelano: {
@@ -32,26 +33,39 @@ export const defaultTranslation = {
   },
   event: {
     button: {
-      back: 'назад',
       delete: 'удалить событие',
-      edit: 'редактировать событие'
+      edit: 'редактировать событие',
+      contact: 'Связаться'
     },
     image: {
       event: 'изображение мероприятия'
+    }
+  },
+  component: {
+    'user-location': {
+      'not-found': 'Мы не смогли найти вас('
     },
-    new: {
+    'new-event-modal': {
       title: 'Новое мероприятие',
       cancel: 'Отмена',
       submit: 'Отправить',
       'add-image': 'Добавить изображение',
+      'remove-image': 'Убрать изображение',
       fields: {
         title: 'Название',
         description: 'Описание',
         start: 'Начало',
         end: 'Окончание',
-        country: 'Страна',
-        city: 'Город',
         price: 'Цена'
+      }
+    },
+    'language-selector': {
+      label: 'Язык'
+    },
+    header: {
+      about: 'Подробнее об Афише',
+      event: {
+        manage: 'Управление событием'
       }
     }
   }

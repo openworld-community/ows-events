@@ -219,7 +219,6 @@ const now = Date.now()
   <ul class="card-list">
     <li v-for="event in eventsWithAdd" v-bind:key="event.id">
       <EventPreviewCard
-        v-if="event.type !== 'add'"
         :class="event.date < now ? 'expired' : ''"
         :event-data="event"
       />

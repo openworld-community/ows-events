@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { t } from 'i18next'
 import { convertToLocaleString } from '../../helpers/dates'
-import { type EventOnPoster } from '@common/types'
 
 const props = defineProps({
   eventData: {

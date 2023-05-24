@@ -19,12 +19,12 @@ export const defaultTranslation = {
   home: {
     title: 'Мероприятия',
     button: {
-      'add-event-aria': 'добавить мероприятие'
+      'add_event_aria': 'добавить мероприятие'
     },
     events: {
-      'image-alt': 'Фото мероприятия',
+      image_alt: 'Фото мероприятия',
       ad: 'Реклама',
-      'anchor-chat': 'Перейти в чат'
+      anchor_chat: 'Перейти в чат'
     },
     peredelano: {
       description:
@@ -42,15 +42,15 @@ export const defaultTranslation = {
     }
   },
   component: {
-    'user-location': {
-      'not-found': 'Мы не смогли найти вас('
+    user_location: {
+      not_found: 'Мы не смогли найти вас('
     },
-    'new-event-modal': {
+    new_event_modal: {
       title: 'Новое мероприятие',
       cancel: 'Отмена',
       submit: 'Отправить',
-      'add-image': 'Добавить изображение',
-      'remove-image': 'Убрать изображение',
+      add_image: 'Добавить изображение',
+      remove_image: 'Убрать изображение',
       fields: {
         title: 'Название',
         description: 'Описание',
@@ -59,7 +59,7 @@ export const defaultTranslation = {
         price: 'Цена'
       }
     },
-    'language-selector': {
+    language_selector: {
       label: 'Язык'
     },
     header: {

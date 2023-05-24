@@ -228,7 +228,7 @@ const now = Date.now()
     icon-width="56"
     icon-height="56"
     aria-haspopup="true"
-    :aria-label="t('home.button.add-event-aria')"
+    :aria-label="t('home.button.add_event_aria')"
     @click="isModalOpen = true"
   />
 

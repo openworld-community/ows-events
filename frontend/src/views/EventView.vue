@@ -38,6 +38,20 @@ const picture = computed(() => {
   }
   return 'https://picsum.photos/400/300'
 })
+
+const convertToLocaleString = (
+  date: number,
+  timezone: { timezoneName: string; timezoneOffset: string } | undefined
+) => {
+  const localDate = new Date(date)
+  return localDate.toLocaleString('ru-RU', {
+    timeZone: timezone?.timezoneName,
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
 </script>
 
 <template>
@@ -79,23 +93,16 @@ const picture = computed(() => {
           <span class="card-title">{{ posterEvent.title }}</span>
         </h2>
         <div class="card-datetime">
-          {{
-            new Date(posterEvent.date).toLocaleString($i18next.languages, {
-              month: 'long',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            })
-          }}
+          {{ convertToLocaleString(posterEvent.date, posterEvent.timezone) }}
           -
           {{
-            new Date(posterEvent.date + posterEvent.durationInSeconds).toLocaleString('ru-RU', {
-              month: 'long',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            })
+            convertToLocaleString(
+              posterEvent.date + posterEvent.durationInSeconds,
+              posterEvent.timezone
+            )
           }}
+
+          {{ posterEvent.timezone?.timezoneOffset }} {{ posterEvent.timezone?.timezoneName }}
         </div>
         <div class="card-geolink">
           <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"

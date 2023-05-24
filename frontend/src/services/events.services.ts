@@ -49,3 +49,59 @@ export const editEvent = async (data: any) => {
 export const deleteEvent = async (id: string) => {
   await api.post('/events/delete', { id })
 }
+
+export const getAllTimezones = async (): Promise<
+  {
+    timezoneName: string
+    timezoneOffset: string
+  }[]
+> => {
+  const local = localStorage.getItem('ALL_TIMEZONES')
+
+  if (local) {
+    return JSON.parse(local) as {
+      timezoneName: string
+      timezoneOffset: string
+    }[]
+  }
+
+  const loaded = (
+    await api.get<
+      StandardResponse<
+        {
+          timezoneName: string
+          timezoneOffset: string
+        }[]
+      >
+    >('/timezones')
+  ).data
+
+  if (!loaded) {
+    return []
+  }
+  if (loaded.type === 'error') {
+    return []
+  }
+
+  localStorage.setItem('ALL_TIMEZONES', JSON.stringify(loaded.data))
+  return loaded.data
+}
+
+export const getTimezoneByCountryAndCity = async ({
+  country,
+  city
+}: {
+  country: string
+  city: string
+}) => {
+  return (
+    await api.get<
+      StandardResponse<{
+        country: string
+        city: string
+        timezoneName: string
+        timezoneOffset: string
+      }>
+    >('/location/meta/' + country + '/' + city)
+  ).data
+}

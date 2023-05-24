@@ -3,7 +3,14 @@ import CustomInput from '@/components/common/input/CustomInput.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import CustomButton from '@/components/common/button/CustomButton.vue'
 import { dateTime, timestampParse } from '@/helpers/dates'
-import { deleteEventImage, editEvent, postEvent, postEventImage } from '@/services/events.services'
+import {
+  deleteEventImage,
+  editEvent,
+  getAllTimezones,
+  getTimezoneByCountryAndCity,
+  postEvent,
+  postEventImage
+} from '@/services/events.services'
 import ImageLoader from '@/components/common/button/ImageLoader.vue'
 import { storeToRefs } from 'pinia'
 import { useLocationStore } from '@/stores/location.store'
@@ -27,6 +34,32 @@ const isLoading = ref(false)
 const newImageFile = ref<null | File>(null)
 const isModalOpen = ref(false)
 
+const allTimezones = ref<string[]>([])
+
+const timezoneConverter = (timezone: { timezoneName: string; timezoneOffset: string }) => {
+  return timezone.timezoneName + ' ' + timezone.timezoneOffset
+}
+
+const timezoneDeconverter = (timezone: string) => {
+  const timezoneName = timezone.split(' ')[0]
+  const timezoneOffset = timezone.split(' ')[1]
+  return {
+    timezoneName,
+    timezoneOffset
+  }
+}
+
+const loadAllTimezones = async () => {
+  const _allTimezones = await getAllTimezones()
+  if (!_allTimezones) {
+    return
+  }
+
+  allTimezones.value = _allTimezones.map((timezone) => timezoneConverter(timezone))
+}
+
+loadAllTimezones()
+
 type inputValuesType = {
   id: string
   title: string
@@ -39,6 +72,7 @@ type inputValuesType = {
   city: string
   image: string
   price: number
+  timezone: string
 }
 
 const inputValues = ref<inputValuesType>({
@@ -52,7 +86,8 @@ const inputValues = ref<inputValuesType>({
   country: '',
   city: '',
   image: '',
-  price: 0
+  price: 0,
+  timezone: ''
 })
 
 onMounted(() => {
@@ -62,8 +97,8 @@ onMounted(() => {
 })
 
 const setEventData = (data: EventOnPoster) => {
-  const start = timestampParse(data.date)
-  const end = timestampParse(data.date + data.durationInSeconds)
+  const start = timestampParse(data.date, data.timezone)
+  const end = timestampParse(data.date + data.durationInSeconds, data.timezone)
 
   inputValues.value.id = data.id
   inputValues.value.title = data.title
@@ -94,6 +129,30 @@ watch(
   { deep: true }
 )
 
+watch(
+  () => inputValues.value.country && inputValues.value.city,
+  async () => {
+    inputValues.value.timezone = ''
+
+    await getTimezoneByCountryAndCity({
+      country: inputValues.value.country,
+      city: inputValues.value.city
+    })
+      .then((timezone) => {
+        if (timezone.type === 'error') {
+          inputValues.value.timezone = ''
+          return
+        }
+        const _timezone = timezone.data
+        inputValues.value.timezone = timezoneConverter(_timezone)
+      })
+      .catch(() => {
+        inputValues.value.timezone = ''
+      })
+  },
+  { deep: true }
+)
+
 const checkFormFilling = computed(() => {
   return !!(
     inputValues.value.title &&
@@ -112,18 +171,28 @@ const closeModal = () => {
 }
 
 const paramsForSubmit = computed(() => {
+  const tz = timezoneDeconverter(inputValues.value.timezone)
   return {
     title: inputValues.value.title,
     description: inputValues.value.description,
-    date: dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
+    date: dateTime(
+      inputValues.value.startDate,
+      inputValues.value.startTime,
+      tz.timezoneOffset
+    ).getTime(),
     durationInSeconds:
-      dateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() -
-      dateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
+      dateTime(inputValues.value.endDate, inputValues.value.endTime, tz.timezoneOffset).getTime() -
+      dateTime(
+        inputValues.value.startDate,
+        inputValues.value.startTime,
+        tz.timezoneOffset
+      ).getTime(),
     location: {
       country: inputValues.value.country,
       city: inputValues.value.city
     },
-    price: inputValues.value.price
+    price: inputValues.value.price,
+    timezone: tz
   }
 })
 
@@ -280,6 +349,15 @@ setTimeout(() => {
           v-bind:key="inputValues.city"
           v-bind:input-disable="!inputValues.country"
         />
+        <CustomInput
+          input-type="datalist"
+          input-name="timezone"
+          input-placeholder="Таймзона"
+          :options-list="allTimezones"
+          v-model="inputValues.timezone"
+          v-bind:key="inputValues.timezone"
+          v-bind:input-disable="!inputValues.city"
+        />
       </div>
 
       <div v-for="input in eventInputs" :key="input.name">
@@ -354,11 +432,11 @@ setTimeout(() => {
   transition-property: top;
   transition-duration: 0.4s;
 
-.row {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 10px;
-}
+  .row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
 
   .card-custom-footer {
     justify-content: flex-end;

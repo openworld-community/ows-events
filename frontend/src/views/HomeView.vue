@@ -57,7 +57,7 @@ const planToLoadEvents = () => {
 watch(
   pickedCountry,
   async (_country) => {
-    country.value = _country
+    city.value = pickedCity.value
   },
   { deep: true }
 )
@@ -95,35 +95,46 @@ const filteredValues = computed(() => {
   return getFilteredEvents(posterEvents.value, search.value, country.value, city.value)
 })
 
-const eventsWithAdd = computed(() => {
+const eventsWithAdd = computed((): (EventOnPoster & { type: 'event' })[] => {
   const events = [...filteredValues.value]
-  const newEvents: (
-    | (EventOnPoster & { type: 'event' })
-    | {
-        id: 'add'
-        type: 'add'
-        title: string
-        description: string
-        link: string
-      }
-  )[] = []
-  for (let i = 0; i < events.length; i++) {
-    if (i % 2 === 0) {
-      newEvents.push({
-        id: 'add',
-        type: 'add',
-        title: 'Peredelano Startups',
-        description: t('home.peredelano.description'),
-        link: 'https://t.me/peredelanoconfjunior'
-      })
-    }
-    newEvents.push({
-      ...events[i],
+  return events.map((x) => {
+    return {
+      ...x,
       type: 'event',
-      image: events[i].image ? `${BASE_URL}${events[i].image}` : 'https://picsum.photos/200/300'
-    })
-  }
-  return newEvents
+      image: x.image
+        ? x.image.includes('http')
+          ? x.image
+          : `${BASE_URL}${x.image}`
+        : 'https://picsum.photos/400/300'
+    }
+  })
+  // const newEvents: (
+  //   | (EventOnPoster & { type: 'event' })
+  //   | {
+  //       id: 'add'
+  //       type: 'add'
+  //       title: string
+  //       description: string
+  //       link: string
+  //     }
+  // )[] = []
+  // for (let i = 0; i < events.length; i++) {
+  //   if (i % 2 === 0) {
+  //     newEvents.push({
+  //       id: 'add',
+  //       type: 'add',
+  //       title: 'Peredelano Startups',
+  //       description: t('home.peredelano.description'),
+  //       link: 'https://t.me/peredelanoconfjunior'
+  //     })
+  //   }
+  //   newEvents.push({
+  //     ...events[i],
+  //     type: 'event',
+  //     image: events[i].image ? `${BASE_URL}${events[i].image}` : 'https://picsum.photos/200/300'
+  //   })
+  // }
+  // return newEvents
 })
 
 const getFilteredEvents = (
@@ -216,7 +227,6 @@ const convertToLocaleString = (
           :input-placeholder="t('home.input.country-placeholder')"
           :options-list="countries"
           v-model="country"
-          v-bind:key="country"
         />
         <CustomInput
           input-type="datalist"
@@ -224,15 +234,15 @@ const convertToLocaleString = (
           :input-placeholder="t('home.input.city-placeholder')"
           :options-list="cities"
           v-model="city"
-          v-bind:key="city"
-          v-bind:input-disable="!country"
+          v-bind:key="country"
+          :inputDisabled="!country"
         />
       </div>
     </div>
 
     <ul class="card-list">
       <li v-for="event in eventsWithAdd" v-bind:key="event.id" class="card">
-        <div v-if="event.type !== 'add'" :class="event.date < now ? 'expired' : ''">
+        <div :class="event.date < now ? 'expired' : ''">
           <a :href="`/event/${event.id}`">
             <div class="card-image">
               <div class="card-price">{{ event.price }} €</div>
@@ -264,7 +274,7 @@ const convertToLocaleString = (
             </div>
           </a>
         </div>
-        <div v-else class="add-block">
+        <!-- <div v-else class="add-block">
           <span class="add-label" role="button" tabindex="0" :aria-label="t('home.events.ad')">{{
             t('home.events.ad')
           }}</span>
@@ -277,7 +287,7 @@ const convertToLocaleString = (
           <div class="card-action">
             <a :href="event.link"> {{ t('home.events.anchor-chat') }}! </a>
           </div>
-        </div>
+        </div> -->
       </li>
     </ul>
   </main>

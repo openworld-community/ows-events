@@ -162,7 +162,8 @@ const checkFormFilling = computed(() => {
     inputValues.value.startDate &&
     inputValues.value.startTime &&
     inputValues.value.country &&
-    inputValues.value.city
+    inputValues.value.city &&
+    inputValues.value.timezone
   )
 })
 
@@ -206,7 +207,6 @@ const submitEvent = async () => {
     let imageURL
 
     const params = paramsForSubmit.value
-    console.log(params)
 
     if (props.dataForEdit) {
       if (newImageFile.value) {
@@ -331,7 +331,7 @@ setTimeout(() => {
     :class="!isModalOpen ? 'new-event-container-hidden' : 'new-event-container-open'"
   >
     <header class="modal-card-head">
-      <h2 class="event-modal__title title is-3">{{t('event.new.title')}}</h2>
+      <h2 class="event-modal__title title is-3">{{ t('event.new.title') }}</h2>
     </header>
     <form class="modal-card-body">
       <div class="row">
@@ -341,7 +341,6 @@ setTimeout(() => {
           input-placeholder="Страна"
           :options-list="countries"
           v-model="inputValues.country"
-          v-bind:key="inputValues.country"
         />
         <CustomInput
           input-type="datalist"
@@ -349,8 +348,8 @@ setTimeout(() => {
           input-placeholder="Город"
           :options-list="cities"
           v-model="inputValues.city"
-          v-bind:key="inputValues.city"
-          v-bind:input-disable="!inputValues.country"
+          v-bind:key="inputValues.country"
+          :inputDisabled="!inputValues.country"
         />
         <CustomInput
           input-type="datalist"
@@ -358,8 +357,8 @@ setTimeout(() => {
           input-placeholder="Таймзона"
           :options-list="allTimezones"
           v-model="inputValues.timezone"
-          v-bind:key="inputValues.timezone"
-          v-bind:input-disable="!inputValues.city"
+          v-bind:key="inputValues.city"
+          :inputDisabled="!inputValues.city"
         />
       </div>
 

@@ -5,7 +5,7 @@ export type PaymentInfo = {
       name?: string;
       link?: string;
       account?: string;
-      cost?: string;
+      price?: string;
     }
   ];
 };

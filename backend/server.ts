@@ -144,6 +144,49 @@ server.get<{
   }
 );
 
+server.get<{
+  Params: eventParams;
+  Reply: StandardResponse<{
+    event: EventOnPoster;
+    paymantsInfo: PaymentInfo[];
+  }>;
+}>("/api/event/payment-info/:id", async (request, reply) => {
+  const event = eventsStateController.getEvent(request.params.id);
+  if (!event) {
+    return {
+      type: "error",
+      errors: ["Event not found"],
+    };
+  }
+
+  const paymentsFile = "assets/presets/payments-info.json";
+
+  const paymantsInfo = JSON.parse(
+    fs.existsSync(paymentsFile)
+      ? fs.readFileSync(paymentsFile, "utf-8")
+      : "[]" || "[]"
+  ) as PaymentInfo[];
+
+  if (!paymantsInfo?.length) {
+    return {
+      type: "error",
+      errors: ["Paymants not found"],
+    };
+  }
+
+  const eventPaymantsInfo = paymantsInfo.filter(
+    (p) => p.id === request.params.id
+  );
+
+  return {
+    type: "success",
+    data: {
+      event,
+      paymantsInfo: eventPaymantsInfo,
+    },
+  };
+});
+
 server.post<{
   Body: Registration;
   Reply: StandardResponse<"ok">;
@@ -169,38 +212,38 @@ server.post<{
   );
 });
 
+// server.get<{
+//   Reply: StandardResponse<Registration>;
+//   Params: eventParams;
+// }>(
+//   "/api/registration/:id",
+//   async (request, reply): Promise<StandardResponse<Registration>> => {
+//     const eventId = request.params.id;
+//     const data = await fsP.readFile("assets/db/registrations.json", {
+//       encoding: "utf-8",
+//     });
+//     if (!data) {
+//       return {
+//         type: "error",
+//       };
+//     }
+//     const info = JSON.parse(data);
+//     if (!info) {
+//       return {
+//         type: "error",
+//       };
+//     }
+
+//     const eventRegistration = info.filter(
+//       (item: Registration) => item.eventId === eventId
+//     );
+//     return eventRegistration;
+//   }
+// );
+
 server.get<{
-  Reply: StandardResponse<Registration>;
   Params: eventParams;
-}>(
-  "/api/registration/:id",
-  async (request, reply): Promise<StandardResponse<Registration>> => {
-    const eventId = request.params.id;
-    const data = await fsP.readFile("assets/db/registrations.json", {
-      encoding: "utf-8",
-    });
-    if (!data) {
-      return {
-        type: "error",
-      };
-    }
-    const info = JSON.parse(data);
-    if (!info) {
-      return {
-        type: "error",
-      };
-    }
-
-    const eventRegistration = info.filter(
-      (item: Registration) => item.eventId === eventId
-    );
-    return eventRegistration;
-  }
-);
-
-server.get<{
   Reply: StandardResponse<PaymentInfo>;
-  Params: eventParams;
 }>(
   "/api/payment-info/:id",
   async (request, reply): Promise<StandardResponse<PaymentInfo>> => {
@@ -223,7 +266,10 @@ server.get<{
     const eventPaymentInfo = info.filter(
       (item: PaymentInfo) => item.id === eventId
     );
-    return eventPaymentInfo;
+    return {
+      type: "success",
+      data: eventPaymentInfo,
+    };
   }
 );
 

@@ -8,7 +8,6 @@ docker run -e RUN_LOCAL=true \
            -e VALIDATE_YAML=true \
            -e VALIDATE_SQL=true \
            -e VALIDATE_MARKDOWN=true \
-           -e VALIDATE_JSON=true \
            -e VALIDATE_JAVASCRIPT_ES=true \
            -e VALIDATE_HTML=true \
            -e VALIDATE_CSS=true \

@@ -13,7 +13,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { BASE_URL } from '@/constants/url'
 
 const { t } = useTranslation()
-
 let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined
 
 const locationStore = useLocationStore()

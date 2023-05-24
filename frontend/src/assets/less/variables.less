@@ -1,15 +1,52 @@
 :root {
+  //BREAKPOINTS
+  --width-mobile: 375px;
+  --width-tablet: 768px;
+  --width-desktop: 1440px;
+
+  //COLORS
+  --color-text: var(--color-text-main);
+  --background-color: var(--color-white);
+
+  //FONTS
   --font-family-main: "Inter", "Arial", sans-serif;
-  --font-size: 16px;
   --line-height: 24px;
   --font-weight-regular: 400;
   --font-weight-bold: 500;
-  --color-text: var(--color-black);
-  --background-color: var(--color-white);
-  --mobile-width: 375px;
-  --tablet-width: 768px;
-  --desktop-width: 1440px;
-  --padding-mobile: 12px;
-  --padding-tablet: 30px;
-  --padding-desktop: 110px;
+
+  --font-size-M: 16px;
+  --font-size-S: 14px;
+  --font-size-XS: 12px;
+  --font-size-L: 18px;
+  --font-size-XL: 24px;
+  --font-size-XXL: 32px;
+
+  @media (min-width: 768px) {
+    --font-size-M: 16px;
+    --font-size-S: 14px;
+    --font-size-XS: 12px;
+    --font-size-L: 18px;
+    --font-size-XL: 24px;
+    --font-size-XXL: 32px;
+  }
+
+  @media (min-width: 1440px) {
+    --font-size-M: 16px;
+    --font-size-S: 14px;
+    --font-size-XS: 12px;
+    --font-size-L: 18px;
+    --font-size-XL: 24px;
+    --font-size-XXL: 32px;
+  }
+
+  //BODY PADDINGS
+  --padding-side: 12px;
+
+  @media (min-width: 768px) {
+      --padding-side: 30px;
+  }
+
+  @media (min-width: 1440px) {
+      --padding-side: 110px;
+  }
 }

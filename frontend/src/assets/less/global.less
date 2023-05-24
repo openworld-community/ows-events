@@ -13,14 +13,22 @@ html {
 
 body {
   width: 100%;
-  min-width: var(--mobile-width);
+  min-width: var(--width-mobile);
   min-height: 100%;
+  //TODO: пока верстка только мобилки
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
   font-family: var(--font-family-main);
-  font-size: var(--font-size);
+  font-size: var(--font-size-M);
   line-height: var(--line-height);
   font-weight: var(--font-weight-regular);
   color: var(--color-text);
   background-color: var(--background-color);
+  padding-left: var(--padding-side);
+  padding-right: var(--padding-side);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 a {

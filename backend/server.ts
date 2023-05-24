@@ -211,7 +211,8 @@ server.post<{
 
   return eventsStateController
     .getEvents({ searchLine, country, city })
-    .slice(0, 100);
+    .slice(0, 100)
+
 });
 
 server.post<{

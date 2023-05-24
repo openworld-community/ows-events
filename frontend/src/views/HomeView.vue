@@ -57,7 +57,7 @@ const planToLoadEvents = () => {
 watch(
   pickedCountry,
   async (_country) => {
-    country.value = _country
+    city.value = pickedCity.value
   },
   { deep: true }
 )
@@ -97,6 +97,17 @@ const filteredValues = computed(() => {
 
 const eventsWithAdd = computed(() => {
   const events = [...filteredValues.value]
+  return events.map((x) => {
+    return {
+      ...x,
+      type: 'event',
+      image: x.image
+        ? x.image.includes('http')
+          ? x.image
+          : `${BASE_URL}${x.image}`
+        : 'https://picsum.photos/400/300'
+    }
+  })
   const newEvents: (
     | (EventOnPoster & { type: 'event' })
     | {
@@ -216,7 +227,6 @@ const convertToLocaleString = (
           :input-placeholder="t('home.input.country-placeholder')"
           :options-list="countries"
           v-model="country"
-          v-bind:key="country"
         />
         <CustomInput
           input-type="datalist"
@@ -224,8 +234,8 @@ const convertToLocaleString = (
           :input-placeholder="t('home.input.city-placeholder')"
           :options-list="cities"
           v-model="city"
-          v-bind:key="city"
-          v-bind:input-disable="!country"
+          v-bind:key="country"
+          :inputDisabled="!country"
         />
       </div>
     </div>

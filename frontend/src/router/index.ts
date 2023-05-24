@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import EventView from '../views/EventView.vue'
-import ConfRegistaration from '../views/ConfRegistaration.vue'
+import ConfRegistaration from '../views/Registration.vue'
 import PaymentInfo from '../views/PaymentInfo.vue'
 
 const router = createRouter({
@@ -24,12 +24,12 @@ const router = createRouter({
       component: EventView
     },
     {
-      path: '/registration/conf/:eventId?',
+      path: '/registration/:eventId?',
       name: 'registrationConf',
       component: ConfRegistaration
     },
     {
-      path: '/conf/registration/:eventId?',
+      path: '/payment/:eventId?',
       name: 'paymentInfo',
       component: PaymentInfo
     }

@@ -23,7 +23,7 @@ const workplace = ref('')
 const experienceInStartups = ref('')
 const fromYouKnow = ref('')
 const beenEarly = ref('')
-const fromWichCity = ref('')
+const fromWhichCity = ref('')
 const email = ref('')
 const personaldataAgree = ref(false)
 const feeAgree = ref(false)
@@ -37,7 +37,7 @@ const submitAvailable = computed(() => {
     experienceInStartups.value,
     fromYouKnow.value,
     beenEarly.value,
-    fromWichCity.value,
+    fromWhichCity.value,
     email.value,
     personaldataAgree.value,
     feeAgree.value
@@ -46,6 +46,7 @@ const submitAvailable = computed(() => {
 
 const submitInfo = computed(() => {
   return {
+    eventId: eventId,
     telegramNickname: telegramNickname.value,
     name: name.value,
     profession: profession.value,
@@ -53,7 +54,7 @@ const submitInfo = computed(() => {
     experienceInStartups: experienceInStartups.value,
     fromYouKnow: fromYouKnow.value,
     beenEarly: beenEarly.value,
-    fromWichCity: fromWichCity.value,
+    fromWhichCity: fromWhichCity.value,
     email: email.value,
     personaldataAgree: personaldataAgree.value,
     feeAgree: feeAgree.value
@@ -66,12 +67,10 @@ const submit = async () => {
   }
 
   sendFormAboutRegistration(submitInfo.value).then(() => {
-    console.log('success')
     localStorage.setItem('REGISTRATION', 'true')
     localStorage.setItem('REGISTRATION_DATA', JSON.stringify(submitInfo.value))
-    window.location.href = '/conf/registration/paymentinfo'
+    window.location.href = `/payment/${eventId}`
   })
-  console.log('submit')
 }
 </script>
 
@@ -141,8 +140,8 @@ const submit = async () => {
           input-type="input"
           input-name="fromWichCity"
           input-placeholder="From which city will you go to the meetup?"
-          v-model="fromWichCity"
-          v-bind:key="fromWichCity"
+          v-model="fromWhichCity"
+          v-bind:key="fromWhichCity"
         />
         <CustomInput
           input-type="input"

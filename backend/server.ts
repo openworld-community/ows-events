@@ -15,6 +15,9 @@ import cityTimezones from "city-timezones";
 
 import moment from "moment-timezone";
 import fs from "fs";
+import fsP from "fs/promises";
+import { Registration } from "@common/types/registration";
+import { PaymentInfo } from "@common/types/payment-info";
 
 interface eventParams {
   id: string;
@@ -142,21 +145,11 @@ server.get<{
 );
 
 server.post<{
-  Body: {
-    fields: {
-      [key: string]: string | number | undefined;
-    };
-  };
+  Body: Registration;
   Reply: StandardResponse<"ok">;
 }>("/api/event/registration", async (request, reply) => {
   const data = await request.body;
   if (!data) {
-    return {
-      type: "error",
-    };
-  }
-
-  if (!data.fields) {
     return {
       type: "error",
     };
@@ -168,15 +161,71 @@ server.post<{
 
   const registrations = JSON.parse(oldRegistrations);
 
-  registrations.push(data.fields);
+  registrations.push(data);
 
   fs.writeFileSync(
     "assets/db/registrations.json",
     JSON.stringify(registrations, null, 2)
   );
-
-  console.log(data.fields);
 });
+
+server.get<{
+  Reply: StandardResponse<Registration>;
+  Params: eventParams;
+}>(
+  "/api/registration/:id",
+  async (request, reply): Promise<StandardResponse<Registration>> => {
+    const eventId = request.params.id;
+    const data = await fsP.readFile("assets/db/registrations.json", {
+      encoding: "utf-8",
+    });
+    if (!data) {
+      return {
+        type: "error",
+      };
+    }
+    const info = JSON.parse(data);
+    if (!info) {
+      return {
+        type: "error",
+      };
+    }
+
+    const eventRegistration = info.filter(
+      (item: Registration) => item.eventId === eventId
+    );
+    return eventRegistration;
+  }
+);
+
+server.get<{
+  Reply: StandardResponse<PaymentInfo>;
+  Params: eventParams;
+}>(
+  "/api/payment-info/:id",
+  async (request, reply): Promise<StandardResponse<PaymentInfo>> => {
+    const eventId = request.params.id;
+    const data = await fsP.readFile("assets/presets/payments-info.json", {
+      encoding: "utf-8",
+    });
+    if (!data) {
+      return {
+        type: "error",
+      };
+    }
+    const info = JSON.parse(data);
+    if (!info) {
+      return {
+        type: "error",
+      };
+    }
+
+    const eventPaymentInfo = info.filter(
+      (item: PaymentInfo) => item.id === eventId
+    );
+    return eventPaymentInfo;
+  }
+);
 
 server.post<{
   Reply: StandardResponse<{ path: string }>;

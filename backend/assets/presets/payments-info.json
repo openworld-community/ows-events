@@ -1,0 +1,52 @@
+[
+  {
+    "id": "tashkent-27-05",
+    "rows": [
+      {
+        "name": "USDT TRON (TRC20)",
+        "account": "TTiY7unVVbS9aY8jVrtyD6mR89PrQ6rp4N",
+        "price": "90$, для партнера +60$"
+      },
+      {
+        "name": "BinanceID",
+        "account": "457250683",
+        "price": "90$, для партнера +60$"
+      },
+      {
+        "name": "Тинькофф общий сбор",
+        "link": "https://www.tinkoff.ru/cf/AJRdCLpssjL",
+        "price": "8000 руб, для партнера +5000 руб"
+      }
+    ]
+  },
+  {
+    "id": "belgrade-27-05",
+    "rows": [
+      {
+        "name": "USDT TRON (TRC20)",
+        "account": "TTiY7unVVbS9aY8jVrtyD6mR89PrQ6rp4N",
+        "price": "100$, для партнера +75$"
+      },
+      {
+        "name": "BinanceID",
+        "account": "457250683",
+        "price": "100$, для партнера +75$"
+      },
+      {
+        "name": "Тинькофф общий сбор",
+        "link": "https://www.tinkoff.ru/cf/8ZoE70Hu1aR",
+        "price": "8800 руб, для партнера +5800 руб"
+      },
+      {
+        "name": "Карта Bank of Ayudhya",
+        "account": "4215 8446 0523 4248",
+        "price": "105$, для партнера +75$"
+      },
+      {
+        "name": "Счет",
+        "link": "465-1-509-970",
+        "price": "105$, для партнера +75$"
+      }
+    ]
+  }
+]

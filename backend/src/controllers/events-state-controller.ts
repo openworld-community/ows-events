@@ -26,6 +26,8 @@ class EventsStateController {
   }
 
   constructor() {
+    this.events =
+      JSON.parse(fs.readFileSync("./assets/db/events.json", "utf-8")) || [];
     this.autogenEventsBase = JSON.parse(
       fs.readFileSync("./assets/presets/autogen-base.json", "utf-8")
     );

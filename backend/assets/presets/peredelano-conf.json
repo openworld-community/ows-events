@@ -1,13 +1,36 @@
 [
   {
-    "title": "Peredelanoconf Митап",
+    "id": "tashkent-27-05",
+    "title": "Peredelanoconf Ташкент",
     "description": "",
     "date": 1685181600000,
     "durationInSeconds": 32340000,
-    "location": { "country": "Uzbekistan", "city": "Tashkent" },
+    "location": {
+      "country": "Uzbekistan",
+      "city": "Tashkent"
+    },
     "price": 0,
-    "timezone": { "timezoneName": "Asia/Tashkent", "timezoneOffset": "+05:00" },
-    "image": "",
-    "id": "tashkent-27.05"
+    "timezone": {
+      "timezoneName": "Asia/Tashkent",
+      "timezoneOffset": "+05:00"
+    },
+    "image": ""
+  },
+  {
+    "id": "belgrade-27-05",
+    "title": "Peredelanoconf Белград",
+    "description": "",
+    "date": 1685181600000,
+    "durationInSeconds": 32340000,
+    "location": {
+      "country": "Serbia",
+      "city": "Belgrade"
+    },
+    "price": 0,
+    "timezone": {
+      "timezoneName": "Europe/Belgrade",
+      "timezoneOffset": "+02:00"
+    },
+    "image": ""
   }
 ]

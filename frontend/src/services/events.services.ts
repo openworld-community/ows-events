@@ -109,5 +109,5 @@ export const getTimezoneByCountryAndCity = async ({
 export const sendFormAboutRegistration = async (data: {
   [key: string]: string | number | boolean
 }) => {
-  await api.post('/event/registration', { fields: data })
+  await api.post('/event/registration', data)
 }

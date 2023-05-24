@@ -1,0 +1,13 @@
+[
+  {
+    "title": "Peredelanoconf Митап",
+    "description": "",
+    "date": 1685181600000,
+    "durationInSeconds": 32340000,
+    "location": { "country": "Uzbekistan", "city": "Tashkent" },
+    "price": 0,
+    "timezone": { "timezoneName": "Asia/Tashkent", "timezoneOffset": "+05:00" },
+    "image": "",
+    "id": "tashkent-27.05"
+  }
+]

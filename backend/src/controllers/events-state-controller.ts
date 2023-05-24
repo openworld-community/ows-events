@@ -102,6 +102,7 @@ class EventsStateController {
           timezoneName: "Europe/Moscow",
           timezoneOffset: "+03:00",
         },
+        url: null,
       });
     }
 

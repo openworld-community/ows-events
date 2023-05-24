@@ -17,6 +17,7 @@ import { useLocationStore } from '@/stores/location.store'
 import { type EventOnPoster } from '@common/types'
 import { useRouter } from 'vue-router'
 import { useTranslation } from '@/i18n'
+import { url } from 'inspector'
 
 const { t } = useTranslation()
 
@@ -76,6 +77,7 @@ type inputValuesType = {
   image: string
   price: number
   timezone: string
+  url: string
 }
 
 const inputValues = ref<inputValuesType>({
@@ -90,7 +92,8 @@ const inputValues = ref<inputValuesType>({
   city: '',
   image: '',
   price: 0,
-  timezone: ''
+  timezone: '',
+  url: ''
 })
 
 onMounted(() => {
@@ -114,6 +117,7 @@ const setEventData = (data: EventOnPoster) => {
   inputValues.value.endDate = end[0]
   inputValues.value.endTime = end[1]
   inputValues.value.image = data.image as string
+  inputValues.value.url = data.url || ''
 }
 
 watch(
@@ -331,7 +335,7 @@ setTimeout(() => {
     :class="!isModalOpen ? 'new-event-container-hidden' : 'new-event-container-open'"
   >
     <header class="modal-card-head">
-      <h2 class="event-modal__title title is-3">{{t('event.new.title')}}</h2>
+      <h2 class="event-modal__title title is-3">{{ t('event.new.title') }}</h2>
     </header>
     <form class="modal-card-body">
       <div class="row">

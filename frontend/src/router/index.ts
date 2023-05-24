@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import EventView from '../views/EventView.vue'
+import ConfRegistaration from '../views/ConfRegistaration.vue'
+import PaymentInfo from '../views/PaymentInfo.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +22,16 @@ const router = createRouter({
       path: '/event/:id',
       name: 'event',
       component: EventView
+    },
+    {
+      path: '/registration/conf/:eventId?',
+      name: 'registrationConf',
+      component: ConfRegistaration
+    },
+    {
+      path: '/conf/registration/:eventId?',
+      name: 'paymentInfo',
+      component: PaymentInfo
     }
   ]
 })

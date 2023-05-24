@@ -14,6 +14,7 @@ import { imageController } from "./src/controllers/image-controller";
 import cityTimezones from "city-timezones";
 
 import moment from "moment-timezone";
+import fs from "fs";
 
 interface eventParams {
   id: string;
@@ -139,6 +140,43 @@ server.get<{
     return eventsStateController.getEvent(eventId);
   }
 );
+
+server.post<{
+  Body: {
+    fields: {
+      [key: string]: string | number | undefined;
+    };
+  };
+  Reply: StandardResponse<"ok">;
+}>("/api/event/registration", async (request, reply) => {
+  const data = await request.body;
+  if (!data) {
+    return {
+      type: "error",
+    };
+  }
+
+  if (!data.fields) {
+    return {
+      type: "error",
+    };
+  }
+
+  const oldRegistrations = !fs.existsSync("assets/db/registrations.json")
+    ? "[]"
+    : fs.readFileSync("assets/db/registrations.json", "utf-8") || "[]";
+
+  const registrations = JSON.parse(oldRegistrations);
+
+  registrations.push(data.fields);
+
+  fs.writeFileSync(
+    "assets/db/registrations.json",
+    JSON.stringify(registrations, null, 2)
+  );
+
+  console.log(data.fields);
+});
 
 server.post<{
   Reply: StandardResponse<{ path: string }>;

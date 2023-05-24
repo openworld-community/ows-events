@@ -54,9 +54,7 @@ const timezoneDeconverter = (timezone: string) => {
 
 const loadAllTimezones = async () => {
   const _allTimezones = await getAllTimezones()
-  if (!_allTimezones) {
-    return
-  }
+  if (!_allTimezones) return
 
   allTimezones.value = _allTimezones.map((timezone) => timezoneConverter(timezone))
 }
@@ -268,20 +266,20 @@ const eventInputs: (
 )[] = [
   {
     type: 'text',
-    label: t('event.new.fields.title'),
+    label: t('component.new-event-modal.fields.title'),
     name: 'title',
     required: true
   },
   {
     type: 'textarea',
-    label: t('event.new.fields.description'),
+    label: t('component.new-event-modal.fields.description'),
     name: 'description',
     required: true
   },
   {
     type: 'row',
     name: 'startDate',
-    label: t('event.new.fields.start'),
+    label: t('component.new-event-modal.fields.start'),
     child: [
       {
         type: 'date',
@@ -298,7 +296,7 @@ const eventInputs: (
   {
     type: 'row',
     name: 'endDate',
-    label: t('event.new.fields.end'),
+    label: t('component.new-event-modal.fields.end'),
     child: [
       {
         type: 'date',
@@ -314,7 +312,7 @@ const eventInputs: (
   },
   {
     type: 'number',
-    label: t('event.new.fields.price'),
+    label: t('component.new-event-modal.fields.price'),
     name: 'price',
     required: true,
     min: 0
@@ -331,14 +329,14 @@ setTimeout(() => {
     :class="!isModalOpen ? 'new-event-container-hidden' : 'new-event-container-open'"
   >
     <header class="modal-card-head">
-      <h2 class="event-modal__title title is-3">{{t('event.new.title')}}</h2>
+      <h2 class="event-modal__title title is-3">{{ t('component.new-event-modal.title') }}</h2>
     </header>
     <form class="modal-card-body">
       <div class="row">
         <CustomInput
           input-type="datalist"
           input-name="country"
-          input-placeholder="Страна"
+          :input-placeholder="t('global.country')"
           :options-list="countries"
           v-model="inputValues.country"
           v-bind:key="inputValues.country"
@@ -346,7 +344,7 @@ setTimeout(() => {
         <CustomInput
           input-type="datalist"
           input-name="city"
-          input-placeholder="Город"
+          :input-placeholder="t('global.city')"
           :options-list="cities"
           v-model="inputValues.city"
           v-bind:key="inputValues.city"
@@ -355,7 +353,7 @@ setTimeout(() => {
         <CustomInput
           input-type="datalist"
           input-name="timezone"
-          input-placeholder="Таймзона"
+          :input-placeholder="t('global.timezone')"
           :options-list="allTimezones"
           v-model="inputValues.timezone"
           v-bind:key="inputValues.timezone"
@@ -393,13 +391,13 @@ setTimeout(() => {
     <div class="modal-card-foot card-custom-footer">
       <CustomButton
         button-class="button"
-        :button-text="t('event.new.cancel')"
+        :button-text="t('component.new-event-modal.cancel')"
         :is-active="!isLoading"
         @click="closeModal()"
       />
       <CustomButton
         button-class="button is-success"
-        :button-text="t('event.new.submit')"
+        :button-text="t('component.new-event-modal.submit')"
         :is-active="checkFormFilling && !isLoading"
         :is-loading="isLoading"
         @click="isLoading ? null : submitEvent()"

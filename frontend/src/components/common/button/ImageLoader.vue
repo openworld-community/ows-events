@@ -26,19 +26,22 @@ watch(
 )
 
 const loadImage = (event: Event) => {
-  // не ясно, почему ругается при билде
-  // говорит, что возможно null
-  //@ts-ignore
-  const file = (event.target as HTMLInputElement).files[0]
+  if (!event.target) return console.warn('Load Image Event has not target attached')
+  const target = event.target as HTMLInputElement
+  if (!target.files || !target.files[0])
+    return console.warn('Load Image Event targed to has no files')
+  const file = target.files[0]
   const reader = new FileReader()
 
   // TODO: определить тип при загрузке изображения
   reader.addEventListener(
     'load',
     (e: ProgressEvent<FileReader>) => {
-      // говорит, что возможно null
-      //@ts-ignore
-      imageSrc.value = e.target.result as string
+      if (!e.target) return console.warn('Reader Load Event has no target attached')
+      const result = e.target.result
+      if (typeof result !== 'string')
+        return console.warn('Reader Load Event received data format which is not supported')
+      imageSrc.value = result
     },
     { once: true }
   )
@@ -62,14 +65,14 @@ const removeImage = () => {
     <div class="loader__buttons">
       <CustomButton
         button-class="button is-success is-small"
-        :button-text="t('event.new.add-image')"
+        :button-text="t('component.new-event-modal.add-image')"
         :is-active="!imageSrc"
         @click="fileIsLoading ? null : input?.click()"
       />
       <CustomButton
         v-if="imageSrc"
         button-class="button is-small"
-        button-text="Remove image"
+        :button-text="t('component.new-event-modal.remove-image')"
         @click="removeImage"
       />
     </div>

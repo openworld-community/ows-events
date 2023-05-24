@@ -201,7 +201,7 @@ const convertToLocaleString = (
             input-class="input is-info search-input"
             input-type="text"
             input-name="search"
-            :input-placeholder="t('home.input.search-placeholder')"
+            :input-placeholder="t('global.search')"
             v-model="search"
           />
         </div>
@@ -212,7 +212,7 @@ const convertToLocaleString = (
         <CustomInput
           input-type="datalist"
           input-name="country"
-          :input-placeholder="t('home.input.country-placeholder')"
+          :input-placeholder="t('global.country')"
           :options-list="countries"
           v-model="country"
           v-bind:key="country"
@@ -220,7 +220,7 @@ const convertToLocaleString = (
         <CustomInput
           input-type="datalist"
           input-name="city"
-          :input-placeholder="t('home.input.city-placeholder')"
+          :input-placeholder="t('global.city')"
           :options-list="cities"
           v-model="city"
           v-bind:key="city"
@@ -264,9 +264,7 @@ const convertToLocaleString = (
           </a>
         </div>
         <div v-else class="add-block">
-          <span class="add-label" role="button" tabindex="0" :aria-label="t('home.events.ad')">{{
-            t('home.events.ad')
-          }}</span>
+          <span class="add-label" role="button" tabindex="0">{{ t('home.events.ad') }}</span>
           <div class="card-title">
             {{ event.title }}
           </div>

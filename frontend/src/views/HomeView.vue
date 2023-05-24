@@ -60,7 +60,7 @@ const planToLoadEvents = () => {
 watch(
   pickedCountry,
   async (_country) => {
-    country.value = _country
+    city.value = pickedCity.value
   },
   { deep: true }
 )
@@ -98,35 +98,46 @@ const filteredValues = computed(() => {
   return getFilteredEvents(posterEvents.value, search.value, country.value, city.value)
 })
 
-const eventsWithAdd = computed(() => {
+const eventsWithAdd = computed((): (EventOnPoster & { type: 'event' })[] => {
   const events = [...filteredValues.value]
-  const newEvents: (
-    | (EventOnPoster & { type: 'event' })
-    | {
-        id: 'add'
-        type: 'add'
-        title: string
-        description: string
-        link: string
-      }
-  )[] = []
-  for (let i = 0; i < events.length; i++) {
-    if (i % 2 === 0) {
-      newEvents.push({
-        id: 'add',
-        type: 'add',
-        title: 'Peredelano Startups',
-        description: t('home.peredelano.description'),
-        link: 'https://t.me/peredelanoconfjunior'
-      })
-    }
-    newEvents.push({
-      ...events[i],
+  return events.map((x) => {
+    return {
+      ...x,
       type: 'event',
-      image: events[i].image ? `${BASE_URL}/${events[i].image}` : 'https://picsum.photos/200/300'
-    })
-  }
-  return newEvents
+      image: x.image
+        ? x.image.includes('http')
+          ? x.image
+          : `${BASE_URL}/${x.image}`
+        : 'https://picsum.photos/400/300'
+    }
+  })
+  // const newEvents: (
+  //   | (EventOnPoster & { type: 'event' })
+  //   | {
+  //       id: 'add'
+  //       type: 'add'
+  //       title: string
+  //       description: string
+  //       link: string
+  //     }
+  // )[] = []
+  // for (let i = 0; i < events.length; i++) {
+  //   if (i % 2 === 0) {
+  //     newEvents.push({
+  //       id: 'add',
+  //       type: 'add',
+  //       title: 'Peredelano Startups',
+  //       description: t('home.peredelano.description'),
+  //       link: 'https://t.me/peredelanoconfjunior'
+  //     })
+  //   }
+  //   newEvents.push({
+  //     ...events[i],
+  //     type: 'event',
+  //     image: events[i].image ? `${BASE_URL}/${events[i].image}` : 'https://picsum.photos/200/300'
+  //   })
+  // }
+  // return newEvents
 })
 
 const getFilteredEvents = (
@@ -191,7 +202,6 @@ const now = Date.now()
         :input-placeholder="t('home.input.country-placeholder')"
         :options-list="countries"
         v-model="country"
-        v-bind:key="country"
       />
       <CustomInput
         class="search__field"
@@ -200,8 +210,8 @@ const now = Date.now()
         :input-placeholder="t('home.input.city-placeholder')"
         :options-list="cities"
         v-model="city"
-        v-bind:key="city"
-        v-bind:input-disable="!country"
+        v-bind:key="country"
+        :inputDisabled="!country"
       />
     </div>
   </section>
@@ -213,7 +223,7 @@ const now = Date.now()
         :class="event.date < now ? 'expired' : ''"
         :event-data="event"
       />
-      <AdCard v-else :ad-data="event" class="ad-block" />
+<!--      <AdCard v-else :ad-data="event" class="ad-block" />-->
     </li>
   </ul>
 

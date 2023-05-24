@@ -25,9 +25,9 @@ class CountriesAndCitiesController {
 
     const getRandomCity = (randomCountry: string) => {
       const randomCityIndex = Math.floor(
-        Math.random() * this.citiesByCountry[randomCountry].length
+        Math.random() * this.citiesByCountry[randomCountry]?.length
       );
-      const randomCity = this.citiesByCountry[randomCountry][randomCityIndex];
+      const randomCity = this.citiesByCountry[randomCountry]?.[randomCityIndex];
       return randomCity;
     };
 

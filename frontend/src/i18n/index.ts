@@ -22,7 +22,6 @@ export function useTranslation() {
   i18next.changeLanguage(
     (supportedLocales as readonly string[]).includes(clientLocale) ? clientLocale : defaultLocale
   )
-  console.log('this runs second')
   function translate(key: TranslationKeys) {
     return i18next.t(key)
   }

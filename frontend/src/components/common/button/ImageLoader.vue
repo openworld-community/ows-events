@@ -2,6 +2,9 @@
 import { ref, watch } from 'vue'
 import CustomButton from '@/components/common/button/CustomButton.vue'
 import { BASE_URL } from '@/constants/url'
+import { useTranslation } from '@/i18n'
+
+const { t } = useTranslation()
 
 type Props = {
   externalImage?: string
@@ -59,7 +62,7 @@ const removeImage = () => {
     <div class="loader__buttons">
       <CustomButton
         button-class="button is-success is-small"
-        button-text="Add image"
+        :button-text="t('event.new.add-image')"
         :is-active="!imageSrc"
         @click="fileIsLoading ? null : input?.click()"
       />

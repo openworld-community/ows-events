@@ -265,13 +265,9 @@ const convertToLocaleString = (
           </a>
         </div>
         <div v-else class="add-block">
-          <span
-            class="add-label"
-            role="button"
-            tabindex="0"
-            :aria-label="t('home.events.add-block-aria-label')"
-            >{{ t('home.events.add-block-label') }}</span
-          >
+          <span class="add-label" role="button" tabindex="0" :aria-label="t('home.events.ad')">{{
+            t('home.events.ad')
+          }}</span>
           <div class="card-title">
             {{ event.title }}
           </div>

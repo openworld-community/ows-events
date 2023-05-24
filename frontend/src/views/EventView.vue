@@ -7,6 +7,8 @@ import CustomButton from '@/components/common/button/CustomButton.vue'
 import NewEventModal from '@/components/modal/NewEventModal.vue'
 import { VueFinalModal } from 'vue-final-modal'
 import { BASE_URL } from '@/constants/url'
+import { useTranslation } from '@/i18n'
+const { t } = useTranslation()
 
 const posterEvent = ref<EventOnPoster | null>(null)
 const route = useRoute()
@@ -36,17 +38,33 @@ const picture = computed(() => {
   }
   return 'https://picsum.photos/400/300'
 })
+
+const convertToLocaleString = (
+  date: number,
+  timezone: { timezoneName: string; timezoneOffset: string } | undefined
+) => {
+  const localDate = new Date(date)
+  return localDate.toLocaleString('ru-RU', {
+    timeZone: timezone?.timezoneName,
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
 </script>
 
 <template>
   <main v-if="posterEvent">
     <div class="actions">
       <div>
-        <a href="/" class="button is-rounded" title="назад"><i class="fas fa-arrow-left"></i></a>
+        <a href="/" class="button is-rounded" :aria-label="t('event.button.back')"
+          ><i class="fas fa-arrow-left"></i
+        ></a>
       </div>
       <div>
         <button
-          aria-label="удалить событие"
+          :aria-label="t('event.button.delete')"
           @click="deleteCard()"
           class="button is-rounded is-small"
         >
@@ -54,7 +72,7 @@ const picture = computed(() => {
         </button>
 
         <button
-          aria-label="управление событием"
+          :aria-label="t('event.button.edit')"
           aria-haspopup="true"
           @click="isModalOpen = true"
           class="button is-rounded is-small"
@@ -66,7 +84,7 @@ const picture = computed(() => {
     <div v-bind:key="posterEvent.id" class="card">
       <div class="card-image">
         <div class="card-price">{{ posterEvent.price }} €</div>
-        <img alt="Картинка эвента" class="image" v-bind:src="picture" />
+        <img :alt="t('event.image.event')" class="image" v-bind:src="picture" />
       </div>
 
       <div class="card-content">
@@ -75,23 +93,16 @@ const picture = computed(() => {
           <span class="card-title">{{ posterEvent.title }}</span>
         </h2>
         <div class="card-datetime">
-          {{
-            new Date(posterEvent.date).toLocaleString('ru-RU', {
-              month: 'long',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            })
-          }}
+          {{ convertToLocaleString(posterEvent.date, posterEvent.timezone) }}
           -
           {{
-            new Date(posterEvent.date + posterEvent.durationInSeconds).toLocaleString('ru-RU', {
-              month: 'long',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            })
+            convertToLocaleString(
+              posterEvent.date + posterEvent.durationInSeconds,
+              posterEvent.timezone
+            )
           }}
+
+          {{ posterEvent.timezone?.timezoneOffset }} {{ posterEvent.timezone?.timezoneName }}
         </div>
         <div class="card-geolink">
           <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"

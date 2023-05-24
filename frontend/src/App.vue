@@ -6,6 +6,7 @@ import CommonHeader from '@/components/header/CommonHeader.vue'
 </script>
 
 <template>
+  <LanguageSelector />
   <CommonHeader />
   <div class="container">
     <RouterView />

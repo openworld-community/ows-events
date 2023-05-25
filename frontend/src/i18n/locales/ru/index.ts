@@ -19,7 +19,8 @@ export const defaultTranslation = {
   home: {
     title: 'Мероприятия',
     button: {
-      add_event_aria: 'добавить мероприятие'
+      add_event_aria: 'Добавить мероприятие',
+      afisha_logo_aria: 'Вернуться к началу страницы'
     },
     events: {
       image_alt: 'Фото мероприятия',

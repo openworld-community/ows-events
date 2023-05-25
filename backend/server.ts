@@ -31,6 +31,10 @@ server.register(cors, {});
 
 server.register(Multipart);
 
+fastify.default({
+  maxParamLength: 1000,
+});
+
 server.register(Static, {
   root: path.join(__dirname, "../frontend/dist/"),
 });

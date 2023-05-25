@@ -21,8 +21,11 @@ export class FileDbController {
     if (!fsSync.existsSync("assets/db")) {
       fsSync.mkdirSync("assets/db");
       fsSync.writeFileSync("assets/db/events.json", "[]", {});
+      fsSync.writeFileSync("assets/db/registration.json", "[]", {});
     } else if (!fsSync.existsSync("assets/db/events.json")) {
       fsSync.writeFileSync("assets/db/events.json", "[]", {});
+    } else if (!fsSync.existsSync("assets/db/registration.json")) {
+      fsSync.writeFileSync("assets/db/registration.json", "[]", {});
     } else {
       this.addTask(TASK_TYPES.READ_FILE);
     }

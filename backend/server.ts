@@ -409,6 +409,10 @@ server.post<{
   };
 });
 
+server.setNotFoundHandler(function (req, reply) {
+  reply.sendFile("index.html");
+});
+
 server.listen({ port: 7080, host: "0.0.0.0" }, (err, address) => {
   if (err) {
     console.error(err);

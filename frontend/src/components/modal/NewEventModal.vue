@@ -256,15 +256,12 @@ type InputEvent = {
   options?: any // TODO тип
 }
 
-const eventInputs: (
-  | InputEvent
-  | {
-      type: 'row' | 'column'
-      name: string
-      label?: string
-      child: InputEvent[]
-    }
-)[] = [
+const eventInputs: ({
+  type: 'row' | 'column'
+  name: string
+  label?: string
+  child: InputEvent[]
+})[] = [
   {
     type: 'column',
     name: 'location',

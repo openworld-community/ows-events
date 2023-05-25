@@ -93,6 +93,10 @@ a {
     padding-right: var(--padding-side);
     margin-left: auto;
     margin-right: auto;
+
+    @media (min-width: 1440px) {
+      max-width: 600px;
+    }
   }
 
   &__left {

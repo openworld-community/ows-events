@@ -42,6 +42,7 @@ onBeforeMount(() => {
   &__label {
     font-size: 14px;
     line-height: 18px;
+    margin-top: 4px;
   }
 }
 </style>

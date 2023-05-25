@@ -67,18 +67,19 @@ const registrationClick = () => {
 </script>
 
 <template>
-  <div v-bind:key="posterEvent.id" v-if="posterEvent" class="card">
-    <div class="card-image">
-      <div class="card-price">{{ posterEvent.price }} €</div>
-      <img :alt="t('event.image.event')" class="image" v-bind:src="picture" />
+  <div v-bind:key="posterEvent.id" v-if="posterEvent" class="event">
+    <div class="=event-image event-image__container">
+      <span class="event-image__price">{{ posterEvent.price }} €</span>
+      <img :alt="t('event.image.event')" class="event-image__image" v-bind:src="picture" />
     </div>
 
-    <div class="card-content">
-      <div class="card-author">Peredelano</div>
-      <h2>
-        <span class="card-title">{{ posterEvent.title }}</span>
+    <div class="event event-description">
+      <p class="event-description__author">Peredelano</p>
+      <h2 class="event-description__title">
+        {{ posterEvent.title }}
       </h2>
-      <div class="card-datetime">
+
+      <p class="event-description__datetime">
         {{ convertToLocaleString(posterEvent.date, posterEvent.timezone) }}
         -
         {{
@@ -87,47 +88,54 @@ const registrationClick = () => {
             posterEvent.timezone
           )
         }}
+        <br />
+        ({{ posterEvent.timezone?.timezoneOffset }} {{ posterEvent.timezone?.timezoneName }})
+      </p>
 
-        {{ posterEvent.timezone?.timezoneOffset }} {{ posterEvent.timezone?.timezoneName }}
-      </div>
-      <div class="card-geolink">
+      <p class="event-description__geolink">
         <!-- <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"
           >Место встречи (изменить нельзя)</a
         > -->
         {{ posterEvent.location.country }}, {{ posterEvent.location.city }}
-      </div>
-      <div class="card-description">
+      </p>
+      <p class="event-description__description">
         {{ posterEvent.description }}
-      </div>
+      </p>
     </div>
-    <div class="card-actions">
-      <CustomButton
-        v-if="posterEvent.url"
-        button-class="card-contact-btn"
-        :button-text="t('event.button.contact')"
-        @click="registrationClick()"
-      />
-      <CustomButton
-        v-if="posterEvent.url"
-        button-class="card-contact-btn"
-        :button-text="t('event.button.register')"
-        @click="registrationClick()"
-      />
 
-      <CustomButton
-        button-class="button is-small"
-        :button-text="t('event.button.edit')"
-        @click="isModalOpen = true"
-        v-if="isManaged"
-      />
-      <!-- please style me 🥺🙏 -->
-      <CustomButton
-        v-if="isManaged"
-        button-class="delete is-small"
-        @click="deleteCard"
-        :button-text="t('event.button.delete')"
-      />
+    <div class="event-actions">
+      <template v-if="posterEvent.url">
+        <!--      v-if="posterEvent.url"-->
+        <CustomButton
+          button-class="button__success"
+          :button-text="t('event.button.contact')"
+          @click="registrationClick()"
+        />
+
+        <!--        v-if это ивент переделано-->
+        <CustomButton
+          button-class="button__success"
+          :button-text="t('event.button.register')"
+          @click="registrationClick()"
+        />
+      </template>
+
+      <template v-if="isManaged">
+        <!--      v-if="isManaged"-->
+        <CustomButton
+          button-class="button__success"
+          :button-text="t('event.button.edit')"
+          @click="isModalOpen = true"
+        />
+
+        <CustomButton
+          button-class="button__warning"
+          @click="deleteCard"
+          :button-text="t('event.button.delete')"
+        />
+      </template>
     </div>
+
     <vue-final-modal
       :hideOverlay="false"
       overlayTransition="vfm-fade"
@@ -150,116 +158,109 @@ const registrationClick = () => {
 </template>
 
 <style lang="less" scoped>
-.image {
+.event {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   height: 100%;
-  min-height: 232px;
-  max-height: 350px;
-  object-fit: cover;
-  border-radius: 0;
-  width: 100%;
-}
-
-.card {
-  width: 100%;
-  box-shadow: none;
-
-  &-content {
-    padding: 12px 16px 12px 16px;
-  }
-
-  &-image {
-    background-color: #cacaca;
-    position: relative;
-  }
-
-  &-author {
-    font-family: Inter;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 16px;
-    letter-spacing: 0;
-    text-align: left;
-    color: #acacac;
-  }
-
-  &-price {
-    position: absolute;
-    font-family: Inter;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 16px;
-    letter-spacing: 0;
-    text-align: center;
-    color: #737373;
-    left: 16px;
-    top: 16px;
-    border-radius: 16px;
-    padding: 4px 10px 4px 10px;
-    background-color: white;
-    z-index: 200;
-  }
-
-  &-title {
-    color: #4e4e4e;
-    font-family: Inter;
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 24px;
-    letter-spacing: 0;
-    text-align: left;
-  }
-
-  &-datetime {
-    font-family: Inter;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 16px;
-    letter-spacing: 0;
-    text-align: left;
-    color: #acacac;
-  }
-
-  &-geolink {
-    font-family: Inter;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 14px;
-    letter-spacing: 0;
-    text-align: left;
-    text-decoration-line: underline;
-  }
+  padding-left: var(--padding-side);
+  padding-right: var(--padding-side);
+  padding-bottom: 30px;
+  margin-bottom: auto;
 
   &-description {
-    color: #4e4e4e;
-    font-family: Inter;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 24px;
-    letter-spacing: 0;
-    text-align: left;
-    min-height: 202px;
-  }
-
-  &-contact-btn {
-    color: white;
-    background: #363636;
-    height: 40px;
+    display: flex;
     width: 100%;
-    border-radius: 6px;
-    padding: 7px 16px 7px 16px;
+    flex-direction: column;
+    margin-bottom: 36px;
+
+    &__author {
+      font-size: var(--font-size-XS);
+      font-weight: var(--font-weight-bold);
+      line-height: 16px;
+      text-align: left;
+      color: var(--color-text-secondary);
+      margin-bottom: 12px;
+    }
+
+    &__title {
+      font-size: var(--font-size-L);
+      font-weight: var(--font-weight-bold);
+      line-height: 24px;
+      margin-bottom: var(--space-related-items);
+    }
+
+    &__datetime {
+      font-size: var(--font-size-XS);
+      font-weight: var(--font-weight-bold);
+      line-height: 16px;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-related-items);
+    }
+
+    &__geolink {
+      font-size: var(--font-size-XS);
+      line-height: 16px;
+      text-decoration-line: underline;
+      color: #5c9ad2;
+      margin-bottom: var(--space-subsections);
+    }
+
+    &__description {
+      word-wrap: break-word;
+      font-size: var(--font-size-S);
+      line-height: 20px;
+    }
   }
 
   &-actions {
     display: flex;
     flex-direction: column;
-    gap: var(--space-related-items);
+    gap: var(--space-unrelated-items);
+    margin-top: auto;
   }
 }
 
-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 12px;
+.event-image {
+  &__container {
+    display: flex;
+    min-height: 232px;
+    height: 232px;
+    position: relative;
+    background-color: var(--color-background-secondary);
+    margin-bottom: 12px;
+    width: 100%;
+    line-height: 0;
+  }
+
+  &__image {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 232px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+  }
+
+  &__price {
+    min-width: 50px;
+    position: absolute;
+    left: 12px;
+    top: 12px;
+
+    font-size: var(--font-size-XS);
+    line-height: 16px;
+    text-align: center;
+
+    border-radius: 16px;
+    color: var(--color-white);
+    background-color: var(--color-accent-green-main);
+
+    padding: 6px 10px;
+    z-index: 1;
+  }
 }
 </style>

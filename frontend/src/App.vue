@@ -14,6 +14,7 @@ import CommonHeader from '@/components/header/CommonHeader.vue'
 
 <style lang="less" scoped>
 .main {
+  height: 100%;
   padding-top: var(--header-height);
 }
 </style>

@@ -57,6 +57,7 @@ const props = defineProps({
 <style lang="less" scoped>
 .button {
   display: flex;
+  justify-content: center;
   border-radius: 24px;
   padding-top: 7px;
   padding-left: 16px;
@@ -94,6 +95,12 @@ const props = defineProps({
     &--disabled {
       color: var(--color-input-field);
     }
+  }
+
+  &__warning {
+    color: var(--color-accent-red);
+    background-color: var(--color-white);
+    border: 1px solid var(--color-accent-red);
   }
 }
 </style>

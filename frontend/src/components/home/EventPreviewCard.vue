@@ -52,7 +52,7 @@ const props = defineProps({
     display: flex;
     height: 176px;
     position: relative;
-    background-color: #cacaca;
+    background-color: var(--color-background-secondary);
     margin-bottom: 12px;
     width: 100%;
     line-height: 0;
@@ -98,7 +98,7 @@ const props = defineProps({
 
     &__author {
       font-size: var(--font-size-XS);
-      font-weight: 500;
+      font-weight: var(--font-weight-bold);
       line-height: 16px;
       text-align: left;
       color: var(--color-text-secondary);
@@ -108,17 +108,17 @@ const props = defineProps({
 
     &__title {
       font-size: var(--font-size-L);
-      font-weight: 500;
+      font-weight: var(--font-weight-bold);
       line-height: 24px;
-      margin-bottom: 8px;
+      margin-bottom: var(--space-related-items);
     }
 
     &__datetime {
       font-size: var(--font-size-XS);
-      font-weight: 500;
+      font-weight: var(--font-weight-bold);
       line-height: 16px;
       color: var(--color-text-secondary);
-      margin-bottom: 8px;
+      margin-bottom: var(--space-related-items);
     }
 
     &__geolink {

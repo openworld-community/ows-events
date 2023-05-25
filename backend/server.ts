@@ -116,7 +116,10 @@ server.get<{
     }[]
   >;
 }>("/api/timezones", async (request, reply) => {
-  return allTimezones;
+  return {
+    type: "success",
+    data: allTimezones,
+  };
 });
 
 server.get("/event/*", function (req, reply) {
@@ -211,8 +214,7 @@ server.post<{
 
   return eventsStateController
     .getEvents({ searchLine, country, city })
-    .slice(0, 100)
-
+    .slice(0, 100);
 });
 
 server.post<{

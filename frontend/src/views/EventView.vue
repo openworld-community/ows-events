@@ -8,6 +8,7 @@ import NewEventModal from '@/components/modal/NewEventModal.vue'
 import { VueFinalModal } from 'vue-final-modal'
 import { BASE_URL } from '@/constants/url'
 import { useTranslation } from '@/i18n'
+import { getUserEvents } from '@/helpers/events'
 
 const { t } = useTranslation()
 
@@ -35,6 +36,10 @@ const deleteCard = async () => {
 
 const picture = computed(() => {
   if (posterEvent.value?.image) {
+    if (posterEvent.value.image.startsWith('http')) {
+      return posterEvent.value.image
+    }
+
     return `${BASE_URL}/${posterEvent.value.image}`
   }
   return 'https://picsum.photos/400/300'
@@ -53,6 +58,8 @@ const convertToLocaleString = (
     minute: '2-digit'
   })
 }
+
+const isManaged = getUserEvents().includes(id)
 </script>
 
 <template>
@@ -80,9 +87,10 @@ const convertToLocaleString = (
         {{ posterEvent.timezone?.timezoneOffset }} {{ posterEvent.timezone?.timezoneName }}
       </div>
       <div class="card-geolink">
-        <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"
+        <!-- <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"
           >Место встречи (изменить нельзя)</a
-        >
+        > -->
+        {{ posterEvent.location.country }}, {{ posterEvent.location.city }}
       </div>
       <div class="card-description">
         {{ posterEvent.description }}
@@ -90,8 +98,19 @@ const convertToLocaleString = (
     </div>
     <button class="card-contact-btn">{{ t('event.button.contact') }}</button>
 
-    <CustomButton button-class="button is-small" button-text="Change" @click="isModalOpen = true" />
-    <button class="delete is-small" :aria-label="t('event.button.delete')"></button>
+    <CustomButton
+      button-class="button is-small"
+      :button-text="t('event.button.edit')"
+      @click="isModalOpen = true"
+      v-if="isManaged"
+    />
+    <!-- please style me 🥺🙏 -->
+    <CustomButton
+      v-if="isManaged"
+      button-class="delete is-small"
+      @click="deleteCard"
+      :button-text="t('event.button.delete')"
+    />
     <vue-final-modal
       :hideOverlay="false"
       overlayTransition="vfm-fade"
@@ -112,6 +131,7 @@ const convertToLocaleString = (
 .image {
   height: 100%;
   min-height: 232px;
+  max-height: 350px;
   object-fit: cover;
   border-radius: 0;
   width: 100%;

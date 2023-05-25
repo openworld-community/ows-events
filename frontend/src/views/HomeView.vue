@@ -172,7 +172,6 @@ const getFilteredEvents = (
 
   return searchResult
 }
-
 const now = Date.now()
 </script>
 

@@ -47,7 +47,7 @@ const route = useRoute()
         class="header__right"
         :aria-label="t('component.header.event.manage')"
       >
-        <img
+        <!-- <img
           src="@/assets/img/icon/edit.svg"
           width="24"
           height="24"
@@ -58,7 +58,7 @@ const route = useRoute()
           width="24"
           height="24"
           :alt="t('global.button.share')"
-        />
+        /> -->
       </div>
     </div>
   </header>

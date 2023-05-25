@@ -1,21 +1,18 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import search from '@/assets/img/icon/search.svg'
-import calendar from '@/assets/img/icon/calendar.svg'
-import clock from '@/assets/img/icon/clock.svg'
-import container from '@/assets/img/icon/container.svg'
+import Icon from '@/components/common/icon/Icon.vue'
 
 const ICON_DICTIONARY: { [key: string]: string } = {
-  search: search,
-  date: calendar,
-  endDate: calendar,
-  startDate: calendar,
-  time: clock,
-  endTime: clock,
-  startTime: clock,
-  country: container,
-  city: container,
-  timezone: container
+  search: 'search',
+  date: 'calendar',
+  endDate: 'calendar',
+  startDate: 'calendar',
+  time: 'clock',
+  endTime: 'clock',
+  startTime: 'clock',
+  country: 'container',
+  city: 'container',
+  timezone: 'container'
 }
 
 const emit = defineEmits(['update:modelValue'])
@@ -128,7 +125,7 @@ const showPicker = () => {
         class="custom-input__button custom-input__button--clear"
         @click.prevent="inputData = ''"
       >
-        <img src="@/assets/img/icon/delete.svg" width="24" height="24" alt="Очистить" />
+        <Icon name="delete" width="24" height="24" alt="Очистить" />
       </a>
 
       <a
@@ -140,7 +137,7 @@ const showPicker = () => {
         class="custom-input__button custom-input__button--icon"
         @click.prevent="showPicker"
       >
-        <img :src="ICON_DICTIONARY[props.inputName]" width="24" height="24" />
+        <Icon :name="ICON_DICTIONARY[props.inputName]" width="24" height="24" />
       </a>
 
       <span
@@ -151,7 +148,7 @@ const showPicker = () => {
         "
         class="custom-input__button custom-input__button--icon"
       >
-        <img :src="ICON_DICTIONARY[props.inputName]" width="24" height="24" />
+        <Icon :name="ICON_DICTIONARY[props.inputName]" width="24" height="24" />
       </span>
 
       <!--    На будущее, для дизайна инпутов с кнопкой "Отмена"-->

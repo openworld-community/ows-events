@@ -2,6 +2,7 @@
 import { useTranslation } from '@/i18n'
 import { RouterLink, useRoute } from 'vue-router'
 import SubscriptionExpired from './SubscriptionExpired.vue'
+import Icon from '@/components/common/icon/Icon.vue'
 
 const { t } = useTranslation()
 const route = useRoute()
@@ -15,40 +16,29 @@ function scrollToTop() {
   <header class="header">
     <div class="header__container">
       <div class="header__left">
-        <RouterLink to="/">
-          <button
+        <RouterLink
+          to="/"
+          @click.prevent="scrollToTop"
+          class="header__navigation-link"
+          :aria-label="t('home.button.afisha_logo_aria')"
+        >
+          <Icon
             v-if="route.name === 'home'"
-            @click.prevent="scrollToTop"
-            :aria-label="t('home.button.afisha_logo_aria')"
-          >
-            <img
-              src="@/assets/img/PeredelanoAfisha.svg"
-              width="142"
-              height="24"
-              alt="Peredelano Афиша"
-            />
-          </button>
-          <img
-            v-else
-            src="@/assets/img/icon/back.svg"
-            width="24"
+            name="peredelano-afisha"
+            width="142"
             height="24"
-            :alt="t('global.button.back')"
+            alt="Peredelano Афиша"
           />
+          <Icon v-else name="back" width="24" height="24" :aria-label="t('global.button.back')" />
         </RouterLink>
       </div>
 
       <div class="header__right">
-        <SubscriptionExpired class="header__subscription" />
+        <SubscriptionExpired v-if="route.name === 'home'" class="header__subscription" />
 
-        <div class="header__navigation" role="navigation" :aria-label="t('global.nav')">
-          <RouterLink v-if="route.name === 'home'" to="/about" class="icon-text">
-            <img
-              src="@/assets/img/icon/info.svg"
-              width="24"
-              height="24"
-              :alt="t('component.header.about')"
-            />
+        <nav class="header__navigation" role="navigation" :aria-label="t('global.nav')">
+          <RouterLink v-if="route.name === 'home'" to="/about" class="header__navigation-link">
+            <Icon name="info" width="24" height="24" :alt="t('component.header.about')" />
           </RouterLink>
 
           <!--          <div-->
@@ -68,7 +58,7 @@ function scrollToTop() {
           <!--              :alt="t('global.button.share')"-->
           <!--            />-->
           <!--          </div>-->
-        </div>
+        </nav>
       </div>
     </div>
   </header>
@@ -125,7 +115,13 @@ function scrollToTop() {
   }
 
   &__navigation {
+    align-items: center;
     gap: 10px;
+  }
+
+  &__navigation-link {
+    height: 100%;
+    display: flex;
   }
 }
 </style>

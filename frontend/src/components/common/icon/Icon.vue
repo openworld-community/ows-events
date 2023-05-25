@@ -30,5 +30,6 @@ const symbolId = computed(() => `#${props.name}`)
 <style scoped lang="less">
 svg {
   pointer-events: none;
+  fill: var(--color-text-main);
 }
 </style>

@@ -32,6 +32,7 @@ onBeforeMount(() => {
 <template>
   <div class="subscription-expired">
     <p class="subscription-expired__label">
+      <span class="subscription-expired__days">{{ dateDifference }}</span>
       {{ formatedSubscriptionExpiredDate }}
     </p>
   </div>
@@ -44,7 +45,11 @@ onBeforeMount(() => {
     max-width: max-content;
     text-align: right;
     font-size: var(--font-size-XS);
-    line-height: 18px;
+    line-height: 14px;
+  }
+
+  &__days {
+    color: var(--color-accent-red);
   }
 }
 </style>

@@ -36,6 +36,10 @@ const deleteCard = async () => {
 
 const picture = computed(() => {
   if (posterEvent.value?.image) {
+    if (posterEvent.value.image.startsWith('http')) {
+      return posterEvent.value.image
+    }
+
     return `${BASE_URL}/${posterEvent.value.image}`
   }
   return 'https://picsum.photos/400/300'
@@ -87,7 +91,6 @@ const isManaged = getUserEvents().includes(id)
           >Место встречи (изменить нельзя)</a
         > -->
         {{ posterEvent.location.country }}, {{ posterEvent.location.city }}
-
       </div>
       <div class="card-description">
         {{ posterEvent.description }}
@@ -95,16 +98,19 @@ const isManaged = getUserEvents().includes(id)
     </div>
     <button class="card-contact-btn">{{ t('event.button.contact') }}</button>
 
-    <CustomButton button-class="button is-small" button-text="Change" @click="isModalOpen = true" />
-    <!-- please style me 🥺🙏 -->
-    <button
+    <CustomButton
+      button-class="button is-small"
+      :button-text="t('event.button.edit')"
+      @click="isModalOpen = true"
       v-if="isManaged"
-      class="delete is-small"
-      style="padding: 4px; background-color: lightgray; border: 1px solid black"
+    />
+    <!-- please style me 🥺🙏 -->
+    <CustomButton
+      v-if="isManaged"
+      button-class="delete is-small"
       @click="deleteCard"
-    >
-      {{ t('event.button.delete') }}
-    </button>
+      :button-text="t('event.button.delete')"
+    />
     <vue-final-modal
       :hideOverlay="false"
       overlayTransition="vfm-fade"
@@ -125,6 +131,7 @@ const isManaged = getUserEvents().includes(id)
 .image {
   height: 100%;
   min-height: 232px;
+  max-height: 350px;
   object-fit: cover;
   border-radius: 0;
   width: 100%;

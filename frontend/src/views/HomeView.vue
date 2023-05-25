@@ -106,7 +106,7 @@ const eventsWithAdd = computed((): (EventOnPoster & { type: 'event' })[] => {
       image: x.image
         ? x.image.includes('http')
           ? x.image
-          : `${BASE_URL}/${x.image}`
+          : `${BASE_URL}${x.image}`
         : 'https://picsum.photos/400/300'
     }
   })
@@ -251,10 +251,14 @@ const now = Date.now()
   display: flex;
   width: 100%;
   padding-top: 16px;
+  padding-left: var(--padding-side);
+  padding-right: var(--padding-side);
   margin-bottom: 36px;
 }
 
 .search {
+  padding-left: var(--padding-side);
+  padding-right: var(--padding-side);
   margin-bottom: 8px;
 
   &__title {

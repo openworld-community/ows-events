@@ -40,9 +40,11 @@ onBeforeMount(() => {
 <style scoped lang="less">
 .subscription-expired {
   &__label {
-    font-size: 14px;
+    width: 100px;
+    max-width: max-content;
+    text-align: right;
+    font-size: var(--font-size-XS);
     line-height: 18px;
-    margin-top: 4px;
   }
 }
 </style>

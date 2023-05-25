@@ -5,7 +5,7 @@ const { t } = useTranslation()
 </script>
 
 <template>
-  <section>
+  <section class="about">
     <h2 class="title">{{ t('about.title') }}</h2>
     <p>{{ t('about.p1') }}</p>
     <br />
@@ -21,4 +21,8 @@ const { t } = useTranslation()
 </template>
 
 <style lang="less" scoped>
+  .about {
+    padding-left: var(--padding-side);
+    padding-right: var(--padding-side);
+  }
 </style>

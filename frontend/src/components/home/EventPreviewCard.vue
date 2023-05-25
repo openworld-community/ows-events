@@ -51,12 +51,11 @@ const props = defineProps({
   &__image-container {
     display: flex;
     height: 176px;
-    overflow: hidden;
     position: relative;
     background-color: #cacaca;
-    margin-left: calc(-1 * var(--padding-side));
-    margin-right: calc(-1 * var(--padding-side));
     margin-bottom: 12px;
+    width: 100%;
+    line-height: 0;
   }
 
   &__image {
@@ -93,8 +92,8 @@ const props = defineProps({
     display: flex;
     width: 100%;
     flex-direction: column;
-    padding-left: 4px;
-    padding-right: 4px;
+    padding-left: 16px;
+    padding-right: 16px;
     margin-bottom: 44px;
 
     &__author {

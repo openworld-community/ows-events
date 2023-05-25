@@ -40,7 +40,7 @@ const picture = computed(() => {
       return posterEvent.value.image
     }
 
-    return `${BASE_URL}/${posterEvent.value.image}`
+    return `${BASE_URL}${posterEvent.value.image}`
   }
   return 'https://picsum.photos/400/300'
 })

@@ -168,7 +168,6 @@ server.get<{
   }
 
   const paymantsFileMd = `assets/presets/${request.params.id}.md`;
-  console.log(paymantsFileMd);
   if (fs.existsSync(paymantsFileMd)) {
     return {
       type: "success",

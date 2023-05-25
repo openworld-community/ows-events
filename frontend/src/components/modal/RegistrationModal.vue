@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, defineProps, defineEmits } from 'vue'
+import { computed, ref } from 'vue'
 import { type EventOnPoster } from '@common/types/event'
 import { deleteEvent, getEvent, sendFormAboutRegistration } from '@/services/events.services'
 import { useRoute, useRouter } from 'vue-router'

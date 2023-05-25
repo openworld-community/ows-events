@@ -83,9 +83,11 @@ const isManaged = getUserEvents().includes(id)
         {{ posterEvent.timezone?.timezoneOffset }} {{ posterEvent.timezone?.timezoneName }}
       </div>
       <div class="card-geolink">
-        <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"
+        <!-- <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"
           >Место встречи (изменить нельзя)</a
-        >
+        > -->
+        {{ posterEvent.location.country }}, {{ posterEvent.location.city }}
+
       </div>
       <div class="card-description">
         {{ posterEvent.description }}

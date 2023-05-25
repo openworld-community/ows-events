@@ -28,15 +28,34 @@ const props = defineProps({
   iconName: {
     type: String,
     default: ''
+  },
+  href: {
+    type: String,
+    default: ''
   }
 })
 </script>
 
 <template>
+  <a
+    v-if="props.href"
+    :href="props.href"
+    :class="[
+      'button',
+      props.buttonClass,
+      { 'is-loading': isLoading },
+      !isActive ? `${props.buttonClass}--disabled` : ''
+    ]"
+    :disabled="!props.isActive"
+  >
+    <span class="button__text">{{ props.buttonText }}</span>
+  </a>
   <button
+    v-else
     class="button"
     :type="props.buttonType"
     :class="[
+      'button',
       props.buttonClass,
       { 'is-loading': isLoading },
       !isActive ? `${props.buttonClass}--disabled` : ''
@@ -67,6 +86,7 @@ const props = defineProps({
 
   &__text {
     margin-right: 16px;
+    font-size: var(--font-size-M);
   }
 
   &__icon {

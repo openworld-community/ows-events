@@ -9,6 +9,7 @@ import { VueFinalModal } from 'vue-final-modal'
 import { BASE_URL } from '@/constants/url'
 import { useTranslation } from '@/i18n'
 import { getUserEvents } from '@/helpers/events'
+import NewEventModal from '@/components/modal/NewEventModal.vue'
 
 const { t } = useTranslation()
 
@@ -17,7 +18,8 @@ const route = useRoute()
 const id = route.params.id as string
 const router = useRouter()
 
-const isModalOpen = ref(false)
+const isModalRegistrationOpen = ref(false)
+const isModalEventOpen = ref(false)
 
 if (!(typeof id === 'string')) {
   router.push({ path: '/' })
@@ -60,10 +62,6 @@ const convertToLocaleString = (
 }
 
 const isManaged = getUserEvents().includes(id)
-
-const registrationClick = () => {
-  isModalOpen.value = true
-}
 </script>
 
 <template>
@@ -105,30 +103,33 @@ const registrationClick = () => {
 
     <div class="event-actions">
       <template v-if="posterEvent.url">
-        <!--      v-if="posterEvent.url"-->
         <CustomButton
+          class="event-actions__button"
           button-class="button__success"
           :button-text="t('event.button.contact')"
-          @click="registrationClick()"
+          :href="posterEvent.url"
+          target="_blank"
         />
 
-        <!--        v-if это ивент переделано-->
+        <!--   TODO     v-if: это ивент переделано-->
         <CustomButton
+          class="event-actions__button"
           button-class="button__success"
           :button-text="t('event.button.register')"
-          @click="registrationClick()"
+          @click="isModalRegistrationOpen = true"
         />
       </template>
 
       <template v-if="isManaged">
-        <!--      v-if="isManaged"-->
         <CustomButton
+          class="event-actions__button"
           button-class="button__success"
           :button-text="t('event.button.edit')"
-          @click="isModalOpen = true"
+          @click="isModalEventOpen = true"
         />
 
         <CustomButton
+          class="event-actions__button"
           button-class="button__warning"
           @click="deleteCard"
           :button-text="t('event.button.delete')"
@@ -136,6 +137,7 @@ const registrationClick = () => {
       </template>
     </div>
 
+    <!--    TODO вынести в отдельный компонент-->
     <vue-final-modal
       :hideOverlay="false"
       overlayTransition="vfm-fade"
@@ -145,13 +147,29 @@ const registrationClick = () => {
       :clickToClose="true"
       :escToClose="true"
       :lockScroll="true"
-      v-model="isModalOpen"
+      v-model="isModalRegistrationOpen"
     >
       <RegistrationModal
-        v-if="isModalOpen"
-        :data-for-edit="posterEvent"
+        v-if="isModalRegistrationOpen"
         :event-id="id"
-        @close="isModalOpen = false"
+        @close="isModalRegistrationOpen = false"
+      />
+    </vue-final-modal>
+    <vue-final-modal
+      :hideOverlay="false"
+      overlayTransition="vfm-fade"
+      overlayTransitionDuration="2600"
+      contentTransition="vfm-fade"
+      swipeToClose="down"
+      :clickToClose="true"
+      :escToClose="true"
+      :lockScroll="true"
+      v-model="isModalEventOpen"
+    >
+      <NewEventModal
+        v-if="isModalEventOpen"
+        :data-for-edit="posterEvent"
+        @close-modal="isModalEventOpen = false"
       />
     </vue-final-modal>
   </div>
@@ -218,6 +236,10 @@ const registrationClick = () => {
     flex-direction: column;
     gap: var(--space-unrelated-items);
     margin-top: auto;
+
+    &__button {
+      height: 40px;
+    }
   }
 }
 

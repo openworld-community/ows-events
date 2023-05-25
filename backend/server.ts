@@ -120,7 +120,10 @@ server.get<{
     }[]
   >;
 }>("/api/timezones", async (request, reply) => {
-  return allTimezones;
+  return {
+    type: "success",
+    data: allTimezones,
+  };
 });
 
 server.get("/event/*", function (req, reply) {

@@ -32,7 +32,7 @@ const useLocationStore = defineStore('counter', {
   state: () => {
     return {
       pickedCountry: localStorage.getItem('LOCATIONS_PICKED_COUNTRY') || '',
-      countries: JSON.parse(localStorage.getItem('LOCATIONS_COUNTRIES') || '[]'),
+      countries: JSON.parse(localStorage.getItem('LOCATIONS_COUNTRIES') || '[]') as string[],
       cities: JSON.parse(localStorage.getItem('LOCATIONS_CITIES') || '[]'),
       citiesByCountry: JSON.parse(localStorage.getItem('LOCATIONS_CITIES_BY_COUNTRY') || '{}'),
       pickedCity: localStorage.getItem('LOCATIONS_PICKED_CITY') || '',
@@ -76,6 +76,9 @@ const useLocationStore = defineStore('counter', {
         return
       }
 
+      if (!this.countries.find((x) => x == country)) {
+        return
+      }
       await api.get(`/location/cities/${country}`).then((response) => {
         this.citiesByCountry[country] = response.data
         this.cities = this.citiesByCountry[country] || []

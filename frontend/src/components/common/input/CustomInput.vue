@@ -14,7 +14,8 @@ const ICON_DICTIONARY: { [key: string]: string } = {
   endTime: clock,
   startTime: clock,
   country: container,
-  city: container
+  city: container,
+  timezone: container
 }
 
 const emit = defineEmits(['update:modelValue'])
@@ -48,8 +49,12 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  inputDisabled: {
+    type: Boolean,
+    default: false
+  },
   optionsList: {
-    type: [Array, String],
+    type: [Array<string>, String],
     default: null
   }
 })
@@ -108,11 +113,13 @@ const showPicker = () => {
         :type="props.inputType"
         :placeholder="props.inputPlaceholder"
         :list="props.inputName"
+        :disabled="props.inputDisabled"
         v-model="inputData"
         @change="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       />
+
       <datalist :id="props.inputName">
-        <option v-for="i in props.optionsList" :value="i" :key="i as string" />
+        <option v-for="i in props.optionsList" :value="i" :key="i" />
       </datalist>
 
       <!--      Icons-->
@@ -133,7 +140,7 @@ const showPicker = () => {
       </a>
 
       <!--    На будущее, для дизайна инпутов с кнопкой "Отмена"-->
-      <!--      <a v-if="inputData" class="custom-input__button--cancel"> Отмена </a>-->
+      <!-- <a v-if="inputData" class="custom-input__button--cancel"> {{ t('global.button.cancel') }} </a> -->
     </div>
   </label>
 </template>

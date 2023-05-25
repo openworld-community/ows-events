@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getEventPayment } from '@/services/events.services'
-import { EventOnPoster } from '@common/types'
-import { PaymentInfo } from '@common/types/payment-info'
+import { type EventOnPoster } from '@common/types'
+import { type PaymentInfo } from '@common/types/payment-info'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 

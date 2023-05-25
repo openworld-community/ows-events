@@ -78,7 +78,7 @@ const submit = async () => {
   <main>
     <div class="actions">
       <div>
-        <a href="/" class="button is-rounded" :aria-label="t('event.button.back')"
+        <a href="/" class="button is-rounded" :aria-label="t('global.button.back')"
           ><i class="fas fa-arrow-left"></i
         ></a>
       </div>

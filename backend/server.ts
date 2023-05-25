@@ -31,6 +31,10 @@ server.register(cors, {});
 
 server.register(Multipart);
 
+fastify.default({
+  maxParamLength: 1000,
+});
+
 server.register(Static, {
   root: path.join(__dirname, "../frontend/dist/"),
 });
@@ -207,7 +211,7 @@ server.post<{
 
   const registrations = JSON.parse(oldRegistrations);
 
-  registrations.push(data);
+  registrations.push({ ...data, date: new Date() });
 
   fs.writeFileSync(
     "assets/db/registrations.json",

@@ -48,6 +48,34 @@ const submitAvailable = computed(() => {
   ].every((a) => !!a)
 })
 
+const getLastInfo = () => {
+  const lastInfo = localStorage.getItem('REGISTRATION_DATA')
+  if (!lastInfo) {
+    return
+  }
+
+  const parsedInfo = JSON.parse(lastInfo)
+  if (!parsedInfo.eventId) {
+    return
+  }
+
+  name.value = parsedInfo.name
+  telegramNickname.value = parsedInfo.telegramNickname
+  profession.value = parsedInfo.profession
+  workplace.value = parsedInfo.workplace
+  experienceInStartups.value = parsedInfo.experienceInStartups
+  fromYouKnow.value = parsedInfo.fromYouKnow
+  beenEarly.value = parsedInfo.beenEarly
+  fromWhichCity.value = parsedInfo.fromWhichCity
+  email.value = parsedInfo.email
+}
+
+try {
+  getLastInfo()
+} catch (e) {
+  console.error(e)
+}
+
 const submitInfo = computed(() => {
   return {
     eventId: props.eventId,

@@ -36,58 +36,52 @@ function scrollToTop() {
             :alt="t('global.button.back')"
           />
         </RouterLink>
-        <SubscriptionExpired />
       </div>
-      <nav
-        v-if="route.name === 'home'"
-        class="header__right"
-        role="navigation"
-        :aria-label="t('global.nav')"
-      >
-        <RouterLink to="/about" class="icon-text">
-          <img
-            src="@/assets/img/icon/info.svg"
-            width="24"
-            height="24"
-            :alt="t('component.header.about')"
-          />
-        </RouterLink>
-      </nav>
-      <div
-        v-if="route.name === 'event'"
-        class="header__right"
-        :aria-label="t('component.header.event.manage')"
-      >
-        <!-- <img
-          src="@/assets/img/icon/edit.svg"
-          width="24"
-          height="24"
-          :alt="t('event.button.edit')"
-        />
-        <img
-          src="@/assets/img/icon/share.svg"
-          width="24"
-          height="24"
-          :alt="t('global.button.share')"
-        /> -->
+
+      <div class="header__right">
+        <SubscriptionExpired class="header__subscription" />
+
+        <div class="header__navigation" role="navigation" :aria-label="t('global.nav')">
+          <RouterLink v-if="route.name === 'home'" to="/about" class="icon-text">
+            <img
+              src="@/assets/img/icon/info.svg"
+              width="24"
+              height="24"
+              :alt="t('component.header.about')"
+            />
+          </RouterLink>
+
+          <!--          <div-->
+          <!--            v-if="route.name === 'event'"-->
+          <!--            :aria-label="t('component.header.event.manage')"-->
+          <!--          >-->
+          <!--            <img-->
+          <!--              src="@/assets/img/icon/edit.svg"-->
+          <!--              width="24"-->
+          <!--              height="24"-->
+          <!--              :alt="t('event.button.edit')"-->
+          <!--            />-->
+          <!--            <img-->
+          <!--              src="@/assets/img/icon/share.svg"-->
+          <!--              width="24"-->
+          <!--              height="24"-->
+          <!--              :alt="t('global.button.share')"-->
+          <!--            />-->
+          <!--          </div>-->
+        </div>
       </div>
     </div>
   </header>
 </template>
 
 <style scoped lang="less">
-// временно из-за bulma
-a {
-  padding: 0;
-  margin: 0;
-}
-
 .header {
   width: 100%;
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 2;
+  //TODO разобраться с z-индексами
+  z-index: 3;
 
   &__container {
     display: flex;
@@ -118,10 +112,20 @@ a {
 
   &__right {
     display: flex;
+    justify-content: flex-end;
     text-align: center;
     padding: 14px 0;
     margin-left: 12px;
     gap: 18px;
+  }
+
+  &__subscription {
+    display: flex;
+    max-width: max-content;
+  }
+
+  &__navigation {
+    gap: 10px;
   }
 }
 </style>

@@ -21,7 +21,7 @@ const fileIsLoading = ref(false)
 watch(
   () => props.externalImage,
   () => {
-    imageSrc.value = `${BASE_URL}/${props.externalImage}`
+    imageSrc.value = `${BASE_URL}${props.externalImage}`
   }
 )
 
@@ -69,7 +69,9 @@ const removeImage = () => {
       />
 
       <div v-if="imageSrc" class="loader__preview">
-        <img :src="imageSrc" class="loader__image" />
+        <div class="loader__img-wrapper">
+          <img :src="imageSrc" class="loader__image" />
+        </div>
         <CustomButton
           class="loader__button"
           button-class="button__ordinary"
@@ -92,11 +94,17 @@ const removeImage = () => {
     align-items: center;
   }
 
-  &__image {
-    max-height: 69px;
-    max-width: 56px;
-    border-radius: 8px;
+  &__img-wrapper {
+    max-width: 69px;
+    max-height: 59px;
+    overflow: hidden;
     margin-right: 10px;
+    border-radius: 8px;
+  }
+
+  &__image {
+    max-height: 59px;
+    max-width: 69px;
   }
 
   &__buttons {

@@ -4,7 +4,7 @@ import { type EventOnPoster } from '@common/types/event'
 import { deleteEvent, getEvent } from '@/services/events.services'
 import { useRoute, useRouter } from 'vue-router'
 import CustomButton from '@/components/common/button/CustomButton.vue'
-import NewEventModal from '@/components/modal/NewEventModal.vue'
+import RegistrationModal from '@/components/modal/RegistrationModal.vue'
 import { VueFinalModal } from 'vue-final-modal'
 import { BASE_URL } from '@/constants/url'
 import { useTranslation } from '@/i18n'
@@ -40,7 +40,7 @@ const picture = computed(() => {
       return posterEvent.value.image
     }
 
-    return `${BASE_URL}/${posterEvent.value.image}`
+    return `${BASE_URL}${posterEvent.value.image}`
   }
   return 'https://picsum.photos/400/300'
 })
@@ -62,16 +62,7 @@ const convertToLocaleString = (
 const isManaged = getUserEvents().includes(id)
 
 const registrationClick = () => {
-  const url = posterEvent.value?.url
-  if (!url) {
-    return
-  }
-
-  if (url === 'self') {
-    router.push({ path: `/registration/${id}` })
-  } else {
-    window.open(url, '_blank')
-  }
+  isModalOpen.value = true
 }
 </script>
 
@@ -109,26 +100,34 @@ const registrationClick = () => {
         {{ posterEvent.description }}
       </div>
     </div>
-    <CustomButton
-      v-if="posterEvent.url"
-      button-class="card-contact-btn"
-      :button-text="t('event.button.contact')"
-      @click="registrationClick()"
-    />
+    <div class="card-actions">
+      <CustomButton
+        v-if="posterEvent.url"
+        button-class="card-contact-btn"
+        :button-text="t('event.button.contact')"
+        @click="registrationClick()"
+      />
+      <CustomButton
+        v-if="posterEvent.url"
+        button-class="card-contact-btn"
+        :button-text="t('event.button.register')"
+        @click="registrationClick()"
+      />
 
-    <CustomButton
-      button-class="button is-small"
-      :button-text="t('event.button.edit')"
-      @click="isModalOpen = true"
-      v-if="isManaged"
-    />
-    <!-- please style me 🥺🙏 -->
-    <CustomButton
-      v-if="isManaged"
-      button-class="delete is-small"
-      @click="deleteCard"
-      :button-text="t('event.button.delete')"
-    />
+      <CustomButton
+        button-class="button is-small"
+        :button-text="t('event.button.edit')"
+        @click="isModalOpen = true"
+        v-if="isManaged"
+      />
+      <!-- please style me 🥺🙏 -->
+      <CustomButton
+        v-if="isManaged"
+        button-class="delete is-small"
+        @click="deleteCard"
+        :button-text="t('event.button.delete')"
+      />
+    </div>
     <vue-final-modal
       :hideOverlay="false"
       overlayTransition="vfm-fade"
@@ -140,7 +139,12 @@ const registrationClick = () => {
       :lockScroll="true"
       v-model="isModalOpen"
     >
-      <NewEventModal v-if="isModalOpen" :data-for-edit="posterEvent" />
+      <RegistrationModal
+        v-if="isModalOpen"
+        :data-for-edit="posterEvent"
+        :event-id="id"
+        @close="isModalOpen = false"
+      />
     </vue-final-modal>
   </div>
 </template>
@@ -159,16 +163,16 @@ const registrationClick = () => {
   width: 100%;
   box-shadow: none;
 
-  .card-content {
+  &-content {
     padding: 12px 16px 12px 16px;
   }
 
-  .card-image {
+  &-image {
     background-color: #cacaca;
     position: relative;
   }
 
-  .card-author {
+  &-author {
     font-family: Inter;
     font-size: 12px;
     font-weight: 500;
@@ -178,7 +182,7 @@ const registrationClick = () => {
     color: #acacac;
   }
 
-  .card-price {
+  &-price {
     position: absolute;
     font-family: Inter;
     font-size: 12px;
@@ -195,7 +199,7 @@ const registrationClick = () => {
     z-index: 200;
   }
 
-  .card-title {
+  &-title {
     color: #4e4e4e;
     font-family: Inter;
     font-size: 18px;
@@ -205,7 +209,7 @@ const registrationClick = () => {
     text-align: left;
   }
 
-  .card-datetime {
+  &-datetime {
     font-family: Inter;
     font-size: 12px;
     font-weight: 500;
@@ -215,7 +219,7 @@ const registrationClick = () => {
     color: #acacac;
   }
 
-  .card-geolink {
+  &-geolink {
     font-family: Inter;
     font-size: 12px;
     font-weight: 400;
@@ -225,7 +229,7 @@ const registrationClick = () => {
     text-decoration-line: underline;
   }
 
-  .card-description {
+  &-description {
     color: #4e4e4e;
     font-family: Inter;
     font-size: 12px;
@@ -236,13 +240,19 @@ const registrationClick = () => {
     min-height: 202px;
   }
 
-  .card-contact-btn {
+  &-contact-btn {
     color: white;
     background: #363636;
     height: 40px;
     width: 100%;
     border-radius: 6px;
     padding: 7px 16px 7px 16px;
+  }
+
+  &-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-related-items);
   }
 }
 

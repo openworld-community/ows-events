@@ -27,4 +27,8 @@ const symbolId = computed(() => `#${props.name}`)
   </svg>
 </template>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+svg {
+  pointer-events: none;
+}
+</style>

@@ -36,7 +36,8 @@ export const defaultTranslation = {
     button: {
       delete: 'Удалить событие',
       edit: 'Редактировать событие',
-      contact: 'Связаться'
+      contact: 'Связаться',
+      register: 'Зарегистрироваться'
     },
     image: {
       event: 'изображение мероприятия'
@@ -78,14 +79,14 @@ export const defaultTranslation = {
   },
   dates: {
     day: {
-      'key_zero': '{{count}} дней',
-      'key_one': '{{count}} день',
-      'key_few': '{{count}} дня',
-      'key_many': '{{count}} дней'
+      key_zero: '{{count}} дней',
+      key_one: '{{count}} день',
+      key_few: '{{count}} дня',
+      key_many: '{{count}} дней'
     }
   },
   header: {
-    'subscription_expired': 'Ваша подписка закончится через $t(dates.day.key)'
+    subscription_expired: '$t(dates.day.key) до конца подписки'
   }
 }
 

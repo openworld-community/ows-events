@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, useRoute } from 'vue-router'
+import SubscriptionExpired from './SubscriptionExpired.vue'
 
 const route = useRoute()
 </script>
@@ -17,6 +18,7 @@ const route = useRoute()
         />
         <img v-else src="@/assets/img/icon/back.svg" width="24" height="24" alt="Назад" />
       </RouterLink>
+      <SubscriptionExpired />
     </div>
     <nav
       v-if="route.name === 'home'"
@@ -54,7 +56,8 @@ a {
   &__left {
     display: flex;
     padding: 14px 12px;
-    align-items: center;
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   &__right {

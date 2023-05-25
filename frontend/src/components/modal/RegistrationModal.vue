@@ -5,16 +5,20 @@ import { deleteEvent, getEvent, sendFormAboutRegistration } from '@/services/eve
 import { useRoute, useRouter } from 'vue-router'
 import CustomButton from '@/components/common/button/CustomButton.vue'
 import CustomInput from '@/components/common/input/CustomInput.vue'
-import NewEventModal from '@/components/modal/NewEventModal.vue'
-import { VueFinalModal } from 'vue-final-modal'
-import { BASE_URL } from '@/constants/url'
 import { useTranslation } from '@/i18n'
 const { t } = useTranslation()
 
 const posterEvent = ref<EventOnPoster | null>(null)
 const route = useRoute()
-const eventId = route.params.eventId as string
-const router = useRouter()
+
+const props = defineProps({
+  eventId: {
+    type: String,
+    default: ''
+  }
+})
+
+const emit = defineEmits(['close'])
 
 const name = ref('')
 const telegramNickname = ref('')
@@ -46,7 +50,7 @@ const submitAvailable = computed(() => {
 
 const submitInfo = computed(() => {
   return {
-    eventId: eventId,
+    eventId: props.eventId,
     telegramNickname: telegramNickname.value,
     name: name.value,
     profession: profession.value,
@@ -69,21 +73,22 @@ const submit = async () => {
   sendFormAboutRegistration(submitInfo.value).then(() => {
     localStorage.setItem('REGISTRATION', 'true')
     localStorage.setItem('REGISTRATION_DATA', JSON.stringify(submitInfo.value))
-    window.location.href = `/payment/${eventId}`
+    window.location.href = `/payment/${props.eventId}`
   })
+}
+
+const closeModal = () => {
+  emit('close')
 }
 </script>
 
 <template>
-  <main>
-    <div class="actions">
-      <div>
-        <a href="/" class="button is-rounded" :aria-label="t('global.button.back')"
-          ><i class="fas fa-arrow-left"></i
-        ></a>
-      </div>
-      <div class="form" v-if="eventId">
-        <h2>Регистрация</h2>
+  <div class="modal-card form">
+    <div class="modal-card__head">
+      <h2 class="modal-card__title">Регистрация</h2>
+    </div>
+    <div class="modal-card__body body">
+      <div class="form-fields">
         <CustomInput
           input-type="input"
           input-name="name"
@@ -141,135 +146,90 @@ const submit = async () => {
           input-placeholder="E-mail address"
           v-model="email"
         />
-        <input type="checkbox" id="personaldata" name="personaldata" v-model="personaldataAgree" />
-        <label for="personaldata">I agree to the processing of personal data</label>
-
-        <input type="checkbox" id="fee" name="fee" v-model="feeAgree" />
-        <label for="fee">I understand that I will have to pay the entrance fee.</label>
       </div>
-      <div v-else>Эвент не найден:(</div>
     </div>
-
-    <CustomButton
-      button-class="button is-small"
-      button-text="Подтвердить"
-      @click="submit()"
-      :is-active="submitAvailable"
-    />
-  </main>
+    <ul class="form-agreements-list">
+      <li class="form-agreements-item">
+        <input type="checkbox" id="personaldata" name="personaldata" v-model="personaldataAgree" />
+        <label class="form-agreements-item__label" for="personaldata"
+          >I agree to the processing of personal data</label
+        >
+      </li>
+      <li class="form-agreements-item">
+        <input type="checkbox" id="fee" name="fee" v-model="feeAgree" />
+        <label class="form-agreements-item__label" for="fee"
+          >I understand that I will have to pay the entrance fee.</label
+        >
+      </li>
+    </ul>
+    <div class="modal-card__foot">
+      <CustomButton
+        class="modal-card__button"
+        button-class="button__success"
+        :button-text="t('component.new_event_modal.submit')"
+        @click="submit()"
+      />
+      <CustomButton
+        class="modal-card__button"
+        button-class="button__ordinary"
+        :button-text="t('component.new_event_modal.cancel')"
+        @click="closeModal()"
+      />
+    </div>
+  </div>
 </template>
 
 <style lang="less" scoped>
-.actions {
+.modal-card {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  margin-bottom: 20px;
   width: 100%;
+  min-height: auto;
+  align-items: center;
+  gap: var(--space-unrelated-items);
+  background: var(--color-white);
+  &__head,
+  &__foot {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}
 
-  .form {
+.body {
+  overflow-y: auto;
+  padding: 20px var(--padding-side);
+}
+
+.form {
+  &-fields,
+  &-agreements-list {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    gap: var(--space-related-items);
+    align-items: center;
+  }
+
+  &-agreements-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-related-items);
+
+    &__label {
+      font-size: var(--font-size-XS);
+      line-height: var(--line-height-XS);
+    }
   }
 }
 
-.image {
-  height: 100%;
-  min-height: 232px;
-  object-fit: cover;
-  border-radius: 0;
+.submit-button {
+  color: var(--color-white);
+  background: var(--color-accent-green-main);
+  height: 40px;
   width: 100%;
-}
-
-.card {
-  width: 100%;
-  box-shadow: none;
-
-  .card-content {
-    padding: 12px 16px 12px 16px;
-  }
-
-  .card-image {
-    background-color: #cacaca;
-  }
-
-  .card-author {
-    font-family: Inter;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 16px;
-    letter-spacing: 0;
-    text-align: left;
-    color: #acacac;
-  }
-
-  .card-price {
-    position: absolute;
-    font-family: Inter;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 16px;
-    letter-spacing: 0;
-    text-align: center;
-    color: #737373;
-    left: 16px;
-    top: 16px;
-    border-radius: 16px;
-    padding: 4px 10px 4px 10px;
-    background-color: white;
-    z-index: 200;
-  }
-
-  .card-title {
-    color: #4e4e4e;
-    font-family: Inter;
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 24px;
-    letter-spacing: 0;
-    text-align: left;
-  }
-
-  .card-datetime {
-    font-family: Inter;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 16px;
-    letter-spacing: 0;
-    text-align: left;
-    color: #acacac;
-  }
-
-  .card-geolink {
-    font-family: Inter;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 14px;
-    letter-spacing: 0;
-    text-align: left;
-    text-decoration-line: underline;
-  }
-
-  .card-description {
-    color: #4e4e4e;
-    font-family: Inter;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 24px;
-    letter-spacing: 0;
-    text-align: left;
-    min-height: 202px;
-  }
-
-  .card-contact-btn {
-    color: white;
-    background: #363636;
-    height: 40px;
-    width: 100%;
-    border-radius: 6px;
-    padding: 7px 16px 7px 16px;
-  }
+  border-radius: 6px;
+  padding: 7px 16px 7px 16px;
+  justify-content: center;
 }
 
 main {

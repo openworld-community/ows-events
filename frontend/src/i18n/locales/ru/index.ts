@@ -36,7 +36,8 @@ export const defaultTranslation = {
     button: {
       delete: 'Удалить событие',
       edit: 'Редактировать событие',
-      contact: 'Связаться'
+      contact: 'Связаться',
+      register: 'Зарегистрироваться'
     },
     image: {
       event: 'изображение мероприятия'

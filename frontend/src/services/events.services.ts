@@ -60,8 +60,7 @@ export const getAllTimezones = async (): Promise<
 
   if (local === 'undefined') {
     localStorage.removeItem('ALL_TIMEZONES')
-  }
-  if (local) {
+  } else if (local) {
     return JSON.parse(local) as {
       timezoneName: string
       timezoneOffset: string

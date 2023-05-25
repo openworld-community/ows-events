@@ -12,9 +12,7 @@ const paymentInfo = ref<{ event: EventOnPoster; paymantsInfo: PaymentInfo[] } | 
 
 const loadPaymantInfo = async () => {
   const response = await getEventPayment(eventId)
-  console.log(response)
   if (response.type === 'success') {
-    console.log(response.data)
     paymentInfo.value = response.data
   } else {
     console.error(response.errors)

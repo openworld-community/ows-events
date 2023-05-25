@@ -62,7 +62,6 @@ const convertToLocaleString = (
 const isManaged = getUserEvents().includes(id)
 
 const registrationClick = () => {
-  console.log('registrationClick', posterEvent.value?.url)
   const url = posterEvent.value?.url
   if (!url) {
     return

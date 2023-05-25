@@ -45,7 +45,7 @@ loadPaymantInfo()
         <p>
           В комментарии к платежу укажите свой ник в telegram и почту, с которой регистрировались!
         </p>
-        <table v-for="p of paymentInfo.paymantsInfo" :key="p.id">
+        <table>
           <thead>
             <tr>
               <th></th>
@@ -54,7 +54,7 @@ loadPaymantInfo()
             </tr>
           </thead>
           <tbody>
-            <tr v-for="row of p.rows" :key="row.toString()">
+            <tr v-for="row of paymentInfo.paymantsInfo.rows" :key="row.toString()">
               <td>{{ row.name }}</td>
               <td>
                 <a v-if="row.link" :href="row.link">{{ row.link }}</a>

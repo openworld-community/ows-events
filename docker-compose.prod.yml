@@ -6,6 +6,8 @@ x-logging: &default-logging
     max-size: '10m'
     max-file: '5'
 
+networks:
+  traefikpublic:
 
 
 services:

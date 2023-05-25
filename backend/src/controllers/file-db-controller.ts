@@ -28,7 +28,7 @@ export class FileDbController {
     }
     this.addTask(
       TASK_TYPES.SAVE_BACKUP,
-      Date.now() + getTimestamp({ value: 12, type: TIMESTAMP_TYPES.HOURS })
+      Date.now() + getTimestamp({ value: 1, type: TIMESTAMP_TYPES.HOURS })
     );
 
     setInterval(
@@ -80,7 +80,7 @@ export class FileDbController {
         await this.makeBackup();
         this.addTask(
           TASK_TYPES.SAVE_BACKUP,
-          Date.now() + getTimestamp({ value: 12, type: TIMESTAMP_TYPES.HOURS })
+          Date.now() + getTimestamp({ value: 1, type: TIMESTAMP_TYPES.HOURS })
         );
         break;
 

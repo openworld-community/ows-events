@@ -41,10 +41,6 @@ server.register(Static, {
   decorateReply: false,
 });
 
-server.setNotFoundHandler((request, reply) => {
-  reply.redirect("/");
-});
-
 server.get<{ Reply: string[] }>(
   "/api/location/countries",
   async (request, reply) => {
@@ -411,6 +407,10 @@ server.post<{
     type: "success",
     data: undefined,
   };
+});
+
+server.setNotFoundHandler(function (req, reply) {
+  reply.sendFile("index.html");
 });
 
 server.listen({ port: 7080, host: "0.0.0.0" }, (err, address) => {

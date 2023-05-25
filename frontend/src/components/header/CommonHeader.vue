@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useTranslation } from '@/i18n'
 import { RouterLink, useRoute } from 'vue-router'
+import SubscriptionExpired from './SubscriptionExpired.vue'
 
 const { t } = useTranslation()
 const route = useRoute()
@@ -26,6 +27,7 @@ const route = useRoute()
             :alt="t('global.button.back')"
           />
         </RouterLink>
+        <SubscriptionExpired />
       </div>
       <nav
         v-if="route.name === 'home'"
@@ -91,13 +93,18 @@ a {
     padding-right: var(--padding-side);
     margin-left: auto;
     margin-right: auto;
+
+    @media (min-width: 1440px) {
+      max-width: 600px;
+    }
   }
 
   &__left {
     display: flex;
+    align-items: flex-start;
+    flex-direction: column;
     padding: 14px 0;
     margin-right: 12px;
-    align-items: center;
   }
 
   &__right {

@@ -248,33 +248,66 @@ const submitEvent = async () => {
 }
 
 type InputEvent = {
-  type: 'text' | 'date' | 'time' | 'number' | 'textarea'
+  type: 'text' | 'date' | 'time' | 'number' | 'textarea' | 'datalist'
   label?: string
   name: keyof typeof inputValues.value
   required: boolean
   min?: number
+  options?: any // TODO тип
 }
 
-const eventInputs: (
-  | InputEvent
-  | {
-      type: 'row'
-      name: string
-      label?: string
-      child: InputEvent[]
-    }
-)[] = [
+const eventInputs: ({
+  type: 'row' | 'column'
+  name: string
+  label?: string
+  child: InputEvent[]
+})[] = [
   {
-    type: 'text',
-    label: t('component.new_event_modal.fields.title'),
-    name: 'title',
-    required: true
+    type: 'column',
+    name: 'location',
+    label: t('component.new_event_modal.fields.location'),
+    child: [
+      {
+        type: 'datalist',
+        name: 'country',
+        options: countries,
+        label: t('component.new_event_modal.fields.country'),
+        required: true
+      },
+      {
+        type: 'datalist',
+        name: 'city',
+        options: cities,
+        label: t('component.new_event_modal.fields.city'),
+        required: true
+      },
+      {
+        type: 'datalist',
+        name: 'timezone',
+        options: allTimezones,
+        label: t('component.new_event_modal.fields.timezone'),
+        required: true
+      }
+    ]
   },
   {
-    type: 'textarea',
-    label: t('component.new_event_modal.fields.description'),
+    type: 'column',
     name: 'description',
-    required: true
+    label: t('component.new_event_modal.fields.main_info'),
+    child: [
+      {
+        type: 'text',
+        label: t('component.new_event_modal.fields.title'),
+        name: 'title',
+        required: true
+      },
+      {
+        type: 'textarea',
+        label: t('component.new_event_modal.fields.description'),
+        name: 'description',
+        required: true
+      }
+    ]
   },
   {
     type: 'row',
@@ -311,13 +344,20 @@ const eventInputs: (
     ]
   },
   {
-    type: 'number',
-    label: t('component.new_event_modal.fields.price'),
+    type: 'row',
     name: 'price',
-    required: true,
-    min: 0
+    label: t('component.new_event_modal.fields.price'),
+    child: [
+      {
+        type: 'number',
+        name: 'price',
+        required: true,
+        min: 0
+      }
+    ]
   }
 ]
+
 setTimeout(() => {
   isModalOpen.value = true
 }, 100)
@@ -325,122 +365,138 @@ setTimeout(() => {
 
 <template>
   <div
-    class="modal-card new-event-container"
+    class="modal-card"
     :class="!isModalOpen ? 'new-event-container-hidden' : 'new-event-container-open'"
   >
-    <header class="modal-card-head">
-      <h2 class="event-modal__title title is-3">{{ t('component.new_event_modal.title') }}</h2>
+    <header class="modal-card__head">
+      <h2 class="modal-card__title">{{ t('component.new_event_modal.title') }}</h2>
     </header>
-    <form class="modal-card-body">
-      <div class="row">
-        <CustomInput
-          input-type="datalist"
-          input-name="country"
-          :input-placeholder="t('global.country')"
-          :options-list="countries"
-          v-model="inputValues.country"
-        />
-        <CustomInput
-          input-type="datalist"
-          input-name="city"
-          :input-placeholder="t('global.city')"
-          :options-list="cities"
-          v-model="inputValues.city"
-          v-bind:key="inputValues.country"
-          :inputDisabled="!inputValues.country"
-        />
-        <CustomInput
-          input-type="datalist"
-          input-name="timezone"
-          :input-placeholder="t('global.timezone')"
-          :options-list="allTimezones"
-          v-model="inputValues.timezone"
-          v-bind:key="inputValues.city"
-          :inputDisabled="!inputValues.city"
-        />
-      </div>
 
-      <div v-for="input in eventInputs" :key="input.name">
-        <CustomInput
-          v-if="input.type !== 'row'"
-          :input-type="input.type"
-          :input-placeholder="input.label"
-          :input-name="input.name"
-          v-model="inputValues[input.name]"
-          :is-required="input.required"
-        />
-        <div v-else>
-          <h3 class="subtitle is-small">{{ input.label }}</h3>
-          <div class="row">
-            <CustomInput
-              v-for="c in input.child"
-              :key="c.name"
-              :input-type="c.type"
-              :input-placeholder="c.label"
-              :input-name="c.name"
-              v-model="inputValues[c.name]"
-              :is-required="c.required"
-            />
-          </div>
+    <form class="modal-card__body body">
+      <div v-for="input in eventInputs" :key="input.name" class="body__section section">
+        <h3 class="section__subtitle is-small">{{ input.label }}</h3>
+        <div :class="input.type === 'column' ? 'section__column' : 'section__row'">
+          <CustomInput
+            class="section__input"
+            v-for="c in input.child"
+            :key="c.name"
+            :input-type="c.type"
+            :options-list="c.options"
+            :input-placeholder="c.label"
+            :input-name="c.name"
+            v-model="inputValues[c.name]"
+            :is-required="c.required"
+          />
         </div>
       </div>
 
       <ImageLoader v-model="newImageFile" :external-image="inputValues.image" />
     </form>
-    <div class="modal-card-foot card-custom-footer">
+    <div class="modal-card__foot">
       <CustomButton
-        button-class="button"
-        :button-text="t('component.new_event_modal.cancel')"
-        :is-active="!isLoading"
-        @click="closeModal()"
-      />
-      <CustomButton
-        button-class="button is-success"
+        class="modal-card__button"
+        button-class="button__success"
         :button-text="t('component.new_event_modal.submit')"
         :is-active="checkFormFilling && !isLoading"
         :is-loading="isLoading"
         @click="isLoading ? null : submitEvent()"
+      />
+      <CustomButton
+        class="modal-card__button"
+        button-class="button__ordinary"
+        :button-text="t('component.new_event_modal.cancel')"
+        :is-active="!isLoading"
+        @click="closeModal()"
       />
     </div>
   </div>
 </template>
 
 <style scoped lang="less">
-.new-event-container-hidden {
-  top: 100vh;
+.modal-card {
+  display: flex;
+  flex-direction: column;
+  //TODO: пока верстка только мобилки
+  width: 95vw;
+  max-width: 480px;
+  max-height: 88vh;
+  overflow: hidden;
+  border-radius: 10px;
+  min-height: 85vh;
+  margin: 10px auto;
+
+  transform: translate(0, 0);
+  transition-property: top;
+  transition-duration: 0.4s;
+  z-index: 1;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    height: 64px;
+    background-color: var(--color-background-secondary);
+    border-bottom: 1px solid var(--color-input-field);
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  &__title {
+    font-size: var(--font-size-XL);
+    font-weight: var(--font-weight-regular);
+  }
+
+  &__foot {
+    display: flex;
+    align-items: center;
+    min-height: 80px;
+    background-color: var(--color-background-secondary);
+    border-top: 1px solid var(--color-input-field);
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  &__button {
+    margin-right: 8px;
+  }
 }
 
-.new-event-container-open {
-  top: 20vh;
+.body {
+  overflow-y: auto;
+  padding: 20px var(--padding-side);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+
+  &__subtitle {
+    font-weight: var(--font-size-L);
+    margin-bottom: 12px;
+  }
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  &__row {
+    display: flex;
+    width: 100%;
+    gap: 16px;
+  }
+
+  &__input {
+    margin-bottom: 16px;
+  }
 }
 
 .new-event-container {
-  width: 100%;
-  max-width: 600px;
-
-  border-radius: 30px 30px 0 0;
-
-  height: 80vh;
-
-  margin: 0;
-
-  position: fixed;
-  left: 50%;
-  transform: translate(-50%, 0);
-
-  z-index: 1000;
-  transition-property: top;
-  transition-duration: 0.4s;
-
   .row {
     display: flex;
     gap: 16px;
     margin-bottom: 10px;
-  }
-
-  .card-custom-footer {
-    justify-content: flex-end;
-    border-radius: 0;
   }
 }
 </style>

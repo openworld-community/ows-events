@@ -80,6 +80,10 @@ const props = defineProps({
     &--inactive {
       opacity: 0.4;
     }
+
+    &--disabled {
+      opacity: 0.4;
+    }
   }
 
   &__ordinary {

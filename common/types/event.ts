@@ -14,5 +14,5 @@ export type EventOnPoster = {
     timezoneName: string;
     timezoneOffset: string;
   };
-  url: string | null;
+  url: string;
 };

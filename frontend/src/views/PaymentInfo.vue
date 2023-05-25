@@ -26,8 +26,23 @@ loadPaymantInfo()
 
 <template>
   <main>
-    <section v-if="eventId && paymentInfo">
+    <section v-if="eventId && paymentInfo && paymentInfo.paymantsInfo">
       <h2 class="title">Информация об оплате: {{ paymentInfo.event.title }}</h2>
+      <p>
+        Стоимость билета зависит от валюты и будет повышаться по мере приближения ивента. Есть
+        скидка для партнёров — жён, мужей, девушек, парней — приходите вместе! Скидки не суммируются
+        (на партнера также не распространяются), действует самая большая.
+      </p>
+      <h3>Крипта</h3>
+      <p>Для нас крипта – приоритетный способ оплаты, поэтому выбирая его, вы получаете скидку.</p>
+      <p>
+        НАПИШИТЕ @Alexears В ТЕЛЕГРАМ, ЧТО ВЫ ОПЛАТИЛИ КРИПТОЙ! И УКАЖИТЕ ПОЧТУ, С КОТОРОЙ
+        РЕГИСТРИРОВАЛИСЬ!
+      </p>
+      <h3>Рубли</h3>
+      <p>
+        В комментарии к платежу укажите свой ник в telegram и почту, с которой регистрировались!
+      </p>
       <table v-for="p of paymentInfo.paymantsInfo" :key="p.id">
         <thead>
           <tr>
@@ -44,7 +59,7 @@ loadPaymantInfo()
               <p v-else>{{ row.account }}</p>
             </td>
             <td>
-              <span v-if="row.price">{{ row.price }} $.</span>
+              <span v-if="row.price">{{ row.price }}.</span>
               <span v-else>Бесплатно</span>
             </td>
           </tr>
@@ -64,11 +79,20 @@ main {
 
   section {
     max-width: 500px;
+    width: 100%;
 
     table {
-      th,
-      td {
-        padding: 10px;
+      max-width: 100%;
+      tr {
+        display: flex;
+        th,
+        td {
+          padding: 10px;
+          flex: 1;
+          max-width: 150px;
+          width: 33vw;
+          word-wrap: break-word;
+        }
       }
     }
   }

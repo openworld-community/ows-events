@@ -19,7 +19,7 @@ export const defaultTranslation = {
   home: {
     title: 'Мероприятия',
     button: {
-      'add_event_aria': 'добавить мероприятие'
+      add_event_aria: 'добавить мероприятие'
     },
     events: {
       image_alt: 'Фото мероприятия',
@@ -61,7 +61,8 @@ export const defaultTranslation = {
         description: 'Описание',
         start: 'Начало',
         end: 'Окончание',
-        price: 'Стоимость'
+        price: 'Стоимость',
+        url_to_rigistration: 'Ссылка на регистрацию'
       }
     },
     language_selector: {

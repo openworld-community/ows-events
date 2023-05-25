@@ -257,12 +257,12 @@ type InputEvent = {
   options?: any // TODO тип
 }
 
-const eventInputs: ({
+const eventInputs: {
   type: 'row' | 'column'
   name: string
   label?: string
   child: InputEvent[]
-})[] = [
+}[] = [
   {
     type: 'column',
     name: 'location',
@@ -352,6 +352,19 @@ const eventInputs: ({
       {
         type: 'number',
         name: 'price',
+        required: true,
+        min: 0
+      }
+    ]
+  },
+  {
+    type: 'row',
+    name: 'price',
+    label: t('component.new_event_modal.fields.url_to_rigistration'),
+    child: [
+      {
+        type: 'text',
+        name: 'url',
         required: true,
         min: 0
       }

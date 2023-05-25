@@ -89,28 +89,24 @@ const submit = async () => {
           input-name="name"
           input-placeholder="Name, Surname (for a badge, in Latin)"
           v-model="name"
-          v-bind:key="name"
         />
         <CustomInput
           input-type="input"
           input-name="telegramNickname"
           input-placeholder="Telegram (in @nickname format) - for communication"
           v-model="telegramNickname"
-          v-bind:key="telegramNickname"
         />
         <CustomInput
           input-type="input"
           input-name="profession"
           input-placeholder="Profession (for a badge, no more than 24 characters, including spaces)"
           v-model="profession"
-          v-bind:key="profession"
         />
         <CustomInput
           input-type="input"
           input-name="workplace"
           input-placeholder="Workplace"
           v-model="workplace"
-          v-bind:key="workplace"
         />
         <CustomInput
           input-type="datalist"
@@ -118,7 +114,6 @@ const submit = async () => {
           input-placeholder="Have you ever worked in startups?"
           :options-list="['Yes', 'Nope']"
           v-model="experienceInStartups"
-          v-bind:key="experienceInStartups"
         />
         <CustomInput
           input-type="datalist"
@@ -126,7 +121,6 @@ const submit = async () => {
           input-placeholder="How did you know about us?"
           :options-list="['Twitter', 'Instagram', 'From friends', 'Telegram', 'LinkedIn']"
           v-model="fromYouKnow"
-          v-bind:key="fromYouKnow"
         />
         <CustomInput
           input-type="datalist"
@@ -134,21 +128,18 @@ const submit = async () => {
           input-placeholder="Have you been to our meetups before?"
           :options-list="['Nope', 'Yes, once', 'Yes, more than once']"
           v-model="beenEarly"
-          v-bind:key="beenEarly"
         />
         <CustomInput
           input-type="input"
           input-name="fromWichCity"
           input-placeholder="From which city will you go to the meetup?"
           v-model="fromWhichCity"
-          v-bind:key="fromWhichCity"
         />
         <CustomInput
           input-type="input"
           input-name="email"
           input-placeholder="E-mail address"
           v-model="email"
-          v-bind:key="email"
         />
         <input type="checkbox" id="personaldata" name="personaldata" v-model="personaldataAgree" />
         <label for="personaldata">I agree to the processing of personal data</label>

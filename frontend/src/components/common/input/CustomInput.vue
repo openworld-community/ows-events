@@ -132,12 +132,27 @@ const showPicker = () => {
       </a>
 
       <a
-        v-if="ICON_DICTIONARY[props.inputName] && !inputData"
+        v-if="
+          ICON_DICTIONARY[props.inputName] &&
+          !inputData &&
+          (inputType === 'date' || inputType === 'time')
+        "
         class="custom-input__button custom-input__button--icon"
         @click.prevent="showPicker"
       >
         <img :src="ICON_DICTIONARY[props.inputName]" width="24" height="24" />
       </a>
+
+      <span
+        v-if="
+          ICON_DICTIONARY[props.inputName] &&
+          !inputData &&
+          !(inputType === 'date' || inputType === 'time')
+        "
+        class="custom-input__button custom-input__button--icon"
+      >
+        <img :src="ICON_DICTIONARY[props.inputName]" width="24" height="24" />
+      </span>
 
       <!--    На будущее, для дизайна инпутов с кнопкой "Отмена"-->
       <!-- <a v-if="inputData" class="custom-input__button--cancel"> {{ t('global.button.cancel') }} </a> -->

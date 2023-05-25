@@ -46,17 +46,22 @@ export const defaultTranslation = {
       not_found: 'Мы не смогли найти вас('
     },
     new_event_modal: {
-      title: 'Новое мероприятие',
+      title: 'Добавьте мероприятие',
       cancel: 'Отмена',
       submit: 'Отправить',
-      add_image: 'Добавить изображение',
-      remove_image: 'Убрать изображение',
+      add_image: 'Добавить фото',
+      remove_image: 'Удалить фото',
       fields: {
+        location: 'Локация',
+        country: 'Страна',
+        city: 'Город',
+        timezone: 'Часовой пояс',
+        main_info: 'Общая информация',
         title: 'Название',
         description: 'Описание',
         start: 'Начало',
         end: 'Окончание',
-        price: 'Цена'
+        price: 'Стоимость'
       }
     },
     language_selector: {

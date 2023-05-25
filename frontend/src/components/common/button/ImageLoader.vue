@@ -56,25 +56,27 @@ const removeImage = () => {
 </script>
 
 <template>
-  <div class="row align-items-center">
-    <div v-if="imageSrc" class="loader__preview">
-      <img :src="imageSrc" class="avatar" />
-    </div>
-
+  <div class="loader">
     <input accept="image/*" ref="input" type="file" @change="loadImage" class="d-none" />
     <div class="loader__buttons">
       <CustomButton
-        button-class="button is-success is-small"
+        v-if="!imageSrc"
+        class="loader__button"
+        button-class="button__ordinary"
         :button-text="t('component.new_event_modal.add_image')"
-        :is-active="!imageSrc"
+        icon-name="picture"
         @click="fileIsLoading ? null : input?.click()"
       />
-      <CustomButton
-        v-if="imageSrc"
-        button-class="button is-small"
-        :button-text="t('component.new_event_modal.remove_image')"
-        @click="removeImage"
-      />
+
+      <div v-if="imageSrc" class="loader__preview">
+        <img :src="imageSrc" class="loader__image" />
+        <CustomButton
+          class="loader__button"
+          button-class="button__ordinary"
+          :button-text="t('component.new_event_modal.remove_image')"
+          @click="removeImage"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -86,14 +88,25 @@ const removeImage = () => {
 
 .loader {
   &__preview {
-    object-fit: cover;
-    max-height: 200px;
-    max-width: 200px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__image {
+    max-height: 69px;
+    max-width: 56px;
+    border-radius: 8px;
+    margin-right: 10px;
   }
 
   &__buttons {
     display: flex;
+    align-items: center;
     gap: 15px;
+  }
+
+  &__button {
+    max-height: 40px;
   }
 }
 </style>

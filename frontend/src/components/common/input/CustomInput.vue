@@ -14,7 +14,8 @@ const ICON_DICTIONARY: { [key: string]: string } = {
   endTime: clock,
   startTime: clock,
   country: container,
-  city: container
+  city: container,
+  timezone: container
 }
 
 const emit = defineEmits(['update:modelValue'])

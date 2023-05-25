@@ -41,6 +41,10 @@ server.register(Static, {
   decorateReply: false,
 });
 
+server.setNotFoundHandler((request, reply) => {
+  reply.redirect("/");
+});
+
 server.get<{ Reply: string[] }>(
   "/api/location/countries",
   async (request, reply) => {

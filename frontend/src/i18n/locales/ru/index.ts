@@ -19,7 +19,7 @@ export const defaultTranslation = {
   home: {
     title: 'Мероприятия',
     button: {
-      add_event_aria: 'добавить мероприятие',
+      add_event_aria: 'Добавить мероприятие',
       afisha_logo_aria: 'Вернуться к началу страницы'
     },
     events: {
@@ -62,7 +62,8 @@ export const defaultTranslation = {
         description: 'Описание',
         start: 'Начало',
         end: 'Окончание',
-        price: 'Стоимость'
+        price: 'Стоимость',
+        url_to_rigistration: 'Ссылка на регистрацию'
       }
     },
     language_selector: {
@@ -74,6 +75,17 @@ export const defaultTranslation = {
         manage: 'Управление событием'
       }
     }
+  },
+  dates: {
+    day: {
+      'key_zero': '{{count}} дней',
+      'key_one': '{{count}} день',
+      'key_few': '{{count}} дня',
+      'key_many': '{{count}} дней'
+    }
+  },
+  header: {
+    'subscription_expired': 'Ваша подписка закончится через $t(dates.day.key)'
   }
 }
 

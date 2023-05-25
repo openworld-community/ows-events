@@ -1,5 +1,6 @@
 import { api } from '@/plugins/axios'
 import { type EventOnPoster, type StandardResponse } from '@common/types'
+import type { PaymentInfo } from '@common/types/payment-info'
 
 export const getEvents = async (): Promise<EventOnPoster[]> => {
   const { data } = await api.get('/events')
@@ -105,5 +106,26 @@ export const getTimezoneByCountryAndCity = async ({
         timezoneOffset: string
       }>
     >('/location/meta/' + country + '/' + city)
+  ).data
+}
+
+export const sendFormAboutRegistration = async (data: {
+  [key: string]: string | number | boolean
+}) => {
+  await api.post('/event/registration', data)
+}
+
+export const getEventRegistration = async (id: string) => {
+  return (await api.get<StandardResponse<PaymentInfo>>('/events/registration/' + id)).data
+}
+
+export const getEventPayment = async (id: string) => {
+  return (
+    await api.get<
+      StandardResponse<{
+        event: EventOnPoster
+        paymantsInfo: PaymentInfo[]
+      }>
+    >('/event/payment-info/' + id)
   ).data
 }

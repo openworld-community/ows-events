@@ -60,6 +60,19 @@ const convertToLocaleString = (
 }
 
 const isManaged = getUserEvents().includes(id)
+
+const registrationClick = () => {
+  const url = posterEvent.value?.url
+  if (!url) {
+    return
+  }
+
+  if (url === 'self') {
+    router.push({ path: `/registration/${id}` })
+  } else {
+    window.open(url, '_blank')
+  }
+}
 </script>
 
 <template>
@@ -96,7 +109,12 @@ const isManaged = getUserEvents().includes(id)
         {{ posterEvent.description }}
       </div>
     </div>
-    <button class="card-contact-btn">{{ t('event.button.contact') }}</button>
+    <CustomButton
+      v-if="posterEvent.url"
+      button-class="card-contact-btn"
+      :button-text="t('event.button.contact')"
+      @click="registrationClick()"
+    />
 
     <CustomButton
       button-class="button is-small"

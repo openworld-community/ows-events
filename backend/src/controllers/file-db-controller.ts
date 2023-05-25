@@ -28,7 +28,7 @@ export class FileDbController {
     }
     this.addTask(
       TASK_TYPES.SAVE_BACKUP,
-      Date.now() + getTimestamp({ value: 12, type: TIMESTAMP_TYPES.HOURS })
+      Date.now() + getTimestamp({ value: 1, type: TIMESTAMP_TYPES.HOURS })
     );
 
     setInterval(
@@ -80,7 +80,7 @@ export class FileDbController {
         await this.makeBackup();
         this.addTask(
           TASK_TYPES.SAVE_BACKUP,
-          Date.now() + getTimestamp({ value: 12, type: TIMESTAMP_TYPES.HOURS })
+          Date.now() + getTimestamp({ value: 1, type: TIMESTAMP_TYPES.HOURS })
         );
         break;
 
@@ -103,7 +103,14 @@ export class FileDbController {
 
   private async makeBackup() {
     const dateString = new Date().toISOString().replaceAll(":", "_");
-    await fs.copyFile("assets/db/events.json", `assets/db/backup-${dateString}.json`);
+    await fs.copyFile(
+      "assets/db/events.json",
+      `assets/db/backup-events-${dateString}.json`
+    );
+    await fs.copyFile(
+      "assets/db/registrations.json",
+      `assets/db/backup-registrations-${dateString}.json`
+    );
   }
 
   private async loadFromDrive() {

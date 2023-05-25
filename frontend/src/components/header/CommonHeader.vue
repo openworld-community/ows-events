@@ -4,6 +4,10 @@ import { RouterLink, useRoute } from 'vue-router'
 
 const { t } = useTranslation()
 const route = useRoute()
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
 </script>
 
 <template>
@@ -11,13 +15,18 @@ const route = useRoute()
     <div class="header__container">
       <div class="header__left">
         <RouterLink to="/">
-          <img
+          <button
             v-if="route.name === 'home'"
-            src="@/assets/img/PeredelanoAfisha.svg"
-            width="142"
-            height="24"
-            alt="Peredelano Афиша"
-          />
+            @click.prevent="scrollToTop"
+            :aria-label="t('home.button.afisha_logo_aria')"
+          >
+            <img
+              src="@/assets/img/PeredelanoAfisha.svg"
+              width="142"
+              height="24"
+              alt="Peredelano Афиша"
+            />
+          </button>
           <img
             v-else
             src="@/assets/img/icon/back.svg"

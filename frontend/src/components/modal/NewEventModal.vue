@@ -198,7 +198,8 @@ const paramsForSubmit = computed(() => {
       city: inputValues.value.city
     },
     price: inputValues.value.price,
-    timezone: tz
+    timezone: tz,
+    url: inputValues.value.url
   }
 })
 

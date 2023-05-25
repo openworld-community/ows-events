@@ -18,6 +18,7 @@ import fs from "fs";
 import fsP from "fs/promises";
 import { Registration } from "@common/types/registration";
 import { PaymentInfo } from "@common/types/payment-info";
+import { type } from "os";
 
 interface eventParams {
   id: string;
@@ -155,7 +156,7 @@ server.get<{
   Params: eventParams;
   Reply: StandardResponse<{
     event: EventOnPoster;
-    paymantsInfo: PaymentInfo[];
+    paymantsInfo: PaymentInfo;
   }>;
 }>("/api/event/payment-info/:id", async (request, reply) => {
   const event = eventsStateController.getEvent(request.params.id);
@@ -163,6 +164,21 @@ server.get<{
     return {
       type: "error",
       errors: ["Event not found"],
+    };
+  }
+
+  const paymantsFileMd = `assets/presets/${request.params.id}.md`;
+  if (fs.existsSync(paymantsFileMd)) {
+    return {
+      type: "success",
+      data: {
+        event,
+        paymantsInfo: {
+          id: event.id,
+          type: "markdown",
+          source: fs.readFileSync(paymantsFileMd, "utf-8"),
+        },
+      },
     };
   }
 
@@ -189,7 +205,7 @@ server.get<{
     type: "success",
     data: {
       event,
-      paymantsInfo: eventPaymantsInfo,
+      paymantsInfo: eventPaymantsInfo[0],
     },
   };
 });

@@ -124,7 +124,7 @@ export const getEventPayment = async (id: string) => {
     await api.get<
       StandardResponse<{
         event: EventOnPoster
-        paymantsInfo: PaymentInfo[]
+        paymantsInfo: PaymentInfo
       }>
     >('/event/payment-info/' + id)
   ).data

@@ -14,6 +14,7 @@ import { BASE_URL } from '@/constants/url'
 import EventPreviewCard from '@/components/home/EventPreviewCard.vue'
 import AdCard from '@/components/home/AdCard.vue'
 import ButtonIcon from '@/components/common/button/ButtonIcon.vue'
+import CustomButton from "@/components/common/button/CustomButton.vue";
 
 const { t } = useTranslation()
 let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined
@@ -208,15 +209,18 @@ const now = Date.now()
         :input-placeholder="t('global.city')"
         :options-list="cities"
         v-model="city"
-        v-bind:key="country"
+        :key="country"
         :inputDisabled="!country"
       />
     </div>
   </section>
 
   <ul class="card-list">
-    <li v-for="event in eventsWithAdd" v-bind:key="event.id">
-      <EventPreviewCard :class="event.date < now ? 'expired' : ''" :event-data="event" />
+    <li v-for="event in eventsWithAdd" :key="event.id">
+      <EventPreviewCard
+        :class="event.date < now ? 'expired' : ''"
+        :event-data="event"
+      />
       <!--      <AdCard v-else :ad-data="event" class="ad-block" />-->
     </li>
   </ul>

@@ -9,13 +9,13 @@ const { userLocation } = storeToRefs(useLocationStore())
 <template>
   <div class="user-location__container">
     <Icon class="user-location__pin" name="map-pin" width="24" height="24" />
-    <div v-if="userLocation?.city" class="user-location__text">
+    <p v-if="userLocation?.city" class="user-location__text">
       {{ userLocation?.country }}, {{ userLocation?.city }}
-    </div>
-    <div v-else-if="userLocation?.country" class="user-location__text">
+    </p>
+    <p v-else-if="userLocation?.country" class="user-location__text">
       {{ userLocation.country }}
-    </div>
-    <div v-else class="user-location__text">Мы не смогли найти вас(</div>
+    </p>
+    <p v-else class="user-location__text">Мы не смогли найти вас(</p>
   </div>
 </template>
 

@@ -1,6 +1,7 @@
 [
   {
     "id": "tashkent-27-05",
+    "type": "table",
     "rows": [
       {
         "name": "USDT TRON (TRC20)",
@@ -21,6 +22,7 @@
   },
   {
     "id": "belgrade-27-05",
+    "type": "table",
     "rows": [
       {
         "name": "USDT TRON (TRC20)",

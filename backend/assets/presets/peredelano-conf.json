@@ -34,5 +34,71 @@
     },
     "image": "",
     "url": "self"
+  },
+  {
+    "title": "Peredelanoconf Амстердам",
+    "description": "",
+    "date": 1685278800000,
+    "durationInSeconds": 32340000,
+    "location": { "country": "Netherlands", "city": "Amsterdam" },
+    "price": 0,
+    "timezone": {
+      "timezoneName": "Europe/Amsterdam",
+      "timezoneOffset": "+02:00"
+    },
+    "image": "",
+    "id": "amsterdam-28-05",
+    "url": "self"
+  },
+  {
+    "title": "Peredelanoconf Прага",
+    "description": "",
+    "date": 1686402000000,
+    "durationInSeconds": 32340000,
+    "location": { "country": "Czech Republic", "city": "Prague" },
+    "price": 0,
+    "timezone": { "timezoneName": "Europe/Prague", "timezoneOffset": "+02:00" },
+    "image": "",
+    "id": "praga-10-06",
+    "url": "self"
+  },
+  {
+    "title": "Peredelanoconf Пхукет",
+    "description": "",
+    "date": 1685782740000,
+    "durationInSeconds": 28800000,
+    "location": { "country": "Thailand", "city": "Phuket" },
+    "price": 0,
+    "timezone": { "timezoneName": "Asia/Bangkok", "timezoneOffset": "+07:00" },
+    "image": "",
+    "id": "phuket-03-06",
+    "url": "self"
+  },
+  {
+    "title": "Peredelanoconf Ереван",
+    "description": "",
+    "date": 1686999600000,
+    "durationInSeconds": 32340000,
+    "location": { "country": "Armenia", "city": "Yerevan" },
+    "price": 0,
+    "timezone": { "timezoneName": "Asia/Yerevan", "timezoneOffset": "+04:00" },
+    "url": "self",
+    "image": "",
+    "id": "yerevan-17-06"
+  },
+  {
+    "title": "Peredelanoconf Limassol",
+    "description": "",
+    "date": 1687611540000,
+    "durationInSeconds": 32400000,
+    "location": { "country": "Cyprus", "city": "Limassol" },
+    "price": 0,
+    "timezone": {
+      "timezoneName": "Africa/Mbabane",
+      "timezoneOffset": "+02:00"
+    },
+    "url": "self",
+    "image": "",
+    "id": "limassol-24-06"
   }
 ]

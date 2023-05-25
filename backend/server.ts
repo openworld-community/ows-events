@@ -207,7 +207,7 @@ server.post<{
 
   const registrations = JSON.parse(oldRegistrations);
 
-  registrations.push(data);
+  registrations.push({ ...data, date: new Date() });
 
   fs.writeFileSync(
     "assets/db/registrations.json",

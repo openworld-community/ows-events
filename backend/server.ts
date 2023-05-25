@@ -14,6 +14,10 @@ import { imageController } from "./src/controllers/image-controller";
 import cityTimezones from "city-timezones";
 
 import moment from "moment-timezone";
+import fs from "fs";
+import fsP from "fs/promises";
+import { Registration } from "@common/types/registration";
+import { PaymentInfo } from "@common/types/payment-info";
 
 interface eventParams {
   id: string;
@@ -140,6 +144,135 @@ server.get<{
   async (request, reply): Promise<EventOnPoster | undefined> => {
     const eventId = request.params.id;
     return eventsStateController.getEvent(eventId);
+  }
+);
+
+server.get<{
+  Params: eventParams;
+  Reply: StandardResponse<{
+    event: EventOnPoster;
+    paymantsInfo: PaymentInfo[];
+  }>;
+}>("/api/event/payment-info/:id", async (request, reply) => {
+  const event = eventsStateController.getEvent(request.params.id);
+  if (!event) {
+    return {
+      type: "error",
+      errors: ["Event not found"],
+    };
+  }
+
+  const paymentsFile = "assets/presets/payments-info.json";
+
+  const paymantsInfo = JSON.parse(
+    fs.existsSync(paymentsFile)
+      ? fs.readFileSync(paymentsFile, "utf-8")
+      : "[]" || "[]"
+  ) as PaymentInfo[];
+
+  if (!paymantsInfo?.length) {
+    return {
+      type: "error",
+      errors: ["Paymants not found"],
+    };
+  }
+
+  const eventPaymantsInfo = paymantsInfo.filter(
+    (p) => p.id === request.params.id
+  );
+
+  return {
+    type: "success",
+    data: {
+      event,
+      paymantsInfo: eventPaymantsInfo,
+    },
+  };
+});
+
+server.post<{
+  Body: Registration;
+  Reply: StandardResponse<"ok">;
+}>("/api/event/registration", async (request, reply) => {
+  const data = await request.body;
+  if (!data) {
+    return {
+      type: "error",
+    };
+  }
+
+  const oldRegistrations = !fs.existsSync("assets/db/registrations.json")
+    ? "[]"
+    : fs.readFileSync("assets/db/registrations.json", "utf-8") || "[]";
+
+  const registrations = JSON.parse(oldRegistrations);
+
+  registrations.push(data);
+
+  fs.writeFileSync(
+    "assets/db/registrations.json",
+    JSON.stringify(registrations, null, 2)
+  );
+});
+
+// server.get<{
+//   Reply: StandardResponse<Registration>;
+//   Params: eventParams;
+// }>(
+//   "/api/registration/:id",
+//   async (request, reply): Promise<StandardResponse<Registration>> => {
+//     const eventId = request.params.id;
+//     const data = await fsP.readFile("assets/db/registrations.json", {
+//       encoding: "utf-8",
+//     });
+//     if (!data) {
+//       return {
+//         type: "error",
+//       };
+//     }
+//     const info = JSON.parse(data);
+//     if (!info) {
+//       return {
+//         type: "error",
+//       };
+//     }
+
+//     const eventRegistration = info.filter(
+//       (item: Registration) => item.eventId === eventId
+//     );
+//     return eventRegistration;
+//   }
+// );
+
+server.get<{
+  Params: eventParams;
+  Reply: StandardResponse<PaymentInfo>;
+}>(
+  "/api/payment-info/:id",
+  async (request, reply): Promise<StandardResponse<PaymentInfo>> => {
+    const eventId = request.params.id;
+    const data = await fsP.readFile("assets/presets/payments-info.json", {
+      encoding: "utf-8",
+    });
+    if (!data) {
+      return {
+        type: "error",
+      };
+    }
+    const info = JSON.parse(data);
+    if (!info) {
+      return {
+        type: "error",
+      };
+    }
+
+    const eventPaymentInfo = info.filter(
+      (item: PaymentInfo) => item.id === eventId
+    );
+    return {
+      type: "success",
+      data: eventPaymentInfo,
+    };
   }
 );
 

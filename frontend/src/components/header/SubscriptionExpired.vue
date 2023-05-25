@@ -25,7 +25,7 @@ onBeforeMount(() => {
   const expiredDate = new Date()
   expiredDate.setDate(expiredDate.getDate() + 30)
   localStorage.setItem('subscriptionExpiredDate', expiredDate.toDateString())
-  return (subscriptionExpiredDate.value = new Date())
+  return (subscriptionExpiredDate.value = expiredDate)
 })
 </script>
 

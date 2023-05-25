@@ -1,6 +1,14 @@
 import { defineTranslation } from '..'
 
 export const defaultTranslation = {
+  global: {
+    country: 'Страна',
+    city: 'Город',
+    search: 'Поиск',
+    timezone: 'Часовой пояс',
+    button: { back: 'Назад', share: 'Поделиться', cancel: 'Отмена' },
+    nav: 'Навигация'
+  },
   about: {
     title: 'Об Aфише',
     p1: 'Идея проекта "Афиши" заключается в создании удобной площадки для поиска мероприятий, которые проходят в интересующем пользователя регионе (с упором на IT-мероприятия, но в целом мы хотим добавлять все: от конференций до музыкальных вечеров).',
@@ -11,19 +19,12 @@ export const defaultTranslation = {
   home: {
     title: 'Мероприятия',
     button: {
-      'add-event-aria': 'добавить мероприятие'
-    },
-    input: {
-      'search-placeholder': 'Поиск',
-      'country-placeholder': 'Страна',
-      'city-placeholder': 'Город'
+      'add_event_aria': 'добавить мероприятие'
     },
     events: {
-      'image-alt': 'Фото мероприятия',
+      image_alt: 'Фото мероприятия',
       ad: 'Реклама',
-      'add-block-aria-label': 'Добавить блок',
-      'add-block-label': 'Добавить блок',
-      'anchor-chat': 'Перейти в чат'
+      anchor_chat: 'Перейти в чат'
     },
     peredelano: {
       description:
@@ -32,26 +33,44 @@ export const defaultTranslation = {
   },
   event: {
     button: {
-      back: 'назад',
-      delete: 'удалить событие',
-      edit: 'редактировать событие'
+      delete: 'Удалить событие',
+      edit: 'Редактировать событие',
+      contact: 'Связаться'
     },
     image: {
       event: 'изображение мероприятия'
+    }
+  },
+  component: {
+    user_location: {
+      not_found: 'Мы не смогли найти вас('
     },
-    new: {
-      title: 'Новое мероприятие',
+    new_event_modal: {
+      title: 'Добавьте мероприятие',
       cancel: 'Отмена',
       submit: 'Отправить',
-      'add-image': 'Добавить изображение',
+      add_image: 'Добавить фото',
+      remove_image: 'Удалить фото',
       fields: {
+        location: 'Локация',
+        country: 'Страна',
+        city: 'Город',
+        timezone: 'Часовой пояс',
+        main_info: 'Общая информация',
         title: 'Название',
         description: 'Описание',
         start: 'Начало',
         end: 'Окончание',
-        country: 'Страна',
-        city: 'Город',
-        price: 'Цена'
+        price: 'Стоимость'
+      }
+    },
+    language_selector: {
+      label: 'Язык'
+    },
+    header: {
+      about: 'Подробнее об Афише',
+      event: {
+        manage: 'Управление событием'
       }
     }
   },

@@ -9,7 +9,7 @@ const { t } = useTranslation()
 <template>
   <section class="about">
     <h2 class="title">{{ t('about.title') }}</h2>
-    <img :src="aboutUsImg" class="about__img" :alt="t('about.alt')"/>
+    <img :src="aboutUsImg" class="about__img" :alt="t('about.alt')" />
     <p>{{ t('about.idea') }}</p>
     <br />
     <p>{{ t('about.functionality') }}</p>
@@ -24,37 +24,37 @@ const { t } = useTranslation()
 </template>
 
 <style lang="less" scoped>
-  .about {
-    padding-left: var(--padding-side);
-    padding-right: var(--padding-side);
-    padding-top: var(--padding-vertical);
-    padding-bottom: var(--padding-vertical);
-  }
+.about {
+  padding-left: var(--padding-side);
+  padding-right: var(--padding-side);
+  padding-top: var(--padding-vertical);
+  padding-bottom: var(--padding-vertical);
+}
 
-  .about p {
-    font-size: var(--font-size-S);
-    line-height: 20px;
-  }
+.about p {
+  font-size: var(--font-size-S);
+  line-height: 20px;
+}
 
-  .title {
-    font-size: var(--font-size-XXL);
-    line-height: var(--line-height-XXL);
-    font-weight: var(--font-weight-bold);
-  }
+.title {
+  font-size: var(--font-size-XXL);
+  line-height: var(--line-height-XXL);
+  font-weight: var(--font-weight-bold);
+}
 
-  .about__img {
-    width: 100%;
-    min-width: 100%;
-    max-width: 100%;
-    height: 100%;
-    margin-top: var(--space-unrelated-items);
-    margin-bottom: var(--space-related-items);
-    border-radius: 4px;
-  }
+.about__img {
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  height: 100%;
+  margin-top: var(--space-unrelated-items);
+  margin-bottom: var(--space-related-items);
+  border-radius: 4px;
+}
 
-  .about__link {
-    color: var(--color-link);
-    text-decoration: underline;
-    font-weight: var(--font-weight-bold);
-  }
+.about__link {
+  color: var(--color-link);
+  text-decoration: underline;
+  font-weight: var(--font-weight-bold);
+}
 </style>

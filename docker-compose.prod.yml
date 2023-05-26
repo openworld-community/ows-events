@@ -47,6 +47,8 @@ services:
 
 
   frontend:
+    container_name: frontend
+    image: ghcr.io/openworld-community/ows-events:latest
     build:
       context: ./
       dockerfile: Dockerfile

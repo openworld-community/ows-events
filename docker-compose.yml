@@ -1,0 +1,37 @@
+version: "3.7"
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: '10m'
+    max-file: '5'
+
+services:
+  frontend:
+    container_name: frontend
+    image: ghcr.io/openworld-community/ows-events:latest
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    logging: *default-logging
+    restart: always
+    ports:
+      - "7080:7080"
+    volumes:
+      - assets-db:/app/backend/assets/db
+      - assets-img:/app/backend/assets/img
+
+volumes:
+  assets-db:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./assets/db
+
+  assets-img:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./assets/img

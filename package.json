@@ -12,7 +12,6 @@
     "concurrently": "^8.0.1"
   },
   "dependencies": {
-    "vite-plugin-svg-icons": "^2.0.1",
     "vue3-markdown-it": "^1.0.10"
   }
 }

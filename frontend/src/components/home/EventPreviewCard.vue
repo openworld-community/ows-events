@@ -33,9 +33,7 @@ const props = defineProps({
         }}
         {{ props.eventData.timezone?.timezoneName }})
       </p>
-      <a
-        class="card-description__geolink"
-        href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"
+      <a class="card-description__geolink"
         >{{ props.eventData.location.country }}, {{ props.eventData.location.city }}</a
       >
     </div>

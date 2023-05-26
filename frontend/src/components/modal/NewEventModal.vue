@@ -389,7 +389,7 @@ setTimeout(() => {
 
     <form class="modal-card__body body">
       <div v-for="input in eventInputs" :key="input.name" class="body__section section">
-        <h3 class="section__subtitle is-small">{{ input.label }}</h3>
+        <h3 class="section__subtitle">{{ input.label }}</h3>
         <div :class="input.type === 'column' ? 'section__column' : 'section__row'">
           <CustomInput
             class="section__input"
@@ -430,6 +430,7 @@ setTimeout(() => {
 <style scoped lang="less">
 .body {
   overflow-y: auto;
+  background-color: var(--color-white);
   padding: 20px var(--padding-side);
 }
 

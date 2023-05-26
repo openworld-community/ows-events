@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useTranslation } from '@/i18n'
 import aboutUsImg from '../../public/img/about-us@2x.jpg'
+import { REPO_URL } from '@/constants/url'
 
 const { t } = useTranslation()
 </script>
@@ -8,16 +9,16 @@ const { t } = useTranslation()
 <template>
   <section class="about">
     <h2 class="title">{{ t('about.title') }}</h2>
-    <img :src="aboutUsImg" class="about__img" alt="About Peredelano Afisha"/>
-    <p>{{ t('about.p1') }}</p>
+    <img :src="aboutUsImg" class="about__img" :alt="t('about.alt')"/>
+    <p>{{ t('about.idea') }}</p>
     <br />
-    <p>{{ t('about.p2') }}</p>
+    <p>{{ t('about.functionality') }}</p>
     <br />
-    <p>{{ t('about.p3') }}</p>
+    <p>{{ t('about.monetization') }}</p>
     <br />
     <p>
       {{ t('about.github') }}:
-      <a href="https://github.com/openworld-community/ows-events" class="about__link">Repo</a>
+      <a :href="REPO_URL" class="about__link" target="_blank" rel="noopener noreferrer">Repo</a>
     </p>
   </section>
 </template>

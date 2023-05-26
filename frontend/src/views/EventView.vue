@@ -104,6 +104,7 @@ const isManaged = getUserEvents().includes(id)
     <div class="event-actions">
       <template v-if="posterEvent.url">
         <CustomButton
+          v-if="posterEvent.url !== 'self'"
           class="event-actions__button"
           button-class="button__success"
           :button-text="t('event.button.contact')"
@@ -111,8 +112,8 @@ const isManaged = getUserEvents().includes(id)
           target="_blank"
         />
 
-        <!--   TODO     v-if: это ивент переделано-->
         <CustomButton
+          v-else
           class="event-actions__button"
           button-class="button__success"
           :button-text="t('event.button.register')"

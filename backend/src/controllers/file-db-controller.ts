@@ -18,14 +18,16 @@ type Task = {
 
 export class FileDbController {
   constructor() {
+    const registrationPath = "assets/db/registrations.json";
+
     if (!fsSync.existsSync("assets/db")) {
       fsSync.mkdirSync("assets/db");
       fsSync.writeFileSync("assets/db/events.json", "[]", {});
-      fsSync.writeFileSync("assets/db/registration.json", "[]", {});
+      fsSync.writeFileSync(registrationPath, "[]", {});
     } else if (!fsSync.existsSync("assets/db/events.json")) {
       fsSync.writeFileSync("assets/db/events.json", "[]", {});
-    } else if (!fsSync.existsSync("assets/db/registration.json")) {
-      fsSync.writeFileSync("assets/db/registration.json", "[]", {});
+    } else if (!fsSync.existsSync(registrationPath)) {
+      fsSync.writeFileSync(registrationPath, "[]", {});
     } else {
       this.addTask(TASK_TYPES.READ_FILE);
     }

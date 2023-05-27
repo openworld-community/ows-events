@@ -145,14 +145,14 @@ const checkStatus = (): string => {
   ];
 
   let counter = 0;
-  
+
   urls.forEach(async (url) => {
     const { status, message } = await url.validator(url.url);
     if (!status) {
       emitError(`${url.description} is down. Error: ${message}`);
     }
     counter++;
-    if(counter % 3 === 0) {
+    if (counter % 3 === 0) {
       counter = 0;
       return "I am alive";
     }

@@ -151,12 +151,11 @@ const checkStatus = (): string => {
     if (!status) {
       emitError(`${url.description} is down. Error: ${message}`);
     }
-    
     counter++;
     if(counter % 3 === 0) {
+      counter = 0;
       return "I am alive";
     }
-    
   });
 
   return "";

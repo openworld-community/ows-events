@@ -140,3 +140,6 @@ backend/assets/img/
 assets/db/
 assets/img/
 !assets/*/.gitkeep
+
+
+bot-status-checker/assets/db/

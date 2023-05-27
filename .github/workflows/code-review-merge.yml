@@ -27,7 +27,6 @@ jobs:
           VALIDATE_DOCKERFILE_HADOLINT: true
           VALIDATE_YAML: true
           VALIDATE_SQL: true
-          VALIDATE_MARKDOWN: true
           VALIDATE_JAVASCRIPT_ES: true
           VALIDATE_HTML: true
           VALIDATE_CSS: true

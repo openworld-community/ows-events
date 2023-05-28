@@ -10,7 +10,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <a
+  <NuxtLink
     :href="`/event/${props.eventData.id}`"
     class="card"
   >
@@ -39,7 +39,7 @@ const props = defineProps({
         {{ props.eventData.location.country }}, {{ props.eventData.location.city }}
       </a>
     </div>
-  </a>
+  </NuxtLink>
 </template>
 
 <style scoped lang="less">

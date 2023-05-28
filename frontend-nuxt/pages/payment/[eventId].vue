@@ -4,7 +4,6 @@ import { type EventOnPoster } from '../../../common/types';
 import { type PaymentInfo } from '../../../common/types/payment-info';
 import { ref } from 'vue';
 import Markdown from 'vue3-markdown-it';
-
 definePageMeta({ name: 'paymentInfo' });
 
 const route = useRoute();

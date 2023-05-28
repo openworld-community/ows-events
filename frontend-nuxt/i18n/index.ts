@@ -12,3 +12,7 @@ export const resources: Record<
   [defaultLocale]: defaultTranslation
   // en: englishTranslation
 };
+
+// todo разбиение файлов по неймспейсам с лейзи лоадингом
+// todo namespaces(pages) lazy loading
+// todo поддержка числительных

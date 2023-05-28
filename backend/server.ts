@@ -18,7 +18,8 @@ import fs from "fs";
 import fsP from "fs/promises";
 import { Registration } from "@common/types/registration";
 import { PaymentInfo } from "@common/types/payment-info";
-import { type } from "os";
+import axios from "axios";
+import TelegramBot from "node-telegram-bot-api";
 
 interface eventParams {
   id: string;
@@ -52,6 +53,21 @@ server.get<{ Reply: string[] }>(
     return countriesAndCitiesController.countries;
   }
 );
+
+server.get("/ping", async (request, reply) => {
+  return "pong";
+});
+
+server.get<{
+  Params: {
+    id: number;
+  };
+  Body: TelegramBot.Message | null;
+}>("/api/postauth/token/:id", async (request, reply) => {
+  return await axios
+    .get(`http://localhost:7090/user/${request.params.id}`)
+    .then((res) => res.data);
+});
 
 server.get<{
   Params: { country: string };

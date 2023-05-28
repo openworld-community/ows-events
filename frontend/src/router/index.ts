@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import EventView from '../views/EventView.vue'
 import PaymentInfo from '../views/PaymentInfo.vue'
+import PostAuth from '../views/PostAuth.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,11 @@ const router = createRouter({
       path: '/payment/:eventId?',
       name: 'paymentInfo',
       component: PaymentInfo
+    },
+    {
+      path: '/postauth/:token',
+      name: 'postauth',
+      component: PostAuth
     }
   ]
 })

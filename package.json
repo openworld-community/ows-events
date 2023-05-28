@@ -9,9 +9,14 @@
     "demo:build": "cd frontend && npm run build:only"
   },
   "devDependencies": {
+    "@types/node-telegram-bot-api": "^0.61.6",
+    "@types/uuid": "^9.0.1",
     "concurrently": "^8.0.1"
   },
   "dependencies": {
+    "axios": "^1.4.0",
+    "node-telegram-bot-api": "^0.61.0",
+    "uuid": "^9.0.0",
     "vue3-markdown-it": "^1.0.10"
   }
 }

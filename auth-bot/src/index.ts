@@ -1,6 +1,7 @@
 import TelegramBot from "node-telegram-bot-api";
 import fs from "fs";
 import fastify from "fastify";
+import jwt from "jsonwebtoken";
 
 const server = fastify({ logger: true });
 
@@ -19,7 +20,10 @@ type User = {
 };
 
 const temporaryLogins: {
-  [key: number]: TelegramBot.Message | null;
+  [key: string]: {
+    userInfo: TelegramBot.Message | null;
+    backurl: string | null;
+  };
 } = {};
 
 server.get("/ping", async (request, reply) => {
@@ -28,10 +32,60 @@ server.get("/ping", async (request, reply) => {
 
 server.get<{
   Params: {
+    id: string;
+    encodede_backurl: string;
+  };
+}>("/auth/:id/:encodede_backurl", async (request, reply) => {
+  if (!request.params.id) {
+    return "No id";
+  }
+  if (!request.params.encodede_backurl) {
+    return "No backurl";
+  }
+
+  if (temporaryLogins[request.params.id]) {
+    delete temporaryLogins[request.params.id];
+  }
+  temporaryLogins[request.params.id] = {
+    backurl: decodeURI(request.params.encodede_backurl),
+    userInfo: null,
+  };
+
+  console.log(token);
+
+  reply.redirect(
+    302,
+    "https://t.me/afisha_authorization_bot?start=" + request.params.id
+  );
+});
+
+server.get<{
+  Params: {
     id: number;
   };
   Body: TelegramBot.Message | null;
 }>("/user/:id", async (request, reply) => {
+  const user = temporaryLogins[request.params.id] || null;
+  if (!user) {
+    return null;
+  }
+
+  const userMessageInfo = user.userInfo?.from;
+
+  if (!userMessageInfo) {
+    return null;
+  }
+
+  return jwt.sign(
+    {
+      username:
+        userMessageInfo.username ||
+        userMessageInfo.first_name + " " + userMessageInfo.last_name,
+      id: userMessageInfo.id,
+    },
+    "secret"
+  );
+
   return temporaryLogins[request.params.id] || null;
 });
 
@@ -91,17 +145,9 @@ bot.onText(/\/start/, (msg) => {
     return;
   }
 
-  temporaryLogins[+secretCode] = msg;
+  temporaryLogins[secretCode].userInfo = msg;
 
-  bot.sendMessage(msg.chat.id, "You will receive messages from now on");
-});
-
-bot.onText(/\/stop/, (msg) => {
-  const chatId = msg.chat.id;
-
-  users.markUserAsInactive(chatId);
-
-  bot.sendMessage(chatId, "You will not receive any more messages");
+  bot.sendMessage(msg.chat.id, temporaryLogins[secretCode].backurl || "");
 });
 
 const emit = (text: string) => {

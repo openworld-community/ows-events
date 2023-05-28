@@ -4,12 +4,56 @@ import { RouterLink, useRoute } from 'vue-router'
 import SubscriptionExpired from './SubscriptionExpired.vue'
 import Icon from '@/components/common/icon/Icon.vue'
 
+import { v4 } from 'uuid'
+import { BASE_URL } from '@/constants/url'
+import { ref } from 'vue'
+
+import {
+  verify
+} from 'jsonwebtoken'
+
 const { t } = useTranslation()
 const route = useRoute()
+
+const user = ref<{
+  username: string
+  id: string
+} | null>(null)
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
+
+const checkUserToken = () => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    return
+  }
+  console.log(token)
+  // const decoded = verify(token)
+  // console.log(decoded)
+  // if (decoded) {
+    // user.value = {
+    //   username: decoded.username,
+    //   id: decoded.id
+    // }
+  // }
+}
+
+checkUserToken()
+
+if (!localStorage.getItem('TEMPORARY_TOKEN')) {
+  localStorage.setItem('TEMPORARY_TOKEN', v4())
+}
+
+const temporaryId = localStorage.getItem('TEMPORARY_TOKEN')
+const AUTH_SERVER_URL = 'http://localhost:7090'
+const authLink = ref<string>(
+  `${AUTH_SERVER_URL}/auth/${temporaryId}/${encodeURIComponent(
+    window.location.href + 'postauth/' + temporaryId
+  )}`
+)
+console.log(authLink)
 </script>
 
 <template>
@@ -58,6 +102,11 @@ function scrollToTop() {
           <!--              :alt="t('global.button.share')"-->
           <!--            />-->
           <!--          </div>-->
+
+          <p v-if="user && user.username">
+            {{ user.username }}
+          </p>
+          <a v-else :href="authLink">Login via Telegram</a>
         </nav>
       </div>
     </div>

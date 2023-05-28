@@ -129,3 +129,8 @@ export const getEventPayment = async (id: string) => {
     >('/event/payment-info/' + id)
   ).data
 }
+
+export const getToken = async (id: string) => {
+  const token = await api.get<string | null>('/postauth/token/' + id)
+  return token.data
+}

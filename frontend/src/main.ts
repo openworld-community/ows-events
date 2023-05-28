@@ -12,7 +12,8 @@ import i18next from 'i18next'
 import { resources, defaultLocale } from './i18n/index'
 i18next.init({
   fallbackLng: defaultLocale,
-  resources
+  resources,
+  detection: {}
 })
 
 const app = createApp(App)

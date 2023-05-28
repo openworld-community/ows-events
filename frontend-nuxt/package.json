@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "nuxt dev",
-    "build": "run-p type-check build-only",
+    "build": "run-p type-check build:only",
     "build:only": "nuxt build",
     "preview": "nuxt preview",
     "test:unit": "vitest",
-    "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
+    "type-check": "nuxi typecheck",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
     "generate": "nuxt generate",
@@ -29,6 +29,8 @@
     "vue-router": "^4.2.0"
   },
   "devDependencies": {
+    "@nuxt/eslint-config": "^0.1.1",
+    "@nuxtjs/eslint-module": "^4.1.0",
     "@rushstack/eslint-patch": "^1.2.0",
     "@tsconfig/node18": "^2.0.1",
     "@types/jsdom": "^21.1.1",
@@ -41,7 +43,7 @@
     "@vue/test-utils": "^2.3.2",
     "@vue/tsconfig": "^0.4.0",
     "autoprefixer": "^10.4.13",
-    "eslint": "^8.40.0",
+    "eslint": "^8.41.0",
     "eslint-plugin-vue": "^9.11.0",
     "jsdom": "^22.0.0",
     "npm-run-all": "^4.1.5",

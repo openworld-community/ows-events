@@ -15,7 +15,6 @@ const _getUserLocation = async (): Promise<UserLocation> => {
 
   try {
     const { data } = await api.get(url);
-
     const location = data?.location;
     const country = location?.country;
 
@@ -66,13 +65,17 @@ const useLocationStore = defineStore('counter', {
       }
 
       this.pickedCountry = country;
-      localStorage.setItem('LOCATIONS_PICKED_COUNTRY', country);
+      if (process.client) {
+        localStorage.setItem('LOCATIONS_PICKED_COUNTRY', country);
+      }
 
       this.loadCitiesByCountry(country);
     },
     async pickCity(city: string) {
       this.pickedCity = city;
-      localStorage.setItem('LOCATIONS_PICKED_CITY', city);
+      if (process.client) {
+        localStorage.setItem('LOCATIONS_PICKED_CITY', city);
+      }
     },
 
     async loadCountries() {
@@ -82,7 +85,9 @@ const useLocationStore = defineStore('counter', {
 
       await api.get('/location/countries').then((response) => {
         this.countries = response.data;
-        localStorage.setItem('LOCATIONS_COUNTRIES', JSON.stringify(response.data));
+        if (process.client) {
+          localStorage.setItem('LOCATIONS_COUNTRIES', JSON.stringify(response.data));
+        }
       });
     },
     async loadCitiesByCountry(country: string) {
@@ -104,26 +109,16 @@ const useLocationStore = defineStore('counter', {
     },
     async init() {
       this.userLocation = await _getUserLocation();
-
       await this.loadCountries();
-      if (!this.pickedCountry) {
-        return;
-      }
+      if (!this.pickedCountry) return;
+
       await this.loadCitiesByCountry(this.pickedCountry);
       await this.pickCountry(this.pickedCountry);
-
-      if (!this.pickedCity) {
-        return;
-      }
+      if (!this.pickedCity) return;
 
       await this.pickCity(this.pickedCity);
     }
   }
-});
-
-setTimeout(() => {
-  const locationStore = useLocationStore();
-  locationStore.init();
 });
 
 export { useLocationStore };

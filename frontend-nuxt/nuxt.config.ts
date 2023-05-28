@@ -15,7 +15,7 @@ export default defineNuxtConfig({
       // vue(),
       vueJsx(),
       createSvgIconsPlugin({
-        iconDirs: [path.resolve(process.cwd(), 'src/assets/img/icon')],
+        iconDirs: [path.resolve(process.cwd(), 'assets/img/icon')],
         symbolId: '[name]',
         inject: 'body-first'
       })

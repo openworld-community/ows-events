@@ -10,5 +10,10 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest'
   },
-  ignorePatterns: ['./node_modules/*']
-}
+  ignorePatterns: ['./node_modules/*'],
+  rules: {
+    'vue/html-self-closing': 'off',
+    'vue/multi-word-component-names': 'off',
+    'vue/html-indent': 'off'
+  }
+};

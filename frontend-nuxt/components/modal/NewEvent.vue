@@ -230,7 +230,7 @@ const submitEvent = async () => {
       if (res.type === 'success') {
         const id = res.data.id;
         addUserEvent(id);
-        navigateTo(`/event/${id}`);
+        await navigateTo(`/event/${id}`);
       }
     }
 

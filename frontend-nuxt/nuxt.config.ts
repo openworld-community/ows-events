@@ -6,7 +6,7 @@ import { fileURLToPath, URL } from 'node:url';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@pinia/nuxt', '@nuxtjs/eslint-module'],
+  modules: ['@pinia/nuxt'],
   typescript: { strict: true },
   vite: {
     plugins: [

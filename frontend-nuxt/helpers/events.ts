@@ -2,6 +2,7 @@ import parseJSON from './json';
 
 export const localUserEventsKey = 'USER_POSTS';
 export function getUserEvents() {
+  if (process.server) return [];
   return parseJSON<string[]>(localStorage.getItem(localUserEventsKey) ?? '[]', []);
 }
 

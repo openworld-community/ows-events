@@ -14,6 +14,7 @@ module.exports = {
   rules: {
     'vue/html-self-closing': 'off',
     'vue/multi-word-component-names': 'off',
-    'vue/html-indent': 'off'
+    'vue/html-indent': 'off',
+    'vue/singleline-html-element-content-newline': 'off'
   }
 };

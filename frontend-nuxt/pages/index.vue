@@ -5,7 +5,6 @@ import { getEvents, getEventsByParams } from '@/services/events.services';
 import { useLocationStore } from '@/stores/location.store';
 import { storeToRefs } from 'pinia';
 import { VueFinalModal } from 'vue-final-modal';
-import { useRoute, useRouter } from 'vue-router';
 import { BASE_URL } from '@/constants/url';
 
 definePageMeta({ name: 'home' });
@@ -16,7 +15,6 @@ const locationStore = useLocationStore();
 locationStore.loadCountries();
 const { countries, cities, pickedCountry, pickedCity } = storeToRefs(locationStore);
 
-const router = useRouter();
 const route = useRoute();
 const posterEvents = ref<EventOnPoster[]>([]);
 
@@ -40,7 +38,9 @@ const loadPosterEvents = async () => {
   }
 };
 
-loadPosterEvents();
+// todo - causes hydration mismtach, MUST be fixed
+// без await ивенты грузятся только на клиенте
+await loadPosterEvents();
 
 const planToLoadEvents = () => {
   lazyLoadTimeout && clearTimeout(lazyLoadTimeout);
@@ -62,7 +62,7 @@ watch(
   search,
   async (_search) => {
     planToLoadEvents();
-    await router.push({ query: { ...route.query, search: _search || 'None' } });
+    await navigateTo({ query: { ...route.query, search: _search || 'None' } });
   },
   { deep: true }
 );
@@ -91,6 +91,7 @@ const filteredValues = computed(() => {
   return getFilteredEvents(posterEvents.value, search.value, country.value, city.value);
 });
 
+// todo - events are not sorted by date
 const eventsWithAdd = computed((): (EventOnPoster & { type: 'event' })[] => {
   const events = [...filteredValues.value];
   return events.map((x) => {
@@ -104,6 +105,7 @@ const eventsWithAdd = computed((): (EventOnPoster & { type: 'event' })[] => {
         : 'https://picsum.photos/400/300'
     };
   });
+
   // const newEvents: (
   //   | (EventOnPoster & { type: 'event' })
   //   | {
@@ -174,7 +176,6 @@ const now = Date.now();
     <div class="location">
       <HomeUserLocation />
     </div>
-
     <section class="search">
       <h1 class="search__title">
         {{ $translate('home.title') }}

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { type PropType } from 'vue';
+
 type ButtonType = 'button' | 'submit' | 'reset' | undefined;
 
 const props = defineProps({
@@ -61,7 +62,7 @@ const props = defineProps({
     :disabled="!props.isActive"
   >
     <span class="button__text">{{ props.buttonText }}</span>
-    <CommonCustomIcon
+    <CommonIcon
       v-if="props.iconName"
       class="button__icon"
       :name="props.iconName"

@@ -101,7 +101,7 @@ const closeModal = () => {
 </script>
 
 <template>
-  <ModalWrapper>
+  <CommonModalWrapper>
     <div class="modal-card form">
       <div class="modal-card__head">
         <h2 class="modal-card__title">
@@ -213,7 +213,7 @@ const closeModal = () => {
         />
       </div>
     </div>
-  </ModalWrapper>
+  </CommonModalWrapper>
 </template>
 
 <style lang="less" scoped>
@@ -225,6 +225,7 @@ const closeModal = () => {
   align-items: center;
   gap: var(--space-unrelated-items);
   background: var(--color-white);
+
   &__head,
   &__foot {
     width: 100%;

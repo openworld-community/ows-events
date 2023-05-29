@@ -16,14 +16,14 @@ function scrollToTop() {
           :aria-label="$translate('home.button.afisha_logo_aria')"
           @click.prevent="scrollToTop"
         >
-          <CommonCustomIcon
+          <CommonIcon
             v-if="route.name === 'home'"
             name="peredelano-afisha"
             width="142"
             height="24"
             alt="Peredelano Афиша"
           />
-          <CommonCustomIcon
+          <CommonIcon
             v-else
             name="back"
             width="24"
@@ -49,7 +49,7 @@ function scrollToTop() {
             to="/about"
             class="header__navigation-link"
           >
-            <CommonCustomIcon
+            <CommonIcon
               name="info"
               width="24"
               height="24"

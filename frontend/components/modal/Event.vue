@@ -363,7 +363,7 @@ const eventInputs: {
 </script>
 
 <template>
-  <ModalWrapper
+  <CommonModalWrapper
     :hide-overlay="false"
     overlay-transition="vfm-fade"
     overlay-transition-duration="2600"
@@ -427,7 +427,7 @@ const eventInputs: {
         />
       </div>
     </div>
-  </ModalWrapper>
+  </CommonModalWrapper>
 </template>
 
 <style scoped lang="less">

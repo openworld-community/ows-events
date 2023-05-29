@@ -132,7 +132,7 @@ const showPicker = () => {
         class="custom-input__button custom-input__button--clear"
         @click.prevent="inputData = ''"
       >
-        <CommonCustomIcon
+        <CommonIcon
           name="delete"
           width="24"
           height="24"
@@ -149,7 +149,7 @@ const showPicker = () => {
         class="custom-input__button custom-input__button--icon"
         @click.prevent="showPicker"
       >
-        <CommonCustomIcon
+        <CommonIcon
           :name="ICON_DICTIONARY[props.inputName]"
           width="24"
           height="24"
@@ -164,7 +164,7 @@ const showPicker = () => {
         "
         class="custom-input__button custom-input__button--icon"
       >
-        <CommonCustomIcon
+        <CommonIcon
           :name="ICON_DICTIONARY[props.inputName]"
           width="24"
           height="24"

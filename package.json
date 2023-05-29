@@ -9,7 +9,8 @@
     "demo:build": "cd frontend && npm run build:only"
   },
   "devDependencies": {
-    "concurrently": "^8.0.1"
+    "concurrently": "^8.0.1",
+    "prettier": "2.8.8"
   },
   "dependencies": {
     "vue3-markdown-it": "^1.0.10"

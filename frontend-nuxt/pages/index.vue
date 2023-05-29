@@ -4,8 +4,12 @@ import { computed, ref, watch } from 'vue';
 import { getEvents, getEventsByParams } from '@/services/events.services';
 import { useLocationStore } from '@/stores/location.store';
 import { storeToRefs } from 'pinia';
-import { VueFinalModal } from 'vue-final-modal';
+import { useModal } from 'vue-final-modal';
 import { BASE_URL } from '@/constants/url';
+import NewEventModal from '../components/modal/NewEvent.vue';
+
+const { open: openEventModal, close, patchOptions } = useModal({ component: NewEventModal });
+patchOptions({ attrs: { close } });
 
 definePageMeta({ name: 'home' });
 
@@ -22,7 +26,6 @@ const searchFromRoute = route.query.search?.toString();
 const search = ref<string>(searchFromRoute === 'None' ? '' : searchFromRoute || '');
 const country = ref<string>(pickedCountry.value || '');
 const city = ref<string>(pickedCity.value || '');
-const isModalOpen = ref<boolean>(false);
 
 locationStore.pickCountry(pickedCountry.value);
 
@@ -38,8 +41,6 @@ const loadPosterEvents = async () => {
   }
 };
 
-// todo - causes hydration mismtach, MUST be fixed
-// без await ивенты грузятся только на клиенте
 await loadPosterEvents();
 
 const planToLoadEvents = () => {
@@ -91,7 +92,7 @@ const filteredValues = computed(() => {
   return getFilteredEvents(posterEvents.value, search.value, country.value, city.value);
 });
 
-// todo - events are not sorted by date
+// todo - new created events are not sorted by date
 const eventsWithAdd = computed((): (EventOnPoster & { type: 'event' })[] => {
   const events = [...filteredValues.value];
   return events.map((x) => {
@@ -230,22 +231,8 @@ const now = Date.now();
       icon-height="56"
       aria-haspopup="true"
       :aria-label="$translate('home.button.add_event_aria')"
-      @click="isModalOpen = true"
+      @click="openEventModal()"
     />
-
-    <vue-final-modal
-      v-model="isModalOpen"
-      :hide-overlay="false"
-      overlay-transition="vfm-fade"
-      overlay-transition-duration="2600"
-      content-transition="vfm-fade"
-      swipe-to-close="down"
-      :click-to-close="true"
-      :esc-to-close="true"
-      :lock-scroll="true"
-    >
-      <ModalNewEvent @close-modal="isModalOpen = false" />
-    </vue-final-modal>
   </div>
 </template>
 

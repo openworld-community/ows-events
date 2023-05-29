@@ -14,22 +14,20 @@ import { useLocationStore } from '@/stores/location.store';
 import { type EventOnPoster } from '../../../common/types';
 import { addUserEvent } from '../../helpers/events';
 
-const emit = defineEmits(['closeModal']);
 const { $translate } = useNuxtApp();
 
 type Props = {
   dataForEdit?: EventOnPoster;
+  close: () => void;
 };
 
 const props = defineProps<Props>();
-
 const locationStore = useLocationStore();
 locationStore.loadCountries();
 const { countries, cities } = storeToRefs(locationStore);
 
 const isLoading = ref(false);
 const newImageFile = ref<null | File>(null);
-const isModalOpen = ref(false);
 
 const allTimezones = ref<string[]>([]);
 
@@ -163,10 +161,7 @@ const checkFormFilling = computed(() => {
 });
 
 const closeModal = () => {
-  isModalOpen.value = false;
-  setTimeout(() => {
-    emit('closeModal');
-  }, 300);
+  setTimeout(() => props.close(), 300);
 };
 
 const paramsForSubmit = computed(() => {
@@ -365,70 +360,74 @@ const eventInputs: {
     ]
   }
 ];
-
-setTimeout(() => {
-  isModalOpen.value = true;
-}, 100);
 </script>
 
 <template>
-  <div
-    class="modal-card"
-    :class="!isModalOpen ? 'new-event-container-hidden' : 'new-event-container-open'"
+  <ModalWrapper
+    :hide-overlay="false"
+    overlay-transition="vfm-fade"
+    overlay-transition-duration="2600"
+    content-transition="vfm-fade"
+    swipe-to-close="down"
+    :click-to-close="true"
+    :esc-to-close="true"
+    :lock-scroll="true"
   >
-    <header class="modal-card__head">
-      <h2 class="modal-card__title">
-        {{ $translate('component.new_event_modal.title') }}
-      </h2>
-    </header>
+    <div class="modal-card">
+      <header class="modal-card__head">
+        <h2 class="modal-card__title">
+          {{ $translate('component.new_event_modal.title') }}
+        </h2>
+      </header>
 
-    <form class="modal-card__body body">
-      <div
-        v-for="input in eventInputs"
-        :key="input.name"
-        class="body__section section"
-      >
-        <h3 class="section__subtitle">
-          {{ input.label }}
-        </h3>
-        <div :class="input.type === 'column' ? 'section__column' : 'section__row'">
-          <CommonInput
-            v-for="c in input.child"
-            :key="c.name"
-            v-model="inputValues[c.name]"
-            class="section__input"
-            :input-type="c.type"
-            :options-list="c.options"
-            :input-placeholder="c.label"
-            :input-name="c.name"
-            :is-required="c.required"
-          />
+      <form class="modal-card__body body">
+        <div
+          v-for="input in eventInputs"
+          :key="input.name"
+          class="body__section section"
+        >
+          <h3 class="section__subtitle">
+            {{ input.label }}
+          </h3>
+          <div :class="input.type === 'column' ? 'section__column' : 'section__row'">
+            <CommonInput
+              v-for="c in input.child"
+              :key="c.name"
+              v-model="inputValues[c.name]"
+              class="section__input"
+              :input-type="c.type"
+              :options-list="c.options"
+              :input-placeholder="c.label"
+              :input-name="c.name"
+              :is-required="c.required"
+            />
+          </div>
         </div>
-      </div>
 
-      <CommonImageLoader
-        v-model="newImageFile"
-        :external-image="inputValues.image"
-      />
-    </form>
-    <div class="modal-card__foot">
-      <CommonButton
-        class="modal-card__button"
-        button-class="button__success"
-        :button-text="$translate('component.new_event_modal.submit')"
-        :is-active="checkFormFilling && !isLoading"
-        :is-loading="isLoading"
-        @click="isLoading ? null : submitEvent()"
-      />
-      <CommonButton
-        class="modal-card__button"
-        button-class="button__ordinary"
-        :button-text="$translate('component.new_event_modal.cancel')"
-        :is-active="!isLoading"
-        @click="closeModal()"
-      />
+        <CommonImageLoader
+          v-model="newImageFile"
+          :external-image="inputValues.image"
+        />
+      </form>
+      <div class="modal-card__foot">
+        <CommonButton
+          class="modal-card__button"
+          button-class="button__success"
+          :button-text="$translate('component.new_event_modal.submit')"
+          :is-active="checkFormFilling && !isLoading"
+          :is-loading="isLoading"
+          @click="isLoading ? null : submitEvent()"
+        />
+        <CommonButton
+          class="modal-card__button"
+          button-class="button__ordinary"
+          :button-text="$translate('component.new_event_modal.cancel')"
+          :is-active="!isLoading"
+          @click="closeModal()"
+        />
+      </div>
     </div>
-  </div>
+  </ModalWrapper>
 </template>
 
 <style scoped lang="less">

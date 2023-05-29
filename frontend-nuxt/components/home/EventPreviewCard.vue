@@ -35,9 +35,10 @@ const props = defineProps({
         }}
         {{ props.eventData.timezone?.timezoneName }})
       </p>
-      <a class="card-description__geolink">
+      <!-- todo должна быть ссылка на карту по геотегу, НО важно помнить, что нельзя <a/> ставить внутри других <a/> элементов, в том числе <NuxtLink/> и прочих -->
+      <p class="card-description__geolink">
         {{ props.eventData.location.country }}, {{ props.eventData.location.city }}
-      </a>
+      </p>
     </div>
   </NuxtLink>
 </template>

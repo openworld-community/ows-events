@@ -2,9 +2,11 @@
 import { computed, ref } from 'vue';
 import { type EventOnPoster } from '../../../common/types/event';
 import { deleteEvent, getEvent } from '@/services/events.services';
-import { VueFinalModal } from 'vue-final-modal';
+import { VueFinalModal, useModal } from 'vue-final-modal';
 import { BASE_URL } from '@/constants/url';
 import { getUserEvents } from '@/helpers/events';
+import RegistrationModal from '../../components/modal/Registration.vue';
+import NewEventModal from '../../components/modal/NewEvent.vue';
 
 definePageMeta({ name: 'event' });
 
@@ -12,8 +14,22 @@ const posterEvent = ref<EventOnPoster | null>(null);
 const route = useRoute();
 const id = route.params.id as string;
 
-const isModalRegistrationOpen = ref(false);
-const isModalEventOpen = ref(false);
+const {
+  open: openRegistrationModal,
+  close: closeRegistrationModal,
+  patchOptions: patchRegistrationModal
+} = useModal({
+  component: RegistrationModal,
+  attrs: { eventId: id, close: () => void 0 }
+});
+patchRegistrationModal({ attrs: { close: closeRegistrationModal } });
+
+const {
+  open: openEventModal,
+  close: closeEventModal,
+  patchOptions: patchEventModal
+} = useModal({ component: NewEventModal });
+patchEventModal({ attrs: { close: closeEventModal } });
 
 if (!(typeof id === 'string')) {
   await navigateTo({ path: '/' });
@@ -23,7 +39,7 @@ const loadPosterEvent = async () => {
   posterEvent.value = await getEvent(id);
 };
 
-loadPosterEvent();
+await loadPosterEvent();
 
 const deleteCard = async () => {
   await deleteEvent(id);
@@ -119,7 +135,7 @@ const isManaged = getUserEvents().includes(id);
           class="event-actions__button"
           button-class="button__success"
           :button-text="$translate('event.button.register')"
-          @click="isModalRegistrationOpen = true"
+          @click="openRegistrationModal()"
         />
       </template>
 
@@ -128,7 +144,7 @@ const isManaged = getUserEvents().includes(id);
           class="event-actions__button"
           button-class="button__success"
           :button-text="$translate('event.button.edit')"
-          @click="isModalEventOpen = true"
+          @click="openEventModal()"
         />
 
         <CommonButton
@@ -139,42 +155,6 @@ const isManaged = getUserEvents().includes(id);
         />
       </template>
     </div>
-
-    <!--    TODO вынести в отдельный компонент-->
-    <vue-final-modal
-      v-model="isModalRegistrationOpen"
-      :hide-overlay="false"
-      overlay-transition="vfm-fade"
-      overlay-transition-duration="2600"
-      content-transition="vfm-fade"
-      swipe-to-close="down"
-      :click-to-close="true"
-      :esc-to-close="true"
-      :lock-scroll="true"
-    >
-      <ModalRegistration
-        v-if="isModalRegistrationOpen"
-        :event-id="id"
-        @close="isModalRegistrationOpen = false"
-      />
-    </vue-final-modal>
-    <vue-final-modal
-      v-model="isModalEventOpen"
-      :hide-overlay="false"
-      overlay-transition="vfm-fade"
-      overlay-transition-duration="2600"
-      content-transition="vfm-fade"
-      swipe-to-close="down"
-      :click-to-close="true"
-      :esc-to-close="true"
-      :lock-scroll="true"
-    >
-      <ModalNewEvent
-        v-if="isModalEventOpen"
-        :data-for-edit="posterEvent"
-        @close-modal="isModalEventOpen = false"
-      />
-    </vue-final-modal>
   </div>
 </template>
 

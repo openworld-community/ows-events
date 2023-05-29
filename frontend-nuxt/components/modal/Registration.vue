@@ -6,10 +6,9 @@ const props = defineProps({
   eventId: {
     type: String,
     default: ''
-  }
+  },
+  close: { type: Function, required: true }
 });
-
-const emit = defineEmits(['close']);
 
 const name = ref('');
 const telegramNickname = ref('');
@@ -97,122 +96,124 @@ const submit = async () => {
 };
 
 const closeModal = () => {
-  emit('close');
+  props.close();
 };
 </script>
 
 <template>
-  <div class="modal-card form">
-    <div class="modal-card__head">
-      <h2 class="modal-card__title">
-        {{ 'Регистрация' }}
-      </h2>
-    </div>
-    <div class="modal-card__body body">
-      <div class="form-fields">
-        <CommonInput
-          v-model="name"
-          input-type="input"
-          input-name="name"
-          input-placeholder="Name, Surname (for a badge, in Latin)"
+  <ModalWrapper>
+    <div class="modal-card form">
+      <div class="modal-card__head">
+        <h2 class="modal-card__title">
+          {{ 'Регистрация' }}
+        </h2>
+      </div>
+      <div class="modal-card__body body">
+        <div class="form-fields">
+          <CommonInput
+            v-model="name"
+            input-type="input"
+            input-name="name"
+            input-placeholder="Name, Surname (for a badge, in Latin)"
+          />
+          <CommonInput
+            v-model="telegramNickname"
+            input-type="input"
+            input-name="telegramNickname"
+            input-placeholder="Telegram (in @nickname format) - for communication"
+          />
+          <CommonInput
+            v-model="profession"
+            input-type="input"
+            input-name="profession"
+            input-placeholder="Profession (for a badge, no more than 24 characters, including spaces)"
+          />
+          <CommonInput
+            v-model="workplace"
+            input-type="input"
+            input-name="workplace"
+            input-placeholder="Workplace"
+          />
+          <CommonInput
+            v-model="experienceInStartups"
+            input-type="datalist"
+            input-name="experienceInStartups"
+            input-placeholder="Have you ever worked in startups?"
+            :options-list="['Yes', 'Nope']"
+          />
+          <CommonInput
+            v-model="fromYouKnow"
+            input-type="datalist"
+            input-name="from"
+            input-placeholder="How did you know about us?"
+            :options-list="['Twitter', 'Instagram', 'From friends', 'Telegram', 'LinkedIn']"
+          />
+          <CommonInput
+            v-model="beenEarly"
+            input-type="datalist"
+            input-name="beenEarly"
+            input-placeholder="Have you been to our meetups before?"
+            :options-list="['Nope', 'Yes, once', 'Yes, more than once']"
+          />
+          <CommonInput
+            v-model="fromWhichCity"
+            input-type="input"
+            input-name="fromWichCity"
+            input-placeholder="From which city will you go to the meetup?"
+          />
+          <CommonInput
+            v-model="email"
+            input-type="input"
+            input-name="email"
+            input-placeholder="E-mail address"
+          />
+        </div>
+      </div>
+      <ul class="form-agreements-list">
+        <li class="form-agreements-item">
+          <input
+            id="personaldata"
+            v-model="personaldataAgree"
+            type="checkbox"
+            name="personaldata"
+          />
+          <label
+            class="form-agreements-item__label"
+            for="personaldata"
+            >I agree to the processing of personal data
+          </label>
+        </li>
+        <li class="form-agreements-item">
+          <input
+            id="fee"
+            v-model="feeAgree"
+            type="checkbox"
+            name="fee"
+          />
+          <label
+            class="form-agreements-item__label"
+            for="fee"
+          >
+            I understand that I will have to pay the entrance fee.
+          </label>
+        </li>
+      </ul>
+      <div class="modal-card__foot">
+        <CommonButton
+          class="modal-card__button"
+          button-class="button__success"
+          :button-text="$translate('component.new_event_modal.submit')"
+          @click="submit()"
         />
-        <CommonInput
-          v-model="telegramNickname"
-          input-type="input"
-          input-name="telegramNickname"
-          input-placeholder="Telegram (in @nickname format) - for communication"
-        />
-        <CommonInput
-          v-model="profession"
-          input-type="input"
-          input-name="profession"
-          input-placeholder="Profession (for a badge, no more than 24 characters, including spaces)"
-        />
-        <CommonInput
-          v-model="workplace"
-          input-type="input"
-          input-name="workplace"
-          input-placeholder="Workplace"
-        />
-        <CommonInput
-          v-model="experienceInStartups"
-          input-type="datalist"
-          input-name="experienceInStartups"
-          input-placeholder="Have you ever worked in startups?"
-          :options-list="['Yes', 'Nope']"
-        />
-        <CommonInput
-          v-model="fromYouKnow"
-          input-type="datalist"
-          input-name="from"
-          input-placeholder="How did you know about us?"
-          :options-list="['Twitter', 'Instagram', 'From friends', 'Telegram', 'LinkedIn']"
-        />
-        <CommonInput
-          v-model="beenEarly"
-          input-type="datalist"
-          input-name="beenEarly"
-          input-placeholder="Have you been to our meetups before?"
-          :options-list="['Nope', 'Yes, once', 'Yes, more than once']"
-        />
-        <CommonInput
-          v-model="fromWhichCity"
-          input-type="input"
-          input-name="fromWichCity"
-          input-placeholder="From which city will you go to the meetup?"
-        />
-        <CommonInput
-          v-model="email"
-          input-type="input"
-          input-name="email"
-          input-placeholder="E-mail address"
+        <CommonButton
+          class="modal-card__button"
+          button-class="button__ordinary"
+          :button-text="$translate('component.new_event_modal.cancel')"
+          @click="closeModal()"
         />
       </div>
     </div>
-    <ul class="form-agreements-list">
-      <li class="form-agreements-item">
-        <input
-          id="personaldata"
-          v-model="personaldataAgree"
-          type="checkbox"
-          name="personaldata"
-        />
-        <label
-          class="form-agreements-item__label"
-          for="personaldata"
-          >I agree to the processing of personal data
-        </label>
-      </li>
-      <li class="form-agreements-item">
-        <input
-          id="fee"
-          v-model="feeAgree"
-          type="checkbox"
-          name="fee"
-        />
-        <label
-          class="form-agreements-item__label"
-          for="fee"
-        >
-          I understand that I will have to pay the entrance fee.
-        </label>
-      </li>
-    </ul>
-    <div class="modal-card__foot">
-      <CommonButton
-        class="modal-card__button"
-        button-class="button__success"
-        :button-text="$translate('component.new_event_modal.submit')"
-        @click="submit()"
-      />
-      <CommonButton
-        class="modal-card__button"
-        button-class="button__ordinary"
-        :button-text="$translate('component.new_event_modal.cancel')"
-        @click="closeModal()"
-      />
-    </div>
-  </div>
+  </ModalWrapper>
 </template>
 
 <style lang="less" scoped>

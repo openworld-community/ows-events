@@ -1,15 +1,15 @@
 <script setup>
 import './assets/less/app.less';
 import 'vue-final-modal/style.css';
-// todo - иконки не рендерятся если изначально зайти на домашнюю страницу.
-// если зайти на любую другую и с нее перейти на домашнюю то все ок
 import 'virtual:svg-icons-register';
 import { useLocationStore } from './stores/location.store';
+import { ModalsContainer } from 'vue-final-modal';
 await useLocationStore().init();
 </script>
 <template>
   <HeaderCommon />
   <main class="main">
+    <ModalsContainer />
     <NuxtPage />
   </main>
 </template>

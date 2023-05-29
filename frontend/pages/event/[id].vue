@@ -1,74 +1,92 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { type EventOnPoster } from '@common/types/event'
-import { deleteEvent, getEvent } from '@/services/events.services'
-import { useRoute, useRouter } from 'vue-router'
-import CustomButton from '@/components/common/button/CustomButton.vue'
-import RegistrationModal from '@/components/modal/RegistrationModal.vue'
-import { VueFinalModal } from 'vue-final-modal'
-import { BASE_URL } from '@/constants/url'
-import { useTranslation } from '@/i18n'
-import { getUserEvents } from '@/helpers/events'
-import NewEventModal from '@/components/modal/NewEventModal.vue'
+import { computed, ref } from 'vue';
+import { type EventOnPoster } from '../../../common/types/event';
+import { deleteEvent, getEvent } from '@/services/events.services';
+import { useModal } from 'vue-final-modal';
+import { BASE_URL } from '@/constants/url';
+import { getUserEvents } from '@/helpers/events';
+import RegistrationModal from '../../components/modal/Registration.vue';
+import NewEventModal from '../../components/modal/NewEvent.vue';
 
-const { t } = useTranslation()
+definePageMeta({ name: 'event' });
 
-const posterEvent = ref<EventOnPoster | null>(null)
-const route = useRoute()
-const id = route.params.id as string
-const router = useRouter()
+const posterEvent = ref<EventOnPoster | null>(null);
+const route = useRoute();
+const id = route.params.id as string;
 
-const isModalRegistrationOpen = ref(false)
-const isModalEventOpen = ref(false)
+const {
+  open: openRegistrationModal,
+  close: closeRegistrationModal,
+  patchOptions: patchRegistrationModal
+} = useModal({
+  component: RegistrationModal,
+  attrs: { eventId: id, close: () => void 0 }
+});
+patchRegistrationModal({ attrs: { close: closeRegistrationModal } });
+
+const {
+  open: openEventModal,
+  close: closeEventModal,
+  patchOptions: patchEventModal
+} = useModal({ component: NewEventModal });
+patchEventModal({ attrs: { close: closeEventModal } });
 
 if (!(typeof id === 'string')) {
-  router.push({ path: '/' })
+  await navigateTo({ path: '/' });
 }
 
 const loadPosterEvent = async () => {
-  posterEvent.value = await getEvent(id)
-}
+  posterEvent.value = await getEvent(id);
+};
 
-loadPosterEvent()
+await loadPosterEvent();
 
 const deleteCard = async () => {
-  await deleteEvent(id)
-  router.push({ path: '/' })
-}
+  await deleteEvent(id);
+  await navigateTo({ path: '/' });
+};
 
 const picture = computed(() => {
   if (posterEvent.value?.image) {
     if (posterEvent.value.image.startsWith('http')) {
-      return posterEvent.value.image
+      return posterEvent.value.image;
     }
 
-    return `${BASE_URL}${posterEvent.value.image}`
+    return `${BASE_URL}${posterEvent.value.image}`;
   }
-  return 'https://picsum.photos/400/300'
-})
+  return 'https://picsum.photos/400/300';
+});
 
 const convertToLocaleString = (
   date: number,
   timezone: { timezoneName: string; timezoneOffset: string } | undefined
 ) => {
-  const localDate = new Date(date)
+  const localDate = new Date(date);
   return localDate.toLocaleString('ru-RU', {
     timeZone: timezone?.timezoneName,
     month: 'long',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit'
-  })
-}
+  });
+};
 
-const isManaged = getUserEvents().includes(id)
+const isManaged = getUserEvents().includes(id);
 </script>
 
 <template>
-  <div v-bind:key="posterEvent.id" v-if="posterEvent" class="event">
+  <div
+    v-if="posterEvent"
+    :key="posterEvent.id"
+    class="event"
+  >
     <div class="=event-image event-image__container">
       <span class="event-image__price">{{ posterEvent.price }} €</span>
-      <img :alt="t('event.image.event')" class="event-image__image" v-bind:src="picture" />
+      <img
+        :src="picture"
+        :alt="$translate('event.image.event')"
+        class="event-image__image"
+      />
     </div>
 
     <div class="event event-description">
@@ -103,76 +121,40 @@ const isManaged = getUserEvents().includes(id)
 
     <div class="event-actions">
       <template v-if="posterEvent.url">
-        <CustomButton
+        <CommonButton
           v-if="posterEvent.url !== 'self'"
           class="event-actions__button"
           button-class="button__success"
-          :button-text="t('event.button.contact')"
+          :button-text="$translate('event.button.contact')"
           :href="posterEvent.url"
           target="_blank"
         />
 
-        <CustomButton
+        <CommonButton
           v-else
           class="event-actions__button"
           button-class="button__success"
-          :button-text="t('event.button.register')"
-          @click="isModalRegistrationOpen = true"
+          :button-text="$translate('event.button.register')"
+          @click="openRegistrationModal()"
         />
       </template>
 
       <template v-if="isManaged">
-        <CustomButton
+        <CommonButton
           class="event-actions__button"
           button-class="button__success"
-          :button-text="t('event.button.edit')"
-          @click="isModalEventOpen = true"
+          :button-text="$translate('event.button.edit')"
+          @click="openEventModal()"
         />
 
-        <CustomButton
+        <CommonButton
           class="event-actions__button"
           button-class="button__warning"
+          :button-text="$translate('event.button.delete')"
           @click="deleteCard"
-          :button-text="t('event.button.delete')"
         />
       </template>
     </div>
-
-    <!--    TODO вынести в отдельный компонент-->
-    <vue-final-modal
-      :hideOverlay="false"
-      overlayTransition="vfm-fade"
-      overlayTransitionDuration="2600"
-      contentTransition="vfm-fade"
-      swipeToClose="down"
-      :clickToClose="true"
-      :escToClose="true"
-      :lockScroll="true"
-      v-model="isModalRegistrationOpen"
-    >
-      <RegistrationModal
-        v-if="isModalRegistrationOpen"
-        :event-id="id"
-        @close="isModalRegistrationOpen = false"
-      />
-    </vue-final-modal>
-    <vue-final-modal
-      :hideOverlay="false"
-      overlayTransition="vfm-fade"
-      overlayTransitionDuration="2600"
-      contentTransition="vfm-fade"
-      swipeToClose="down"
-      :clickToClose="true"
-      :escToClose="true"
-      :lockScroll="true"
-      v-model="isModalEventOpen"
-    >
-      <NewEventModal
-        v-if="isModalEventOpen"
-        :data-for-edit="posterEvent"
-        @close-modal="isModalEventOpen = false"
-      />
-    </vue-final-modal>
   </div>
 </template>
 

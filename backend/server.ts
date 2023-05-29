@@ -1,10 +1,7 @@
 import fastify from "fastify";
 import { EventOnPoster } from "@common/types/event";
 import cors from "@fastify/cors";
-import {
-  eventsStateController,
-  FindEventParams,
-} from "./src/controllers/events-state-controller";
+import { eventsStateController, FindEventParams } from "./src/controllers/events-state-controller";
 import { StandardResponse } from "@common/types/standard-response";
 import path from "path";
 import Static from "@fastify/static";
@@ -46,12 +43,9 @@ server.register(Static, {
   decorateReply: false,
 });
 
-server.get<{ Reply: string[] }>(
-  "/api/location/countries",
-  async (request, reply) => {
-    return countriesAndCitiesController.countries;
-  }
-);
+server.get<{ Reply: string[] }>("/api/location/countries", async (request, reply) => {
+  return countriesAndCitiesController.countries;
+});
 
 server.get<{
   Params: { country: string };
@@ -75,7 +69,7 @@ server.get<{
   const _city = request.params.city;
 
   const cities = cityTimezones.lookupViaCity(_city);
-  const city = cities.find((c) => c.country === _country);
+  const city = cities.find(c => c.country === _country);
 
   let timezone = "";
 
@@ -109,7 +103,7 @@ server.get<{
   };
 });
 
-const allTimezones = moment.tz.names().map((name) => {
+const allTimezones = moment.tz.names().map(name => {
   return {
     timezoneName: name,
     timezoneOffset: moment.tz(name).format("Z"),
@@ -144,13 +138,10 @@ server.get<{
 server.get<{
   Reply: EventOnPoster;
   Params: eventParams;
-}>(
-  "/api/events/:id",
-  async (request, reply): Promise<EventOnPoster | undefined> => {
-    const eventId = request.params.id;
-    return eventsStateController.getEvent(eventId);
-  }
-);
+}>("/api/events/:id", async (request, reply): Promise<EventOnPoster | undefined> => {
+  const eventId = request.params.id;
+  return eventsStateController.getEvent(eventId);
+});
 
 server.get<{
   Params: eventParams;
@@ -185,9 +176,7 @@ server.get<{
   const paymentsFile = "assets/presets/payments-info.json";
 
   const paymantsInfo = JSON.parse(
-    fs.existsSync(paymentsFile)
-      ? fs.readFileSync(paymentsFile, "utf-8")
-      : "[]" || "[]"
+    fs.existsSync(paymentsFile) ? fs.readFileSync(paymentsFile, "utf-8") : "[]" || "[]"
   ) as PaymentInfo[];
 
   if (!paymantsInfo?.length) {
@@ -197,9 +186,7 @@ server.get<{
     };
   }
 
-  const eventPaymantsInfo = paymantsInfo.filter(
-    (p) => p.id === request.params.id
-  );
+  const eventPaymantsInfo = paymantsInfo.filter(p => p.id === request.params.id);
 
   return {
     type: "success",
@@ -229,10 +216,7 @@ server.post<{
 
   registrations.push({ ...data, date: new Date() });
 
-  fs.writeFileSync(
-    "assets/db/registrations.json",
-    JSON.stringify(registrations, null, 2)
-  );
+  fs.writeFileSync("assets/db/registrations.json", JSON.stringify(registrations, null, 2));
 });
 
 // server.get<{
@@ -267,73 +251,65 @@ server.post<{
 server.get<{
   Params: eventParams;
   Reply: StandardResponse<PaymentInfo>;
-}>(
-  "/api/payment-info/:id",
-  async (request, reply): Promise<StandardResponse<PaymentInfo>> => {
-    const eventId = request.params.id;
-    const data = await fsP.readFile("assets/presets/payments-info.json", {
-      encoding: "utf-8",
-    });
-    if (!data) {
-      return {
-        type: "error",
-      };
-    }
-    const info = JSON.parse(data);
-    if (!info) {
-      return {
-        type: "error",
-      };
-    }
-
-    const eventPaymentInfo = info.filter(
-      (item: PaymentInfo) => item.id === eventId
-    );
+}>("/api/payment-info/:id", async (request, reply): Promise<StandardResponse<PaymentInfo>> => {
+  const eventId = request.params.id;
+  const data = await fsP.readFile("assets/presets/payments-info.json", {
+    encoding: "utf-8",
+  });
+  if (!data) {
     return {
-      type: "success",
-      data: eventPaymentInfo,
+      type: "error",
     };
   }
-);
+  const info = JSON.parse(data);
+  if (!info) {
+    return {
+      type: "error",
+    };
+  }
+
+  const eventPaymentInfo = info.filter((item: PaymentInfo) => item.id === eventId);
+  return {
+    type: "success",
+    data: eventPaymentInfo,
+  };
+});
 
 server.post<{
   Reply: StandardResponse<{ path: string }>;
-}>(
-  "/api/image/add",
-  async (request, reply): Promise<StandardResponse<{ path: string }>> => {
-    const data = await request.file();
-    if (!data) {
-      return {
-        type: "error",
-      };
-    }
-
-    const buffer = await data.toBuffer();
-    if (!buffer) {
-      return {
-        type: "error",
-      };
-    }
-
-    try {
-      const path = await imageController.saveImg({
-        data: buffer,
-        filetype: data.filename.split(".").reverse()[0],
-      });
-      return {
-        type: "success",
-
-        data: {
-          path,
-        },
-      };
-    } catch (e) {
-      return {
-        type: "error",
-      };
-    }
+}>("/api/image/add", async (request, reply): Promise<StandardResponse<{ path: string }>> => {
+  const data = await request.file();
+  if (!data) {
+    return {
+      type: "error",
+    };
   }
-);
+
+  const buffer = await data.toBuffer();
+  if (!buffer) {
+    return {
+      type: "error",
+    };
+  }
+
+  try {
+    const path = await imageController.saveImg({
+      data: buffer,
+      filetype: data.filename.split(".").reverse()[0],
+    });
+    return {
+      type: "success",
+
+      data: {
+        path,
+      },
+    };
+  } catch (e) {
+    return {
+      type: "error",
+    };
+  }
+});
 
 server.post<{
   Body: { path: string };
@@ -365,9 +341,7 @@ server.post<{
 }>("/api/events/find", async (request, reply): Promise<EventOnPoster[]> => {
   const { searchLine, country, city } = request.body;
 
-  return eventsStateController
-    .getEvents({ searchLine, country, city })
-    .slice(0, 100);
+  return eventsStateController.getEvents({ searchLine, country, city }).slice(0, 100);
 });
 
 server.post<{

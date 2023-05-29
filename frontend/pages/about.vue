@@ -1,0 +1,26 @@
+<script setup lang="ts"></script>
+
+<template>
+  <section class="about">
+    <h2 class="title">
+      {{ $translate('about.title') }}
+    </h2>
+    <p>{{ $translate('about.p1') }}</p>
+    <br />
+    <p>{{ $translate('about.p2') }}</p>
+    <br />
+    <p>{{ $translate('about.p3') }}</p>
+    <br />
+    <p>
+      {{ $translate('about.github') }}:
+      <a href="https://github.com/openworld-community/ows-events">Repo</a>
+    </p>
+  </section>
+</template>
+
+<style lang="less" scoped>
+.about {
+  padding-left: var(--padding-side);
+  padding-right: var(--padding-side);
+}
+</style>

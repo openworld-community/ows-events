@@ -64,7 +64,7 @@ export class FileDbController {
   private checkTasks() {
     const tasks = this.getTasks();
 
-    if (tasks.length || tasks[0].time > Date.now()) return;
+    if (!tasks.length || tasks[0].time > Date.now()) return;
 
     const currentTask = tasks.shift();
 

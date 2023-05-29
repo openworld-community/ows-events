@@ -1,0 +1,6 @@
+.githooks
+.github
+.idea
+assets
+backend/assets
+*.json

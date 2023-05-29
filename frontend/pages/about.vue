@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import aboutUsImg from '../public/img/about-us@2x.jpg';
+import aboutUsImg from '@/src/img/about-us@2x.jpg';
 import { REPO_URL } from '@/constants/url';
 const { $translate } = useNuxtApp();
 </script>

@@ -1,1 +1,2 @@
-npx prettier --check
+npx prettier --write
+npx eslint . --ext .ts

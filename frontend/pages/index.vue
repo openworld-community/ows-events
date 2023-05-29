@@ -30,261 +30,261 @@ const city = ref<string>(pickedCity.value || '');
 locationStore.pickCountry(pickedCountry.value);
 
 const loadPosterEvents = async () => {
-  if (search.value || country.value || city.value) {
-    posterEvents.value = await getEventsByParams({
-      searchLine: search.value,
-      country: country.value,
-      city: city.value
-    });
-  } else {
-    posterEvents.value = await getEvents();
-  }
+	if (search.value || country.value || city.value) {
+		posterEvents.value = await getEventsByParams({
+			searchLine: search.value,
+			country: country.value,
+			city: city.value
+		});
+	} else {
+		posterEvents.value = await getEvents();
+	}
 };
 
 await loadPosterEvents();
 
 const planToLoadEvents = () => {
-  lazyLoadTimeout && clearTimeout(lazyLoadTimeout);
+	lazyLoadTimeout && clearTimeout(lazyLoadTimeout);
 
-  lazyLoadTimeout = setTimeout(async () => {
-    loadPosterEvents();
-  }, 500);
+	lazyLoadTimeout = setTimeout(async () => {
+		loadPosterEvents();
+	}, 500);
 };
 
 watch(
-  pickedCountry,
-  async () => {
-    city.value = pickedCity.value;
-  },
-  { deep: true }
+	pickedCountry,
+	async () => {
+		city.value = pickedCity.value;
+	},
+	{ deep: true }
 );
 
 watch(
-  search,
-  async (_search) => {
-    planToLoadEvents();
-    await navigateTo({ query: { ...route.query, search: _search || 'None' } });
-  },
-  { deep: true }
+	search,
+	async (_search) => {
+		planToLoadEvents();
+		await navigateTo({ query: { ...route.query, search: _search || 'None' } });
+	},
+	{ deep: true }
 );
 
 watch(
-  country,
-  async (_country) => {
-    locationStore.pickCountry(_country);
+	country,
+	async (_country) => {
+		locationStore.pickCountry(_country);
 
-    city.value = pickedCity.value;
-    planToLoadEvents();
-  },
-  { deep: true }
+		city.value = pickedCity.value;
+		planToLoadEvents();
+	},
+	{ deep: true }
 );
 
 watch(
-  city,
-  async (_city) => {
-    locationStore.pickCity(_city);
-    planToLoadEvents();
-  },
-  { deep: true }
+	city,
+	async (_city) => {
+		locationStore.pickCity(_city);
+		planToLoadEvents();
+	},
+	{ deep: true }
 );
 
 const filteredValues = computed(() => {
-  return getFilteredEvents(posterEvents.value, search.value, country.value, city.value);
+	return getFilteredEvents(posterEvents.value, search.value, country.value, city.value);
 });
 
 // todo - new created events are not sorted by date
 const eventsWithAdd = computed((): (EventOnPoster & { type: 'event' })[] => {
-  const events = [...filteredValues.value];
-  return events.map((x) => {
-    return {
-      ...x,
-      type: 'event',
-      image: x.image
-        ? x.image.includes('http')
-          ? x.image
-          : `${BASE_URL}${x.image}`
-        : 'https://picsum.photos/400/300'
-    };
-  });
+	const events = [...filteredValues.value];
+	return events.map((x) => {
+		return {
+			...x,
+			type: 'event',
+			image: x.image
+				? x.image.includes('http')
+					? x.image
+					: `${BASE_URL}${x.image}`
+				: 'https://picsum.photos/400/300'
+		};
+	});
 
-  // const newEvents: (
-  //   | (EventOnPoster & { type: 'event' })
-  //   | {
-  //       id: 'add'
-  //       type: 'add'
-  //       title: string
-  //       description: string
-  //       link: string
-  //     }
-  // )[] = []
-  // for (let i = 0; i < events.length; i++) {
-  //   if (i % 2 === 0) {
-  //     newEvents.push({
-  //       id: 'add',
-  //       type: 'add',
-  //       title: 'Peredelano Startups',
-  //       description: $translate('home.peredelano.description'),
-  //       link: 'https://t.me/peredelanoconfjunior'
-  //     })
-  //   }
-  //   newEvents.push({
-  //     ...events[i],
-  //     type: 'event',
-  //     image: events[i].image ? `${BASE_URL}/${events[i].image}` : 'https://picsum.photos/200/300'
-  //   })
-  // }
-  // return newEvents
+	// const newEvents: (
+	//   | (EventOnPoster & { type: 'event' })
+	//   | {
+	//       id: 'add'
+	//       type: 'add'
+	//       title: string
+	//       description: string
+	//       link: string
+	//     }
+	// )[] = []
+	// for (let i = 0; i < events.length; i++) {
+	//   if (i % 2 === 0) {
+	//     newEvents.push({
+	//       id: 'add',
+	//       type: 'add',
+	//       title: 'Peredelano Startups',
+	//       description: $translate('home.peredelano.description'),
+	//       link: 'https://t.me/peredelanoconfjunior'
+	//     })
+	//   }
+	//   newEvents.push({
+	//     ...events[i],
+	//     type: 'event',
+	//     image: events[i].image ? `${BASE_URL}/${events[i].image}` : 'https://picsum.photos/200/300'
+	//   })
+	// }
+	// return newEvents
 });
 
 const getFilteredEvents = (
-  events: EventOnPoster[],
-  search: string,
-  country: string,
-  city: string
+	events: EventOnPoster[],
+	search: string,
+	country: string,
+	city: string
 ) => {
-  if (!search && !country && !city) {
-    return events;
-  }
+	if (!search && !country && !city) {
+		return events;
+	}
 
-  const searchSource = (event: EventOnPoster) =>
-    [event.title, event.description, event.location.city, event.location.country]
-      .join(' ')
-      .toLowerCase();
+	const searchSource = (event: EventOnPoster) =>
+		[event.title, event.description, event.location.city, event.location.country]
+			.join(' ')
+			.toLowerCase();
 
-  let searchResult = events.filter((event) => {
-    return searchSource(event).includes(search.toLowerCase());
-  });
+	let searchResult = events.filter((event) => {
+		return searchSource(event).includes(search.toLowerCase());
+	});
 
-  if (country) {
-    searchResult = searchResult.filter((event) => {
-      return searchSource(event).includes(country.toLowerCase());
-    });
-  }
+	if (country) {
+		searchResult = searchResult.filter((event) => {
+			return searchSource(event).includes(country.toLowerCase());
+		});
+	}
 
-  if (city) {
-    searchResult = searchResult.filter((event) => {
-      return searchSource(event).includes(city.toLowerCase());
-    });
-  }
+	if (city) {
+		searchResult = searchResult.filter((event) => {
+			return searchSource(event).includes(city.toLowerCase());
+		});
+	}
 
-  return searchResult;
+	return searchResult;
 };
 const now = Date.now();
 </script>
 
 <template>
-  <div>
-    <div class="location">
-      <HomeUserLocation />
-    </div>
-    <section class="search">
-      <h1 class="search__title">
-        {{ $translate('home.title') }}
-      </h1>
-      <CommonInput
-        v-model="search"
-        class="search__field"
-        input-class="input is-info search-input"
-        input-type="text"
-        input-name="search"
-        :input-placeholder="$translate('global.search')"
-      />
-      <div class="search__container">
-        <CommonInput
-          v-model="country"
-          class="search__field"
-          input-type="datalist"
-          input-name="country"
-          :input-placeholder="$translate('global.country')"
-          :options-list="countries"
-        />
-        <CommonInput
-          :key="country"
-          v-model="city"
-          :input-disabled="!country"
-          class="search__field"
-          input-type="datalist"
-          input-name="city"
-          :input-placeholder="$translate('global.city')"
-          :options-list="cities"
-        />
-      </div>
-    </section>
+	<div>
+		<div class="location">
+			<HomeUserLocation />
+		</div>
+		<section class="search">
+			<h1 class="search__title">
+				{{ $translate('home.title') }}
+			</h1>
+			<CommonInput
+				v-model="search"
+				class="search__field"
+				input-class="input is-info search-input"
+				input-type="text"
+				input-name="search"
+				:input-placeholder="$translate('global.search')"
+			/>
+			<div class="search__container">
+				<CommonInput
+					v-model="country"
+					class="search__field"
+					input-type="datalist"
+					input-name="country"
+					:input-placeholder="$translate('global.country')"
+					:options-list="countries"
+				/>
+				<CommonInput
+					:key="country"
+					v-model="city"
+					:input-disabled="!country"
+					class="search__field"
+					input-type="datalist"
+					input-name="city"
+					:input-placeholder="$translate('global.city')"
+					:options-list="cities"
+				/>
+			</div>
+		</section>
 
-    <ul class="card-list">
-      <li
-        v-for="event in eventsWithAdd"
-        :key="event.id"
-      >
-        <HomeEventPreviewCard
-          :class="event.date < now ? 'expired' : ''"
-          :event-data="event"
-        />
-        <!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
-      </li>
-    </ul>
+		<ul class="card-list">
+			<li
+				v-for="event in eventsWithAdd"
+				:key="event.id"
+			>
+				<HomeEventPreviewCard
+					:class="event.date < now ? 'expired' : ''"
+					:event-data="event"
+				/>
+				<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
+			</li>
+		</ul>
 
-    <CommonButtonIcon
-      class="add-event-button"
-      icon-name="button-plus"
-      icon-width="56"
-      icon-height="56"
-      aria-haspopup="true"
-      :aria-label="$translate('home.button.add_event_aria')"
-      @click="openEventModal()"
-    />
-  </div>
+		<CommonButtonIcon
+			class="add-event-button"
+			icon-name="button-plus"
+			icon-width="56"
+			icon-height="56"
+			aria-haspopup="true"
+			:aria-label="$translate('home.button.add_event_aria')"
+			@click="openEventModal()"
+		/>
+	</div>
 </template>
 
 <style lang="less" scoped>
 .location {
-  display: flex;
-  width: 100%;
-  padding-top: 16px;
-  padding-left: var(--padding-side);
-  padding-right: var(--padding-side);
-  margin-bottom: 36px;
+	display: flex;
+	width: 100%;
+	padding-top: 16px;
+	padding-left: var(--padding-side);
+	padding-right: var(--padding-side);
+	margin-bottom: 36px;
 }
 
 .search {
-  padding-left: var(--padding-side);
-  padding-right: var(--padding-side);
-  margin-bottom: 8px;
+	padding-left: var(--padding-side);
+	padding-right: var(--padding-side);
+	margin-bottom: 8px;
 
-  &__title {
-    font-size: var(--font-size-XXL);
-    line-height: 40px;
-    margin-bottom: 24px;
-  }
+	&__title {
+		font-size: var(--font-size-XXL);
+		line-height: 40px;
+		margin-bottom: 24px;
+	}
 
-  &__container {
-    display: flex;
-    gap: 15px;
-  }
+	&__container {
+		display: flex;
+		gap: 15px;
+	}
 
-  &__field {
-    margin-bottom: 16px;
-  }
+	&__field {
+		margin-bottom: 16px;
+	}
 }
 
 .card-list {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
 }
 
 .add-event-button {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 1;
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	z-index: 1;
 }
 
 .modal-card {
-  background-color: var(--background-color);
+	background-color: var(--background-color);
 }
 
 .expired {
-  opacity: 0.5;
+	opacity: 0.5;
 }
 </style>

@@ -10,8 +10,5 @@
   },
   "devDependencies": {
     "concurrently": "^8.0.1"
-  },
-  "dependencies": {
-    "vue3-markdown-it": "^1.0.10"
   }
 }

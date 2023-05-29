@@ -10,8 +10,8 @@ const props = defineProps({
     type: String,
     default: null
   },
-  width: { type: [String, Number], default: 50 },
-  height: { type: [String, Number], default: 50 }
+  width: { type: [String, Number], default: 24 },
+  height: { type: [String, Number], default: 24 }
 });
 
 const symbolId = computed(() => `#${props.name}`);

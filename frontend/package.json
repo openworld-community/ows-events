@@ -25,7 +25,8 @@
     "vue": "^3.3.2",
     "vue-final-modal": "^4.4.2",
     "vue-flag-icon": "^2.1.0",
-    "vue-markdown": "^2.2.4"
+    "vue-markdown": "^2.2.4",
+    "vue3-markdown-it": "^1.0.10"
   },
   "devDependencies": {
     "@nuxt/eslint-config": "^0.1.1",

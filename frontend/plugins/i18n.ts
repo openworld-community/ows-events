@@ -1,5 +1,5 @@
 import i18next from 'i18next';
-import I18NextVue from 'i18next-vue';
+import I18NextVue, { useTranslation } from 'i18next-vue';
 import { defaultLocale, resources } from '@/i18n';
 import { type TranslationKeys } from '@/i18n/i18n';
 
@@ -20,7 +20,8 @@ export default defineNuxtPlugin(({ vueApp }) => {
   }
 
   function translate(key: TranslationKeys) {
-    return i18next.t(key);
+    const { t } = useTranslation();
+    return t(key);
   }
 
   return { provide: { i18n: i18next, translate } };

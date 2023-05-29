@@ -3,16 +3,16 @@
 <template>
   <section class="about">
     <h2 class="title">
-      {{ $t('about.title') }}
+      {{ $translate('about.title') }}
     </h2>
-    <p>{{ $t('about.p1') }}</p>
+    <p>{{ $translate('about.p1') }}</p>
     <br />
-    <p>{{ $t('about.p2') }}</p>
+    <p>{{ $translate('about.p2') }}</p>
     <br />
-    <p>{{ $t('about.p3') }}</p>
+    <p>{{ $translate('about.p3') }}</p>
     <br />
     <p>
-      {{ $t('about.github') }}:
+      {{ $translate('about.github') }}:
       <a href="https://github.com/openworld-community/ows-events">Repo</a>
     </p>
   </section>

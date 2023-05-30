@@ -1,5 +1,26 @@
 import { api } from '@/helpers/axios';
 import { type EventOnPoster, type StandardResponse } from '../../common/types';
+import { dateTime } from '~/helpers/dates';
+
+type SearchEventPayload = {
+	searchLine?: string;
+	country?: string;
+	city?: string;
+};
+
+type PostEventPayload = {
+	title: string;
+	description: string;
+	date: number;
+	durationInSeconds: number;
+	location: {
+		country: string;
+		city: string;
+	};
+	price: number;
+	timezone: string;
+	url: string;
+};
 
 // EVENTS HOME PAGE
 export const getEvents = async (): Promise<EventOnPoster[]> => {
@@ -11,11 +32,7 @@ export const getEventsByParams = async ({
 	searchLine,
 	country,
 	city
-}: {
-	searchLine?: string;
-	country?: string;
-	city?: string;
-}): Promise<EventOnPoster[]> => {
+}: SearchEventPayload): Promise<EventOnPoster[]> => {
 	const { data } = await api.post('/events/find', { searchLine, country, city });
 	return data;
 };
@@ -26,8 +43,9 @@ export const getEvent = async (id: string): Promise<EventOnPoster> => {
 	return data;
 };
 
-export const postEvent = async (data: any) => {
-	return (await api.post<StandardResponse<{ id: string }>>('/events/add', data)).data;
+export const postEvent = async (payload: PostEventPayload) => {
+	const { data } = await api.post<StandardResponse<{ id: string }>>('/events/add', payload);
+	return data;
 };
 
 export const editEvent = async (data: any) => {

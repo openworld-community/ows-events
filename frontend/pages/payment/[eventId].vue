@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { getEventPayment } from '@/services/events.services';
+import { getEventPayment } from '@/services/payment.services';
 import { type EventOnPoster } from '../../../common/types';
 import { type PaymentInfo } from '../../../common/types/payment-info';
 import { ref } from 'vue';
 import Markdown from 'vue3-markdown-it';
+
 definePageMeta({ name: 'paymentInfo' });
 
 const route = useRoute();
@@ -102,8 +103,10 @@ main {
 
 		table {
 			max-width: 100%;
+
 			tr {
 				display: flex;
+
 				th,
 				td {
 					padding: 10px;

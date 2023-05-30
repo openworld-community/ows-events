@@ -1,88 +1,85 @@
-version: "3.7"
+version: '3.7'
 
 x-logging: &default-logging
-  driver: json-file
-  options:
-    max-size: '10m'
-    max-file: '5'
+    driver: json-file
+    options:
+        max-size: '10m'
+        max-file: '5'
 
 networks:
-  traefikpublic:
-
+    traefikpublic:
 
 services:
-  traefik:
-    image: traefik:v2.9
-    logging: *default-logging
-    container_name: "traefik"
-    restart: always
-    command:
-      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
-      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=http"
-      - "--certificatesresolvers.myresolver.acme.email=tibode495@gmail.com"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-      - "--providers.docker=true"
-      - "--providers.docker.network=ows-events_traefikpublic"
-      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.http.address=:80"
-      - "--entrypoints.https.address=:443"
-      - "--accesslog=true"
-    labels:
-      - "traefik.enable=true"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./letsencrypt:/letsencrypt"
-    ports:
-      - mode: host
-        protocol: tcp
-        published: 80
-        target: 80
-      - mode: host
-        protocol: tcp
-        published: 443
-        target: 443
-    networks:
-      - traefikpublic
+    traefik:
+        image: traefik:v2.9
+        logging: *default-logging
+        container_name: 'traefik'
+        restart: always
+        command:
+            - '--certificatesresolvers.myresolver.acme.httpchallenge=true'
+            - '--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=http'
+            - '--certificatesresolvers.myresolver.acme.email=tibode495@gmail.com'
+            - '--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json'
+            - '--providers.docker=true'
+            - '--providers.docker.network=ows-events_traefikpublic'
+            - '--providers.docker.endpoint=unix:///var/run/docker.sock'
+            - '--providers.docker.exposedbydefault=false'
+            - '--entrypoints.http.address=:80'
+            - '--entrypoints.https.address=:443'
+            - '--accesslog=true'
+        labels:
+            - 'traefik.enable=true'
+        volumes:
+            - '/var/run/docker.sock:/var/run/docker.sock'
+            - './letsencrypt:/letsencrypt'
+        ports:
+            - mode: host
+              protocol: tcp
+              published: 80
+              target: 80
+            - mode: host
+              protocol: tcp
+              published: 443
+              target: 443
+        networks:
+            - traefikpublic
 
-
-  frontend:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    logging: *default-logging
-    restart: always
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.routers.backend_https.rule=Host(`poster-peredelano.orby-tech.space`)"
-      - "traefik.http.routers.backend_https.middlewares=sslheader@docker"
-      - "traefik.http.routers.backend_https.entrypoints=http, https"
-      - "traefik.http.routers.backend_https.tls.certresolver=myresolver"
-      - "traefik.http.routers.backend_http.rule=Host(`poster-peredelano.orby-tech.space`)"
-      - "traefik.http.routers.backend_http.entrypoints=http"
-    environment:
-      - MODE=prod
-    ports:
-      - "7080:7080"
-    volumes:
-      - assets-db:/app/backend/assets/db
-      - assets-img:/app/backend/assets/img
-    networks:
-      - traefikpublic
-
+    frontend:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        logging: *default-logging
+        restart: always
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
+            - 'traefik.http.routers.backend_https.rule=Host(`poster-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.backend_https.middlewares=sslheader@docker'
+            - 'traefik.http.routers.backend_https.entrypoints=http, https'
+            - 'traefik.http.routers.backend_https.tls.certresolver=myresolver'
+            - 'traefik.http.routers.backend_http.rule=Host(`poster-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.backend_http.entrypoints=http'
+        environment:
+            - MODE=prod
+        ports:
+            - '7080:7080'
+        volumes:
+            - assets-db:/app/backend/assets/db
+            - assets-img:/app/backend/assets/img
+        networks:
+            - traefikpublic
 
 volumes:
-  assets-db:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./assets/db
+    assets-db:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: ./assets/db
 
-  assets-img:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./assets/img
+    assets-img:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: ./assets/img

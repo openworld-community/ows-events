@@ -4,8 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "nuxt dev --dotenv .env.dev",
-    "build": "run-p type-check build:only --dotenv .env.prod",
-    "build:only": "nuxt build --dotenv .env.demo",
+    "build-demo": "run-p type-check build:only-demo",
+    "build-prod": "run-p type-check build:only-prod",
+    "build:only-demo": "nuxt build --dotenv .env.demo",
+    "build:only-prod": "nuxt build --dotenv .env.prod",
     "preview": "nuxt preview",
     "test:unit": "vitest",
     "type-check": "nuxi typecheck",

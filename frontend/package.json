@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt dev",
-    "build": "run-p type-check build:only",
-    "build:only": "nuxt build",
+    "dev": "nuxt dev --dotenv .env.dev",
+    "build": "run-p type-check build:only --dotenv .env.prod",
+    "build:only": "nuxt build --dotenv .env.demo",
     "preview": "nuxt preview",
     "test:unit": "vitest",
     "type-check": "nuxi typecheck",

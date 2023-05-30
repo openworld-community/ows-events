@@ -1,6 +1,7 @@
 import { api } from '@/services/axios';
 import { defineStore } from 'pinia';
 import parseJSON from '~/helpers/json';
+import { LOCATION_API_URL } from '~/constants/url';
 
 export type UserLocation = {
   code?: string;
@@ -9,12 +10,8 @@ export type UserLocation = {
 };
 
 const _getUserLocation = async (): Promise<UserLocation> => {
-  const url = `https://api.ipregistry.co/?key=${
-    import.meta.env.VITE_IPREGISTRY_API_KEY ?? 'ryy5dlbl3v8y55x4'
-  }`;
-
   try {
-    const { data } = await api.get(url);
+    const { data } = await api.get(LOCATION_API_URL);
     const location = data?.location;
     const country = location?.country;
 

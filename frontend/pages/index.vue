@@ -103,7 +103,8 @@ const eventsWithAdd = computed((): (EventOnPoster & { type: 'event' })[] => {
         ? x.image.includes('http')
           ? x.image
           : `${BASE_URL}${x.image}`
-        : 'https://picsum.photos/400/300'
+        : //TODO убрать эту заглушку
+          'https://picsum.photos/400/300'
     };
   });
 

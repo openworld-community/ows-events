@@ -1,7 +1,7 @@
-const isDevelopmnet = import.meta.env.MODE === 'development'
+export const API_URL = import.meta.env.VITE_API_URL;
 
-export const API_URL = isDevelopmnet ? 'http://localhost:7080/api' : '/api'
+export const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export const BASE_URL = isDevelopmnet ? 'http://localhost:7080' : ''
+export const LOCATION_API_URL = `https://api.ipregistry.co/?key=${import.meta.env.VITE_IPREGISTRY_API_KEY}`;
 
-export const REPO_URL = 'https://github.com/openworld-community/ows-events'
+export const REPO_URL = 'https://github.com/openworld-community/ows-events';

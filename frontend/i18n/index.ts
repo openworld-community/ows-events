@@ -6,11 +6,11 @@ import type { defineTranslation } from './locales';
 export const supportedLocales = ['ru' /* ,'en' */] as const;
 export const defaultLocale = supportedLocales[0];
 export const resources: Record<
-  (typeof supportedLocales)[number],
-  ReturnType<typeof defineTranslation>
+	(typeof supportedLocales)[number],
+	ReturnType<typeof defineTranslation>
 > = {
-  [defaultLocale]: defaultTranslation
-  // en: englishTranslation
+	[defaultLocale]: defaultTranslation
+	// en: englishTranslation
 };
 
 // todo разбиение файлов по неймспейсам с лейзи лоадингом

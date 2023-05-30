@@ -1,5 +1,5 @@
-import { api } from '@/services/axios';
 import { defineStore } from 'pinia';
+import { api } from '@/services/axios';
 import parseJSON from '~/helpers/json';
 import { LOCATION_API_URL } from '~/constants/url';
 
@@ -57,9 +57,8 @@ const useLocationStore = defineStore('counter', {
     async pickCountry(country: string) {
       if (this.pickedCountry === country) {
         return;
-      } else {
-        this.pickCity('');
       }
+      this.pickCity('');
 
       this.pickedCountry = country;
       if (process.client) {

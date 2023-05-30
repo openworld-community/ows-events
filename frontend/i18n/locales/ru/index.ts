@@ -1,4 +1,4 @@
-import { defineTranslation } from '..'
+import { defineTranslation } from '..';
 
 export const defaultTranslation = {
   global: {
@@ -91,4 +91,4 @@ export const defaultTranslation = {
   }
 }
 
-export default defineTranslation(defaultTranslation)
+export default defineTranslation(defaultTranslation);

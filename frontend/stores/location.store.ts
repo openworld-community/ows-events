@@ -24,9 +24,8 @@ const _getUserLocation = async (): Promise<UserLocation> => {
       country: country.name
     };
   } catch (e) {
-    // todo error handling
-    void 1;
-    throw e;
+    console.error(e);
+    return { code: 'ru', city: 'Moscow', country: 'Russia' };
   }
 };
 

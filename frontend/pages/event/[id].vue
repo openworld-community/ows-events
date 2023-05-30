@@ -10,9 +10,9 @@ import NewEventModal from '../../components/modal/NewEvent.vue';
 
 definePageMeta({ name: 'event' });
 
-const posterEvent = ref<EventOnPoster | null>(null);
 const route = useRoute();
 const id = route.params.id as string;
+const posterEvent = ref<EventOnPoster>(await getEvent(id));
 
 const {
   open: openRegistrationModal,
@@ -29,17 +29,11 @@ const {
   close: closeEventModal,
   patchOptions: patchEventModal
 } = useModal({ component: NewEventModal });
-patchEventModal({ attrs: { close: closeEventModal } });
+patchEventModal({ attrs: { close: closeEventModal, dataForEdit: posterEvent.value } });
 
 if (!(typeof id === 'string')) {
   await navigateTo({ path: '/' });
 }
-
-const loadPosterEvent = async () => {
-  posterEvent.value = await getEvent(id);
-};
-
-await loadPosterEvent();
 
 const deleteCard = async () => {
   await deleteEvent(id);

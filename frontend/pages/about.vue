@@ -25,7 +25,7 @@ const { $translate } = useNuxtApp();
         class="about__link"
         target="_blank"
         rel="noopener noreferrer"
-        >
+      >
         Repo
       </a>
     </p>

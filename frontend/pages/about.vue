@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import aboutUsImg from '@/src/img/about-us@2x.jpg';
+import aboutUsImg from '@/assets/img/about-us@2x.jpg';
 import { REPO_URL } from '@/constants/url';
+
 const { $translate } = useNuxtApp();
 </script>
 
@@ -25,7 +26,7 @@ const { $translate } = useNuxtApp();
         class="about__link"
         target="_blank"
         rel="noopener noreferrer"
-        >
+      >
         Repo
       </a>
     </p>

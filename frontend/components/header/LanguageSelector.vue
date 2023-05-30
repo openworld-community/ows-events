@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { watch } from 'vue';
+import { watch, ref } from 'vue';
 import { supportedLocales } from '@/i18n';
-import { ref } from 'vue';
 
 const { $i18n } = useNuxtApp();
 const language = ref($i18n.language);

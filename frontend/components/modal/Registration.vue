@@ -3,8 +3,6 @@ import { computed, ref } from 'vue';
 import { sendFormAboutRegistration } from '@/services/event-registration.services';
 import { Registration } from '../../../common/types/registration';
 
-const router = useRouter();
-
 const props = defineProps({
 	eventId: {
 		type: String,
@@ -91,8 +89,8 @@ const submit = async () => {
 		return;
 	}
 
-	await sendFormAboutRegistration(submitInfo.value).then(() =>
-		router.push(`/payment/${submitInfo.value.eventId}`)
+	await sendFormAboutRegistration(submitInfo.value).then(
+		async () => await navigateTo(`/payment/${submitInfo.value.eventId}`)
 	);
 };
 

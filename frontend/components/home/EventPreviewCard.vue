@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { convertToLocaleString } from '@/helpers/dates';
-
 const props = defineProps({
 	eventData: {
 		type: Object,

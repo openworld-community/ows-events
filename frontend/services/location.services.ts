@@ -1,26 +1,15 @@
-import { api } from '@/helpers/axios';
 import { LOCATION_API_URL } from '@/constants/url';
+import { UserLocation } from '../../common/types/location';
 
-export type UserLocation = {
-	code?: string;
-	city?: string;
-	country?: string;
-};
-
-export const getUserLocation = async (): Promise<UserLocation | null> => {
-	let result: null | UserLocation = null;
-	await api
-		.get(LOCATION_API_URL)
-		.then(({ data }) => {
-			result = {
-				code: data?.location?.code,
-				city: data?.city,
-				country: data?.location?.name
-			};
-		})
-		.catch((err) => {
-			throw Error(err);
-		});
+export const getUserLocation = async (): Promise<UserLocation> => {
+	let result: {} | UserLocation = {};
+	await api.get(LOCATION_API_URL).then(({ data }) => {
+		result = {
+			code: data?.location?.country?.code,
+			city: data?.location?.city,
+			country: data?.location?.country?.name
+		};
+	});
 	return result;
 };
 

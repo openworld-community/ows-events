@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
-import { dateTime, timestampParse } from '@/helpers/dates';
 import { deleteEventImage, editEvent, postEvent, postEventImage } from '@/services/events.services';
 import { storeToRefs } from 'pinia';
 import { useLocationStore } from '@/stores/location.store';
 import { type EventOnPoster } from '../../../common/types';
-import { addUserEvent } from '../../helpers/events';
 import { getTimezoneByCountryAndCity, getAllTimezones } from '@/services/timezone.services';
-import { timezoneConverter, timezoneDeconverter } from '@/helpers/timezones';
+import { PostEventPayload } from '../../../common/types/event';
 
 const { $translate } = useNuxtApp();
 
@@ -195,7 +193,7 @@ const submitEvent = async () => {
 					...params,
 					image: imageURL
 				}
-			});
+			} as PostEventPayload);
 
 			if (res.type === 'success') {
 				const id = res.data.id;

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
-import parseJSON from '@/helpers/json';
 import { getCitiesByCountry, getCountries, getUserLocation } from '@/services/location.services';
+import { UserLocation } from '../../common/types/location';
+import parseJSON from '@/utils/json';
 
 const useLocationStore = defineStore('counter', {
 	state: () => {
@@ -24,7 +25,9 @@ const useLocationStore = defineStore('counter', {
 				{}
 			),
 			pickedCity: localStorage.getItem('LOCATIONS_PICKED_CITY') ?? '',
-			userLocation: parseJSON(localStorage.getItem('LOCATIONS_USER_LOCATION') ?? '{}')
+			userLocation: parseJSON<UserLocation>(
+				localStorage.getItem('LOCATIONS_USER_LOCATION') ?? '{}'
+			)
 		};
 	},
 	getters: {},

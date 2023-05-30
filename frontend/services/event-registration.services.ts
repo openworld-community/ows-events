@@ -1,4 +1,3 @@
-import { api } from '@/helpers/axios';
 import { StandardResponse } from '../../common/types';
 import { PaymentInfo } from '../../common/types/payment-info';
 import { Registration } from '../../common/types/registration';

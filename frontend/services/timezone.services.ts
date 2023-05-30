@@ -1,6 +1,4 @@
-import { api } from '~/helpers/axios';
 import { StandardResponse } from '../../common/types';
-import { timezoneConverter } from '~/helpers/timezones';
 
 type AllTimezonesResponse = {
 	timezoneName: string;
@@ -9,10 +7,8 @@ type AllTimezonesResponse = {
 
 export const getAllTimezones = async (): Promise<AllTimezonesResponse[]> => {
 	const local = localStorage.getItem('ALL_TIMEZONES');
-	//TODO зачем очищать пустой ключ?
-	if (!local) {
-		localStorage.removeItem('ALL_TIMEZONES');
-	} else {
+
+	if (local) {
 		return JSON.parse(local) as AllTimezonesResponse[];
 	}
 

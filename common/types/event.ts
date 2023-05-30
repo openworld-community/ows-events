@@ -16,3 +16,17 @@ export type EventOnPoster = {
 	};
 	url: string;
 };
+
+export type PostEventPayload = {
+	title: string;
+	description: string;
+	date: number;
+	durationInSeconds: number;
+	location: {
+		country: string;
+		city: string;
+	};
+	price: number;
+	timezone: string;
+	url: string;
+};

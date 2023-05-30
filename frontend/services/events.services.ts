@@ -1,25 +1,10 @@
-import { api } from '@/helpers/axios';
 import { type EventOnPoster, type StandardResponse } from '../../common/types';
-import { dateTime } from '~/helpers/dates';
+import { PostEventPayload } from '../../common/types/event';
 
 type SearchEventPayload = {
 	searchLine?: string;
 	country?: string;
 	city?: string;
-};
-
-type PostEventPayload = {
-	title: string;
-	description: string;
-	date: number;
-	durationInSeconds: number;
-	location: {
-		country: string;
-		city: string;
-	};
-	price: number;
-	timezone: string;
-	url: string;
 };
 
 // EVENTS HOME PAGE

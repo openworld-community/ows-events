@@ -5,7 +5,6 @@ import { storeToRefs } from 'pinia';
 import { useLocationStore } from '@/stores/location.store';
 import { type EventOnPoster } from '../../../common/types';
 import { getTimezoneByCountryAndCity, getAllTimezones } from '@/services/timezone.services';
-import { PostEventPayload } from '../../../common/types/event';
 
 const { $translate } = useNuxtApp();
 
@@ -193,7 +192,7 @@ const submitEvent = async () => {
 					...params,
 					image: imageURL
 				}
-			} as PostEventPayload);
+			});
 
 			if (res.type === 'success') {
 				const id = res.data.id;

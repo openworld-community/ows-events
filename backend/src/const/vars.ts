@@ -1,3 +1,3 @@
 export const vars = {
-  env: process.env.MODE,
+	env: process.env.MODE
 };

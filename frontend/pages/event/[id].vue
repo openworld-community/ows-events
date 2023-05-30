@@ -48,6 +48,7 @@ const picture = computed(() => {
 
     return `${BASE_URL}${posterEvent.value.image}`;
   }
+  //TODO убрать эту заглушку
   return 'https://picsum.photos/400/300';
 });
 

@@ -15,7 +15,7 @@ import fs from "fs";
 import fsP from "fs/promises";
 import { Registration } from "@common/types/registration";
 import { PaymentInfo } from "@common/types/payment-info";
-import { type } from "os";
+import { eventsApi } from './src/rest/v1/events/router';
 
 interface eventParams {
   id: string;
@@ -42,6 +42,8 @@ server.register(Static, {
   prefix: "/image/",
   decorateReply: false,
 });
+
+server.register(eventsApi, { prefix: "/api/events" });
 
 server.get<{ Reply: string[] }>("/api/location/countries", async (request, reply) => {
   return countriesAndCitiesController.countries;
@@ -342,30 +344,6 @@ server.post<{
   const { searchLine, country, city } = request.body;
 
   return eventsStateController.getEvents({ searchLine, country, city }).slice(0, 100);
-});
-
-server.post<{
-  Body: { event: EventOnPoster };
-  Reply: StandardResponse<{ id: string }>;
-}>("/api/events/add", async (request, reply) => {
-  const body = request.body as { event: EventOnPoster | undefined };
-  if (!body) {
-    return {
-      type: "error",
-    };
-  }
-  const event = body.event;
-  if (!event) {
-    return {
-      type: "error",
-    };
-  }
-
-  const newPostId = eventsStateController.addEvent(event);
-  return {
-    type: "success",
-    data: { id: newPostId },
-  };
 });
 
 server.post<{

@@ -46,8 +46,8 @@ services:
 
     frontend:
         build:
-            context: ./
-            dockerfile: Dockerfile
+            context: .
+            dockerfile: ./frontend/Dockerfile
         logging: *default-logging
         restart: always
         labels:
@@ -60,14 +60,23 @@ services:
             - 'traefik.http.routers.backend_http.rule=Host(`poster-peredelano.orby-tech.space`)'
             - 'traefik.http.routers.backend_http.entrypoints=http'
         environment:
-            - MODE=prod
+            - NODE_ENV=dev
+            - VITE_API_URL=http://localhost:7080/api
+            - VITE_BASE_URL=http://localhost:7080
+            - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
+        networks:
+            - traefikpublic
+
+    backend:
+        build:
+            context: .
+            dockerfile: ./backend/Dockerfile
+        logging: *default-logging
         ports:
             - '7080:7080'
         volumes:
             - assets-db:/app/backend/assets/db
             - assets-img:/app/backend/assets/img
-        networks:
-            - traefikpublic
 
 volumes:
     assets-db:

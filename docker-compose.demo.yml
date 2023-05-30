@@ -9,10 +9,21 @@ x-logging: &default-logging
 services:
     frontend:
         build:
-            context: ./
-            dockerfile: Dockerfile
+            context: .
+            dockerfile: ./frontend/Dockerfile
         logging: *default-logging
-        restart: always
+        network_mode: host
+        environment:
+            - NODE_ENV=dev
+            - VITE_API_URL=http://localhost:7080/api
+            - VITE_BASE_URL=http://localhost:7080
+            - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
+
+    backend:
+        build:
+            context: .
+            dockerfile: ./backend/Dockerfile
+        logging: *default-logging
         ports:
             - '7080:7080'
         volumes:

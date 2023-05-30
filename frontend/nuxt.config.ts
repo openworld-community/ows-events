@@ -9,6 +9,11 @@ export default defineNuxtConfig({
 	modules: ['@pinia/nuxt'],
 	typescript: { strict: true },
 	vite: {
+		server: {
+			watch: {
+				usePolling: true,
+			},
+		},
 		plugins: [
 			// плагин выдает ошибку из-за компонента /node_modules/nuxt/dist/app/components/nuxt-root.vue
 			// убрал пока не пойму нужен ли он вообще на самом деле

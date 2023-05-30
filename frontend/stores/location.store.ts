@@ -14,16 +14,15 @@ const _getUserLocation = async (): Promise<UserLocation> => {
     const { data } = await api.get(LOCATION_API_URL);
     const location = data?.location;
     const country = location?.country;
-
+    
     return {
       code: country?.code,
       city: location?.city.name,
       country: country.name
     };
   } catch (e) {
-    // todo error handling
-    void 1;
-    throw e;
+    console.error(e);
+    return { code: 'ru', city: 'Moscow', country: 'Russia' };
   }
 };
 

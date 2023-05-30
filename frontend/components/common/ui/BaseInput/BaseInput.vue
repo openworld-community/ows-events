@@ -43,13 +43,9 @@ export default defineComponent({
 		},
 	},
 	emits: ['update:modelValue'],
-	mounted() {
-		console.log(this.placeholder)
-	},
 	methods: {
 		updateValue(event: Event) {
-			const target = event.target as HTMLInputElement;
-			this.$emit('update:modelValue', target.value);
+			this.$emit('update:modelValue', (event.target as HTMLInputElement).value);
 		},
 	}
 });

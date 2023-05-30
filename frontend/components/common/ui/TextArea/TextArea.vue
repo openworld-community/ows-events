@@ -33,10 +33,9 @@ export default defineComponent({
 	emits: ['update:modelValue'],
 	methods: {
 		updateValue(event: Event) {
-			const target = event.target as HTMLTextAreaElement;
-			this.$emit('update:modelValue', target.value);
+			this.$emit('update:modelValue', (event.target as HTMLTextAreaElement).value);
 		},
-	},
+	}
 });
 </script>
 
@@ -44,7 +43,7 @@ export default defineComponent({
 	<div :class="`textarea__wrapper ${className}`">
 		<label :for="name">{{ label }}</label>
 		<textarea
-				:class="`textarea form__field ${error ? form__error : ''}`"
+				:class="`textarea form__field ${error ? 'form__error' : ''}`"
 				:name="name"
 				:value="modelValue"
 				@input="updateValue"

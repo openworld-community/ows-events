@@ -1,7 +1,7 @@
-import * as TelegramBot from "node-telegram-bot-api";
+import TelegramBot from "node-telegram-bot-api";
 import axios from "axios";
-import * as fs from "fs";
-import Users from "./Users";
+import fs from "fs";
+import { Users } from "./Users";
 
 const token = process.env.TELEGRAM_BOT_TOKEN || "";
 
@@ -52,6 +52,8 @@ const checkUrl = async (
     });
 };
 
+let counter = 0;
+
 const checkStatus = (): string => {
   const urls = [
     {
@@ -98,26 +100,27 @@ const checkStatus = (): string => {
     },
   ];
 
-  let counter = 0;
-
   urls.forEach(async (url) => {
     const { status, message } = await url.validator(url.url);
     if (!status) {
       emitError(`${url.description} is down. Error: ${message}`);
     }
-    counter++;
-    if (counter % 3 === 0) {
-      counter = 0;
-      return "I am alive";
-    }
   });
 
+  counter++;
+  if (counter % 3 === 0) {
+    counter = 0;
+    return "I am alive";
+  }
+  
   return "";
 };
 
 const emit = (text: string) => {
   users.getActiveUsers().forEach((user) => {
-    bot.sendMessage(user.chatId, text);
+    if (text) {
+      bot.sendMessage(user.chatId, text);
+    }
   });
 };
 

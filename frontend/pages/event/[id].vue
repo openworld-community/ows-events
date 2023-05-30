@@ -6,7 +6,7 @@ import { useModal } from 'vue-final-modal';
 import { BASE_URL } from '@/constants/url';
 import { getUserEvents } from '@/helpers/events';
 import RegistrationModal from '../../components/modal/Registration.vue';
-import NewEventModal from '../../components/modal/NewEvent.vue';
+import EventModal from '../../components/modal/Event.vue';
 
 definePageMeta({ name: 'event' });
 
@@ -28,7 +28,7 @@ const {
   open: openEventModal,
   close: closeEventModal,
   patchOptions: patchEventModal
-} = useModal({ component: NewEventModal });
+} = useModal({ component: EventModal });
 patchEventModal({ attrs: { close: closeEventModal, dataForEdit: posterEvent.value } });
 
 if (!(typeof id === 'string')) {

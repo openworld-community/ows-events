@@ -6,9 +6,9 @@ import { useLocationStore } from '@/stores/location.store';
 import { storeToRefs } from 'pinia';
 import { useModal } from 'vue-final-modal';
 import { BASE_URL } from '@/constants/url';
-import NewEventModal from '../components/modal/NewEvent.vue';
+import EventModal from '../components/modal/Event.vue';
 
-const { open: openEventModal, close, patchOptions } = useModal({ component: NewEventModal });
+const { open: openEventModal, close, patchOptions } = useModal({ component: EventModal });
 patchOptions({ attrs: { close } });
 
 definePageMeta({ name: 'home' });

@@ -17,7 +17,7 @@ const props = defineProps({
 
 <template>
   <button>
-    <CommonCustomIcon
+    <CommonIcon
       :name="props.iconName"
       :width="props.iconWidth"
       :height="props.iconHeight"

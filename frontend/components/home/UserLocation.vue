@@ -7,7 +7,7 @@ const { userLocation } = storeToRefs(useLocationStore());
 
 <template>
   <div class="user-location__container">
-    <CommonCustomIcon
+    <CommonIcon
       class="user-location__pin"
       name="map-pin"
       width="24"

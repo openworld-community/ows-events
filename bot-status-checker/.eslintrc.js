@@ -6,5 +6,5 @@ module.exports = {
 		tsconfigRootDir: __dirname,
 		ecmaVersion: 'latest'
 	},
-	ignorePatterns: ['./node_modules/*']
+	ignorePatterns: ['./node_modules/*', './build/*', './dist/*', './assets/*']
 };

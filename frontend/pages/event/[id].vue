@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { type EventOnPoster } from '../../../common/types/event';
 import { deleteEvent, getEvent } from '@/services/events.services';
-import { useModal } from 'vue-final-modal';
-import { BASE_URL } from '@/constants/url';
+import {useModal, UseModalOptions, VueFinalModal} from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
 import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
-import {getEventImage, getEventPicture} from "~/utils/events";
 
 definePageMeta({
 	name: RouteNameEnum.EVENT
@@ -25,14 +23,14 @@ const {
 } = useModal({
 	component: RegistrationModal,
 	attrs: { eventId: id, close: () => void 0 }
-});
+} as UseModalOptions<InstanceType<typeof VueFinalModal>["$props"]>);
 patchRegistrationModal({ attrs: { close: closeRegistrationModal } });
 
 const {
 	open: openEventModal,
 	close: closeEventModal,
 	patchOptions: patchEventModal
-} = useModal({ component: EventModal });
+} = useModal({ component: EventModal } as UseModalOptions<InstanceType<typeof VueFinalModal>["$props"]>);
 patchEventModal({ attrs: { close: closeEventModal, dataForEdit: posterEvent.value } });
 
 const deleteCard = async () => {

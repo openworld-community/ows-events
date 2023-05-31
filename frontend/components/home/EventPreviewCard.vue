@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { EventOnPoster } from '../../../common/types';
-import {getEventImage} from "~/utils/events";
+
 
 const props = defineProps<{ eventData: EventOnPoster }>();
 

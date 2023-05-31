@@ -11,8 +11,8 @@ export default defineNuxtConfig({
 	vite: {
 		server: {
 			watch: {
-				usePolling: true,
-			},
+				usePolling: true
+			}
 		},
 		plugins: [
 			// плагин выдает ошибку из-за компонента /node_modules/nuxt/dist/app/components/nuxt-root.vue

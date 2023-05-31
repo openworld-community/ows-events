@@ -9,7 +9,7 @@ const props = defineProps({
 	}
 });
 
-const openLocation = (url) => {
+const openLocation = (url: string) => {
 	window.open(url, '_blank');
 };
 

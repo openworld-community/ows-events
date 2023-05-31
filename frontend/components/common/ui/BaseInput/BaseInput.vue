@@ -32,7 +32,8 @@ function updateValue(event: Event) {
 		</label>
 		<div class="input__box">
 			<input
-				:class="`input ${error ? 'form__error' : ''} form__field`"
+				class="input form__field"
+				:class="{ error: 'form__error' }"
 				v-bind="$attrs"
 				:name="name"
 				:type="type"

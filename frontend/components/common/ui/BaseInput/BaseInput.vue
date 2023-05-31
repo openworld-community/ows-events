@@ -1,3 +1,8 @@
+<script>
+export default {
+	inheritAttrs: false
+}
+</script>
 <script lang="ts" setup>
 import { InputValue } from './types/types';
 

@@ -4,10 +4,11 @@ import { type EventOnPoster } from '../../../common/types/event';
 import { deleteEvent, getEvent } from '@/services/events.services';
 import { useModal } from 'vue-final-modal';
 import { BASE_URL } from '@/constants/url';
+import { RouteNameEnum } from '@/constants/enums/route';
 import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
 
-definePageMeta({ name: 'event' });
+definePageMeta({ name: RouteNameEnum.EVENT });
 
 const route = useRoute();
 const id = route.params.id as string;

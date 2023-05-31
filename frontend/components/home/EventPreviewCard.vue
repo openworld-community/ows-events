@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import { EventOnPoster } from '../../../common/types';
-import { PropType } from 'vue';
 
-const props = defineProps({
-	eventData: {
-		type: Object as PropType<EventOnPoster>,
-		required: true
-	}
-});
+const props = defineProps<{ eventData: EventOnPoster }>();
 
 const openLocation = (url: string) => {
 	window.open(url, '_blank');
@@ -15,11 +9,9 @@ const openLocation = (url: string) => {
 
 //TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
 const templateURL = `https://www.google.com/maps/place/${props.eventData?.location.city}+${props.eventData?.location.country}`;
-
 </script>
 
 <template>
-	<!--  TODO не понимаю, почему ругается на id-->
 	<NuxtLink
 		:to="`/event/${props.eventData.id}`"
 		class="card"
@@ -27,7 +19,7 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 		<div class="card__image-container">
 			<span class="card__price">{{ props.eventData.price }} €</span>
 			<img
-				v-if="props.eventData?.image"
+				v-if="props.eventData.image"
 				:alt="$translate('home.events.image_alt')"
 				class="card__image"
 				:src="props.eventData.image"
@@ -42,10 +34,8 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 			</h2>
 			<p class="card-description__datetime">
 				{{ convertToLocaleString(props.eventData.date, props.eventData.timezone) }}
-        ({{
-					props.eventData.timezone?.timezoneOffset
-				}}
-				{{ props.eventData.timezone?.timezoneName }})
+				({{ props.eventData.timezone.timezoneOffset }}
+				{{ props.eventData.timezone.timezoneName }})
 			</p>
 			<span
 				class="card-description__geolink"

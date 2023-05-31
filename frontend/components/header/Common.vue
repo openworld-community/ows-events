@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { RouteNameEnum } from '@/constants/enums/route';
+
 const route = useRoute();
 
 function scrollToTop() {
@@ -17,17 +19,14 @@ function scrollToTop() {
           @click.prevent="scrollToTop"
         >
           <CommonIcon
-            v-if="route.name === 'home'"
+            v-if="route.name === RouteNameEnum.HOME"
             name="peredelano-afisha"
             width="142"
-            height="24"
             alt="Peredelano Афиша"
           />
           <CommonIcon
             v-else
             name="back"
-            width="24"
-            height="24"
             :aria-label="$translate('global.button.back')"
           />
         </NuxtLink>
@@ -35,7 +34,7 @@ function scrollToTop() {
 
       <div class="header__right">
         <HeaderSubscriptionExpired
-          v-if="route.name === 'home'"
+          v-if="route.name === RouteNameEnum.HOME"
           class="header__subscription"
         />
 
@@ -45,14 +44,12 @@ function scrollToTop() {
           :aria-label="$translate('global.nav')"
         >
           <NuxtLink
-            v-if="route.name === 'home'"
+            v-if="route.name === RouteNameEnum.HOME"
             to="/about"
             class="header__navigation-link"
           >
             <CommonIcon
               name="info"
-              width="24"
-              height="24"
               :alt="$translate('component.header.about')"
             />
           </NuxtLink>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { type PropType } from 'vue';
-
-type ButtonType = 'button' | 'submit' | 'reset' | undefined;
+import { type ButtonType } from '../../../common/types/button';
 
 const props = defineProps({
   buttonType: {
@@ -66,8 +65,6 @@ const props = defineProps({
       v-if="props.iconName"
       class="button__icon"
       :name="props.iconName"
-      width="24"
-      height="24"
     />
   </button>
 </template>

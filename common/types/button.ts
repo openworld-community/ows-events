@@ -1,0 +1,1 @@
+type ButtonType = 'button' | 'submit' | 'reset' | undefined;

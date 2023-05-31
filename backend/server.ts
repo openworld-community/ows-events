@@ -12,6 +12,8 @@ import fs from 'fs';
 import fsP from 'fs/promises';
 import { Registration } from '@common/types/registration';
 import { PaymentInfo } from '@common/types/payment-info';
+import axios from 'axios';
+import TelegramBot from 'node-telegram-bot-api';
 import { imageController } from './src/controllers/image-controller';
 import { countriesAndCitiesController } from './src/controllers/countries-and-cities.controller';
 import { eventsStateController, FindEventParams } from './src/controllers/events-state-controller';
@@ -46,6 +48,21 @@ server.get<{ Reply: string[] }>(
 	'/api/location/countries',
 	async () => countriesAndCitiesController.countries
 );
+
+server.get('/ping', async (request, reply) => {
+	return 'pong';
+});
+
+server.get<{
+	Params: {
+		id: number;
+	};
+	Body: TelegramBot.Message | null;
+}>('/api/postauth/token/:id', async (request, reply) => {
+	return await axios
+		.get(`http://localhost:7090/user/${request.params.id}`)
+		.then((res) => res.data);
+});
 
 server.get<{
 	Params: { country: string };

@@ -26,7 +26,8 @@
   "devDependencies": {
     "@types/node": "^20.2.0",
     "@types/uuid": "^9.0.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "@types/node-telegram-bot-api": "^0.61.6"
   },
   "nodemonConfig": {
     "ignore": [

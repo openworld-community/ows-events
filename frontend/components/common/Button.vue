@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { type PropType } from 'vue';
-import { type ButtonType } from '../../../common/types/button';
+
+type ButtonType = 'button' | 'submit' | 'reset' | undefined;
 
 const props = defineProps({
   buttonType: {

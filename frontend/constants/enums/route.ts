@@ -1,3 +1,5 @@
 export enum RouteNameEnum {
-  HOME = 'home'
+  HOME = 'home',
+  EVENT = 'event',
+  PAYMENT_INFO = 'paymentInfo'
 }

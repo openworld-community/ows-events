@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IconDefault } from '@/constants/defaultValues/icon';
+import { IconDefaultParams } from '@/constants/defaultValues/icon';
 
 const props = defineProps({
   iconName: {
@@ -8,11 +8,11 @@ const props = defineProps({
   },
   iconWidth: {
     type: String,
-    default: IconDefault.WIDTH
+    default: IconDefaultParams.WIDTH
   },
   iconHeight: {
     type: String,
-    default: IconDefault.HEIGHT
+    default: IconDefaultParams.HEIGHT
   }
 });
 </script>

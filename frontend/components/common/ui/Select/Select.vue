@@ -49,7 +49,7 @@ export default defineComponent({
 		}
 	},
 	methods: {
-		updateValue(value: Event) {
+		updateValue(value: string) {
 			this.$emit('update:modelValue', value);
 			this.setIsOpen();
 		},

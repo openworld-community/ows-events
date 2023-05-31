@@ -8,24 +8,29 @@ export const timestampParse = (
 	timestamp: number,
 	timezone: { timezoneName: string; timezoneOffset: string } | undefined
 ) => {
-	const date = new Date(timestamp)
-		.toLocaleString('ru-RU', {
+	try {
+		const date = new Date(timestamp)
+			.toLocaleString('ru-RU', {
+				timeZone: timezone?.timezoneName,
+				day: 'numeric',
+				month: 'numeric',
+				year: 'numeric'
+			})
+			.split('.')
+			.reverse()
+			.join('-');
+
+		const time = new Date(timestamp).toLocaleString('ru-RU', {
 			timeZone: timezone?.timezoneName,
-			day: 'numeric',
-			month: 'numeric',
-			year: 'numeric'
-		})
-		.split('.')
-		.reverse()
-		.join('-');
+			hour: '2-digit',
+			minute: '2-digit'
+		});
 
-	const time = new Date(timestamp).toLocaleString('ru-RU', {
-		timeZone: timezone?.timezoneName,
-		hour: '2-digit',
-		minute: '2-digit'
-	});
-
-	return [date, time];
+		return [date, time];
+	} catch (e) {
+		console.error(e);
+		return ['', ''];
+	}
 };
 
 export const day = 1000 * 60 * 60 * 24;
@@ -40,12 +45,17 @@ export const convertToLocaleString = (
 	date: number,
 	timezone: { timezoneName: string; timezoneOffset: string } | undefined
 ) => {
-	const localDate = new Date(date);
-	return localDate.toLocaleString('ru-RU', {
-		timeZone: timezone?.timezoneName,
-		month: 'long',
-		day: 'numeric',
-		hour: '2-digit',
-		minute: '2-digit'
-	});
+	try {
+		const localDate = new Date(date);
+		return localDate.toLocaleString('ru-RU', {
+			timeZone: timezone?.timezoneName,
+			month: 'long',
+			day: 'numeric',
+			hour: '2-digit',
+			minute: '2-digit'
+		});
+	} catch (e) {
+		console.error(e);
+		return '';
+	}
 };

@@ -6,12 +6,13 @@ import { useLocationStore } from '@/stores/location.store';
 import { storeToRefs } from 'pinia';
 import { useModal } from 'vue-final-modal';
 import { BASE_URL } from '@/constants/url';
+import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '../components/modal/Event.vue';
 
 const { open: openEventModal, close, patchOptions } = useModal({ component: EventModal });
 patchOptions({ attrs: { close } });
 
-definePageMeta({ name: 'home' });
+definePageMeta({ name: RouteNameEnum.HOME });
 
 let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined;
 

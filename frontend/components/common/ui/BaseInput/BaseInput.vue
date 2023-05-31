@@ -1,86 +1,55 @@
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-import { PropType } from 'vue';
+<script lang="ts" setup>
 import { InputValue } from './types/types';
 
+withDefaults(
+	defineProps<{
+		className?: string;
+		modelValue?: string;
+		name: string;
+		type?: InputValue;
+		placeholder?: string;
+		label?: string;
+		disabled?: boolean;
+		error?: string;
+	}>(),
+	{ className: '', modelValue: '', type: InputValue.text, placeholder: '', label: '', error: '' }
+);
 
-export default defineComponent({
-	name: 'BaseInput',
-	inheritAttrs: false,
-	props: {
-		className: {
-			type: String,
-			default: '',
-		},
-		modelValue: {
-			type: String,
-			default: '',
-		},
-		name: {
-				type: String,
-				required: true,
-		},
-		type: {
-			type: String as PropType<InputValue>,
-			default: 'text',
-		},
-		placeholder: {
-			type: String,
-			default: '',
-		},
-		label: {
-			type: String,
-			default: '',
-		},
-		disabled: {
-			type: Boolean,
-			default: false,
-		},
-		error: {
-			type: String,
-			default: ''
-		},
-	},
-	emits: ['update:modelValue'],
-	methods: {
-		updateValue(event: Event) {
-			this.$emit('update:modelValue', (event.target as HTMLInputElement).value);
-		},
-	}
-});
+const emit = defineEmits(['update:modelValue']);
+function updateValue(event: Event) {
+	emit('update:modelValue', (event.target as HTMLInputElement).value);
+}
 </script>
 
 <template>
 	<div :class="`input__wrapper ${className}`">
-    <label
-				v-if="label"
-				class="form__label"
-				:for="name"
+		<label
+			v-if="label"
+			class="form__label"
+			:for="name"
 		>
 			{{ label }}
 		</label>
-    <div class="input__box">
-      <input
-					:class="`input ${error ? 'form__error' : ''} form__field`"
-					v-bind="$attrs"
-					:name="name"
-					:type="type"
-          :value="modelValue"
-          :disabled="disabled"
-					:placeholder="placeholder"
-					@input="updateValue"
-      />
-      <slot name="icon-right">
-			</slot>
-    </div>
+		<div class="input__box">
+			<input
+				:class="`input ${error ? 'form__error' : ''} form__field`"
+				v-bind="$attrs"
+				:name="name"
+				:type="type"
+				:value="modelValue"
+				:disabled="disabled"
+				:placeholder="placeholder"
+				@input="updateValue"
+			/>
+			<slot name="icon-right"> </slot>
+		</div>
 		<span
-				v-if="error"
-				class="form__error"
+			v-if="error"
+			class="form__error"
 		>
 			{{ error }}
 		</span>
-  </div>
+	</div>
 </template>
 
 <style lang="less" scoped>
@@ -90,7 +59,7 @@ export default defineComponent({
 }
 
 .input__wrapper {
- margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 .input__box {
@@ -124,5 +93,4 @@ export default defineComponent({
 	position: absolute;
 	right: 0;
 }
-
 </style>

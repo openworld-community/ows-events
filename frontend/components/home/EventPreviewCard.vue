@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { convertToLocaleString } from '@/helpers/dates';
+import { EventOnPoster } from '../../../common/types';
 
-const props = defineProps({
-	eventData: {
-		type: Object,
-		required: true
-	}
-});
+const props = defineProps<{ eventData: EventOnPoster }>();
+
+const openLocation = (url: string) => {
+	window.open(url, '_blank');
+};
+
+//TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
+const templateURL = `https://www.google.com/maps/place/${props.eventData?.location.city}+${props.eventData?.location.country}`;
 </script>
 
 <template>
 	<NuxtLink
-		:href="`/event/${props.eventData.id}`"
+		:to="`/event/${props.eventData.id}`"
 		class="card"
 	>
 		<div class="card__image-container">
@@ -25,20 +27,24 @@ const props = defineProps({
 		</div>
 
 		<div class="card card-description">
+			<!--      TODO когда будет регистрация, нужно будет подставлять имя создавшего-->
 			<p class="card-description__author">Peredelano</p>
 			<h2 class="card-description__title">
 				{{ props.eventData.title }}
 			</h2>
 			<p class="card-description__datetime">
-				{{ convertToLocaleString(props.eventData.date, props.eventData.timezone) }} ({{
-					props.eventData.timezone?.timezoneOffset
-				}}
+				{{ convertToLocaleString(props.eventData.date, props.eventData?.timezone) }}
+				({{ props.eventData.timezone?.timezoneOffset }}
 				{{ props.eventData.timezone?.timezoneName }})
 			</p>
-			<!-- todo должна быть ссылка на карту по геотегу, НО важно помнить, что нельзя <a/> ставить внутри других <a/> элементов, в том числе <NuxtLink/> и прочих -->
-			<p class="card-description__geolink">
+			<span
+				class="card-description__geolink"
+				role="link"
+				tabindex="0"
+				@click.prevent="openLocation(templateURL)"
+			>
 				{{ props.eventData.location.country }}, {{ props.eventData.location.city }}
-			</p>
+			</span>
 		</div>
 	</NuxtLink>
 </template>
@@ -123,6 +129,7 @@ const props = defineProps({
 		}
 
 		&__geolink {
+			width: max-content;
 			font-size: var(--font-size-XS);
 			line-height: 16px;
 			text-decoration-line: underline;

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onBeforeMount, ref, computed } from 'vue';
-import { getDatesDayDifference } from '@/helpers/dates';
 
 const subscriptionExpiredDate = ref<null | Date>(null);
 
@@ -11,7 +10,7 @@ const formatedSubscriptionExpiredDate = computed(() => {
 
 const dateDifference = computed((): number => {
 	return subscriptionExpiredDate.value
-		? getDatesDayDifference(new Date(), subscriptionExpiredDate.value)
+		? getDatesDayDifference(new Date(), subscriptionExpiredDate.value as Date)
 		: 0;
 });
 

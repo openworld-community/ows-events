@@ -134,8 +134,6 @@ const showPicker = () => {
       >
         <CommonIcon
           name="delete"
-          width="24"
-          height="24"
           alt="Очистить"
         />
       </a>
@@ -151,8 +149,6 @@ const showPicker = () => {
       >
         <CommonIcon
           :name="ICON_DICTIONARY[props.inputName]"
-          width="24"
-          height="24"
         />
       </a>
 
@@ -166,8 +162,6 @@ const showPicker = () => {
       >
         <CommonIcon
           :name="ICON_DICTIONARY[props.inputName]"
-          width="24"
-          height="24"
         />
       </span>
 

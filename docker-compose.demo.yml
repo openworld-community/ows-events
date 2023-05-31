@@ -23,7 +23,7 @@ services:
         networks:
             - ows-demo-network
         ports:
-            - '3000:3000'
+            - '13000:3000'
 
     backend:
         build:
@@ -33,7 +33,7 @@ services:
         networks:
             - ows-demo-network
         ports:
-            - '7080:7080'
+            - '8070:7080'
         volumes:
             - assets-db:/app/backend/assets/db
             - assets-img:/app/backend/assets/img

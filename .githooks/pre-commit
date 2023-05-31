@@ -1,2 +1,2 @@
 npx prettier --write
-npx eslint . --ext .ts
+npx eslint . --ext .ts --fix

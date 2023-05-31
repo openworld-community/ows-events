@@ -44,11 +44,11 @@ volumes:
         driver_opts:
             type: none
             o: bind
-            device: ./assets/db
+            device: /home/a/ows-events-demo/assets/db
 
     assets-img:
         driver: local
         driver_opts:
             type: none
             o: bind
-            device: ./assets/img
+            device: /home/a/ows-events-demo/assets/img

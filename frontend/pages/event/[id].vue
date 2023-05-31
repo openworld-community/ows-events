@@ -7,11 +7,15 @@ import { BASE_URL } from '@/constants/url';
 import { RouteNameEnum } from '@/constants/enums/route';
 import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
+import {getEventImage, getEventPicture} from "~/utils/events";
 
-definePageMeta({ name: RouteNameEnum.EVENT });
+definePageMeta({
+	name: RouteNameEnum.EVENT
+});
 
 const route = useRoute();
 const id = route.params.id as string;
+
 const posterEvent = ref<EventOnPoster>(await getEvent(id));
 
 const {
@@ -31,83 +35,53 @@ const {
 } = useModal({ component: EventModal });
 patchEventModal({ attrs: { close: closeEventModal, dataForEdit: posterEvent.value } });
 
-if (!(typeof id === 'string')) {
-	await navigateTo({ path: '/' });
-}
-
 const deleteCard = async () => {
 	await deleteEvent(id);
-	await navigateTo({ path: '/' });
+	await navigateTo({ name: RouteNameEnum.HOME });
 };
 
-const picture = computed(() => {
-	if (posterEvent.value?.image) {
-		if (posterEvent.value.image.startsWith('http')) {
-			return posterEvent.value.image;
-		}
-
-		return `${BASE_URL}${posterEvent.value.image}`;
-	}
-	//TODO убрать эту заглушку
-	return 'https://picsum.photos/400/300';
-});
-
-const convertToLocaleString = (
-	date: number,
-	timezone: { timezoneName: string; timezoneOffset: string } | undefined
-) => {
-	const localDate = new Date(date);
-	return localDate.toLocaleString('ru-RU', {
-		timeZone: timezone?.timezoneName,
-		month: 'long',
-		day: 'numeric',
-		hour: '2-digit',
-		minute: '2-digit'
-	});
-};
-
+// TODO убрать, когда появится авторизация
 const isManaged = getUserEvents().includes(id);
 </script>
 
 <template>
-	<div
-		v-if="posterEvent"
-		:key="posterEvent.id"
-		class="event"
-	>
+	<div class="event">
 		<div class="=event-image event-image__container">
 			<span class="event-image__price">{{ posterEvent.price }} €</span>
 			<img
-				:src="picture"
+				:src="getEventImage(posterEvent)"
 				:alt="$translate('event.image.event')"
 				class="event-image__image"
 			/>
 		</div>
 
 		<div class="event event-description">
+			<!--      TODO когда будет регистрация, нужно будет подставлять имя создавшего-->
 			<p class="event-description__author">Peredelano</p>
 			<h2 class="event-description__title">
 				{{ posterEvent.title }}
 			</h2>
 
 			<p class="event-description__datetime">
-				{{ convertToLocaleString(posterEvent.date, posterEvent.timezone) }}
-				-
-				{{
-					convertToLocaleString(
-						posterEvent.date + posterEvent.durationInSeconds,
-						posterEvent.timezone
-					)
-				}}
+				<span v-if="posterEvent.durationInSeconds">
+					{{ convertToLocaleString(posterEvent.date, posterEvent.timezone) }}
+					-
+					{{
+						convertToLocaleString(
+							posterEvent.date + posterEvent.durationInSeconds,
+							posterEvent.timezone
+						)
+					}}
+				</span>
+				<span v-else>
+					{{ convertToLocaleString(posterEvent.date, posterEvent.timezone) }}
+				</span>
 				<br />
 				({{ posterEvent.timezone?.timezoneOffset }}
 				{{ posterEvent.timezone?.timezoneName }})
 			</p>
 
 			<p class="event-description__geolink">
-				<!-- <a href="https://goo.gl/maps/rdfTtRw7RmQ2sJ5V8?coh=178571&entry=tt"
-          >Место встречи (изменить нельзя)</a
-        > -->
 				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
 			</p>
 			<p class="event-description__description">
@@ -169,6 +143,7 @@ const isManaged = getUserEvents().includes(id);
 		display: flex;
 		width: 100%;
 		flex-direction: column;
+		padding-inline: 0;
 		margin-bottom: 36px;
 
 		&__author {
@@ -225,13 +200,13 @@ const isManaged = getUserEvents().includes(id);
 .event-image {
 	&__container {
 		display: flex;
+		width: 100%;
 		min-height: 232px;
 		height: 232px;
 		position: relative;
+		line-height: 0;
 		background-color: var(--color-background-secondary);
 		margin-bottom: 12px;
-		width: 100%;
-		line-height: 0;
 	}
 
 	&__image {
@@ -244,6 +219,7 @@ const isManaged = getUserEvents().includes(id);
 		top: 0;
 		left: 0;
 		object-fit: cover;
+		border-radius: 4px;
 	}
 
 	&__price {

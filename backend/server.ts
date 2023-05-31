@@ -49,20 +49,19 @@ server.get<{ Reply: string[] }>(
 	async () => countriesAndCitiesController.countries
 );
 
-server.get('/ping', async (request, reply) => {
-	return 'pong';
-});
+server.get('/ping', async () => 'pong');
 
 server.get<{
 	Params: {
 		id: number;
 	};
 	Body: TelegramBot.Message | null;
-}>('/api/postauth/token/:id', async (request, reply) => {
-	return await axios
-		.get(`http://localhost:7090/user/${request.params.id}`)
-		.then((res) => res.data);
-});
+}>(
+	'/api/postauth/token/:id',
+	async (request) =>
+		// eslint-disable-next-line @typescript-eslint/return-await
+		await axios.get(`http://localhost:7090/user/${request.params.id}`).then((res) => res.data)
+);
 
 server.get<{
 	Params: { country: string };

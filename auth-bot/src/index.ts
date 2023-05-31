@@ -8,6 +8,7 @@ const server = fastify({ logger: true });
 const token = process.env.AUTH_TELEGRAM_BOT_TOKEN || '';
 
 if (!token) {
+	// eslint-disable-next-line no-console
 	console.error('AUTH_TELEGRAM_BOT_TOKEN is not set');
 	process.exit(1);
 }
@@ -26,9 +27,7 @@ const temporaryLogins: {
 	};
 } = {};
 
-server.get('/ping', async (request, reply) => {
-	return 'pong';
-});
+server.get('/ping', async () => 'pong');
 
 server.get<{
 	Params: {
@@ -42,9 +41,9 @@ server.get<{
 		return 'No id';
 	}
 
-	const { encodede_backurl } = request.query;
+	const { encodede_backurl: encodedBackurl } = request.query;
 
-	if (!encodede_backurl) {
+	if (!encodedBackurl) {
 		return 'No backurl';
 	}
 
@@ -52,13 +51,12 @@ server.get<{
 		delete temporaryLogins[request.params.id];
 	}
 	temporaryLogins[request.params.id] = {
-		backurl: decodeURI(encodede_backurl),
+		backurl: decodeURI(encodedBackurl),
 		userInfo: null
 	};
 
-	console.log(token);
-
-	reply.redirect(302, 'https://t.me/afisha_authorization_bot?start=' + request.params.id);
+	reply.redirect(302, `https://t.me/afisha_authorization_bot?start=${request.params.id}`);
+	return 0;
 });
 
 server.get<{
@@ -66,7 +64,7 @@ server.get<{
 		id: number;
 	};
 	Body: TelegramBot.Message | null;
-}>('/user/:id', async (request, reply) => {
+}>('/user/:id', async (request) => {
 	const user = temporaryLogins[request.params.id] || null;
 	if (!user) {
 		return null;
@@ -82,7 +80,7 @@ server.get<{
 		{
 			username:
 				userMessageInfo.username ||
-				userMessageInfo.first_name + ' ' + userMessageInfo.last_name,
+				`${userMessageInfo.first_name} ${userMessageInfo.last_name}`,
 			id: userMessageInfo.id
 		},
 		'secret'
@@ -161,7 +159,7 @@ const emit = (text: string) => {
 };
 
 const emitError = (e: string) => {
-	emit('Error: ' + e);
+	emit(`Error: ${e}`);
 };
 
 const testsRun = () => {
@@ -179,8 +177,10 @@ testsRun();
 
 server.listen({ port: 7090, host: '0.0.0.0' }, (err, address) => {
 	if (err) {
+		// eslint-disable-next-line no-console
 		console.error(err);
 		process.exit(1);
 	}
+	// eslint-disable-next-line no-console
 	console.log(`Server listening at ${address}`);
 });

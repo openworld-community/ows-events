@@ -6,7 +6,7 @@
   "scripts": {
     "start:watch": "nodemon server.ts",
     "build": "tsc -p tsconfig.json",
-    "start": "node index.js",
+    "start": "node dist/app/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -16,6 +16,7 @@
     "@fastify/cors": "^8.2.1",
     "@fastify/multipart": "^7.6.0",
     "@fastify/static": "^6.10.1",
+    "axios": "^1.4.0",
     "city-timezones": "^1.2.1",
     "fastify": "^4.17.0",
     "moment-timezone": "^0.5.43",
@@ -24,10 +25,11 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/node": "^20.2.0",
+    "@types/node-telegram-bot-api": "^0.61.6",
     "@types/uuid": "^9.0.1",
-    "typescript": "^5.0.4",
-    "@types/node-telegram-bot-api": "^0.61.6"
+    "typescript": "^5.0.4"
   },
   "nodemonConfig": {
     "ignore": [

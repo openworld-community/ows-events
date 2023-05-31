@@ -1,13 +1,13 @@
 import fastify from "fastify";
 import { EventOnPoster } from "@common/types/event";
 import cors from "@fastify/cors";
-import { eventsStateController, FindEventParams } from "./src/controllers/events-state-controller";
+import { eventsStateController, FindEventParams } from "../controllers/events-state-controller";
 import { StandardResponse } from "@common/types/standard-response";
 import path from "path";
 import Static from "@fastify/static";
 import Multipart, { MultipartFile } from "@fastify/multipart";
-import { countriesAndCitiesController } from "./src/controllers/countries-and-cities.controller";
-import { imageController } from "./src/controllers/image-controller";
+import { countriesAndCitiesController } from "../controllers/countries-and-cities.controller";
+import { imageController } from "../controllers/image-controller";
 import cityTimezones from "city-timezones";
 
 import moment from "moment-timezone";
@@ -15,7 +15,9 @@ import fs from "fs";
 import fsP from "fs/promises";
 import { Registration } from "@common/types/registration";
 import { PaymentInfo } from "@common/types/payment-info";
-import { eventsApi } from './src/rest/v1/events/router';
+import {eventApi, eventsApi} from '../rest/v1/events/router';
+import { locationApi } from "../rest/v1/events/router";
+import { timezonesApi } from "../rest/v1/events/router";
 
 interface eventParams {
   id: string;
@@ -43,22 +45,27 @@ server.register(Static, {
   decorateReply: false,
 });
 
+// eventsApi is a plugin
 server.register(eventsApi, { prefix: "/api/events" });
+server.register(locationApi, { prefix: "/api/location"});
+server.register(timezonesApi, { prefix: "/api/timezones"});
+server.register(eventApi, { prefix: "/api/event"});
 
-server.get<{ Reply: string[] }>("/api/location/countries", async (request, reply) => {
-  return countriesAndCitiesController.countries;
-});
+// server.get<{ Reply: string[] }>("/api/location/countries", async (request, reply) => {
+//   return countriesAndCitiesController.countries;
+// });
 
-server.get<{
-  Params: { country: string };
-  Body: { country: string };
-}>("/api/location/cities/:country", async (request, reply) => {
-  const { country } = request.params;
 
-  return countriesAndCitiesController.getCitiesByCountry(country);
-});
+//server.get<{
+//  Params: { country: string };
+//  Body: { country: string };
+//}>("/api/location/cities/:country", async (request, reply) => {
+//  const { country } = request.params;
 
-server.get<{
+//  return countriesAndCitiesController.getCitiesByCountry(country);
+//});
+
+/*server.get<{
   Params: { country: string; city: string };
   Body: StandardResponse<{
     country: string;
@@ -103,9 +110,9 @@ server.get<{
       timezoneOffset,
     },
   };
-});
+});*/
 
-const allTimezones = moment.tz.names().map(name => {
+/*const allTimezones = moment.tz.names().map(name => {
   return {
     timezoneName: name,
     timezoneOffset: moment.tz(name).format("Z"),
@@ -125,31 +132,31 @@ server.get<{
     type: "success",
     data: allTimezones,
   };
-});
+});*/
 
-server.get("/event/*", function (req, reply) {
+server.get("/event/!*", function (req, reply) {
   reply.sendFile("index.html");
 });
 
-server.get<{
+/*server.get<{
   Reply: EventOnPoster[];
 }>("/api/events", async (request, reply): Promise<EventOnPoster[]> => {
   return eventsStateController.getEvents().slice(0, 100);
-});
+});*/
 
-server.get<{
+/*server.get<{
   Reply: EventOnPoster;
   Params: eventParams;
 }>("/api/events/:id", async (request, reply): Promise<EventOnPoster | undefined> => {
   const eventId = request.params.id;
   return eventsStateController.getEvent(eventId);
-});
+});*/
 
-server.get<{
+/*server.get<{
   Params: eventParams;
   Reply: StandardResponse<{
     event: EventOnPoster;
-    paymantsInfo: PaymentInfo;
+    paymentsInfo: PaymentInfo;
   }>;
 }>("/api/event/payment-info/:id", async (request, reply) => {
   const event = eventsStateController.getEvent(request.params.id);
@@ -160,16 +167,16 @@ server.get<{
     };
   }
 
-  const paymantsFileMd = `assets/presets/${request.params.id}.md`;
-  if (fs.existsSync(paymantsFileMd)) {
+  const paymentsFileMd = `assets/presets/${request.params.id}.md`;
+  if (fs.existsSync(paymentsFileMd)) {
     return {
       type: "success",
       data: {
         event,
-        paymantsInfo: {
+        paymentsInfo: {
           id: event.id,
           type: "markdown",
-          source: fs.readFileSync(paymantsFileMd, "utf-8"),
+          source: fs.readFileSync(paymentsFileMd, "utf-8"),
         },
       },
     };
@@ -177,29 +184,29 @@ server.get<{
 
   const paymentsFile = "assets/presets/payments-info.json";
 
-  const paymantsInfo = JSON.parse(
+  const paymentsInfo = JSON.parse(
     fs.existsSync(paymentsFile) ? fs.readFileSync(paymentsFile, "utf-8") : "[]" || "[]"
   ) as PaymentInfo[];
 
-  if (!paymantsInfo?.length) {
+  if (!paymentsInfo?.length) {
     return {
       type: "error",
-      errors: ["Paymants not found"],
+      errors: ["Payments not found"],
     };
   }
 
-  const eventPaymantsInfo = paymantsInfo.filter(p => p.id === request.params.id);
+  const eventPaymentsInfo = paymentsInfo.filter(p => p.id === request.params.id);
 
   return {
     type: "success",
     data: {
       event,
-      paymantsInfo: eventPaymantsInfo[0],
+      paymentsInfo: eventPaymentsInfo[0],
     },
   };
-});
+});*/
 
-server.post<{
+/*server.post<{
   Body: Registration;
   Reply: StandardResponse<"ok">;
 }>("/api/event/registration", async (request, reply) => {
@@ -219,7 +226,7 @@ server.post<{
   registrations.push({ ...data, date: new Date() });
 
   fs.writeFileSync("assets/db/registrations.json", JSON.stringify(registrations, null, 2));
-});
+});*/
 
 // server.get<{
 //   Reply: StandardResponse<Registration>;
@@ -337,16 +344,16 @@ server.post<{
   }
 });
 
-server.post<{
+/*server.post<{
   Body: FindEventParams;
   Reply: EventOnPoster[];
 }>("/api/events/find", async (request, reply): Promise<EventOnPoster[]> => {
   const { searchLine, country, city } = request.body;
 
   return eventsStateController.getEvents({ searchLine, country, city }).slice(0, 100);
-});
+});*/
 
-server.post<{
+/*server.post<{
   Body: { event: EventOnPoster };
   Reply: StandardResponse<undefined>;
 }>("/api/events/update", async (request, reply) => {
@@ -368,8 +375,9 @@ server.post<{
     type: "success",
     data: undefined,
   };
-});
+});*/
 
+/*
 server.post<{
   Body: { id: string };
   Reply: StandardResponse<undefined>;
@@ -380,6 +388,7 @@ server.post<{
     data: undefined,
   };
 });
+*/
 
 server.setNotFoundHandler(function (req, reply) {
   reply.sendFile("index.html");

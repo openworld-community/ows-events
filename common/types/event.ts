@@ -16,3 +16,4 @@ export type EventOnPoster = {
   };
   url: string;
 };
+

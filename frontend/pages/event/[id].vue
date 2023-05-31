@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { type EventOnPoster } from '../../../common/types/event';
 import { deleteEvent, getEvent } from '@/services/events.services';
-import {useModal, UseModalOptions, VueFinalModal} from 'vue-final-modal';
+import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
 import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
@@ -23,14 +23,16 @@ const {
 } = useModal({
 	component: RegistrationModal,
 	attrs: { eventId: id, close: () => void 0 }
-} as UseModalOptions<InstanceType<typeof VueFinalModal>["$props"]>);
+} as UseModalOptions<InstanceType<typeof VueFinalModal>['$props']>);
 patchRegistrationModal({ attrs: { close: closeRegistrationModal } });
 
 const {
 	open: openEventModal,
 	close: closeEventModal,
 	patchOptions: patchEventModal
-} = useModal({ component: EventModal } as UseModalOptions<InstanceType<typeof VueFinalModal>["$props"]>);
+} = useModal({ component: EventModal } as UseModalOptions<
+	InstanceType<typeof VueFinalModal>['$props']
+>);
 patchEventModal({ attrs: { close: closeEventModal, dataForEdit: posterEvent.value } });
 
 const deleteCard = async () => {
@@ -40,6 +42,13 @@ const deleteCard = async () => {
 
 // TODO убрать, когда появится авторизация
 const isManaged = getUserEvents().includes(id);
+
+const openLocation = (url: string) => {
+  window.open(url, '_blank');
+};
+
+//TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
+const templateURL = computed(() => `https://www.google.com/maps/place/${posterEvent.value?.location.city}+${posterEvent.value?.location.country}`);
 </script>
 
 <template>
@@ -79,9 +88,12 @@ const isManaged = getUserEvents().includes(id);
 				{{ posterEvent.timezone?.timezoneName }})
 			</p>
 
-			<p class="event-description__geolink">
+			<NuxtLink
+				@click.prevent="openLocation(templateURL)"
+				class="event-description__geolink"
+			>
 				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
-			</p>
+			</NuxtLink>
 			<p class="event-description__description">
 				{{ posterEvent.description }}
 			</p>

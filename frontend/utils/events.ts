@@ -19,7 +19,6 @@ export function addUserEvent(id: string) {
 
 
 export const getEventImage = (eventData:EventOnPoster) => {
-	console.log(eventData)
 	if (eventData?.image) {
 		//TODO убрать, когда с бэка будут приходить одинаковые url
 		if(eventData.image.startsWith('https')) {

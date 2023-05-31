@@ -1,182 +1,186 @@
-import TelegramBot from "node-telegram-bot-api";
-import fs from "fs";
-import fastify from "fastify";
-import jwt from "jsonwebtoken";
+import TelegramBot from 'node-telegram-bot-api';
+import fs from 'fs';
+import fastify from 'fastify';
+import jwt from 'jsonwebtoken';
 
 const server = fastify({ logger: true });
 
-const token = process.env.AUTH_TELEGRAM_BOT_TOKEN || "";
+const token = process.env.AUTH_TELEGRAM_BOT_TOKEN || '';
 
 if (!token) {
-  console.error("TELEGRAM_BOT_TOKEN is not set");
-  process.exit(1);
+	console.error('AUTH_TELEGRAM_BOT_TOKEN is not set');
+	process.exit(1);
 }
 
 const bot = new TelegramBot(token, { polling: true });
 
 type User = {
-  chatId: number;
-  status: "active" | "inactive";
+	chatId: number;
+	status: 'active' | 'inactive';
 };
 
 const temporaryLogins: {
-  [key: string]: {
-    userInfo: TelegramBot.Message | null;
-    backurl: string | null;
-  };
+	[key: string]: {
+		userInfo: TelegramBot.Message | null;
+		backurl: string | null;
+	};
 } = {};
 
-server.get("/ping", async (request, reply) => {
-  return "pong";
+server.get('/ping', async (request, reply) => {
+	return 'pong';
 });
 
 server.get<{
-  Params: {
-    id: string;
-    encodede_backurl: string;
-  };
-}>("/auth/:id/:encodede_backurl", async (request, reply) => {
-  if (!request.params.id) {
-    return "No id";
-  }
-  if (!request.params.encodede_backurl) {
-    return "No backurl";
-  }
+	Params: {
+		id: string;
+	};
+	Querystring: {
+		encodede_backurl: string;
+	};
+}>('/auth/:id', async (request, reply) => {
+	if (!request.params.id) {
+		return 'No id';
+	}
 
-  if (temporaryLogins[request.params.id]) {
-    delete temporaryLogins[request.params.id];
-  }
-  temporaryLogins[request.params.id] = {
-    backurl: decodeURI(request.params.encodede_backurl),
-    userInfo: null,
-  };
+	const { encodede_backurl } = request.query;
 
-  console.log(token);
+	if (!encodede_backurl) {
+		return 'No backurl';
+	}
 
-  reply.redirect(
-    302,
-    "https://t.me/afisha_authorization_bot?start=" + request.params.id
-  );
+	if (temporaryLogins[request.params.id]) {
+		delete temporaryLogins[request.params.id];
+	}
+	temporaryLogins[request.params.id] = {
+		backurl: decodeURI(encodede_backurl),
+		userInfo: null
+	};
+
+	console.log(token);
+
+	reply.redirect(302, 'https://t.me/afisha_authorization_bot?start=' + request.params.id);
 });
 
 server.get<{
-  Params: {
-    id: number;
-  };
-  Body: TelegramBot.Message | null;
-}>("/user/:id", async (request, reply) => {
-  const user = temporaryLogins[request.params.id] || null;
-  if (!user) {
-    return null;
-  }
+	Params: {
+		id: number;
+	};
+	Body: TelegramBot.Message | null;
+}>('/user/:id', async (request, reply) => {
+	const user = temporaryLogins[request.params.id] || null;
+	if (!user) {
+		return null;
+	}
 
-  const userMessageInfo = user.userInfo?.from;
+	const userMessageInfo = user.userInfo?.from;
 
-  if (!userMessageInfo) {
-    return null;
-  }
+	if (!userMessageInfo) {
+		return null;
+	}
 
-  return jwt.sign(
-    {
-      username:
-        userMessageInfo.username ||
-        userMessageInfo.first_name + " " + userMessageInfo.last_name,
-      id: userMessageInfo.id,
-    },
-    "secret"
-  );
+	return jwt.sign(
+		{
+			username:
+				userMessageInfo.username ||
+				userMessageInfo.first_name + ' ' + userMessageInfo.last_name,
+			id: userMessageInfo.id
+		},
+		'secret'
+	);
 
-  return temporaryLogins[request.params.id] || null;
+	return temporaryLogins[request.params.id] || null;
 });
 
 class Users {
-  private users: { [key: number]: User } = {};
+	private users: { [key: number]: User } = {};
 
-  constructor() {
-    if (!fs.existsSync("assets")) {
-      fs.mkdirSync("assets");
-      fs.mkdirSync("assets/db");
-      fs.writeFileSync("assets/db/users.json", "{}");
-    } else if (!fs.existsSync("assets/db")) {
-      fs.mkdirSync("assets/db");
-      fs.writeFileSync("assets/db/users.json", "{}");
-    } else if (!fs.existsSync("assets/db/users.json")) {
-      fs.writeFileSync("assets/db/users.json", "{}");
-    }
+	constructor() {
+		if (!fs.existsSync('assets')) {
+			fs.mkdirSync('assets');
+			fs.mkdirSync('assets/db');
+			fs.writeFileSync('assets/db/users.json', '{}');
+		} else if (!fs.existsSync('assets/db')) {
+			fs.mkdirSync('assets/db');
+			fs.writeFileSync('assets/db/users.json', '{}');
+		} else if (!fs.existsSync('assets/db/users.json')) {
+			fs.writeFileSync('assets/db/users.json', '{}');
+		}
 
-    this.users = JSON.parse(fs.readFileSync("assets/db/users.json", "utf-8"));
-  }
+		this.users = JSON.parse(fs.readFileSync('assets/db/users.json', 'utf-8'));
+	}
 
-  private writeUsers() {
-    fs.writeFileSync("assets/db/users.json", JSON.stringify(this.users));
-  }
+	private writeUsers() {
+		fs.writeFileSync('assets/db/users.json', JSON.stringify(this.users));
+	}
 
-  addUser(user: User) {
-    this.users[user.chatId] = user;
-    this.writeUsers();
-  }
+	addUser(user: User) {
+		this.users[user.chatId] = user;
+		this.writeUsers();
+	}
 
-  markUserAsInactive(chatId: number) {
-    this.users[chatId].status = "inactive";
+	markUserAsInactive(chatId: number) {
+		this.users[chatId].status = 'inactive';
 
-    this.writeUsers();
-  }
+		this.writeUsers();
+	}
 
-  getUser(chatId: number) {
-    return this.users[chatId];
-  }
+	getUser(chatId: number) {
+		return this.users[chatId];
+	}
 
-  getActiveUsers() {
-    return Object.values(this.users).filter((user) => user.status === "active");
-  }
+	getActiveUsers() {
+		return Object.values(this.users).filter((user) => user.status === 'active');
+	}
 }
 
 const users = new Users();
 
 bot.onText(/\*/, (msg) => {
-  const chatId = msg.chat.id;
-  bot.sendMessage(chatId, "I didn't understand that command.");
+	const chatId = msg.chat.id;
+	bot.sendMessage(chatId, "I didn't understand that command.");
 });
 
 bot.onText(/\/start/, (msg) => {
-  const secretCode = msg.text?.split(" ")[1];
+	const secretCode = msg.text?.split(' ')[1];
 
-  if (!secretCode) {
-    return;
-  }
+	if (!secretCode) {
+		return;
+	}
 
-  temporaryLogins[secretCode].userInfo = msg;
+	temporaryLogins[secretCode].userInfo = msg;
 
-  bot.sendMessage(msg.chat.id, temporaryLogins[secretCode].backurl || "");
+	const href = temporaryLogins[secretCode].backurl || '';
+
+	bot.sendMessage(msg.chat.id, `<a href='${href}'> ${href} </a>`, { parse_mode: 'HTML' });
 });
 
 const emit = (text: string) => {
-  users.getActiveUsers().forEach((user) => {
-    bot.sendMessage(user.chatId, text);
-  });
+	users.getActiveUsers().forEach((user) => {
+		bot.sendMessage(user.chatId, text);
+	});
 };
 
 const emitError = (e: string) => {
-  emit("Error: " + e);
+	emit('Error: ' + e);
 };
 
 const testsRun = () => {
-  try {
-    emit("I am alive");
-  } catch (e: any) {
-    emitError(e.toString());
-  }
+	try {
+		emit('I am alive');
+	} catch (e: any) {
+		emitError(e.toString());
+	}
 };
 
 setInterval(() => {
-  testsRun();
+	testsRun();
 }, 1000 * 60 * 10);
 testsRun();
 
-server.listen({ port: 7090, host: "0.0.0.0" }, (err, address) => {
-  if (err) {
-    console.error(err);
-    process.exit(1);
-  }
-  console.log(`Server listening at ${address}`);
+server.listen({ port: 7090, host: '0.0.0.0' }, (err, address) => {
+	if (err) {
+		console.error(err);
+		process.exit(1);
+	}
+	console.log(`Server listening at ${address}`);
 });

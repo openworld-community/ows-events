@@ -60,9 +60,9 @@ export default defineComponent({
 		>
 			{{ label }}
 		</label>
-    <div :class="`input__box ${error ? 'form__error' : ''} form__field`">
+    <div class="input__box">
       <input
-					class="input"
+					:class="`input ${error ? 'form__error' : ''} form__field`"
 					v-bind="$attrs"
 					:name="name"
 					:type="type"
@@ -97,21 +97,20 @@ export default defineComponent({
 	position: relative;
 	display: flex;
 	align-items: center;
+}
+
+.input__box input {
+	width: 100%;
+	padding: 10px 15px;
+	outline: none;
+	font-size: 1rem;
+	color: #333;
 	border: 1px solid #ccc;
-	border-radius: 4px;
+	border-radius: 24px;
 	overflow: hidden;
 	&.error {
 		border: 1px solid var(--color-accent-red);
 	}
-}
-
-.input__box input {
-	flex-grow: 1;
-	padding: 10px 15px;
-	border: none;
-	outline: none;
-	font-size: 1rem;
-	color: #333;
 }
 
 /* If using Font Awesome or similar, you can add some spacing to the icons */
@@ -120,7 +119,8 @@ export default defineComponent({
 	color: var(--color-input-icons);
 }
 
-:deep(.input__box button) {
+:deep(.input__box > button),
+:deep(.input__box > svg) {
 	position: absolute;
 	right: 0;
 }

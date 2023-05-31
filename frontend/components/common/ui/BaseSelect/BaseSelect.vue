@@ -48,6 +48,11 @@ export default defineComponent({
 			isRemove: false,
 		}
 	},
+	// computed: {
+	// 	filteredList() {
+	// 		return this.list?.filter(item => item.includes(this.modelValue));
+	// 	},
+	// },
 	methods: {
 		updateValue(value: string) {
 			this.$emit('update:modelValue', value);
@@ -61,8 +66,8 @@ export default defineComponent({
 		},
 		onRemove() {
 			this.$emit('update:modelValue', '');
-		}
-	},
+		},
+	}
 });
 </script>
 
@@ -98,16 +103,18 @@ export default defineComponent({
 			</template>
 		</base-input>
 
-		<ul :class="`select__list ${isOpen ? 'isOpen' : ''}`">
-			<li
-					v-for="item in list"
-					:key="item"
-					class="select__list-item"
-					@click="updateValue(item)"
-			>
-				{{ item }}
-			</li>
-		</ul>
+		<div :class="`select__list-box ${isOpen ? 'isOpen' : ''}`">
+			<ul class="select__list benefits">
+				<li
+						v-for="item in list"
+						:key="item"
+						class="select__list-item"
+						@click="updateValue(item)"
+				>
+					{{ item }}
+				</li>
+			</ul>
+			</div>
 	</div>
 </template>
 
@@ -123,22 +130,52 @@ export default defineComponent({
 		//width: 100%;
 	}
 
-	&__list {
+	&__list-box {
 		display: none;
 		position: absolute;
 		top: 50px;
 		left: 0;
+		width: 267px;
+		height: 202px;
+		padding: 14px 16px;
 		background-color: var(--color-white);
 		max-height: 200px;
-		overflow-y: scroll;
 		z-index: 99;
+		border-radius: 24px;
+		border: 1px solid #ccc;
 		&.isOpen {
 			display: block;
 		}
+	}
+
+	&__list {
+		width: 100%;
+		height: 100%;
+		overflow-y: scroll;
+		overflow-x: hidden;
+
+	}
+
+	&__list::-webkit-scrollbar {
+		width: 10px;
+		background-color: var(--color-white);
+		border-radius: 5px;
+		height: 200px;
+	}
+
+	&__list::-webkit-scrollbar-thumb {
+		background: var(--color-input-icons);
+		border-radius: 5px;
+		height: 20px;
+	}
+
+	&__list::-webkit-scrollbar-track {
+		background-color: var(--color-white);
 	}
 
 	&__list-item {
 		padding: 5px;
 	}
 }
+
 </style>

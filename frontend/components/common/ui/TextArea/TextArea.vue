@@ -59,15 +59,18 @@ export default defineComponent({
 
 <style lang="less" scoped>
 .textarea {
+	width: 100%;
 	border: 1px solid #ccc;
 	flex-grow: 1;
 	padding: 10px 15px;
 	outline: none;
 	font-size: 1rem;
 	color: #333;
+	border-radius: 24px;
+	&__wrapper {
+		position: relative;
+		margin-bottom: 20px;
+	}
 }
 
-.textarea__wrapper {
-	margin-bottom: 20px;
-}
 </style>

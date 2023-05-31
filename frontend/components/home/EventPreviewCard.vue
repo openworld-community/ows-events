@@ -34,8 +34,8 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 			</h2>
 			<p class="card-description__datetime">
 				{{ convertToLocaleString(props.eventData.date, props.eventData.timezone) }}
-				({{ props.eventData.timezone.timezoneOffset }}
-				{{ props.eventData.timezone.timezoneName }})
+				({{ props.eventData.timezone?.timezoneOffset }}
+				{{ props.eventData.timezone?.timezoneName }})
 			</p>
 			<span
 				class="card-description__geolink"

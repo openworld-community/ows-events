@@ -2,7 +2,7 @@ FROM node:16.15.1-alpine AS builder
 
 WORKDIR /app
 
-COPY ../common ../common/
+COPY ./common ../common/
 COPY ./frontend/package-lock.json ./
 COPY ./frontend/package.json ./
 

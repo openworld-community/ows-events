@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { EventOnPoster } from '../../../common/types';
 
+
 const props = defineProps<{ eventData: EventOnPoster }>();
 
 const openLocation = (url: string) => {
@@ -19,10 +20,9 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 		<div class="card__image-container">
 			<span class="card__price">{{ props.eventData.price }} €</span>
 			<img
-				v-if="props.eventData.image"
 				:alt="$translate('home.events.image_alt')"
 				class="card__image"
-				:src="props.eventData.image"
+				:src="getEventImage(props.eventData)"
 			/>
 		</div>
 

@@ -103,8 +103,8 @@ const eventsWithAdd = computed((): (EventOnPoster & { type: 'event' })[] => {
 				? x.image.includes('http')
 					? x.image
 					: `${BASE_URL}${x.image}`
-        //TODO убрать эту заглушку
-				: 'https://picsum.photos/400/300'
+				: //TODO убрать эту заглушку
+				  'https://picsum.photos/400/300'
 		};
 	});
 
@@ -143,32 +143,21 @@ const getFilteredEvents = (
 	country: string,
 	city: string
 ) => {
-	if (!search && !country && !city) {
-		return events;
-	}
+	if (!search && !country && !city) return events;
 
 	const searchSource = (event: EventOnPoster) =>
 		[event.title, event.description, event.location.city, event.location.country]
 			.join(' ')
 			.toLowerCase();
 
-	let searchResult = events.filter((event) => {
-		return searchSource(event).includes(search.toLowerCase());
+	return events.filter((event) => {
+		const eventData = searchSource(event);
+		return (
+			eventData.includes(search.toLowerCase()) ||
+			(country && eventData.includes(country.toLowerCase())) ||
+			(city && eventData.includes(city.toLowerCase()))
+		);
 	});
-
-	if (country) {
-		searchResult = searchResult.filter((event) => {
-			return searchSource(event).includes(country.toLowerCase());
-		});
-	}
-
-	if (city) {
-		searchResult = searchResult.filter((event) => {
-			return searchSource(event).includes(city.toLowerCase());
-		});
-	}
-
-	return searchResult;
 };
 const now = Date.now();
 </script>

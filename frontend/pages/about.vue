@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import aboutUsImg from '@/assets/img/about-us@2x.jpg';
+import eventScreen from '@/assets/img/event-screen@2x.png';
 import { REPO_URL } from '@/constants/url';
 </script>
 
@@ -7,7 +7,7 @@ import { REPO_URL } from '@/constants/url';
 	<section class="about">
 		<h2 class="title">{{ $translate('about.title') }}</h2>
 		<img
-			:src="aboutUsImg"
+			:src="eventScreen"
 			class="about__img"
 			:alt="$translate('about.alt')"
 		/>

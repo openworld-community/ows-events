@@ -28,8 +28,9 @@ const temporaryLogins: {
 } = {};
 
 const clearTemporaryLogin = (id: string) => {
-	delete temporaryLogins[id];
-	setTimeout(() => {}, 1000 * 60 * 3);
+	setTimeout(() => {
+		delete temporaryLogins[id];
+	}, 1000 * 60 * 3);
 };
 
 server.get('/ping', async () => 'pong');

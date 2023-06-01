@@ -10,7 +10,7 @@ const { $translate } = useNuxtApp();
 
 type Props = {
 	dataForEdit?: EventOnPoster;
-	close: () => void;
+	closeEventModal: () => void;
 };
 
 const props = defineProps<Props>();
@@ -129,7 +129,7 @@ const checkFormFilling = computed(() => {
 });
 
 const closeModal = () => {
-	setTimeout(() => props.close(), 300);
+	setTimeout(() => props.closeEventModal(), 300);
 };
 
 const paramsForSubmit = computed(() => {
@@ -164,7 +164,6 @@ const paramsForSubmit = computed(() => {
 });
 
 const submitEvent = async () => {
-	//TODO: проверьте тип плиз
 	isLoading.value = true;
 	try {
 		let imageURL;

@@ -5,12 +5,22 @@ import { getEvents, getEventsByParams } from '@/services/events.services';
 import { useLocationStore } from '@/stores/location.store';
 import { storeToRefs } from 'pinia';
 import { useModal } from 'vue-final-modal';
-import { BASE_URL } from '@/constants/url';
 import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '../components/modal/Event.vue';
+import NeedAuthorize from '~/components/modal/NeedAuthorize.vue';
 
-const { open: openEventModal, close, patchOptions } = useModal({ component: EventModal });
-patchOptions({ attrs: { close } });
+const {
+	open: openEventModal,
+	close: closeEventModal,
+	patchOptions: eventModalPatch
+} = useModal({ component: EventModal });
+eventModalPatch({ attrs: { closeEventModal } });
+const {
+	open: openNeedAuthorizeModal,
+	close: closeNeedAuthorizeModal,
+	patchOptions: needAuthorizeModalPatch
+} = useModal({ component: NeedAuthorize });
+needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
 
 definePageMeta({ name: RouteNameEnum.HOME });
 
@@ -156,6 +166,14 @@ const getFilteredEvents = (
 		);
 	});
 };
+
+const onButtonClick = () => {
+	if (useCookie('token').value) {
+		openEventModal();
+	} else {
+		openNeedAuthorizeModal();
+	}
+};
 const now = Date.now();
 </script>
 
@@ -218,7 +236,7 @@ const now = Date.now();
 			icon-height="56"
 			aria-haspopup="true"
 			:aria-label="$translate('home.button.add_event_aria')"
-			@click="openEventModal()"
+			@click="onButtonClick"
 		/>
 	</div>
 </template>

@@ -1,30 +1,13 @@
 <script setup lang="ts">
-import { v4 } from 'uuid';
-import { ref } from 'vue';
-import { AUTH_SERVER_URL, SERVER_URL } from '@/constants/url';
-import { UserInfo } from '../../../common/types/user';
 
 type Props = {
 	close: () => void;
+	isAuthorized: boolean;
+	authorize: () => void;
+	deauthorize: () => void;
 };
 
 const props = defineProps<Props>();
-const userCookie = useCookie<UserInfo | null>('user');
-
-const authorize = (url: string) => {
-	window.open(url, '_blank');
-	setTimeout(() => props.close(), 300);
-};
-
-const temporaryId = v4();
-
-const authLink = ref<string>(
-	`${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backurl=${encodeURIComponent(
-		`${SERVER_URL}/postauth/${temporaryId}`
-	)}`
-);
-
-const isAuthorized = computed(() => !!userCookie.value);
 </script>
 
 <template>
@@ -39,7 +22,7 @@ const isAuthorized = computed(() => !!userCookie.value);
 		:lock-scroll="false"
 	>
 		<NuxtLink
-			@click.prevent="authorize(authLink)"
+			@click="isAuthorized ? props.deauthorize() : props.authorize()"
 			class="authorisation-button"
 		>
 			<p class="authorisation-button__text">

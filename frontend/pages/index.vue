@@ -148,7 +148,7 @@ const getFilteredEvents = (
 	return events.filter((event) => {
 		const eventData = searchSource(event);
 		return (
-			eventData.includes(search.toLowerCase()) ||
+			(search && eventData.includes(search.toLowerCase())) ||
 			(country && eventData.includes(country.toLowerCase())) ||
 			(city && eventData.includes(city.toLowerCase()))
 		);

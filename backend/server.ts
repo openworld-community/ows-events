@@ -19,6 +19,8 @@ import { imageController } from './src/controllers/image-controller';
 import { countriesAndCitiesController } from './src/controllers/countries-and-cities.controller';
 import { eventsStateController, FindEventParams } from './src/controllers/events-state-controller';
 
+import jwt from 'jsonwebtoken';
+
 interface EventParams {
 	id: string;
 }
@@ -393,6 +395,7 @@ server.post<{
 
 server.post<{
 	Body: { event: EventOnPoster };
+	Header: { Authorization: string };
 	Reply: StandardResponse<{ id: string }>;
 }>('/api/events/add', async (request) => {
 	const body = request.body as { event: EventOnPoster | undefined };
@@ -401,6 +404,13 @@ server.post<{
 			type: 'error'
 		};
 	}
+	// const user = jwt.verify(request.headers.authorization?.split(' ')[1] || '', 'secret') as string;
+
+	// if (!user) {
+	// 	throw new Error('User is not defined');
+	// }
+
+
 	const { event } = body;
 	if (!event) {
 		return {

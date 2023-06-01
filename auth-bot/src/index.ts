@@ -27,6 +27,11 @@ const temporaryLogins: {
 	};
 } = {};
 
+const clearTemporaryLogin = (id: string) => {
+	delete temporaryLogins[id];
+	setTimeout(() => {}, 1000 * 60 * 3);
+};
+
 server.get('/ping', async () => 'pong');
 
 server.get<{
@@ -54,6 +59,7 @@ server.get<{
 		backurl: decodeURI(encodedBackurl),
 		userInfo: null
 	};
+	clearTemporaryLogin(request.params.id);
 
 	reply.redirect(302, `https://t.me/afisha_authorization_bot?start=${request.params.id}`);
 	return 0;
@@ -61,7 +67,7 @@ server.get<{
 
 server.get<{
 	Params: {
-		id: number;
+		id: string;
 	};
 	Body: TelegramBot.Message | null;
 }>('/user/:id', async (request) => {
@@ -85,6 +91,8 @@ server.get<{
 		},
 		'secret'
 	);
+
+	clearTemporaryLogin(request.params.id);
 
 	return {
 		token: newToken,

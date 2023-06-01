@@ -5,18 +5,16 @@ export default {
 </script>
 
 <script lang="ts" setup>
-
-type textAreaProps = {
-	className?: string;
-	modelValue?: string;
-	name: string;
-	placeholder?: string;
-	label?: string;
-	error?: string;
-}
-
+// @ts-ignore
 withDefaults(
-		defineProps<{ textAreaProps }>(),
+		defineProps<{
+			className?: string;
+			modelValue?: string;
+			name: string;
+			placeholder?: string;
+			label?: string;
+			error?: string;
+		}>(),
 		{
 			textAreaProps: undefined,
 			name: '',

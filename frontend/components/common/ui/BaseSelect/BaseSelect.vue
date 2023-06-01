@@ -3,19 +3,18 @@ import {ref} from 'vue';
 import CommonIcon from '~/components/common/Icon.vue';
 import BaseInput from '~/components/common/ui/BaseInput/BaseInput.vue';
 
-type selectProps = {
-	className?: string;
-	modelValue?: string;
-	list: string[];
-	name: string;
-	placeholder?: string;
-	label?: string;
-	error?: string;
-	disabled?: boolean;
-}
-
+// @ts-ignore
 withDefaults(
-		defineProps<{ selectProps }>(),
+		defineProps<{
+			className?: string;
+			modelValue?: string;
+			list: string[];
+			name: string;
+			placeholder?: string;
+			label?: string;
+			error?: string;
+			disabled?: boolean;
+		}>(),
 		{
 			selectProps: undefined,
 			name: '',

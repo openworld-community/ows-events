@@ -4,8 +4,8 @@ import CommonIcon from '~/components/common/Icon.vue';
 import BaseInput from '~/components/common/ui/BaseInput/BaseInput.vue';
 import {Props} from "~/components/common/ui/BaseSelect/types/types";
 
-withDefaults(
-	defineProps<Props>(),
+// @ts-ignore
+withDefaults(defineProps<Props>(),
 	{
 		className: '',
 		modelValue: '',
@@ -23,6 +23,7 @@ const updateValue = (value: string) => {
 };
 
 const setIsOpen = () => {
+	console.log('isOpen', isOpen.value)
 	isOpen.value = !isOpen.value;
 };
 
@@ -36,7 +37,10 @@ const onRemove = () => {
 </script>
 
 <template>
-	<div :class="`select__wrapper ${className}`">
+  <div
+    :class="`select__wrapper ${className}`"
+    @click="setIsOpen()"
+  >
 		<BaseInput
 			:name="name"
 			:model-value="modelValue"
@@ -44,7 +48,6 @@ const onRemove = () => {
 			:disabled="disabled"
 			:placeholder="placeholder"
 			:error="error"
-			@click="setIsOpen"
 		>
 			<template #icon-right>
 				<button @click="onRemove">
@@ -61,13 +64,12 @@ const onRemove = () => {
 						width="24"
 						height="24"
 						alt="Открыть"
-						@click.prevent="setIsOpen"
 					/>
 				</button>
 			</template>
 		</BaseInput>
 
-		<div :class="`select__list-box ${isOpen ? 'isOpen' : ''}`">
+		<div :class="`select__list-box ${isOpen.value ? 'isOpen' : ''}`">
 			<ul class="select__list benefits">
 				<li
 					v-for="item in list"

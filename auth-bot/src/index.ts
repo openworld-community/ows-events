@@ -27,6 +27,12 @@ const temporaryLogins: {
 	};
 } = {};
 
+const clearTemporaryLogin = (id: string) => {
+	setTimeout(() => {
+		delete temporaryLogins[id];
+	}, 1000 * 60 * 3);
+};
+
 server.get('/ping', async () => 'pong');
 
 server.get<{
@@ -54,14 +60,14 @@ server.get<{
 		backurl: decodeURI(encodedBackurl),
 		userInfo: null
 	};
+	clearTemporaryLogin(request.params.id);
 
-	reply.redirect(302, `https://t.me/afisha_authorization_bot?start=${request.params.id}`);
-	return 0;
+	return reply.redirect(302, `https://t.me/afisha_authorization_bot?start=${request.params.id}`);
 });
 
 server.get<{
 	Params: {
-		id: number;
+		id: string;
 	};
 	Body: TelegramBot.Message | null;
 }>('/user/:id', async (request) => {
@@ -76,7 +82,7 @@ server.get<{
 		return null;
 	}
 
-	return jwt.sign(
+	const newToken = jwt.sign(
 		{
 			username:
 				userMessageInfo.username ||
@@ -86,7 +92,15 @@ server.get<{
 		'secret'
 	);
 
-	return temporaryLogins[request.params.id] || null;
+	clearTemporaryLogin(request.params.id);
+
+	return {
+		token: newToken,
+		userNickName: userMessageInfo.username,
+		firstNickName: userMessageInfo.first_name,
+		lastNickName: userMessageInfo.last_name,
+		id: userMessageInfo.id
+	};
 });
 
 class Users {

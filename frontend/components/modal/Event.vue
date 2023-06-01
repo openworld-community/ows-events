@@ -187,6 +187,7 @@ const submitEvent = async () => {
 			});
 		} else {
 			imageURL = await postEventImage(newImageFile.value as File);
+
 			const res = await postEvent({
 				event: {
 					...params,

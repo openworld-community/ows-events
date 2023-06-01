@@ -6,13 +6,17 @@ import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
 import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
+import { UserInfo } from '~/../common/types/user';
 
 definePageMeta({
 	name: RouteNameEnum.EVENT
 });
 
+console.log('event page');
 const route = useRoute();
 const id = route.params.id as string;
+
+const user = useCookie<UserInfo | null>('user');
 
 const posterEvent = ref<EventOnPoster>(await getEvent(id));
 
@@ -44,11 +48,14 @@ const deleteCard = async () => {
 const isManaged = getUserEvents().includes(id);
 
 const openLocation = (url: string) => {
-  window.open(url, '_blank');
+	window.open(url, '_blank');
 };
 
 //TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
-const templateURL = computed(() => `https://www.google.com/maps/place/${posterEvent.value?.location.city}+${posterEvent.value?.location.country}`);
+const templateURL = computed(
+	() =>
+		`https://www.google.com/maps/place/${posterEvent.value?.location.city}+${posterEvent.value?.location.country}`
+);
 </script>
 
 <template>
@@ -119,7 +126,7 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 				/>
 			</template>
 
-			<template v-if="isManaged">
+			<template v-if="isManaged && user?.id && user.id === posterEvent.creatorId">
 				<CommonButton
 					class="event-actions__button"
 					button-class="button__success"

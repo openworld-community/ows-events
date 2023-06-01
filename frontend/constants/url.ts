@@ -7,3 +7,7 @@ export const LOCATION_API_URL = `https://api.ipregistry.co/?key=${
 }`;
 
 export const REPO_URL = 'https://github.com/openworld-community/ows-events';
+
+export const AUTH_SERVER_URL = import.meta.env?.AUTH_SERVER_URL || process.env?.AUTH_SERVER_URL;
+
+export const SERVER_URL = import.meta.env?.VITE_POSTAUTH_URL || process.env?.VITE_POSTAUTH_URL;

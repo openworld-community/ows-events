@@ -90,6 +90,10 @@ export const defaultTranslation = {
   },
   header: {
     subscription_expired: '$t(dates.day.key) до конца подписки'
+  },
+  callToAction: {
+    delete: 'Очистить',
+    search: 'Поиск'
   }
 };
 

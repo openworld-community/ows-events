@@ -1,5 +1,6 @@
 export type EventOnPoster = {
 	id: string;
+	creatorId?: string;
 	title: string;
 	description: string;
 	date: number;

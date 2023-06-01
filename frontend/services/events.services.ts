@@ -30,16 +30,50 @@ export const getEvent = async (id: string): Promise<EventOnPoster> => {
 };
 
 export const postEvent = async (payload: PostEventPayload) => {
-	const { data } = await api.post<StandardResponse<{ id: string }>>('/events/add', payload);
+	const token = useCookie<string>('token').value;
+
+	if (!token) {
+		throw new Error('You are not authorized');
+	}
+
+	const { data } = await api.post<StandardResponse<{ id: string }>>('/events/add', payload, {
+		headers: {
+			Authorization: token
+		}
+	});
 	return data;
 };
 
 export const editEvent = async (data: any) => {
-	await api.post('/events/update', data);
+	const token = useCookie<string>('token').value;
+
+	if (!token) {
+		throw new Error('You are not authorized');
+	}
+
+	await api.post('/events/update', data, {
+		headers: {
+			Authorization: token
+		}
+	});
 };
 
 export const deleteEvent = async (id: string) => {
-	await api.post('/events/delete', { id });
+	const token = useCookie<string>('token').value;
+
+	if (!token) {
+		throw new Error('You are not authorized');
+	}
+
+	await api.post(
+		'/events/delete',
+		{ id },
+		{
+			headers: {
+				Authorization: token
+			}
+		}
+	);
 };
 
 //EVENT IMAGES

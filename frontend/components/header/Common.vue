@@ -36,8 +36,8 @@ function scrollToTop() {
 // checkUserToken();
 
 const temporaryId = v4();
-const AUTH_SERVER_URL = process.env.AUTH_SERVER_URL;
-const SERVER_URL = process.env.VITE_BASE_URL;
+const AUTH_SERVER_URL = '' ?? process.env.AUTH_SERVER_URL;
+const SERVER_URL = '' ?? process.env.VITE_BASE_URL;
 const authLink = ref<string>(
 	`${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backurl=${encodeURIComponent(
 		`${SERVER_URL}/postauth/${temporaryId}`
@@ -46,55 +46,55 @@ const authLink = ref<string>(
 </script>
 
 <template>
-  <header class="header">
-    <div class="header__container">
-      <div class="header__left">
-        <NuxtLink
-          to="/"
-          class="header__navigation-link"
-          :aria-label="$translate('home.button.afisha_logo_aria')"
-          @click.prevent="scrollToTop"
-        >
-          <CommonIcon
-            v-if="route.name === RouteNameEnum.HOME"
-            name="peredelano-afisha"
-            width="142"
+	<header class="header">
+		<div class="header__container">
+			<div class="header__left">
+				<NuxtLink
+					to="/"
+					class="header__navigation-link"
+					:aria-label="$translate('home.button.afisha_logo_aria')"
+					@click.prevent="scrollToTop"
+				>
+					<CommonIcon
+						v-if="route.name === RouteNameEnum.HOME"
+						name="peredelano-afisha"
+						width="142"
 						height="24"
-            alt="Peredelano Афиша"
-          />
-          <CommonIcon
-            v-else
-            name="back"
-            width="24"
+						alt="Peredelano Афиша"
+					/>
+					<CommonIcon
+						v-else
+						name="back"
+						width="24"
 						height="24"
-            :aria-label="$translate('global.button.back')"
-          />
-        </NuxtLink>
-      </div>
+						:aria-label="$translate('global.button.back')"
+					/>
+				</NuxtLink>
+			</div>
 
-      <div class="header__right">
-        <HeaderSubscriptionExpired
-          v-if="route.name === RouteNameEnum.HOME"
-          class="header__subscription"
-        />
+			<div class="header__right">
+				<HeaderSubscriptionExpired
+					v-if="route.name === RouteNameEnum.HOME"
+					class="header__subscription"
+				/>
 
-        <nav
-          class="header__navigation"
-          role="navigation"
-          :aria-label="$translate('global.nav')"
-        >
-          <NuxtLink
-            v-if="route.name === RouteNameEnum.HOME"
-            to="/about"
-            class="header__navigation-link"
-          >
-            <CommonIcon
-              name="info"
+				<nav
+					class="header__navigation"
+					role="navigation"
+					:aria-label="$translate('global.nav')"
+				>
+					<NuxtLink
+						v-if="route.name === RouteNameEnum.HOME"
+						to="/about"
+						class="header__navigation-link"
+					>
+						<CommonIcon
+							name="info"
 							width="24"
 							height="24"
-              :alt="$translate('component.header.about')"
-            />
-          </NuxtLink>
+							:alt="$translate('component.header.about')"
+						/>
+					</NuxtLink>
 
 					<!--          <div-->
 					<!--            v-if="route.name === 'event'"-->

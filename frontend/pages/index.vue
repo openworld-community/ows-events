@@ -104,8 +104,8 @@ const eventsWithAdd = computed((): (EventOnPoster & { type: 'event' })[] => {
 				? x.image.includes('http')
 					? x.image
 					: `${BASE_URL}${x.image}`
-        //TODO убрать эту заглушку
 				: 'https://picsum.photos/400/300'
+			//TODO убрать эту^ заглушку
 		};
 	});
 
@@ -172,6 +172,9 @@ const getFilteredEvents = (
 	return searchResult;
 };
 const now = Date.now();
+const { $trpc } = useNuxtApp();
+const { data, refresh, pending } = await $trpc.greeting.hi.useQuery();
+$trpc.greeting.test.useQuery();
 </script>
 
 <template>
@@ -183,6 +186,9 @@ const now = Date.now();
 			<h1 class="search__title">
 				{{ $translate('home.title') }}
 			</h1>
+			<div v-if="pending">fetching...</div>
+			<div>{{ data }}</div>
+			<button @click="refresh()">refresh</button>
 			<CommonInput
 				v-model="search"
 				class="search__field"

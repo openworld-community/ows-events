@@ -30,16 +30,32 @@ export const getEvent = async (id: string): Promise<EventOnPoster> => {
 };
 
 export const postEvent = async (payload: PostEventPayload) => {
-	const { data } = await api.post<StandardResponse<{ id: string }>>('/events/add', payload);
+	const { data } = await api.post<StandardResponse<{ id: string }>>('/events/add', payload, {
+		headers: {
+			Authorization: 'Bearer ' + useCookie<string>('token').value
+		}
+	});
 	return data;
 };
 
 export const editEvent = async (data: any) => {
-	await api.post('/events/update', data);
+	await api.post('/events/update', data, {
+		headers: {
+			Authorization: 'Bearer ' + useCookie<string>('token').value
+		}
+	});
 };
 
 export const deleteEvent = async (id: string) => {
-	await api.post('/events/delete', { id });
+	await api.post(
+		'/events/delete',
+		{ id },
+		{
+			headers: {
+				Authorization: 'Bearer ' + useCookie<string>('token').value
+			}
+		}
+	);
 };
 
 //EVENT IMAGES

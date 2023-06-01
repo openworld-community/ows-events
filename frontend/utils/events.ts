@@ -1,7 +1,7 @@
 import parseJSON from '@/utils/json';
-import {computed} from "vue";
 import {BASE_URL} from "~/constants/url";
 import {EventOnPoster} from "../../common/types";
+import eventCard from '@/assets/img/event-screen@2x.png'
 
 export const localUserEventsKey = 'USER_POSTS';
 
@@ -27,6 +27,6 @@ export const getEventImage = (eventData:EventOnPoster) => {
 		return `${BASE_URL}${eventData.image}`;
 	} else {
 		//TODO убрать эту заглушку
-		return 'https://picsum.photos/400/300';
+		return eventCard;
 	}
 };

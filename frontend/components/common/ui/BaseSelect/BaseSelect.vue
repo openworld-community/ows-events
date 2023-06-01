@@ -2,18 +2,10 @@
 import { ref } from 'vue';
 import CommonIcon from '~/components/common/Icon.vue';
 import BaseInput from '~/components/common/ui/BaseInput/BaseInput.vue';
+import {Props} from "~/components/common/ui/BaseSelect/types/types";
 
 withDefaults(
-	defineProps<{
-		className?: string;
-		modelValue?: string;
-		list: string[];
-		name: string;
-		placeholder?: string;
-		label?: string;
-		error?: string;
-		disabled?: boolean;
-	}>(),
+	defineProps<Props>(),
 	{
 		className: '',
 		modelValue: '',

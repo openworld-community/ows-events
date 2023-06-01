@@ -1,19 +1,12 @@
-<script>
-export default {
-	inheritAttrs: false
-};
-</script>
-
 <script lang="ts" setup>
+import {Props} from "~/components/common/ui/TextArea/types";
+
+defineOptions({
+	inheritAttrs: false
+});
+
 withDefaults(
-	defineProps<{
-		className?: string;
-		modelValue?: string;
-		name: string;
-		placeholder?: string;
-		label?: string;
-		error?: string;
-	}>(),
+	defineProps<Props>(),
 	{
 		className: '',
 		modelValue: '',
@@ -57,6 +50,7 @@ const updateValue = (event: Event) => {
 	font-size: 1rem;
 	color: #333;
 	border-radius: 24px;
+
 	&__wrapper {
 		position: relative;
 		margin-bottom: 20px;

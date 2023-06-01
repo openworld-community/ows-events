@@ -1,31 +1,18 @@
-<script>
-export default {
-	inheritAttrs: false
-};
-</script>
 <script lang="ts" setup>
-import { InputValue } from './types/types';
+import { InputValue, Props } from './types/types';
 
-withDefaults(
-	defineProps<{
-		className?: string;
-		modelValue?: string;
-		name: string;
-		type?: InputValue;
-		placeholder?: string;
-		label?: string;
-		disabled?: boolean;
-		error?: string;
-	}>(),
-	{
-		className: '',
-		modelValue: '',
-		type: InputValue.text,
-		placeholder: '',
-		label: '',
-		error: ''
-	}
-);
+defineOptions({
+	inheritAttrs: false
+});
+
+withDefaults(defineProps<Props>(), {
+	className: '',
+	modelValue: '',
+	type: InputValue.text,
+	placeholder: '',
+	label: '',
+	error: ''
+});
 
 const emit = defineEmits(['update:modelValue']);
 const updateValue = (event: Event) => {
@@ -54,7 +41,7 @@ const updateValue = (event: Event) => {
 				:placeholder="placeholder"
 				@input="updateValue"
 			/>
-			<slot name="icon-right"> </slot>
+			<slot name="icon-right"></slot>
 		</div>
 		<span
 			v-if="error"
@@ -90,6 +77,7 @@ const updateValue = (event: Event) => {
 	border: 1px solid #ccc;
 	border-radius: 24px;
 	overflow: hidden;
+
 	&.error {
 		border: 1px solid var(--color-accent-red);
 	}

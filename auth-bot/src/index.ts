@@ -76,7 +76,7 @@ server.get<{
 		return null;
 	}
 
-	return jwt.sign(
+	const newToken = jwt.sign(
 		{
 			username:
 				userMessageInfo.username ||
@@ -86,7 +86,13 @@ server.get<{
 		'secret'
 	);
 
-	return temporaryLogins[request.params.id] || null;
+	return {
+		token: newToken,
+		userNickName: userMessageInfo.username,
+		firstNickName: userMessageInfo.first_name,
+		lastNickName: userMessageInfo.last_name,
+		id: userMessageInfo.id
+	};
 });
 
 class Users {

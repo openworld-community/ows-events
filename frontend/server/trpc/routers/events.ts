@@ -93,7 +93,7 @@ export const eventsRouter = router({
 	addImageToEvent: publicProcedure.input(FormData).mutation(() => backendFetch('image/add'))
 });
 
-// checks that defined zod schema for adding new event is consistent with PostEventPayload type
+// checks that defined zod schema for the endpoint is consistent with payload type
 type AddEventSchema = z.infer<typeof addEventSchema>;
 type EditEventSchema = z.infer<typeof editEventSchema>;
 (function (a: CheckTypeEquality<AddEventSchema, PostEventPayload>) {

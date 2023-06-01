@@ -1,31 +1,11 @@
 <script setup lang="ts">
-import { RouterLink, useRoute } from 'vue-router';
-import { v4 } from 'uuid';
-import { ref } from 'vue';
-
 import { RouteNameEnum } from '@/constants/enums/route';
-import { AUTH_SERVER_URL, SERVER_URL } from '~/constants/url';
-import { UserInfo } from '~/../common/types/user';
 
 const route = useRoute();
-const userCookie = useCookie<UserInfo | null>('user');
 
-const username =
-	userCookie.value?.userNickName ||
-	(userCookie.value?.firstNickName || userCookie.value?.lastNickName
-		? userCookie.value?.firstNickName + ' ' + userCookie.value?.lastNickName
-		: null);
-
-function scrollToTop() {
+const scrollToTop = () => {
 	window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-const temporaryId = v4();
-
-const authLink = ref<string>(
-	`${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backurl=${encodeURIComponent(
-		`${SERVER_URL}/postauth/${temporaryId}`
-	)}`
-);
+};
 </script>
 
 <template>
@@ -33,7 +13,7 @@ const authLink = ref<string>(
 		<div class="header__container">
 			<div class="header__left">
 				<NuxtLink
-					to="/"
+					:to="{ name: RouteNameEnum.HOME }"
 					class="header__navigation-link"
 					:aria-label="$translate('home.button.afisha_logo_aria')"
 					@click.prevent="scrollToTop"
@@ -55,58 +35,15 @@ const authLink = ref<string>(
 				</NuxtLink>
 			</div>
 
-			<div class="header__right">
+			<div
+				v-if="route.name !== RouteNameEnum.ABOUT"
+				class="header__right"
+			>
 				<HeaderSubscriptionExpired
 					v-if="route.name === RouteNameEnum.HOME"
 					class="header__subscription"
 				/>
-
-				<nav
-					class="header__navigation"
-					role="navigation"
-					:aria-label="$translate('global.nav')"
-				>
-					<NuxtLink
-						v-if="route.name === RouteNameEnum.HOME"
-						to="/about"
-						class="header__navigation-link"
-					>
-						<CommonIcon
-							name="info"
-							width="24"
-							height="24"
-							:alt="$translate('component.header.about')"
-						/>
-					</NuxtLink>
-
-					<!--          <div-->
-					<!--            v-if="route.name === 'event'"-->
-					<!--            :aria-label="$translate('component.header.event.manage')"-->
-					<!--          >-->
-					<!--            <img-->
-					<!--              src="@/assets/img/icon/edit.svg"-->
-					<!--              width="24"-->
-					<!--              height="24"-->
-					<!--              :alt="$translate('event.button.edit')"-->
-					<!--            />-->
-					<!--            <img-->
-					<!--              src="@/assets/img/icon/share.svg"-->
-					<!--              width="24"-->
-					<!--              height="24"-->
-					<!--              :alt="$translate('global.button.share')"-->
-					<!--            />-->
-					<!--          </div>-->
-
-					<div v-if="username">
-						{{ username }}
-						<a href="/logout">Выйти</a>
-					</div>
-					<a
-						v-else
-						:href="authLink"
-						>Зайти с помощью Telegram</a
-					>
-				</nav>
+				<HeaderNavigation />
 			</div>
 		</div>
 	</header>
@@ -115,6 +52,7 @@ const authLink = ref<string>(
 <style scoped lang="less">
 .header {
 	width: 100%;
+	height: var(--header-height);
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -160,11 +98,6 @@ const authLink = ref<string>(
 	&__subscription {
 		display: flex;
 		max-width: max-content;
-	}
-
-	&__navigation {
-		align-items: center;
-		gap: 10px;
 	}
 
 	&__navigation-link {

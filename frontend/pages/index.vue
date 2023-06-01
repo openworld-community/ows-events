@@ -6,12 +6,13 @@ import { useLocationStore } from '@/stores/location.store';
 import { storeToRefs } from 'pinia';
 import { useModal } from 'vue-final-modal';
 import { BASE_URL } from '@/constants/url';
+import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '../components/modal/Event.vue';
 
 const { open: openEventModal, close, patchOptions } = useModal({ component: EventModal });
 patchOptions({ attrs: { close } });
 
-definePageMeta({ name: 'home' });
+definePageMeta({ name: RouteNameEnum.HOME });
 
 let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined;
 
@@ -98,13 +99,7 @@ const eventsWithAdd = computed((): (EventOnPoster & { type: 'event' })[] => {
 	return events.map((x) => {
 		return {
 			...x,
-			type: 'event',
-			image: x.image
-				? x.image.includes('http')
-					? x.image
-					: `${BASE_URL}${x.image}`
-				: //TODO убрать эту заглушку
-				  'https://picsum.photos/400/300'
+			type: 'event'
 		};
 	});
 

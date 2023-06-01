@@ -147,23 +147,14 @@ const getFilteredEvents = (
 			.join(' ')
 			.toLowerCase();
 
-	let searchResult = events.filter((event) => {
-		return searchSource(event).includes(search.toLowerCase());
+	return events.filter((event) => {
+		const eventData = searchSource(event);
+		return (
+			(search && eventData.includes(search.toLowerCase())) ||
+			(country && eventData.includes(country.toLowerCase())) ||
+			(city && eventData.includes(city.toLowerCase()))
+		);
 	});
-
-	if (country) {
-		searchResult = searchResult.filter((event) => {
-			return searchSource(event).includes(country.toLowerCase());
-		});
-	}
-
-	if (city) {
-		searchResult = searchResult.filter((event) => {
-			return searchSource(event).includes(city.toLowerCase());
-		});
-	}
-
-	return searchResult;
 };
 const now = Date.now();
 const { $trpc } = useNuxtApp();

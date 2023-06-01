@@ -20,9 +20,10 @@ const isAuthorized = computed(() => !!userCookie.value);
 </script>
 
 <template>
+<!--TODO: Вставить компонент button как будет готов  -->
 	<div
 		class="authorisation"
-		@click.prevent="openAuthModal"
+		@click="openAuthModal"
 	>
 		<CommonIcon
 			name="user"

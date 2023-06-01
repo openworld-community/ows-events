@@ -99,13 +99,7 @@ const eventsWithAdd = computed((): (EventOnPoster & { type: 'event' })[] => {
 	return events.map((x) => {
 		return {
 			...x,
-			type: 'event',
-			image: x.image
-				? x.image.includes('http')
-					? x.image
-					: `${BASE_URL}${x.image}`
-				: 'https://picsum.photos/400/300'
-			//TODO убрать эту^ заглушку
+			type: 'event'
 		};
 	});
 

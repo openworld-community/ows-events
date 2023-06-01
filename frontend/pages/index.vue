@@ -138,7 +138,9 @@ const getFilteredEvents = (
 	country: string,
 	city: string
 ) => {
-	if (!search && !country && !city) return events;
+	if (!search && !country && !city) {
+		return events;
+	}
 
 	const searchSource = (event: EventOnPoster) =>
 		[event.title, event.description, event.location.city, event.location.country]

@@ -1,52 +1,46 @@
 <script>
 export default {
 	inheritAttrs: false
-}
+};
 </script>
 
 <script lang="ts" setup>
-// @ts-ignore
 withDefaults(
-		defineProps<{
-			className?: string;
-			modelValue?: string;
-			name: string;
-			placeholder?: string;
-			label?: string;
-			error?: string;
-		}>(),
-		{
-			textAreaProps: undefined,
-			name: '',
-			className: '',
-			modelValue: '',
-			list: () => [''],
-			placeholder: '',
-			label: '',
-			error: '',
-			disabled: false
-		}
+	defineProps<{
+		className?: string;
+		modelValue?: string;
+		name: string;
+		placeholder?: string;
+		label?: string;
+		error?: string;
+	}>(),
+	{
+		className: '',
+		modelValue: '',
+		placeholder: '',
+		label: '',
+		error: ''
+	}
 );
 
 const emit = defineEmits(['update:modelValue']);
 const updateValue = (event: Event) => {
-	emit('update:modelValue', (event.target as HTMLInputElement).value);
-}
-
+	emit('update:modelValue', (event.target as HTMLTextAreaElement).value);
+};
 </script>
 
 <template>
 	<div :class="`textarea__wrapper ${className}`">
 		<label :for="name">{{ label }}</label>
 		<textarea
-				:class="`textarea form__field ${error ? 'form__error' : ''}`"
-				:name="name"
-				:value="modelValue"
-				@input="updateValue"
+			:class="`textarea form__field ${error ? 'form__error' : ''}`"
+			:name="name"
+			:value="modelValue"
+			@input="updateValue"
 		/>
 		<span
-				v-if="error"
-				class="textarea__error"
+			v-if="error"
+			class="textarea__error"
 		>
 			{{ error }}
 		</span>
@@ -68,5 +62,4 @@ const updateValue = (event: Event) => {
 		margin-bottom: 20px;
 	}
 }
-
 </style>

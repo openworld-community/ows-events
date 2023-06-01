@@ -1,37 +1,36 @@
 <script>
 export default {
 	inheritAttrs: false
-}
+};
 </script>
 <script lang="ts" setup>
 import { InputValue } from './types/types';
 
-// @ts-ignore
 withDefaults(
-		defineProps<{
-			className?: string;
-			modelValue?: string;
-			name: string;
-			type?: InputValue;
-			placeholder?: string;
-			label?: string;
-			disabled?: boolean;
-			error?: string;
-		}>(),
-		{
-			className: '',
-			modelValue: '',
-			type: InputValue.text,
-			placeholder: '',
-			label: '',
-			error: ''
-		}
+	defineProps<{
+		className?: string;
+		modelValue?: string;
+		name: string;
+		type?: InputValue;
+		placeholder?: string;
+		label?: string;
+		disabled?: boolean;
+		error?: string;
+	}>(),
+	{
+		className: '',
+		modelValue: '',
+		type: InputValue.text,
+		placeholder: '',
+		label: '',
+		error: ''
+	}
 );
 
 const emit = defineEmits(['update:modelValue']);
 const updateValue = (event: Event) => {
 	emit('update:modelValue', (event.target as HTMLInputElement).value);
-}
+};
 </script>
 
 <template>

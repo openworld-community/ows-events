@@ -1,51 +1,46 @@
 <script lang="ts" setup>
-import {ref} from 'vue';
+import { ref } from 'vue';
 import CommonIcon from '~/components/common/Icon.vue';
 import BaseInput from '~/components/common/ui/BaseInput/BaseInput.vue';
 
-// @ts-ignore
 withDefaults(
-		defineProps<{
-			className?: string;
-			modelValue?: string;
-			list: string[];
-			name: string;
-			placeholder?: string;
-			label?: string;
-			error?: string;
-			disabled?: boolean;
-		}>(),
-		{
-			selectProps: undefined,
-			name: '',
-			className: '',
-			modelValue: '',
-			list: () => [''],
-			placeholder: '',
-			label: '',
-			error: '',
-			disabled: false
-		}
+	defineProps<{
+		className?: string;
+		modelValue?: string;
+		list: string[];
+		name: string;
+		placeholder?: string;
+		label?: string;
+		error?: string;
+		disabled?: boolean;
+	}>(),
+	{
+		className: '',
+		modelValue: '',
+		placeholder: '',
+		label: '',
+		error: ''
+	}
 );
 
-	const isOpen = ref<boolean>(false);
+const isOpen = ref<boolean>(false);
 
-	const emit = defineEmits(['update:modelValue']);
-	const updateValue = (value: string) => {
-		emit('update:modelValue', value);
-	}
+const emit = defineEmits(['update:modelValue']);
+const updateValue = (value: string) => {
+	emit('update:modelValue', value);
+};
 
-	const setIsOpen = () => {
-		isOpen.value = !isOpen.value;
-	}
+const setIsOpen = () => {
+	isOpen.value = !isOpen.value;
+};
 
-	const onRemove = () => {
-		emit('update:modelValue', '');
-	}
+const onRemove = () => {
+	emit('update:modelValue', '');
+};
 
-	// const filteredItems = computed(() => {
-	// 	return list.filter(item => item.includes(this.modelValue));
-	// });
+// const filteredItems = computed(() => {
+// 	return list.filter(item => item.includes(this.modelValue));
+// });
 </script>
 
 <template>
@@ -83,20 +78,19 @@ withDefaults(
 		<div :class="`select__list-box ${isOpen ? 'isOpen' : ''}`">
 			<ul class="select__list benefits">
 				<li
-						v-for="item in list"
-						:key="item"
-						class="select__list-item"
-						@click="updateValue(item)"
+					v-for="item in list"
+					:key="item"
+					class="select__list-item"
+					@click="updateValue(item)"
 				>
 					{{ item }}
 				</li>
 			</ul>
-			</div>
+		</div>
 	</div>
 </template>
 
 <style lang="less" scoped>
-
 .select {
 	&__wrapper {
 		width: 100%;
@@ -130,7 +124,6 @@ withDefaults(
 		height: 100%;
 		overflow-y: scroll;
 		overflow-x: hidden;
-
 	}
 
 	&__list::-webkit-scrollbar {
@@ -154,5 +147,4 @@ withDefaults(
 		padding: 5px;
 	}
 }
-
 </style>

@@ -62,8 +62,7 @@ server.get<{
 	};
 	clearTemporaryLogin(request.params.id);
 
-	reply.redirect(302, `https://t.me/afisha_authorization_bot?start=${request.params.id}`);
-	return 0;
+	return reply.redirect(302, `https://t.me/afisha_authorization_bot?start=${request.params.id}`);
 });
 
 server.get<{

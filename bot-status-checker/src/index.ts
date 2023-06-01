@@ -98,6 +98,33 @@ const checkStatus = (): string => {
       description: "Limassol event page",
       validator: checkUrl,
     },
+    {
+      url: "https://api.poster-demo-peredelano.orby-tech.space/api/events",
+      description: "Events API",
+      validator: (url: string) => {
+        return axios
+          .get(url)
+          .then((res) => res.data)
+          .then((res) => {
+            if (res.length === 0) {
+              return {
+                status: false,
+                message: "No events",
+              };
+            }
+            return {
+              status: true,
+              message: res.bo,
+            };
+          })
+          .catch((e) => {
+            return {
+              status: false,
+              message: e.toString(),
+            };
+          });
+      },
+    },
   ];
 
   urls.forEach(async (url) => {

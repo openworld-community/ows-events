@@ -3,7 +3,7 @@ export type UserDbEntity = {
 	userNickName: string;
 	firstNickName: string;
 	lastNickName: string;
-	id: number;
+	id: string;
 };
 
 export type UserInfo = Omit<UserDbEntity, 'token'>;

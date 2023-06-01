@@ -13,3 +13,5 @@ export const publicProcedure = t.procedure;
 export const backendFetch = <T>(...args: Parameters<typeof $fetch>) => {
 	return $fetch<T>(args[0], { ...args[1], baseURL: API_URL });
 };
+
+export type CheckTypeEquality<T, B> = T extends B ? (B extends T ? true : never) : never;

@@ -24,14 +24,12 @@ const searchFromRoute = route.query.search?.toString();
 const search = ref(searchFromRoute === 'None' ? '' : searchFromRoute ?? '');
 const country = ref(pickedCountry.value ?? '');
 const city = ref(pickedCity.value ?? '');
-const { data: posterEvents, refresh } = await $trpc.events.search.useQuery({
+const { data: posterEvents, refresh } = await $trpc.events.findMany.useQuery({
 	city: city.value,
 	country: country.value,
 	searchLine: search.value
 });
-
 locationStore.pickCountry(pickedCountry.value);
-
 let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined;
 const debounceEventsSearch = () => {
 	clearTimeout(lazyLoadTimeout);

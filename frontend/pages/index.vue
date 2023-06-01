@@ -1,54 +1,42 @@
 <script setup lang="ts">
 import { type EventOnPoster } from '../../common/types';
 import { computed, ref, watch } from 'vue';
-import { getEvents, getEventsByParams } from '@/services/events.services';
 import { useLocationStore } from '@/stores/location.store';
 import { storeToRefs } from 'pinia';
 import { useModal } from 'vue-final-modal';
-import { BASE_URL } from '@/constants/url';
 import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '../components/modal/Event.vue';
+
+definePageMeta({ name: RouteNameEnum.HOME });
 
 const { open: openEventModal, close, patchOptions } = useModal({ component: EventModal });
 patchOptions({ attrs: { close } });
 
-definePageMeta({ name: RouteNameEnum.HOME });
-
-let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined;
+const { $trpc } = useNuxtApp();
 
 const locationStore = useLocationStore();
 locationStore.loadCountries();
 const { countries, cities, pickedCountry, pickedCity } = storeToRefs(locationStore);
 
 const route = useRoute();
-const posterEvents = ref<EventOnPoster[]>([]);
 
 const searchFromRoute = route.query.search?.toString();
-const search = ref<string>(searchFromRoute === 'None' ? '' : searchFromRoute || '');
-const country = ref<string>(pickedCountry.value || '');
-const city = ref<string>(pickedCity.value || '');
+const search = ref(searchFromRoute === 'None' ? '' : searchFromRoute ?? '');
+const country = ref(pickedCountry.value ?? '');
+const city = ref(pickedCity.value ?? '');
+const { data: posterEvents, refresh } = await $trpc.events.search.useQuery({
+	city: city.value,
+	country: country.value,
+	searchLine: search.value
+});
 
 locationStore.pickCountry(pickedCountry.value);
 
-const loadPosterEvents = async () => {
-	if (search.value || country.value || city.value) {
-		posterEvents.value = await getEventsByParams({
-			searchLine: search.value,
-			country: country.value,
-			city: city.value
-		});
-	} else {
-		posterEvents.value = await getEvents();
-	}
-};
-
-await loadPosterEvents();
-
-const planToLoadEvents = () => {
-	lazyLoadTimeout && clearTimeout(lazyLoadTimeout);
-
+let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined;
+const debounceEventsSearch = () => {
+	clearTimeout(lazyLoadTimeout);
 	lazyLoadTimeout = setTimeout(async () => {
-		loadPosterEvents();
+		await refresh();
 	}, 500);
 };
 
@@ -63,7 +51,7 @@ watch(
 watch(
 	search,
 	async (_search) => {
-		planToLoadEvents();
+		debounceEventsSearch();
 		await navigateTo({ query: { ...route.query, search: _search || 'None' } });
 	},
 	{ deep: true }
@@ -75,7 +63,7 @@ watch(
 		locationStore.pickCountry(_country);
 
 		city.value = pickedCity.value;
-		planToLoadEvents();
+		debounceEventsSearch();
 	},
 	{ deep: true }
 );
@@ -84,7 +72,7 @@ watch(
 	city,
 	async (_city) => {
 		locationStore.pickCity(_city);
-		planToLoadEvents();
+		debounceEventsSearch();
 	},
 	{ deep: true }
 );
@@ -157,8 +145,6 @@ const getFilteredEvents = (
 	});
 };
 const now = Date.now();
-const { $trpc } = useNuxtApp();
-const { data, refresh, pending } = await $trpc.greeting.hi.useQuery();
 </script>
 
 <template>
@@ -170,9 +156,6 @@ const { data, refresh, pending } = await $trpc.greeting.hi.useQuery();
 			<h1 class="search__title">
 				{{ $translate('home.title') }}
 			</h1>
-			<div v-if="pending">fetching...</div>
-			<div>{{ data }}</div>
-			<button @click="refresh()">refresh</button>
 			<CommonInput
 				v-model="search"
 				class="search__field"

@@ -1,16 +1,4 @@
 import { createNuxtApiHandler } from 'trpc-nuxt';
-import { router, publicProcedure, backendFetch } from '../../trpc';
+import { appRouter } from '../../trpc/routers';
 
-export const appRouter = router({
-	greeting: router({
-		hi: publicProcedure.query(() => Math.random()),
-		hello: publicProcedure.query(() => 'hello')
-	})
-});
-
-export type AppRouter = typeof appRouter;
-
-export default createNuxtApiHandler({
-	router: appRouter,
-	createContext: () => ({})
-});
+export default createNuxtApiHandler({ router: appRouter });

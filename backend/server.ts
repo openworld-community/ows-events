@@ -7,7 +7,7 @@ import path from 'path';
 import Static from '@fastify/static';
 import Multipart from '@fastify/multipart';
 import cityTimezones from 'city-timezones';
-
+import jwt from 'jsonwebtoken';
 import moment from 'moment-timezone';
 import fs from 'fs';
 import fsP from 'fs/promises';
@@ -19,9 +19,12 @@ import { imageController } from './src/controllers/image-controller';
 import { countriesAndCitiesController } from './src/controllers/countries-and-cities.controller';
 import { eventsStateController, FindEventParams } from './src/controllers/events-state-controller';
 
-import jwt from 'jsonwebtoken';
-
 interface EventParams {
+	id: string;
+}
+
+interface TokenData {
+	username: string;
 	id: string;
 }
 
@@ -76,6 +79,7 @@ server.get<{
 				return res.data.token;
 			})
 			.catch((e) => {
+				// eslint-disable-next-line no-console
 				console.error(e);
 				return '';
 			})
@@ -397,19 +401,27 @@ server.post<{
 	Body: { event: EventOnPoster };
 	Header: { Authorization: string };
 	Reply: StandardResponse<{ id: string }>;
-}>('/api/events/add', async (request) => {
+}>('/api/events/add', async (request, reply) => {
+	const token = request.headers.authorization;
+	if (!token) {
+		return reply.status(401).send({
+			type: 'error'
+		});
+	}
+
+	const jwtData = jwt.verify(token, 'secret') as TokenData;
+	if (!jwtData.id) {
+		return reply.status(401).send({
+			type: 'error'
+		});
+	}
+
 	const body = request.body as { event: EventOnPoster | undefined };
 	if (!body) {
 		return {
 			type: 'error'
 		};
 	}
-	// const user = jwt.verify(request.headers.authorization?.split(' ')[1] || '', 'secret') as string;
-
-	// if (!user) {
-	// 	throw new Error('User is not defined');
-	// }
-
 
 	const { event } = body;
 	if (!event) {
@@ -418,7 +430,9 @@ server.post<{
 		};
 	}
 
+	event.creatorId = jwtData.id;
 	const newPostId = eventsStateController.addEvent(event);
+
 	return {
 		type: 'success',
 		data: { id: newPostId }
@@ -428,18 +442,41 @@ server.post<{
 server.post<{
 	Body: { event: EventOnPoster };
 	Reply: StandardResponse<undefined>;
-}>('/api/events/update', async (request) => {
+}>('/api/events/update', async (request, reply) => {
+	const token = request.headers.authorization;
+	if (!token) {
+		return reply.status(401).send({
+			type: 'error'
+		});
+	}
+
+	const jwtData = jwt.verify(token, 'secret') as TokenData;
+	if (!jwtData.id) {
+		return reply.status(401).send({
+			type: 'error'
+		});
+	}
+
 	const body = request.body as { event: EventOnPoster | undefined };
 	if (!body) {
 		return {
 			type: 'error'
 		};
 	}
+
 	const { event } = body;
 	if (!event) {
 		return {
 			type: 'error'
 		};
+	}
+
+	const oldEvent = eventsStateController.getEvent(event.id);
+
+	if (oldEvent?.creatorId !== jwtData.id) {
+		return reply.status(403).send({
+			type: 'error'
+		});
 	}
 
 	eventsStateController.updateEvent(event);
@@ -452,7 +489,29 @@ server.post<{
 server.post<{
 	Body: { id: string };
 	Reply: StandardResponse<undefined>;
-}>('/api/events/delete', async (request) => {
+}>('/api/events/delete', async (request, reply) => {
+	const token = request.headers.authorization;
+	if (!token) {
+		return reply.status(401).send({
+			type: 'error'
+		});
+	}
+
+	const jwtData = jwt.verify(token, 'secret') as TokenData;
+	if (!jwtData.id) {
+		return reply.status(401).send({
+			type: 'error'
+		});
+	}
+
+	const oldEvent = eventsStateController.getEvent(request.body.id);
+
+	if (oldEvent?.creatorId !== jwtData.id) {
+		return reply.status(403).send({
+			type: 'error'
+		});
+	}
+
 	eventsStateController.deleteEvent(request.body.id);
 	return {
 		type: 'success',

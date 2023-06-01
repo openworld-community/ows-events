@@ -38,7 +38,7 @@ export const postEvent = async (payload: PostEventPayload) => {
 
 	const { data } = await api.post<StandardResponse<{ id: string }>>('/events/add', payload, {
 		headers: {
-			Authorization: 'Bearer ' + token
+			Authorization: token
 		}
 	});
 	return data;
@@ -53,7 +53,7 @@ export const editEvent = async (data: any) => {
 
 	await api.post('/events/update', data, {
 		headers: {
-			Authorization: 'Bearer ' + token
+			Authorization: token
 		}
 	});
 };
@@ -70,7 +70,7 @@ export const deleteEvent = async (id: string) => {
 		{ id },
 		{
 			headers: {
-				Authorization: 'Bearer ' + token
+				Authorization: token
 			}
 		}
 	);

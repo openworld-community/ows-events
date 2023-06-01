@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
 import { UserInfo } from '../../../common/types/user';
 import { useModal } from 'vue-final-modal';
 import { ModalAuthorisation } from '#components';
+import { v4 } from 'uuid';
+import { AUTH_SERVER_URL, SERVER_URL } from '~/constants/url';
 
-const route = useRoute();
-const userCookie = useCookie<UserInfo | null>('user');
+const tokenCookie = useCookie<string | null>('token');
+const user = useCookie<UserInfo | null>('user');
+
+const isAuthorized = computed(() => !!tokenCookie.value);
 
 // const username =
 // 	userCookie.value?.userNickName ||
@@ -13,14 +16,39 @@ const userCookie = useCookie<UserInfo | null>('user');
 // 		? userCookie.value?.firstNickName + ' ' + userCookie.value?.lastNickName
 // 		: null);
 
-const { open: openAuthModal, close, patchOptions } = useModal({ component: ModalAuthorisation });
-patchOptions({ attrs: { close: close } });
+const authorize = () => {
+	const temporaryId = v4();
+	const authLink: string = `${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backurl=${encodeURIComponent(
+		`${SERVER_URL}/postauth/${temporaryId}`
+	)}`;
+	window.open(authLink, '_blank');
+	setTimeout(() => close(), 300);
+	updateModalData();
+};
 
-const isAuthorized = computed(() => !!userCookie.value);
+const deauthorize = () => {
+	user.value = null;
+	tokenCookie.value = null;
+	setTimeout(() => close(), 300);
+	updateModalData();
+};
+
+const updateModalData = () => {
+	patchOptions({
+		attrs: {
+			close: close,
+			authorize: authorize,
+			deauthorize: deauthorize,
+			isAuthorized: isAuthorized.value
+		}
+	});
+};
+const { open: openAuthModal, close, patchOptions } = useModal({ component: ModalAuthorisation });
+updateModalData();
 </script>
 
 <template>
-<!--TODO: Вставить компонент button как будет готов  -->
+	<!--TODO: Вставить компонент button как будет готов  -->
 	<div
 		class="authorisation"
 		@click="openAuthModal"
@@ -30,19 +58,13 @@ const isAuthorized = computed(() => !!userCookie.value);
 			:class="['authorisation__icon', { 'authorisation__icon--success': isAuthorized }]"
 			:alt="isAuthorized ? 'Выйти из личного кабинета' : 'Авторизоваться с помощью Telegram'"
 		/>
-		<!--  <div v-if="username">-->
-		<!--    {{ username }}-->
-		<!--    <a href="/logout">Выйти</a>-->
-		<!--  </div>-->
-		<!--  <a-->
-		<!--    v-else-->
-		<!--    :href="authLink"-->
-		<!--  ></a>-->
 	</div>
 </template>
 
 <style scoped lang="less">
 .authorisation {
+	cursor: pointer;
+
 	&__icon {
 		color: var(--color-text-main);
 

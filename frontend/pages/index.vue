@@ -168,7 +168,6 @@ const getFilteredEvents = (
 const now = Date.now();
 const { $trpc } = useNuxtApp();
 const { data, refresh, pending } = await $trpc.greeting.hi.useQuery();
-$trpc.greeting.test.useQuery();
 </script>
 
 <template>

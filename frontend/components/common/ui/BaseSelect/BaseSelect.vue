@@ -1,79 +1,57 @@
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import {ref} from 'vue';
 import CommonIcon from '~/components/common/Icon.vue';
 import BaseInput from '~/components/common/ui/BaseInput/BaseInput.vue';
 
-export default defineComponent({
-	name: 'BaseSelect',
-	components: {BaseInput, CommonIcon},
-	inheritAttrs: false,
-	props: {
-		className: {
-			type: String,
-			default: '',
-		},
-		modelValue: {
-			type: String,
-			default: '',
-		},
-		list: {
-			type: Array as () => string[],
-			default: () => ['text'],
-		},
-		name: {
-			type: String,
-			required: true,
-		},
-		placeholder: {
-			type: String,
-			default: '',
-		},
-		label: {
-			type: String,
-			default: '',
-		},
-		disabled: {
-			type: Boolean,
-			default: false,
-		},
-		error: {
-			type: String,
-			default: ''
+type selectProps = {
+	className?: string;
+	modelValue?: string;
+	list: string[];
+	name: string;
+	placeholder?: string;
+	label?: string;
+	error?: string;
+	disabled?: boolean;
+}
+
+withDefaults(
+		defineProps<{ selectProps }>(),
+		{
+			selectProps: undefined,
+			name: '',
+			className: '',
+			modelValue: '',
+			list: () => [''],
+			placeholder: '',
+			label: '',
+			error: '',
+			disabled: false
 		}
-	},
-	emits: ['update:modelValue'],
-	data() {
-		return {
-			isOpen: false,
-			isRemove: false,
-		}
-	},
-	// computed: {
-	// 	filteredList() {
-	// 		return this.list?.filter(item => item.includes(this.modelValue));
-	// 	},
-	// },
-	methods: {
-		updateValue(value: string) {
-			this.$emit('update:modelValue', value);
-			this.setIsOpen();
-		},
-		setIsOpen() {
-			this.isOpen = !this.isOpen;
-		},
-		setIsRemove() {
-			this.isRemove = !this.isRemove;
-		},
-		onRemove() {
-			this.$emit('update:modelValue', '');
-		},
+);
+
+	const isOpen = ref<boolean>(false);
+
+	const emit = defineEmits(['update:modelValue']);
+	const updateValue = (value: string) => {
+		emit('update:modelValue', value);
 	}
-});
+
+	const setIsOpen = () => {
+		isOpen.value = !isOpen.value;
+	}
+
+	const onRemove = () => {
+		emit('update:modelValue', '');
+	}
+
+	// const filteredItems = computed(() => {
+	// 	return list.filter(item => item.includes(this.modelValue));
+	// });
 </script>
 
 <template>
 	<div :class="`select__wrapper ${className}`">
-		<base-input
+		<BaseInput
 			:name="name"
 			:model-value="modelValue"
 			:label="label"
@@ -101,7 +79,7 @@ export default defineComponent({
 					/>
 				</button>
 			</template>
-		</base-input>
+		</BaseInput>
 
 		<div :class="`select__list-box ${isOpen ? 'isOpen' : ''}`">
 			<ul class="select__list benefits">

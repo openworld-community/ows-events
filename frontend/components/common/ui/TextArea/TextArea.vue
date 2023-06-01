@@ -1,42 +1,40 @@
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script>
+export default {
+	inheritAttrs: false
+}
+</script>
 
-export default defineComponent({
-	name: 'TextArea',
-	inheritAttrs: false,
-	props: {
-		className: {
-			type: String,
-			default: '',
-		},
-		modelValue: {
-			type: String,
-			required: true,
-		},
-		name: {
-			type: String,
-			required: true,
-		},
-		placeholder: {
-			type: String,
-			default: '',
-		},
-		label: {
-			type: String,
-			default: '',
-		},
-		error: {
-			type: String,
-			default: ''
+<script lang="ts" setup>
+
+type textAreaProps = {
+	className?: string;
+	modelValue?: string;
+	name: string;
+	placeholder?: string;
+	label?: string;
+	error?: string;
+}
+
+withDefaults(
+		defineProps<{ textAreaProps }>(),
+		{
+			textAreaProps: undefined,
+			name: '',
+			className: '',
+			modelValue: '',
+			list: () => [''],
+			placeholder: '',
+			label: '',
+			error: '',
+			disabled: false
 		}
-	},
-	emits: ['update:modelValue'],
-	methods: {
-		updateValue(event: Event) {
-			this.$emit('update:modelValue', (event.target as HTMLTextAreaElement).value);
-		},
-	}
-});
+);
+
+const emit = defineEmits(['update:modelValue']);
+const updateValue = (event: Event) => {
+	emit('update:modelValue', (event.target as HTMLInputElement).value);
+}
+
 </script>
 
 <template>

@@ -30,7 +30,7 @@ const loadAllTimezones = async () => {
 	allTimezones.value = _allTimezones.map((timezone) => timezoneConverter(timezone));
 };
 
-loadAllTimezones();
+await loadAllTimezones();
 
 type inputValuesType = {
 	id: string;
@@ -124,7 +124,8 @@ const checkFormFilling = computed(() => {
 		inputValues.value.startTime &&
 		inputValues.value.country &&
 		inputValues.value.city &&
-		inputValues.value.timezone
+		inputValues.value.timezone &&
+		allTimezones.value.includes(inputValues.value.timezone)
 	);
 });
 
@@ -364,11 +365,11 @@ const eventInputs: {
 					<div :class="input.type === 'column' ? 'section__column' : 'section__row'">
 						<CommonInput
 							v-for="c in input.child"
-							:key="c.name"
+							:key="c.name + c.options?.value.join('')"
 							v-model="inputValues[c.name]"
 							class="section__input"
 							:input-type="c.type"
-							:options-list="c.options"
+							:options-list="c.options?.value"
 							:input-placeholder="c.label"
 							:input-name="c.name"
 							:is-required="c.required"

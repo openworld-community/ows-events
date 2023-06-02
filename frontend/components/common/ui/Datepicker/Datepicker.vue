@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import {Props} from './types/types';
@@ -14,15 +14,15 @@ withDefaults(defineProps<Props>(), {
 	minDate: new Date("1990-09-09"),
 });
 
-const date = ref<Date>(new Date());
-// In case of a range picker, you'll receive [Date, Date]
-const format = (date) => {
+const date = ref<>(new Date());
+
+const format = computed((date: Date) => {
 	const day = date.getDate();
 	const month = date.getMonth() + 1;
 	const year = date.getFullYear();
 
 	return `${day}.${month}.${year}`;
-}
+})
 
 </script>
 
@@ -55,19 +55,19 @@ const format = (date) => {
 	</div>
 </template>
 
-<style lang="less" scoped>
+<style lang="less">
 
-:deep(.dp__menu_transitioned),
-:deep(.dp__input)  {
+.dp__menu_transitioned,
+.dp__input  {
 	border-radius: 24px;
 }
 
-:deep(.dp__arrow_bottom),
-:deep(.dp__arrow_top) {
+.dp__arrow_bottom,
+.dp__arrow_top {
 	opacity: 0;
 }
 
-:deep(.dp__cell_inner) {
+.dp__cell_inner {
 	border-radius: 50%;
 	border: 1px solid var(--color-input-field);
 	background-color: var(--color-white);
@@ -75,28 +75,28 @@ const format = (date) => {
 	width: 24px;
 }
 
-:deep(.dp__calendar_item),
-:deep(.dp__active_date) {
+.dp__calendar_item,
+.dp__active_date {
 	padding: 3px;
 	color: #363636;
 	font-size: var(--font-size-XS);
 }
 
-:deep(.dp__menu_inner) {
+.dp__menu_inner {
 	padding: 14px 16px;
 }
 
-:deep(.dp__calendar_header_item) {
+.dp__calendar_header_item {
 	font-size: var(--font-size-S);
 }
 
-:deep(.dp__input) {
+.dp__input {
 	padding: 9px 12px;
 	border: 1px solid var(--color-input-field);
 	font-size: var(--font-size-M);
 }
 
-:deep(.dp__input_icon) {
+.dp__input_icon {
 	left: unset;
 	right: 0;
 	color: var(--color-input-icons);
@@ -104,7 +104,7 @@ const format = (date) => {
 	height: 20px;
 }
 
-:deep(.dp__clear_icon) {
+.dp__clear_icon {
 	display: none;
 }
 </style>

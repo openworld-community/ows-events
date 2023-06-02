@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
-import {Props} from './types/types.ts';
+import {Props} from './types/types';
 
 // @ts-ignore
 withDefaults(defineProps<Props>(), {
@@ -10,10 +10,11 @@ withDefaults(defineProps<Props>(), {
 	modelValue: '',
 	placeholder: '',
 	label: '',
-	error: ''
+	error: '',
+	minDate: new Date("1990-09-09"),
 });
 
-const date = ref(new Date());
+const date = ref<Date>(new Date());
 // In case of a range picker, you'll receive [Date, Date]
 const format = (date) => {
 	const day = date.getDate();
@@ -35,14 +36,14 @@ const format = (date) => {
 			{{ label }}
 		</label>
 			<VueDatePicker
-				:name="name"
 				v-model="date"
-				:input-class-name="`input form__field ${error ? form__error : ''} ${className}`"
+				:name="name"
+				:input-class-name="`input form__field ${error ? 'form__error' : ''} ${className}`"
 				auto-apply
 				partial-flow
 				:flow="['calendar']"
 				:enable-time-picker="false"
-				:min-date="minDate ?? null"
+				:min-date="minDate"
 				:format="format"
 			/>
 		<span

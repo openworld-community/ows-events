@@ -19,7 +19,7 @@ bot.onText(/\*/, (msg) => {
 	bot.sendMessage(chatId, "I didn't understand that command.");
 });
 
-bot.onText(/\/start/, (msg) => {
+bot.onText(/\/startEmitStatusCheckerBot/, (msg) => {
 	const chatId = msg.chat.id;
 	users.addUser({ chatId: chatId, status: 'active' });
 	bot.sendMessage(chatId, 'You will receive messages from now on');

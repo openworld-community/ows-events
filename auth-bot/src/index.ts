@@ -166,6 +166,22 @@ bot.onText(/\/start/, (msg) => {
 	bot.sendMessage(msg.chat.id, `<a href='${href}'> ${href} </a>`, { parse_mode: 'HTML' });
 });
 
+bot.onText(/\/startEmitAuthBot/, (msg) => {
+	const chatId = msg.chat.id;
+	users.addUser({ chatId: chatId, status: 'active' });
+	bot.sendMessage(chatId, 'You will receive messages from now on');
+});
+
+
+bot.onText(/\/stop/, (msg) => {
+	const chatId = msg.chat.id;
+
+	users.markUserAsInactive(chatId);
+
+	bot.sendMessage(chatId, 'You will not receive any more messages');
+});
+
+
 const emit = (text: string) => {
 	users.getActiveUsers().forEach((user) => {
 		bot.sendMessage(user.chatId, text);

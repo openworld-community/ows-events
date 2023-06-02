@@ -1,15 +1,2 @@
-docker run -e RUN_LOCAL=true \
-           -e DISABLE_ERRORS=true \
-           -e LOG_LEVEL=WARN \
-           -e VALIDATE_ALL_CODEBASE=false \
-           -e IGNORE_GITIGNORED_FILES=true \
-           -e VALIDATE_GITLEAKS=true \
-           -e VALIDATE_DOCKERFILE_HADOLINT=true \
-           -e VALIDATE_YAML=true \
-           -e VALIDATE_SQL=true \
-           -e VALIDATE_MARKDOWN=true \
-           -e VALIDATE_JAVASCRIPT_ES=true \
-           -e VALIDATE_HTML=true \
-           -e VALIDATE_CSS=true \
-           -e VALIDATE_GITHUB_ACTIONS=true \
-           -v ./:/tmp/lint github/super-linter
+npx prettier --write
+npx eslint . --ext .ts --fix

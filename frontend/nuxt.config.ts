@@ -1,0 +1,34 @@
+// import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx';
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+import path from 'path';
+import { fileURLToPath, URL } from 'node:url';
+
+// https://nuxt.com/docs/api/configuration/nuxt-config
+export default defineNuxtConfig({
+	modules: ['@pinia/nuxt'],
+	typescript: { strict: true },
+	vite: {
+		server: {
+			watch: {
+				usePolling: true
+			}
+		},
+		plugins: [
+			// плагин выдает ошибку из-за компонента /node_modules/nuxt/dist/app/components/nuxt-root.vue
+			// убрал пока не пойму нужен ли он вообще на самом деле
+			// vue(),
+			vueJsx(),
+			createSvgIconsPlugin({
+				iconDirs: [path.resolve(process.cwd(), 'assets/img/icon')],
+				symbolId: '[name]',
+				inject: 'body-first'
+			})
+		],
+		resolve: { alias: { '@common': fileURLToPath(new URL('../common', import.meta.url)) } }
+	},
+	// на винде очень долго стартует дев-сервер, проблема недавняя
+	// один из авторов Нукста на ГХ посоветовал такое решение
+	// если у кого-то от этой настройки наоборот что-то ломается, то скажите - что-нибудь придумаем
+	experimental: { watcher: 'chokidar' }
+});

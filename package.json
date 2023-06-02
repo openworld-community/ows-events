@@ -1,17 +1,22 @@
 {
   "scripts": {
     "dev": "concurrently -n \"frontend,backend\" -c \"red,blue\" \"npm run dev:frontend\" \"npm run dev:backend\"",
-    "dev:frontend": "cd frontend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev:local",
     "dev:backend": "cd backend && npm run start:watch",
     "i": "npm i && concurrently -n \"frontend,backend\" -c \"red,blue\" \"cd frontend && npm i\" \"cd backend && npm i\"",
-    "prod:build": "cd frontend && npm run build",
+    "prod:build": "cd frontend && npm run build-prod",
     "prod:run": "cd backend && npm run start:watch",
-    "demo:build": "cd frontend && npm run build:only"
+    "demo:build": "cd frontend && npm run build:only-demo"
   },
   "devDependencies": {
-    "concurrently": "^8.0.1"
-  },
-  "dependencies": {
-    "vue3-markdown-it": "^1.0.10"
+    "@typescript-eslint/eslint-plugin": "^5.59.7",
+    "@typescript-eslint/parser": "^5.59.7",
+    "concurrently": "^8.0.1",
+    "eslint": "^8.41.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "prettier": "2.8.8"
   }
 }

@@ -1,0 +1,13 @@
+{
+	"rules": {
+		"import/prefer-default-export": "off",
+		"import/no-default-export": "warn",
+		"import/extensions": ["error", "never"],
+		"no-plusplus": "off",
+		"no-underscore-dangle": "off",
+		"array-callback-return": "off",
+		"class-methods-use-this": "off"
+	},
+	"extends": ["airbnb-base", "airbnb-typescript/base", "prettier"],
+	"ignorePatterns": ["./vetur.config.js"]
+}

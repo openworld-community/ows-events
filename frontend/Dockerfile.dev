@@ -1,0 +1,11 @@
+FROM node:16.15.1-alpine
+
+WORKDIR /app
+
+COPY ./frontend/entrypoint.dev.sh /scripts/
+RUN chmod +x -R /scripts
+
+EXPOSE 3000
+EXPOSE 24678
+
+ENTRYPOINT ["sh", "/scripts/entrypoint.dev.sh"]

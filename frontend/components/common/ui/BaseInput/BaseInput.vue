@@ -5,6 +5,7 @@ defineOptions({
 	inheritAttrs: false
 });
 
+// @ts-ignore
 withDefaults(defineProps<Props>(), {
 	className: '',
 	modelValue: '',
@@ -18,6 +19,7 @@ const emit = defineEmits(['update:modelValue']);
 const updateValue = (event: Event) => {
 	emit('update:modelValue', (event.target as HTMLInputElement).value);
 };
+
 </script>
 
 <template>
@@ -40,6 +42,7 @@ const updateValue = (event: Event) => {
 				:disabled="disabled"
 				:placeholder="placeholder"
 				@input="updateValue"
+				@change="updateValue"
 			/>
 			<slot name="icon-right"></slot>
 		</div>
@@ -77,10 +80,6 @@ const updateValue = (event: Event) => {
 	border: 1px solid #ccc;
 	border-radius: 24px;
 	overflow: hidden;
-
-	&.error {
-		border: 1px solid var(--color-accent-red);
-	}
 }
 
 /* If using Font Awesome or similar, you can add some spacing to the icons */
@@ -93,5 +92,9 @@ const updateValue = (event: Event) => {
 :deep(.input__box > svg) {
 	position: absolute;
 	right: 0;
+}
+:deep(.input__box > button) {
+	display: flex;
+	align-items: center;
 }
 </style>

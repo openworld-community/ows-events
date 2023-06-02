@@ -4,8 +4,8 @@ import CommonIcon from '~/components/common/Icon.vue';
 import BaseInput from '~/components/common/ui/BaseInput/BaseInput.vue';
 import {Props} from "~/components/common/ui/BaseSelect/types/types";
 
-withDefaults(
-	defineProps<Props>(),
+// @ts-ignore
+withDefaults(defineProps<Props>(),
 	{
 		className: '',
 		modelValue: '',
@@ -20,6 +20,7 @@ const isOpen = ref<boolean>(false);
 const emit = defineEmits(['update:modelValue']);
 const updateValue = (value: string) => {
 	emit('update:modelValue', value);
+	setIsOpen();
 };
 
 const setIsOpen = () => {
@@ -30,9 +31,6 @@ const onRemove = () => {
 	emit('update:modelValue', '');
 };
 
-// const filteredItems = computed(() => {
-// 	return list.filter(item => item.includes(this.modelValue));
-// });
 </script>
 
 <template>
@@ -47,15 +45,19 @@ const onRemove = () => {
 			@click="setIsOpen"
 		>
 			<template #icon-right>
-				<button @click="onRemove">
-					<CommonIcon
+				<button
 						v-if="modelValue"
+						@click="onRemove"
+				>
+					<CommonIcon
 						name="delete"
 						width="24"
 						height="24"
 						alt="Очистить"
 					/>
-					<CommonIcon
+				</button>
+
+				<CommonIcon
 						v-else
 						name="container"
 						width="24"
@@ -63,7 +65,6 @@ const onRemove = () => {
 						alt="Открыть"
 						@click.prevent="setIsOpen"
 					/>
-				</button>
 			</template>
 		</BaseInput>
 

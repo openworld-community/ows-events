@@ -1,11 +1,11 @@
 import TelegramBot from 'node-telegram-bot-api';
 import axios from 'axios';
-import fs from 'fs';
 import { Users } from './Users';
 
 const token = process.env.TELEGRAM_BOT_TOKEN || '';
 
 if (!token) {
+	// eslint-disable-next-line no-console
 	console.error('TELEGRAM_BOT_TOKEN is not set');
 	process.exit(1);
 }
@@ -14,6 +14,18 @@ const bot = new TelegramBot(token, { polling: true });
 
 const users = new Users();
 
+const emit = (text: string) => {
+	users.getActiveUsers().forEach((user) => {
+		if (text) {
+			bot.sendMessage(user.chatId, text);
+		}
+	});
+};
+
+const emitError = (e: string) => {
+	emit(`Error: ${e}`);
+};
+
 bot.onText(/\*/, (msg) => {
 	const chatId = msg.chat.id;
 	bot.sendMessage(chatId, "I didn't understand that command.");
@@ -21,7 +33,7 @@ bot.onText(/\*/, (msg) => {
 
 bot.onText(/\/startEmitStatusCheckerBot/, (msg) => {
 	const chatId = msg.chat.id;
-	users.addUser({ chatId: chatId, status: 'active' });
+	users.addUser({ chatId, status: 'active' });
 	bot.sendMessage(chatId, 'You will receive messages from now on');
 });
 
@@ -33,22 +45,17 @@ bot.onText(/\/stop/, (msg) => {
 	bot.sendMessage(chatId, 'You will not receive any more messages');
 });
 
-const checkUrl = async (url: string): Promise<{ status: boolean; message: string }> => {
-	return axios
+const checkUrl = async (url: string): Promise<{ status: boolean; message: string }> =>
+	axios
 		.get(url)
-		.then((res) => {
-			return {
-				status: true,
-				message: res.statusText
-			};
-		})
-		.catch((e) => {
-			return {
-				status: false,
-				message: e.toString()
-			};
-		});
-};
+		.then((res) => ({
+			status: true,
+			message: res.statusText
+		}))
+		.catch((e) => ({
+			status: false,
+			message: e.toString()
+		}));
 
 let counter = 0;
 
@@ -62,8 +69,8 @@ const checkStatus = (): string => {
 		{
 			url: 'https://poster-peredelano.orby-tech.space/api/events',
 			description: 'Events API',
-			validator: (url: string) => {
-				return axios
+			validator: (url: string) =>
+				axios
 					.get(url)
 					.then((res) => res.data)
 					.then((res) => {
@@ -78,13 +85,10 @@ const checkStatus = (): string => {
 							message: res.bo
 						};
 					})
-					.catch((e) => {
-						return {
-							status: false,
-							message: e.toString()
-						};
-					});
-			}
+					.catch((e) => ({
+						status: false,
+						message: e.toString()
+					}))
 		},
 		{
 			url: 'https://metrics.orby-tech.space/poster-peredelano.orby-tech.space',
@@ -104,8 +108,8 @@ const checkStatus = (): string => {
 		{
 			url: 'https://api.poster-demo-peredelano.orby-tech.space/api/events',
 			description: 'Events API',
-			validator: (url: string) => {
-				return axios
+			validator: (url: string) =>
+				axios
 					.get(url)
 					.then((res) => res.data)
 					.then((res) => {
@@ -120,13 +124,10 @@ const checkStatus = (): string => {
 							message: res.bo
 						};
 					})
-					.catch((e) => {
-						return {
-							status: false,
-							message: e.toString()
-						};
-					});
-			}
+					.catch((e) => ({
+						status: false,
+						message: e.toString()
+					}))
 		},
 		{
 			url: 'https://api.poster-demo-peredelano.orby-tech.space/event/limassol-24-06',
@@ -149,18 +150,6 @@ const checkStatus = (): string => {
 	}
 
 	return '';
-};
-
-const emit = (text: string) => {
-	users.getActiveUsers().forEach((user) => {
-		if (text) {
-			bot.sendMessage(user.chatId, text);
-		}
-	});
-};
-
-const emitError = (e: string) => {
-	emit('Error: ' + e);
 };
 
 const testsRun = () => {

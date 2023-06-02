@@ -21,7 +21,7 @@ services:
             - '--certificatesresolvers.myresolver.acme.email=tibode495@gmail.com'
             - '--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json'
             - '--providers.docker=true'
-            - '--providers.docker.network=ows-events_traefikpublic'
+            - '--providers.docker.network=ows-events_prod_traefikpublic'
             - '--providers.docker.endpoint=unix:///var/run/docker.sock'
             - '--providers.docker.exposedbydefault=false'
             - '--entrypoints.http.address=:80'
@@ -68,6 +68,8 @@ services:
             - 'traefik.http.routers.frontend_http.entrypoints=http'
         networks:
             - traefikpublic
+        ports:
+            - '3000:3000'
 
     auth:
         build:
@@ -88,6 +90,8 @@ services:
             - 'traefik.http.routers.auth_http.entrypoints=http'
         networks:
             - traefikpublic
+        ports:
+            - '7090:7090'
 
     backend:
         build:
@@ -104,6 +108,8 @@ services:
             - 'traefik.http.routers.backend_https.tls.certresolver=myresolver'
             - 'traefik.http.routers.backend_http.rule=Host(`api.afisha.peredelano.com`)'
             - 'traefik.http.routers.backend_http.entrypoints=http'
+        networks:
+            - traefikpublic
         ports:
             - '7080:7080'
         volumes:

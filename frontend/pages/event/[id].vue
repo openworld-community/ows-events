@@ -12,7 +12,6 @@ definePageMeta({
 	name: RouteNameEnum.EVENT
 });
 
-console.log('event page');
 const route = useRoute();
 const id = route.params.id as string;
 
@@ -37,7 +36,7 @@ const {
 } = useModal({ component: EventModal } as UseModalOptions<
 	InstanceType<typeof VueFinalModal>['$props']
 >);
-patchEventModal({ attrs: { close: closeEventModal, dataForEdit: posterEvent.value } });
+patchEventModal({ attrs: { closeEventModal, dataForEdit: posterEvent.value } });
 
 const deleteCard = async () => {
 	await deleteEvent(id);

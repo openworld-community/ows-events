@@ -9,6 +9,8 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '../components/modal/Event.vue';
 import NeedAuthorize from '~/components/modal/NeedAuthorize.vue';
 
+definePageMeta({ name: RouteNameEnum.HOME });
+
 const {
 	open: openEventModal,
 	close: closeEventModal,
@@ -21,8 +23,6 @@ const {
 	patchOptions: needAuthorizeModalPatch
 } = useModal({ component: NeedAuthorize });
 needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
-
-definePageMeta({ name: RouteNameEnum.HOME });
 
 let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined;
 

@@ -113,7 +113,7 @@ const closeModal = () => {
 						v-model="name"
 						input-type="input"
 						input-name="name"
-						input-placeholder="Name, Surname (for a badge, in Latin)"
+						input-placeholder="How should we call you? (for a badge, in Latin)"
 					/>
 					<CommonInput
 						v-model="telegramNickname"

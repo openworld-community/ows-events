@@ -12,7 +12,6 @@ definePageMeta({
 	name: RouteNameEnum.EVENT
 });
 
-console.log('event page');
 const route = useRoute();
 const id = route.params.id as string;
 
@@ -37,15 +36,12 @@ const {
 } = useModal({ component: EventModal } as UseModalOptions<
 	InstanceType<typeof VueFinalModal>['$props']
 >);
-patchEventModal({ attrs: { close: closeEventModal, dataForEdit: posterEvent.value } });
+patchEventModal({ attrs: { closeEventModal, dataForEdit: posterEvent.value } });
 
 const deleteCard = async () => {
 	await deleteEvent(id);
 	await navigateTo({ name: RouteNameEnum.HOME });
 };
-
-// TODO убрать, когда появится авторизация
-const isManaged = getUserEvents().includes(id);
 
 const openLocation = (url: string) => {
 	window.open(url, '_blank');
@@ -126,7 +122,7 @@ const templateURL = computed(
 				/>
 			</template>
 
-			<template v-if="isManaged && user?.id && user.id === posterEvent.creatorId">
+			<template v-if="user?.id === posterEvent.creatorId">
 				<CommonButton
 					class="event-actions__button"
 					button-class="button__success"

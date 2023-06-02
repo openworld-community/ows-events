@@ -1,30 +1,21 @@
 <script setup lang="ts">
-import { v4 } from 'uuid';
-import { ref } from 'vue';
-import { AUTH_SERVER_URL, SERVER_URL } from '@/constants/url';
 import { UserInfo } from '../../../common/types/user';
 
 type Props = {
 	close: () => void;
+	isAuthorized: boolean;
+	authorize: () => void;
+	deauthorize: () => void;
 };
 
 const props = defineProps<Props>();
-const userCookie = useCookie<UserInfo | null>('user');
+const user = useCookie<UserInfo | null>('user');
 
-const authorize = (url: string) => {
-	window.open(url, '_blank');
-	setTimeout(() => props.close(), 300);
-};
-
-const temporaryId = v4();
-
-const authLink = ref<string>(
-	`${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backurl=${encodeURIComponent(
-		`${SERVER_URL}/postauth/${temporaryId}`
-	)}`
-);
-
-const isAuthorized = computed(() => !!userCookie.value);
+const username =
+	user.value?.userNickName ||
+	(user.value?.firstNickName || user.value?.lastNickName
+		? user.value?.firstNickName + ' ' + user.value?.lastNickName
+		: null);
 </script>
 
 <template>
@@ -39,18 +30,26 @@ const isAuthorized = computed(() => !!userCookie.value);
 		:lock-scroll="false"
 	>
 		<NuxtLink
-			@click.prevent="authorize(authLink)"
+			@click="isAuthorized ? props.deauthorize() : props.authorize()"
 			class="authorisation-button"
 		>
-			<p class="authorisation-button__text">
-				{{ isAuthorized ? 'Выйти' : 'Войти' }}
+			<p
+				class="authorisation-button__user"
+				v-if="isAuthorized"
+			>
+				{{ username }}
 			</p>
-			<CommonIcon
-				class="authorisation-button__icon"
-				:name="isAuthorized ? 'sign-out' : 'sign-in'"
-				width="20"
-				height="20"
-			/>
+			<div class="authorisation-button__container">
+				<p class="authorisation-button__text">
+					{{ isAuthorized ? 'Выйти' : 'Войти' }}
+				</p>
+				<CommonIcon
+					class="authorisation-button__icon"
+					:name="isAuthorized ? 'sign-out' : 'sign-in'"
+					width="20"
+					height="20"
+				/>
+			</div>
 		</NuxtLink>
 	</CommonModalWrapper>
 </template>
@@ -58,6 +57,7 @@ const isAuthorized = computed(() => !!userCookie.value);
 <style scoped lang="less">
 .authorisation-button {
 	display: flex;
+	flex-direction: column;
 	width: max-content;
 	justify-content: center;
 	align-items: center;
@@ -65,12 +65,21 @@ const isAuthorized = computed(() => !!userCookie.value);
 	top: var(--header-height);
 	right: var(--padding-side);
 	background-color: var(--color-white);
-	box-shadow: 0px 8px 16px -2px rgba(0, 0, 0, 0.1), 0px 0px 0px 1px rgba(0, 0, 0, 0.02);
+	box-shadow: 0 8px 16px -2px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.02);
 	border-radius: 6px;
 	padding: 8px 16px;
 
+	&__container {
+		display: flex;
+	}
+
 	&__text {
 		margin-right: 9px;
+	}
+
+	&__user {
+		font-size: var(--font-size-XS);
+		color: var(--color-text-secondary);
 	}
 
 	&__icon {

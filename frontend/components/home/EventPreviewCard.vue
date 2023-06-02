@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { EventOnPoster } from '../../../common/types';
 
-
 const props = defineProps<{ eventData: EventOnPoster }>();
 
 const openLocation = (url: string) => {
@@ -58,7 +57,6 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 	&__image-container {
 		display: flex;
 		height: 176px;
-		position: relative;
 		background-color: var(--color-background-secondary);
 		margin-bottom: 12px;
 		width: 100%;
@@ -70,10 +68,6 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 		min-width: 100%;
 		max-width: 100%;
 		height: 100%;
-		position: absolute;
-		top: 0;
-		left: 0;
-		max-height: 176px;
 		object-fit: cover;
 	}
 

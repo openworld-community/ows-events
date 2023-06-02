@@ -1,6 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import axios from 'axios';
-import fs from 'fs';
+import { Users } from './Users';
 
 const token = process.env.TELEGRAM_BOT_TOKEN || '';
 
@@ -12,70 +12,26 @@ if (!token) {
 
 const bot = new TelegramBot(token, { polling: true });
 
-type User = {
-	chatId: number;
-	status: 'active' | 'inactive';
-};
-
-class Users {
-	private users: { [key: number]: User } = {};
-
-	constructor() {
-		if (!fs.existsSync('assets')) {
-			fs.mkdirSync('assets');
-			fs.mkdirSync('assets/db');
-			fs.writeFileSync('assets/db/users.json', '{}');
-		} else if (!fs.existsSync('assets/db')) {
-			fs.mkdirSync('assets/db');
-			fs.writeFileSync('assets/db/users.json', '{}');
-		} else if (!fs.existsSync('assets/db/users.json')) {
-			fs.writeFileSync('assets/db/users.json', '{}');
-		}
-
-		this.users = JSON.parse(fs.readFileSync('assets/db/users.json', 'utf-8'));
-	}
-
-	private writeUsers() {
-		fs.writeFileSync('assets/db/users.json', JSON.stringify(this.users));
-	}
-
-	addUser(user: User) {
-		this.users[user.chatId] = user;
-		this.writeUsers();
-	}
-
-	markUserAsInactive(chatId: number) {
-		this.users[chatId].status = 'inactive';
-
-		this.writeUsers();
-	}
-
-	getUser(chatId: number) {
-		return this.users[chatId];
-	}
-
-	getActiveUsers() {
-		return Object.values(this.users).filter((user) => user.status === 'active');
-	}
-}
-
 const users = new Users();
 
 const emit = (text: string) => {
 	users.getActiveUsers().forEach((user) => {
-		bot.sendMessage(user.chatId, text);
+		if (text) {
+			bot.sendMessage(user.chatId, text);
+		}
 	});
 };
 
 const emitError = (e: string) => {
 	emit(`Error: ${e}`);
 };
+
 bot.onText(/\*/, (msg) => {
 	const chatId = msg.chat.id;
 	bot.sendMessage(chatId, "I didn't understand that command.");
 });
 
-bot.onText(/\/start/, (msg) => {
+bot.onText(/\/startEmitStatusCheckerBot/, (msg) => {
 	const chatId = msg.chat.id;
 	users.addUser({ chatId, status: 'active' });
 	bot.sendMessage(chatId, 'You will receive messages from now on');
@@ -100,6 +56,8 @@ const checkUrl = async (url: string): Promise<{ status: boolean; message: string
 			status: false,
 			message: e.toString()
 		}));
+
+let counter = 0;
 
 const checkStatus = (): string => {
 	const urls = [
@@ -141,23 +99,55 @@ const checkStatus = (): string => {
 			url: 'https://poster-peredelano.orby-tech.space/event/limassol-24-06',
 			description: 'Limassol event page',
 			validator: checkUrl
+		},
+		{
+			url: 'https://api.poster-demo-peredelano.orby-tech.space/',
+			description: 'Main page',
+			validator: checkUrl
+		},
+		{
+			url: 'https://api.poster-demo-peredelano.orby-tech.space/api/events',
+			description: 'Events API',
+			validator: (url: string) =>
+				axios
+					.get(url)
+					.then((res) => res.data)
+					.then((res) => {
+						if (res.length === 0) {
+							return {
+								status: false,
+								message: 'No events'
+							};
+						}
+						return {
+							status: true,
+							message: res.bo
+						};
+					})
+					.catch((e) => ({
+						status: false,
+						message: e.toString()
+					}))
+		},
+		{
+			url: 'https://api.poster-demo-peredelano.orby-tech.space/event/limassol-24-06',
+			description: 'Limassol event page',
+			validator: checkUrl
 		}
 	];
-
-	let counter = 0;
 
 	urls.forEach(async (url) => {
 		const { status, message } = await url.validator(url.url);
 		if (!status) {
 			emitError(`${url.description} is down. Error: ${message}`);
 		}
-		counter++;
-		if (counter % 3 === 0) {
-			counter = 0;
-			return 'I am alive';
-		}
-		return 0;
 	});
+
+	counter++;
+	if (counter % 3 === 0) {
+		counter = 0;
+		return 'I am alive';
+	}
 
 	return '';
 };

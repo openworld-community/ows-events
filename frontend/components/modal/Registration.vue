@@ -113,7 +113,7 @@ const closeModal = () => {
 						v-model="name"
 						input-type="input"
 						input-name="name"
-						input-placeholder="Name, Surname (for a badge, in Latin)"
+						input-placeholder="How should we call you? (for a badge, in Latin)"
 					/>
 					<CommonInput
 						v-model="telegramNickname"
@@ -206,15 +206,15 @@ const closeModal = () => {
 			<div class="modal-card__foot">
 				<CommonButton
 					class="modal-card__button"
-					button-class="button__success"
-					:button-text="$translate('component.new_event_modal.submit')"
-					@click="submit()"
-				/>
-				<CommonButton
-					class="modal-card__button"
 					button-class="button__ordinary"
 					:button-text="$translate('component.new_event_modal.cancel')"
 					@click="closeModal()"
+				/>
+				<CommonButton
+					class="modal-card__button"
+					button-class="button__success"
+					:button-text="$translate('component.new_event_modal.submit')"
+					@click="submit()"
 				/>
 			</div>
 		</div>

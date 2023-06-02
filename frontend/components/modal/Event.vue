@@ -10,7 +10,7 @@ const { $translate } = useNuxtApp();
 
 type Props = {
 	dataForEdit?: EventOnPoster;
-	close: () => void;
+	closeEventModal: () => void;
 };
 
 const props = defineProps<Props>();
@@ -30,7 +30,7 @@ const loadAllTimezones = async () => {
 	allTimezones.value = _allTimezones.map((timezone) => timezoneConverter(timezone));
 };
 
-loadAllTimezones();
+await loadAllTimezones();
 
 type inputValuesType = {
 	id: string;
@@ -91,6 +91,10 @@ const setEventData = (data: EventOnPoster) => {
 watch(
 	() => inputValues.value.country,
 	async (_country) => {
+		if (!_country) {
+			inputValues.value.city = '';
+			return;
+		}
 		await locationStore.pickCountry(_country);
 	},
 	{ deep: true }
@@ -124,12 +128,13 @@ const checkFormFilling = computed(() => {
 		inputValues.value.startTime &&
 		inputValues.value.country &&
 		inputValues.value.city &&
-		inputValues.value.timezone
+		inputValues.value.timezone &&
+		allTimezones.value.includes(inputValues.value.timezone)
 	);
 });
 
 const closeModal = () => {
-	setTimeout(() => props.close(), 300);
+	setTimeout(() => props.closeEventModal(), 300);
 };
 
 const paramsForSubmit = computed(() => {
@@ -164,7 +169,6 @@ const paramsForSubmit = computed(() => {
 });
 
 const submitEvent = async () => {
-	//TODO: проверьте тип плиз
 	isLoading.value = true;
 	try {
 		let imageURL;
@@ -197,7 +201,6 @@ const submitEvent = async () => {
 
 			if (res.type === 'success') {
 				const id = res.data.id;
-				addUserEvent(id);
 				await navigateTo(`/event/${id}`);
 			}
 		}
@@ -210,6 +213,14 @@ const submitEvent = async () => {
 	}
 };
 
+const isCityDisabled = computed(() => {
+	return !inputValues.value.country;
+});
+
+const isTimezoneDisabled = computed(() => {
+	return !inputValues.value.city;
+});
+
 type InputEvent = {
 	type: 'text' | 'date' | 'time' | 'number' | 'textarea' | 'datalist';
 	label?: string;
@@ -217,6 +228,7 @@ type InputEvent = {
 	required: boolean;
 	min?: number;
 	options?: any; // TODO тип
+	isDisabled?: Ref<boolean>;
 };
 
 const eventInputs: {
@@ -242,14 +254,16 @@ const eventInputs: {
 				name: 'city',
 				options: cities,
 				label: $translate('component.new_event_modal.fields.city'),
-				required: true
+				required: true,
+				isDisabled: isCityDisabled
 			},
 			{
 				type: 'datalist',
 				name: 'timezone',
 				options: allTimezones,
 				label: $translate('component.new_event_modal.fields.timezone'),
-				required: true
+				required: true,
+				isDisabled: isTimezoneDisabled
 			}
 		]
 	},
@@ -365,11 +379,12 @@ const eventInputs: {
 					<div :class="input.type === 'column' ? 'section__column' : 'section__row'">
 						<CommonInput
 							v-for="c in input.child"
-							:key="c.name"
+							:key="c.name + c.options?.value.join('') + c.isDisabled"
 							v-model="inputValues[c.name]"
+							:input-disabled="c.isDisabled?.value || false"
 							class="section__input"
 							:input-type="c.type"
-							:options-list="c.options"
+							:options-list="c.options?.value"
 							:input-placeholder="c.label"
 							:input-name="c.name"
 							:is-required="c.required"
@@ -385,18 +400,18 @@ const eventInputs: {
 			<div class="modal-card__foot">
 				<CommonButton
 					class="modal-card__button"
+					button-class="button__ordinary"
+					:button-text="$translate('component.new_event_modal.cancel')"
+					:is-active="!isLoading"
+					@click="closeModal()"
+				/>
+				<CommonButton
+					class="modal-card__button"
 					button-class="button__success"
 					:button-text="$translate('component.new_event_modal.submit')"
 					:is-active="checkFormFilling && !isLoading"
 					:is-loading="isLoading"
 					@click="isLoading ? null : submitEvent()"
-				/>
-				<CommonButton
-					class="modal-card__button"
-					button-class="button__ordinary"
-					:button-text="$translate('component.new_event_modal.cancel')"
-					:is-active="!isLoading"
-					@click="closeModal()"
 				/>
 			</div>
 		</div>

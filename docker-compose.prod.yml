@@ -75,6 +75,8 @@ services:
             dockerfile: ./auth-bot/Dockerfile
         logging: *default-logging
         restart: always
+        environment:
+            - TELEGRAM_BOT_TOKEN
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'

@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import {User} from "./User";
+
 export class Users {
   private users: { [key: number]: User } = {};
 

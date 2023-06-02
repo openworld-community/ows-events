@@ -130,14 +130,21 @@ server.get<{
 		const byProvince = cityTimezones.findFromCityStateProvince(countryString)[0];
 		if (!byProvince) {
 			return {
-				type: 'error'
+				type: 'error',
+				errors: ['City not found. Please, check the city name and try again.']
 			};
 		}
 
 		timezone = byProvince.timezone;
 
 		return {
-			type: 'error'
+			type: 'success',
+			data: {
+				country: countryString,
+				city: cityString,
+				timezoneName: timezone,
+				timezoneOffset: moment.tz(timezone).format('Z')
+			}
 		};
 	}
 	timezone = city.timezone;

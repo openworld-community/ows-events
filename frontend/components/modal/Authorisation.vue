@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { UserInfo } from '../../../common/types/user';
 
 type Props = {
 	close: () => void;
@@ -8,6 +9,13 @@ type Props = {
 };
 
 const props = defineProps<Props>();
+const user = useCookie<UserInfo | null>('user');
+
+const username =
+	user.value?.userNickName ||
+	(user.value?.firstNickName || user.value?.lastNickName
+		? user.value?.firstNickName + ' ' + user.value?.lastNickName
+		: null);
 </script>
 
 <template>
@@ -25,6 +33,12 @@ const props = defineProps<Props>();
 			@click="isAuthorized ? props.deauthorize() : props.authorize()"
 			class="authorisation-button"
 		>
+			<p
+				class="authorisation-button__text"
+				v-if="isAuthorized"
+			>
+				{{ username }}
+			</p>
 			<p class="authorisation-button__text">
 				{{ isAuthorized ? 'Выйти' : 'Войти' }}
 			</p>
@@ -41,6 +55,7 @@ const props = defineProps<Props>();
 <style scoped lang="less">
 .authorisation-button {
 	display: flex;
+	flex-direction: column;
 	width: max-content;
 	justify-content: center;
 	align-items: center;

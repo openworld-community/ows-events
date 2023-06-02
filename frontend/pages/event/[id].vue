@@ -44,9 +44,6 @@ const deleteCard = async () => {
 	await navigateTo({ name: RouteNameEnum.HOME });
 };
 
-// TODO убрать, когда появится авторизация
-const isManaged = getUserEvents().includes(id);
-
 const openLocation = (url: string) => {
 	window.open(url, '_blank');
 };
@@ -126,7 +123,7 @@ const templateURL = computed(
 				/>
 			</template>
 
-			<template v-if="isManaged && user?.id && user.id === posterEvent.creatorId">
+			<template v-if="user?.id === posterEvent.creatorId">
 				<CommonButton
 					class="event-actions__button"
 					button-class="button__success"

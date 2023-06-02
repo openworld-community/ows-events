@@ -110,6 +110,7 @@ services:
             - 'traefik.http.routers.backend_http.entrypoints=http'
         environment:
             - AUTH_SERVER_URL=https://auth.afisha.peredelano.com
+            - MODE=prod
         networks:
             - traefikpublic
         ports:

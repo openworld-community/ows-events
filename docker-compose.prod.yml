@@ -21,7 +21,7 @@ services:
             - '--certificatesresolvers.myresolver.acme.email=tibode495@gmail.com'
             - '--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json'
             - '--providers.docker=true'
-            - '--providers.docker.network=ows-events_traefikpublic'
+            - '--providers.docker.network=ows-events_prod_traefikpublic'
             - '--providers.docker.endpoint=unix:///var/run/docker.sock'
             - '--providers.docker.exposedbydefault=false'
             - '--entrypoints.http.address=:80'
@@ -60,14 +60,16 @@ services:
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
-            - 'traefik.http.routers.backend_https.rule=Host(`afisha.peredelano.com`)'
-            - 'traefik.http.routers.backend_https.middlewares=sslheader@docker'
-            - 'traefik.http.routers.backend_https.entrypoints=http, https'
-            - 'traefik.http.routers.backend_https.tls.certresolver=myresolver'
-            - 'traefik.http.routers.backend_http.rule=Host(`afisha.peredelano.com`)'
-            - 'traefik.http.routers.backend_http.entrypoints=http'
+            - 'traefik.http.routers.frontend_https.rule=Host(`afisha.peredelano.com`)'
+            - 'traefik.http.routers.frontend_https.middlewares=sslheader@docker'
+            - 'traefik.http.routers.frontend_https.entrypoints=http, https'
+            - 'traefik.http.routers.frontend_https.tls.certresolver=myresolver'
+            - 'traefik.http.routers.frontend_http.rule=Host(`afisha.peredelano.com`)'
+            - 'traefik.http.routers.frontend_http.entrypoints=http'
         networks:
             - traefikpublic
+        ports:
+            - '3000:3000'
 
     auth:
         build:
@@ -75,17 +77,21 @@ services:
             dockerfile: ./auth-bot/Dockerfile
         logging: *default-logging
         restart: always
+        environment:
+            - AUTH_TELEGRAM_BOT_TOKEN
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
-            - 'traefik.http.routers.backend_https.rule=Host(`auth.afisha.peredelano.com`)'
-            - 'traefik.http.routers.backend_https.middlewares=sslheader@docker'
-            - 'traefik.http.routers.backend_https.entrypoints=http, https'
-            - 'traefik.http.routers.backend_https.tls.certresolver=myresolver'
-            - 'traefik.http.routers.backend_http.rule=Host(`auth.afisha.peredelano.com`)'
-            - 'traefik.http.routers.backend_http.entrypoints=http'
+            - 'traefik.http.routers.auth_https.rule=Host(`auth.afisha.peredelano.com`)'
+            - 'traefik.http.routers.auth_https.middlewares=sslheader@docker'
+            - 'traefik.http.routers.auth_https.entrypoints=http, https'
+            - 'traefik.http.routers.auth_https.tls.certresolver=myresolver'
+            - 'traefik.http.routers.auth_http.rule=Host(`auth.afisha.peredelano.com`)'
+            - 'traefik.http.routers.auth_http.entrypoints=http'
         networks:
             - traefikpublic
+        ports:
+            - '7090:7090'
 
     backend:
         build:
@@ -102,6 +108,10 @@ services:
             - 'traefik.http.routers.backend_https.tls.certresolver=myresolver'
             - 'traefik.http.routers.backend_http.rule=Host(`api.afisha.peredelano.com`)'
             - 'traefik.http.routers.backend_http.entrypoints=http'
+        environment:
+            - AUTH_SERVER_URL=https://auth.afisha.peredelano.com
+        networks:
+            - traefikpublic
         ports:
             - '7080:7080'
         volumes:

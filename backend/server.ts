@@ -18,6 +18,7 @@ import TelegramBot from 'node-telegram-bot-api';
 import { imageController } from './src/controllers/image-controller';
 import { countriesAndCitiesController } from './src/controllers/countries-and-cities.controller';
 import { eventsStateController, FindEventParams } from './src/controllers/events-state-controller';
+import { vars } from './src/const/vars';
 
 interface EventParams {
 	id: string;
@@ -66,7 +67,7 @@ server.get<{
 	async (request) =>
 		// eslint-disable-next-line @typescript-eslint/return-await
 		await axios
-			.get<UserDbEntity>(`https://auth.orby-tech.space/user/${request.params.id}`)
+			.get<UserDbEntity>(`${vars.auth_server_url}/user/${request.params.id}`)
 			.then((res) => {
 				if (!res.data) {
 					throw new Error('No data');

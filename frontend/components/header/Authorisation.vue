@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { UserInfo } from '../../../common/types/user';
+
 import { useModal } from 'vue-final-modal';
 import { ModalAuthorisation } from '#components';
 import { v4 } from 'uuid';
@@ -7,6 +9,7 @@ import { AUTH_SERVER_URL, SERVER_URL } from '~/constants/url';
 const tokenCookie = useCookie<string | null>('token');
 
 const isAuthorized = computed(() => !!tokenCookie.value);
+const user = useCookie<UserInfo | null>('user');
 
 const authorize = () => {
 	const temporaryId = v4();

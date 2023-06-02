@@ -168,7 +168,7 @@ bot.onText(/\/start/, (msg) => {
 
 bot.onText(/\/startEmitAuthBot/, (msg) => {
 	const chatId = msg.chat.id;
-	users.addUser({ chatId: chatId, status: 'active' });
+	users.addUser({ chatId, status: 'active' });
 	bot.sendMessage(chatId, 'You will receive messages from now on');
 });
 

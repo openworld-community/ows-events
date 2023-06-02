@@ -12,7 +12,6 @@ definePageMeta({
 	name: RouteNameEnum.EVENT
 });
 
-console.log('event page');
 const route = useRoute();
 const id = route.params.id as string;
 

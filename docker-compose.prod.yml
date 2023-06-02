@@ -108,6 +108,8 @@ services:
             - 'traefik.http.routers.backend_https.tls.certresolver=myresolver'
             - 'traefik.http.routers.backend_http.rule=Host(`api.afisha.peredelano.com`)'
             - 'traefik.http.routers.backend_http.entrypoints=http'
+        environment:
+            - AUTH_SERVER_URL=https://auth.afisha.peredelano.com
         networks:
             - traefikpublic
         ports:

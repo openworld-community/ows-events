@@ -30,7 +30,7 @@ const loadAllTimezones = async () => {
 	allTimezones.value = _allTimezones.map((timezone) => timezoneConverter(timezone));
 };
 
-loadAllTimezones();
+await loadAllTimezones();
 
 type inputValuesType = {
 	id: string;
@@ -91,6 +91,10 @@ const setEventData = (data: EventOnPoster) => {
 watch(
 	() => inputValues.value.country,
 	async (_country) => {
+		if (!_country) {
+			inputValues.value.city = '';
+			return;
+		}
 		await locationStore.pickCountry(_country);
 	},
 	{ deep: true }
@@ -124,7 +128,8 @@ const checkFormFilling = computed(() => {
 		inputValues.value.startTime &&
 		inputValues.value.country &&
 		inputValues.value.city &&
-		inputValues.value.timezone
+		inputValues.value.timezone &&
+		allTimezones.value.includes(inputValues.value.timezone)
 	);
 });
 
@@ -208,6 +213,14 @@ const submitEvent = async () => {
 	}
 };
 
+const isCityDisabled = computed(() => {
+	return !inputValues.value.country;
+});
+
+const isTimezoneDisabled = computed(() => {
+	return !inputValues.value.city;
+});
+
 type InputEvent = {
 	type: 'text' | 'date' | 'time' | 'number' | 'textarea' | 'datalist';
 	label?: string;
@@ -215,6 +228,7 @@ type InputEvent = {
 	required: boolean;
 	min?: number;
 	options?: any; // TODO тип
+	isDisabled?: Ref<boolean>;
 };
 
 const eventInputs: {
@@ -240,14 +254,16 @@ const eventInputs: {
 				name: 'city',
 				options: cities,
 				label: $translate('component.new_event_modal.fields.city'),
-				required: true
+				required: true,
+				isDisabled: isCityDisabled
 			},
 			{
 				type: 'datalist',
 				name: 'timezone',
 				options: allTimezones,
 				label: $translate('component.new_event_modal.fields.timezone'),
-				required: true
+				required: true,
+				isDisabled: isTimezoneDisabled
 			}
 		]
 	},
@@ -363,11 +379,12 @@ const eventInputs: {
 					<div :class="input.type === 'column' ? 'section__column' : 'section__row'">
 						<CommonInput
 							v-for="c in input.child"
-							:key="c.name"
+							:key="c.name + c.options?.value.join('') + c.isDisabled"
 							v-model="inputValues[c.name]"
+							:input-disabled="c.isDisabled?.value || false"
 							class="section__input"
 							:input-type="c.type"
-							:options-list="c.options"
+							:options-list="c.options?.value"
 							:input-placeholder="c.label"
 							:input-name="c.name"
 							:is-required="c.required"

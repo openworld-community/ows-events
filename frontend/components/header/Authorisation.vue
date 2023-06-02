@@ -1,20 +1,15 @@
 <script setup lang="ts">
 import { UserInfo } from '../../../common/types/user';
+
 import { useModal } from 'vue-final-modal';
 import { ModalAuthorisation } from '#components';
 import { v4 } from 'uuid';
 import { AUTH_SERVER_URL, SERVER_URL } from '~/constants/url';
 
 const tokenCookie = useCookie<string | null>('token');
-const user = useCookie<UserInfo | null>('user');
 
 const isAuthorized = computed(() => !!tokenCookie.value);
-
-// const username =
-// 	userCookie.value?.userNickName ||
-// 	(userCookie.value?.firstNickName || userCookie.value?.lastNickName
-// 		? userCookie.value?.firstNickName + ' ' + userCookie.value?.lastNickName
-// 		: null);
+const user = useCookie<UserInfo | null>('user');
 
 const authorize = () => {
 	const temporaryId = v4();

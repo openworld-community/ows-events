@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { UserInfo } from '../../../common/types/user';
 
 type Props = {
 	close: () => void;
@@ -8,6 +9,13 @@ type Props = {
 };
 
 const props = defineProps<Props>();
+const user = useCookie<UserInfo | null>('user');
+
+const username =
+	user.value?.userNickName ||
+	(user.value?.firstNickName || user.value?.lastNickName
+		? user.value?.firstNickName + ' ' + user.value?.lastNickName
+		: null);
 </script>
 
 <template>
@@ -25,15 +33,23 @@ const props = defineProps<Props>();
 			@click="isAuthorized ? props.deauthorize() : props.authorize()"
 			class="authorisation-button"
 		>
-			<p class="authorisation-button__text">
-				{{ isAuthorized ? 'Выйти' : 'Войти' }}
+			<p
+				class="authorisation-button__user"
+				v-if="isAuthorized"
+			>
+				{{ username }}
 			</p>
-			<CommonIcon
-				class="authorisation-button__icon"
-				:name="isAuthorized ? 'sign-out' : 'sign-in'"
-				width="20"
-				height="20"
-			/>
+			<div class="authorisation-button__container">
+				<p class="authorisation-button__text">
+					{{ isAuthorized ? 'Выйти' : 'Войти' }}
+				</p>
+				<CommonIcon
+					class="authorisation-button__icon"
+					:name="isAuthorized ? 'sign-out' : 'sign-in'"
+					width="20"
+					height="20"
+				/>
+			</div>
 		</NuxtLink>
 	</CommonModalWrapper>
 </template>
@@ -41,6 +57,7 @@ const props = defineProps<Props>();
 <style scoped lang="less">
 .authorisation-button {
 	display: flex;
+	flex-direction: column;
 	width: max-content;
 	justify-content: center;
 	align-items: center;
@@ -48,12 +65,21 @@ const props = defineProps<Props>();
 	top: var(--header-height);
 	right: var(--padding-side);
 	background-color: var(--color-white);
-	box-shadow: 0px 8px 16px -2px rgba(0, 0, 0, 0.1), 0px 0px 0px 1px rgba(0, 0, 0, 0.02);
+	box-shadow: 0 8px 16px -2px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.02);
 	border-radius: 6px;
 	padding: 8px 16px;
 
+	&__container {
+		display: flex;
+	}
+
 	&__text {
 		margin-right: 9px;
+	}
+
+	&__user {
+		font-size: var(--font-size-XS);
+		color: var(--color-text-secondary);
 	}
 
 	&__icon {

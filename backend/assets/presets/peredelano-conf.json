@@ -14,7 +14,7 @@
       "timezoneName": "Asia/Tashkent",
       "timezoneOffset": "+05:00"
     },
-    "image": "",
+    "image": "https://media.discordapp.net/attachments/1110187947988365365/1113762445270450246/95d48c3588734d63.png?width=1187&height=668",
     "url": "self"
   },
   {
@@ -32,7 +32,7 @@
       "timezoneName": "Europe/Belgrade",
       "timezoneOffset": "+02:00"
     },
-    "image": "",
+    "image": "https://media.discordapp.net/attachments/1110187947988365365/1113762562480287825/4aed331314607335.png?width=1187&height=668",
     "url": "self"
   },
   {
@@ -46,7 +46,7 @@
       "timezoneName": "Europe/Amsterdam",
       "timezoneOffset": "+02:00"
     },
-    "image": "",
+    "image": "https://media.discordapp.net/attachments/1110187947988365365/1113762527843733574/3caa45efb4dbd057.png?width=1187&height=668",
     "id": "amsterdam-28-05",
     "url": "self"
   },
@@ -58,7 +58,7 @@
     "location": { "country": "Czech Republic", "city": "Prague" },
     "price": 0,
     "timezone": { "timezoneName": "Europe/Prague", "timezoneOffset": "+02:00" },
-    "image": "",
+    "image": "https://media.discordapp.net/attachments/1110187947988365365/1113762659993665536/0805c9548c5b9807.png?width=1187&height=668",
     "id": "praga-10-06",
     "url": "self"
   },
@@ -70,7 +70,7 @@
     "location": { "country": "Thailand", "city": "Phuket" },
     "price": 0,
     "timezone": { "timezoneName": "Asia/Bangkok", "timezoneOffset": "+07:00" },
-    "image": "",
+    "image": "https://media.discordapp.net/attachments/1110187947988365365/1113762701345296424/c718d965a31106e0.png?width=1187&height=668",
     "id": "phuket-03-06",
     "url": "self"
   },
@@ -83,7 +83,7 @@
     "price": 0,
     "timezone": { "timezoneName": "Asia/Yerevan", "timezoneOffset": "+04:00" },
     "url": "self",
-    "image": "",
+    "image": "https://media.discordapp.net/attachments/1110187947988365365/1113762599901859900/292b538291a13cb4.png?width=1187&height=668",
     "id": "yerevan-17-06"
   },
   {
@@ -98,7 +98,7 @@
       "timezoneOffset": "+02:00"
     },
     "url": "self",
-    "image": "",
+    "image": "https://media.discordapp.net/attachments/1110187947988365365/1113762628116955196/bdf74308618006a4.png?width=1187&height=668",
     "id": "limassol-24-06"
   }
 ]

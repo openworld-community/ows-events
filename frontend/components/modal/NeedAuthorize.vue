@@ -22,7 +22,7 @@ const props = defineProps<Props>();
 			</div>
 			<div class="modal-card__foot">
 				<CommonButton
-					button-class="button__success"
+					button-kind="success"
 					button-text="Закрыть"
 					@click="props.closeNeedAuthorizeModal"
 				/>
@@ -33,17 +33,16 @@ const props = defineProps<Props>();
 
 <style scoped lang="less">
 .modal {
+	//TODO: пока верстка только мобилки
+	max-width: 350px;
 	overflow: hidden;
 	border-radius: 10px;
-	margin-top: 50%;
-	margin-bottom: auto;
-	margin-inline: var(--padding-side);
+	margin: 40vh auto auto;
 }
 
 .modal-card {
 	&__head {
 		height: max-content;
-		min-height: 64px;
 	}
 
 	&__title {

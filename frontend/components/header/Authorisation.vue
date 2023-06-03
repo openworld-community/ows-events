@@ -43,29 +43,13 @@ updateModalData();
 </script>
 
 <template>
-	<!--TODO: Вставить компонент button как будет готов  -->
-	<div
-		class="authorisation"
+	<CommonButton
+		is-icon
+		icon-name="user"
+		:button-kind="isAuthorized ? 'success' : 'ordinary'"
+		:alt="isAuthorized ? 'Выйти из личного кабинета' : 'Авторизоваться с помощью Telegram'"
 		@click="openAuthModal"
-	>
-		<CommonIcon
-			name="user"
-			:class="['authorisation__icon', { 'authorisation__icon--success': isAuthorized }]"
-			:alt="isAuthorized ? 'Выйти из личного кабинета' : 'Авторизоваться с помощью Telegram'"
-		/>
-	</div>
+	/>
 </template>
 
-<style scoped lang="less">
-.authorisation {
-	cursor: pointer;
-
-	&__icon {
-		color: var(--color-text-main);
-
-		&--success {
-			color: var(--color-accent-green-main);
-		}
-	}
-}
-</style>
+<style scoped lang="less"></style>

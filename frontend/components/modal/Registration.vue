@@ -206,13 +206,13 @@ const closeModal = () => {
 			<div class="modal-card__foot">
 				<CommonButton
 					class="modal-card__button"
-					button-class="button__ordinary"
+					button-kind="ordinary"
 					:button-text="$translate('component.new_event_modal.cancel')"
 					@click="closeModal()"
 				/>
 				<CommonButton
 					class="modal-card__button"
-					button-class="button__success"
+					button-kind="success"
 					:button-text="$translate('component.new_event_modal.submit')"
 					@click="submit()"
 				/>
@@ -263,16 +263,6 @@ const closeModal = () => {
 			line-height: var(--line-height-XS);
 		}
 	}
-}
-
-.submit-button {
-	color: var(--color-white);
-	background: var(--color-accent-green-main);
-	height: 40px;
-	width: 100%;
-	border-radius: 6px;
-	padding: 7px 16px 7px 16px;
-	justify-content: center;
 }
 
 main {

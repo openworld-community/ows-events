@@ -229,13 +229,13 @@ const now = Date.now();
 			</li>
 		</ul>
 
-		<CommonButtonIcon
-			class="add-event-button"
-			icon-name="button-plus"
-			icon-width="56"
-			icon-height="56"
+		<CommonButton
+      class="add-event-button"
+			button-kind="success"
+			is-round
+			icon-name="plus"
+			:alt="$translate('home.button.add_event_aria')"
 			aria-haspopup="true"
-			:aria-label="$translate('home.button.add_event_aria')"
 			@click="onButtonClick"
 		/>
 	</div>

@@ -37,8 +37,8 @@ export const defaultTranslation = {
   },
   event: {
     button: {
-      delete: 'Удалить событие',
-      edit: 'Редактировать событие',
+      delete: 'Удалить',
+      edit: 'Редактировать',
       contact: 'Связаться',
       register: 'Зарегистрироваться'
     },

@@ -10,21 +10,15 @@ const route = useRoute();
 		role="navigation"
 		:aria-label="$translate('global.nav')"
 	>
-		<NuxtLink
+		<CommonButton
 			v-if="route.name === RouteNameEnum.HOME"
-			:to="{ name: RouteNameEnum.ABOUT }"
-			class="navigation__item"
-		>
-			<CommonIcon
-				name="info"
-				:alt="$translate('component.header.about')"
-			/>
-		</NuxtLink>
-
-		<HeaderAuthorisation
-			v-if="route.name === RouteNameEnum.HOME"
-			class="navigation__item"
+			:link="{ name: RouteNameEnum.ABOUT }"
+			is-icon
+			icon-name="info"
+			:alt="$translate('component.header.about')"
 		/>
+
+		<HeaderAuthorisation v-if="route.name === RouteNameEnum.HOME" />
 
 		<!--          <div-->
 		<!--            v-if="route.name === 'event'"-->
@@ -50,16 +44,5 @@ const route = useRoute();
 .navigation {
 	display: flex;
 	align-items: center;
-	gap: 10px;
-
-	&__item {
-		margin-right: 10px;
-		height: 100%;
-		display: flex;
-
-		&:last-child {
-			margin-right: 0;
-		}
-	}
 }
 </style>

@@ -19,14 +19,14 @@ import { REPO_URL } from '@/constants/url';
 		<br />
 		<p>
 			{{ $translate('about.github') }}:
-			<a
+			<NuxtLink
 				:href="REPO_URL"
 				class="about__link"
 				target="_blank"
 				rel="noopener noreferrer"
 			>
 				Repo
-			</a>
+			</NuxtLink>
 		</p>
 	</section>
 </template>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {computed, ref} from 'vue';
+import {ref} from 'vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import {Props} from './types/types';
@@ -8,21 +8,20 @@ import {Props} from './types/types';
 withDefaults(defineProps<Props>(), {
 	className: '',
 	modelValue: '',
-	placeholder: '',
+	placeholder: 'дд.мм.гг',
 	label: '',
 	error: '',
-	minDate: new Date("1990-09-09"),
 });
 
-const date = ref<>(new Date());
+const date = ref(null);
 
-const format = computed((date: Date) => {
+const format = (date) => {
 	const day = date.getDate();
 	const month = date.getMonth() + 1;
 	const year = date.getFullYear();
 
 	return `${day}.${month}.${year}`;
-})
+}
 
 </script>
 
@@ -38,6 +37,7 @@ const format = computed((date: Date) => {
 			<VueDatePicker
 				v-model="date"
 				:name="name"
+				:placeholder="placeholder"
 				:input-class-name="`input form__field ${error ? 'form__error' : ''} ${className}`"
 				auto-apply
 				partial-flow

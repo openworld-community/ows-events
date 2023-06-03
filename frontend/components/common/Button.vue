@@ -2,6 +2,8 @@
 import { computed, type PropType } from 'vue';
 import NuxtLink from '#app/components/nuxt-link';
 
+const emit = defineEmits(['click'])
+
 type ButtonKind = 'ordinary' | 'success' | 'warning'; // для задания внешнего вида
 
 const props = defineProps({
@@ -82,7 +84,7 @@ const loaderColor = computed(() => {
 			isRound ? 'button--round' : ''
 		]"
 		:aria-label="alt ? alt : null"
-		@click="!link && !isDisabled ? $emit('click') : null"
+		@click="!link && !isDisabled ? emit('click') : null"
 	>
 		<CommonUiLoadSpinner
 			v-if="isLoading"

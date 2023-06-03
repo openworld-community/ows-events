@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PropType } from 'vue';
 
-const props = defineProps({
+defineProps({
 	color: {
 		type: String as PropType<string>,
 		default: 'var(--color-white)'

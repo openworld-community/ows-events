@@ -15,7 +15,7 @@ withDefaults(defineProps<Props>(), {
 
 const date = ref(null);
 
-const format = (date) => {
+const format = (date: Date) => {
 	const day = date.getDate();
 	const month = date.getMonth() + 1;
 	const year = date.getFullYear();

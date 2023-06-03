@@ -10,8 +10,6 @@ const { userLocation } = storeToRefs(useLocationStore());
     <CommonIcon
       class="user-location__pin"
       name="map-pin"
-      width="24"
-      height="24"
     />
     <div
       v-if="userLocation?.city"

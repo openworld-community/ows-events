@@ -53,7 +53,7 @@ export const defaultTranslation = {
     new_event_modal: {
       title: 'Добавьте мероприятие',
       cancel: 'Отмена',
-      submit: 'Отправить',
+      submit: 'Сохранить',
       add_image: 'Добавить фото',
       remove_image: 'Удалить фото',
       fields: {
@@ -90,6 +90,10 @@ export const defaultTranslation = {
   },
   header: {
     subscription_expired: '$t(dates.day.key) до конца подписки'
+  },
+  callToAction: {
+    delete: 'Очистить',
+    search: 'Поиск'
   }
 };
 

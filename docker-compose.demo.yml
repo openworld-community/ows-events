@@ -6,15 +6,36 @@ x-logging: &default-logging
         max-size: '10m'
         max-file: '5'
 
+networks:
+    ows-demo-network:
+
 services:
     frontend:
         build:
-            context: ./
-            dockerfile: Dockerfile
+            context: .
+            dockerfile: ./frontend/Dockerfile
+            args:
+                - NODE_ENV=production
+                - VITE_API_URL=https://api.poster-demo-peredelano.orby-tech.space/api
+                - VITE_BASE_URL=https://api.poster-demo-peredelano.orby-tech.space
+                - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
+                - AUTH_SERVER_URL=https://auth.orby-tech.space
+                - VITE_POSTAUTH_URL=https://poster-demo-peredelano.orby-tech.space
         logging: *default-logging
-        restart: always
+        networks:
+            - ows-demo-network
         ports:
-            - '7080:7080'
+            - '13000:3000'
+
+    backend:
+        build:
+            context: .
+            dockerfile: ./backend/Dockerfile
+        logging: *default-logging
+        networks:
+            - ows-demo-network
+        ports:
+            - '8070:7080'
         volumes:
             - assets-db:/app/backend/assets/db
             - assets-img:/app/backend/assets/img
@@ -25,11 +46,11 @@ volumes:
         driver_opts:
             type: none
             o: bind
-            device: ./assets/db
+            device: /home/a/ows-events-demo/assets/db
 
     assets-img:
         driver: local
         driver_opts:
             type: none
             o: bind
-            device: ./assets/img
+            device: /home/a/ows-events-demo/assets/img

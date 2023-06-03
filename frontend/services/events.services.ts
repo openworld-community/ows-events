@@ -1,7 +1,14 @@
-import { api } from '@/services/axios';
 import { type EventOnPoster, type StandardResponse } from '../../common/types';
-import type { PaymentInfo } from '../../common/types/payment-info';
+import { PostEventPayload } from '../../common/types/event';
+import { api } from '../utils/axios';
 
+type SearchEventPayload = {
+	searchLine?: string;
+	country?: string;
+	city?: string;
+};
+
+// EVENTS HOME PAGE
 export const getEvents = async (): Promise<EventOnPoster[]> => {
 	const { data } = await api.get('/events');
 	return data;
@@ -11,19 +18,65 @@ export const getEventsByParams = async ({
 	searchLine,
 	country,
 	city
-}: {
-	searchLine?: string;
-	country?: string;
-	city?: string;
-}): Promise<EventOnPoster[]> => {
+}: SearchEventPayload): Promise<EventOnPoster[]> => {
 	const { data } = await api.post('/events/find', { searchLine, country, city });
 	return data;
 };
+
+// EVENT PAGE
 export const getEvent = async (id: string): Promise<EventOnPoster> => {
 	const { data } = await api.get(`/events/${id}`);
 	return data;
 };
 
+export const postEvent = async (payload: PostEventPayload) => {
+	const token = useCookie<string>('token').value;
+
+	if (!token) {
+		throw new Error('You are not authorized');
+	}
+
+	const { data } = await api.post<StandardResponse<{ id: string }>>('/events/add', payload, {
+		headers: {
+			Authorization: token
+		}
+	});
+	return data;
+};
+
+export const editEvent = async (data: any) => {
+	const token = useCookie<string>('token').value;
+
+	if (!token) {
+		throw new Error('You are not authorized');
+	}
+
+	await api.post('/events/update', data, {
+		headers: {
+			Authorization: token
+		}
+	});
+};
+
+export const deleteEvent = async (id: string) => {
+	const token = useCookie<string>('token').value;
+
+	if (!token) {
+		throw new Error('You are not authorized');
+	}
+
+	await api.post(
+		'/events/delete',
+		{ id },
+		{
+			headers: {
+				Authorization: token
+			}
+		}
+	);
+};
+
+//EVENT IMAGES
 export const postEventImage = async (img?: File): Promise<string> => {
 	if (!img) {
 		return '';
@@ -37,95 +90,4 @@ export const postEventImage = async (img?: File): Promise<string> => {
 
 export const deleteEventImage = async (path: string) => {
 	await api.post('/image/delete', { path });
-};
-
-export const postEvent = async (data: any) => {
-	return (await api.post<StandardResponse<{ id: string }>>('/events/add', data)).data;
-};
-
-export const editEvent = async (data: any) => {
-	await api.post('/events/update', data);
-};
-
-export const deleteEvent = async (id: string) => {
-	await api.post('/events/delete', { id });
-};
-
-export const getAllTimezones = async (): Promise<
-	{
-		timezoneName: string;
-		timezoneOffset: string;
-	}[]
-> => {
-	const local = localStorage.getItem('ALL_TIMEZONES');
-
-	if (local === 'undefined') {
-		localStorage.removeItem('ALL_TIMEZONES');
-	} else if (local) {
-		return JSON.parse(local) as {
-			timezoneName: string;
-			timezoneOffset: string;
-		}[];
-	}
-
-	const loaded = (
-		await api.get<
-			StandardResponse<
-				{
-					timezoneName: string;
-					timezoneOffset: string;
-				}[]
-			>
-		>('/timezones')
-	).data;
-
-	if (!loaded) {
-		return [];
-	}
-	if (loaded.type === 'error') {
-		return [];
-	}
-
-	localStorage.setItem('ALL_TIMEZONES', JSON.stringify(loaded.data));
-	return loaded.data;
-};
-
-export const getTimezoneByCountryAndCity = async ({
-	country,
-	city
-}: {
-	country: string;
-	city: string;
-}) => {
-	return (
-		await api.get<
-			StandardResponse<{
-				country: string;
-				city: string;
-				timezoneName: string;
-				timezoneOffset: string;
-			}>
-		>(`/location/meta/${country}/${city}`)
-	).data;
-};
-
-export const sendFormAboutRegistration = async (data: {
-	[key: string]: string | number | boolean;
-}) => {
-	await api.post('/event/registration', data);
-};
-
-export const getEventRegistration = async (id: string) => {
-	return (await api.get<StandardResponse<PaymentInfo>>(`/events/registration/${id}`)).data;
-};
-
-export const getEventPayment = async (id: string) => {
-	return (
-		await api.get<
-			StandardResponse<{
-				event: EventOnPoster;
-				paymantsInfo: PaymentInfo;
-			}>
-		>(`/event/payment-info/${id}`)
-	).data;
 };

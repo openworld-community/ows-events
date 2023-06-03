@@ -2,21 +2,30 @@ import fastify from 'fastify';
 import { EventOnPoster } from '@common/types/event';
 import cors from '@fastify/cors';
 import { StandardResponse } from '@common/types/standard-response';
+import { UserDbEntity, UserInfo } from '@common/types/user';
 import path from 'path';
 import Static from '@fastify/static';
 import Multipart from '@fastify/multipart';
 import cityTimezones from 'city-timezones';
-
+import jwt from 'jsonwebtoken';
 import moment from 'moment-timezone';
 import fs from 'fs';
 import fsP from 'fs/promises';
 import { Registration } from '@common/types/registration';
 import { PaymentInfo } from '@common/types/payment-info';
+import axios from 'axios';
+import TelegramBot from 'node-telegram-bot-api';
 import { imageController } from './src/controllers/image-controller';
 import { countriesAndCitiesController } from './src/controllers/countries-and-cities.controller';
 import { eventsStateController, FindEventParams } from './src/controllers/events-state-controller';
+import { vars } from './src/const/vars';
 
 interface EventParams {
+	id: string;
+}
+
+interface TokenData {
+	username: string;
 	id: string;
 }
 
@@ -33,10 +42,6 @@ fastify.default({
 });
 
 server.register(Static, {
-	root: path.join(__dirname, '../frontend/dist/')
-});
-
-server.register(Static, {
 	root: path.join(__dirname, './assets/img'),
 	prefix: '/image/',
 	decorateReply: false
@@ -46,6 +51,55 @@ server.get<{ Reply: string[] }>(
 	'/api/location/countries',
 	async () => countriesAndCitiesController.countries
 );
+
+server.get('/ping', async () => 'pong');
+
+const users: UserDbEntity[] = [];
+
+server.get<{
+	Params: {
+		id: number;
+	};
+
+	Body: TelegramBot.Message | null;
+}>(
+	'/api/postauth/token/:id',
+	async (request) =>
+		// eslint-disable-next-line @typescript-eslint/return-await
+		await axios
+			.get<UserDbEntity>(`${vars.auth_server_url}/user/${request.params.id}`)
+			.then((res) => {
+				if (!res.data) {
+					throw new Error('No data');
+				}
+				if (!res.data.token) {
+					throw new Error('No token');
+				}
+				users.push(res.data);
+
+				return res.data.token;
+			})
+			.catch((e) => {
+				// eslint-disable-next-line no-console
+				console.error(e);
+				return '';
+			})
+);
+
+server.get<{
+	Querystring: {
+		token: string;
+	};
+	Body: UserInfo;
+}>('/api/user/info', async (request) => {
+	const userEntity = users.find((u) => u.token === request.query.token);
+	return {
+		firstNickName: userEntity?.firstNickName,
+		lastNickName: userEntity?.lastNickName,
+		userNickName: userEntity?.userNickName,
+		id: userEntity?.id
+	};
+});
 
 server.get<{
 	Params: { country: string };
@@ -77,14 +131,21 @@ server.get<{
 		const byProvince = cityTimezones.findFromCityStateProvince(countryString)[0];
 		if (!byProvince) {
 			return {
-				type: 'error'
+				type: 'error',
+				errors: ['City not found. Please, check the city name and try again.']
 			};
 		}
 
 		timezone = byProvince.timezone;
 
 		return {
-			type: 'error'
+			type: 'success',
+			data: {
+				country: countryString,
+				city: cityString,
+				timezoneName: timezone,
+				timezoneOffset: moment.tz(timezone).format('Z')
+			}
 		};
 	}
 	timezone = city.timezone;
@@ -346,14 +407,30 @@ server.post<{
 
 server.post<{
 	Body: { event: EventOnPoster };
+	Header: { Authorization: string };
 	Reply: StandardResponse<{ id: string }>;
-}>('/api/events/add', async (request) => {
+}>('/api/events/add', async (request, reply) => {
+	const token = request.headers.authorization;
+	if (!token) {
+		return reply.status(401).send({
+			type: 'error'
+		});
+	}
+
+	const jwtData = jwt.verify(token, 'secret') as TokenData;
+	if (!jwtData.id) {
+		return reply.status(401).send({
+			type: 'error'
+		});
+	}
+
 	const body = request.body as { event: EventOnPoster | undefined };
 	if (!body) {
 		return {
 			type: 'error'
 		};
 	}
+
 	const { event } = body;
 	if (!event) {
 		return {
@@ -361,7 +438,9 @@ server.post<{
 		};
 	}
 
+	event.creatorId = jwtData.id;
 	const newPostId = eventsStateController.addEvent(event);
+
 	return {
 		type: 'success',
 		data: { id: newPostId }
@@ -371,18 +450,41 @@ server.post<{
 server.post<{
 	Body: { event: EventOnPoster };
 	Reply: StandardResponse<undefined>;
-}>('/api/events/update', async (request) => {
+}>('/api/events/update', async (request, reply) => {
+	const token = request.headers.authorization;
+	if (!token) {
+		return reply.status(401).send({
+			type: 'error'
+		});
+	}
+
+	const jwtData = jwt.verify(token, 'secret') as TokenData;
+	if (!jwtData.id) {
+		return reply.status(401).send({
+			type: 'error'
+		});
+	}
+
 	const body = request.body as { event: EventOnPoster | undefined };
 	if (!body) {
 		return {
 			type: 'error'
 		};
 	}
+
 	const { event } = body;
 	if (!event) {
 		return {
 			type: 'error'
 		};
+	}
+
+	const oldEvent = eventsStateController.getEvent(event.id);
+
+	if (oldEvent?.creatorId !== jwtData.id) {
+		return reply.status(403).send({
+			type: 'error'
+		});
 	}
 
 	eventsStateController.updateEvent(event);
@@ -395,7 +497,29 @@ server.post<{
 server.post<{
 	Body: { id: string };
 	Reply: StandardResponse<undefined>;
-}>('/api/events/delete', async (request) => {
+}>('/api/events/delete', async (request, reply) => {
+	const token = request.headers.authorization;
+	if (!token) {
+		return reply.status(401).send({
+			type: 'error'
+		});
+	}
+
+	const jwtData = jwt.verify(token, 'secret') as TokenData;
+	if (!jwtData.id) {
+		return reply.status(401).send({
+			type: 'error'
+		});
+	}
+
+	const oldEvent = eventsStateController.getEvent(request.body.id);
+
+	if (oldEvent?.creatorId !== jwtData.id) {
+		return reply.status(403).send({
+			type: 'error'
+		});
+	}
+
 	eventsStateController.deleteEvent(request.body.id);
 	return {
 		type: 'success',

@@ -5,13 +5,24 @@ import { getEvents, getEventsByParams } from '@/services/events.services';
 import { useLocationStore } from '@/stores/location.store';
 import { storeToRefs } from 'pinia';
 import { useModal } from 'vue-final-modal';
-import { BASE_URL } from '@/constants/url';
+import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '../components/modal/Event.vue';
+import NeedAuthorize from '~/components/modal/NeedAuthorize.vue';
 
-const { open: openEventModal, close, patchOptions } = useModal({ component: EventModal });
-patchOptions({ attrs: { close } });
+definePageMeta({ name: RouteNameEnum.HOME });
 
-definePageMeta({ name: 'home' });
+const {
+	open: openEventModal,
+	close: closeEventModal,
+	patchOptions: eventModalPatch
+} = useModal({ component: EventModal });
+eventModalPatch({ attrs: { closeEventModal } });
+const {
+	open: openNeedAuthorizeModal,
+	close: closeNeedAuthorizeModal,
+	patchOptions: needAuthorizeModalPatch
+} = useModal({ component: NeedAuthorize });
+needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
 
 let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined;
 
@@ -98,13 +109,7 @@ const eventsWithAdd = computed((): (EventOnPoster & { type: 'event' })[] => {
 	return events.map((x) => {
 		return {
 			...x,
-			type: 'event',
-			image: x.image
-				? x.image.includes('http')
-					? x.image
-					: `${BASE_URL}${x.image}`
-        //TODO убрать эту заглушку
-				: 'https://picsum.photos/400/300'
+			type: 'event'
 		};
 	});
 
@@ -152,23 +157,22 @@ const getFilteredEvents = (
 			.join(' ')
 			.toLowerCase();
 
-	let searchResult = events.filter((event) => {
-		return searchSource(event).includes(search.toLowerCase());
+	return events.filter((event) => {
+		const eventData = searchSource(event);
+		return (
+			(search && eventData.includes(search.toLowerCase())) ||
+			(country && eventData.includes(country.toLowerCase())) ||
+			(city && eventData.includes(city.toLowerCase()))
+		);
 	});
+};
 
-	if (country) {
-		searchResult = searchResult.filter((event) => {
-			return searchSource(event).includes(country.toLowerCase());
-		});
+const onButtonClick = () => {
+	if (useCookie('token').value) {
+		openEventModal();
+	} else {
+		openNeedAuthorizeModal();
 	}
-
-	if (city) {
-		searchResult = searchResult.filter((event) => {
-			return searchSource(event).includes(city.toLowerCase());
-		});
-	}
-
-	return searchResult;
 };
 const now = Date.now();
 </script>
@@ -232,7 +236,7 @@ const now = Date.now();
 			icon-height="56"
 			aria-haspopup="true"
 			:aria-label="$translate('home.button.add_event_aria')"
-			@click="openEventModal()"
+			@click="onButtonClick"
 		/>
 	</div>
 </template>

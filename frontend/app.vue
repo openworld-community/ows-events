@@ -1,9 +1,10 @@
-<script setup>
+<script lang="ts" setup>
 import './assets/less/app.less';
 import 'vue-final-modal/style.css';
 import 'virtual:svg-icons-register';
 import { useLocationStore } from './stores/location.store';
 import { ModalsContainer } from 'vue-final-modal';
+
 await useLocationStore().init();
 </script>
 <template>

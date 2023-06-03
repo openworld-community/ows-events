@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { IconDefaultParams } from '@/constants/defaultValues/icon';
 
 const props = defineProps({
 	name: {
@@ -10,8 +11,8 @@ const props = defineProps({
 		type: String,
 		default: null
 	},
-	width: { type: [String, Number], default: 24 },
-	height: { type: [String, Number], default: 24 }
+	width: { type: [String, Number], default: IconDefaultParams.WIDTH },
+	height: { type: [String, Number], default: IconDefaultParams.HEIGHT }
 });
 
 const symbolId = computed(() => `#${props.name}`);

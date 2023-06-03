@@ -381,7 +381,7 @@ const eventInputs: {
 							v-for="c in input.child"
 							:key="c.name + c.options?.value.join('') + c.isDisabled"
 							v-model="inputValues[c.name]"
-							:input-disabled="c.isDisabled"
+							:input-disabled="c.isDisabled?.value || false"
 							class="section__input"
 							:input-type="c.type"
 							:options-list="c.options?.value"

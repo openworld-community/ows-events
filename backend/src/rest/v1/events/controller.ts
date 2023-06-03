@@ -1,6 +1,6 @@
 import {EventOnPoster, StandardResponse} from "@common/types";
 import {eventsStateController, FindEventParams} from "../../../controllers/events-state-controller";
-import { RouteHandlerMethod, FastifyRequest } from "fastify";
+import {RouteHandlerMethod, FastifyRequest, FastifyReply} from "fastify";
 import {webcrypto} from "crypto";
 import {countriesAndCitiesController} from "../../../controllers/countries-and-cities.controller";
 import cityTimezones from "city-timezones";
@@ -8,10 +8,11 @@ import moment from "moment-timezone";
 import fs from "fs";
 import {PaymentInfo} from "@common/types/payment-info";
 import {Registration} from "@common/types/registration";
+import {eventParams} from "@common/types/event";
+import fsP from "fs/promises";
+import * as repl from "repl";
+import {imageController} from "../../../controllers/image-controller";
 
-interface eventParams {
-  id: string;
-}
 
 export const addEvent: RouteHandlerMethod = async (request) => {
   const body = request.body as { event: EventOnPoster | undefined };
@@ -38,14 +39,23 @@ export const getEvents: RouteHandlerMethod = async (request, reply): Promise<Eve
   return eventsStateController.getEvents().slice(0, 100);
 }
 
-export const getEvent: RouteHandlerMethod = async (request: FastifyRequest<{
+export const getEvent: (request: FastifyRequest<{
+  Params: eventParams;
+  Reply: eventParams;
+}>, reply: FastifyReply) => Promise<EventOnPoster | undefined> = async (request: FastifyRequest<{
   Params: eventParams
 }>, reply): Promise<EventOnPoster | undefined> => {
   const eventId = request.params.id;
   return eventsStateController.getEvent(eventId);
 }
 
-export const deleteEvent = async (request, reply) => {
+export const deleteEvent: (request: FastifyRequest<{
+  Body: { id: string };
+  Reply: StandardResponse<undefined>
+}>, reply: FastifyReply) => Promise<StandardResponse<undefined>> = async (request: FastifyRequest<{
+  Body: { id: string };
+  Reply: StandardResponse<undefined>;
+}>, reply: FastifyReply) => {
   eventsStateController.deleteEvent(request.body.id);
   return {
     type: "success",
@@ -53,7 +63,7 @@ export const deleteEvent = async (request, reply) => {
   };
 }
 
-export const updateEvent = async (request, reply) => {
+export const updateEvent: RouteHandlerMethod = async (request, reply) => {
   const body = request.body as { event: EventOnPoster | undefined };
   if (!body) {
     return {
@@ -75,7 +85,10 @@ export const updateEvent = async (request, reply) => {
 }
 
 
-export const findEvents: RouteHandlerMethod = async (request: FastifyRequest<{
+export const findEvents: (request: FastifyRequest<{
+  Body: FindEventParams;
+  Reply: EventOnPoster[]
+}>) => Promise<EventOnPoster[]> = async (request: FastifyRequest<{
   Body: FindEventParams;
   Reply: EventOnPoster[];
 }>): Promise<EventOnPoster[]> => {
@@ -84,9 +97,12 @@ export const findEvents: RouteHandlerMethod = async (request: FastifyRequest<{
   return eventsStateController.getEvents({ searchLine, country, city }).slice(0, 100);
 }
 
-export const getPaymentInfo: RouteHandlerMethod =  async (request: FastifyRequest<{
-  Params: eventParams
-}>, reply) => {
+export const getPaymentInfo = async (request: FastifyRequest<{
+  Params: eventParams;
+  Reply: StandardResponse<{
+    event: EventOnPoster;
+    paymentsInfo: PaymentInfo;
+  }>}>, reply: FastifyReply) => {
   const event = eventsStateController.getEvent(request.params.id);
   if (!event) {
     return {
@@ -148,7 +164,8 @@ export const getCitiesByCountry = async (request: FastifyRequest<
 
 export const getRegistration = async (request: FastifyRequest<{
   Body: Registration;
-}) => {
+  Reply: StandardResponse<Registration>;
+}>) => {
   const data = await request.body;
   if (!data) {
     return {
@@ -229,3 +246,95 @@ export const getTimezones = async () => {
   }
 }
 
+export const getPaymentInfoById: (request: FastifyRequest<{
+  Params: eventParams;
+  Reply: StandardResponse<PaymentInfo>
+}>) => Promise<{ type: string } | { type: string } | { data: any; type: string }> = async (request: FastifyRequest<{
+  Params: eventParams;
+  Reply: StandardResponse<PaymentInfo>;
+}>) => {
+  const eventId = request.params.id;
+  const data = await fsP.readFile("assets/presets/payments-info.json", {
+    encoding: "utf-8",
+  });
+  if (!data) {
+    return {
+      type: "error",
+    };
+  }
+  const info = JSON.parse(data);
+  if (!info) {
+    return {
+      type: "error",
+    };
+  }
+
+  const eventPaymentInfo = info.filter((item: PaymentInfo) => item.id === eventId);
+  return {
+    type: "success",
+    data: eventPaymentInfo,
+  };
+}
+
+export const deleteImage: RouteHandlerMethod = async (request: FastifyRequest<{
+  Body: { path: string };
+  Reply: StandardResponse<undefined>
+}>, reply) => {
+  // redundant await ?
+  const path = request.body.path;
+  if (!path) {
+    return {
+      type: "error",
+      status: "error",
+    };
+  }
+  try {
+    await imageController.deleteImg(path);
+    return {
+      type: "success",
+      data: undefined,
+    };
+  } catch (e) {
+    return {
+      type: "error",
+    };
+  }
+}
+
+export const addImage: RouteHandlerMethod = async (request, reply): Promise<StandardResponse<{ path: string }>> => {
+  const data = await request.file();
+  if (!data) {
+    return {
+      type: "error",
+    };
+  }
+
+  const buffer = await data.toBuffer();
+  if (!buffer) {
+    return {
+      type: "error",
+    };
+  }
+
+  try {
+    const path = await imageController.saveImg({
+      data: buffer,
+      filetype: data.filename.split(".").reverse()[0],
+    });
+    return {
+      type: "success",
+
+      data: {
+        path,
+      },
+    };
+  } catch (e) {
+    return {
+      type: "error",
+    };
+  }
+}
+
+export const giveIndex: RouteHandlerMethod = function (request, reply) {
+  reply.sendFile("index.html");
+}

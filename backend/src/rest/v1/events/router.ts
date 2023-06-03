@@ -1,20 +1,23 @@
 import { EventOnPoster, StandardResponse } from "@common/types";
 import fastify, { FastifyInstance } from "fastify";
-import {, getTimezones} from "./controller";
+import {addImage, deleteImage, getTimezones, giveIndex} from "./controller";
 import { getCountries } from "./controller";
 import { getCitiesByCountry } from "./controller"
 import { getMeta } from "./controller"
 import { addEvent, getEvents, getEvent, findEvents, updateEvent, deleteEvent } from "./controller"
 import { getPaymentInfo, getRegistration } from "./controller"
+import { getPaymentInfoById } from "./controller"
 import {PaymentInfo} from "@common/types/payment-info";
 import {Registration} from "@common/types/registration";
+import {eventParams} from "@common/types/event";
+import {FindEventParams} from "../../../controllers/events-state-controller";
 
 export const eventsApi = async (fastify: FastifyInstance) => {
   fastify.get<{
     Reply: EventOnPoster[];
   }>("/", getEvents);
 
-      fastify.post<{
+  fastify.post<{
     Body: { event: EventOnPoster };
     Reply: StandardResponse<{ id: string }>;
   }>("/add", addEvent);
@@ -51,8 +54,10 @@ export const eventApi = async (fastify: FastifyInstance) => {
 
   fastify.post<{
     Body: Registration;
-    Reply: StandardResponse<"ok">;
+    Reply: StandardResponse<Registration>;
   }>("/registration", getRegistration)
+
+  fastify.get("/!*", giveIndex);
 }
 
 export const locationApi = async (fastify: FastifyInstance)=> {
@@ -87,4 +92,21 @@ export const timezonesApi = async (fastify: FastifyInstance) => {
         }[]
     >;
   }>("/", getTimezones)
+}
+
+export const paymentInfoApi = async (fastify: FastifyInstance) => {
+  fastify.get<{
+    Params: eventParams;
+    Reply: StandardResponse<PaymentInfo>;
+  }>("/:id", getPaymentInfoById)
+}
+
+export const imageApi = async (fastify: FastifyInstance) => {
+  fastify.post<{
+    Body: { path: string };
+    Reply: StandardResponse<undefined>;
+  }>("/delete", deleteImage)
+  fastify.post<{
+    Reply: StandardResponse<{ path: string }>;
+  }>("/add", addImage)
 }

@@ -17,3 +17,6 @@ export type EventOnPoster = {
   url: string;
 };
 
+export type eventParams = {
+  id: string;
+}

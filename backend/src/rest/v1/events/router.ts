@@ -1,5 +1,5 @@
 import { EventOnPoster, StandardResponse } from "@common/types";
-import fastify, { FastifyInstance } from "fastify";
+import { FastifyInstance } from "fastify";
 import {addImage, deleteImage, getTimezones, giveIndex} from "./controller";
 import { getCountries } from "./controller";
 import { getCitiesByCountry } from "./controller"

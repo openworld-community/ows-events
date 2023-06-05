@@ -208,13 +208,13 @@ const closeModal = () => {
 					class="modal-card__button"
 					button-kind="ordinary"
 					:button-text="$translate('component.new_event_modal.cancel')"
-					@click="closeModal()"
+					@click="closeModal"
 				/>
 				<CommonButton
 					class="modal-card__button"
 					button-kind="success"
 					:button-text="$translate('component.new_event_modal.submit')"
-					@click="submit()"
+					@click="submit"
 				/>
 			</div>
 		</div>

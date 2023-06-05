@@ -115,7 +115,7 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 					button-kind="success"
 					class="event-actions__button"
 					:button-text="$translate('event.button.register')"
-					@click="openRegistrationModal()"
+					@click="openRegistrationModal"
 				/>
 			</template>
 
@@ -127,7 +127,7 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 					class="event-actions__button"
 					:button-text="$translate('event.button.edit')"
 					icon-name="edit"
-					@click="openEventModal()"
+					@click="openEventModal"
 				/>
 
 				<CommonButton

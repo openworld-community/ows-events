@@ -2,7 +2,12 @@
 import { computed, type PropType } from 'vue';
 import NuxtLink from '#app/components/nuxt-link';
 
-const emit = defineEmits(['click'])
+const emit = defineEmits(['click']);
+
+type LinkObjectType = {
+	name?: string;
+	path?: string;
+};
 
 type ButtonKind = 'ordinary' | 'success' | 'warning'; // для задания внешнего вида
 
@@ -18,7 +23,7 @@ const props = defineProps({
 	},
 	link: {
 		// если это ссылка
-		type: [String, Object] as PropType<string | { name?: string; path?: string }>,
+		type: [String, Object] as PropType<string | LinkObjectType>,
 		default: ''
 	},
 	isExternalLink: {
@@ -81,7 +86,7 @@ const loaderColor = computed(() => {
 			isIcon ? 'icon' : `button button__${buttonKind}`,
 			isIcon && buttonKind ? `icon__${buttonKind}` : '',
 			isDisabled ? `button__${buttonKind}--disabled` : '',
-			isRound ? 'button--round' : ''
+			{ 'button--round': isRound }
 		]"
 		:aria-label="alt ? alt : null"
 		@click="!link && !isDisabled ? emit('click') : null"
@@ -93,7 +98,7 @@ const loaderColor = computed(() => {
 		/>
 		<CommonIcon
 			v-if="iconName"
-			:class="buttonText ? 'button__icon' : ''"
+			:class="{ button__icon: buttonText }"
 			:name="iconName"
 			:alt="alt ? alt : null"
 		/>

@@ -47,7 +47,7 @@ updateModalData();
 		is-icon
 		icon-name="user"
 		:button-kind="isAuthorized ? 'success' : 'ordinary'"
-		:alt="isAuthorized ? 'Выйти из личного кабинета' : 'Авторизоваться с помощью Telegram'"
+		:alt="isAuthorized ? $translate('component.header.authorization.deauthorize')	: $translate('component.header.authorization.authorize')"
 		@click="openAuthModal"
 	/>
 </template>

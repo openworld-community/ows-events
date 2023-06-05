@@ -18,12 +18,14 @@ const props = defineProps<Props>();
 	>
 		<div class="modal">
 			<div class="modal-card__head">
-				<p class="modal-card__title">Для создания мероприятия необходимо авторизоваться</p>
+				<p class="modal-card__title">
+					{{ $translate('component.need_authorize_modal.title') }}
+				</p>
 			</div>
 			<div class="modal-card__foot">
 				<CommonButton
 					button-kind="success"
-					button-text="Закрыть"
+					:button-text="$translate('component.need_authorize_modal.button.close')"
 					@click="props.closeNeedAuthorizeModal"
 				/>
 			</div>

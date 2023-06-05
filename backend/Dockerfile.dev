@@ -1,0 +1,8 @@
+FROM node:16.15.1-alpine
+
+WORKDIR /app
+
+COPY ./backend/entrypoint.dev.sh /scripts/
+RUN chmod +x -R /scripts
+
+ENTRYPOINT ["sh", "/scripts/entrypoint.dev.sh"]

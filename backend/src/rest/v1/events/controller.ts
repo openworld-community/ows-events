@@ -9,7 +9,7 @@ import {
 	IGetEventsHandler,
 	IUpdateEventHandler
 } from './type';
-import { TokenData } from '../../types';
+import { ITokenData } from '../../types';
 
 export const addEvent: IAddEventHandler = async (request, reply) => {
 	const token = request.headers.authorization;
@@ -19,7 +19,7 @@ export const addEvent: IAddEventHandler = async (request, reply) => {
 		});
 	}
 
-	const jwtData = jwt.verify(token, 'secret') as TokenData;
+	const jwtData = jwt.verify(token, 'secret') as ITokenData;
 	if (!jwtData.id) {
 		return reply.status(401).send({
 			type: 'error'
@@ -62,7 +62,7 @@ export const deleteEvent: IDeleteEventHandler = async (request, reply) => {
 		});
 	}
 
-	const jwtData = jwt.verify(token, 'secret') as TokenData;
+	const jwtData = jwt.verify(token, 'secret') as ITokenData;
 	if (!jwtData.id) {
 		return reply.status(401).send({
 			type: 'error'
@@ -91,7 +91,7 @@ export const updateEvent: IUpdateEventHandler = async (request, reply) => {
 		});
 	}
 
-	const jwtData = jwt.verify(token, 'secret') as TokenData;
+	const jwtData = jwt.verify(token, 'secret') as ITokenData;
 	if (!jwtData.id) {
 		return reply.status(401).send({
 			type: 'error'

@@ -23,8 +23,6 @@ const {
 } = useModal({ component: NeedAuthorize });
 needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
 
-const { $trpc } = useNuxtApp();
-
 const locationStore = useLocationStore();
 locationStore.loadCountries();
 const { countries, cities, pickedCountry, pickedCity } = storeToRefs(locationStore);
@@ -35,17 +33,18 @@ const searchFromRoute = route.query.search?.toString();
 const search = ref(searchFromRoute === 'None' ? '' : searchFromRoute ?? '');
 const country = ref(pickedCountry.value ?? '');
 const city = ref(pickedCity.value ?? '');
-const { data: posterEvents, refresh } = await $trpc.events.findMany.useQuery({
-	city: city.value,
-	country: country.value,
-	searchLine: search.value
-});
+const { data: posterEvents, refresh: refreshEvents } = await useAPI(
+	'events',
+	'findMany',
+	undefined
+);
+
 locationStore.pickCountry(pickedCountry.value);
 let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined;
 const debounceEventsSearch = () => {
 	clearTimeout(lazyLoadTimeout);
 	lazyLoadTimeout = setTimeout(async () => {
-		await refresh();
+		// await refreshEvents();
 	}, 500);
 };
 
@@ -87,6 +86,7 @@ watch(
 );
 
 const filteredValues = computed(() => {
+	if (!posterEvents.value) return [];
 	return getFilteredEvents(posterEvents.value, search.value, country.value, city.value);
 });
 

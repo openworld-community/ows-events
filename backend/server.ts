@@ -401,7 +401,6 @@ server.post<{
 	Reply: EventOnPoster[];
 }>('/api/events/find', async (request): Promise<EventOnPoster[]> => {
 	const { searchLine, country, city } = request.body;
-
 	return eventsStateController.getEvents({ searchLine, country, city }).slice(0, 100);
 });
 

@@ -1,7 +1,12 @@
-import { type DeepPartial } from '@trpc/server';
 import { type EventOnPoster, type StandardResponse } from '../../../../common/types';
 import { type PostEventPayload } from '../../../../common/types/event';
-import { CheckTypeEquality, backendFetch, publicProcedure, router } from '../trpc';
+import {
+	type CheckTypeEquality,
+	backendFetch,
+	publicProcedure,
+	router,
+	DeepRequired
+} from '../trpc';
 import { z } from 'zod';
 
 const addEventSchema = z.object({
@@ -56,16 +61,14 @@ export const eventsRouter = router({
 				.optional()
 		)
 		.query(({ input }): Promise<EventOnPoster[]> => {
-			return input
-				? backendFetch('events/find', {
-						body: {
-							searchLine: input.searchLine,
-							country: input.country,
-							city: input.city
-						},
-						method: 'POST'
-				  })
-				: backendFetch('events');
+			return backendFetch('events/find', {
+				body: {
+					searchLine: input?.searchLine,
+					country: input?.country,
+					city: input?.city
+				},
+				method: 'POST'
+			});
 		}),
 	getByID: publicProcedure
 		.input(z.object({ id: z.string() }))
@@ -89,19 +92,20 @@ export const eventsRouter = router({
 		.mutation(
 			({ input }): Promise<StandardResponse<undefined>> =>
 				backendFetch('events/delete', { body: input, method: 'POST' })
-		),
-	addImageToEvent: publicProcedure.input(FormData).mutation(() => backendFetch('image/add'))
+		)
+	// addImageToEvent: publicProcedure.input(File).mutation(() => backendFetch('image/add'))
 });
 
 // checks that defined zod schema for the endpoint is consistent with payload type
 type AddEventSchema = z.infer<typeof addEventSchema>;
 type EditEventSchema = z.infer<typeof editEventSchema>;
-(function (a: CheckTypeEquality<AddEventSchema, PostEventPayload>) {
-	return a;
-})(true);
-(function (a: CheckTypeEquality<EditEventSchema, { event: DeepPartial<EventOnPoster> }>) {
-	return a;
-})(true);
+((a: CheckTypeEquality<AddEventSchema, PostEventPayload>) => a)(true);
+((
+	a: CheckTypeEquality<
+		DeepRequired<EditEventSchema>,
+		{ event: Omit<DeepRequired<EventOnPoster>, 'creatorId'> }
+	>
+) => a)(true);
 
 // //EVENT IMAGES
 // export const postEventImage = async (img?: File): Promise<string> => {

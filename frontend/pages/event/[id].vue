@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { type EventOnPoster } from '../../../common/types/event';
+import { type EventOnPoster } from '../../../common/types';
 import { deleteEvent, getEvent } from '@/services/events.services';
 import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
@@ -92,8 +92,8 @@ const templateURL = computed(
 			</p>
 
 			<NuxtLink
-				@click.prevent="openLocation(templateURL)"
 				class="event-description__geolink"
+				@click.prevent="openLocation(templateURL)"
 			>
 				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
 			</NuxtLink>

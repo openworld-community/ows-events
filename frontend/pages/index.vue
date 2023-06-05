@@ -4,7 +4,7 @@ import { computed, ref, watch } from 'vue';
 import { getEvents, getEventsByParams } from '@/services/events.services';
 import { useLocationStore } from '@/stores/location.store';
 import { storeToRefs } from 'pinia';
-import {useModal, UseModalOptions, VueFinalModal} from 'vue-final-modal';
+import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '../components/modal/Event.vue';
 import NeedAuthorize from '~/components/modal/NeedAuthorize.vue';
@@ -15,13 +15,17 @@ const {
 	open: openEventModal,
 	close: closeEventModal,
 	patchOptions: eventModalPatch
-} = useModal({ component: EventModal } as UseModalOptions<InstanceType<typeof VueFinalModal>['$props']>);
+} = useModal({ component: EventModal } as UseModalOptions<
+	InstanceType<typeof VueFinalModal>['$props']
+>);
 eventModalPatch({ attrs: { closeEventModal } });
 const {
 	open: openNeedAuthorizeModal,
 	close: closeNeedAuthorizeModal,
 	patchOptions: needAuthorizeModalPatch
-} = useModal({ component: NeedAuthorize } as UseModalOptions<InstanceType<typeof VueFinalModal>['$props']>);
+} = useModal({ component: NeedAuthorize } as UseModalOptions<
+	InstanceType<typeof VueFinalModal>['$props']
+>);
 needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
 
 let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined;
@@ -35,8 +39,8 @@ const posterEvents = ref<EventOnPoster[]>([]);
 
 const searchFromRoute = route.query.search?.toString();
 const search = ref<string>(searchFromRoute === 'None' ? '' : searchFromRoute || '');
-const country = ref<string>(pickedCountry.value as string || '');
-const city = ref<string>(pickedCity.value as string || '');
+const country = ref<string>((pickedCountry.value as string) || '');
+const city = ref<string>((pickedCity.value as string) || '');
 
 locationStore.pickCountry(pickedCountry.value);
 
@@ -178,23 +182,25 @@ const now = Date.now();
 </script>
 
 <template>
-	<div>
-		<div class="location">
+	<div class="main-page">
+		<CommonInput
+			v-model="search"
+			class="main-page__search"
+			input-class="input is-info search-input"
+			input-type="text"
+			input-name="search"
+			:input-placeholder="$translate('global.search')"
+		/>
+		<div class="main-page__location">
 			<HomeUserLocation />
 		</div>
-		<section class="search">
-			<h1 class="search__title">
-				{{ $translate('home.title') }}
-			</h1>
-			<CommonInput
-				v-model="search"
-				class="search__field"
-				input-class="input is-info search-input"
-				input-type="text"
-				input-name="search"
-				:input-placeholder="$translate('global.search')"
-			/>
-			<div class="search__container">
+
+    <h1 class="main-page__title">
+      {{ $translate('home.title') }}
+    </h1>
+
+		<section class="main-page__filter filter">
+			<div class="filter__container">
 				<CommonInput
 					v-model="country"
 					class="search__field"
@@ -216,7 +222,7 @@ const now = Date.now();
 			</div>
 		</section>
 
-		<ul class="card-list">
+		<ul class="main-page__card-list">
 			<li
 				v-for="event in eventsWithAdd"
 				:key="event.id"
@@ -230,7 +236,7 @@ const now = Date.now();
 		</ul>
 
 		<CommonButton
-      class="add-event-button"
+			class="add-event-button"
 			button-kind="success"
 			is-round
 			icon-name="plus"
@@ -242,25 +248,37 @@ const now = Date.now();
 </template>
 
 <style lang="less" scoped>
-.location {
-	display: flex;
-	width: 100%;
-	padding-top: 16px;
-	padding-left: var(--padding-side);
-	padding-right: var(--padding-side);
-	margin-bottom: 36px;
+.main-page {
+  padding-top: 16px;
+
+  &__search {
+    padding-left: var(--padding-side);
+    padding-right: var(--padding-side);
+    margin-bottom: 40px;
+  }
+
+  &__location {
+    display: flex;
+    width: 100%;
+    padding-left: var(--padding-side);
+    padding-right: var(--padding-side);
+    margin-bottom: 16px;
+  }
+
+  &__title {
+    font-size: var(--font-size-XXL);
+    line-height: 40px;
+    padding-left: var(--padding-side);
+    padding-right: var(--padding-side);
+    margin-bottom: 24px;
+  }
 }
 
-.search {
+
+.filter {
 	padding-left: var(--padding-side);
 	padding-right: var(--padding-side);
 	margin-bottom: 8px;
-
-	&__title {
-		font-size: var(--font-size-XXL);
-		line-height: 40px;
-		margin-bottom: 24px;
-	}
 
 	&__container {
 		display: flex;
@@ -270,23 +288,21 @@ const now = Date.now();
 	&__field {
 		margin-bottom: 16px;
 	}
-}
 
-.card-list {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
+  &__card-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
 }
 
 .add-event-button {
-	position: fixed;
+	position: sticky;
 	bottom: 20px;
-	right: 20px;
+	right: 0;
+	margin-left: auto;
+	margin-right: 20px;
 	z-index: 1;
-}
-
-.modal-card {
-	background-color: var(--background-color);
 }
 
 .expired {

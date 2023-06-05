@@ -21,8 +21,8 @@ const scrollToTop = () => {
 				>
 					<CommonIcon
 						name="peredelano-afisha"
-						width="142"
-						height="24"
+						width="86"
+						height="40"
 						alt="Peredelano Афиша"
 					/>
 				</NuxtLink>
@@ -80,9 +80,8 @@ const scrollToTop = () => {
 
 	&__left {
 		display: flex;
-		align-items: flex-start;
-		flex-direction: column;
-		padding: 14px 0;
+    height: 100%;
+		align-items: center;
 		margin-right: 12px;
 	}
 
@@ -102,6 +101,7 @@ const scrollToTop = () => {
 
 	&__navigation-link {
 		height: 100%;
+    align-items: center;
 		display: flex;
 	}
 }

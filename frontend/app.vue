@@ -5,6 +5,11 @@ import 'virtual:svg-icons-register';
 import { useLocationStore } from './stores/location.store';
 import { ModalsContainer } from 'vue-final-modal';
 
+useHead({
+	//TODO доработать метаданные, когда будет понятно, как их локализовать
+	title: 'Афиша',
+	meta: [{ name: 'Афиша переделано', content: 'Это площадка для поиска мероприятий' }]
+});
 await useLocationStore().init();
 </script>
 <template>

@@ -1,7 +1,7 @@
 import { StandardResponse } from '../../common/types';
 import { PaymentInfo } from '../../common/types/payment-info';
 import { Registration } from '../../common/types/registration';
-import { api } from '../utils/axios';
+import { api } from '~/utils/axios';
 
 //TODO добавить запись в localStorage для формы ивента
 export const sendFormAboutRegistration = async (data: Registration) => {

@@ -34,3 +34,7 @@ export type PostEventPayload = {
 		url: string;
 	};
 };
+
+export type EventParams = {
+	id: string;
+};

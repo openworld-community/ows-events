@@ -400,16 +400,16 @@ const eventInputs: {
 			<div class="modal-card__foot">
 				<CommonButton
 					class="modal-card__button"
-					button-class="button__ordinary"
+					button-kind="ordinary"
 					:button-text="$translate('component.new_event_modal.cancel')"
 					:is-active="!isLoading"
 					@click="closeModal()"
 				/>
 				<CommonButton
 					class="modal-card__button"
-					button-class="button__success"
+					button-kind="success"
 					:button-text="$translate('component.new_event_modal.submit')"
-					:is-active="checkFormFilling && !isLoading"
+					:is-disabled="!checkFormFilling || isLoading"
 					:is-loading="isLoading"
 					@click="isLoading ? null : submitEvent()"
 				/>

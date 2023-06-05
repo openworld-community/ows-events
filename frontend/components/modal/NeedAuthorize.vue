@@ -18,12 +18,14 @@ const props = defineProps<Props>();
 	>
 		<div class="modal">
 			<div class="modal-card__head">
-				<p class="modal-card__title">Для создания мероприятия необходимо авторизоваться</p>
+				<p class="modal-card__title">
+					{{ $translate('component.need_authorize_modal.title') }}
+				</p>
 			</div>
 			<div class="modal-card__foot">
 				<CommonButton
-					button-class="button__success"
-					button-text="Закрыть"
+					button-kind="success"
+					:button-text="$translate('component.need_authorize_modal.button.close')"
 					@click="props.closeNeedAuthorizeModal"
 				/>
 			</div>
@@ -33,17 +35,16 @@ const props = defineProps<Props>();
 
 <style scoped lang="less">
 .modal {
+	//TODO: пока верстка только мобилки
+	max-width: 350px;
 	overflow: hidden;
 	border-radius: 10px;
-	margin-top: 50%;
-	margin-bottom: auto;
-	margin-inline: var(--padding-side);
+	margin: 40vh auto auto;
 }
 
 .modal-card {
 	&__head {
 		height: max-content;
-		min-height: 64px;
 	}
 
 	&__title {

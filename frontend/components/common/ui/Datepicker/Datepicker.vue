@@ -1,56 +1,87 @@
 <script lang="ts" setup>
-import {ref} from 'vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
-import {Props} from './types/types';
+import {DatepickerType} from './types/types';
+import {dateFormat} from '~/utils/dateFormat';
+import {ref} from 'vue';
 
-// @ts-ignore
-withDefaults(defineProps<Props>(), {
-	className: '',
-	modelValue: '',
-	placeholder: 'дд.мм.гг',
-	label: '',
-	error: '',
-});
+const props =  defineProps({
+		className: {
+			type: String,
+			default: ''
+		},
+		modelValue: {
+			type: String,
+			default: ''
+		},
+		placeholder: {
+			type: String,
+			default: 'дд.мм.гг'
+		},
+		type: {
+			type: String,
+			default: DatepickerType.date
+		},
+		name: {
+			type: String,
+			required: true
+		},
+		label: {
+			type: String,
+			default: ''
+		},
+		minDate: {
+			type: Date,
+			default: null,
+		},
+		disabled: {
+			type: Boolean,
+			default: false,
+		},
+		error: {
+			type: String,
+			default: ''
+		},
+	})
 
-const date = ref(null);
+const date = ref();
 
-const format = (date: Date) => {
-	const day = date.getDate();
-	const month = date.getMonth() + 1;
-	const year = date.getFullYear();
-
-	return `${day}.${month}.${year}`;
+const handleDate = (modelData) => {
+	date.value = modelData;
 }
 
 </script>
 
 <template>
-	<div class="className">
+	<div :class="props.className">
 		<label
-				v-if="label"
+				v-if="props.label"
 				class="form__label"
-				:for="name"
+				:for="props.name"
 		>
-			{{ label }}
+			{{ props.label }}
 		</label>
 			<VueDatePicker
-				v-model="date"
-				:name="name"
-				:placeholder="placeholder"
-				:input-class-name="`input form__field ${error ? 'form__error' : ''} ${className}`"
+				:model-value="date"
+				:name="props.name"
+				:placeholder="props.placeholder"
+				:input-class-name="`input form__field ${props.error ? 'form__error' : ''}`"
 				auto-apply
 				partial-flow
 				:flow="['calendar']"
-				:enable-time-picker="false"
-				:min-date="minDate"
-				:format="format"
+				:time-picker="props.type === 'time'"
+				:enable-time-picker="props.type === 'time'"
+				:min-date="props.minDate"
+				:format="props.type === 'date' && dateFormat"
+				:disabled="props.disabled"
+				is-24
+				@update:model-value="handleDate"
 			/>
 		<span
-				v-if="error"
+				v-if="props.error"
 				class="form__error"
 		>
-				{{ error }}
+				{{ props.error }}
 		</span>
 	</div>
 </template>
@@ -75,7 +106,12 @@ const format = (date: Date) => {
 	width: 24px;
 }
 
+.dp__instance_calendar {
+	overflow: hidden;
+}
+
 .dp__calendar_item,
+.dp__instance_calendar,
 .dp__active_date {
 	padding: 3px;
 	color: #363636;

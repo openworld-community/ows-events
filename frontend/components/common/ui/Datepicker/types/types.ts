@@ -1,10 +1,5 @@
-export type Props = {
-	className?: string;
-	modelValue?: string;
-	placeholder?: string;
-	name: string;
-	label?: string;
-	minDate?: Date;
-	disabled?: boolean;
-	error?: string;
-}
+export const DatepickerType: { [key: string]: string } = {
+	date: 'date',
+	time: 'time'
+};
+

@@ -8,6 +8,9 @@ export const defaultTranslation = {
     },
     about_us: {
       title: 'О нас'
+    },
+    payment_info: {
+      title: 'Оплата'
     }
   },
   global: {

@@ -4,11 +4,16 @@ import { computed, ref, watch } from 'vue';
 import { getEvents, getEventsByParams } from '@/services/events.services';
 import { useLocationStore } from '@/stores/location.store';
 import { storeToRefs } from 'pinia';
-import {useModal, UseModalOptions, VueFinalModal} from 'vue-final-modal';
+import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '../components/modal/Event.vue';
 import NeedAuthorize from '~/components/modal/NeedAuthorize.vue';
 
+const { $translate } = useNuxtApp();
+
+useHead({
+	title: `${$translate('meta.title')} / ${$translate('meta.home.title')}`
+});
 definePageMeta({ name: RouteNameEnum.HOME });
 
 const {
@@ -35,8 +40,8 @@ const posterEvents = ref<EventOnPoster[]>([]);
 
 const searchFromRoute = route.query.search?.toString();
 const search = ref<string>(searchFromRoute === 'None' ? '' : searchFromRoute || '');
-const country = ref<string>(pickedCountry.value as string || '');
-const city = ref<string>(pickedCity.value as string || '');
+const country = ref<string>((pickedCountry.value as string) || '');
+const city = ref<string>((pickedCity.value as string) || '');
 
 locationStore.pickCountry(pickedCountry.value);
 
@@ -230,7 +235,7 @@ const now = Date.now();
 		</ul>
 
 		<CommonButton
-      class="add-event-button"
+			class="add-event-button"
 			button-kind="success"
 			is-round
 			icon-name="plus"

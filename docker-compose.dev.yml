@@ -23,7 +23,7 @@ services:
             - VITE_API_URL=http://localhost:7080/api
             - VITE_BASE_URL=http://localhost:7080
             - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
-            - VITE_AUTH_SERVER_URL=https://auth.orby-tech.space
+            - VITE_AUTH_SERVER_URL=https://auth.afisha.peredelano.com
             - VITE_POSTAUTH_URL=http://localhost:3000
 
     backend:
@@ -31,6 +31,8 @@ services:
             context: .
             dockerfile: ./backend/Dockerfile.dev
         logging: *default-logging
+        environment:
+            - AUTH_SERVER_URL=https://auth.afisha.peredelano.com
         ports:
             - '7080:7080'
         volumes:

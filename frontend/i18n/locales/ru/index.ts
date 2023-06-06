@@ -37,8 +37,8 @@ export const defaultTranslation = {
   },
   event: {
     button: {
-      delete: 'Удалить событие',
-      edit: 'Редактировать событие',
+      delete: 'Удалить',
+      edit: 'Редактировать',
       contact: 'Связаться',
       register: 'Зарегистрироваться'
     },
@@ -70,6 +70,12 @@ export const defaultTranslation = {
         url_to_rigistration: 'Ссылка на регистрацию'
       }
     },
+    need_authorize_modal: {
+      title: 'Для создания мероприятия необходимо авторизоваться',
+      button: {
+        close: 'Закрыть'
+      }
+    },
     language_selector: {
       label: 'Язык'
     },
@@ -77,6 +83,10 @@ export const defaultTranslation = {
       about: 'Подробнее об Афише',
       event: {
         manage: 'Управление событием'
+      },
+      authorization: {
+        authorize: 'Авторизоваться с помощью Telegram',
+        deauthorize: 'Выйти из личного кабинета'
       }
     }
   },

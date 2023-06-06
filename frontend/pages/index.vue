@@ -3,7 +3,7 @@ import { type EventOnPoster } from '../../common/types';
 import { computed, ref, watch } from 'vue';
 import { useLocationStore } from '@/stores/location.store';
 import { storeToRefs } from 'pinia';
-import { useModal } from 'vue-final-modal';
+import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '../components/modal/Event.vue';
 import NeedAuthorize from '~/components/modal/NeedAuthorize.vue';
@@ -14,13 +14,17 @@ const {
 	open: openEventModal,
 	close: closeEventModal,
 	patchOptions: eventModalPatch
-} = useModal({ component: EventModal });
+} = useModal({ component: EventModal } as UseModalOptions<
+	InstanceType<typeof VueFinalModal>['$props']
+>);
 eventModalPatch({ attrs: { closeEventModal } });
 const {
 	open: openNeedAuthorizeModal,
 	close: closeNeedAuthorizeModal,
 	patchOptions: needAuthorizeModalPatch
-} = useModal({ component: NeedAuthorize });
+} = useModal({ component: NeedAuthorize } as UseModalOptions<
+	InstanceType<typeof VueFinalModal>['$props']
+>);
 needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
 
 const locationStore = useLocationStore();
@@ -216,13 +220,13 @@ const now = Date.now();
 			</li>
 		</ul>
 
-		<CommonButtonIcon
+		<CommonButton
 			class="add-event-button"
-			icon-name="button-plus"
-			icon-width="56"
-			icon-height="56"
+			button-kind="success"
+			is-round
+			icon-name="plus"
+			:alt="$translate('home.button.add_event_aria')"
 			aria-haspopup="true"
-			:aria-label="$translate('home.button.add_event_aria')"
 			@click="onButtonClick"
 		/>
 	</div>

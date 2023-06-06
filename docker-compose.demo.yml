@@ -76,8 +76,6 @@ services:
             - 'traefik.http.routers.demo_backend_https.tls.certresolver=myresolver'
             - 'traefik.http.routers.demo_backend_http.rule=Host(`api.poster-demo-peredelano.orby-tech.space`)'
             - 'traefik.http.routers.demo_backend_http.entrypoints=http'
-            - 'traefik.http.services.demo_backend_http.loadbalancer.server.port=7080'
-            - 'traefik.http.services.demo_backend_https.loadbalancer.server.port=7080'
         environment:
             - AUTH_SERVER_URL=https://auth.poster-demo-peredelano.orby-tech.space
             - MODE=prod

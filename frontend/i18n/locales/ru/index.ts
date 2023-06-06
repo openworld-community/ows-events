@@ -15,7 +15,7 @@ export const defaultTranslation = {
     city: 'Город',
     search: 'Поиск',
     timezone: 'Часовой пояс',
-    button: { back: 'Назад', share: 'Поделиться', cancel: 'Отмена' },
+    button: { back: 'Назад', share: 'Поделиться', cancel: 'Отмена', search: 'Поиск', delete: 'Очистить' },
     nav: 'Навигация'
   },
   about: {
@@ -110,10 +110,6 @@ export const defaultTranslation = {
   header: {
     subscription_expired: '$t(dates.day.key) до конца подписки'
   },
-  callToAction: {
-    delete: 'Очистить',
-    search: 'Поиск'
-  }
 };
 
 export default defineTranslation(defaultTranslation);

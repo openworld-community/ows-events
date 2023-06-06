@@ -2,20 +2,43 @@
 import { ref } from 'vue';
 import CommonIcon from '~/components/common/Icon.vue';
 import BaseInput from '~/components/common/ui/BaseInput/BaseInput.vue';
-import {Props} from "~/components/common/ui/BaseSelect/types/types";
 
-// @ts-ignore
-withDefaults(defineProps<Props>(),
-	{
-		className: '',
-		modelValue: '',
-		placeholder: '',
-		label: '',
-		error: ''
+const props = defineProps({
+	className: {
+		type: String,
+		default: '',
+	},
+	modelValue: {
+		type: String,
+		default: '',
+	},
+	list: {
+		type: Array as () => string[],
+		default: () => ['text'],
+	},
+	name: {
+		type: String,
+		required: true,
+	},
+	placeholder: {
+		type: String,
+		default: '',
+	},
+	label: {
+		type: String,
+		default: '',
+	},
+	disabled: {
+		type: Boolean,
+		default: false,
+	},
+	error: {
+		type: String,
+		default: ''
 	}
-);
+})
 
-const isOpen = ref<boolean>(false);
+const isOpen = ref(false);
 
 const emit = defineEmits(['update:modelValue']);
 const updateValue = (value: string) => {
@@ -34,19 +57,19 @@ const onRemove = () => {
 </script>
 
 <template>
-	<div :class="`select__wrapper ${className}`">
+	<div :class="`select__wrapper ${props.className}`">
 		<BaseInput
-			:name="name"
-			:model-value="modelValue"
-			:label="label"
-			:disabled="disabled"
-			:placeholder="placeholder"
-			:error="error"
+			:name="props.name"
+			:model-value="props.modelValue"
+			:label="props.label"
+			:disabled="props.disabled"
+			:placeholder="props.placeholder"
+			:error="props.error"
 			@click="setIsOpen"
 		>
 			<template #icon-right>
 				<button
-						v-if="modelValue"
+						v-if="props.modelValue"
 						@click="onRemove"
 				>
 					<CommonIcon
@@ -71,7 +94,7 @@ const onRemove = () => {
 		<div :class="`select__list-box ${isOpen ? 'isOpen' : ''}`">
 			<ul class="select__list benefits">
 				<li
-					v-for="item in list"
+					v-for="item in props.list"
 					:key="item"
 					class="select__list-item"
 					@click="updateValue(item)"

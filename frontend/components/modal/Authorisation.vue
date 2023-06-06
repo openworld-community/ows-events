@@ -30,12 +30,12 @@ const username =
 		:lock-scroll="false"
 	>
 		<NuxtLink
-			@click="isAuthorized ? props.deauthorize() : props.authorize()"
 			class="authorisation-button"
+			@click="isAuthorized ? props.deauthorize() : props.authorize()"
 		>
 			<p
-				class="authorisation-button__user"
 				v-if="isAuthorized"
+				class="authorisation-button__user"
 			>
 				{{ username }}
 			</p>

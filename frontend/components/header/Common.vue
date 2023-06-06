@@ -13,26 +13,26 @@ const scrollToTop = () => {
 		<div class="header__container">
 			<div class="header__left">
 				<NuxtLink
+					v-if="route.name === RouteNameEnum.HOME"
 					:to="{ name: RouteNameEnum.HOME }"
 					class="header__navigation-link"
 					:aria-label="$translate('home.button.afisha_logo_aria')"
 					@click.prevent="scrollToTop"
 				>
 					<CommonIcon
-						v-if="route.name === RouteNameEnum.HOME"
 						name="peredelano-afisha"
 						width="142"
 						height="24"
 						alt="Peredelano Афиша"
 					/>
-					<CommonIcon
-						v-else
-						name="back"
-						width="24"
-						height="24"
-						:aria-label="$translate('global.button.back')"
-					/>
 				</NuxtLink>
+				<CommonButton
+					v-else
+					:link="{ name: RouteNameEnum.HOME }"
+					is-icon
+					icon-name="back"
+					:alt="$translate('global.button.back')"
+				/>
 			</div>
 
 			<div

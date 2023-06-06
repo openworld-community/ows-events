@@ -8,42 +8,11 @@ x-logging: &default-logging
 
 networks:
     traefikpublic:
+        external:
+            name: ows-events_traefikpublic
+    prodnetwork:
 
 services:
-    traefik:
-        image: traefik:v2.9
-        logging: *default-logging
-        container_name: 'traefik'
-        restart: always
-        command:
-            - '--certificatesresolvers.myresolver.acme.httpchallenge=true'
-            - '--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=http'
-            - '--certificatesresolvers.myresolver.acme.email=tibode495@gmail.com'
-            - '--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json'
-            - '--providers.docker=true'
-            - '--providers.docker.network=ows-events_prod_traefikpublic'
-            - '--providers.docker.endpoint=unix:///var/run/docker.sock'
-            - '--providers.docker.exposedbydefault=false'
-            - '--entrypoints.http.address=:80'
-            - '--entrypoints.https.address=:443'
-            - '--accesslog=true'
-        labels:
-            - 'traefik.enable=true'
-        volumes:
-            - '/var/run/docker.sock:/var/run/docker.sock'
-            - './letsencrypt:/letsencrypt'
-        ports:
-            - mode: host
-              protocol: tcp
-              published: 80
-              target: 80
-            - mode: host
-              protocol: tcp
-              published: 443
-              target: 443
-        networks:
-            - traefikpublic
-
     frontend:
         build:
             context: .
@@ -68,6 +37,7 @@ services:
             - 'traefik.http.routers.frontend_http.entrypoints=http'
         networks:
             - traefikpublic
+            - prodnetwork
         ports:
             - '3000:3000'
 
@@ -90,6 +60,7 @@ services:
             - 'traefik.http.routers.auth_http.entrypoints=http'
         networks:
             - traefikpublic
+            - prodnetwork
         ports:
             - '7090:7090'
 
@@ -113,6 +84,7 @@ services:
             - MODE=prod
         networks:
             - traefikpublic
+            - prodnetwork
         ports:
             - '7080:7080'
         volumes:

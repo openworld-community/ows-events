@@ -10,7 +10,7 @@ networks:
     traefikpublic:
         external:
             name: ows-events_traefikpublic
-    demonetwork:
+    testnetwork:
 
 services:
     frontend:
@@ -19,27 +19,27 @@ services:
             dockerfile: ./frontend/Dockerfile
             args:
                 - NODE_ENV=production
-                - VITE_API_URL=https://api.poster-demo-peredelano.orby-tech.space/api
-                - VITE_BASE_URL=https://api.poster-demo-peredelano.orby-tech.space
+                - VITE_API_URL=https://api.poster-test-peredelano.orby-tech.space/api
+                - VITE_BASE_URL=https://api.poster-test-peredelano.orby-tech.space
                 - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
-                - VITE_AUTH_SERVER_URL=https://auth.poster-demo-peredelano.orby-tech.space
-                - VITE_POSTAUTH_URL=https://poster-demo-peredelano.orby-tech.space
+                - VITE_AUTH_SERVER_URL=https://auth.poster-test-peredelano.orby-tech.space
+                - VITE_POSTAUTH_URL=https://poster-test-peredelano.orby-tech.space
         logging: *default-logging
         restart: always
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
-            - 'traefik.http.routers.frontend_https.rule=Host(`poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.frontend_https.rule=Host(`poster-test-peredelano.orby-tech.space`)'
             - 'traefik.http.routers.frontend_https.middlewares=sslheader@docker'
             - 'traefik.http.routers.frontend_https.entrypoints=http, https'
             - 'traefik.http.routers.frontend_https.tls.certresolver=myresolver'
-            - 'traefik.http.routers.frontend_http.rule=Host(`poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.frontend_http.rule=Host(`poster-test-peredelano.orby-tech.space`)'
             - 'traefik.http.routers.frontend_http.entrypoints=http'
         networks:
             - traefikpublic
-            - demonetwork
+            - testnetwork
         ports:
-            - '3001:3000'
+            - '3002:3000'
 
     auth:
         build:
@@ -52,17 +52,17 @@ services:
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
-            - 'traefik.http.routers.auth_https.rule=Host(`auth.poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.auth_https.rule=Host(`auth.poster-test-peredelano.orby-tech.space`)'
             - 'traefik.http.routers.auth_https.middlewares=sslheader@docker'
             - 'traefik.http.routers.auth_https.entrypoints=http, https'
             - 'traefik.http.routers.auth_https.tls.certresolver=myresolver'
-            - 'traefik.http.routers.auth_http.rule=Host(`auth.poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.auth_http.rule=Host(`auth.poster-test-peredelano.orby-tech.space`)'
             - 'traefik.http.routers.auth_http.entrypoints=http'
         networks:
             - traefikpublic
-            - demonetwork
+            - testnetwork
         ports:
-            - '7091:7090'
+            - '7092:7090'
 
     backend:
         build:
@@ -73,35 +73,35 @@ services:
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
-            - 'traefik.http.routers.backend_https.rule=Host(`api.poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.backend_https.rule=Host(`api.poster-test-peredelano.orby-tech.space`)'
             - 'traefik.http.routers.backend_https.middlewares=sslheader@docker'
             - 'traefik.http.routers.backend_https.entrypoints=http, https'
             - 'traefik.http.routers.backend_https.tls.certresolver=myresolver'
-            - 'traefik.http.routers.backend_http.rule=Host(`api.poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.backend_http.rule=Host(`api.poster-test-peredelano.orby-tech.space`)'
             - 'traefik.http.routers.backend_http.entrypoints=http'
         environment:
-            - AUTH_SERVER_URL=https://auth.poster-demo-peredelano.orby-tech.space
+            - AUTH_SERVER_URL=https://auth.poster-test-peredelano.orby-tech.space
             - MODE=prod
         networks:
             - traefikpublic
-            - demonetwork
+            - testnetwork
         ports:
-            - '7081:7080'
+            - '7082:7080'
         volumes:
             - assets-db:/app/backend/assets/db
             - assets-img:/app/backend/assets/img
 
 volumes:
-    assets-db-demo:
+    assets-db-test:
         driver: local
         driver_opts:
             type: none
             o: bind
-            device: /root/ows-events_demo/assets/db
+            device: /root/ows-events_test/assets/db
 
-    assets-img-demo:
+    assets-img-test:
         driver: local
         driver_opts:
             type: none
             o: bind
-            device: /root/ows-events_demo/assets/img
+            device: /root/ows-events_test/assets/img

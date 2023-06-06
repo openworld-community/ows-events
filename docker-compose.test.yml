@@ -88,8 +88,8 @@ services:
         ports:
             - '7082:7080'
         volumes:
-            - assets-db:/app/backend/assets/db
-            - assets-img:/app/backend/assets/img
+            - assets-db-test:/app/backend/assets/db
+            - assets-img-test:/app/backend/assets/img
 
 volumes:
     assets-db-test:

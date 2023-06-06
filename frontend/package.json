@@ -21,6 +21,8 @@
   "dependencies": {
     "@pinia/nuxt": "^0.4.11",
     "@types/uuid": "^9.0.1",
+    "@vueuse/core": "^10.1.2",
+    "@vueuse/nuxt": "^10.1.2",
     "axios": "^1.4.0",
     "i18next": "^22.5.0",
     "i18next-vue": "^2.1.1",

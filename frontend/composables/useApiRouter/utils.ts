@@ -1,5 +1,36 @@
 import { API_URL } from '~/constants/url';
 
+type ApiRouter = { [K in string]: ApiRouter | ReturnType<typeof defineRoute> };
+export function defineRouter<T extends ApiRouter>(router: T) {
+	return router;
+}
+
+type Refify<T> = T extends object
+	? {
+			[K in keyof T]: T[K] | Ref<T[K]> | Refify<Extract<T[K], object>>;
+	  }
+	: T | Ref<T>;
+type Fetchify<T> = ReturnType<typeof useFetch<T>>;
+type Routify<T extends (data: any) => any> = T extends () => any
+	? T extends (data?: infer P) => infer R
+		? unknown extends P
+			? () => Fetchify<R>
+			: (data?: Refify<P>) => Fetchify<R>
+		: never
+	: T extends (data: infer P) => infer R
+	? (data: Refify<P>) => Fetchify<R>
+	: never;
+
+/**
+ * Specify a function and the wrapper will transform its type
+ * to conform with the excpected shape
+ */
+export function defineRoute<T extends ((data: any) => any) | void = void>(
+	routeCallback: T extends (data: any) => any ? Routify<T> : 'DO NOT USE ME WITHOUT A GENERIC'
+) {
+	return { useFetch: routeCallback };
+}
+
 /**
  * Overrides baseURL to be of our backend server
  */
@@ -10,33 +41,3 @@ export function useBackendFetch<T>(
 	opts.baseURL ??= API_URL;
 	return useFetch<T>(request, opts);
 }
-
-type Refify<T> = T extends object
-	? {
-			[K in keyof T]: T[K] | Ref<T[K]> | Refify<Extract<T[K], object>>;
-	  }
-	: T | Ref<T>;
-type Fetchify<T> = ReturnType<typeof useFetch<T>>;
-export function defineAPIRoute<T extends (input: any) => any>(
-	callback: T extends () => any
-		? T extends (input?: infer P) => infer R
-			? unknown extends P
-				? () => Fetchify<R>
-				: (input?: Refify<P>) => Fetchify<R>
-			: never
-		: T extends (input: infer P) => infer R
-		? (input: Refify<P>) => Fetchify<R>
-		: never
-) {
-	return callback;
-}
-
-type A = ReturnType<typeof defineAPIRoute>;
-type B = ReturnType<typeof defineAPIRoute<(a: '5') => '345'>>;
-type C = ReturnType<typeof defineAPIRoute<(b?: 'dfsa') => 'dsa'>>;
-type D = ReturnType<typeof defineAPIRoute<(a: 'sfda', b: 'ds') => 'fsd'>>;
-type E = ReturnType<typeof defineAPIRoute<(a: 'sfda', b?: 'ds') => 'fsd'>>;
-type F = ReturnType<typeof defineAPIRoute<() => 'fsd'>>;
-
-type A2 = ((a: string, b?: string, c?: number) => 'd') extends (a: string) => 'd' ? true : false;
-const a = { id: 'st' } instanceof Proxy;

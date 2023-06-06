@@ -37,12 +37,14 @@ const searchFromRoute = route.query.search?.toString();
 const search = ref(searchFromRoute === 'None' ? '' : searchFromRoute ?? '');
 const country = ref(pickedCountry.value ?? '');
 const city = ref(pickedCity.value ?? '');
-const { data: posterEvents, refresh: refreshEvents } = await useAPI(
-	'events',
-	'findMany',
-	undefined
-);
-
+const eventsSearchQuery = computed(() => ({
+	city: city.value,
+	country: country.value,
+	searchLine: search.value
+}));
+const { data: posterEvents } = await apiRouter.events.findMany.useFetch({
+	query: eventsSearchQuery
+});
 locationStore.pickCountry(pickedCountry.value);
 let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined;
 const debounceEventsSearch = () => {

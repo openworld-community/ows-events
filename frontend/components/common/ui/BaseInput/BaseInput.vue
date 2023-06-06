@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { InputValue } from './types/types';
-import {defineProps} from 'vue';
 import {PropType} from 'vue';
 
 defineOptions({

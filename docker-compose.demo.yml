@@ -29,12 +29,12 @@ services:
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
-            - 'traefik.http.routers.frontend_https.rule=Host(`poster-demo-peredelano.orby-tech.space`)'
-            - 'traefik.http.routers.frontend_https.middlewares=sslheader@docker'
-            - 'traefik.http.routers.frontend_https.entrypoints=http, https'
-            - 'traefik.http.routers.frontend_https.tls.certresolver=myresolver'
-            - 'traefik.http.routers.frontend_http.rule=Host(`poster-demo-peredelano.orby-tech.space`)'
-            - 'traefik.http.routers.frontend_http.entrypoints=http'
+            - 'traefik.http.routers.demo_frontend_https.rule=Host(`poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_frontend_https.middlewares=sslheader@docker'
+            - 'traefik.http.routers.demo_frontend_https.entrypoints=http, https'
+            - 'traefik.http.routers.demo_frontend_https.tls.certresolver=myresolver'
+            - 'traefik.http.routers.demo_frontend_http.rule=Host(`poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_frontend_http.entrypoints=http'
         networks:
             - traefikpublic
             - demonetwork
@@ -52,12 +52,12 @@ services:
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
-            - 'traefik.http.routers.auth_https.rule=Host(`auth.poster-demo-peredelano.orby-tech.space`)'
-            - 'traefik.http.routers.auth_https.middlewares=sslheader@docker'
-            - 'traefik.http.routers.auth_https.entrypoints=http, https'
-            - 'traefik.http.routers.auth_https.tls.certresolver=myresolver'
-            - 'traefik.http.routers.auth_http.rule=Host(`auth.poster-demo-peredelano.orby-tech.space`)'
-            - 'traefik.http.routers.auth_http.entrypoints=http'
+            - 'traefik.http.routers.demo_auth_https.rule=Host(`auth.poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_auth_https.middlewares=sslheader@docker'
+            - 'traefik.http.routers.demo_auth_https.entrypoints=http, https'
+            - 'traefik.http.routers.demo_auth_https.tls.certresolver=myresolver'
+            - 'traefik.http.routers.demo_auth_http.rule=Host(`auth.poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_auth_http.entrypoints=http'
         networks:
             - traefikpublic
             - demonetwork
@@ -73,12 +73,12 @@ services:
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
-            - 'traefik.http.routers.backend_https.rule=Host(`api.poster-demo-peredelano.orby-tech.space`)'
-            - 'traefik.http.routers.backend_https.middlewares=sslheader@docker'
-            - 'traefik.http.routers.backend_https.entrypoints=http, https'
-            - 'traefik.http.routers.backend_https.tls.certresolver=myresolver'
-            - 'traefik.http.routers.backend_http.rule=Host(`api.poster-demo-peredelano.orby-tech.space`)'
-            - 'traefik.http.routers.backend_http.entrypoints=http'
+            - 'traefik.http.routers.demo_backend_https.rule=Host(`api.poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_backend_https.middlewares=sslheader@docker'
+            - 'traefik.http.routers.demo_backend_https.entrypoints=http, https'
+            - 'traefik.http.routers.demo_backend_https.tls.certresolver=myresolver'
+            - 'traefik.http.routers.demo_backend_http.rule=Host(`api.poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_backend_http.entrypoints=http'
         environment:
             - AUTH_SERVER_URL=https://auth.poster-demo-peredelano.orby-tech.space
             - MODE=prod

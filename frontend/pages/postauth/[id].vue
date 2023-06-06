@@ -1,22 +1,20 @@
 <script setup lang="ts">
 import { UserInfo } from '../../../common/types/user';
 import { getToken, getUserInfoByToken } from '~/services/auth';
+import { RouteNameEnum } from '~/constants/enums/route';
 
 const route = useRoute();
-const router = useRouter();
 const eventId = route.params.id as string;
 const user = useCookie<UserInfo | null>('user');
 const tokenCookie = useCookie<string>('token');
 try {
 	const token = await getToken(eventId);
 	if (token) {
-		tokenCookie.value = token;
+		tokenCookie.value = token as string;
 
-		const userInfo = await getUserInfoByToken(token);
+		user.value = (await getUserInfoByToken(token)) as UserInfo;
 
-		user.value = userInfo;
-
-		router.push(`/`);
+		navigateTo({name: RouteNameEnum.HOME});
 	}
 } catch (e) {
 	console.log(e);

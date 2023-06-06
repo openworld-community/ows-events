@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { type EventOnPoster } from '../../../common/types/event';
+import { type EventOnPoster } from '../../../common/types';
 import { deleteEvent, getEvent } from '@/services/events.services';
 import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
@@ -48,10 +48,7 @@ const openLocation = (url: string) => {
 };
 
 //TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
-const templateURL = computed(
-	() =>
-		`https://www.google.com/maps/place/${posterEvent.value?.location.city}+${posterEvent.value?.location.country}`
-);
+const templateURL = computed(() => `https://www.google.com/maps/place/${posterEvent.value?.location.city}+${posterEvent.value?.location.country}`);
 </script>
 
 <template>
@@ -92,8 +89,8 @@ const templateURL = computed(
 			</p>
 
 			<NuxtLink
-				@click.prevent="openLocation(templateURL)"
 				class="event-description__geolink"
+				@click.prevent="openLocation(templateURL)"
 			>
 				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
 			</NuxtLink>
@@ -106,37 +103,41 @@ const templateURL = computed(
 			<template v-if="posterEvent.url">
 				<CommonButton
 					v-if="posterEvent.url !== 'self'"
+					button-kind="success"
 					class="event-actions__button"
-					button-class="button__success"
 					:button-text="$translate('event.button.contact')"
-					:href="posterEvent.url"
-					target="_blank"
+					:link="posterEvent.url"
+					is-external-link
 				/>
 
 				<CommonButton
 					v-else
+					button-kind="success"
 					class="event-actions__button"
-					button-class="button__success"
 					:button-text="$translate('event.button.register')"
-					@click="openRegistrationModal()"
+					@click="openRegistrationModal"
 				/>
 			</template>
 
-			<template v-if="user?.id === posterEvent.creatorId">
+			<div
+				v-if="user?.id === posterEvent.creatorId"
+				class="event-actions__manage"
+			>
 				<CommonButton
 					class="event-actions__button"
-					button-class="button__success"
 					:button-text="$translate('event.button.edit')"
-					@click="openEventModal()"
+					icon-name="edit"
+					@click="openEventModal"
 				/>
 
 				<CommonButton
 					class="event-actions__button"
-					button-class="button__warning"
+					button-kind="warning"
 					:button-text="$translate('event.button.delete')"
+					icon-name="close"
 					@click="deleteCard"
 				/>
-			</template>
+			</div>
 		</div>
 	</div>
 </template>
@@ -204,7 +205,15 @@ const templateURL = computed(
 		gap: var(--space-unrelated-items);
 		margin-top: auto;
 
+		&__manage {
+			display: flex;
+			justify-content: center;
+			gap: 17px;
+		}
+
 		&__button {
+			width: 100%;
+			min-width: 165px;
 			height: 40px;
 		}
 	}

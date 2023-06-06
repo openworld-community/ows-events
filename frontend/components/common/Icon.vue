@@ -1,18 +1,24 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, PropType } from 'vue';
 import { IconDefaultParams } from '@/constants/defaultValues/icon';
 
 const props = defineProps({
 	name: {
-		type: String,
+		type: String as PropType<string>,
 		required: true
 	},
 	color: {
-		type: String,
-		default: null
+		type: String as PropType<string>,
+		default: 'var(--color-input-field)'
 	},
-	width: { type: [String, Number], default: IconDefaultParams.WIDTH },
-	height: { type: [String, Number], default: IconDefaultParams.HEIGHT }
+	width: {
+		type: [String, Number] as PropType<string | number>,
+		default: IconDefaultParams.WIDTH
+	},
+	height: {
+		type: [String, Number] as PropType<string | number>,
+		default: IconDefaultParams.HEIGHT
+	}
 });
 
 const symbolId = computed(() => `#${props.name}`);
@@ -24,16 +30,13 @@ const symbolId = computed(() => `#${props.name}`);
 		:width="props.width"
 		:height="props.height"
 	>
-		<use
-			:href="symbolId"
-			:fill="color"
-		/>
+		<use :href="symbolId" />
 	</svg>
 </template>
 
 <style scoped lang="less">
 svg {
 	pointer-events: none;
-	fill: var(--color-text-main);
+	color: v-bind('color');
 }
 </style>

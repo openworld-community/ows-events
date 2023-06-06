@@ -17,7 +17,7 @@ try {
 		navigateTo({name: RouteNameEnum.HOME});
 	}
 } catch (e) {
-	console.log(e);
+	console.error(e);
 }
 </script>
 

@@ -38,3 +38,9 @@ export type PostEventPayload = {
 export type EventParams = {
 	id: string;
 };
+
+export type SearchEventPayload = {
+	searchLine?: string;
+	country?: string;
+	city?: string;
+};

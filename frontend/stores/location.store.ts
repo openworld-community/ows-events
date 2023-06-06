@@ -3,7 +3,7 @@ import { getCitiesByCountry, getCountries, getUserLocation } from '@/services/lo
 import { UserLocation } from '../../common/types/location';
 import parseJSON from '@/utils/json';
 
-const useLocationStore = defineStore('counter', {
+const useLocationStore = defineStore('location', {
 	state: () => {
 		if (process.server) {
 			return {

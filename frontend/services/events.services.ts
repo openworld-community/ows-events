@@ -1,12 +1,6 @@
 import { type EventOnPoster, type StandardResponse } from '../../common/types';
-import { PostEventPayload } from '../../common/types/event';
+import { PostEventPayload, SearchEventPayload } from '../../common/types/event';
 import { api } from '~/utils/axios';
-
-type SearchEventPayload = {
-	searchLine?: string;
-	country?: string;
-	city?: string;
-};
 
 // EVENTS HOME PAGE
 export const getEvents = async (): Promise<EventOnPoster[]> => {

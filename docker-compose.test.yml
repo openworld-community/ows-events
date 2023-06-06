@@ -10,7 +10,6 @@ networks:
     traefikpublic:
         external:
             name: ows-events_traefikpublic
-    testnetwork:
 
 services:
     frontend:
@@ -37,7 +36,6 @@ services:
             - 'traefik.http.routers.test_frontend_http.entrypoints=http'
         networks:
             - traefikpublic
-            - testnetwork
         ports:
             - '3002:3000'
 
@@ -60,7 +58,6 @@ services:
             - 'traefik.http.routers.test_auth_http.entrypoints=http'
         networks:
             - traefikpublic
-            - testnetwork
         ports:
             - '7092:7090'
 
@@ -84,7 +81,6 @@ services:
             - MODE=prod
         networks:
             - traefikpublic
-            - testnetwork
         ports:
             - '7082:7080'
         volumes:

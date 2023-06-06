@@ -25,11 +25,9 @@ jobs:
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
       - name: connect and pull
         run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ vars.DEMO_DIR }} && git checkout ${{ vars.DEMO_BRANCH }} && git pull"
-        env:
-          AUTH_TELEGRAM_BOT_TOKEN: ${{ secrets.DEMO_AUTH_TELEGRAM_BOT_TOKEN }}
       - name: connect and update traefik
         run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ vars.DEMO_DIR }} && docker-compose --compatibility -p ows-events -f docker-compose.traefik.yml up -d --build && exit"
       - name: connect and rebuild services
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ vars.DEMO_DIR }} && docker-compose --compatibility -p ows-events_demo -f docker-compose.demo.yml up -d --force-recreate --build && exit"
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "export AUTH_TELEGRAM_BOT_TOKEN=${{ secrets.DEMO_AUTH_TELEGRAM_BOT_TOKEN }} && cd ${{ vars.DEMO_DIR }} && docker-compose --compatibility -p ows-events_demo -f docker-compose.demo.yml up -d --force-recreate --build && exit"
       - name: cleanup
         run: rm -rf ~/.ssh

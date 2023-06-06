@@ -19,6 +19,12 @@ const user = useCookie<UserInfo | null>('user');
 
 const posterEvent = ref<EventOnPoster>(await getEvent(id));
 
+const { $translate } = useNuxtApp();
+
+useHead({
+	title: `${$translate('meta.title')} / ${posterEvent.value.title}`
+});
+
 const {
 	open: openRegistrationModal,
 	close: closeRegistrationModal,

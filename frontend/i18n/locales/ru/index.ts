@@ -1,6 +1,18 @@
 import { defineTranslation } from '..';
 
 export const defaultTranslation = {
+  meta: {
+    title: 'Афиша',
+    home: {
+      title: 'Главная'
+    },
+    about_us: {
+      title: 'О нас'
+    },
+    payment_info: {
+      title: 'Оплата'
+    }
+  },
   global: {
     country: 'Страна',
     city: 'Город',

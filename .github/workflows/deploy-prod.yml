@@ -25,11 +25,11 @@ jobs:
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
       - name: connect and pull
         run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ vars.PROD_DIR }} && git checkout ${{ vars.PROD_BRANCH }} && git pull"
+        env:
+          AUTH_TELEGRAM_BOT_TOKEN: ${{ secrets.PROD_AUTH_TELEGRAM_BOT_TOKEN }}
       - name: connect and update traefik
         run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ vars.PROD_DIR }} && docker-compose --compatibility -p ows-events -f docker-compose.traefik.yml up -d --build && exit"
       - name: connect and rebuild services
         run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ vars.PROD_DIR }} && docker-compose --compatibility -p ows-events_prod -f docker-compose.prod.yml up -d --force-recreate --build && exit"
-        env:
-          AUTH_TELEGRAM_BOT_TOKEN: ${{ secrets.PROD_AUTH_TELEGRAM_BOT_TOKEN }}
       - name: cleanup
         run: rm -rf ~/.ssh

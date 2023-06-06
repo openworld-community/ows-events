@@ -46,7 +46,7 @@ const props =  defineProps({
 
 const date = ref();
 
-const handleDate = (modelData) => {
+const handleDate = (modelData: Date) => {
 	date.value = modelData;
 }
 
@@ -72,7 +72,7 @@ const handleDate = (modelData) => {
 				:time-picker="props.type === 'time'"
 				:enable-time-picker="props.type === 'time'"
 				:min-date="props.minDate"
-				:format="props.type === 'date' && dateFormat"
+				:format="dateFormat"
 				:disabled="props.disabled"
 				is-24
 				@update:model-value="handleDate"

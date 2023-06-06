@@ -6,6 +6,11 @@ import EventModal from '../components/modal/Event.vue';
 import NeedAuthorize from '~/components/modal/NeedAuthorize.vue';
 import { useEventsStore } from '~/stores/events.store';
 
+const { $translate } = useNuxtApp();
+
+useHead({
+	title: `${$translate('meta.title')} / ${$translate('meta.home.title')}`
+});
 definePageMeta({ name: RouteNameEnum.HOME });
 
 const {

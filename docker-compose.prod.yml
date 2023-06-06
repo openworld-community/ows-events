@@ -10,7 +10,6 @@ networks:
     traefikpublic:
         external:
             name: ows-events_traefikpublic
-    prodnetwork:
 
 services:
     frontend:
@@ -37,7 +36,6 @@ services:
             - 'traefik.http.routers.frontend_http.entrypoints=http'
         networks:
             - traefikpublic
-            - prodnetwork
         ports:
             - '3000:3000'
 
@@ -60,7 +58,6 @@ services:
             - 'traefik.http.routers.auth_http.entrypoints=http'
         networks:
             - traefikpublic
-            - prodnetwork
         ports:
             - '7090:7090'
 
@@ -84,7 +81,6 @@ services:
             - MODE=prod
         networks:
             - traefikpublic
-            - prodnetwork
         ports:
             - '7080:7080'
         volumes:

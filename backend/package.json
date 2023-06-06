@@ -6,7 +6,7 @@
   "scripts": {
     "start:watch": "nodemon src/server.ts",
     "build": "tsc -p tsconfig.json",
-    "start": "node dist/app/server.js",
+    "start": "node dist/app/src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

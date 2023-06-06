@@ -10,7 +10,6 @@ networks:
     traefikpublic:
         external:
             name: ows-events_traefikpublic
-    demonetwork:
 
 services:
     frontend:
@@ -37,7 +36,6 @@ services:
             - 'traefik.http.routers.demo_frontend_http.entrypoints=http'
         networks:
             - traefikpublic
-            - demonetwork
         ports:
             - '3001:3000'
 
@@ -60,7 +58,6 @@ services:
             - 'traefik.http.routers.demo_auth_http.entrypoints=http'
         networks:
             - traefikpublic
-            - demonetwork
         ports:
             - '7091:7090'
 
@@ -84,7 +81,6 @@ services:
             - MODE=prod
         networks:
             - traefikpublic
-            - demonetwork
         ports:
             - '7081:7080'
         volumes:

@@ -97,7 +97,7 @@ const now = timestampDateParse(Date.now())
         class="custom-input__field"
         :name="props.inputName"
         :type="props.inputType"
-        :min="props.inputType === 'startDate' || props.inputType === 'endDate' ? now : ''"
+        :min="props.inputType === 'date' ? now : ''"
         :placeholder="props.inputPlaceholder"
         :required="props.isRequired"
       />

@@ -10,9 +10,9 @@ export const events = {
 	>((input) => {
 		return useBackendFetch('events/find', { body: input?.query ?? {} });
 	}),
-	get: defineQuery<(input: { id: string }) => EventOnPoster>((input) =>
-		useBackendFetch(`events/${input.id}`)
-	),
+	get: defineQuery<(input: { id: string }) => EventOnPoster>((input) => {
+		return useBackendFetch(`events/${input.id}`);
+	}),
 	add: defineMutation<(input: PostEventPayload) => StandardResponse<{ id: string }>>((input) => {
 		return useBackendFetch('events/add', { body: input }, true);
 	}),

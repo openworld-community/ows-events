@@ -176,7 +176,7 @@ const submitEvent = async () => {
 			const { data } = await apiRouter.events.image.add.useMutation({
 				image: newImageFile.value
 			});
-			if (data.value && data.value.type === 'success') {
+			if (data.value?.type === 'success') {
 				image = data.value.data.path;
 			}
 		}
@@ -189,14 +189,14 @@ const submitEvent = async () => {
 			const { data } = await apiRouter.events.edit.useMutation({
 				event: Object.assign(params, { id: inputValues.value.id })
 			});
-			if (data.value && data.value.type === 'success') {
+			if (data.value?.type === 'success') {
 				props.refreshEvent();
 			} else {
 				console.error(data.value?.errors);
 			}
 		} else {
 			const { data } = await apiRouter.events.add.useMutation({ event: params });
-			if (data.value && data.value.type === 'success') {
+			if (data.value?.type === 'success') {
 				await navigateTo(`/event/${data.value.data.id}`);
 			}
 		}

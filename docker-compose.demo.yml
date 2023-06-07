@@ -47,6 +47,7 @@ services:
         restart: always
         environment:
             - AUTH_TELEGRAM_BOT_TOKEN
+            - AUTH_TELEGRAM_BOT_NAME
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'

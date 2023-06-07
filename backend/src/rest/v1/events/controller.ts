@@ -39,7 +39,9 @@ export const addEvent: IAddEventHandler = async (request, reply) => {
 		};
 	}
 
+	event.creatorId = jwtData.id;
 	const newPostId = eventsStateController.addEvent(event);
+
 	return {
 		type: 'success',
 		data: { id: newPostId }

@@ -21,8 +21,11 @@ jobs:
         with:
           node-version: "16"
 
-      - name: Install modules
+      - name: Install root modules
         run: npm install
+
+      - name: Install service modules
+        run: npm run i
 
       - name: Run ESLint
         run: npx eslint . --ext .ts,.vue

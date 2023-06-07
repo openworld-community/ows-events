@@ -1,53 +1,82 @@
 <script lang="ts" setup>
-import { InputValue, Props } from './types/types';
+import { InputValue } from './types/types';
+import {PropType} from 'vue';
 
 defineOptions({
 	inheritAttrs: false
 });
 
-withDefaults(defineProps<Props>(), {
-	className: '',
-	modelValue: '',
-	type: InputValue.text,
-	placeholder: '',
-	label: '',
-	error: ''
-});
+const props = defineProps({
+	className: {
+		type: String,
+		default: '',
+	},
+	modelValue: {
+		type: String,
+		default: '',
+	},
+	name: {
+		type: String,
+		required: true,
+	},
+	type: {
+		type: String as PropType<InputValue>,
+		default: 'text',
+	},
+	placeholder: {
+		type: String,
+		default: '',
+	},
+	label: {
+		type: String,
+		default: '',
+	},
+	disabled: {
+		type: Boolean,
+		default: false,
+	},
+	error: {
+		type: String,
+		default: ''
+	},
+})
 
 const emit = defineEmits(['update:modelValue']);
 const updateValue = (event: Event) => {
 	emit('update:modelValue', (event.target as HTMLInputElement).value);
 };
+
 </script>
 
 <template>
-	<div :class="`input__wrapper ${className}`">
+	<div :class="`input__wrapper ${props.className}`">
 		<label
-			v-if="label"
+			v-if="props.label"
 			class="form__label"
-			:for="name"
+			:for="props.name"
 		>
-			{{ label }}
+			{{ props.label }}
 		</label>
 		<div class="input__box">
 			<input
 				class="input form__field"
 				:class="{ error: 'form__error' }"
 				v-bind="$attrs"
-				:name="name"
-				:type="type"
-				:value="modelValue"
-				:disabled="disabled"
-				:placeholder="placeholder"
+				:name="props.name"
+				:type="props.type"
+				:value="props.modelValue"
+				:disabled="props.disabled"
+				:placeholder="props.placeholder"
 				@input="updateValue"
+				@change="updateValue"
 			/>
 			<slot name="icon-right"></slot>
 		</div>
 		<span
-			v-if="error"
+			v-if="props.error"
 			class="form__error"
 		>
-			{{ error }}
+			{{ props.error }}
 		</span>
 	</div>
 </template>
@@ -77,10 +106,6 @@ const updateValue = (event: Event) => {
 	border: 1px solid #ccc;
 	border-radius: 24px;
 	overflow: hidden;
-
-	&.error {
-		border: 1px solid var(--color-accent-red);
-	}
 }
 
 /* If using Font Awesome or similar, you can add some spacing to the icons */
@@ -93,5 +118,9 @@ const updateValue = (event: Event) => {
 :deep(.input__box > svg) {
 	position: absolute;
 	right: 0;
+}
+:deep(.input__box > button) {
+	display: flex;
+	align-items: center;
 }
 </style>

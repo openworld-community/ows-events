@@ -6,6 +6,11 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import { ref } from 'vue';
 import Markdown from 'vue3-markdown-it';
 
+const { $translate } = useNuxtApp();
+
+useHead({
+	title: `${$translate('meta.title')} / ${$translate('meta.payment_info.title')}`
+});
 definePageMeta({ name: RouteNameEnum.PAYMENT_INFO });
 
 const route = useRoute();

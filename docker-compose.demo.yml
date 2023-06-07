@@ -7,7 +7,9 @@ x-logging: &default-logging
         max-file: '5'
 
 networks:
-    ows-demo-network:
+    traefikpublic:
+        external:
+            name: ows-events_traefikpublic
 
 services:
     frontend:
@@ -19,38 +21,84 @@ services:
                 - VITE_API_URL=https://api.poster-demo-peredelano.orby-tech.space/api
                 - VITE_BASE_URL=https://api.poster-demo-peredelano.orby-tech.space
                 - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
-                - AUTH_SERVER_URL=https://auth.orby-tech.space
+                - VITE_AUTH_SERVER_URL=https://auth.poster-demo-peredelano.orby-tech.space
                 - VITE_POSTAUTH_URL=https://poster-demo-peredelano.orby-tech.space
         logging: *default-logging
+        restart: always
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
+            - 'traefik.http.routers.demo_frontend_https.rule=Host(`poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_frontend_https.middlewares=sslheader@docker'
+            - 'traefik.http.routers.demo_frontend_https.entrypoints=http, https'
+            - 'traefik.http.routers.demo_frontend_https.tls.certresolver=myresolver'
+            - 'traefik.http.routers.demo_frontend_http.rule=Host(`poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_frontend_http.entrypoints=http'
         networks:
-            - ows-demo-network
+            - traefikpublic
         ports:
-            - '13000:3000'
+            - '3001:3000'
+
+    auth:
+        build:
+            context: .
+            dockerfile: ./auth-bot/Dockerfile
+        logging: *default-logging
+        restart: always
+        environment:
+            - AUTH_TELEGRAM_BOT_TOKEN
+            - AUTH_TELEGRAM_BOT_NAME
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
+            - 'traefik.http.routers.demo_auth_https.rule=Host(`auth.poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_auth_https.middlewares=sslheader@docker'
+            - 'traefik.http.routers.demo_auth_https.entrypoints=http, https'
+            - 'traefik.http.routers.demo_auth_https.tls.certresolver=myresolver'
+            - 'traefik.http.routers.demo_auth_http.rule=Host(`auth.poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_auth_http.entrypoints=http'
+        networks:
+            - traefikpublic
+        ports:
+            - '7091:7090'
 
     backend:
         build:
             context: .
             dockerfile: ./backend/Dockerfile
         logging: *default-logging
+        restart: always
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
+            - 'traefik.http.routers.demo_backend_https.rule=Host(`api.poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_backend_https.middlewares=sslheader@docker'
+            - 'traefik.http.routers.demo_backend_https.entrypoints=http, https'
+            - 'traefik.http.routers.demo_backend_https.tls.certresolver=myresolver'
+            - 'traefik.http.routers.demo_backend_http.rule=Host(`api.poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_backend_http.entrypoints=http'
+        environment:
+            - AUTH_SERVER_URL=https://auth.poster-demo-peredelano.orby-tech.space
+            - MODE=prod
         networks:
-            - ows-demo-network
+            - traefikpublic
         ports:
-            - '8070:7080'
+            - '7081:7080'
         volumes:
-            - assets-db:/app/backend/assets/db
-            - assets-img:/app/backend/assets/img
+            - assets-db-demo:/app/backend/assets/db
+            - assets-img-demo:/app/backend/assets/img
 
 volumes:
-    assets-db:
+    assets-db-demo:
         driver: local
         driver_opts:
             type: none
             o: bind
-            device: /home/a/ows-events-demo/assets/db
+            device: /root/ows-events_demo/assets/db
 
-    assets-img:
+    assets-img-demo:
         driver: local
         driver_opts:
             type: none
             o: bind
-            device: /home/a/ows-events-demo/assets/img
+            device: /root/ows-events_demo/assets/img

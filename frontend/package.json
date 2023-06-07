@@ -23,6 +23,7 @@
     "@types/uuid": "^9.0.1",
     "@vueuse/core": "^10.1.2",
     "@vueuse/nuxt": "^10.1.2",
+    "@vuepic/vue-datepicker": "^5.1.2",
     "axios": "^1.4.0",
     "i18next": "^22.5.0",
     "i18next-vue": "^2.1.1",

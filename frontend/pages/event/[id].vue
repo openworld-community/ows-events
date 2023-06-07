@@ -5,9 +5,7 @@ import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
 import { UserInfo } from '@/../common/types/user';
 
-definePageMeta({
-	name: RouteNameEnum.EVENT
-});
+definePageMeta({ name: RouteNameEnum.EVENT });
 
 const route = useRoute();
 const id = route.params.id as string;
@@ -55,18 +53,15 @@ const deleteCard = async () => {
 		console.error(data.value?.errors);
 	}
 };
-
-//TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
-const templateURL = computed(
-	() =>
-		`https://www.google.com/maps/place/${posterEvent?.value?.location.city}+${posterEvent?.value?.location.country}`
-);
 </script>
 
 <template>
-	<div class="event">
+	<div
+		v-if="posterEvent"
+		class="event"
+	>
 		<div class="=event-image event-image__container">
-			<span class="event-image__price">{{ posterEvent?.price }} €</span>
+			<span class="event-image__price">{{ posterEvent.price }} €</span>
 			<img
 				:src="posterEvent ? getEventImage(posterEvent) : undefined"
 				:alt="$translate('event.image.event')"
@@ -78,53 +73,50 @@ const templateURL = computed(
 			<!--      TODO когда будет регистрация, нужно будет подставлять имя создавшего-->
 			<p class="event-description__author">Peredelano</p>
 			<h2 class="event-description__title">
-				{{ posterEvent?.title }}
+				{{ posterEvent.title }}
 			</h2>
 
 			<p class="event-description__datetime">
-				<span v-if="posterEvent?.durationInSeconds">
-					{{ convertToLocaleString(posterEvent?.date, posterEvent?.timezone) }}
+				<span v-if="posterEvent.durationInSeconds">
+					{{ convertToLocaleString(posterEvent.date, posterEvent.timezone) }}
 					-
 					{{
 						convertToLocaleString(
-							posterEvent?.date + posterEvent?.durationInSeconds,
-							posterEvent?.timezone
+							posterEvent.date + posterEvent.durationInSeconds,
+							posterEvent.timezone
 						)
 					}}
 				</span>
 				<span v-else>
 					{{
-						convertToLocaleString(
-							posterEvent?.date ?? Date.now(),
-							posterEvent?.timezone
-						)
+						convertToLocaleString(posterEvent.date ?? Date.now(), posterEvent.timezone)
 					}}
 				</span>
 				<br />
-				({{ posterEvent?.timezone?.timezoneOffset }}
-				{{ posterEvent?.timezone?.timezoneName }})
+				({{ posterEvent.timezone?.timezoneOffset }}
+				{{ posterEvent.timezone?.timezoneName }})
 			</p>
-
+			<!-- TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса -->
 			<NuxtLink
 				class="event-description__geolink"
-				:to="templateURL"
+				:to="`https://www.google.com/maps/place/${posterEvent.location.city}+${posterEvent.location.country}`"
 				target="_blank"
 			>
-				{{ posterEvent?.location.country }}, {{ posterEvent?.location.city }}
+				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
 			</NuxtLink>
 			<p class="event-description__description">
-				{{ posterEvent?.description }}
+				{{ posterEvent.description }}
 			</p>
 		</div>
 
 		<div class="event-actions">
-			<template v-if="posterEvent?.url">
+			<template v-if="posterEvent.url">
 				<CommonButton
-					v-if="posterEvent?.url !== 'self'"
+					v-if="posterEvent.url !== 'self'"
 					button-kind="success"
 					class="event-actions__button"
 					:button-text="$translate('event.button.contact')"
-					:link="posterEvent?.url"
+					:link="posterEvent.url"
 					is-external-link
 				/>
 
@@ -138,7 +130,7 @@ const templateURL = computed(
 			</template>
 
 			<div
-				v-if="user?.id === posterEvent?.creatorId"
+				v-if="user?.id === posterEvent.creatorId"
 				class="event-actions__manage"
 			>
 				<CommonButton
@@ -162,6 +154,8 @@ const templateURL = computed(
 			</div>
 		</div>
 	</div>
+	<!-- todo - временная затычка -->
+	<div v-else>Request errored or pending</div>
 </template>
 
 <style lang="less" scoped>

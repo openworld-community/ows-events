@@ -42,7 +42,7 @@ const searchFromRoute = route.query.search?.toString();
 const search = ref(searchFromRoute === 'None' ? '' : searchFromRoute ?? '');
 const country = ref(pickedCountry.value ?? '');
 const city = ref(pickedCity.value ?? '');
-const debouncedEventsQuery = refDebounced(
+const debouncedEventsRequestQuery = refDebounced(
 	computed(() => ({
 		city: city.value,
 		country: country.value,
@@ -52,7 +52,7 @@ const debouncedEventsQuery = refDebounced(
 	{ maxWait: 5000 }
 );
 const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
-	query: debouncedEventsQuery
+	query: debouncedEventsRequestQuery
 });
 locationStore.pickCountry(pickedCountry.value);
 

@@ -14,6 +14,10 @@ type Refify<T> = T extends object
 	  }
 	: T | Ref<T>;
 type Fetchify<T> = ReturnType<typeof useFetch<T>>;
+/**
+ * Couldn't find an easier way to handle a function which can have 0, 1 optional or 1 required argument
+ * and then would output a function with the same arguments signature so I had to resort to this.
+ */
 type Querify<T extends (data: any) => any> = T extends () => any
 	? T extends (data?: infer P) => infer R
 		? unknown extends P
@@ -35,7 +39,9 @@ type Mutify<T extends (data: any) => any> = T extends () => any
 
 /**
  * Specify a function and the wrapper will transform its type
- * to conform with the excpected shape of a query
+ * to conform with the expected shape of a query.
+ *
+ * `(input: string) => number` gets converted to `(input: string | Ref<string>) => typeof useFetch<number>`
  */
 export function defineQuery<T extends ((data: any) => any) | void = void>(
 	routeCallback: T extends (data: any) => any ? Querify<T> : 'DO NOT USE ME WITHOUT A GENERIC'
@@ -45,6 +51,8 @@ export function defineQuery<T extends ((data: any) => any) | void = void>(
 /**
  * Specify a function and the wrapper will transform its type
  * to conform with the excpected shape of a mutation
+ *
+ * `(input: string) => number` gets converted to `(input: string) => typeof useFetch<number>`
  */
 export function defineMutation<T extends ((data: any) => any) | void = void>(
 	routeCallback: T extends (data: any) => any ? Mutify<T> : 'DO NOT USE ME WITHOUT A GENERIC'
@@ -75,5 +83,3 @@ export function useBackendFetch<T>(
 	}
 	return useFetch(request, opts);
 }
-
-export type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };

@@ -77,7 +77,7 @@ const isDateType = computed(() => {
 				:time-picker="!isDateType"
 				:enable-time-picker="!isDateType"
 				:min-date="props.minDate"
-				:format="dateFormat"
+				:format="isDateType ? dateFormat : timeFormat"
 				:disabled="props.disabled"
 				is-24
 				@update:model-value="handleDate"
@@ -87,21 +87,10 @@ const isDateType = computed(() => {
 						#input-icon
 				>
 					<CommonIcon
-							:css-class="'clock'"
 							name="clock"
-							:alt="$translate('global.button.search')"
+							:alt="$translate('dates.clock')"
 					/>
 				</template>
-
-<!--				<template #action-buttons>-->
-<!--					<CommonButton-->
-<!--							class="custom-select"-->
-<!--							button-kind="ordinary"-->
-<!--							:button-text="$translate('select')"-->
-<!--							icon-name="select"-->
-<!--							@click="selectDate"-->
-<!--					/>-->
-<!--				</template>-->
 			</VueDatePicker>
 		<span
 				v-if="props.error"
@@ -117,6 +106,10 @@ const isDateType = computed(() => {
 .dp__menu_transitioned,
 .dp__input  {
 	border-radius: 24px;
+}
+
+.dp__menu {
+	overflow: hidden;
 }
 
 .dp__arrow_bottom,
@@ -192,17 +185,25 @@ const isDateType = computed(() => {
 	font-size: var(--font-size-M);
 }
 
+.dp__input_icons,
 .dp__input_icon {
 	position: absolute;
 	top: 50%;
 	left: unset;
-	right: 0;
 	color: var(--color-input-icons);
 	width: 18px;
 	height: 20px;
 	svg {
 		color: var(--color-input-icons);
 	}
+}
+
+.dp__input_icons.dp__input_icon {
+	right: 0;
+}
+
+.dp__input_icon {
+	right: 15px;
 }
 
 :deep(.clock) {

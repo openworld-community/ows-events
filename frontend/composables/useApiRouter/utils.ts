@@ -35,7 +35,7 @@ type Mutify<T extends (data: any) => any> = T extends () => any
 
 /**
  * Specify a function and the wrapper will transform its type
- * to conform with the excpected shape
+ * to conform with the excpected shape of a query
  */
 export function defineQuery<T extends ((data: any) => any) | void = void>(
 	routeCallback: T extends (data: any) => any ? Querify<T> : 'DO NOT USE ME WITHOUT A GENERIC'
@@ -44,7 +44,7 @@ export function defineQuery<T extends ((data: any) => any) | void = void>(
 }
 /**
  * Specify a function and the wrapper will transform its type
- * to conform with the excpected shape
+ * to conform with the excpected shape of a mutation
  */
 export function defineMutation<T extends ((data: any) => any) | void = void>(
 	routeCallback: T extends (data: any) => any ? Mutify<T> : 'DO NOT USE ME WITHOUT A GENERIC'

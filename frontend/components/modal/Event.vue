@@ -71,8 +71,8 @@ onMounted(() => {
 });
 
 const setEventData = (data: EventOnPoster) => {
-	const start = timestampParse(data.date, data.timezone);
-	const end = timestampParse(data.date + data.durationInSeconds, data.timezone);
+	const start = timestampDateTimeParse(data.date, data.timezone);
+	const end = timestampDateTimeParse(data.date + data.durationInSeconds, data.timezone);
 
 	inputValues.value.id = data.id;
 	inputValues.value.title = data.title;

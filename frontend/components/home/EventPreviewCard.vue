@@ -37,11 +37,9 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 		<NuxtLink
 			:to="templateURL"
 			target="_blank"
-			class="card-link"
+			class="card-link card-link__geolink"
 		>
-			<p class="card-link__geolink">
 				{{ props.eventData.location.country }}, {{ props.eventData.location.city }}
-			</p>
 		</NuxtLink>
 	</div>
 </template>

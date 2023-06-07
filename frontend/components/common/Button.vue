@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, type PropType } from 'vue';
 import NuxtLink from '#app/components/nuxt-link';
+import { IconDefaultParams } from '@/constants/defaultValues/icon';
 
 const emit = defineEmits(['click']);
 
@@ -45,6 +46,14 @@ const props = defineProps({
 		// можно передать иконку в кнопку или сделать кнопкой-иконкой
 		type: String as PropType<string>,
 		default: ''
+	},
+	iconWidth: {
+		type: String as PropType<string>,
+		default: IconDefaultParams.WIDTH
+	},
+	iconHeight: {
+		type: String as PropType<string>,
+		default: IconDefaultParams.HEIGHT
 	},
 	alt: {
 		type: String as PropType<string>,
@@ -101,6 +110,8 @@ const loaderColor = computed(() => {
 			:class="{ button__icon: buttonText }"
 			:name="iconName"
 			:alt="alt ? alt : null"
+			:width="iconWidth"
+			:height="iconHeight"
 		/>
 		<span
 			v-if="!isIcon"

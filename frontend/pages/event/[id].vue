@@ -6,7 +6,7 @@ import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
 import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
-import { UserInfo } from '~/../common/types/user';
+import { UserInfo } from '@/../common/types/user';
 
 definePageMeta({
 	name: RouteNameEnum.EVENT
@@ -130,6 +130,8 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 					class="event-actions__button"
 					:button-text="$translate('event.button.edit')"
 					icon-name="edit"
+					icon-width="16"
+					icon-height="16"
 					@click="openEventModal"
 				/>
 
@@ -137,7 +139,9 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 					class="event-actions__button"
 					button-kind="warning"
 					:button-text="$translate('event.button.delete')"
-					icon-name="close"
+					icon-name="trash"
+					icon-width="16"
+					icon-height="16"
 					@click="deleteCard"
 				/>
 			</div>
@@ -211,7 +215,7 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 		&__manage {
 			display: flex;
 			justify-content: center;
-			gap: 17px;
+			gap: 10px;
 		}
 
 		&__button {

@@ -1,28 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { type EventOnPoster } from '../../../common/types';
-import { deleteEvent, getEvent } from '@/services/events.services';
 import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
 import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
 import { UserInfo } from '@/../common/types/user';
 
-definePageMeta({
-	name: RouteNameEnum.EVENT
-});
+definePageMeta({ name: RouteNameEnum.EVENT });
 
 const route = useRoute();
 const id = route.params.id as string;
 
 const user = useCookie<UserInfo | null>('user');
 
-const posterEvent = ref<EventOnPoster>(await getEvent(id));
+const { data: posterEvent, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ id });
 
 const { $translate } = useNuxtApp();
 
 useHead({
-	title: `${$translate('meta.title')} / ${posterEvent.value.title}`
+	title: `${$translate('meta.title')} / ${posterEvent.value?.title}`
 });
 
 const {
@@ -42,23 +37,33 @@ const {
 } = useModal({ component: EventModal } as UseModalOptions<
 	InstanceType<typeof VueFinalModal>['$props']
 >);
-patchEventModal({ attrs: { closeEventModal, dataForEdit: posterEvent.value } });
+patchEventModal({
+	attrs: {
+		dataForEdit: posterEvent,
+		closeEventModal,
+		refreshEvent
+	}
+});
 
 const deleteCard = async () => {
-	await deleteEvent(id);
-	await navigateTo({ name: RouteNameEnum.HOME });
+	const { data } = await apiRouter.events.delete.useMutation({ id });
+	if (data.value?.type === 'success') {
+		await navigateTo({ name: RouteNameEnum.HOME });
+	} else {
+		console.error(data.value?.errors);
+	}
 };
-
-//TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
-const templateURL = computed(() => `https://www.google.com/maps/place/${posterEvent.value?.location.city}+${posterEvent.value?.location.country}`);
 </script>
 
 <template>
-	<div class="event">
+	<div
+		v-if="posterEvent"
+		class="event"
+	>
 		<div class="=event-image event-image__container">
 			<span class="event-image__price">{{ posterEvent.price }} €</span>
 			<img
-				:src="getEventImage(posterEvent)"
+				:src="posterEvent ? getEventImage(posterEvent) : undefined"
 				:alt="$translate('event.image.event')"
 				class="event-image__image"
 			/>
@@ -83,16 +88,18 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 					}}
 				</span>
 				<span v-else>
-					{{ convertToLocaleString(posterEvent.date, posterEvent.timezone) }}
+					{{
+						convertToLocaleString(posterEvent.date ?? Date.now(), posterEvent.timezone)
+					}}
 				</span>
 				<br />
 				({{ posterEvent.timezone?.timezoneOffset }}
 				{{ posterEvent.timezone?.timezoneName }})
 			</p>
-
+			<!-- TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса -->
 			<NuxtLink
 				class="event-description__geolink"
-				:to="templateURL"
+				:to="`https://www.google.com/maps/place/${posterEvent.location.city}+${posterEvent.location.country}`"
 				target="_blank"
 			>
 				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
@@ -147,6 +154,8 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 			</div>
 		</div>
 	</div>
+	<!-- todo - временная затычка -->
+	<div v-else>Request errored or pending</div>
 </template>
 
 <style lang="less" scoped>

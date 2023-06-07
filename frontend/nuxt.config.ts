@@ -5,16 +5,18 @@ import { fileURLToPath, URL } from 'node:url';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+	modules: ['@pinia/nuxt', '@vueuse/nuxt'],
 	app: {
 		head: {
-			script: [{
-				defer: true,
-				"data-domain": "poster-peredelano.orby-tech.space",
-				src: "http://metrics.orby-tech.space/js/script.js"
-			}]
+			script: [
+				{
+					defer: true,
+					'data-domain': 'poster-peredelano.orby-tech.space',
+					src: 'http://metrics.orby-tech.space/js/script.js'
+				}
+			]
 		}
 	},
-	modules: ['@pinia/nuxt'],
 	typescript: { strict: true },
 	vite: {
 		server: {

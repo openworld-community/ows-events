@@ -18,6 +18,7 @@ module.exports = {
 		'vue/html-self-closing': 'off',
 		'vue/multi-word-component-names': 'off',
 		'vue/html-indent': 'off',
-		'vue/singleline-html-element-content-newline': 'off'
+		'vue/singleline-html-element-content-newline': 'off',
+		'no-mixed-spaces-and-tabs': 'off'
 	}
 };

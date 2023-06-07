@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { type EventOnPoster } from '../../../common/types';
-import { deleteEvent, getEvent } from '@/services/events.services';
+import { deleteEvent } from '@/services/events.services';
 import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
 import RegistrationModal from '../../components/modal/Registration.vue';
@@ -17,7 +16,7 @@ const id = route.params.id as string;
 
 const user = useCookie<UserInfo | null>('user');
 
-const posterEvent = ref<EventOnPoster>(await getEvent(id));
+const { data: posterEvent } = await apiRouter.events.getById.useFetch(id);
 
 const {
 	open: openRegistrationModal,
@@ -36,7 +35,7 @@ const {
 } = useModal({ component: EventModal } as UseModalOptions<
 	InstanceType<typeof VueFinalModal>['$props']
 >);
-patchEventModal({ attrs: { closeEventModal, dataForEdit: posterEvent.value } });
+patchEventModal({ attrs: { closeEventModal, dataForEdit: posterEvent?.value } });
 
 const deleteCard = async () => {
 	await deleteEvent(id);
@@ -48,15 +47,18 @@ const openLocation = (url: string) => {
 };
 
 //TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
-const templateURL = computed(() => `https://www.google.com/maps/place/${posterEvent.value?.location.city}+${posterEvent.value?.location.country}`);
+const templateURL = computed(
+	() =>
+		`https://www.google.com/maps/place/${posterEvent?.value?.location.city}+${posterEvent?.value?.location.country}`
+);
 </script>
 
 <template>
 	<div class="event">
 		<div class="=event-image event-image__container">
-			<span class="event-image__price">{{ posterEvent.price }} €</span>
+			<span class="event-image__price">{{ posterEvent?.price }} €</span>
 			<img
-				:src="getEventImage(posterEvent)"
+				:src="posterEvent ? getEventImage(posterEvent) : undefined"
 				:alt="$translate('event.image.event')"
 				class="event-image__image"
 			/>
@@ -66,47 +68,52 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 			<!--      TODO когда будет регистрация, нужно будет подставлять имя создавшего-->
 			<p class="event-description__author">Peredelano</p>
 			<h2 class="event-description__title">
-				{{ posterEvent.title }}
+				{{ posterEvent?.title }}
 			</h2>
 
 			<p class="event-description__datetime">
-				<span v-if="posterEvent.durationInSeconds">
-					{{ convertToLocaleString(posterEvent.date, posterEvent.timezone) }}
+				<span v-if="posterEvent?.durationInSeconds">
+					{{ convertToLocaleString(posterEvent?.date, posterEvent?.timezone) }}
 					-
 					{{
 						convertToLocaleString(
-							posterEvent.date + posterEvent.durationInSeconds,
-							posterEvent.timezone
+							posterEvent?.date + posterEvent?.durationInSeconds,
+							posterEvent?.timezone
 						)
 					}}
 				</span>
 				<span v-else>
-					{{ convertToLocaleString(posterEvent.date, posterEvent.timezone) }}
+					{{
+						convertToLocaleString(
+							posterEvent?.date ?? Date.now(),
+							posterEvent?.timezone
+						)
+					}}
 				</span>
 				<br />
-				({{ posterEvent.timezone?.timezoneOffset }}
-				{{ posterEvent.timezone?.timezoneName }})
+				({{ posterEvent?.timezone?.timezoneOffset }}
+				{{ posterEvent?.timezone?.timezoneName }})
 			</p>
 
 			<NuxtLink
 				class="event-description__geolink"
 				@click.prevent="openLocation(templateURL)"
 			>
-				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
+				{{ posterEvent?.location.country }}, {{ posterEvent?.location.city }}
 			</NuxtLink>
 			<p class="event-description__description">
-				{{ posterEvent.description }}
+				{{ posterEvent?.description }}
 			</p>
 		</div>
 
 		<div class="event-actions">
-			<template v-if="posterEvent.url">
+			<template v-if="posterEvent?.url">
 				<CommonButton
-					v-if="posterEvent.url !== 'self'"
+					v-if="posterEvent?.url !== 'self'"
 					button-kind="success"
 					class="event-actions__button"
 					:button-text="$translate('event.button.contact')"
-					:link="posterEvent.url"
+					:link="posterEvent?.url"
 					is-external-link
 				/>
 
@@ -120,7 +127,7 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 			</template>
 
 			<div
-				v-if="user?.id === posterEvent.creatorId"
+				v-if="user?.id === posterEvent?.creatorId"
 				class="event-actions__manage"
 			>
 				<CommonButton

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
-import { deleteEventImage, editEvent, postEvent, postEventImage } from '@/services/events.services';
+import { deleteEventImage, postEventImage } from '@/services/events.services';
 import { storeToRefs } from 'pinia';
 import { useLocationStore } from '@/stores/location.store';
 import { type EventOnPoster } from '../../../common/types';
 import { getTimezoneByCountryAndCity, getAllTimezones } from '@/services/timezone.services';
+import { API_URL } from '~/constants/url';
 
 const { $translate } = useNuxtApp();
 
@@ -171,37 +172,23 @@ const paramsForSubmit = computed(() => {
 const submitEvent = async () => {
 	isLoading.value = true;
 	try {
-		let imageURL;
-
-		const params = paramsForSubmit.value;
+		const params = Object.assign(paramsForSubmit.value, {
+			image: await postEventImage(newImageFile.value as File)
+		});
 
 		if (props.dataForEdit) {
 			if (newImageFile.value) {
 				if (props.dataForEdit.image) {
 					await deleteEventImage(props.dataForEdit.image);
 				}
-				imageURL = await postEventImage(newImageFile.value as File);
 			}
-			await editEvent({
-				event: {
-					...params,
-					id: inputValues.value.id,
-					image: imageURL
-				}
+			const { data } = await apiRouter.events.edit.useFetch({
+				event: Object.assign(params, { id: inputValues.value.id })
 			});
 		} else {
-			imageURL = await postEventImage(newImageFile.value as File);
-
-			const res = await postEvent({
-				event: {
-					...params,
-					image: imageURL
-				}
-			});
-
-			if (res.type === 'success') {
-				const id = res.data.id;
-				await navigateTo(`/event/${id}`);
+			const { data } = await apiRouter.events.add.useFetch({ event: params });
+			if (data.value && data.value.type === 'success') {
+				await navigateTo(`/event/${data.value.data.id}`);
 			}
 		}
 

@@ -1,10 +1,11 @@
-import { EventOnPoster } from '~/../common/types';
-import { defineRoute, useBackendFetch } from './utils';
+import { EventOnPoster, StandardResponse } from '~/../common/types';
+import { DeepPartial, defineRoute, useBackendFetch } from './utils';
+import { PostEventPayload } from '~/../common/types/event';
 
 export const events = {
 	findMany: defineRoute<
 		(input?: {
-			query?: { searchLine?: string; country?: string; city?: string };
+			query: { searchLine?: string; country?: string; city?: string };
 		}) => EventOnPoster[]
 	>((input) => {
 		return useBackendFetch('events/find', {
@@ -12,63 +13,26 @@ export const events = {
 			method: 'POST'
 		});
 	}),
-	findMany1: defineRoute<
-		(input?: {
-			query?: { searchLine?: string; country?: string; city?: string };
-		}) => EventOnPoster[]
-	>((input) => {
-		return useBackendFetch('events/find', {
-			body: input?.query ?? {},
+	getById: defineRoute<(id: string) => EventOnPoster>((id) => useBackendFetch(`events/${id}`)),
+	add: defineRoute<(input: PostEventPayload) => StandardResponse<{ id: string }>>((input) => {
+		const token = useCookie('token').value;
+		if (!token) {
+			throw new Error('You are not authorized');
+		}
+		return useBackendFetch('events/add', {
+			body: input,
+			headers: { Authorization: token },
 			method: 'POST'
 		});
 	}),
-	findMany2: defineRoute<
-		(input?: {
-			query?: { searchLine?: string; country?: string; city?: string };
-		}) => EventOnPoster[]
-	>((input) => {
-		return useBackendFetch('events/find', {
-			body: input?.query ?? {},
-			method: 'POST'
-		});
-	}),
-	findMany3: defineRoute<
-		(input?: {
-			query?: { searchLine?: string; country?: string; city?: string };
-		}) => EventOnPoster[]
-	>((input) => {
-		return useBackendFetch('events/find', {
-			body: input?.query ?? {},
-			method: 'POST'
-		});
-	}),
-	findMany4: defineRoute<
-		(input?: {
-			query?: { searchLine?: string; country?: string; city?: string };
-		}) => EventOnPoster[]
-	>((input) => {
-		return useBackendFetch('events/find', {
-			body: input?.query ?? {},
-			method: 'POST'
-		});
-	}),
-	findMany5: defineRoute<
-		(input?: {
-			query?: { searchLine?: string; country?: string; city?: string };
-		}) => EventOnPoster[]
-	>((input) => {
-		return useBackendFetch('events/find', {
-			body: input?.query ?? {},
-			method: 'POST'
-		});
-	}),
-	findMany6: defineRoute<
-		(input?: {
-			query?: { searchLine?: string; country?: string; city?: string };
-		}) => EventOnPoster[]
-	>((input) => {
-		return useBackendFetch('events/find', {
-			body: input?.query ?? {},
+	edit: defineRoute<(input: { event: EventOnPoster }) => StandardResponse<undefined>>((input) => {
+		const token = useCookie('token').value;
+		if (!token) {
+			throw new Error('You are not authorized');
+		}
+		return useBackendFetch('events/update', {
+			body: input,
+			headers: { Authorization: token },
 			method: 'POST'
 		});
 	})

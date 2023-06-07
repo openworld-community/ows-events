@@ -41,3 +41,5 @@ export function useBackendFetch<T>(
 	opts.baseURL ??= API_URL;
 	return useFetch<T>(request, opts);
 }
+
+export type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };

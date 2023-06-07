@@ -37,22 +37,19 @@ const searchFromRoute = route.query.search?.toString();
 const search = ref(searchFromRoute === 'None' ? '' : searchFromRoute ?? '');
 const country = ref(pickedCountry.value ?? '');
 const city = ref(pickedCity.value ?? '');
-const eventsSearchQuery = computed(() => ({
-	city: city.value,
-	country: country.value,
-	searchLine: search.value
-}));
+const debouncedEventsQuery = refDebounced(
+	computed(() => ({
+		city: city.value,
+		country: country.value,
+		searchLine: search.value
+	})),
+	500,
+	{ maxWait: 5000 }
+);
 const { data: posterEvents } = await apiRouter.events.findMany.useFetch({
-	query: eventsSearchQuery
+	query: debouncedEventsQuery
 });
 locationStore.pickCountry(pickedCountry.value);
-let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined;
-const debounceEventsSearch = () => {
-	clearTimeout(lazyLoadTimeout);
-	lazyLoadTimeout = setTimeout(async () => {
-		// await refreshEvents();
-	}, 500);
-};
 
 watch(
 	pickedCountry,
@@ -65,7 +62,6 @@ watch(
 watch(
 	search,
 	async (_search) => {
-		debounceEventsSearch();
 		await navigateTo({ query: { ...route.query, search: _search || 'None' } });
 	},
 	{ deep: true }
@@ -75,9 +71,7 @@ watch(
 	country,
 	async (_country) => {
 		locationStore.pickCountry(_country);
-
 		city.value = pickedCity.value;
-		debounceEventsSearch();
 	},
 	{ deep: true }
 );
@@ -86,7 +80,6 @@ watch(
 	city,
 	async (_city) => {
 		locationStore.pickCity(_city);
-		debounceEventsSearch();
 	},
 	{ deep: true }
 );

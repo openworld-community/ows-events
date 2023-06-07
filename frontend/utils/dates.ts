@@ -4,7 +4,19 @@ export const dateTime = (date: string, time: string, timezone: string) => {
 	return new Date(`${date} ${time} ${timezone}`);
 };
 
-export const timestampParse = (
+export const timestampDateParse = (timestamp: number) => {
+	return new Date(timestamp)
+		.toLocaleString('ru-RU', {
+			day: 'numeric',
+			month: 'numeric',
+			year: 'numeric'
+		})
+		.split('.')
+		.reverse()
+		.join('-');
+};
+
+export const timestampDateTimeParse = (
 	timestamp: number,
 	timezone: { timezoneName: string; timezoneOffset: string } | undefined
 ) => {

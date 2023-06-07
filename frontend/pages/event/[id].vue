@@ -165,7 +165,6 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 		width: 100%;
 		flex-direction: column;
 		padding-inline: 0;
-		margin-bottom: 36px;
 
 		&__author {
 			font-size: var(--font-size-XS);
@@ -200,7 +199,9 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 		}
 
 		&__description {
+			max-height: 155px;
 			word-wrap: break-word;
+			overflow-y: auto;
 			font-size: var(--font-size-S);
 			line-height: 20px;
 		}
@@ -209,6 +210,7 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 	&-actions {
 		display: flex;
 		flex-direction: column;
+		background-color: var(--color-white);
 		gap: var(--space-unrelated-items);
 		margin-top: auto;
 

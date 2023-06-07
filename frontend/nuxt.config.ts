@@ -1,4 +1,3 @@
-// import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import path from 'path';
@@ -6,6 +5,15 @@ import { fileURLToPath, URL } from 'node:url';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+	app: {
+		head: {
+			script: [{
+				defer: true,
+				"data-domain": "poster-peredelano.orby-tech.space",
+				src: "http://metrics.orby-tech.space/js/script.js"
+			}]
+		}
+	},
 	modules: ['@pinia/nuxt'],
 	typescript: { strict: true },
 	vite: {

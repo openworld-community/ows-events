@@ -51,7 +51,7 @@ const debouncedEventsQuery = refDebounced(
 	500,
 	{ maxWait: 5000 }
 );
-const { data: posterEvents } = await apiRouter.events.findMany.useFetch({
+const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 	query: debouncedEventsQuery
 });
 locationStore.pickCountry(pickedCountry.value);

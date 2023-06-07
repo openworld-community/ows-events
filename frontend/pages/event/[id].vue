@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { deleteEvent } from '@/services/events.services';
-import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
-import RegistrationModal from '../../components/modal/Registration.vue';
-import EventModal from '../../components/modal/Event.vue';
+import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { UserInfo } from '~/../common/types/user';
+import EventModal from '../../components/modal/Event.vue';
+import RegistrationModal from '../../components/modal/Registration.vue';
 
 definePageMeta({
 	name: RouteNameEnum.EVENT
@@ -16,12 +14,12 @@ const id = route.params.id as string;
 
 const user = useCookie<UserInfo | null>('user');
 
-const { data: posterEvent } = await apiRouter.events.getById.useFetch(id);
+const { data: posterEvent, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ id });
 
 const { $translate } = useNuxtApp();
 
 useHead({
-	title: `${$translate('meta.title')} / ${posterEvent.value.title}`
+	title: `${$translate('meta.title')} / ${posterEvent.value?.title}`
 });
 
 const {
@@ -41,11 +39,21 @@ const {
 } = useModal({ component: EventModal } as UseModalOptions<
 	InstanceType<typeof VueFinalModal>['$props']
 >);
-patchEventModal({ attrs: { closeEventModal, dataForEdit: posterEvent?.value } });
+patchEventModal({
+	attrs: {
+		dataForEdit: posterEvent,
+		closeEventModal,
+		refreshEvent
+	}
+});
 
 const deleteCard = async () => {
-	await deleteEvent(id);
-	await navigateTo({ name: RouteNameEnum.HOME });
+	const { data } = await apiRouter.events.delete.useMutation({ id });
+	if (data.value?.type === 'success') {
+		await navigateTo({ name: RouteNameEnum.HOME });
+	} else {
+		console.error(data.value?.errors);
+	}
 };
 
 const openLocation = (url: string) => {

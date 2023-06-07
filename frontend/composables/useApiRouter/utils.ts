@@ -53,7 +53,7 @@ export function defineMutation<T extends ((data: any) => any) | void = void>(
 }
 
 /**
- * Overrides baseURL to be of our backend server
+ * Provides some common defaults for calls to our backend API
  */
 export function useBackendFetch<T>(
 	request: Parameters<typeof useFetch>[0],

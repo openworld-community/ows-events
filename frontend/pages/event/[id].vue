@@ -49,10 +49,6 @@ const deleteCard = async () => {
 	await navigateTo({ name: RouteNameEnum.HOME });
 };
 
-const openLocation = (url: string) => {
-	window.open(url, '_blank');
-};
-
 //TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
 const templateURL = computed(() => `https://www.google.com/maps/place/${posterEvent.value?.location.city}+${posterEvent.value?.location.country}`);
 </script>
@@ -96,7 +92,8 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 
 			<NuxtLink
 				class="event-description__geolink"
-				@click.prevent="openLocation(templateURL)"
+				:to="templateURL"
+				target="_blank"
 			>
 				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
 			</NuxtLink>

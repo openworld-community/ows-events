@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "nuxt dev",
     "dev:local": "nuxt dev --dotenv .env.dev",
-    "build-demo": "run-p type-check build:only-demo",
-    "build-prod": "run-p type-check build:only-prod",
+    "build-demo": "run-p type:check build:only-demo",
+    "build-prod": "run-p type:check build:only-prod",
     "build:only-demo": "nuxt build",
     "build:only-prod": "nuxt build",
     "preview": "nuxt preview",

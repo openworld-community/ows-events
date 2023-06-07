@@ -48,11 +48,11 @@ const props = defineProps({
 		default: ''
 	},
 	iconWidth: {
-		type: String as PropType<string>,
+		type: [String, Number] as PropType<string | number>,
 		default: IconDefaultParams.WIDTH
 	},
 	iconHeight: {
-		type: String as PropType<string>,
+    type: [String, Number] as PropType<string | number>,
 		default: IconDefaultParams.HEIGHT
 	},
 	alt: {

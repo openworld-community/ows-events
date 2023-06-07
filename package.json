@@ -3,10 +3,14 @@
     "dev": "concurrently -n \"frontend,backend\" -c \"red,blue\" \"npm run dev:frontend\" \"npm run dev:backend\"",
     "dev:frontend": "cd frontend && npm run dev:local",
     "dev:backend": "cd backend && npm run start:watch",
-    "i": "npm i && concurrently -n \"frontend,backend\" -c \"red,blue\" \"cd frontend && npm i\" \"cd backend && npm i\"",
+    "i": "npm i && concurrently -n \"frontend,backend,auth-bot\" -c \"red,blue,green\" \"cd frontend && npm i\" \"cd backend && npm i\" \"cd auth-bot && npm i\"",
     "prod:build": "cd frontend && npm run build-prod",
     "prod:run": "cd backend && npm run start:watch",
-    "demo:build": "cd frontend && npm run build:only-demo"
+    "demo:build": "cd frontend && npm run build:only-demo",
+    "type:check": "concurrently -n \"frontend,backend,auth-bot\" -c \"red,blue,green\" \"npm run type:check:frontend\" \"npm run type:check:backend\" \"npm run type:check:auth-bot\"",
+    "type:check:backend": "cd backend && npm run type:check",
+    "type:check:frontend": "cd frontend && npm run type:check",
+    "type:check:auth-bot": "cd auth-bot && npm run type:check"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.59.7",

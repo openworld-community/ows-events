@@ -1,12 +1,24 @@
 import { defineTranslation } from '..';
 
 export const defaultTranslation = {
+  meta: {
+    title: 'Афиша',
+    home: {
+      title: 'Главная'
+    },
+    about_us: {
+      title: 'О нас'
+    },
+    payment_info: {
+      title: 'Оплата'
+    }
+  },
   global: {
     country: 'Страна',
     city: 'Город',
     search: 'Поиск',
     timezone: 'Часовой пояс',
-    button: { back: 'Назад', share: 'Поделиться', cancel: 'Отмена' },
+    button: { back: 'Назад', share: 'Поделиться', cancel: 'Отмена', search: 'Поиск', delete: 'Очистить' },
     nav: 'Навигация'
   },
   about: {
@@ -101,10 +113,6 @@ export const defaultTranslation = {
   header: {
     subscription_expired: '$t(dates.day.key) до конца подписки'
   },
-  callToAction: {
-    delete: 'Очистить',
-    search: 'Поиск'
-  }
 };
 
 export default defineTranslation(defaultTranslation);

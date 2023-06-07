@@ -12,7 +12,7 @@
     "preview": "nuxt preview",
     "start": "node .output/server/index.mjs",
     "test:unit": "vitest",
-    "type-check": "nuxi typecheck",
+    "type:check": "nuxi typecheck",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
     "generate": "nuxt generate",
@@ -21,6 +21,7 @@
   "dependencies": {
     "@pinia/nuxt": "^0.4.11",
     "@types/uuid": "^9.0.1",
+    "@vuepic/vue-datepicker": "^5.1.2",
     "axios": "^1.4.0",
     "i18next": "^22.5.0",
     "i18next-vue": "^2.1.1",

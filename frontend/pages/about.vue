@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import eventScreen from '@/assets/img/event-screen@2x.png';
 import { REPO_URL } from '@/constants/url';
+
+const { $translate } = useNuxtApp();
+
+useHead({
+	title: `${$translate('meta.title')} / ${$translate('meta.about_us.title')}`
+});
 </script>
 
 <template>

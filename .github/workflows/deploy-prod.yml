@@ -28,6 +28,6 @@ jobs:
       - name: connect and update traefik
         run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ vars.PROD_DIR }} && docker-compose --compatibility -p ows-events -f docker-compose.traefik.yml up -d --build && exit"
       - name: connect and rebuild services
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "export AUTH_TELEGRAM_BOT_TOKEN=${{ secrets.PROD_AUTH_TELEGRAM_BOT_TOKEN }} && cd ${{ vars.PROD_DIR }} && docker-compose --compatibility -p ows-events_prod -f docker-compose.prod.yml up -d --force-recreate --build && exit"
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "export AUTH_TELEGRAM_BOT_TOKEN=${{ secrets.PROD_AUTH_TELEGRAM_BOT_TOKEN }} && export AUTH_TELEGRAM_BOT_NAME=${{ vars.PROD_AUTH_TELEGRAM_BOT_NAME }} && cd ${{ vars.PROD_DIR }} && docker-compose --compatibility -p ows-events_prod -f docker-compose.prod.yml up -d --force-recreate --build  && exit"
       - name: cleanup
         run: rm -rf ~/.ssh

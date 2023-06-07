@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import {timestampDateParse} from "~/utils/dates";
 
 const ICON_DICTIONARY: { [key: string]: string } = {
   search: 'search',
@@ -73,6 +74,9 @@ const showPicker = () => {
     input.value?.showPicker();
   }
 };
+
+const now = timestampDateParse(Date.now())
+
 </script>
 
 <template>
@@ -85,6 +89,7 @@ const showPicker = () => {
     </span>
     <div class="custom-input__container">
       <!--      Input: text, number, date, time-->
+<!--      TODO: минимальное значение прибито здесь до тех пор, пока не будут готовы кастомные инпуты-->
       <input
         v-if="props.inputType !== 'textarea' && props.inputType !== 'datalist'"
         ref="input"
@@ -92,6 +97,7 @@ const showPicker = () => {
         class="custom-input__field"
         :name="props.inputName"
         :type="props.inputType"
+        :min="props.inputType === 'startDate' || props.inputType === 'endDate' ? now : ''"
         :placeholder="props.inputPlaceholder"
         :required="props.isRequired"
       />

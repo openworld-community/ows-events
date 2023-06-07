@@ -6,7 +6,7 @@ import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
 import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
-import { UserInfo } from '~/../common/types/user';
+import { UserInfo } from '@/../common/types/user';
 
 definePageMeta({
 	name: RouteNameEnum.EVENT
@@ -18,6 +18,12 @@ const id = route.params.id as string;
 const user = useCookie<UserInfo | null>('user');
 
 const posterEvent = ref<EventOnPoster>(await getEvent(id));
+
+const { $translate } = useNuxtApp();
+
+useHead({
+	title: `${$translate('meta.title')} / ${posterEvent.value.title}`
+});
 
 const {
 	open: openRegistrationModal,
@@ -41,10 +47,6 @@ patchEventModal({ attrs: { closeEventModal, dataForEdit: posterEvent.value } });
 const deleteCard = async () => {
 	await deleteEvent(id);
 	await navigateTo({ name: RouteNameEnum.HOME });
-};
-
-const openLocation = (url: string) => {
-	window.open(url, '_blank');
 };
 
 //TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
@@ -90,7 +92,8 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 
 			<NuxtLink
 				class="event-description__geolink"
-				@click.prevent="openLocation(templateURL)"
+				:to="templateURL"
+				target="_blank"
 			>
 				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
 			</NuxtLink>
@@ -127,6 +130,8 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 					class="event-actions__button"
 					:button-text="$translate('event.button.edit')"
 					icon-name="edit"
+					icon-width="16"
+					icon-height="16"
 					@click="openEventModal"
 				/>
 
@@ -134,7 +139,9 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 					class="event-actions__button"
 					button-kind="warning"
 					:button-text="$translate('event.button.delete')"
-					icon-name="close"
+					icon-name="trash"
+					icon-width="16"
+					icon-height="16"
 					@click="deleteCard"
 				/>
 			</div>
@@ -158,7 +165,6 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 		width: 100%;
 		flex-direction: column;
 		padding-inline: 0;
-		margin-bottom: 36px;
 
 		&__author {
 			font-size: var(--font-size-XS);
@@ -193,7 +199,9 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 		}
 
 		&__description {
+			max-height: 155px;
 			word-wrap: break-word;
+			overflow-y: auto;
 			font-size: var(--font-size-S);
 			line-height: 20px;
 		}
@@ -202,13 +210,14 @@ const templateURL = computed(() => `https://www.google.com/maps/place/${posterEv
 	&-actions {
 		display: flex;
 		flex-direction: column;
+		background-color: var(--color-white);
 		gap: var(--space-unrelated-items);
 		margin-top: auto;
 
 		&__manage {
 			display: flex;
 			justify-content: center;
-			gap: 17px;
+			gap: 10px;
 		}
 
 		&__button {

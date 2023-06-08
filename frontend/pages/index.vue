@@ -1,18 +1,15 @@
 <script setup lang="ts">
-import { type EventOnPoster } from '../../common/types';
-import { computed, ref, watch } from 'vue';
-import { useLocationStore } from '@/stores/location.store';
-import { storeToRefs } from 'pinia';
-import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
-import EventModal from '../components/modal/Event.vue';
+import { computed } from 'vue';
+import { UseModalOptions, VueFinalModal, useModal } from 'vue-final-modal';
 import NeedAuthorize from '~/components/modal/NeedAuthorize.vue';
+import { useLocationStore } from '~/stores/location.store';
+import EventModal from '../components/modal/Event.vue';
 
 const { $translate } = useNuxtApp();
-
-useHead({
-	title: `${$translate('meta.title')} / ${$translate('meta.home.title')}`
-});
+// todo - use a function syntax, for now its bugged, awaiting issue reply
+// https://github.com/nuxt/nuxt/issues/21457
+useHead({ titleTemplate: `%s / ${$translate('meta.home.title')}` });
 definePageMeta({ name: RouteNameEnum.HOME });
 
 const {
@@ -33,19 +30,13 @@ const {
 needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
 
 const locationStore = useLocationStore();
-locationStore.loadCountries();
-const { countries, cities, pickedCountry, pickedCity } = storeToRefs(locationStore);
 
 const route = useRoute();
-
-const searchFromRoute = route.query.search?.toString();
-const search = ref(searchFromRoute === 'None' ? '' : searchFromRoute ?? '');
-const country = ref(pickedCountry.value ?? '');
-const city = ref(pickedCity.value ?? '');
+const search = ref(route.query.search?.toString() ?? '');
 const debouncedEventsRequestQuery = refDebounced(
 	computed(() => ({
-		city: city.value,
-		country: country.value,
+		city: locationStore.pickedCity,
+		country: locationStore.pickedCountry,
 		searchLine: search.value
 	})),
 	500,
@@ -54,109 +45,6 @@ const debouncedEventsRequestQuery = refDebounced(
 const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 	query: debouncedEventsRequestQuery
 });
-locationStore.pickCountry(pickedCountry.value);
-
-watch(
-	pickedCountry,
-	async () => {
-		city.value = pickedCity.value;
-	},
-	{ deep: true }
-);
-
-watch(
-	search,
-	async (_search) => {
-		await navigateTo({ query: { ...route.query, search: _search || 'None' } });
-	},
-	{ deep: true }
-);
-
-watch(
-	country,
-	async (_country) => {
-		locationStore.pickCountry(_country);
-		city.value = pickedCity.value;
-	},
-	{ deep: true }
-);
-
-watch(
-	city,
-	async (_city) => {
-		locationStore.pickCity(_city);
-	},
-	{ deep: true }
-);
-
-const filteredValues = computed(() => {
-	if (!posterEvents.value) return [];
-	return getFilteredEvents(posterEvents.value, search.value, country.value, city.value);
-});
-
-// todo - new created events are not sorted by date
-const eventsWithAdd = computed((): (EventOnPoster & { type: 'event' })[] => {
-	const events = [...filteredValues.value];
-	return events.map((x) => {
-		return {
-			...x,
-			type: 'event'
-		};
-	});
-
-	// const newEvents: (
-	//   | (EventOnPoster & { type: 'event' })
-	//   | {
-	//       id: 'add'
-	//       type: 'add'
-	//       title: string
-	//       description: string
-	//       link: string
-	//     }
-	// )[] = []
-	// for (let i = 0; i < events.length; i++) {
-	//   if (i % 2 === 0) {
-	//     newEvents.push({
-	//       id: 'add',
-	//       type: 'add',
-	//       title: 'Peredelano Startups',
-	//       description: $translate('home.peredelano.description'),
-	//       link: 'https://t.me/peredelanoconfjunior'
-	//     })
-	//   }
-	//   newEvents.push({
-	//     ...events[i],
-	//     type: 'event',
-	//     image: events[i].image ? `${BASE_URL}/${events[i].image}` : 'https://picsum.photos/200/300'
-	//   })
-	// }
-	// return newEvents
-});
-
-const getFilteredEvents = (
-	events: EventOnPoster[],
-	search: string,
-	country: string,
-	city: string
-) => {
-	if (!search && !country && !city) {
-		return events;
-	}
-
-	const searchSource = (event: EventOnPoster) =>
-		[event.title, event.description, event.location.city, event.location.country]
-			.join(' ')
-			.toLowerCase();
-
-	return events.filter((event) => {
-		const eventData = searchSource(event);
-		return (
-			(search && eventData.includes(search.toLowerCase())) ||
-			(country && eventData.includes(country.toLowerCase())) ||
-			(city && eventData.includes(city.toLowerCase()))
-		);
-	});
-};
 
 const onButtonClick = () => {
 	if (useCookie('token').value) {
@@ -169,51 +57,28 @@ const now = Date.now();
 </script>
 
 <template>
-	<div>
-		<div class="location">
+	<div class="main-page">
+		<HomeSearch
+			v-model:search="search"
+			class="main-page__search"
+		/>
+		<div class="main-page__location">
 			<HomeUserLocation />
 		</div>
-		<section class="search">
-			<h1 class="search__title">
-				{{ $translate('home.title') }}
-			</h1>
-			<CommonInput
-				v-model="search"
-				class="search__field"
-				input-class="input is-info search-input"
-				input-type="text"
-				input-name="search"
-				:input-placeholder="$translate('global.search')"
-			/>
-			<div class="search__container">
-				<CommonInput
-					v-model="country"
-					class="search__field"
-					input-type="datalist"
-					input-name="country"
-					:input-placeholder="$translate('global.country')"
-					:options-list="countries"
-				/>
-				<CommonInput
-					:key="country"
-					v-model="city"
-					:input-disabled="!country"
-					class="search__field"
-					input-type="datalist"
-					input-name="city"
-					:input-placeholder="$translate('global.city')"
-					:options-list="cities"
-				/>
-			</div>
-		</section>
 
-		<ul class="card-list">
+		<h1 class="main-page__title">
+			{{ $translate('home.title') }}
+		</h1>
+
+		<HomeFilter class="main-page__filter" />
+
+		<ul class="main-page__card-list">
 			<li
-				v-for="event in eventsWithAdd"
+				v-for="event in posterEvents"
 				:key="event.id"
 			>
 				<HomeEventPreviewCard
-					:class="event.date < now ? 'expired' : ''"
+					:class="{ expired: event.date < now }"
 					:event-data="event"
 				/>
 				<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
@@ -233,51 +98,51 @@ const now = Date.now();
 </template>
 
 <style lang="less" scoped>
-.location {
-	display: flex;
-	width: 100%;
+.main-page {
 	padding-top: 16px;
-	padding-left: var(--padding-side);
-	padding-right: var(--padding-side);
-	margin-bottom: 36px;
-}
 
-.search {
-	padding-left: var(--padding-side);
-	padding-right: var(--padding-side);
-	margin-bottom: 8px;
+	&__search {
+		padding-left: var(--padding-side);
+		padding-right: var(--padding-side);
+		margin-bottom: 40px;
+	}
+
+	&__location {
+		display: flex;
+		width: 100%;
+		padding-left: var(--padding-side);
+		padding-right: var(--padding-side);
+		margin-bottom: 16px;
+	}
 
 	&__title {
 		font-size: var(--font-size-XXL);
 		line-height: 40px;
+		padding-left: var(--padding-side);
+		padding-right: var(--padding-side);
 		margin-bottom: 24px;
 	}
 
-	&__container {
+	&__filter {
+		padding-left: var(--padding-side);
+		padding-right: var(--padding-side);
+		margin-bottom: 24px;
+	}
+
+	&__card-list {
 		display: flex;
-		gap: 15px;
+		flex-direction: column;
+		width: 100%;
 	}
-
-	&__field {
-		margin-bottom: 16px;
-	}
-}
-
-.card-list {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
 }
 
 .add-event-button {
-	position: fixed;
+	position: sticky;
 	bottom: 20px;
-	right: 20px;
+	right: 0;
+	margin-left: auto;
+	margin-right: 20px;
 	z-index: 1;
-}
-
-.modal-card {
-	background-color: var(--background-color);
 }
 
 .expired {

@@ -5,7 +5,7 @@ import { api } from '~/utils/axios';
 
 //TODO добавить запись в localStorage для формы ивента
 export const sendFormAboutRegistration = async (data: Registration) => {
-	await api.post('/event/registration', data).then(() => {
+	await api.post('registration/add', data).then(() => {
 		localStorage.setItem('REGISTRATION', 'true');
 		localStorage.setItem('REGISTRATION_DATA', JSON.stringify(data));
 	});

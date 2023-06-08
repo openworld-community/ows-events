@@ -3,6 +3,10 @@ html {
   height: 100%;
 }
 
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 *,
 *::before,
 *::after {
@@ -84,6 +88,9 @@ input,
 optgroup,
 select,
 textarea {
+  //TODO временно, пока нет стилей для outline
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
   font-family: inherit;
   font-size: 100%;
   font-weight: inherit;

@@ -31,7 +31,8 @@ needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
 
 const locationStore = useLocationStore();
 
-const search = ref('');
+const route = useRoute();
+const search = ref(route.query.search?.toString() ?? '');
 const debouncedEventsRequestQuery = refDebounced(
 	computed(() => ({
 		city: locationStore.pickedCity,

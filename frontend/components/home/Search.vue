@@ -5,7 +5,9 @@ defineEmits(['update:search']);
 watch(
 	() => props.search,
 	(search) => {
-		navigateTo({ query: { ...route.query, search: search || 'None' } });
+		navigateTo({
+			query: search ? { ...route.query, search } : { ...route.query, search: undefined }
+		});
 	}
 );
 </script>

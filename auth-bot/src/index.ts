@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 const server = fastify({ logger: true });
 
 const token = process.env.AUTH_TELEGRAM_BOT_TOKEN || '';
+const botName = process.env.AUTH_TELEGRAM_BOT_NAME || '';
 
 if (!token) {
 	// eslint-disable-next-line no-console
@@ -62,7 +63,7 @@ server.get<{
 	};
 	clearTemporaryLogin(request.params.id);
 
-	return reply.redirect(302, `https://t.me/afisha_authorization_bot?start=${request.params.id}`);
+	return reply.redirect(302, `https://t.me/${botName}?start=${request.params.id}`);
 });
 
 server.get<{
@@ -172,7 +173,6 @@ bot.onText(/\/startEmitAuthBot/, (msg) => {
 	bot.sendMessage(chatId, 'You will receive messages from now on');
 });
 
-
 bot.onText(/\/stop/, (msg) => {
 	const chatId = msg.chat.id;
 
@@ -180,7 +180,6 @@ bot.onText(/\/stop/, (msg) => {
 
 	bot.sendMessage(chatId, 'You will not receive any more messages');
 });
-
 
 const emit = (text: string) => {
 	users.getActiveUsers().forEach((user) => {

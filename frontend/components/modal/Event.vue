@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
-import { deleteEventImage, editEvent, postEvent, postEventImage } from '@/services/events.services';
-import { storeToRefs } from 'pinia';
+import { getAllTimezones, getTimezoneByCountryAndCity } from '@/services/timezone.services';
 import { useLocationStore } from '@/stores/location.store';
+import { storeToRefs } from 'pinia';
+import { computed, onMounted, ref, watch } from 'vue';
 import { type EventOnPoster } from '../../../common/types';
-import { getTimezoneByCountryAndCity, getAllTimezones } from '@/services/timezone.services';
 
 const { $translate } = useNuxtApp();
 
 type Props = {
 	dataForEdit?: EventOnPoster;
 	closeEventModal: () => void;
+	refreshEvent: () => void;
 };
 
 const props = defineProps<Props>();
@@ -71,8 +71,8 @@ onMounted(() => {
 });
 
 const setEventData = (data: EventOnPoster) => {
-	const start = timestampParse(data.date, data.timezone);
-	const end = timestampParse(data.date + data.durationInSeconds, data.timezone);
+	const start = timestampDateTimeParse(data.date, data.timezone);
+	const end = timestampDateTimeParse(data.date + data.durationInSeconds, data.timezone);
 
 	inputValues.value.id = data.id;
 	inputValues.value.title = data.title;
@@ -171,37 +171,33 @@ const paramsForSubmit = computed(() => {
 const submitEvent = async () => {
 	isLoading.value = true;
 	try {
-		let imageURL;
-
-		const params = paramsForSubmit.value;
+		let image = '';
+		if (newImageFile.value) {
+			const { data } = await apiRouter.events.image.add.useMutation({
+				image: newImageFile.value
+			});
+			if (data.value?.type === 'success') {
+				image = data.value.data.path;
+			}
+		}
+		const params = Object.assign(paramsForSubmit.value, { image });
 
 		if (props.dataForEdit) {
-			if (newImageFile.value) {
-				if (props.dataForEdit.image) {
-					await deleteEventImage(props.dataForEdit.image);
-				}
-				imageURL = await postEventImage(newImageFile.value as File);
+			if (newImageFile.value && props.dataForEdit.image) {
+				await apiRouter.events.image.delete.useMutation({ path: props.dataForEdit.image });
 			}
-			await editEvent({
-				event: {
-					...params,
-					id: inputValues.value.id,
-					image: imageURL
-				}
+			const { data } = await apiRouter.events.edit.useMutation({
+				event: Object.assign(params, { id: inputValues.value.id })
 			});
+			if (data.value?.type === 'success') {
+				props.refreshEvent();
+			} else {
+				console.error(data.value?.errors);
+			}
 		} else {
-			imageURL = await postEventImage(newImageFile.value as File);
-
-			const res = await postEvent({
-				event: {
-					...params,
-					image: imageURL
-				}
-			});
-
-			if (res.type === 'success') {
-				const id = res.data.id;
-				await navigateTo(`/event/${id}`);
+			const { data } = await apiRouter.events.add.useMutation({ event: params });
+			if (data.value?.type === 'success') {
+				await navigateTo(`/event/${data.value.data.id}`);
 			}
 		}
 

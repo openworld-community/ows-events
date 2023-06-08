@@ -33,7 +33,7 @@ server.register(Static, {
 });
 
 server.register(Static, {
-	root: path.join(__dirname, './assets/img'),
+	root: path.join(__dirname, '../assets/img'),
 	prefix: '/image/',
 	decorateReply: false
 });

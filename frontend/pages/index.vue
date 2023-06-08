@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
-import EventModal from '../components/modal/Event.vue';
+import { computed } from 'vue';
+import { UseModalOptions, VueFinalModal, useModal } from 'vue-final-modal';
 import NeedAuthorize from '~/components/modal/NeedAuthorize.vue';
 import { useEventsStore } from '~/stores/events.store';
+import EventModal from '../components/modal/Event.vue';
 
 const { $translate } = useNuxtApp();
 
@@ -34,7 +34,18 @@ const route = useRoute();
 const eventsStore = useEventsStore();
 
 const events = computed(() => eventsStore.events);
-
+const debouncedEventsRequestQuery = refDebounced(
+	computed(() => ({
+		city: city.value,
+		country: country.value,
+		searchLine: search.value
+	})),
+	500,
+	{ maxWait: 5000 }
+);
+const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
+	query: debouncedEventsRequestQuery
+});
 await eventsStore.loadPosterEvents();
 
 const onButtonClick = () => {

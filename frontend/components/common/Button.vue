@@ -1,123 +1,279 @@
 <script setup lang="ts">
-import { type PropType } from 'vue';
+import { computed, type PropType } from 'vue';
+import NuxtLink from '#app/components/nuxt-link';
+import { IconDefaultParams } from '@/constants/defaultValues/icon';
 
-type ButtonType = 'button' | 'submit' | 'reset' | undefined;
+const emit = defineEmits(['click']);
+
+type LinkObjectType = {
+	name?: string;
+	path?: string;
+};
+
+type ButtonKind = 'ordinary' | 'success' | 'warning'; // для задания внешнего вида
 
 const props = defineProps({
-  buttonType: {
-    type: String as PropType<ButtonType>,
-    default: 'button'
-  },
-  buttonClass: {
-    type: [String, Array<string>],
-    required: true
-  },
-  buttonText: {
-    type: String,
-    default: ''
-  },
-  isActive: {
-    type: Boolean,
-    default: true
-  },
-  isLoading: {
-    type: Boolean,
-    default: false
-  },
-  iconName: {
-    type: String,
-    default: ''
-  },
-  href: {
-    type: String,
-    default: ''
-  }
+	buttonKind: {
+		// для обычных кнопок задает внешний вид согласно стайл-гайду, для кнопок-инонок раскрашивает в соответствующие цвета
+		type: String as PropType<ButtonKind>,
+		default: 'ordinary'
+	},
+	buttonText: {
+		type: String as PropType<string>,
+		default: ''
+	},
+	link: {
+		// если это ссылка
+		type: [String, Object] as PropType<string | LinkObjectType>,
+		default: ''
+	},
+	isExternalLink: {
+		// если необходимо открыть в новом окне
+		type: Boolean as PropType<boolean>,
+		default: false
+	},
+	isRound: {
+		// если кнопка круглая
+		type: Boolean as PropType<boolean>,
+		default: false
+	},
+	isIcon: {
+		// если компонент выглядит, как иконка
+		type: Boolean as PropType<boolean>,
+		default: false
+	},
+	iconName: {
+		// можно передать иконку в кнопку или сделать кнопкой-иконкой
+		type: String as PropType<string>,
+		default: ''
+	},
+	iconWidth: {
+		type: [String, Number] as PropType<string | number>,
+		default: IconDefaultParams.WIDTH
+	},
+	iconHeight: {
+    type: [String, Number] as PropType<string | number>,
+		default: IconDefaultParams.HEIGHT
+	},
+	alt: {
+		type: String as PropType<string>,
+		default: ''
+	},
+	isDisabled: {
+		type: Boolean as PropType<boolean>,
+		default: false
+	},
+	isLoading: {
+		type: Boolean as PropType<boolean>,
+		default: false
+	}
+});
+
+const loaderColor = computed(() => {
+	let color = '';
+	if (props.buttonKind === 'success') {
+		color = 'var(--color-white)';
+	}
+	if (props.buttonKind === 'warning') {
+		color = 'var(--color-accent-red)';
+	}
+	if (props.buttonKind === 'ordinary') {
+		color = 'var(--color-text-main)';
+	}
+	return color;
 });
 </script>
 
 <template>
-  <a
-    v-if="props.href"
-    :href="props.href"
-    :class="[
-      'button',
-      props.buttonClass,
-      { 'is-loading': isLoading },
-      !isActive ? `${props.buttonClass}--disabled` : ''
-    ]"
-    :disabled="!props.isActive"
-  >
-    <span class="button__text">{{ props.buttonText }}</span>
-  </a>
-  <button
-    v-else
-    class="button"
-    :type="props.buttonType"
-    :class="[
-      'button',
-      props.buttonClass,
-      { 'is-loading': isLoading },
-      !isActive ? `${props.buttonClass}--disabled` : ''
-    ]"
-    :disabled="!props.isActive"
-  >
-    <span class="button__text">{{ props.buttonText }}</span>
-    <CommonIcon
-      v-if="props.iconName"
-      class="button__icon"
-      :name="props.iconName"
-    />
-  </button>
+	<component
+		:is="link ? NuxtLink : 'button'"
+		:type="link ? null : 'button'"
+		:to="link ? link : null"
+		:target="isExternalLink ? '_blank' : null"
+		:disabled="!link && isDisabled"
+		:class="[
+			isIcon ? 'icon' : `button button__${buttonKind}`,
+			isIcon && buttonKind ? `icon__${buttonKind}` : '',
+			isDisabled ? `button__${buttonKind}--disabled` : '',
+			{ 'button--round': isRound }
+		]"
+		:aria-label="alt ? alt : null"
+		@click="!link && !isDisabled ? emit('click') : null"
+	>
+		<CommonUiLoadSpinner
+			v-if="isLoading"
+			:color="loaderColor"
+			class="loader"
+		/>
+		<CommonIcon
+			v-if="iconName"
+			:class="{ button__icon: buttonText }"
+			:name="iconName"
+			:alt="alt ? alt : null"
+			:width="iconWidth"
+			:height="iconHeight"
+		/>
+		<span
+			v-if="!isIcon"
+			class="button__text"
+		>
+			{{ buttonText }}
+		</span>
+	</component>
 </template>
 
 <style lang="less" scoped>
 .button {
-  display: flex;
-  justify-content: center;
-  border-radius: 24px;
-  padding-top: 7px;
-  padding-left: 16px;
-  padding-right: 0;
-  padding-bottom: 7px;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	height: 40px;
+	border-radius: 24px;
+	padding: 5px 14px;
+	align-items: center;
+	transition: background-color 0.3s ease;
 
-  &__text {
-    margin-right: 16px;
-    font-size: var(--font-size-M);
-  }
+	&--round {
+		width: 56px;
+		height: 56px;
+		border-radius: 50%;
+	}
 
-  &__icon {
-    margin-right: 16px;
-    color: var(--color-input-field);
-  }
+	&__text {
+		font-size: var(--font-size-M);
+	}
 
-  &__success {
-    color: var(--color-white);
-    background-color: var(--color-accent-green-main);
+	&__icon {
+		margin-right: 5px;
+		color: var(--color-input-field);
+	}
 
-    &--inactive {
-      opacity: 0.4;
-    }
+	.loader {
+		margin-right: 10px;
+	}
 
-    &--disabled {
-      opacity: 0.4;
-    }
-  }
+	&__success {
+		color: var(--color-white);
+		background-color: var(--color-accent-green-main);
+		border: 1px solid var(--color-accent-green-main);
 
-  &__ordinary {
-    color: var(--color-text-main);
-    background-color: var(--color-white);
-    border: 1px solid var(--color-input-field);
+		&::v-deep(svg) {
+			color: var(--color-white);
+		}
 
-    &--disabled {
-      color: var(--color-input-field);
-    }
-  }
+		&:hover,
+		&:focus {
+			background-color: var(--color-accent-green-dark);
+			border-color: var(--color-accent-green-dark);
+		}
 
-  &__warning {
-    color: var(--color-accent-red);
-    background-color: var(--color-white);
-    border: 1px solid var(--color-accent-red);
-  }
+		&:active {
+			border-color: var(--color-accent-green-dark);
+			box-shadow: var(--shadow-button-success);
+		}
+
+		&--disabled {
+			opacity: 0.4;
+		}
+	}
+
+	&__ordinary {
+		color: var(--color-text-main);
+		background-color: var(--color-white);
+		border: 1px solid var(--color-input-field);
+
+		&::v-deep(svg) {
+			color: var(--color-text-main);
+		}
+
+		&:hover,
+		&:focus {
+			background-color: var(--color-input-field);
+		}
+
+		&:active {
+			color: var(--color-white);
+			background-color: var(--color-text-main);
+			border-color: var(--color-text-main);
+
+			&::v-deep(svg) {
+				color: var(--color-white);
+			}
+		}
+
+		&--disabled {
+			color: var(--color-input-field);
+
+			&::v-deep(svg) {
+				color: var(--color-input-field);
+			}
+		}
+	}
+
+	&__warning {
+		color: var(--color-accent-red);
+		background-color: var(--color-white);
+		border: 1px solid var(--color-accent-red);
+
+		&::v-deep(svg) {
+			color: var(--color-accent-red);
+		}
+
+		&:hover,
+		&:focus {
+			color: var(--color-white);
+			background-color: var(--color-accent-red);
+			border-color: var(--color-accent-red);
+
+			&::v-deep(svg) {
+				color: var(--color-white);
+			}
+		}
+
+		&:active {
+			background-color: var(--color-accent-red-semitransparent);
+		}
+
+		&--disabled {
+			color: var(--color-input-field);
+			background-color: var(--color-white);
+			border-color: var(--color-input-field);
+
+			&::v-deep(svg) {
+				color: var(--color-input-field);
+			}
+		}
+	}
+}
+
+.icon {
+	display: block;
+	width: max-content;
+	line-height: 0;
+
+	&::v-deep(svg) {
+		color: var(--color-input-field);
+	}
+
+	& + .icon {
+		margin-left: 20px;
+	}
+
+	&__ordinary {
+		&::v-deep(svg) {
+			color: var(--color-text-main);
+		}
+	}
+
+	&__success {
+		&::v-deep(svg) {
+			color: var(--color-accent-green-main);
+		}
+	}
+
+	&__warning {
+		&::v-deep(svg) {
+			color: var(--color-accent-red);
+		}
+	}
 }
 </style>

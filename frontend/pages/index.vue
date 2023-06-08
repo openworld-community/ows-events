@@ -1,66 +1,60 @@
 <script setup lang="ts">
 import { type EventOnPoster } from '../../common/types';
 import { computed, ref, watch } from 'vue';
-import { getEvents, getEventsByParams } from '@/services/events.services';
 import { useLocationStore } from '@/stores/location.store';
 import { storeToRefs } from 'pinia';
-import { useModal } from 'vue-final-modal';
+import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '../components/modal/Event.vue';
 import NeedAuthorize from '~/components/modal/NeedAuthorize.vue';
 
+const { $translate } = useNuxtApp();
+
+useHead({
+	title: `${$translate('meta.title')} / ${$translate('meta.home.title')}`
+});
 definePageMeta({ name: RouteNameEnum.HOME });
 
 const {
 	open: openEventModal,
 	close: closeEventModal,
 	patchOptions: eventModalPatch
-} = useModal({ component: EventModal });
+} = useModal({ component: EventModal } as UseModalOptions<
+	InstanceType<typeof VueFinalModal>['$props']
+>);
 eventModalPatch({ attrs: { closeEventModal } });
 const {
 	open: openNeedAuthorizeModal,
 	close: closeNeedAuthorizeModal,
 	patchOptions: needAuthorizeModalPatch
-} = useModal({ component: NeedAuthorize });
+} = useModal({ component: NeedAuthorize } as UseModalOptions<
+	InstanceType<typeof VueFinalModal>['$props']
+>);
 needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
-
-let lazyLoadTimeout: ReturnType<typeof setTimeout> | undefined;
 
 const locationStore = useLocationStore();
 locationStore.loadCountries();
 const { countries, cities, pickedCountry, pickedCity } = storeToRefs(locationStore);
 
 const route = useRoute();
-const posterEvents = ref<EventOnPoster[]>([]);
 
 const searchFromRoute = route.query.search?.toString();
-const search = ref<string>(searchFromRoute === 'None' ? '' : searchFromRoute || '');
-const country = ref<string>(pickedCountry.value || '');
-const city = ref<string>(pickedCity.value || '');
-
+const search = ref(searchFromRoute === 'None' ? '' : searchFromRoute ?? '');
+const country = ref(pickedCountry.value ?? '');
+const city = ref(pickedCity.value ?? '');
+const debouncedEventsRequestQuery = refDebounced(
+	computed(() => ({
+		city: city.value,
+		country: country.value,
+		searchLine: search.value
+	})),
+	500,
+	{ maxWait: 5000 }
+);
+const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
+	query: debouncedEventsRequestQuery
+});
 locationStore.pickCountry(pickedCountry.value);
-
-const loadPosterEvents = async () => {
-	if (search.value || country.value || city.value) {
-		posterEvents.value = await getEventsByParams({
-			searchLine: search.value,
-			country: country.value,
-			city: city.value
-		});
-	} else {
-		posterEvents.value = await getEvents();
-	}
-};
-
-await loadPosterEvents();
-
-const planToLoadEvents = () => {
-	lazyLoadTimeout && clearTimeout(lazyLoadTimeout);
-
-	lazyLoadTimeout = setTimeout(async () => {
-		loadPosterEvents();
-	}, 500);
-};
 
 watch(
 	pickedCountry,
@@ -73,7 +67,6 @@ watch(
 watch(
 	search,
 	async (_search) => {
-		planToLoadEvents();
 		await navigateTo({ query: { ...route.query, search: _search || 'None' } });
 	},
 	{ deep: true }
@@ -83,9 +76,7 @@ watch(
 	country,
 	async (_country) => {
 		locationStore.pickCountry(_country);
-
 		city.value = pickedCity.value;
-		planToLoadEvents();
 	},
 	{ deep: true }
 );
@@ -94,12 +85,12 @@ watch(
 	city,
 	async (_city) => {
 		locationStore.pickCity(_city);
-		planToLoadEvents();
 	},
 	{ deep: true }
 );
 
 const filteredValues = computed(() => {
+	if (!posterEvents.value) return [];
 	return getFilteredEvents(posterEvents.value, search.value, country.value, city.value);
 });
 
@@ -229,13 +220,13 @@ const now = Date.now();
 			</li>
 		</ul>
 
-		<CommonButtonIcon
+		<CommonButton
 			class="add-event-button"
-			icon-name="button-plus"
-			icon-width="56"
-			icon-height="56"
+			button-kind="success"
+			is-round
+			icon-name="plus"
+			:alt="$translate('home.button.add_event_aria')"
 			aria-haspopup="true"
-			:aria-label="$translate('home.button.add_event_aria')"
 			@click="onButtonClick"
 		/>
 	</div>

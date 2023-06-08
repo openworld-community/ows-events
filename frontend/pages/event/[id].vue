@@ -1,23 +1,24 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { type EventOnPoster } from '../../../common/types/event';
-import { deleteEvent, getEvent } from '@/services/events.services';
 import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
 import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
-import { UserInfo } from '~/../common/types/user';
+import { UserInfo } from '@/../common/types/user';
 
-definePageMeta({
-	name: RouteNameEnum.EVENT
-});
+definePageMeta({ name: RouteNameEnum.EVENT });
 
 const route = useRoute();
 const id = route.params.id as string;
 
 const user = useCookie<UserInfo | null>('user');
 
-const posterEvent = ref<EventOnPoster>(await getEvent(id));
+const { data: posterEvent, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ id });
+
+const { $translate } = useNuxtApp();
+
+useHead({
+	title: `${$translate('meta.title')} / ${posterEvent.value?.title}`
+});
 
 const {
 	open: openRegistrationModal,
@@ -36,30 +37,33 @@ const {
 } = useModal({ component: EventModal } as UseModalOptions<
 	InstanceType<typeof VueFinalModal>['$props']
 >);
-patchEventModal({ attrs: { closeEventModal, dataForEdit: posterEvent.value } });
+patchEventModal({
+	attrs: {
+		dataForEdit: posterEvent,
+		closeEventModal,
+		refreshEvent
+	}
+});
 
 const deleteCard = async () => {
-	await deleteEvent(id);
-	await navigateTo({ name: RouteNameEnum.HOME });
+	const { data } = await apiRouter.events.delete.useMutation({ id });
+	if (data.value?.type === 'success') {
+		await navigateTo({ name: RouteNameEnum.HOME });
+	} else {
+		console.error(data.value?.errors);
+	}
 };
-
-const openLocation = (url: string) => {
-	window.open(url, '_blank');
-};
-
-//TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
-const templateURL = computed(
-	() =>
-		`https://www.google.com/maps/place/${posterEvent.value?.location.city}+${posterEvent.value?.location.country}`
-);
 </script>
 
 <template>
-	<div class="event">
+	<div
+		v-if="posterEvent"
+		class="event"
+	>
 		<div class="=event-image event-image__container">
 			<span class="event-image__price">{{ posterEvent.price }} €</span>
 			<img
-				:src="getEventImage(posterEvent)"
+				:src="posterEvent ? getEventImage(posterEvent) : undefined"
 				:alt="$translate('event.image.event')"
 				class="event-image__image"
 			/>
@@ -84,16 +88,19 @@ const templateURL = computed(
 					}}
 				</span>
 				<span v-else>
-					{{ convertToLocaleString(posterEvent.date, posterEvent.timezone) }}
+					{{
+						convertToLocaleString(posterEvent.date ?? Date.now(), posterEvent.timezone)
+					}}
 				</span>
 				<br />
 				({{ posterEvent.timezone?.timezoneOffset }}
 				{{ posterEvent.timezone?.timezoneName }})
 			</p>
-
+			<!-- TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса -->
 			<NuxtLink
-				@click.prevent="openLocation(templateURL)"
 				class="event-description__geolink"
+				:to="`https://www.google.com/maps/place/${posterEvent.location.city}+${posterEvent.location.country}`"
+				target="_blank"
 			>
 				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
 			</NuxtLink>
@@ -106,39 +113,49 @@ const templateURL = computed(
 			<template v-if="posterEvent.url">
 				<CommonButton
 					v-if="posterEvent.url !== 'self'"
+					button-kind="success"
 					class="event-actions__button"
-					button-class="button__success"
 					:button-text="$translate('event.button.contact')"
-					:href="posterEvent.url"
-					target="_blank"
+					:link="posterEvent.url"
+					is-external-link
 				/>
 
 				<CommonButton
 					v-else
+					button-kind="success"
 					class="event-actions__button"
-					button-class="button__success"
 					:button-text="$translate('event.button.register')"
-					@click="openRegistrationModal()"
+					@click="openRegistrationModal"
 				/>
 			</template>
 
-			<template v-if="user?.id === posterEvent.creatorId">
+			<div
+				v-if="user?.id === posterEvent.creatorId"
+				class="event-actions__manage"
+			>
 				<CommonButton
 					class="event-actions__button"
-					button-class="button__success"
 					:button-text="$translate('event.button.edit')"
-					@click="openEventModal()"
+					icon-name="edit"
+					icon-width="16"
+					icon-height="16"
+					@click="openEventModal"
 				/>
 
 				<CommonButton
 					class="event-actions__button"
-					button-class="button__warning"
+					button-kind="warning"
 					:button-text="$translate('event.button.delete')"
+					icon-name="trash"
+					icon-width="16"
+					icon-height="16"
 					@click="deleteCard"
 				/>
-			</template>
+			</div>
 		</div>
 	</div>
+	<!-- todo - временная затычка -->
+	<div v-else>Request errored or pending</div>
 </template>
 
 <style lang="less" scoped>
@@ -157,7 +174,6 @@ const templateURL = computed(
 		width: 100%;
 		flex-direction: column;
 		padding-inline: 0;
-		margin-bottom: 36px;
 
 		&__author {
 			font-size: var(--font-size-XS);
@@ -192,7 +208,9 @@ const templateURL = computed(
 		}
 
 		&__description {
+			max-height: 155px;
 			word-wrap: break-word;
+			overflow-y: auto;
 			font-size: var(--font-size-S);
 			line-height: 20px;
 		}
@@ -201,10 +219,19 @@ const templateURL = computed(
 	&-actions {
 		display: flex;
 		flex-direction: column;
+		background-color: var(--color-white);
 		gap: var(--space-unrelated-items);
 		margin-top: auto;
 
+		&__manage {
+			display: flex;
+			justify-content: center;
+			gap: 10px;
+		}
+
 		&__button {
+			width: 100%;
+			min-width: 165px;
 			height: 40px;
 		}
 	}

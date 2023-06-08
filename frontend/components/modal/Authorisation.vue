@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { UserInfo } from '../../../common/types/user';
+import { v4 } from 'uuid';
+import { AUTH_SERVER_URL, SERVER_URL } from '~/constants/url';
 
 type Props = {
 	close: () => void;
 	isAuthorized: boolean;
-	authorize: () => void;
 	deauthorize: () => void;
 };
 
@@ -16,6 +17,9 @@ const username =
 	(user.value?.firstNickName || user.value?.lastNickName
 		? user.value?.firstNickName + ' ' + user.value?.lastNickName
 		: null);
+
+const temporaryId = v4();
+const authLink: string = `${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backurl=${encodeURIComponent(`${SERVER_URL}/postauth/${temporaryId}`)}`;
 </script>
 
 <template>
@@ -29,28 +33,42 @@ const username =
 		:esc-to-close="true"
 		:lock-scroll="false"
 	>
-		<NuxtLink
-			@click="isAuthorized ? props.deauthorize() : props.authorize()"
-			class="authorisation-button"
-		>
-			<p
-				class="authorisation-button__user"
+		<div>
+			<NuxtLink
 				v-if="isAuthorized"
+				class="authorisation-button"
+				@click="props.deauthorize()"
 			>
-				{{ username }}
-			</p>
-			<div class="authorisation-button__container">
-				<p class="authorisation-button__text">
-					{{ isAuthorized ? 'Выйти' : 'Войти' }}
+				<p class="authorisation-button__user">
+					{{ username }}
 				</p>
-				<CommonIcon
-					class="authorisation-button__icon"
-					:name="isAuthorized ? 'sign-out' : 'sign-in'"
-					width="20"
-					height="20"
-				/>
-			</div>
-		</NuxtLink>
+				<div class="authorisation-button__container">
+					<p class="authorisation-button__text">Выйти</p>
+					<CommonIcon
+						class="authorisation-button__icon"
+						name="sign-out"
+						width="20"
+						height="20"
+					/>
+				</div>
+			</NuxtLink>
+			<NuxtLink
+				v-else
+				:to="authLink"
+        target="_blank"
+        class="authorisation-button"
+			>
+				<div class="authorisation-button__container">
+					<p class="authorisation-button__text">Войти</p>
+					<CommonIcon
+						class="authorisation-button__icon"
+						name="sign-in"
+						width="20"
+						height="20"
+					/>
+				</div>
+			</NuxtLink>
+		</div>
 	</CommonModalWrapper>
 </template>
 

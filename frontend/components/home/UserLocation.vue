@@ -40,7 +40,6 @@ const { userLocation } = storeToRefs(useLocationStore());
 
   &__pin {
     color: var(--color-accent-green-main);
-    margin-left: 5px;
     margin-right: 13px;
   }
 

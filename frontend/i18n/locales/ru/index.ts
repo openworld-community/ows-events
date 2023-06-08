@@ -108,7 +108,8 @@ export const defaultTranslation = {
       key_one: ' день',
       key_few: ' дня',
       key_many: ' дней'
-    }
+    },
+    clock: 'часы'
   },
   header: {
     subscription_expired: '$t(dates.day.key) до конца подписки'

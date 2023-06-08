@@ -3,14 +3,13 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import { computed } from 'vue';
 import { UseModalOptions, VueFinalModal, useModal } from 'vue-final-modal';
 import NeedAuthorize from '~/components/modal/NeedAuthorize.vue';
-import { useEventsStore } from '~/stores/events.store';
+import { useLocationStore } from '~/stores/location.store';
 import EventModal from '../components/modal/Event.vue';
 
 const { $translate } = useNuxtApp();
-
-useHead({
-	title: `${$translate('meta.title')} / ${$translate('meta.home.title')}`
-});
+// todo - use a function syntax, for now its bugged, awaiting issue reply
+// https://github.com/nuxt/nuxt/issues/21457
+useHead({ titleTemplate: `%s / ${$translate('meta.home.title')}` });
 definePageMeta({ name: RouteNameEnum.HOME });
 
 const {
@@ -30,14 +29,13 @@ const {
 >);
 needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
 
-const route = useRoute();
-const eventsStore = useEventsStore();
+const locationStore = useLocationStore();
 
-const events = computed(() => eventsStore.events);
+const search = ref('');
 const debouncedEventsRequestQuery = refDebounced(
 	computed(() => ({
-		city: city.value,
-		country: country.value,
+		city: locationStore.pickedCity,
+		country: locationStore.pickedCountry,
 		searchLine: search.value
 	})),
 	500,
@@ -46,7 +44,6 @@ const debouncedEventsRequestQuery = refDebounced(
 const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 	query: debouncedEventsRequestQuery
 });
-await eventsStore.loadPosterEvents();
 
 const onButtonClick = () => {
 	if (useCookie('token').value) {
@@ -60,7 +57,10 @@ const now = Date.now();
 
 <template>
 	<div class="main-page">
-		<HomeSearch class="main-page__search" />
+		<HomeSearch
+			v-model:search="search"
+			class="main-page__search"
+		/>
 		<div class="main-page__location">
 			<HomeUserLocation />
 		</div>
@@ -73,11 +73,11 @@ const now = Date.now();
 
 		<ul class="main-page__card-list">
 			<li
-				v-for="event in events"
+				v-for="event in posterEvents"
 				:key="event.id"
 			>
 				<HomeEventPreviewCard
-					:class="event.date < now ? 'expired' : ''"
+					:class="{ expired: event.date < now }"
 					:event-data="event"
 				/>
 				<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->

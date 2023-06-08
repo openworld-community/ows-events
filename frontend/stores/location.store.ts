@@ -93,12 +93,12 @@ const useLocationStore = defineStore('location', {
 
 			if (!this.pickedCountry) return;
 
-			await this.loadCitiesByCountry(this.pickedCountry);
-			await this.pickCountry(this.pickedCountry);
+			this.loadCitiesByCountry(this.pickedCountry);
+			this.pickCountry(this.pickedCountry);
 
 			if (!this.pickedCity) return;
 
-			await this.pickCity(this.pickedCity);
+			this.pickCity(this.pickedCity);
 		}
 	}
 });

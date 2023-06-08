@@ -6,7 +6,7 @@ watch(
 	() => props.search,
 	(search) => {
 		navigateTo({
-			query: { ...route.query, search: search ? search : undefined }
+			query: { ...route.query, search: search || undefined }
 		});
 	}
 );

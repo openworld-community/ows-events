@@ -21,6 +21,15 @@ useHead({
 	title: `${$translate('meta.title')} / ${posterEvent.value?.title}`
 });
 
+const deleteCard = async () => {
+	const { data } = await apiRouter.events.delete.useMutation({ id });
+	if (data.value?.type === 'success') {
+		await navigateTo({ name: RouteNameEnum.HOME });
+	} else {
+		console.error(data.value?.errors);
+	}
+};
+
 const {
 	open: openRegistrationModal,
 	close: closeRegistrationModal,
@@ -55,18 +64,11 @@ const {
 >);
 patchDeleteEventModal({
 	attrs: {
-		closeDeleteEventModal
+		close: closeDeleteEventModal,
+		removeEvent: deleteCard
 	}
 });
 
-const deleteCard = async () => {
-	const { data } = await apiRouter.events.delete.useMutation({ id });
-	if (data.value?.type === 'success') {
-		await navigateTo({ name: RouteNameEnum.HOME });
-	} else {
-		console.error(data.value?.errors);
-	}
-};
 </script>
 
 <template>

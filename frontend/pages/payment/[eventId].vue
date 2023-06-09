@@ -16,9 +16,9 @@ definePageMeta({ name: RouteNameEnum.PAYMENT_INFO });
 const route = useRoute();
 const eventId = route.params.eventId as string;
 
-const paymentInfo = ref<{ event: EventOnPoster; paymantsInfo: PaymentInfo } | null>(null);
+const paymentInfo = ref<{ event: EventOnPoster; paymentsInfo: PaymentInfo } | null>(null);
 
-const loadPaymantInfo = async () => {
+const loadPaymentInfo = async () => {
 	const response = await getEventPayment(eventId);
 	if (response.type === 'success') {
 		paymentInfo.value = response.data;
@@ -27,14 +27,13 @@ const loadPaymantInfo = async () => {
 	}
 };
 
-loadPaymantInfo();
+await loadPaymentInfo();
 </script>
 
 <template>
 	<main>
-		<section v-if="eventId && paymentInfo && paymentInfo.paymantsInfo">
-			{{ paymentInfo.paymantsInfo.type }}
-			<div v-if="paymentInfo.paymantsInfo.type === 'table'">
+		<section v-if="eventId && paymentInfo && paymentInfo.paymentsInfo">
+			<div v-if="paymentInfo.paymentsInfo.type === 'table'">
 				<h2 class="title">Информация об оплате: {{ paymentInfo.event.title }}</h2>
 				<p>
 					Стоимость билета зависит от валюты и будет повышаться по мере приближения
@@ -66,7 +65,7 @@ loadPaymantInfo();
 					</thead>
 					<tbody>
 						<tr
-							v-for="row of paymentInfo.paymantsInfo.rows"
+							v-for="row of paymentInfo.paymentsInfo.rows"
 							:key="row.toString()"
 						>
 							<td>{{ row.name }}</td>
@@ -88,8 +87,8 @@ loadPaymantInfo();
 				</table>
 			</div>
 
-			<div v-else>
-				<Markdown :source="paymentInfo.paymantsInfo.source" />
+			<div v-else-if="paymentInfo.paymentsInfo.type === 'markdown'">
+				<Markdown :source="paymentInfo.paymentsInfo.source" />
 			</div>
 		</section>
 		<div v-else>Эвент не найден:(</div>
@@ -102,6 +101,14 @@ main {
 	flex-direction: column;
 	align-items: center;
 	padding: 10px;
+
+	:deep(h1) {
+		font-size: 20px;
+	}
+
+	:deep(h2) {
+		font-size: 20px;
+	}
 
 	section {
 		max-width: 500px;

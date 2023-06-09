@@ -4,6 +4,7 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
 import { UserInfo } from '@/../common/types/user';
+import DeleteEvent from '../../components/modal/DeleteEvent.vue'
 
 definePageMeta({ name: RouteNameEnum.EVENT });
 
@@ -42,6 +43,19 @@ patchEventModal({
 		dataForEdit: posterEvent,
 		closeEventModal,
 		refreshEvent
+	}
+});
+
+const {
+	open: openDeleteEventModal,
+	close: closeDeleteEventModal,
+	patchOptions: patchDeleteEventModal
+} = useModal({ component: DeleteEvent } as UseModalOptions<
+	InstanceType<typeof VueFinalModal>['$props']
+>);
+patchDeleteEventModal({
+	attrs: {
+		closeDeleteEventModal
 	}
 });
 
@@ -149,7 +163,7 @@ const deleteCard = async () => {
 					icon-name="trash"
 					icon-width="16"
 					icon-height="16"
-					@click="deleteCard"
+					@click="openDeleteEventModal"
 				/>
 			</div>
 		</div>

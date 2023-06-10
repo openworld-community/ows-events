@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { InputValue } from './types/types';
-import {PropType} from 'vue';
 
 defineOptions({
 	inheritAttrs: false
@@ -9,43 +8,42 @@ defineOptions({
 const props = defineProps({
 	className: {
 		type: String,
-		default: '',
+		default: ''
 	},
 	modelValue: {
 		type: String,
-		default: '',
+		default: ''
 	},
 	name: {
 		type: String,
-		required: true,
+		required: true
 	},
 	type: {
 		type: String as PropType<InputValue>,
-		default: 'text',
+		default: 'text'
 	},
 	placeholder: {
 		type: String,
-		default: '',
+		default: ''
 	},
 	label: {
 		type: String,
-		default: '',
+		default: ''
 	},
 	disabled: {
 		type: Boolean,
-		default: false,
+		default: false
 	},
 	error: {
 		type: String,
 		default: ''
-	},
-})
+	}
+});
 
 const emit = defineEmits(['update:modelValue']);
 const updateValue = (event: Event) => {
 	emit('update:modelValue', (event.target as HTMLInputElement).value);
 };
-
 </script>
 
 <template>

@@ -1,28 +1,26 @@
 <script setup lang="ts">
-import { UserInfo } from '../../../common/types/user';
-import { getToken, getUserInfoByToken } from '~/services/auth';
 import { RouteNameEnum } from '~/constants/enums/route';
+import type { UserInfo } from '../../../common/types/user';
 
 const route = useRoute();
-const eventId = route.params.id as string;
-const user = useCookie<UserInfo | null>('user');
+const userID = getFirstParam(route.params.id);
+const userCookie = useCookie<UserInfo | null>('user');
 const tokenCookie = useCookie<string>('token');
-try {
-	const token = await getToken(eventId);
-	if (token) {
-		tokenCookie.value = token as string;
-
-		user.value = (await getUserInfoByToken(token)) as UserInfo;
-
-		navigateTo({name: RouteNameEnum.HOME});
+const { data: token } = await apiRouter.auth.getToken.useQuery({ id: userID });
+if (!token.value) {
+	console.error('No token retrieved');
+} else {
+	tokenCookie.value = token.value;
+	const { data: user } = await apiRouter.auth.getUser.useQuery({ userToken: token.value });
+	if (!user.value) {
+		console.error('No user data retrieved');
+	} else {
+		userCookie.value = user.value;
 	}
-} catch (e) {
-	console.error(e);
 }
+await navigateTo({ name: RouteNameEnum.HOME });
 </script>
 
 <template>
 	<main></main>
 </template>
-
-<style lang="less" scoped></style>

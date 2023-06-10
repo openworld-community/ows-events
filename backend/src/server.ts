@@ -86,11 +86,12 @@ server.get<{
 	Body: UserInfo;
 }>('/api/user/info', async (request) => {
 	const userEntity = users.find((u) => u.token === request.query.token);
+	if (!userEntity) return null;
 	return {
-		firstNickName: userEntity?.firstNickName,
-		lastNickName: userEntity?.lastNickName,
-		userNickName: userEntity?.userNickName,
-		id: userEntity?.id
+		firstNickName: userEntity.firstNickName,
+		lastNickName: userEntity.lastNickName,
+		userNickName: userEntity.userNickName,
+		id: userEntity.id
 	};
 });
 

@@ -4,8 +4,8 @@ const props = defineProps<{ search: string }>();
 defineEmits(['update:search']);
 watch(
 	() => props.search,
-	(search) => {
-		navigateTo({
+	async (search) => {
+		await navigateTo({
 			query: { ...route.query, search: search || undefined }
 		});
 	}

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { UserInfo } from '../../../common/types/user';
+import type { UserInfo } from '../../../common/types/user';
 import { v4 } from 'uuid';
 import { AUTH_SERVER_URL, SERVER_URL } from '~/constants/url';
 
@@ -19,7 +19,9 @@ const username =
 		: null);
 
 const temporaryId = v4();
-const authLink: string = `${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backurl=${encodeURIComponent(`${SERVER_URL}/postauth/${temporaryId}`)}`;
+const authLink: string = `${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backurl=${encodeURIComponent(
+	`${SERVER_URL}/postauth/${temporaryId}`
+)}`;
 </script>
 
 <template>
@@ -55,8 +57,8 @@ const authLink: string = `${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backur
 			<NuxtLink
 				v-else
 				:to="authLink"
-        target="_blank"
-        class="authorisation-button"
+				target="_blank"
+				class="authorisation-button"
 			>
 				<div class="authorisation-button__container">
 					<p class="authorisation-button__text">Войти</p>

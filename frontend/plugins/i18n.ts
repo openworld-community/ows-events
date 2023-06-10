@@ -19,6 +19,7 @@ export default defineNuxtPlugin(({ vueApp }) => {
 	}
 
 	function translate(key: TranslationKeys) {
+		// todo - this invokes composable for every translation call, not for every component as it should be >:(
 		const { t } = useTranslation();
 		return t(key);
 	}

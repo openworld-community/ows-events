@@ -1,20 +1,17 @@
 <script lang="ts" setup>
-import {Props} from "~/components/common/ui/TextArea/types";
+import type { Props } from '~/components/common/ui/TextArea/types';
 
 defineOptions({
 	inheritAttrs: false
 });
 
-withDefaults(
-	defineProps<Props>(),
-	{
-		className: '',
-		modelValue: '',
-		placeholder: '',
-		label: '',
-		error: ''
-	}
-);
+withDefaults(defineProps<Props>(), {
+	className: '',
+	modelValue: '',
+	placeholder: '',
+	label: '',
+	error: ''
+});
 
 const emit = defineEmits(['update:modelValue']);
 const updateValue = (event: Event) => {

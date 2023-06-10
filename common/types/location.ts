@@ -3,3 +3,8 @@ export type UserLocation = {
 	city?: string;
 	country?: string;
 };
+
+export type Timezone = {
+	timezoneName: string;
+	timezoneOffset: string;
+};

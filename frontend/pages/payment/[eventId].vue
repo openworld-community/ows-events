@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { getEventPayment } from '@/services/payment.services';
 import { type EventOnPoster } from '../../../common/types';
 import { type PaymentInfo } from '../../../common/types/payment-info';
 import { RouteNameEnum } from '@/constants/enums/route';
@@ -14,17 +13,16 @@ useHead({
 definePageMeta({ name: RouteNameEnum.PAYMENT_INFO });
 
 const route = useRoute();
-const eventId = route.params.eventId as string;
+const eventId = getFirstParam(route.params.eventId);
 
 const paymentInfo = ref<{ event: EventOnPoster; paymentsInfo: PaymentInfo } | null>(null);
 
 const loadPaymentInfo = async () => {
-	const response = await getEventPayment(eventId);
-	if (response.type === 'success') {
-		paymentInfo.value = response.data;
-	} else {
-		console.error(response.errors);
-	}
+	const { data } = await apiRouter.payment.get.useQuery({ eventId });
+	if (!data.value) return console.error('No payment info retrieved');
+	if (data.value.type !== 'success') return console.error(data.value.errors);
+
+	paymentInfo.value = data.value.data;
 };
 
 await loadPaymentInfo();

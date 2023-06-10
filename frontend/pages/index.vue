@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '@/constants/enums/route';
 import { computed } from 'vue';
-import { UseModalOptions, VueFinalModal, useModal } from 'vue-final-modal';
+import { type UseModalOptions, VueFinalModal, useModal } from 'vue-final-modal';
 import NeedAuthorize from '~/components/modal/NeedAuthorize.vue';
 import { useLocationStore } from '~/stores/location.store';
 import EventModal from '../components/modal/Event.vue';
-
 const { $translate } = useNuxtApp();
 useHead({ titleTemplate: `%s / ${$translate('meta.home.title')}` });
 definePageMeta({ name: RouteNameEnum.HOME });

@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '@/constants/enums/route';
 import { computed } from 'vue';
-import { UseModalOptions, VueFinalModal, useModal } from 'vue-final-modal';
+import { type UseModalOptions, VueFinalModal, useModal } from 'vue-final-modal';
 import NeedAuthorize from '~/components/modal/NeedAuthorize.vue';
 import { useLocationStore } from '~/stores/location.store';
 import EventModal from '../components/modal/Event.vue';
-
 const { $translate } = useNuxtApp();
-// todo - use a function syntax, for now its bugged, awaiting issue reply
-// https://github.com/nuxt/nuxt/issues/21457
 useHead({ titleTemplate: `%s / ${$translate('meta.home.title')}` });
 definePageMeta({ name: RouteNameEnum.HOME });
 
@@ -65,11 +62,9 @@ const now = Date.now();
 		<div class="main-page__location">
 			<HomeUserLocation />
 		</div>
-
 		<h1 class="main-page__title">
 			{{ $translate('home.title') }}
 		</h1>
-
 		<HomeFilter class="main-page__filter" />
 
 		<ul class="main-page__card-list">

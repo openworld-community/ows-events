@@ -16,16 +16,9 @@ import { registrationApi } from './rest/v1/registration/router';
 import { timezonesApi } from './rest/v1/timezones/router';
 import { vars } from './const/vars';
 
-import fastifySwagger from '@fastify/swagger';
-import { openApiOptions, openApiUiOptions } from './docs';
-import fastifySwaggerUi from '@fastify/swagger-ui';
-
 const server = fastify({
 	logger: true
 });
-
-server.register(fastifySwagger, openApiOptions)
-server.register(fastifySwaggerUi, openApiUiOptions)
 
 server.register(cors, {});
 

@@ -75,10 +75,9 @@ export const addEventSchema = {
     body: {
         type: 'object',
         properties: ItemEvent.properties,
-        required: ['id', 'title', 'description', 'date', 'durationInSeconds',
-            'image', 'location', 'price', 'timezone', 'url']
+        required: ['title']
     },
-    security: [{ bearerAuth: [] }]
+    security: [{ authJWT: [] }]
 }
 
 export const deleteEventSchema = {
@@ -94,7 +93,7 @@ export const deleteEventSchema = {
         properties: { id: { type: 'string' } },
         required: ['id']
     },
-    security: [{ bearerAuth: [] }]
+    security: [{ authJWT: [] }]
 }
 
 export const updateEventSchema = {
@@ -109,7 +108,7 @@ export const updateEventSchema = {
         type: 'object',
         properties: ItemEvent.properties
     },
-    security: [{ bearerAuth: [] }]
+    security: [{ authJWT: [] }]
 }
 
 export const findEventsSchema = {
@@ -130,6 +129,6 @@ export const findEventsSchema = {
             country: { type: 'string' },
         }
     },
-    security: [{ bearerAuth: [] }]
+    security: [{ authJWT: [] }]
 }
 

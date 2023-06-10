@@ -1,6 +1,5 @@
-import { type FastifyPluginAsync } from 'fastify'
-import fastifySwagger, { type FastifyDynamicSwaggerOptions } from '@fastify/swagger'
-import fastifySwaggerUi, { type FastifySwaggerUiOptions } from '@fastify/swagger-ui'
+import { type FastifyDynamicSwaggerOptions } from '@fastify/swagger'
+import { type FastifySwaggerUiOptions } from '@fastify/swagger-ui'
 
 
 export const openApiOptions: FastifyDynamicSwaggerOptions = {
@@ -10,26 +9,21 @@ export const openApiOptions: FastifyDynamicSwaggerOptions = {
             description: 'REST API Peredelano Afisha',
             version: '0.0.1'
         },
-        // components: {
-        //     securitySchemes: {            
-        //         Bearer: {
-        //             type: 'http',
-        //             scheme: 'bearer'
-        //         }
-        //     }
-        // }
+        security: [],
         components: {
             securitySchemes: {
-                bearerAuth: {
-                    type: "http",
-                    scheme: "bearer",
-                    bearerFormat: "JWT"
+                authJWT: {
+                    name: "Authorization",
+                    in: 'header',
+                    type: 'apiKey',
+                    description: 'Для авторизации вставте JWT токен'
                 }
             }
-        }
+        },
     },
-    hideUntagged: true
-}
+    hideUntagged: true,
+};
+
 
 export const openApiUiOptions: FastifySwaggerUiOptions = {
     routePrefix: 'api/docs',

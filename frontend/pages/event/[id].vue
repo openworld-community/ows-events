@@ -60,10 +60,17 @@ const deleteCard = async () => {
 		v-if="posterEvent"
 		class="event"
 	>
-		<div class="=event-image event-image__container">
+		<div
+			:class="[
+				'event-image',
+				'event-image__container',
+				{ 'event-image__container--background': !posterEvent.image }
+			]"
+		>
 			<span class="event-image__price">{{ posterEvent.price }} €</span>
 			<img
-				:src="posterEvent ? getEventImage(posterEvent) : undefined"
+				v-if="posterEvent.image"
+				:src="getEventImage(posterEvent)"
 				:alt="$translate('event.image.event')"
 				class="event-image__image"
 			/>
@@ -135,21 +142,20 @@ const deleteCard = async () => {
 			>
 				<CommonButton
 					class="event-actions__button"
-					:button-text="$translate('event.button.edit')"
-					icon-name="edit"
-					icon-width="16"
-					icon-height="16"
-					@click="openEventModal"
-				/>
-
-				<CommonButton
-					class="event-actions__button"
 					button-kind="warning"
 					:button-text="$translate('event.button.delete')"
 					icon-name="trash"
 					icon-width="16"
 					icon-height="16"
 					@click="deleteCard"
+				/>
+				<CommonButton
+					class="event-actions__button"
+					:button-text="$translate('event.button.edit')"
+					icon-name="edit"
+					icon-width="16"
+					icon-height="16"
+					@click="openEventModal"
 				/>
 			</div>
 		</div>
@@ -241,12 +247,16 @@ const deleteCard = async () => {
 	&__container {
 		display: flex;
 		width: 100%;
-		min-height: 232px;
 		height: 232px;
 		position: relative;
 		line-height: 0;
-		background-color: var(--color-background-secondary);
+		background-color: var(--color-input-field);
 		margin-bottom: 12px;
+
+		&--background {
+			background: url('@/assets/img/event-card@2x.png') center center no-repeat;
+			background-size: cover;
+		}
 	}
 
 	&__image {

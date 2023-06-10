@@ -4,7 +4,7 @@
  * @param fallback значение на случай, если парсинг выдаст ошибку
  * @returns пропаршенный json того типа, который указан в дженерике
  */
-export default function parseJSON<T>(string: string, fallback?: T) {
+export function parseJSON<T>(string: string, fallback?: T) {
 	try {
 		return JSON.parse(string) as T;
 	} catch (e) {
@@ -15,4 +15,8 @@ export default function parseJSON<T>(string: string, fallback?: T) {
 		console.log('Error while parsing JSON');
 		throw e;
 	}
+}
+
+export function getFirstParam(param: ReturnType<typeof useRoute>['params'][string]) {
+	return typeof param === 'string' ? param : param[0];
 }

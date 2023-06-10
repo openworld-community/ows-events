@@ -12,7 +12,8 @@ useHead({
 	title: $translate('meta.title'),
 	meta: [{ name: 'Афиша переделано', content: 'Это площадка для поиска мероприятий' }]
 });
-await useLocationStore().init();
+const { data } = await apiRouter.location.getUserLocation.useQuery();
+await useLocationStore().init(data.value ?? {});
 </script>
 <template>
 	<HeaderCommon />

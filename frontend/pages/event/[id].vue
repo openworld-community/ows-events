@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useModal, UseModalOptions, VueFinalModal } from 'vue-final-modal';
+import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
 import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
-import { UserInfo } from '@/../common/types/user';
+import type { UserInfo } from '@/../common/types/user';
 
 definePageMeta({ name: RouteNameEnum.EVENT });
 

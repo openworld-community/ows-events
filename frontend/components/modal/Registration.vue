@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { sendFormAboutRegistration } from '@/services/event-registration.services';
-import { Registration } from '../../../common/types/registration';
+import type { Registration } from '../../../common/types/registration';
 
 const props = defineProps({
 	eventId: {
@@ -88,10 +86,14 @@ const submit = async () => {
 	if (!submitAvailable.value) {
 		return;
 	}
-
-	await sendFormAboutRegistration(submitInfo.value).then(
-		async () => await navigateTo(`/payment/${submitInfo.value.eventId}`)
-	);
+	apiRouter.events.registration.add
+		.useMutation({ registration: submitInfo.value })
+		.then(async () => {
+			// TODO добавить запись в localStorage для формы ивента (by Emilia)
+			localStorage.setItem('REGISTRATION', 'true');
+			localStorage.setItem('REGISTRATION_DATA', JSON.stringify(submitInfo.value));
+			await navigateTo(`/payment/${submitInfo.value.eventId}`);
+		});
 };
 
 const closeModal = () => {

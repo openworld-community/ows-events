@@ -15,10 +15,16 @@ import { paymentInfoApi } from './rest/v1/payment-info/router';
 import { registrationApi } from './rest/v1/registration/router';
 import { timezonesApi } from './rest/v1/timezones/router';
 import { vars } from './const/vars';
+import { openApiOptions, openApiUiOptions } from './docs';
+import fastifySwagger from '@fastify/swagger'
+import fastifySwaggerUi from '@fastify/swagger-ui'
 
 const server = fastify({
 	logger: true
 });
+
+server.register(fastifySwagger, openApiOptions)
+server.register(fastifySwaggerUi, openApiUiOptions)
 
 server.register(cors, {});
 
@@ -86,12 +92,11 @@ server.get<{
 	Body: UserInfo;
 }>('/api/user/info', async (request) => {
 	const userEntity = users.find((u) => u.token === request.query.token);
-	if (!userEntity) return null;
 	return {
-		firstNickName: userEntity.firstNickName,
-		lastNickName: userEntity.lastNickName,
-		userNickName: userEntity.userNickName,
-		id: userEntity.id
+		firstNickName: userEntity?.firstNickName,
+		lastNickName: userEntity?.lastNickName,
+		userNickName: userEntity?.userNickName,
+		id: userEntity?.id
 	};
 });
 

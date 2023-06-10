@@ -10,12 +10,20 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 <template>
 	<div class="card">
 		<NuxtLink :to="`/event/${props.eventData.id}`">
-			<div class="card__image-container">
+			<div
+				:class="[
+					'card__image-container',
+					{ 'card__image-container--background': !eventData.image }
+				]"
+			>
 				<span class="card__price">{{ props.eventData.price }} €</span>
 				<img
+					v-if="eventData.image"
 					:alt="$translate('home.events.image_alt')"
 					class="card__image"
 					:src="getEventImage(props.eventData)"
+					width="375"
+					height="176"
 				/>
 			</div>
 
@@ -39,7 +47,7 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 			target="_blank"
 			class="card-link card-link__geolink"
 		>
-				{{ props.eventData.location.country }}, {{ props.eventData.location.city }}
+			{{ props.eventData.location.country }}, {{ props.eventData.location.city }}
 		</NuxtLink>
 	</div>
 </template>
@@ -52,11 +60,17 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 
 	&__image-container {
 		display: flex;
-		height: 176px;
-		background-color: var(--color-background-secondary);
-		margin-bottom: 12px;
 		width: 100%;
+		height: 176px;
+		background-color: var(--color-input-field);
+		background-size: cover;
+		margin-bottom: 12px;
 		line-height: 0;
+
+		&--background {
+			background: url('@/assets/img/event-card@2x.png') center center no-repeat;
+			background-size: cover;
+		}
 	}
 
 	&__image {

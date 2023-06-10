@@ -84,26 +84,26 @@ const setEventData = (data: EventOnPoster) => {
 	inputValues.value.startTime = start[1];
 	inputValues.value.endDate = end[0];
 	inputValues.value.endTime = end[1];
-	inputValues.value.image = data.image as string;
+	inputValues.value.image = data.image;
 	inputValues.value.url = data.url || '';
 };
 
 watch(
 	() => inputValues.value.country,
-	async (_country) => {
+	(_country) => {
 		if (!_country) {
 			inputValues.value.city = '';
 			return;
 		}
-		await locationStore.pickCountry(_country);
+		locationStore.pickCountry(_country);
 	},
 	{ deep: true }
 );
 
 watch(
 	() => inputValues.value.city,
-	async (_city) => {
-		await locationStore.pickCity(_city);
+	(_city) => {
+		locationStore.pickCity(_city);
 	},
 	{ deep: true }
 );
@@ -183,6 +183,8 @@ const submitEvent = async () => {
 		const params = Object.assign(paramsForSubmit.value, { image });
 
 		if (props.dataForEdit) {
+			console.log(newImageFile.value); // new value
+			console.log(props.dataForEdit.image); // og value
 			if (!newImageFile.value && props.dataForEdit.image) {
 				await apiRouter.events.image.delete.useMutation({ path: props.dataForEdit.image });
 			}

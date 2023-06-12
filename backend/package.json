@@ -23,6 +23,7 @@
     "fastify": "^4.17.0",
     "jsonwebtoken": "^9.0.0",
     "moment-timezone": "^0.5.43",
+    "mongoose": "^7.2.3",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
     "uuid": "^9.0.0"

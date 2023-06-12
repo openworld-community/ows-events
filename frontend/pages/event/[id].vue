@@ -4,7 +4,7 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
 import type { UserInfo } from '@/../common/types/user';
-import DeleteEvent from '../../components/modal/DeleteEvent.vue'
+import DeleteEvent from '../../components/modal/DeleteEvent.vue';
 
 definePageMeta({ name: RouteNameEnum.EVENT });
 
@@ -24,8 +24,8 @@ useHead({
 const deleteCard = async () => {
 	const { data } = await apiRouter.events.delete.useMutation({ id });
 	if (data.value?.type === 'success') {
-		await navigateTo({ name: RouteNameEnum.HOME });
-		closeDeleteEventModal();
+		await closeDeleteEventModal();
+		navigateTo({ name: RouteNameEnum.HOME });
 	} else {
 		console.error(data.value?.errors);
 	}
@@ -69,7 +69,6 @@ patchDeleteEventModal({
 		removeEvent: deleteCard
 	}
 });
-
 </script>
 
 <template>
@@ -264,7 +263,7 @@ patchDeleteEventModal({
 	&__container {
 		display: flex;
 		width: 100%;
-		height: 232px;
+		min-height: 232px;
 		position: relative;
 		line-height: 0;
 		background-color: var(--color-input-field);
@@ -280,8 +279,7 @@ patchDeleteEventModal({
 		width: 100%;
 		min-width: 100%;
 		max-width: 100%;
-		height: 100%;
-		max-height: 232px;
+		height: 232px;
 		position: absolute;
 		top: 0;
 		left: 0;

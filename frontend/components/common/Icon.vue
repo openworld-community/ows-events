@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed, PropType } from 'vue';
 import { IconDefaultParams } from '@/constants/defaultValues/icon';
 
 const props = defineProps({

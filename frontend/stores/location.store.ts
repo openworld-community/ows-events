@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia';
-import { getCitiesByCountry, getCountries, getUserLocation } from '@/services/location.services';
-import { UserLocation } from '../../common/types/location';
-import parseJSON from '@/utils/json';
+import { parseJSON } from '~/utils';
+import type { UserLocation } from '../../common/types/location';
 
-const useLocationStore = defineStore('counter', {
+const useLocationStore = defineStore('location', {
 	state: () => {
 		if (process.server) {
 			return {
@@ -58,7 +57,8 @@ const useLocationStore = defineStore('counter', {
 				return;
 			}
 
-			this.countries = await getCountries();
+			const { data } = await apiRouter.location.country.getAll.useQuery();
+			this.countries = data.value ?? [];
 
 			if (process.client) {
 				localStorage.setItem('LOCATIONS_COUNTRIES', JSON.stringify(this.countries));
@@ -74,7 +74,8 @@ const useLocationStore = defineStore('counter', {
 				return;
 			}
 
-			const cities = await getCitiesByCountry(country);
+			const { data } = await apiRouter.location.country.getCities.useQuery({ country });
+			const cities = data.value ?? [];
 
 			if (cities) {
 				this.citiesByCountry[country] = cities;
@@ -87,18 +88,18 @@ const useLocationStore = defineStore('counter', {
 				localStorage.setItem('LOCATIONS_CITIES', JSON.stringify(cities));
 			}
 		},
-		async init() {
-			this.userLocation = await getUserLocation();
+		async init(userLocation: UserLocation) {
+			this.userLocation = userLocation;
 			await this.loadCountries();
 
 			if (!this.pickedCountry) return;
 
-			await this.loadCitiesByCountry(this.pickedCountry);
-			await this.pickCountry(this.pickedCountry);
+			this.loadCitiesByCountry(this.pickedCountry);
+			this.pickCountry(this.pickedCountry);
 
 			if (!this.pickedCity) return;
 
-			await this.pickCity(this.pickedCity);
+			this.pickCity(this.pickedCity);
 		}
 	}
 });

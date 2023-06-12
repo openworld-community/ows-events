@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { UserInfo } from '../../../common/types/user';
+import type { UserInfo } from '../../../common/types/user';
 
 import { useModal } from 'vue-final-modal';
 import { ModalAuthorisation } from '#components';
@@ -34,7 +34,11 @@ updateModalData();
 		is-icon
 		icon-name="user"
 		:button-kind="isAuthorized ? 'success' : 'ordinary'"
-		:alt="isAuthorized ? $translate('component.header.authorization.deauthorize')	: $translate('component.header.authorization.authorize')"
+		:alt="
+			isAuthorized
+				? $translate('component.header.authorization.deauthorize')
+				: $translate('component.header.authorization.authorize')
+		"
 		@click="openAuthModal"
 	/>
 </template>

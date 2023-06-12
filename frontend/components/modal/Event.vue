@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
-import { deleteEventImage, editEvent, postEvent, postEventImage } from '@/services/events.services';
-import { storeToRefs } from 'pinia';
+import { getAllTimezones, getTimezone } from '@/services/timezone.services';
 import { useLocationStore } from '@/stores/location.store';
+import { storeToRefs } from 'pinia';
+import { computed, onMounted, ref, watch } from 'vue';
 import { type EventOnPoster } from '../../../common/types';
-import { getTimezoneByCountryAndCity, getAllTimezones } from '@/services/timezone.services';
+import type { ImageLoaderFile } from '../common/ImageLoader.vue';
 
 const { $translate } = useNuxtApp();
 
 type Props = {
 	dataForEdit?: EventOnPoster;
 	closeEventModal: () => void;
+	refreshEvent: () => void;
 };
 
 const props = defineProps<Props>();
@@ -19,7 +20,7 @@ locationStore.loadCountries();
 const { countries, cities } = storeToRefs(locationStore);
 
 const isLoading = ref(false);
-const newImageFile = ref<null | File>(null);
+const newImageFile = ref<ImageLoaderFile>(null);
 
 const allTimezones = ref<string[]>([]);
 
@@ -27,7 +28,7 @@ const loadAllTimezones = async () => {
 	const _allTimezones = await getAllTimezones();
 	if (!_allTimezones) return;
 
-	allTimezones.value = _allTimezones.map((timezone) => timezoneConverter(timezone));
+	allTimezones.value = _allTimezones.map((timezone) => timezoneToString(timezone));
 };
 
 await loadAllTimezones();
@@ -84,26 +85,26 @@ const setEventData = (data: EventOnPoster) => {
 	inputValues.value.startTime = start[1];
 	inputValues.value.endDate = end[0];
 	inputValues.value.endTime = end[1];
-	inputValues.value.image = data.image as string;
-	inputValues.value.url = data.url || '';
+	inputValues.value.image = data.image;
+	inputValues.value.url = data.url;
 };
 
 watch(
 	() => inputValues.value.country,
-	async (_country) => {
+	(_country) => {
 		if (!_country) {
 			inputValues.value.city = '';
 			return;
 		}
-		await locationStore.pickCountry(_country);
+		locationStore.pickCountry(_country);
 	},
 	{ deep: true }
 );
 
 watch(
 	() => inputValues.value.city,
-	async (_city) => {
-		await locationStore.pickCity(_city);
+	(_city) => {
+		locationStore.pickCity(_city);
 	},
 	{ deep: true }
 );
@@ -113,7 +114,7 @@ watch(
 	async () => {
 		inputValues.value.timezone = '';
 
-		inputValues.value.timezone = await getTimezoneByCountryAndCity({
+		inputValues.value.timezone = await getTimezone({
 			country: inputValues.value.country,
 			city: inputValues.value.city
 		});
@@ -124,6 +125,7 @@ watch(
 const checkFormFilling = computed(() => {
 	return !!(
 		inputValues.value.title &&
+		inputValues.value.url &&
 		inputValues.value.startDate &&
 		inputValues.value.startTime &&
 		inputValues.value.country &&
@@ -138,7 +140,7 @@ const closeModal = () => {
 };
 
 const paramsForSubmit = computed(() => {
-	const tz = timezoneDeconverter(inputValues.value.timezone);
+	const tz = stringToTimezone(inputValues.value.timezone);
 	return {
 		title: inputValues.value.title,
 		description: inputValues.value.description,
@@ -170,48 +172,42 @@ const paramsForSubmit = computed(() => {
 
 const submitEvent = async () => {
 	isLoading.value = true;
-	try {
-		let imageURL;
 
-		const params = paramsForSubmit.value;
-
-		if (props.dataForEdit) {
-			if (newImageFile.value) {
-				if (props.dataForEdit.image) {
-					await deleteEventImage(props.dataForEdit.image);
-				}
-				imageURL = await postEventImage(newImageFile.value as File);
-			}
-			await editEvent({
-				event: {
-					...params,
-					id: inputValues.value.id,
-					image: imageURL
-				}
-			});
-		} else {
-			imageURL = await postEventImage(newImageFile.value as File);
-
-			const res = await postEvent({
-				event: {
-					...params,
-					image: imageURL
-				}
-			});
-
-			if (res.type === 'success') {
-				const id = res.data.id;
-				await navigateTo(`/event/${id}`);
-			}
+	if (props.dataForEdit) {
+		let image = props.dataForEdit.image;
+		if (newImageFile.value && props.dataForEdit.image) {
+			await apiRouter.events.image.delete.useMutation({ path: props.dataForEdit.image });
+			image = '';
 		}
+		image = (await addImage(newImageFile.value)) ?? image;
 
-		closeModal();
-	} catch (e) {
-		alert(e); // временно выводим ошибки через alert
-	} finally {
-		isLoading.value = false;
+		const event = Object.assign(paramsForSubmit.value, { id: inputValues.value.id, image });
+		const { data } = await apiRouter.events.edit.useMutation({ event });
+
+		if (data.value?.type === 'success') {
+			props.refreshEvent();
+		} else {
+			console.error(data.value?.errors);
+		}
+	} else {
+		const image = (await addImage(newImageFile.value)) ?? '';
+		const event = Object.assign(paramsForSubmit.value, { image });
+		const { data } = await apiRouter.events.add.useMutation({ event });
+		if (data.value?.type === 'success') {
+			await navigateTo(`/event/${data.value.data.id}`);
+		}
 	}
+
+	closeModal();
+	isLoading.value = false;
 };
+
+async function addImage(image: ImageLoaderFile) {
+	if (!image || image === 'DELETED') return;
+	const { data } = await apiRouter.events.image.add.useMutation({ image });
+	if (data.value?.type !== 'success') return;
+	return data.value.data.path;
+}
 
 const isCityDisabled = computed(() => {
 	return !inputValues.value.country;

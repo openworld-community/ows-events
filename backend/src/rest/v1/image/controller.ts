@@ -10,7 +10,7 @@ export const deleteImage: IDeleteImageHandlerProps = async (request) => {
 	}
 
 	try {
-		await imageController.deleteImg(filePath);
+		await imageController.deleteImg(`.${filePath}`);
 		return {
 			type: 'success',
 			data: undefined

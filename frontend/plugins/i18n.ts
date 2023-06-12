@@ -6,11 +6,10 @@ import { type TranslationKeys } from '@/i18n/i18n';
 export default defineNuxtPlugin(({ vueApp }) => {
 	vueApp.use(I18NextVue, { i18next });
 	i18next.init({ fallbackLng: defaultLocale, resources });
-
 	// todo - change only to supported locales
 	switch (true) {
 		case process.server: {
-			i18next.changeLanguage(useRequestHeaders()['accept-language']?.slice(0, 2) || 'en');
+			i18next.changeLanguage(useRequestHeaders()['accept-language']?.slice(0, 2) ?? 'en');
 			break;
 		}
 		case process.client: {
@@ -20,6 +19,7 @@ export default defineNuxtPlugin(({ vueApp }) => {
 	}
 
 	function translate(key: TranslationKeys) {
+		// todo - this invokes composable for every translation call, not for every component as it should be >:(
 		const { t } = useTranslation();
 		return t(key);
 	}

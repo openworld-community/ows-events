@@ -18,7 +18,7 @@ const { data: posterEvent, refresh: refreshEvent } = await apiRouter.events.get.
 const { $translate } = useNuxtApp();
 
 useHead({
-	title: `${$translate('meta.title')} / ${posterEvent.value?.data?.title}`
+	title: `${$translate('meta.title')} / ${posterEvent.value?.title}`
 });
 
 const deleteCard = async () => {
@@ -74,20 +74,20 @@ patchDeleteEventModal({
 
 <template>
 	<div
-		v-if="posterEvent.data"
+		v-if="posterEvent"
 		class="event"
 	>
 		<div
 			:class="[
 				'event-image',
 				'event-image__container',
-				{ 'event-image__container--background': !posterEvent.data.image }
+				{ 'event-image__container--background': !posterEvent.image }
 			]"
 		>
-			<span class="event-image__price">{{ posterEvent.data.price }} €</span>
+			<span class="event-image__price">{{ posterEvent.price }} €</span>
 			<img
-				v-if="posterEvent.data.image"
-				:src="getEventImage(posterEvent.data)"
+				v-if="posterEvent.image"
+				:src="getEventImage(posterEvent)"
 				:alt="$translate('event.image.event')"
 				class="event-image__image"
 			/>
@@ -97,53 +97,53 @@ patchDeleteEventModal({
 			<!--      TODO когда будет регистрация, нужно будет подставлять имя создавшего-->
 			<p class="event-description__author">Peredelano</p>
 			<h2 class="event-description__title">
-				{{ posterEvent.data.title }}
+				{{ posterEvent.title }}
 			</h2>
 
 			<p class="event-description__datetime">
-				<span v-if="posterEvent.data.durationInSeconds">
-					{{ convertToLocaleString(posterEvent.date, posterEvent.data.timezone) }}
+				<span v-if="posterEvent.durationInSeconds">
+					{{ convertToLocaleString(posterEvent.date, posterEvent.timezone) }}
 					-
 					{{
 						convertToLocaleString(
-							posterEvent.data.date + posterEvent.data.durationInSeconds,
-							posterEvent.data.timezone
+							posterEvent.date + posterEvent.durationInSeconds,
+							posterEvent.timezone
 						)
 					}}
 				</span>
 				<span v-else>
 					{{
 						convertToLocaleString(
-							posterEvent.data.date ?? Date.now(),
-							posterEvent.data.timezone
+							posterEvent.date ?? Date.now(),
+							posterEvent.timezone
 						)
 					}}
 				</span>
 				<br />
-				({{ posterEvent.data.timezone?.timezoneOffset }}
-				{{ posterEvent.data.timezone?.timezoneName }})
+				({{ posterEvent.timezone?.timezoneOffset }}
+				{{ posterEvent.timezone?.timezoneName }})
 			</p>
 			<!-- TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса -->
 			<NuxtLink
 				class="event-description__geolink"
-				:to="`https://www.google.com/maps/place/${posterEvent.data.location.city}+${posterEvent.data.location.country}`"
+				:to="`https://www.google.com/maps/place/${posterEvent.location.city}+${posterEvent.location.country}`"
 				target="_blank"
 			>
-				{{ posterEvent.data.location.country }}, {{ posterEvent.data.location.city }}
+				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
 			</NuxtLink>
 			<p class="event-description__description">
-				{{ posterEvent.data.description }}
+				{{ posterEvent.description }}
 			</p>
 		</div>
 
 		<div class="event-actions">
-			<template v-if="posterEvent.data.url">
+			<template v-if="posterEvent.url">
 				<CommonButton
-					v-if="posterEvent.data.url !== 'self'"
+					v-if="posterEvent.url !== 'self'"
 					button-kind="success"
 					class="event-actions__button"
 					:button-text="$translate('event.button.contact')"
-					:link="posterEvent.data.url"
+					:link="posterEvent.url"
 					is-external-link
 				/>
 
@@ -157,7 +157,7 @@ patchDeleteEventModal({
 			</template>
 
 			<div
-				v-if="user?.id === posterEvent.data.creatorId"
+				v-if="user?.id === posterEvent.creatorId"
 				class="event-actions__manage"
 			>
 				<CommonButton

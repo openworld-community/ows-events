@@ -40,7 +40,7 @@ export const addEvent: IAddEventHandler = async (request, reply) => {
 	}
 
 	event.creatorId = jwtData.id;
-	const newPostId = eventsStateController.addEvent(event);
+	const newPostId = await eventsStateController.addEvent(event);
 
 	return {
 		type: 'success',
@@ -49,36 +49,47 @@ export const addEvent: IAddEventHandler = async (request, reply) => {
 };
 
 export const getEvents: IGetEventsHandler = async (): Promise<EventOnPoster[]> =>
-	eventsStateController.getEvents().slice(0, 100);
+	(await eventsStateController.getEvents()).slice(0, 100);
 
-export const getEvent: IGetEventHandler = async (request): Promise<EventOnPoster | undefined> => {
+export const getEvent: IGetEventHandler = async (request) => {
 	const eventId = request.params.id;
-	return eventsStateController.getEvent(eventId);
+	const event = await eventsStateController.getEvent(eventId);
+	if (!event) {
+		return {
+			type: 'error',
+			errors: ['Event not found']
+		};
+	}
+	return {
+		type: 'success',
+		data: event
+	};
 };
 
 export const deleteEvent: IDeleteEventHandler = async (request, reply) => {
 	const token = request.headers.authorization;
 	if (!token) {
 		return reply.status(401).send({
-			type: 'error'
+			type: 'error',
+			errors: ['No token']
 		});
 	}
 
 	const jwtData = jwt.verify(token, 'secret') as ITokenData;
 	if (!jwtData.id) {
 		return reply.status(401).send({
-			type: 'error'
+			type: 'error',
+			errors: ['Wrong token']
 		});
 	}
-	const oldEvent = eventsStateController.getEvent(request.body.id);
-
-	if (oldEvent?.creatorId !== jwtData.id) {
+	const oldEvent = await eventsStateController.getEvent(request.body.id);
+	if (oldEvent?.creatorId !== String(jwtData.id)) {
 		return reply.status(403).send({
 			type: 'error'
 		});
 	}
 
-	eventsStateController.deleteEvent(request.body.id);
+	await eventsStateController.deleteEvent(request.body.id);
 	return {
 		type: 'success',
 		data: undefined
@@ -100,9 +111,9 @@ export const updateEvent: IUpdateEventHandler = async (request, reply) => {
 		});
 	}
 
-	const oldEvent = eventsStateController.getEvent(request.body.event.id);
+	const oldEvent = await eventsStateController.getEvent(request.body.event.id);
 
-	if (oldEvent?.creatorId !== jwtData.id) {
+	if (oldEvent?.creatorId !== String(jwtData.id)) {
 		return reply.status(403).send({
 			type: 'error'
 		});
@@ -114,6 +125,7 @@ export const updateEvent: IUpdateEventHandler = async (request, reply) => {
 			type: 'error'
 		};
 	}
+
 	const { event } = body;
 	if (!event) {
 		return {
@@ -121,7 +133,7 @@ export const updateEvent: IUpdateEventHandler = async (request, reply) => {
 		};
 	}
 
-	eventsStateController.updateEvent(event);
+	await eventsStateController.updateEvent(event);
 	return {
 		type: 'success',
 		data: undefined
@@ -131,5 +143,5 @@ export const updateEvent: IUpdateEventHandler = async (request, reply) => {
 export const findEvents: IFindEventHandler = async (request) => {
 	const { searchLine, country, city } = request.body;
 
-	return eventsStateController.getEvents({ searchLine, country, city }).slice(0, 100);
+	return (await eventsStateController.getEvents({ searchLine, country, city })).slice(0, 100);
 };

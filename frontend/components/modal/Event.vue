@@ -86,7 +86,7 @@ const setEventData = (data: EventOnPoster) => {
 	inputValues.value.endDate = end[0];
 	inputValues.value.endTime = end[1];
 	inputValues.value.image = data.image;
-	inputValues.value.url = data.url || '';
+	inputValues.value.url = data.url;
 };
 
 watch(
@@ -125,6 +125,7 @@ watch(
 const checkFormFilling = computed(() => {
 	return !!(
 		inputValues.value.title &&
+		inputValues.value.url &&
 		inputValues.value.startDate &&
 		inputValues.value.startTime &&
 		inputValues.value.country &&
@@ -200,6 +201,7 @@ const submitEvent = async () => {
 	closeModal();
 	isLoading.value = false;
 };
+
 async function addImage(image: ImageLoaderFile) {
 	if (!image || image === 'DELETED') return;
 	const { data } = await apiRouter.events.image.add.useMutation({ image });

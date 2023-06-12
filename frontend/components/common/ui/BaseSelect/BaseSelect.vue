@@ -44,22 +44,19 @@ const inputData = ref('');
 const emit = defineEmits(['update:modelValue', 'update:inputData']);
 const updateValue = (value: string) => {
 	emit('update:modelValue', value);
+	inputData.value = value;
 	setIsOpen();
 };
 
 const setIsOpen = () => {
-	isOpen.value = !isOpen.value;
-};
-
-const onFocus = () => {
-	if(!isOpen.value) {
-		isOpen.value = true;
+	if(!props.disabled) {
+		isOpen.value = !isOpen.value;
 	}
 };
 
 const onRemove = () => {
 	emit('update:modelValue', '');
-	emit('update:inputData', '');
+	inputData.value = '';
 };
 
 
@@ -85,7 +82,6 @@ const filteredValues = computed(() => {
 			:placeholder="props.placeholder"
 			:error="props.error"
 			@click="setIsOpen"
-			@focus="onFocus"
 		>
 			<template #icon-right>
 				<button

@@ -96,6 +96,8 @@ services:
         image: mongo:6.0
         restart: unless-stopped
         command: ['--bind_ip_all']
+        ports:
+            - '127.0.0.1:27002:27017'
         networks:
             - traefikpublic
         healthcheck:

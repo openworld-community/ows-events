@@ -80,22 +80,28 @@ services:
         environment:
             - AUTH_SERVER_URL=https://auth.afisha.peredelano.com
             - MODE=prod
+            - MONGO_URI=mongodb://mongo:27017/prod
         networks:
             - traefikpublic
         ports:
             - '7080:7080'
         volumes:
-            - assets-db:/app/backend/assets/db
             - assets-img:/app/backend/assets/img
 
-volumes:
-    assets-db:
-        driver: local
-        driver_opts:
-            type: none
-            o: bind
-            device: /root/ows-events/assets/db
+    mongo:
+        image: mongo:6.0
+        restart: unless-stopped
+        command: ['--bind_ip_all']
+        networks:
+            - traefikpublic
+        healthcheck:
+            test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo --quiet) -eq 1
+            interval: 10s
+            start_period: 30s
+        volumes:
+            - /root/db/prod:/data/db
 
+volumes:
     assets-img:
         driver: local
         driver_opts:

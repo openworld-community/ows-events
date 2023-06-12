@@ -68,6 +68,10 @@ services:
             dockerfile: ./backend/Dockerfile
         logging: *default-logging
         restart: always
+        depends_on:
+            - mongo
+        links:
+            - mongo
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
@@ -80,24 +84,26 @@ services:
         environment:
             - AUTH_SERVER_URL=https://auth.poster-test-peredelano.orby-tech.space
             - MODE=prod
+            - MONGO_URI=mongodb://mongo:27017/test
         networks:
             - traefikpublic
         ports:
             - '7082:7080'
         volumes:
-            - assets-db-test:/app/backend/assets/db
             - assets-img-test:/app/backend/assets/img
 
     mongo:
         image: mongo:6.0
         restart: unless-stopped
         command: ['--bind_ip_all']
+        networks:
+            - traefikpublic
         healthcheck:
             test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo --quiet) -eq 1
             interval: 10s
             start_period: 30s
         volumes:
-            - /root/ows-events/assets/db:/data/db
+            - /root/db/test:/data/db
 
 volumes:
     assets-img-test:

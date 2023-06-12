@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 import CommonIcon from '~/components/common/Icon.vue';
 import BaseInput from '~/components/common/ui/BaseInput/BaseInput.vue';
 
@@ -14,7 +14,7 @@ const props = defineProps({
 	},
 	list: {
 		type: Array as () => string[],
-		default: () => ['text'],
+		default: () => [''],
 	},
 	name: {
 		type: String,
@@ -39,8 +39,9 @@ const props = defineProps({
 })
 
 const isOpen = ref(false);
+const inputData = ref('');
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'update:inputData']);
 const updateValue = (value: string) => {
 	emit('update:modelValue', value);
 	setIsOpen();
@@ -50,27 +51,46 @@ const setIsOpen = () => {
 	isOpen.value = !isOpen.value;
 };
 
+const onFocus = () => {
+	if(!isOpen.value) {
+		isOpen.value = true;
+	}
+};
+
 const onRemove = () => {
 	emit('update:modelValue', '');
+	emit('update:inputData', '');
 };
+
+
+const filteredValues = computed(() => {
+	if (props.list) {
+		return props.list.filter(option => {
+			return option.toLowerCase().includes(inputData.value.toLowerCase() ?? '')
+		});
+	} else {
+		return [''];
+	}
+});
 
 </script>
 
 <template>
 	<div :class="`select__wrapper ${props.className}`">
 		<BaseInput
+			v-model="inputData"
 			:name="props.name"
-			:model-value="props.modelValue"
 			:label="props.label"
 			:disabled="props.disabled"
 			:placeholder="props.placeholder"
 			:error="props.error"
 			@click="setIsOpen"
+			@focus="onFocus"
 		>
 			<template #icon-right>
 				<button
-						v-if="props.modelValue"
-						@click="onRemove"
+						v-if="props.modelValue || inputData"
+						@click.prevent="onRemove"
 				>
 					<CommonIcon
 						name="delete"
@@ -94,7 +114,7 @@ const onRemove = () => {
 		<div :class="`select__list-box ${isOpen ? 'isOpen' : ''}`">
 			<ul class="select__list benefits">
 				<li
-					v-for="item in props.list"
+					v-for="item in filteredValues"
 					:key="item"
 					class="select__list-item"
 					@click="updateValue(item)"

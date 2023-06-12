@@ -39,6 +39,10 @@ const props = defineProps({
 		type: String,
 		default: ''
 	},
+	autocomplete: {
+		type: String,
+		default: 'off'
+	},
 })
 
 const emit = defineEmits(['update:modelValue']);
@@ -67,6 +71,7 @@ const updateValue = (event: Event) => {
 				:value="props.modelValue"
 				:disabled="props.disabled"
 				:placeholder="props.placeholder"
+				:autocomplete="autocomplete"
 				@input="updateValue"
 				@change="updateValue"
 			/>

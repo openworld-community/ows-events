@@ -88,6 +88,13 @@ export const defaultTranslation = {
         close: 'Закрыть'
       }
     },
+    delete_event_modal: {
+      title: 'Удаление мероприятия',
+      button: {
+        cancel: 'Отмена',
+        submit: 'Подтвердить'
+      }
+    },
     language_selector: {
       label: 'Язык'
     },

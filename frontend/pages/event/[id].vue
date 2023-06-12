@@ -4,6 +4,7 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
 import type { UserInfo } from '@/../common/types/user';
+import DeleteEvent from '../../components/modal/DeleteEvent.vue'
 
 definePageMeta({ name: RouteNameEnum.EVENT });
 
@@ -19,6 +20,16 @@ const { $translate } = useNuxtApp();
 useHead({
 	title: `${$translate('meta.title')} / ${posterEvent.value?.title}`
 });
+
+const deleteCard = async () => {
+	const { data } = await apiRouter.events.delete.useMutation({ id });
+	if (data.value?.type === 'success') {
+		await navigateTo({ name: RouteNameEnum.HOME });
+		closeDeleteEventModal();
+	} else {
+		console.error(data.value?.errors);
+	}
+};
 
 const {
 	open: openRegistrationModal,
@@ -45,14 +56,20 @@ patchEventModal({
 	}
 });
 
-const deleteCard = async () => {
-	const { data } = await apiRouter.events.delete.useMutation({ id });
-	if (data.value?.type === 'success') {
-		await navigateTo({ name: RouteNameEnum.HOME });
-	} else {
-		console.error(data.value?.errors);
+const {
+	open: openDeleteEventModal,
+	close: closeDeleteEventModal,
+	patchOptions: patchDeleteEventModal
+} = useModal({ component: DeleteEvent } as UseModalOptions<
+	InstanceType<typeof VueFinalModal>['$props']
+>);
+patchDeleteEventModal({
+	attrs: {
+		closeDeleteEventModal,
+		removeEvent: deleteCard
 	}
-};
+});
+
 </script>
 
 <template>
@@ -147,7 +164,7 @@ const deleteCard = async () => {
 					icon-name="trash"
 					icon-width="16"
 					icon-height="16"
-					@click="deleteCard"
+					@click="openDeleteEventModal"
 				/>
 				<CommonButton
 					class="event-actions__button"

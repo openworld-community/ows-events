@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
-import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
 import type { UserInfo } from '@/../common/types/user';
-import DeleteEvent from '../../components/modal/DeleteEvent.vue'
+import DeleteEvent from '../../components/modal/DeleteEvent.vue';
+import type { EventOnPoster } from '../../../common/types';
 
 definePageMeta({ name: RouteNameEnum.EVENT });
 
@@ -13,33 +13,42 @@ const id = route.params.id as string;
 
 const user = useCookie<UserInfo | null>('user');
 
-const { data: posterEvent, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ id });
+const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ id });
+
+//TODO: Перепишите позже на нормальном, пожалуйста
+let posterEvent: EventOnPoster;
+if (data.value?.type === 'success') {
+	posterEvent = data.value.data;
+} else {
+	throw 'err';
+}
 
 const { $translate } = useNuxtApp();
 
 useHead({
-	title: `${$translate('meta.title')} / ${posterEvent.value?.title}`
+	title: `${$translate('meta.title')} / ${posterEvent?.title}`
 });
 
 const deleteCard = async () => {
 	const { data } = await apiRouter.events.delete.useMutation({ id });
 	if (data.value?.type === 'success') {
-		await navigateTo({ name: RouteNameEnum.HOME });
-		closeDeleteEventModal();
+		await closeDeleteEventModal();
+		navigateTo({ name: RouteNameEnum.HOME });
 	} else {
 		console.error(data.value?.errors);
 	}
 };
 
-const {
-	open: openRegistrationModal,
-	close: closeRegistrationModal,
-	patchOptions: patchRegistrationModal
-} = useModal({
-	component: RegistrationModal,
-	attrs: { eventId: id, close: () => void 0 }
-} as UseModalOptions<InstanceType<typeof VueFinalModal>['$props']>);
-patchRegistrationModal({ attrs: { close: closeRegistrationModal } });
+// TODO подключить, когда вернемся к проработке регистрации
+// const {
+// 	open: openRegistrationModal,
+// 	close: closeRegistrationModal,
+// 	patchOptions: patchRegistrationModal
+// } = useModal({
+// 	component: RegistrationModal,
+// 	attrs: { eventId: id, close: () => void 0 }
+// } as UseModalOptions<InstanceType<typeof VueFinalModal>['$props']>);
+// patchRegistrationModal({ attrs: { close: closeRegistrationModal } });
 
 const {
 	open: openEventModal,
@@ -69,7 +78,6 @@ patchDeleteEventModal({
 		removeEvent: deleteCard
 	}
 });
-
 </script>
 
 <template>
@@ -143,14 +151,14 @@ patchDeleteEventModal({
 					:link="posterEvent.url"
 					is-external-link
 				/>
-
-				<CommonButton
-					v-else
-					button-kind="success"
-					class="event-actions__button"
-					:button-text="$translate('event.button.register')"
-					@click="openRegistrationModal"
-				/>
+<!--TODO подключить, когда вернемся к проработке регистрации-->
+<!--				<CommonButton-->
+<!--					v-else-->
+<!--					button-kind="success"-->
+<!--					class="event-actions__button"-->
+<!--					:button-text="$translate('event.button.register')"-->
+<!--					@click="openRegistrationModal"-->
+<!--				/>-->
 			</template>
 
 			<div
@@ -264,7 +272,7 @@ patchDeleteEventModal({
 	&__container {
 		display: flex;
 		width: 100%;
-		height: 232px;
+		min-height: 232px;
 		position: relative;
 		line-height: 0;
 		background-color: var(--color-input-field);
@@ -280,8 +288,7 @@ patchDeleteEventModal({
 		width: 100%;
 		min-width: 100%;
 		max-width: 100%;
-		height: 100%;
-		max-height: 232px;
+		height: 232px;
 		position: absolute;
 		top: 0;
 		left: 0;

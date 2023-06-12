@@ -4,6 +4,7 @@ import { useLocationStore } from '@/stores/location.store';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, ref, watch } from 'vue';
 import { type EventOnPoster } from '../../../common/types';
+import type { ImageLoaderFile } from '../common/ImageLoader.vue';
 
 const { $translate } = useNuxtApp();
 
@@ -19,7 +20,7 @@ locationStore.loadCountries();
 const { countries, cities } = storeToRefs(locationStore);
 
 const isLoading = ref(false);
-const newImageFile = ref<null | File>(null);
+const newImageFile = ref<ImageLoaderFile>(null);
 
 const allTimezones = ref<string[]>([]);
 
@@ -170,46 +171,41 @@ const paramsForSubmit = computed(() => {
 
 const submitEvent = async () => {
 	isLoading.value = true;
-	try {
-		let image = '';
-		if (newImageFile.value) {
-			const { data } = await apiRouter.events.image.add.useMutation({
-				image: newImageFile.value
-			});
-			if (data.value?.type === 'success') {
-				image = data.value.data.path;
-			}
-		}
-		const params = Object.assign(paramsForSubmit.value, { image });
 
-		if (props.dataForEdit) {
-			console.log(newImageFile.value); // new value
-			console.log(props.dataForEdit.image); // og value
-			if (!newImageFile.value && props.dataForEdit.image) {
-				await apiRouter.events.image.delete.useMutation({ path: props.dataForEdit.image });
-			}
-			const { data } = await apiRouter.events.edit.useMutation({
-				event: Object.assign(params, { id: inputValues.value.id })
-			});
-			if (data.value?.type === 'success') {
-				props.refreshEvent();
-			} else {
-				console.error(data.value?.errors);
-			}
+	if (props.dataForEdit) {
+		let image = props.dataForEdit.image;
+		if (newImageFile.value && props.dataForEdit.image) {
+			await apiRouter.events.image.delete.useMutation({ path: props.dataForEdit.image });
+			image = '';
+		}
+		image = (await addImage(newImageFile.value)) ?? image;
+
+		const event = Object.assign(paramsForSubmit.value, { id: inputValues.value.id, image });
+		const { data } = await apiRouter.events.edit.useMutation({ event });
+
+		if (data.value?.type === 'success') {
+			props.refreshEvent();
 		} else {
-			const { data } = await apiRouter.events.add.useMutation({ event: params });
-			if (data.value?.type === 'success') {
-				await navigateTo(`/event/${data.value.data.id}`);
-			}
+			console.error(data.value?.errors);
 		}
-
-		closeModal();
-	} catch (e) {
-		alert(e); // временно выводим ошибки через alert
-	} finally {
-		isLoading.value = false;
+	} else {
+		const image = (await addImage(newImageFile.value)) ?? '';
+		const event = Object.assign(paramsForSubmit.value, { image });
+		const { data } = await apiRouter.events.add.useMutation({ event });
+		if (data.value?.type === 'success') {
+			await navigateTo(`/event/${data.value.data.id}`);
+		}
 	}
+
+	closeModal();
+	isLoading.value = false;
 };
+async function addImage(image: ImageLoaderFile) {
+	if (!image || image === 'DELETED') return;
+	const { data } = await apiRouter.events.image.add.useMutation({ image });
+	if (data.value?.type !== 'success') return;
+	return data.value.data.path;
+}
 
 const isCityDisabled = computed(() => {
 	return !inputValues.value.country;

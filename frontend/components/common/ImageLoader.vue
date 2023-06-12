@@ -1,16 +1,19 @@
+<script lang="ts">
+export type ImageLoaderFile = File | null | 'DELETED';
+</script>
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { BASE_URL } from '@/constants/url';
 
-type Props = {
+const props = defineProps<{
 	externalImage?: string;
-};
+}>();
 
-const props = defineProps<Props>();
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits<{
+	'update:modelValue': [file: ImageLoaderFile];
+}>();
 
 const input = ref<HTMLInputElement | null>(null);
-
 const imageSrc = ref<string | null>(null);
 const fileIsLoading = ref(false);
 
@@ -49,7 +52,7 @@ const loadImage = (event: Event) => {
 
 const removeImage = () => {
 	imageSrc.value = null;
-	emit('update:modelValue', null);
+	emit('update:modelValue', 'DELETED');
 };
 </script>
 
@@ -71,7 +74,6 @@ const removeImage = () => {
 				icon-name="picture"
 				@click="fileIsLoading ? null : input?.click()"
 			/>
-
 			<div
 				v-if="imageSrc"
 				class="loader__preview"

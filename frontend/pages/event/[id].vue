@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
-import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
 import type { UserInfo } from '@/../common/types/user';
 import DeleteEvent from '../../components/modal/DeleteEvent.vue';
@@ -31,15 +30,16 @@ const deleteCard = async () => {
 	}
 };
 
-const {
-	open: openRegistrationModal,
-	close: closeRegistrationModal,
-	patchOptions: patchRegistrationModal
-} = useModal({
-	component: RegistrationModal,
-	attrs: { eventId: id, close: () => void 0 }
-} as UseModalOptions<InstanceType<typeof VueFinalModal>['$props']>);
-patchRegistrationModal({ attrs: { close: closeRegistrationModal } });
+// TODO подключить, когда вернемся к проработке регистрации
+// const {
+// 	open: openRegistrationModal,
+// 	close: closeRegistrationModal,
+// 	patchOptions: patchRegistrationModal
+// } = useModal({
+// 	component: RegistrationModal,
+// 	attrs: { eventId: id, close: () => void 0 }
+// } as UseModalOptions<InstanceType<typeof VueFinalModal>['$props']>);
+// patchRegistrationModal({ attrs: { close: closeRegistrationModal } });
 
 const {
 	open: openEventModal,
@@ -142,14 +142,14 @@ patchDeleteEventModal({
 					:link="posterEvent.url"
 					is-external-link
 				/>
-
-				<CommonButton
-					v-else
-					button-kind="success"
-					class="event-actions__button"
-					:button-text="$translate('event.button.register')"
-					@click="openRegistrationModal"
-				/>
+<!--TODO подключить, когда вернемся к проработке регистрации-->
+<!--				<CommonButton-->
+<!--					v-else-->
+<!--					button-kind="success"-->
+<!--					class="event-actions__button"-->
+<!--					:button-text="$translate('event.button.register')"-->
+<!--					@click="openRegistrationModal"-->
+<!--				/>-->
 			</template>
 
 			<div

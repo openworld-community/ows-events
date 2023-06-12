@@ -4,7 +4,8 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import RegistrationModal from '../../components/modal/Registration.vue';
 import EventModal from '../../components/modal/Event.vue';
 import type { UserInfo } from '@/../common/types/user';
-import DeleteEvent from '../../components/modal/DeleteEvent.vue'
+import DeleteEvent from '../../components/modal/DeleteEvent.vue';
+import type { EventOnPoster } from '../../../common/types';
 
 definePageMeta({ name: RouteNameEnum.EVENT });
 
@@ -13,12 +14,20 @@ const id = route.params.id as string;
 
 const user = useCookie<UserInfo | null>('user');
 
-const { data: posterEvent, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ id });
+const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ id });
+
+//TODO: Перепишите позже на нормальном, пожалуйста
+let posterEvent: EventOnPoster;
+if (data.value?.type === 'success') {
+	posterEvent = data.value.data;
+} else {
+	throw 'err';
+}
 
 const { $translate } = useNuxtApp();
 
 useHead({
-	title: `${$translate('meta.title')} / ${posterEvent.value?.title}`
+	title: `${$translate('meta.title')} / ${posterEvent?.title}`
 });
 
 const deleteCard = async () => {
@@ -69,7 +78,6 @@ patchDeleteEventModal({
 		removeEvent: deleteCard
 	}
 });
-
 </script>
 
 <template>
@@ -113,10 +121,7 @@ patchDeleteEventModal({
 				</span>
 				<span v-else>
 					{{
-						convertToLocaleString(
-							posterEvent.date ?? Date.now(),
-							posterEvent.timezone
-						)
+						convertToLocaleString(posterEvent.date ?? Date.now(), posterEvent.timezone)
 					}}
 				</span>
 				<br />

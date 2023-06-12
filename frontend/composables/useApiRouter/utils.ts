@@ -1,4 +1,4 @@
-import { UseFetchOptions } from 'nuxt/app';
+import type { UseFetchOptions } from 'nuxt/app';
 import { API_URL } from '~/constants/url';
 
 type ApiRouter = {
@@ -13,10 +13,10 @@ type Refify<T> = T extends object
 			[K in keyof T]: T[K] | Ref<T[K]> | Refify<Extract<T[K], object>>;
 	  }
 	: T | Ref<T>;
-type Fetchify<T> = ReturnType<typeof useFetch<T>>;
-/**
- * Couldn't find an easier way to handle a function which can have 0, 1 optional or 1 required argument
- * and then would output a function with the same arguments signature so I had to resort to this.
+type Fetchify<T> = ReturnType<typeof useBackendFetch<T>>;
+/*
+	Couldn't find an easier way to handle a function which can have 0, 1 optional or 1 required argument
+	and then would output a function with the same arguments signature so I had to resort to this.
  */
 type Querify<T extends (data: any) => any> = T extends () => any
 	? T extends (data?: infer P) => infer R

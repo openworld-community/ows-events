@@ -1,4 +1,4 @@
-import {InputHTMLAttributes} from 'vue';
+import type { InputHTMLAttributes } from 'vue';
 
 export type Props = {
 	className?: string;
@@ -9,7 +9,7 @@ export type Props = {
 	label?: string;
 	disabled?: boolean;
 	error?: string;
-}
+};
 
 export enum InputValue {
 	text = 'text',
@@ -17,7 +17,7 @@ export enum InputValue {
 	time = 'time',
 	number = 'number',
 	textarea = 'textarea',
-	datalist = 'datalist',
+	datalist = 'datalist'
 }
 
 export interface BaseInputProps extends InputHTMLAttributes {

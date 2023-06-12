@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getAllTimezones, getTimezoneByCountryAndCity } from '@/services/timezone.services';
+import { getAllTimezones, getTimezone } from '@/services/timezone.services';
 import { useLocationStore } from '@/stores/location.store';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, ref, watch } from 'vue';
@@ -27,7 +27,7 @@ const loadAllTimezones = async () => {
 	const _allTimezones = await getAllTimezones();
 	if (!_allTimezones) return;
 
-	allTimezones.value = _allTimezones.map((timezone) => timezoneConverter(timezone));
+	allTimezones.value = _allTimezones.map((timezone) => timezoneToString(timezone));
 };
 
 await loadAllTimezones();
@@ -113,7 +113,7 @@ watch(
 	async () => {
 		inputValues.value.timezone = '';
 
-		inputValues.value.timezone = await getTimezoneByCountryAndCity({
+		inputValues.value.timezone = await getTimezone({
 			country: inputValues.value.country,
 			city: inputValues.value.city
 		});
@@ -138,7 +138,7 @@ const closeModal = () => {
 };
 
 const paramsForSubmit = computed(() => {
-	const tz = timezoneDeconverter(inputValues.value.timezone);
+	const tz = stringToTimezone(inputValues.value.timezone);
 	return {
 		title: inputValues.value.title,
 		description: inputValues.value.description,
@@ -183,7 +183,7 @@ const submitEvent = async () => {
 		const params = Object.assign(paramsForSubmit.value, { image });
 
 		if (props.dataForEdit) {
-			if (newImageFile.value && props.dataForEdit.image) {
+			if (!newImageFile.value && props.dataForEdit.image) {
 				await apiRouter.events.image.delete.useMutation({ path: props.dataForEdit.image });
 			}
 			const { data } = await apiRouter.events.edit.useMutation({

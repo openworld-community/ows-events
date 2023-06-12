@@ -1,5 +1,6 @@
-import { EventOnPoster, StandardResponse } from '~/../common/types';
-import { PostEventPayload } from '~/../common/types/event';
+import type { EventOnPoster, StandardResponse } from '~/../common/types';
+import type { PostEventPayload } from '~/../common/types/event';
+import type { Registration } from '~/../common/types/registration';
 import { defineMutation, defineQuery, useBackendFetch } from './utils';
 
 export const events = {
@@ -37,5 +38,10 @@ export const events = {
 				return useBackendFetch('image/delete', { body: { path: input.path } }, true);
 			}
 		)
+	},
+	registration: {
+		add: defineMutation<(input: { registration: Registration }) => void>((input) => {
+			return useBackendFetch<void>('registration/add', { body: input.registration });
+		})
 	}
 };

@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import type { UserInfo } from '../../../common/types/user';
-import { v4 } from 'uuid';
-import { AUTH_SERVER_URL, SERVER_URL } from '~/constants/url';
 
 type Props = {
 	close: () => void;
@@ -37,20 +35,12 @@ onMounted(() => {
 
   script.setAttribute('data-size', 'large');
   // script.setAttribute('data-userpic', props.userpic);
-  script.setAttribute('data-telegram-login', 'Afishabot');
+  script.setAttribute('data-telegram-login', 'standart_oauth_test1_bot');
   script.setAttribute('data-request-access', 'write');
 
-  if (props.mode === 'callback') {
-    window.onTelegramAuth = onTelegramAuth;
-    script.setAttribute('data-onauth', 'window.onTelegramAuth(user)');
-  }
-  // else {
-  //   script.setAttribute('data-auth-url', props.redirectUrl);
-  // }
+    script.setAttribute('data-auth-url','https:');
   telegram.value.appendChild(script);
 });
-
-
 
 </script>
 
@@ -85,10 +75,9 @@ onMounted(() => {
 					/>
 				</div>
 			</NuxtLink>
-			<NuxtLink
+			<div
 				v-else
-				:to="#"
-				target="_blank"
+        @click="onTelegramAuth"
 				class="authorisation-button"
 			>
 				<div class="authorisation-button__container">
@@ -100,7 +89,7 @@ onMounted(() => {
 						height="20"
 					/>
 				</div>
-			</NuxtLink>
+			</div>
 		</div>
 	</CommonModalWrapper>
 </template>

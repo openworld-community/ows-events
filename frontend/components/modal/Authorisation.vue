@@ -16,18 +16,15 @@ const username =
 		? userCookie.value?.firstNickName + ' ' + userCookie.value?.lastNickName
 		: null);
 
-
 // const temporaryId = v4();
 // const authLink: string = `${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backurl=${encodeURIComponent(
 // 	`${SERVER_URL}/postauth/${temporaryId}`
 // )}`;
 
-
-
-const onTelegramAuth = (user) => {
+const onTelegramAuth = (user: any) => {
   alert('Logged in as ' + user.first_name + ' ' + user.last_name + ' (' + user.id + (user.username ? ', @' + user.username : '') + ')');
 }
-const telegram = ref(null);
+const telegram = ref(new HTMLElement());
 onMounted(() => {
   const script = document.createElement('script');
   script.async = true;
@@ -39,7 +36,7 @@ onMounted(() => {
   script.setAttribute('data-request-access', 'write');
 
     script.setAttribute('data-auth-url','https:');
-  telegram.value.appendChild(script);
+  telegram.value?.appendChild(script);
 });
 
 </script>

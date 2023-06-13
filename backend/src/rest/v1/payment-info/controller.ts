@@ -5,7 +5,7 @@ import { eventsStateController } from '../../../controllers/events-state-control
 import { IGetJSONPaymentInfoHandlerProps, IGetPaymentInfoHandlerProps } from './type';
 
 export const getPaymentInfo: IGetPaymentInfoHandlerProps = async (request) => {
-	const event = eventsStateController.getEvent(request.params.id);
+	const event = await eventsStateController.getEvent(request.params.id);
 	if (!event) {
 		return {
 			type: 'error',
@@ -29,6 +29,7 @@ export const getPaymentInfo: IGetPaymentInfoHandlerProps = async (request) => {
 	}
 
 	const paymentsFile = 'assets/presets/payments-info.json';
+
 	const paymentsInfo = JSON.parse(
 		fs.existsSync(paymentsFile) ? fs.readFileSync(paymentsFile, 'utf-8') : '[]' || '[]'
 	) as PaymentInfo[];

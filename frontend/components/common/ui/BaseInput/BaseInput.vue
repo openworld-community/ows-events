@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { InputValue } from './types/types';
-import {PropType} from 'vue';
+import type {PropType} from 'vue';
 
 defineOptions({
 	inheritAttrs: false

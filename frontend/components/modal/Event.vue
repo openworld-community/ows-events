@@ -161,11 +161,11 @@ const closeModal = () => {
 	setTimeout(() => props.closeEventModal(), 300);
 };
 
-const dateTime = (date: Date, time: string, timezone: string) => {
+const dateTime = (date: Date, time: any, timezone: string) => {
 	const y = date.getUTCFullYear();
 	const m = date.toLocaleString('default', { month: 'long' });
 	const d = date.getDay();
-	return new Date(`${m} ${d} ${y} ${time} ${timezone}`);
+	return new Date(`${m} ${d} ${y} ${time?.hours ?? '00'}:${time?.minutes ?? '00'} ${timezone}`);
 };
 
 const paramsForSubmit = computed(() => {
@@ -371,9 +371,9 @@ type InputEvent = {
 								:placeholder="$translate('component.new_event_modal.fields.price')"
 						/>
 <!--						<BaseSelect-->
-<!--								:key="inputValues.current"-->
-<!--								v-model="inputValues.current"-->
-<!--								:input-disabled="!inputValues.current"-->
+<!--								:key="inputValues.currency"-->
+<!--								v-model="inputValues.currency"-->
+<!--								:input-disabled="!inputValues.currency"-->
 <!--								name="current"-->
 <!--								:placeholder="$translate('global.city')"-->
 <!--								:list="cities"-->

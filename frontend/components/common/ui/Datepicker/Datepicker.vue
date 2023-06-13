@@ -49,7 +49,7 @@ const date = ref();
 const emit = defineEmits(['update:modelValue']);
 const handleDate = (modelData: Date | any) => {
 	// view
-	emit('update:modelValue', isDateType.value ? modelData : `${modelData.hours}:${modelData.minutes}`);
+	emit('update:modelValue', modelData);
 	// model
 	date.value = modelData;
 };

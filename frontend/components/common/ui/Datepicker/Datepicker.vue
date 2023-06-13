@@ -2,7 +2,7 @@
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import {DatepickerType} from './types/types';
-import {dateFormat} from '~/utils/dateFormat';
+import {dateFormat, timeFormat} from '~/utils/dateFormat';
 import {computed, ref} from 'vue';
 
 const props =  defineProps({
@@ -46,9 +46,17 @@ const props =  defineProps({
 
 const date = ref();
 
-const handleDate = (modelData: Date) => {
+const emit = defineEmits(['update:modelValue']);
+const handleDate = (modelData: Date | any) => {
+	// view
+	emit('update:modelValue', isDateType.value ? modelData : `${modelData.hours}:${modelData.minutes}`);
+	// model
 	date.value = modelData;
-}
+};
+// const handleTime = (modelData: Date | any) => {
+// 	emit('update:modelValue', `${modelData.hours}:${modelData.minutes}`);
+// 	date.value = modelData;
+// };
 
 const isDateType = computed(() => {
 	return props.type === DatepickerType.date
@@ -57,7 +65,7 @@ const isDateType = computed(() => {
 </script>
 
 <template>
-	<div :class="props.className">
+	<div :class="`input__wrapper ${props.className}`">
 		<label
 				v-if="props.label"
 				class="form__label"
@@ -66,7 +74,7 @@ const isDateType = computed(() => {
 			{{ props.label }}
 		</label>
 			<VueDatePicker
-				:model-value="date"
+				:model-value="modelValue"
 				:name="props.name"
 				:placeholder="props.placeholder"
 				:input-class-name="`input form__field ${props.error ? 'form__error' : ''}`"

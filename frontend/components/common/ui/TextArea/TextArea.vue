@@ -26,6 +26,7 @@ const updateValue = (event: Event) => {
 			:class="`textarea form__field ${error ? 'form__error' : ''}`"
 			:name="name"
 			:value="modelValue"
+			:placeholder="placeholder"
 			@input="updateValue"
 		/>
 		<span

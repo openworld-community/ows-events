@@ -7,6 +7,8 @@ import Multipart from '@fastify/multipart';
 import TelegramBot from 'node-telegram-bot-api';
 
 import { UserInfo } from '@common/types/user';
+import fastifySwagger from '@fastify/swagger';
+import fastifySwaggerUi from '@fastify/swagger-ui';
 import { eventsApi } from './rest/v1/events/router';
 import { imageApi } from './rest/v1/image/router';
 import { locationApi } from './rest/v1/location/router';
@@ -14,8 +16,6 @@ import { paymentInfoApi } from './rest/v1/payment-info/router';
 import { registrationApi } from './rest/v1/registration/router';
 import { timezonesApi } from './rest/v1/timezones/router';
 import { openApiOptions, openApiUiOptions } from './docs';
-import fastifySwagger from '@fastify/swagger'
-import fastifySwaggerUi from '@fastify/swagger-ui'
 import { userController } from './controllers/user-controller';
 import { connectToMongo } from './boot/connectToMongo';
 
@@ -35,8 +35,8 @@ connectToMongo()
 		console.error(e);
 	});
 
-server.register(fastifySwagger, openApiOptions)
-server.register(fastifySwaggerUi, openApiUiOptions)
+server.register(fastifySwagger, openApiOptions);
+server.register(fastifySwaggerUi, openApiUiOptions);
 
 server.register(cors, {});
 

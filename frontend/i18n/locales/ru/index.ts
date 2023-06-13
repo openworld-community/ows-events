@@ -56,6 +56,9 @@ export const defaultTranslation = {
     },
     image: {
       event: 'изображение мероприятия'
+    },
+    price: {
+      free: 'Бесплатно'
     }
   },
   component: {

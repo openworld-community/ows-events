@@ -11,7 +11,7 @@ type IAddEventRoute = {
 type IAddEventHandler = IRouteHandler<IAddEventRoute>;
 
 type IGetEventRoute = {
-	Reply: EventOnPoster;
+	Reply: StandardResponse<EventOnPoster>;
 	Params: EventParams;
 };
 type IGetEventHandler = IRouteHandler<IGetEventRoute>;

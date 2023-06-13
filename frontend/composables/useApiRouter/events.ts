@@ -11,7 +11,7 @@ export const events = {
 	>((input) => {
 		return useBackendFetch('events/find', { body: input?.query ?? {} });
 	}),
-	get: defineQuery<(input: { id: string }) => EventOnPoster>((input) => {
+	get: defineQuery<(input: { id: string }) => StandardResponse<EventOnPoster>>((input) => {
 		return useBackendFetch(`events/${input.id}`);
 	}),
 	add: defineMutation<(input: PostEventPayload) => StandardResponse<{ id: string }>>((input) => {

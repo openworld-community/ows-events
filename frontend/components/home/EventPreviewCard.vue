@@ -68,7 +68,7 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 		line-height: 0;
 
 		&--background {
-			background: url('@/assets/img/event-card@2x.png') center center no-repeat;
+			background: url('@/assets/img/event-preview@2x.png') center center no-repeat;
 			background-size: cover;
 		}
 	}

@@ -6,9 +6,6 @@ x-logging: &default-logging
         max-size: '10m'
         max-file: '5'
 
-networks:
-    tmp:
-
 services:
     frontend:
         build:
@@ -31,9 +28,26 @@ services:
             context: .
             dockerfile: ./backend/Dockerfile.dev
         logging: *default-logging
+        depends_on:
+            - mongo
+        links:
+            - mongo
         environment:
             - AUTH_SERVER_URL=https://auth.poster-test-peredelano.orby-tech.space
         ports:
             - '7080:7080'
         volumes:
             - ./:/app
+
+    mongo:
+        image: mongo:6.0
+        restart: unless-stopped
+        command: ['--bind_ip_all']
+        healthcheck:
+            test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo --quiet) -eq 1
+            interval: 10s
+            start_period: 30s
+        ports:
+            - '27020:27017'
+        volumes:
+            - /tmp/ows-events/db:/data/db

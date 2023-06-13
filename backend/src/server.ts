@@ -5,23 +5,35 @@ import Static from '@fastify/static';
 import Multipart from '@fastify/multipart';
 
 import TelegramBot from 'node-telegram-bot-api';
-import axios from 'axios';
 
-import { UserDbEntity, UserInfo } from '@common/types/user';
+import { UserInfo } from '@common/types/user';
 import { eventsApi } from './rest/v1/events/router';
 import { imageApi } from './rest/v1/image/router';
 import { locationApi } from './rest/v1/location/router';
 import { paymentInfoApi } from './rest/v1/payment-info/router';
 import { registrationApi } from './rest/v1/registration/router';
 import { timezonesApi } from './rest/v1/timezones/router';
-import { vars } from './const/vars';
 import { openApiOptions, openApiUiOptions } from './docs';
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUi from '@fastify/swagger-ui'
+import { userController } from './controllers/user-controller';
+import { connectToMongo } from './boot/connectToMongo';
 
 const server = fastify({
 	logger: true
 });
+
+connectToMongo()
+	.then(() => {
+		// eslint-disable-next-line no-console
+		console.log('Connected to mongo');
+	})
+	.catch((e) => {
+		// eslint-disable-next-line no-console
+		console.error('MongoConnection Error');
+		// eslint-disable-next-line no-console
+		console.error(e);
+	});
 
 server.register(fastifySwagger, openApiOptions)
 server.register(fastifySwaggerUi, openApiUiOptions)
@@ -52,37 +64,17 @@ server.register(registrationApi, { prefix: '/api/registration' });
 server.register(paymentInfoApi, { prefix: '/api/payment-info' });
 server.register(imageApi, { prefix: '/api/image' });
 
-// TODO: Refactor later
-const users: UserDbEntity[] = [];
-
 server.get<{
 	Params: {
-		id: number;
+		id: string;
 	};
-
 	Body: TelegramBot.Message | null;
-}>(
-	'/api/postauth/token/:id',
-	async (request) =>
-		// eslint-disable-next-line @typescript-eslint/return-await
-		await axios
-			.get<UserDbEntity>(`${vars.auth_server_url}/user/${request.params.id}`)
-			.then((res) => {
-				if (!res.data) {
-					throw new Error('No data');
-				}
-				if (!res.data.token) {
-					throw new Error('No token');
-				}
-				users.push(res.data);
-
-				return res.data.token;
-			})
-			.catch((e) => {
-				// eslint-disable-next-line no-console
-				console.error(e);
-				return '';
-			})
+}>('/api/postauth/token/:id', async (request) =>
+	userController.getUserFromAuthService(request.params.id).catch((e) => {
+		// eslint-disable-next-line no-console
+		console.error(e);
+		return '';
+	})
 );
 
 server.get<{
@@ -90,15 +82,7 @@ server.get<{
 		token: string;
 	};
 	Body: UserInfo;
-}>('/api/user/info', async (request) => {
-	const userEntity = users.find((u) => u.token === request.query.token);
-	return {
-		firstNickName: userEntity?.firstNickName,
-		lastNickName: userEntity?.lastNickName,
-		userNickName: userEntity?.userNickName,
-		id: userEntity?.id
-	};
-});
+}>('/api/user/info', async (request) => userController.getUserInfoByToken(request.query.token));
 
 server.setNotFoundHandler((req, reply) => {
 	reply.sendFile('index.html');

@@ -10,18 +10,48 @@ type Props = {
 };
 
 const props = defineProps<Props>();
-const user = useCookie<UserInfo | null>('user');
+const userCookie = useCookie<UserInfo | null>('user');
 
 const username =
-	user.value?.userNickName ||
-	(user.value?.firstNickName || user.value?.lastNickName
-		? user.value?.firstNickName + ' ' + user.value?.lastNickName
+	userCookie.value?.userNickName ||
+	(userCookie.value?.firstNickName || userCookie.value?.lastNickName
+		? userCookie.value?.firstNickName + ' ' + userCookie.value?.lastNickName
 		: null);
 
-const temporaryId = v4();
-const authLink: string = `${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backurl=${encodeURIComponent(
-	`${SERVER_URL}/postauth/${temporaryId}`
-)}`;
+
+// const temporaryId = v4();
+// const authLink: string = `${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backurl=${encodeURIComponent(
+// 	`${SERVER_URL}/postauth/${temporaryId}`
+// )}`;
+
+
+
+const onTelegramAuth = (user) => {
+  alert('Logged in as ' + user.first_name + ' ' + user.last_name + ' (' + user.id + (user.username ? ', @' + user.username : '') + ')');
+}
+const telegram = ref(null);
+onMounted(() => {
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = 'https://telegram.org/js/telegram-widget.js?22';
+
+  script.setAttribute('data-size', 'large');
+  // script.setAttribute('data-userpic', props.userpic);
+  script.setAttribute('data-telegram-login', 'Afishabot');
+  script.setAttribute('data-request-access', 'write');
+
+  if (props.mode === 'callback') {
+    window.onTelegramAuth = onTelegramAuth;
+    script.setAttribute('data-onauth', 'window.onTelegramAuth(user)');
+  }
+  // else {
+  //   script.setAttribute('data-auth-url', props.redirectUrl);
+  // }
+  telegram.value.appendChild(script);
+});
+
+
+
 </script>
 
 <template>
@@ -36,6 +66,7 @@ const authLink: string = `${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backur
 		:lock-scroll="false"
 	>
 		<div>
+      <div ref="telegram"></div>
 			<NuxtLink
 				v-if="isAuthorized"
 				class="authorisation-button"
@@ -56,7 +87,7 @@ const authLink: string = `${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backur
 			</NuxtLink>
 			<NuxtLink
 				v-else
-				:to="authLink"
+				:to="#"
 				target="_blank"
 				class="authorisation-button"
 			>

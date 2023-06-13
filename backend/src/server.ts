@@ -2,7 +2,6 @@ import fastify from 'fastify';
 import cors from '@fastify/cors';
 import path from 'path';
 import Static from '@fastify/static';
-import Multipart from '@fastify/multipart';
 
 import TelegramBot from 'node-telegram-bot-api';
 
@@ -18,9 +17,13 @@ import { timezonesApi } from './rest/v1/timezones/router';
 import { openApiOptions, openApiUiOptions } from './docs';
 import { userController } from './controllers/user-controller';
 import { connectToMongo } from './boot/connectToMongo';
+import { ajvFilePlugin } from './config/ajvPlugins';
 
 const server = fastify({
-	logger: true
+	logger: true,
+	ajv: {
+		plugins: [ajvFilePlugin]
+	}
 });
 
 connectToMongo()
@@ -39,8 +42,6 @@ server.register(fastifySwagger, openApiOptions);
 server.register(fastifySwaggerUi, openApiUiOptions);
 
 server.register(cors, {});
-
-server.register(Multipart);
 
 fastify.default({
 	maxParamLength: 1000

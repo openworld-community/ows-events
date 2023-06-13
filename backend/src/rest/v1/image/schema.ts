@@ -6,10 +6,10 @@ export const deleteImageSchema = {
 		type: 'object',
 		properties: {
 			path: { type: 'string' }
-		},
+		}
 	},
 	response: {
-		200: { success: { type: 'string' } } 
+		200: { success: { type: 'string' } }
 	},
 	security: [{ authJWT: [] }]
 };
@@ -22,12 +22,19 @@ export const addImageSchema = {
 	body: {
 		type: 'object',
 		properties: {
-			image: { type: 'string', format: 'binary' }
-		},
+			image: { isFile: true }
+		}
 	},
 	response: {
-		200: { path: { type: 'string' } }
+		200: {
+			type: 'object',
+			properties: {
+				type: { type: 'string' },
+				data: {
+					path: { type: 'string' }
+				}
+			}
+		}
 	},
 	security: [{ authJWT: [] }]
 };
-

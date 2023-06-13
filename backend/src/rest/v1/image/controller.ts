@@ -23,15 +23,15 @@ export const deleteImage: IDeleteImageHandlerProps = async (request) => {
 };
 
 export const addImage: IAddImageHandlerProps = async (request) => {
-	const data = await request.file();
-	if (!data) {
+	const { image } = request.body;
+	if (!image) {
 		return {
 			type: 'error'
 		};
 	}
 
-	const buffer = await data.toBuffer();
-	if (!buffer) {
+	const [filename, data] = image.split('--');
+	if (!data) {
 		return {
 			type: 'error'
 		};
@@ -39,12 +39,11 @@ export const addImage: IAddImageHandlerProps = async (request) => {
 
 	try {
 		const path = await imageController.saveImg({
-			data: buffer,
-			filetype: data.filename.split('.').reverse()[0]
+			data: Buffer.from(data, 'base64'),
+			filetype: filename.split('.').reverse()[0]
 		});
 		return {
 			type: 'success',
-
 			data: {
 				path
 			}

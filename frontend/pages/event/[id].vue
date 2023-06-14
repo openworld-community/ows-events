@@ -4,10 +4,8 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '../../components/modal/Event.vue';
 import type { UserInfo } from '@/../common/types/user';
 import DeleteEvent from '../../components/modal/DeleteEvent.vue';
-import type { EventOnPoster } from '../../../common/types';
 
 definePageMeta({ name: RouteNameEnum.EVENT });
-
 const route = useRoute();
 const id = route.params.id as string;
 

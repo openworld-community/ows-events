@@ -200,36 +200,35 @@ const paramsForSubmit = computed(() => {
 });
 
 const submitEvent = async () => {
-	console.log('submit', paramsForSubmit.value)
-	// isLoading.value = true;
-	//
-	// if (props.dataForEdit) {
-	// 	let image = props.dataForEdit.image;
-	// 	if (newImageFile.value && props.dataForEdit.image) {
-	// 		await apiRouter.events.image.delete.useMutation({ path: props.dataForEdit.image });
-	// 		image = '';
-	// 	}
-	// 	image = (await addImage(newImageFile.value)) ?? image;
-	//
-	// 	const event = Object.assign(paramsForSubmit.value, { id: inputValues.value.id, image });
-	// 	const { data } = await apiRouter.events.edit.useMutation({ event });
-	//
-	// 	if (data.value?.type === 'success') {
-	// 		props.refreshEvent();
-	// 	} else {
-	// 		console.error(data.value?.errors);
-	// 	}
-	// } else {
-	// 	const image = (await addImage(newImageFile.value)) ?? '';
-	// 	const event = Object.assign(paramsForSubmit.value, { image });
-	// 	const { data } = await apiRouter.events.add.useMutation({ event });
-	// 	if (data.value?.type === 'success') {
-	// 		await navigateTo(`/event/${data.value.data.id}`);
-	// 	}
-	// }
-	//
-	// closeModal();
-	// isLoading.value = false;
+	isLoading.value = true;
+
+	if (props.dataForEdit) {
+		let image = props.dataForEdit.image;
+		if (newImageFile.value && props.dataForEdit.image) {
+			await apiRouter.events.image.delete.useMutation({ path: props.dataForEdit.image });
+			image = '';
+		}
+		image = (await addImage(newImageFile.value)) ?? image;
+
+		const event = Object.assign(paramsForSubmit.value, { id: inputValues.value.id, image });
+		const { data } = await apiRouter.events.edit.useMutation({ event });
+
+		if (data.value?.type === 'success') {
+			props.refreshEvent();
+		} else {
+			console.error(data.value?.errors);
+		}
+	} else {
+		const image = (await addImage(newImageFile.value)) ?? '';
+		const event = Object.assign(paramsForSubmit.value, { image });
+		const { data } = await apiRouter.events.add.useMutation({ event });
+		if (data.value?.type === 'success') {
+			await navigateTo(`/event/${data.value.data.id}`);
+		}
+	}
+
+	closeModal();
+	isLoading.value = false;
 };
 
 async function addImage(image: ImageLoaderFile) {
@@ -247,15 +246,6 @@ const isTimezoneDisabled = computed(() => {
 	return !inputValues.value.city;
 });
 
-type InputEvent = {
-	type: 'text' | 'date' | 'time' | 'number' | 'textarea' | 'datalist';
-	label?: string;
-	name: keyof typeof inputValues.value;
-	required: boolean;
-	min?: number;
-	options?: any; // TODO тип
-	isDisabled?: Ref<boolean>;
-};
 </script>
 
 <template>
@@ -412,6 +402,7 @@ type InputEvent = {
 					button-kind="success"
 					:button-text="$translate('component.new_event_modal.submit')"
 					:is-loading="isLoading"
+					:is-disabled="!checkFormFilling || isLoading"
 					@click="isLoading ? null : submitEvent()"
 				/>
 			</div>

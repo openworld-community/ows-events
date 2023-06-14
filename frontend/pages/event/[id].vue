@@ -15,18 +15,15 @@ const user = useCookie<UserInfo | null>('user');
 
 const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ id });
 
-//TODO: Перепишите позже на нормальном, пожалуйста
-let posterEvent: EventOnPoster;
-if (data.value?.type === 'success') {
-	posterEvent = data.value.data;
-} else {
-	throw 'err';
-}
+const posterEvent = computed(() => {
+	if (data.value?.type !== 'success') return null;
+	return data.value.data;
+});
 
 const { $translate } = useNuxtApp();
 
 useHead({
-	title: `${$translate('meta.title')} / ${posterEvent?.title}`
+	title: `${$translate('meta.title')} / ${posterEvent.value?.title}`
 });
 
 const deleteCard = async () => {

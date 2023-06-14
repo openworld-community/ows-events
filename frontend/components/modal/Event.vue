@@ -158,17 +158,17 @@ const paramsForSubmit = computed(() => {
 		title: inputValues.value.title,
 		description: inputValues.value.description,
 		date: dateTime(
-			inputValues.value.startDate as Date,
+			inputValues.value.startDate as unknown as Date,
 			inputValues.value.startTime,
 			tz.timezoneOffset
 		).getTime(),
 		durationInSeconds: dateTime(
-				inputValues.value.endDate as Date,
+				inputValues.value.endDate as unknown as Date,
 				inputValues.value.endTime,
 				tz.timezoneOffset
 			).getTime() -
 			dateTime(
-				inputValues.value.startDate as Date,
+				inputValues.value.startDate as unknown as Date,
 				inputValues.value.startTime,
 				tz.timezoneOffset
 			).getTime()
@@ -342,6 +342,7 @@ const isTimezoneDisabled = computed(() => {
 						<BaseInput
 								v-model="inputValues.price"
 								name="price"
+								type="number"
 								:placeholder="$translate('component.new_event_modal.fields.price')"
 						/>
 <!--						<BaseSelect-->

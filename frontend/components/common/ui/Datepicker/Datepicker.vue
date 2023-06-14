@@ -47,16 +47,12 @@ const props =  defineProps({
 const date = ref();
 
 const emit = defineEmits(['update:modelValue']);
-const handleDate = (modelData: Date | any) => {
+const handleDate = (modelData: Date) => {
 	// view
 	emit('update:modelValue', modelData);
 	// model
 	date.value = modelData;
 };
-// const handleTime = (modelData: Date | any) => {
-// 	emit('update:modelValue', `${modelData.hours}:${modelData.minutes}`);
-// 	date.value = modelData;
-// };
 
 const isDateType = computed(() => {
 	return props.type === DatepickerType.date

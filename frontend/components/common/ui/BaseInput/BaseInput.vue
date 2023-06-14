@@ -20,7 +20,7 @@ const props = defineProps({
 		required: true
 	},
 	type: {
-		type: String as PropType<InputValue>,
+		type: String as PropType<InputValue> | Number as PropType<InputValue>,
 		default: 'text'
 	},
 	placeholder: {

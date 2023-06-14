@@ -29,6 +29,8 @@ useHead({
 	title: `${$translate('meta.title')} / ${posterEvent?.title}`
 });
 
+const trackRedirects = () => useTrackEvent('redirect');
+
 const deleteCard = async () => {
 	const { data } = await apiRouter.events.delete.useMutation({ id });
 	if (data.value?.type === 'success') {
@@ -152,6 +154,7 @@ patchDeleteEventModal({
 					:button-text="$translate('event.button.contact')"
 					:link="posterEvent.url"
 					is-external-link
+					@click="trackRedirects"
 				/>
 				<!--TODO подключить, когда вернемся к проработке регистрации-->
 				<!--				<CommonButton-->

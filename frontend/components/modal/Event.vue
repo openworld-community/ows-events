@@ -43,9 +43,9 @@ type inputValuesType = {
 	id: string;
 	title: string;
 	description: string;
-	startDate: string;
+	startDate: Date | string;
 	startTime: string;
-	endDate: string;
+	endDate: Date | string;
 	endTime: string;
 	country: string;
 	city: string;
@@ -141,27 +141,11 @@ const checkFormFilling = computed(() => {
 	);
 });
 
-watch(
-		() => inputValues.value.startDate,
-		(data) => {
-			console.log('startDate', data)
-		},
-		{ deep: true }
-);
-
-watch(
-		() => inputValues.value.startTime,
-		(data) => {
-			console.log('startTime', data)
-		},
-		{ deep: true }
-);
-
 const closeModal = () => {
 	setTimeout(() => props.closeEventModal(), 300);
 };
 
-const dateTime = (date: Date, time: any, timezone: string) => {
+const dateTime = (date: Date, time: any, timezone: string): Date => {
 	const y = date.getUTCFullYear();
 	const m = date.toLocaleString('default', { month: 'long' });
 	const d = date.getDay();

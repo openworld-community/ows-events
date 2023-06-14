@@ -33,7 +33,7 @@ const onTelegramAuth = (user: any) => {
 			')'
 	);
 };
-const telegram = ref(new HTMLElement());
+const telegram = ref<HTMLElement | null>(null);
 onMounted(() => {
 	const script = document.createElement('script');
 	script.async = true;
@@ -41,11 +41,12 @@ onMounted(() => {
 
 	script.setAttribute('data-size', 'large');
 	// script.setAttribute('data-userpic', props.userpic);
-	script.setAttribute('data-telegram-login', 'standart_oauth_test1_bot');
+	script.setAttribute('data-telegram-login', 'afisha_oauth_local_bot');
 	script.setAttribute('data-request-access', 'write');
 
-	script.setAttribute('data-auth-url', 'https:');
+	script.setAttribute('data-auth-url', 'http://127.0.0.1:7080/api/auth/telegram');
 	telegram.value?.appendChild(script);
+	console.log(telegram.value);
 });
 </script>
 

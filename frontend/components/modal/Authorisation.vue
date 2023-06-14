@@ -37,17 +37,12 @@ const authLink: string = `${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backur
 	>
 		<div class="modal">
 			<div class="modal-card__head">
-                <p 
-				v-if="isAuthorized" 
-				class="modal-card__title"
-				>
-					{{ username }}
-                </p>
-				<p 
-				v-else 
-				class="modal-card__title"
-				>
-                    {{ $translate('component.pre_authorisation_modal.title') }}
+                <p class="modal-card__title">
+					{{
+						isAuthorized 
+						? username 
+						: $translate('component.pre_authorisation_modal.title')
+					}}
                 </p>
             </div>
 			<div class="modal-card__foot">

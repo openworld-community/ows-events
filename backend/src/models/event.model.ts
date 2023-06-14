@@ -41,6 +41,9 @@ const schema = new Schema<IEventDocument>(
 		image: {
 			type: String
 		},
+		url: {
+			type: String
+		},
 		price: {
 			type: Number
 		},

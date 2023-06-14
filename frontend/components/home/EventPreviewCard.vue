@@ -16,7 +16,10 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 					{ 'card__image-container--background': !eventData.image }
 				]"
 			>
-				<span class="card__price">{{ props.eventData.price }} €</span>
+				<span class="card__price">{{
+					eventData.price === 0 ? $translate('event.price.free') : `${eventData.price} €`
+				}}
+        </span>
 				<img
 					v-if="eventData.image"
 					:alt="$translate('home.events.image_alt')"

@@ -92,7 +92,9 @@ patchDeleteEventModal({
 				{ 'event-image__container--background': !posterEvent.image }
 			]"
 		>
-			<span class="event-image__price">{{ posterEvent.price }} €</span>
+			<span class="event-image__price">{{
+				posterEvent.price === 0 ? $translate('event.price.free') : `${posterEvent.price} €`
+			}}</span>
 			<img
 				v-if="posterEvent.image"
 				:src="getEventImage(posterEvent)"
@@ -151,14 +153,14 @@ patchDeleteEventModal({
 					:link="posterEvent.url"
 					is-external-link
 				/>
-<!--TODO подключить, когда вернемся к проработке регистрации-->
-<!--				<CommonButton-->
-<!--					v-else-->
-<!--					button-kind="success"-->
-<!--					class="event-actions__button"-->
-<!--					:button-text="$translate('event.button.register')"-->
-<!--					@click="openRegistrationModal"-->
-<!--				/>-->
+				<!--TODO подключить, когда вернемся к проработке регистрации-->
+				<!--				<CommonButton-->
+				<!--					v-else-->
+				<!--					button-kind="success"-->
+				<!--					class="event-actions__button"-->
+				<!--					:button-text="$translate('event.button.register')"-->
+				<!--					@click="openRegistrationModal"-->
+				<!--				/>-->
 			</template>
 
 			<div

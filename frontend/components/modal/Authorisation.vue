@@ -11,10 +11,10 @@ const props = defineProps<Props>();
 const userCookie = useCookie<UserInfo | null>('user');
 
 const username =
-	userCookie.value?.userNickName ||
-	(userCookie.value?.firstNickName || userCookie.value?.lastNickName
-		? userCookie.value?.firstNickName + ' ' + userCookie.value?.lastNickName
-		: null);
+	userCookie.value?.username ||
+	userCookie.value?.first_name ||
+	userCookie.value?.last_name ||
+	null;
 
 // const temporaryId = v4();
 // const authLink: string = `${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backurl=${encodeURIComponent(
@@ -22,23 +22,31 @@ const username =
 // )}`;
 
 const onTelegramAuth = (user: any) => {
-  alert('Logged in as ' + user.first_name + ' ' + user.last_name + ' (' + user.id + (user.username ? ', @' + user.username : '') + ')');
-}
+	alert(
+		'Logged in as ' +
+			user.first_name +
+			' ' +
+			user.last_name +
+			' (' +
+			user.id +
+			(user.username ? ', @' + user.username : '') +
+			')'
+	);
+};
 const telegram = ref(new HTMLElement());
 onMounted(() => {
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = 'https://telegram.org/js/telegram-widget.js?22';
+	const script = document.createElement('script');
+	script.async = true;
+	script.src = 'https://telegram.org/js/telegram-widget.js?22';
 
-  script.setAttribute('data-size', 'large');
-  // script.setAttribute('data-userpic', props.userpic);
-  script.setAttribute('data-telegram-login', 'standart_oauth_test1_bot');
-  script.setAttribute('data-request-access', 'write');
+	script.setAttribute('data-size', 'large');
+	// script.setAttribute('data-userpic', props.userpic);
+	script.setAttribute('data-telegram-login', 'standart_oauth_test1_bot');
+	script.setAttribute('data-request-access', 'write');
 
-    script.setAttribute('data-auth-url','https:');
-  telegram.value?.appendChild(script);
+	script.setAttribute('data-auth-url', 'https:');
+	telegram.value?.appendChild(script);
 });
-
 </script>
 
 <template>
@@ -53,7 +61,7 @@ onMounted(() => {
 		:lock-scroll="false"
 	>
 		<div>
-      <div ref="telegram"></div>
+			<div ref="telegram"></div>
 			<NuxtLink
 				v-if="isAuthorized"
 				class="authorisation-button"
@@ -74,8 +82,8 @@ onMounted(() => {
 			</NuxtLink>
 			<div
 				v-else
-        @click="onTelegramAuth"
 				class="authorisation-button"
+				@click="onTelegramAuth"
 			>
 				<div class="authorisation-button__container">
 					<p class="authorisation-button__text">Войти</p>

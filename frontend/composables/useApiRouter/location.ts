@@ -4,22 +4,17 @@ import { LOCATION_API_URL } from '~/constants/url';
 
 export const location = {
 	getUserLocation: defineQuery<() => UserLocation>(() => {
-		return useAsyncData<UserLocation>(() =>
-			$fetch<{
+		return useFetch(LOCATION_API_URL, {
+			transform(data: {
 				location: { city: string; country: { code: string; name: string } };
-			}>(LOCATION_API_URL)
-				.then((res) => {
-					return {
-						code: res.location.country.code,
-						city: res.location.city,
-						country: res.location.country.name
-					};
-				})
-				.catch((e) => {
-					console.error(e);
-					return {};
-				})
-		);
+			}) {
+				return {
+					code: data.location.country.code,
+					city: data.location.city,
+					country: data.location.country.name
+				};
+			}
+		});
 	}),
 	country: {
 		getAll: defineQuery<() => string[]>(() => useBackendFetch('location/countries')),

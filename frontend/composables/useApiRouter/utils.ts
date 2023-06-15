@@ -8,6 +8,11 @@ export function defineRouter<T extends ApiRouter>(router: T) {
 	return router;
 }
 
+/**
+ * Helper to determine the shape of a single argument function
+ * - If it has 1 required, 1 optional or 0 arguments.
+ * @returns `[Parameter, ReturnValue]`
+ */
 type inferFunctionSignature<T extends (data: any) => any> = T extends () => any
 	? T extends (data?: infer P) => infer R
 		? unknown extends P
@@ -23,6 +28,13 @@ type Refify<T> = T extends object
 	  }
 	: T | (T extends undefined ? never : Ref<T>);
 type Fetchify<T> = ReturnType<typeof useBackendFetch<T>>;
+/**
+ * Helper for `defineQuery` & `defineMutation`
+ *
+ * Determines if data(essentially input) is required, optional or even exists in provided query/mutation
+ * @see {@link defineQuery}
+ * @see {@link defineMutation}
+ */
 type Datatify<
 	T extends (data: any) => any,
 	P extends inferFunctionSignature<T>[0] = inferFunctionSignature<T>[0]
@@ -35,6 +47,10 @@ type Datatify<
 	Couldn't find an easier way to handle a function which can have 0, 1 optional or 1 required argument
 	and then would output a function with the same arguments signature so I had to resort to this.
  */
+/**
+ * Helper for `defineQuery`
+ * @see {@link defineQuery}
+ */
 type Querify<
 	T extends (data: any) => any,
 	P extends inferFunctionSignature<T>[0] = inferFunctionSignature<T>[0],
@@ -44,6 +60,10 @@ type Querify<
 	: P & undefined extends never
 	? (data: Refify<P>) => Fetchify<R>
 	: (data?: Refify<P>) => Fetchify<R>;
+/**
+ * Helper for `defineMutation`
+ * @see {@link defineMutation}
+ */
 type Mutify<
 	T extends (data: any) => any,
 	P extends inferFunctionSignature<T>[0] = inferFunctionSignature<T>[0],

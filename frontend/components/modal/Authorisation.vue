@@ -54,47 +54,48 @@ onMounted(() => {
 	<!--  TODO костылище, пока у нас нет финального макета-->
 	<CommonModalWrapper
 		:hide-overlay="false"
-        overlay-transition="vfm-fade"
-        overlay-transition-duration="2600"
-        content-transition="vfm-fade"
-        :click-to-close="true"
-        :esc-to-close="true"
-        :lock-scroll="false"
+		overlay-transition="vfm-fade"
+		overlay-transition-duration="2600"
+		content-transition="vfm-fade"
+		:click-to-close="true"
+		:esc-to-close="true"
+		:lock-scroll="false"
 	>
 		<div class="modal">
 			<div class="modal-card__head">
-                <p class="modal-card__title">
+				<p class="modal-card__title">
 					{{
 						isAuthorized
-						? username
-						: $translate('component.pre_authorisation_modal.title')
+							? username
+							: $translate('component.pre_authorisation_modal.title')
 					}}
-                </p>
-            </div>
+				</p>
+			</div>
 			<div class="modal-card__foot">
-        <div ref="telegram"></div>
+				<div ref="telegram"></div>
 				<CommonButton
 					class="modal-card__cancel-button"
 					button-kind="ordinary"
 					:button-text="$translate('component.pre_authorisation_modal.button.cancel')"
 					@click="props.close()"
-                />
+				/>
 				<CommonButton
 					v-if="isAuthorized"
 					button-kind="success"
 					:button-text="$translate('component.pre_authorisation_modal.button.logout')"
 					class="modal-card__logout-button"
 					@click="props.deauthorize()"
-                />
-                <CommonButton
+				/>
+
+				<CommonButton
 					v-else
 					:link="authLink"
 					is-external-link
 					class="modal-card__login-button"
 					button-kind="success"
 					:button-text="$translate('component.pre_authorisation_modal.button.login')"
-          @click="onTelegramAuth"
-                />
+					@click="onTelegramAuth"
+				/>
 			</div>
 		</div>
 	</CommonModalWrapper>
@@ -102,23 +103,23 @@ onMounted(() => {
 
 <style scoped lang="less">
 .modal {
-    //TODO: пока верстка только мобилки
-    max-width: 350px;
-    overflow: hidden;
-    border-radius: 10px;
-    margin: 40vh auto auto;
+	//TODO: пока верстка только мобилки
+	max-width: 350px;
+	overflow: hidden;
+	border-radius: 10px;
+	margin: 40vh auto auto;
 }
 
 .modal-card {
-    &__head {
-        height: max-content;
-        justify-content: center;
-    }
+	&__head {
+		height: max-content;
+		justify-content: center;
+	}
 
-    &__foot {
-        padding: 12px 57px;
-        justify-content: center;
-    }
+	&__foot {
+		padding: 12px 57px;
+		justify-content: center;
+	}
 
 	&__cancel-button {
 		padding: 7px 16px;
@@ -133,6 +134,7 @@ onMounted(() => {
 		padding: 7px 23px;
 	}
 }
+
 .authorisation-button {
 	display: flex;
 	flex-direction: column;

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { getAllTimezones, getTimezone } from '@/services/timezone.services';
 import { useLocationStore } from '@/stores/location.store';
-import { storeToRefs } from 'pinia';
 import { computed, onMounted, ref, watch } from 'vue';
 import { type EventOnPoster } from '../../../common/types';
 import { EventValidatorErrorTypes } from '../../../common/types/event-validation-error';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
+import type { City } from '@/stores/location.store';
+import type { Country } from '@/stores/location.store';
 
 const { $translate, $i18n } = useNuxtApp();
 const t = $i18n.t.bind($i18n);
@@ -19,7 +20,6 @@ type Props = {
 const props = defineProps<Props>();
 const locationStore = useLocationStore();
 locationStore.loadCountries();
-const { countries, cities } = storeToRefs(locationStore);
 
 const isLoading = ref(false);
 const newImageFile = ref<ImageLoaderFile>(null);
@@ -43,8 +43,8 @@ type inputValuesType = {
 	startTime: string;
 	endDate: string;
 	endTime: string;
-	country: string;
-	city: string;
+	country: Country;
+	city: City;
 	image: string;
 	price: number;
 	timezone: string;
@@ -93,22 +93,9 @@ const setEventData = (data: EventOnPoster) => {
 
 watch(
 	() => inputValues.value.country,
-	(_country) => {
-		if (!_country) {
-			inputValues.value.city = '';
-			return;
-		}
-		locationStore.pickCountry(_country);
-	},
-	{ deep: true }
-);
-
-watch(
-	() => inputValues.value.city,
-	(_city) => {
-		locationStore.pickCity(_city);
-	},
-	{ deep: true }
+	() => {
+		inputValues.value.city = '';
+	}
 );
 
 watch(
@@ -236,16 +223,18 @@ type InputEvent = {
 	name: keyof typeof inputValues.value;
 	required: boolean;
 	min?: number;
-	options?: any; // TODO тип
+	options?: string[] | Set<string>; // TODO тип
 	isDisabled?: Ref<boolean>;
 };
 
-const eventInputs: {
-	type: 'row' | 'column';
-	name: string;
-	label?: string;
-	child: InputEvent[];
-}[] = [
+const eventInputs = ref<
+	{
+		type: 'row' | 'column';
+		name: string;
+		label?: string;
+		child: InputEvent[];
+	}[]
+>([
 	{
 		type: 'column',
 		name: 'location',
@@ -254,14 +243,14 @@ const eventInputs: {
 			{
 				type: 'datalist',
 				name: 'country',
-				options: countries,
+				options: locationStore.countries,
 				label: $translate('component.new_event_modal.fields.country'),
 				required: true
 			},
 			{
 				type: 'datalist',
 				name: 'city',
-				options: cities,
+				options: locationStore.citiesByCountry.get(inputValues.value.country),
 				label: $translate('component.new_event_modal.fields.city'),
 				required: true,
 				isDisabled: isCityDisabled
@@ -269,7 +258,7 @@ const eventInputs: {
 			{
 				type: 'datalist',
 				name: 'timezone',
-				options: allTimezones,
+				options: allTimezones.value,
 				label: $translate('component.new_event_modal.fields.timezone'),
 				required: true,
 				isDisabled: isTimezoneDisabled
@@ -355,7 +344,7 @@ const eventInputs: {
 			}
 		]
 	}
-];
+]);
 </script>
 
 <template>
@@ -388,12 +377,12 @@ const eventInputs: {
 					<div :class="input.type === 'column' ? 'section__column' : 'section__row'">
 						<CommonInput
 							v-for="c in input.child"
-							:key="c.name + c.options?.value.join('') + c.isDisabled"
+							:key="c.name + c.options?.toString() + c.isDisabled"
 							v-model="inputValues[c.name]"
-							:input-disabled="c.isDisabled?.value || false"
+							:input-disabled="c.isDisabled ?? false"
 							class="section__input"
 							:input-type="c.type"
-							:options-list="c.options?.value"
+							:options-list="c.options"
 							:input-placeholder="c.label"
 							:input-name="c.name"
 							:is-required="c.required"

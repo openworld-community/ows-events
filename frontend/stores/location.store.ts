@@ -1,106 +1,63 @@
 import { defineStore } from 'pinia';
-import { parseJSON } from '~/utils';
 import type { UserLocation } from '../../common/types/location';
 
-const useLocationStore = defineStore('location', {
-	state: () => {
-		if (process.server) {
-			return {
-				pickedCountry: '',
-				countries: [],
-				cities: [],
-				citiesByCountry: {},
-				pickedCity: '',
-				userLocation: {}
-			};
-		}
+export type City = string;
+export type Country = string;
+type LocationStore = {
+	countries: Set<Country>;
+	citiesByCountry: Map<Country, City[]>;
+	userLocation: UserLocation;
+};
 
+const COUNTRIES_KEY = 'COUNTRIES';
+
+export const useLocationStore = defineStore('location', {
+	state: (): LocationStore => {
 		return {
-			pickedCountry: localStorage.getItem('LOCATIONS_PICKED_COUNTRY') ?? '',
-			countries: parseJSON<string[]>(localStorage.getItem('LOCATIONS_COUNTRIES') ?? '[]', []),
-			cities: parseJSON<string[]>(localStorage.getItem('LOCATIONS_CITIES') ?? '[]', []),
-			citiesByCountry: parseJSON<Record<string, string[]>>(
-				localStorage.getItem('LOCATIONS_CITIES_BY_COUNTRY') ?? '{}',
-				{}
-			),
-			pickedCity: localStorage.getItem('LOCATIONS_PICKED_CITY') ?? '',
-			userLocation: parseJSON<UserLocation>(
-				localStorage.getItem('LOCATIONS_USER_LOCATION') ?? '{}'
-			)
+			countries: new Set(),
+			citiesByCountry: new Map(),
+			userLocation: {}
 		};
 	},
-	getters: {},
 	actions: {
-		pickCountry(country: string) {
-			if (this.pickedCountry === country) {
-				return;
-			}
-			this.pickCity('');
+		async loadCountries(): Promise<void> {
+			if (this.countries.size) return;
 
-			this.pickedCountry = country;
-			if (process.client) {
-				localStorage.setItem('LOCATIONS_PICKED_COUNTRY', country);
-			}
-
-			this.loadCitiesByCountry(country);
-		},
-
-		pickCity(city: string) {
-			this.pickedCity = city;
-			if (process.client) {
-				localStorage.setItem('LOCATIONS_PICKED_CITY', city);
-			}
-		},
-
-		async loadCountries() {
-			if (this.countries.length) {
+			const { $locationStoreForage } = useNuxtApp();
+			const localCountries: Country[] | null = await $locationStoreForage.getItem(
+				COUNTRIES_KEY
+			);
+			if (localCountries) {
+				this.countries = new Set(localCountries);
 				return;
 			}
 
 			const { data } = await apiRouter.location.country.getAll.useQuery({});
-			this.countries = data.value ?? [];
-
-			if (process.client) {
-				localStorage.setItem('LOCATIONS_COUNTRIES', JSON.stringify(this.countries));
-			}
+			if (!data.value) return;
+			this.countries = new Set(data.value);
+			// data.value is Proxy which can't copied to storage directly - spread operator converts back to native object
+			$locationStoreForage.setItem(COUNTRIES_KEY, [...data.value]);
 		},
-		async loadCitiesByCountry(country: string) {
-			if (this.citiesByCountry[country]) {
-				this.cities = this.citiesByCountry[country];
-				return;
-			}
+		async loadCitiesByCountry(country: Country): Promise<void> {
+			if (this.citiesByCountry.get(country) || !this.countries.has(country)) return;
 
-			if (!this.countries.find((x) => x === country)) {
+			const { $locationStoreForage } = useNuxtApp();
+			const localCities: City[] | null = await $locationStoreForage.getItem(country);
+			if (localCities) {
+				this.citiesByCountry.set(country, localCities);
 				return;
 			}
 
 			const { data } = await apiRouter.location.country.getCities.useQuery({
 				data: { country }
 			});
-			const cities = data.value ?? [];
-
-			this.citiesByCountry[country] = cities;
-			this.cities = this.citiesByCountry[country] ?? [];
-			localStorage.setItem(
-				'LOCATIONS_CITIES_BY_COUNTRY',
-				JSON.stringify(this.citiesByCountry)
-			);
-			localStorage.setItem('LOCATIONS_CITIES', JSON.stringify(cities));
+			if (!data.value) return;
+			this.citiesByCountry.set(country, data.value);
+			// data.value is Proxy which can't copied to storage directly - spread operator converts back to native object
+			$locationStoreForage.setItem(country, [...data.value]);
 		},
-		async init(userLocation: UserLocation) {
-			this.userLocation = userLocation;
+		async init() {
 			await this.loadCountries();
-
-			if (!this.pickedCountry) return;
-
-			this.loadCitiesByCountry(this.pickedCountry);
-			this.pickCountry(this.pickedCountry);
-
-			if (!this.pickedCity) return;
-
-			this.pickCity(this.pickedCity);
 		}
 	}
 });
-
-export { useLocationStore };

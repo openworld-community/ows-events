@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const route = useRoute();
 const props = defineProps<{ search: string }>();
-defineEmits(['update:search']);
+const emit = defineEmits<{ 'update:search': [search: typeof props.search] }>();
 watch(
 	() => props.search,
 	async (search) => {
@@ -19,7 +19,7 @@ watch(
 		input-name="search"
 		:input-placeholder="$translate('global.search')"
 		:model-value="search"
-		@update:model-value="(value) => $emit('update:search', value)"
+		@update:model-value="(value:typeof search) => emit('update:search', value)"
 	/>
 </template>
 

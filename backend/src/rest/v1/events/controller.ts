@@ -10,7 +10,7 @@ import {
 	IUpdateEventHandler
 } from './type';
 import { ITokenData } from '../../types';
-import { eventsValidator } from './../../../validators/event-validator';
+import { eventsValidator } from '../../../validators/event-validator';
 
 export const addEvent: IAddEventHandler = async (request, reply) => {
 	const token = request.headers.authorization;

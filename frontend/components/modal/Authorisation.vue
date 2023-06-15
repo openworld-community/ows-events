@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { UserInfo } from '../../../common/types/user';
+import { TELEGRAM_AUTH_BOT_NAME, BASE_URL } from '../../constants/url';
 
 type Props = {
 	close: () => void;
@@ -40,13 +41,12 @@ onMounted(() => {
 	script.src = 'https://telegram.org/js/telegram-widget.js?22';
 
 	script.setAttribute('data-size', 'large');
-  script.setAttribute('data-userpic', 'false');
-	script.setAttribute('data-telegram-login', 'afisha_oauth_local_bot');
+	script.setAttribute('data-userpic', 'false');
+	script.setAttribute('data-telegram-login', TELEGRAM_AUTH_BOT_NAME);
 	script.setAttribute('data-request-access', 'write');
 
-	script.setAttribute('data-auth-url', 'http://127.0.0.1:7080/api/auth/telegram');
+	script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
 	telegram.value?.appendChild(script);
-	console.log(telegram.value);
 });
 </script>
 
@@ -85,14 +85,18 @@ onMounted(() => {
 					class="modal-card__logout-button"
 					@click="props.deauthorize()"
 				/>
-        <div v-else ref="telegram" class="modal-card__login-button"></div>
-<!--				<CommonButton-->
-<!--					v-else-->
-<!--					class="modal-card__login-button"-->
-<!--					button-kind="success"-->
-<!--					:button-text="$translate('component.pre_authorisation_modal.button.login')"-->
-<!--					@click="onTelegramAuth"-->
-<!--				/>-->
+				<div
+					v-else
+					ref="telegram"
+					class="modal-card__login-button"
+				></div>
+				<!--				<CommonButton-->
+				<!--					v-else-->
+				<!--					class="modal-card__login-button"-->
+				<!--					button-kind="success"-->
+				<!--					:button-text="$translate('component.pre_authorisation_modal.button.login')"-->
+				<!--					@click="onTelegramAuth"-->
+				<!--				/>-->
 			</div>
 		</div>
 	</CommonModalWrapper>
@@ -129,7 +133,7 @@ onMounted(() => {
 
 	&__login-button {
 		line-height: 0;
-    width: 234px;
+		width: 234px;
 	}
 }
 </style>

@@ -13,14 +13,17 @@ services:
             dockerfile: ./frontend/Dockerfile
             args:
                 - NODE_ENV=production
-                - VITE_API_URL=https://localhost:7080/api
-                - VITE_BASE_URL=https://localhost:7080
+                - VITE_API_URL=http://backend:7080/api
+                - VITE_BASE_URL=http://backend:7080
                 - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
                 - VITE_AUTH_SERVER_URL=https://auth.poster-test-peredelano.orby-tech.space
-                - VITE_POSTAUTH_URL=http://localhost:3000
+                - VITE_POSTAUTH_URL=http://backend:3000
+                - TELEGRAM_AUTH_BOT_NAME=afisha_oauth_local_bot
         logging: *default-logging
         ports:
             - 80:3000
+        links:
+            - backend
 
     backend:
         build:

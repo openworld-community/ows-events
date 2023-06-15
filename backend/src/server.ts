@@ -4,7 +4,6 @@ import path from 'path';
 import Static from '@fastify/static';
 import Multipart from '@fastify/multipart';
 
-import { UserInfo } from '@common/types/user';
 import { eventsApi } from './rest/v1/events/router';
 import { imageApi } from './rest/v1/image/router';
 import { locationApi } from './rest/v1/location/router';
@@ -62,7 +61,6 @@ server.get<{
 	Querystring: {
 		token: string;
 	};
-	Body: UserInfo;
 }>('/api/user/info', async (request) => userController.getUserInfoByToken(request.query.token));
 
 server.setNotFoundHandler((req, reply) => {

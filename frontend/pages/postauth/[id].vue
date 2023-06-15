@@ -3,20 +3,15 @@ import { RouteNameEnum } from '~/constants/enums/route';
 import type { UserInfo } from '../../../common/types/user';
 
 const route = useRoute();
-const userID = getFirstParam(route.params.id);
+const userToken = getFirstParam(route.params.id);
 const userCookie = useCookie<UserInfo | null>('user');
 const tokenCookie = useCookie<string>('token');
-const { data: token } = await apiRouter.auth.getToken.useQuery({ id: userID });
-if (!token.value) {
-	console.error('No token retrieved');
+tokenCookie.value = userToken;
+const { data: user } = await apiRouter.auth.getUser.useQuery({ userToken });
+if (!user.value) {
+	console.error('No user data retrieved');
 } else {
-	tokenCookie.value = token.value;
-	const { data: user } = await apiRouter.auth.getUser.useQuery({ userToken: token.value });
-	if (!user.value) {
-		console.error('No user data retrieved');
-	} else {
-		userCookie.value = user.value;
-	}
+	userCookie.value = user.value;
 }
 await navigateTo({ name: RouteNameEnum.HOME });
 </script>

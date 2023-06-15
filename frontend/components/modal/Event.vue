@@ -5,8 +5,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { type EventOnPoster } from '../../../common/types';
 import { EventValidatorErrorTypes } from '../../../common/types/event-validation-error';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
-import type { City } from '@/stores/location.store';
-import type { Country } from '@/stores/location.store';
+import type { City, Country } from '@/stores/location.store';
 
 const { $translate, $i18n } = useNuxtApp();
 const t = $i18n.t.bind($i18n);
@@ -381,7 +380,8 @@ const eventInputs: {
 								c.name +
 								(c.options && 'value' in c.options
 									? c.options.value
-									: c.options)?.toString() +
+									: c.options
+								)?.toString() +
 								c.isDisabled
 							"
 							v-model="inputValues[c.name]"

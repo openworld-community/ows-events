@@ -18,7 +18,7 @@ services:
                 - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
                 - VITE_AUTH_SERVER_URL=https://auth.poster-test-peredelano.orby-tech.space
                 - VITE_POSTAUTH_URL=http://backend:3000
-                - TELEGRAM_AUTH_BOT_NAME=afisha_oauth_local_bot
+                - VITE_TELEGRAM_AUTH_BOT_NAME=afisha_oauth_local_bot
         logging: *default-logging
         ports:
             - 80:3000

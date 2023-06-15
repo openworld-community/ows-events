@@ -15,4 +15,4 @@ export const LOCATION_API_URL = `https://api.ipregistry.co/?key=${
 export const REPO_URL = 'https://github.com/openworld-community/ows-events';
 
 export const TELEGRAM_AUTH_BOT_NAME =
-	import.meta.env?.VITE_TELEGRAM_AUTH_BOT_NAME || process.env?.VITE_TELEGRAM_AUTH_BOT_NAME;
+	import.meta.env?.VITE_TELEGRAM_AUTH_BOT_NAME || process.env.VITE_TELEGRAM_AUTH_BOT_NAME;

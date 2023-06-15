@@ -4,10 +4,8 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '../../components/modal/Event.vue';
 import type { UserInfo } from '@/../common/types/user';
 import DeleteEvent from '../../components/modal/DeleteEvent.vue';
-import type { EventOnPoster } from '../../../common/types';
 
 definePageMeta({ name: RouteNameEnum.EVENT });
-
 const route = useRoute();
 const id = route.params.id as string;
 
@@ -15,19 +13,18 @@ const user = useCookie<UserInfo | null>('user');
 
 const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ id });
 
-//TODO: Перепишите позже на нормальном, пожалуйста
-let posterEvent: EventOnPoster;
-if (data.value?.type === 'success') {
-	posterEvent = data.value.data;
-} else {
-	throw 'err';
-}
+const posterEvent = computed(() => {
+	if (data.value?.type !== 'success') return null;
+	return data.value.data;
+});
 
 const { $translate } = useNuxtApp();
 
 useHead({
-	title: `${$translate('meta.title')} / ${posterEvent?.title}`
+	title: `${$translate('meta.title')} / ${posterEvent.value?.title}`
 });
+
+const trackRedirects = () => useTrackEvent('redirect');
 
 const deleteCard = async () => {
 	const { data } = await apiRouter.events.delete.useMutation({ id });
@@ -152,6 +149,7 @@ patchDeleteEventModal({
 					:button-text="$translate('event.button.contact')"
 					:link="posterEvent.url"
 					is-external-link
+					@click="trackRedirects"
 				/>
 				<!--TODO подключить, когда вернемся к проработке регистрации-->
 				<!--				<CommonButton-->

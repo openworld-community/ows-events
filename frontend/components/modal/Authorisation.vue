@@ -40,7 +40,7 @@ onMounted(() => {
 	script.src = 'https://telegram.org/js/telegram-widget.js?22';
 
 	script.setAttribute('data-size', 'large');
-	// script.setAttribute('data-userpic', props.userpic);
+  script.setAttribute('data-userpic', 'false');
 	script.setAttribute('data-telegram-login', 'afisha_oauth_local_bot');
 	script.setAttribute('data-request-access', 'write');
 
@@ -72,7 +72,6 @@ onMounted(() => {
 				</p>
 			</div>
 			<div class="modal-card__foot">
-				<div ref="telegram"></div>
 				<CommonButton
 					class="modal-card__cancel-button"
 					button-kind="ordinary"
@@ -86,16 +85,14 @@ onMounted(() => {
 					class="modal-card__logout-button"
 					@click="props.deauthorize()"
 				/>
-
-				<CommonButton
-					v-else
-					:link="authLink"
-					is-external-link
-					class="modal-card__login-button"
-					button-kind="success"
-					:button-text="$translate('component.pre_authorisation_modal.button.login')"
-					@click="onTelegramAuth"
-				/>
+        <div v-else ref="telegram" class="modal-card__login-button"></div>
+<!--				<CommonButton-->
+<!--					v-else-->
+<!--					class="modal-card__login-button"-->
+<!--					button-kind="success"-->
+<!--					:button-text="$translate('component.pre_authorisation_modal.button.login')"-->
+<!--					@click="onTelegramAuth"-->
+<!--				/>-->
 			</div>
 		</div>
 	</CommonModalWrapper>
@@ -131,39 +128,8 @@ onMounted(() => {
 	}
 
 	&__login-button {
-		padding: 7px 23px;
-	}
-}
-
-.authorisation-button {
-	display: flex;
-	flex-direction: column;
-	width: max-content;
-	justify-content: center;
-	align-items: center;
-	//position: absolute;
-	//top: var(--header-height);
-	//right: var(--padding-side);
-	background-color: var(--color-white);
-	box-shadow: 0 8px 16px -2px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.02);
-	border-radius: 6px;
-	padding: 8px 16px;
-
-	&__container {
-		display: flex;
-	}
-
-	&__text {
-		margin-right: 9px;
-	}
-
-	&__user {
-		font-size: var(--font-size-XS);
-		color: var(--color-text-secondary);
-	}
-
-	&__icon {
-		color: var(--color-input-field);
+		line-height: 0;
+    width: 234px;
 	}
 }
 </style>

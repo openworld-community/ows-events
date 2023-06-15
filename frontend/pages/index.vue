@@ -31,7 +31,7 @@ const eventsQuery = ref({
 	country: ''
 });
 // todo - fix debouncing, doesnt seem to work with non-primitives
-const debouncedEventsRequestQuery = refDebounced(eventsQuery, 5000, { maxWait: 5000 });
+const debouncedEventsRequestQuery = refDebounced(eventsQuery, 500, { maxWait: 5000 });
 const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 	data: { query: debouncedEventsRequestQuery }
 });

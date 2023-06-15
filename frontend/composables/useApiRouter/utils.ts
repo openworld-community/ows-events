@@ -119,5 +119,11 @@ export function useBackendFetch<T>(
 	if (opts.body) {
 		opts.method ??= 'POST';
 	}
+	opts.onRequestError = ({ error }) => {
+		console.error(error);
+	};
+	opts.onResponseError = ({ error }) => {
+		console.error(error);
+	};
 	return (opts_: UseFetchOptions<T> = {}) => useFetch(request, Object.assign(opts, opts_));
 }

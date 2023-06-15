@@ -57,7 +57,7 @@ const useLocationStore = defineStore('location', {
 				return;
 			}
 
-			const { data } = await apiRouter.location.country.getAll.useQuery();
+			const { data } = await apiRouter.location.country.getAll.useQuery({});
 			this.countries = data.value ?? [];
 
 			if (process.client) {
@@ -74,19 +74,18 @@ const useLocationStore = defineStore('location', {
 				return;
 			}
 
-			const { data } = await apiRouter.location.country.getCities.useQuery({ country });
+			const { data } = await apiRouter.location.country.getCities.useQuery({
+				data: { country }
+			});
 			const cities = data.value ?? [];
 
-			if (cities) {
-				this.citiesByCountry[country] = cities;
-				this.cities = this.citiesByCountry[country] || [];
-				this.citiesByCountry = { ...this.citiesByCountry };
-				localStorage.setItem(
-					'LOCATIONS_CITIES_BY_COUNTRY',
-					JSON.stringify(this.citiesByCountry)
-				);
-				localStorage.setItem('LOCATIONS_CITIES', JSON.stringify(cities));
-			}
+			this.citiesByCountry[country] = cities;
+			this.cities = this.citiesByCountry[country] ?? [];
+			localStorage.setItem(
+				'LOCATIONS_CITIES_BY_COUNTRY',
+				JSON.stringify(this.citiesByCountry)
+			);
+			localStorage.setItem('LOCATIONS_CITIES', JSON.stringify(cities));
 		},
 		async init(userLocation: UserLocation) {
 			this.userLocation = userLocation;

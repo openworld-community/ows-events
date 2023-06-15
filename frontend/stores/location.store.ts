@@ -79,16 +79,13 @@ const useLocationStore = defineStore('location', {
 			});
 			const cities = data.value ?? [];
 
-			if (cities) {
-				this.citiesByCountry[country] = cities;
-				this.cities = this.citiesByCountry[country] || [];
-				this.citiesByCountry = { ...this.citiesByCountry };
-				localStorage.setItem(
-					'LOCATIONS_CITIES_BY_COUNTRY',
-					JSON.stringify(this.citiesByCountry)
-				);
-				localStorage.setItem('LOCATIONS_CITIES', JSON.stringify(cities));
-			}
+			this.citiesByCountry[country] = cities;
+			this.cities = this.citiesByCountry[country] ?? [];
+			localStorage.setItem(
+				'LOCATIONS_CITIES_BY_COUNTRY',
+				JSON.stringify(this.citiesByCountry)
+			);
+			localStorage.setItem('LOCATIONS_CITIES', JSON.stringify(cities));
 		},
 		async init(userLocation: UserLocation) {
 			this.userLocation = userLocation;

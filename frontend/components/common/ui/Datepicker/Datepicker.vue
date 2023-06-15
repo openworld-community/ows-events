@@ -11,8 +11,8 @@ const props =  defineProps({
 			default: ''
 		},
 		modelValue: {
-			type: String,
-			default: ''
+			type: Date,
+			default: new Date()
 		},
 		placeholder: {
 			type: String,

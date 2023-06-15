@@ -17,6 +17,11 @@ const emit = defineEmits(['update:modelValue']);
 const updateValue = (event: Event) => {
 	emit('update:modelValue', (event.target as HTMLTextAreaElement).value);
 };
+
+const onRemove = () => {
+	emit('update:modelValue', '');
+};
+
 </script>
 
 <template>
@@ -29,6 +34,16 @@ const updateValue = (event: Event) => {
 			:placeholder="placeholder"
 			@input="updateValue"
 		/>
+		<button
+				class="textarea__remove"
+				v-if="modelValue"
+				@click="onRemove"
+		>
+			<CommonIcon
+					name="delete"
+					:alt="$translate('global.button.delete')"
+			/>
+		</button>
 		<span
 			v-if="error"
 			class="textarea__error"
@@ -52,6 +67,13 @@ const updateValue = (event: Event) => {
 	&__wrapper {
 		position: relative;
 		margin-bottom: 20px;
+	}
+
+	&__remove {
+		position: absolute;
+		bottom: 10px;
+		right: 10px;
+		color: var(--color-input-icons);
 	}
 }
 </style>

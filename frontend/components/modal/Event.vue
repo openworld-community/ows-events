@@ -31,6 +31,7 @@ const isLoading = ref(false);
 const newImageFile = ref<ImageLoaderFile>(null);
 
 const allTimezones = ref<string[]>([]);
+const minDate = ref(new Date());
 
 const loadAllTimezones = async () => {
 	const _allTimezones = await getAllTimezones();
@@ -160,17 +161,17 @@ const paramsForSubmit = computed(() => {
 		title: inputValues.value.title,
 		description: inputValues.value.description,
 		date: dateTime(
-			inputValues.value.startDate as unknown as Date,
+			inputValues.value.startDate,
 			inputValues.value.startTime,
 			tz.timezoneOffset
 		).getTime(),
 		durationInSeconds: dateTime(
-				inputValues.value.endDate as unknown as Date,
+				inputValues.value.endDate,
 				inputValues.value.endTime,
 				tz.timezoneOffset
 			).getTime() -
 			dateTime(
-				inputValues.value.startDate as unknown as Date,
+				inputValues.value.startDate,
 				inputValues.value.startTime,
 				tz.timezoneOffset
 			).getTime()
@@ -241,6 +242,19 @@ const isTimezoneDisabled = computed(() => {
 	return !inputValues.value.city;
 });
 
+const isSelectCountryOpen = ref(false);
+const isSelectCityOpen = ref(false);
+
+const onClose = () => {
+	isSelectCountryOpen.value = false;
+	isSelectCityOpen.value = false;
+}
+
+const setIsSelectOpen = (value: boolean) => {
+	isSelectCountryOpen.value = value;
+	isSelectCityOpen.value = value;
+}
+
 </script>
 
 <template>
@@ -253,6 +267,7 @@ const isTimezoneDisabled = computed(() => {
 		:click-to-close="true"
 		:esc-to-close="true"
 		:lock-scroll="true"
+		@on-close-select="onClose"
 	>
 		<div class="modal-card">
 			<header class="modal-card__head">
@@ -275,6 +290,8 @@ const isTimezoneDisabled = computed(() => {
 						<BaseSelect
 								:key="inputValues.country"
 								v-model="inputValues.city"
+								:is-open="isSelectCountryOpen"
+								@setOpen="setIsSelectOpen"
 								:input-disabled="isCityDisabled"
 								name="city"
 								:placeholder="$translate('global.city')"
@@ -284,6 +301,8 @@ const isTimezoneDisabled = computed(() => {
 						<BaseSelect
 								:key="inputValues.timezone"
 								v-model="inputValues.timezone"
+								:is-open="isSelectCityOpen"
+								@setOpen="setIsSelectOpen"
 								:input-disabled="isTimezoneDisabled"
 								name="timezone"
 								:placeholder="$translate('global.timezone')"
@@ -317,6 +336,7 @@ const isTimezoneDisabled = computed(() => {
 								v-model="inputValues.startDate"
 								type="date"
 								name="startDate"
+								:min-date="minDate"
 						/>
 						<Datepicker
 								v-model="inputValues.startTime"
@@ -335,6 +355,7 @@ const isTimezoneDisabled = computed(() => {
 								v-model="inputValues.endDate"
 								type="date"
 								name="endDate"
+								:min-date="minDate"
 						/>
 						<Datepicker
 								v-model="inputValues.endTime"

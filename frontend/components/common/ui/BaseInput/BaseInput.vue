@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { InputValue } from './types/types';
 import type {PropType} from 'vue';
+import {useSlots} from 'vue';
 
 defineOptions({
 	inheritAttrs: false
@@ -45,10 +46,17 @@ const props = defineProps({
 	},
 })
 
+const slots = useSlots();
+
 const emit = defineEmits(['update:modelValue']);
 const updateValue = (event: Event) => {
 	emit('update:modelValue', (event.target as HTMLInputElement).value);
 };
+
+const onRemove = () => {
+	emit('update:modelValue', '');
+};
+
 </script>
 
 <template>
@@ -74,7 +82,20 @@ const updateValue = (event: Event) => {
 				@input="updateValue"
 				@change="updateValue"
 			/>
-			<slot name="icon-right"></slot>
+			<slot
+					v-if="slots['icon-right']"
+					name="icon-right"
+			>
+			</slot>
+			<button
+					v-else-if="props.modelValue"
+					@click.prevent="onRemove"
+			>
+				<CommonIcon
+						name="delete"
+						:alt="$translate('global.button.delete')"
+				/>
+			</button>
 		</div>
 		<span
 			v-if="props.error"
@@ -103,7 +124,7 @@ const updateValue = (event: Event) => {
 
 .input__box input {
 	width: 100%;
-	padding: 10px 15px;
+	padding: 8px 15px;
 	outline: none;
 	font-size: 1rem;
 	color: #333;

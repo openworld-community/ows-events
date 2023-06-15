@@ -28,6 +28,10 @@ const props = defineProps({
 		type: String,
 		default: '',
 	},
+	isOpen: {
+		type: Boolean,
+		default: false,
+	},
 	disabled: {
 		type: Boolean,
 		default: false,
@@ -38,10 +42,9 @@ const props = defineProps({
 	}
 })
 
-const isOpen = ref(false);
 const inputData = ref('');
 
-const emit = defineEmits(['update:modelValue', 'update:inputData']);
+const emit = defineEmits(['update:modelValue', 'update:setIsOpen']);
 const updateValue = (value: string) => {
 	emit('update:modelValue', value);
 	inputData.value = value;
@@ -49,8 +52,11 @@ const updateValue = (value: string) => {
 };
 
 const setIsOpen = () => {
+	// if(!props.disabled) {
+	// 	isOpen.value = !isOpen.value;
+	// }
 	if(!props.disabled) {
-		isOpen.value = !isOpen.value;
+		emit('update:setIsOpen');
 	}
 };
 
@@ -85,7 +91,7 @@ const filteredValues = computed(() => {
 		>
 			<template #icon-right>
 				<button
-						v-if="props.modelValue || inputData"
+						v-if="props.modelValue || inputData || isOpen"
 						@click.prevent="onRemove"
 				>
 					<CommonIcon
@@ -146,6 +152,7 @@ const filteredValues = computed(() => {
 		z-index: 99;
 		border-radius: 24px;
 		border: 1px solid #ccc;
+		pointer-events: none;
 		&.isOpen {
 			display: block;
 		}

@@ -9,6 +9,9 @@
   color: var(--color-accent-red);
 }
 
+.form__field {
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
 .form__field:active,
 .form__field:hover,
 .form__field:focus,
@@ -22,4 +25,16 @@
 
 .input__wrapper {
   margin-bottom: 20px;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

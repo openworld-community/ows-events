@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { UserInfo } from '../../../common/types/user';
 import { TELEGRAM_AUTH_BOT_NAME, BASE_URL } from '../../constants/url';
+import LoadSpinner from '../common/ui/LoadSpinner.vue';
 
 type Props = {
 	close: () => void;
@@ -16,11 +17,6 @@ const username =
 	userCookie.value?.first_name ||
 	userCookie.value?.last_name ||
 	null;
-
-// const temporaryId = v4();
-// const authLink: string = `${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backurl=${encodeURIComponent(
-// 	`${SERVER_URL}/postauth/${temporaryId}`
-// )}`;
 
 const onTelegramAuth = (user: any) => {
 	alert(
@@ -87,16 +83,16 @@ onMounted(() => {
 				/>
 				<div
 					v-else
-					ref="telegram"
 					class="modal-card__login-button"
-				></div>
-				<!--				<CommonButton-->
-				<!--					v-else-->
-				<!--					class="modal-card__login-button"-->
-				<!--					button-kind="success"-->
-				<!--					:button-text="$translate('component.pre_authorisation_modal.button.login')"-->
-				<!--					@click="onTelegramAuth"-->
-				<!--				/>-->
+				>
+					<div class="modal-card__loader">
+						<LoadSpinner class="modal-card__spinner" />
+					</div>
+					<div
+						class="modal-card__telegram-button"
+						ref="telegram"
+					/>
+				</div>
 			</div>
 		</div>
 	</CommonModalWrapper>
@@ -132,8 +128,36 @@ onMounted(() => {
 	}
 
 	&__login-button {
+		position: relative;
+		min-width: 231px;
+		height: 40px;
 		line-height: 0;
-		width: 234px;
+	}
+
+	&__loader,
+	&__telegram-button {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 231px;
+		height: 40px;
+		border-radius: 20px;
+	}
+
+	&__loader {
+		background-color: #54a9eb;
+		z-index: 0;
+	}
+
+	&__telegram-button {
+		z-index: 1;
+	}
+
+	&__spinner {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 	}
 }
 </style>

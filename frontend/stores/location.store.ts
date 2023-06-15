@@ -44,26 +44,26 @@ export const useLocationStore = defineStore('location', {
 	},
 	actions: {
 		getCitiesByCountry(country: Country) {
-			this._loadCitiesByCountry(country);
+			(async () => {
+				if (this._citiesByCountry.get(country) || !this.countries.has(country)) return;
+
+				const { $locationStoreForage } = useNuxtApp();
+				const localCities: City[] | null = await $locationStoreForage.getItem(country);
+				if (localCities) {
+					this._citiesByCountry.set(country, localCities);
+					return;
+				}
+
+				const { data } = await apiRouter.location.country.getCities.useQuery({
+					data: { country }
+				});
+				if (!data.value) return;
+				this._citiesByCountry.set(country, data.value);
+				// data.value is Proxy which can't copied to storage directly - spread operator converts back to native object
+				$locationStoreForage.setItem(country, [...data.value]);
+			})();
+
 			return this._citiesByCountry.get(country);
-		},
-		async _loadCitiesByCountry(country: Country): Promise<void> {
-			if (this._citiesByCountry.get(country) || !this.countries.has(country)) return;
-
-			const { $locationStoreForage } = useNuxtApp();
-			const localCities: City[] | null = await $locationStoreForage.getItem(country);
-			if (localCities) {
-				this._citiesByCountry.set(country, localCities);
-				return;
-			}
-
-			const { data } = await apiRouter.location.country.getCities.useQuery({
-				data: { country }
-			});
-			if (!data.value) return;
-			this._citiesByCountry.set(country, data.value);
-			// data.value is Proxy which can't copied to storage directly - spread operator converts back to native object
-			$locationStoreForage.setItem(country, [...data.value]);
 		}
 	}
 });

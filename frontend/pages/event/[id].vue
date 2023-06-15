@@ -11,7 +11,7 @@ const id = route.params.id as string;
 
 const user = useCookie<UserInfo | null>('user');
 
-const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ id });
+const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ data: { id } });
 
 const posterEvent = computed(() => {
 	if (data.value?.type !== 'success') return null;
@@ -27,7 +27,7 @@ useHead({
 const trackRedirects = () => useTrackEvent('redirect');
 
 const deleteCard = async () => {
-	const { data } = await apiRouter.events.delete.useMutation({ id });
+	const { data } = await apiRouter.events.delete.useMutation({ data: { id } });
 	if (data.value?.type === 'success') {
 		await closeDeleteEventModal();
 		navigateTo({ name: RouteNameEnum.HOME });
@@ -160,7 +160,6 @@ patchDeleteEventModal({
 				<!--					@click="openRegistrationModal"-->
 				<!--				/>-->
 			</template>
-
 			<div
 				v-if="user?.id === posterEvent.creatorId"
 				class="event-actions__manage"

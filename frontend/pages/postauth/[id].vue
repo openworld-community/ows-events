@@ -6,12 +6,14 @@ const route = useRoute();
 const userID = getFirstParam(route.params.id);
 const userCookie = useCookie<UserInfo | null>('user');
 const tokenCookie = useCookie<string>('token');
-const { data: token } = await apiRouter.auth.getToken.useQuery({ id: userID });
+const { data: token } = await apiRouter.auth.getToken.useQuery({ data: { id: userID } });
 if (!token.value) {
 	console.error('No token retrieved');
 } else {
 	tokenCookie.value = token.value;
-	const { data: user } = await apiRouter.auth.getUser.useQuery({ userToken: token.value });
+	const { data: user } = await apiRouter.auth.getUser.useQuery({
+		data: { userToken: token.value }
+	});
 	if (!user.value) {
 		console.error('No user data retrieved');
 	} else {

@@ -176,13 +176,15 @@ const submitEvent = async () => {
 	if (props.dataForEdit) {
 		let image = props.dataForEdit.image;
 		if (newImageFile.value && props.dataForEdit.image) {
-			await apiRouter.events.image.delete.useMutation({ path: props.dataForEdit.image });
+			await apiRouter.events.image.delete.useMutation({
+				data: { path: props.dataForEdit.image }
+			});
 			image = '';
 		}
 		image = (await addImage(newImageFile.value)) ?? image;
 
 		const event = Object.assign(paramsForSubmit.value, { id: inputValues.value.id, image });
-		const { data } = await apiRouter.events.edit.useMutation({ event });
+		const { data } = await apiRouter.events.edit.useMutation({ data: { event } });
 
 		if (data.value?.type === 'success') {
 			props.refreshEvent();
@@ -192,7 +194,7 @@ const submitEvent = async () => {
 	} else {
 		const image = (await addImage(newImageFile.value)) ?? '';
 		const event = Object.assign(paramsForSubmit.value, { image });
-		const { data } = await apiRouter.events.add.useMutation({ event });
+		const { data } = await apiRouter.events.add.useMutation({ data: { event } });
 		if (data.value?.type === 'success') {
 			await navigateTo(`/event/${data.value.data.id}`);
 		}
@@ -204,7 +206,7 @@ const submitEvent = async () => {
 
 async function addImage(image: ImageLoaderFile) {
 	if (!image || image === 'DELETED') return;
-	const { data } = await apiRouter.events.image.add.useMutation({ image });
+	const { data } = await apiRouter.events.image.add.useMutation({ data: { image } });
 	if (data.value?.type !== 'success') return;
 	return data.value.data.path;
 }

@@ -87,7 +87,7 @@ const submit = async () => {
 		return;
 	}
 	apiRouter.events.registration.add
-		.useMutation({ registration: submitInfo.value })
+		.useMutation({ data: { registration: submitInfo.value } })
 		.then(async () => {
 			// TODO добавить запись в localStorage для формы ивента (by Emilia)
 			localStorage.setItem('REGISTRATION', 'true');

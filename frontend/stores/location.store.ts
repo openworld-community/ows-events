@@ -57,7 +57,7 @@ const useLocationStore = defineStore('location', {
 				return;
 			}
 
-			const { data } = await apiRouter.location.country.getAll.useQuery();
+			const { data } = await apiRouter.location.country.getAll.useQuery({});
 			this.countries = data.value ?? [];
 
 			if (process.client) {
@@ -74,7 +74,9 @@ const useLocationStore = defineStore('location', {
 				return;
 			}
 
-			const { data } = await apiRouter.location.country.getCities.useQuery({ country });
+			const { data } = await apiRouter.location.country.getCities.useQuery({
+				data: { country }
+			});
 			const cities = data.value ?? [];
 
 			if (cities) {

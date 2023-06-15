@@ -40,7 +40,7 @@ const debouncedEventsRequestQuery = refDebounced(
 	{ maxWait: 5000 }
 );
 const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
-	query: debouncedEventsRequestQuery
+	data: { query: debouncedEventsRequestQuery }
 });
 
 const onButtonClick = () => {

@@ -112,6 +112,10 @@ const isDateType = computed(() => {
 	border-radius: 24px;
 }
 
+.dp__input  {
+	padding: 8px 12px;
+}
+
 .dp__menu {
 	overflow: hidden;
 }

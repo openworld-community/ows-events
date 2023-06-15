@@ -127,7 +127,6 @@ const onRemove = () => {
 	padding: 8px 15px;
 	outline: none;
 	font-size: 1rem;
-	color: #333;
 	border: 1px solid #ccc;
 	border-radius: 24px;
 	overflow: hidden;

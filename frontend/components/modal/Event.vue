@@ -4,9 +4,11 @@ import { useLocationStore } from '@/stores/location.store';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, ref, watch } from 'vue';
 import { type EventOnPoster } from '../../../common/types';
+import { EventValidatorErrorTypes } from '../../../common/types/event-validation-error';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
 
-const { $translate } = useNuxtApp();
+const { $translate, $i18n } = useNuxtApp();
+const t = $i18n.t.bind($i18n);
 
 type Props = {
 	dataForEdit?: EventOnPoster;
@@ -195,6 +197,15 @@ const submitEvent = async () => {
 		const { data } = await apiRouter.events.add.useMutation({ event });
 		if (data.value?.type === 'success') {
 			await navigateTo(`/event/${data.value.data.id}`);
+		} else {
+			alert(
+				'Ошибка при добавлении события:\n' +
+					data.value?.errors
+						?.map((e) => t(`event.validation_errors.${e as EventValidatorErrorTypes}`))
+						.join('\n')
+			);
+			isLoading.value = false;
+			return;
 		}
 	}
 

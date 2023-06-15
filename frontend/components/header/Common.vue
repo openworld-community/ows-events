@@ -39,10 +39,11 @@ const scrollToTop = () => {
 				v-if="route.name !== RouteNameEnum.ABOUT"
 				class="header__right"
 			>
-				<HeaderSubscriptionExpired
-					v-if="route.name === RouteNameEnum.HOME"
-					class="header__subscription"
-				/>
+				<!--        TODO: вернуться при доработке подписки-->
+				<!--				<HeaderSubscriptionExpired-->
+				<!--					v-if="route.name === RouteNameEnum.HOME"-->
+				<!--					class="header__subscription"-->
+				<!--				/>-->
 				<HeaderNavigation />
 			</div>
 		</div>
@@ -80,7 +81,7 @@ const scrollToTop = () => {
 
 	&__left {
 		display: flex;
-    height: 100%;
+		height: 100%;
 		align-items: center;
 		margin-right: 12px;
 	}
@@ -101,7 +102,7 @@ const scrollToTop = () => {
 
 	&__navigation-link {
 		height: 100%;
-    align-items: center;
+		align-items: center;
 		display: flex;
 	}
 }

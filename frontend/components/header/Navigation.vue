@@ -1,24 +1,32 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '@/constants/enums/route';
+import { SUPPORT_TG_URL } from '../../constants/url';
 
 const route = useRoute();
 </script>
 
 <template>
 	<nav
+		v-if="route.name === RouteNameEnum.HOME"
 		class="navigation"
 		role="navigation"
 		:aria-label="$translate('global.nav')"
 	>
 		<CommonButton
-			v-if="route.name === RouteNameEnum.HOME"
+			:link="SUPPORT_TG_URL"
+			is-external-link
+			is-icon
+			icon-name="contact-tg"
+			:alt="$translate('component.header.support')"
+		/>
+		<CommonButton
 			:link="{ name: RouteNameEnum.ABOUT }"
 			is-icon
 			icon-name="info"
 			:alt="$translate('component.header.about')"
 		/>
 
-		<HeaderAuthorisation v-if="route.name === RouteNameEnum.HOME" />
+		<HeaderAuthorisation />
 
 		<!--          <div-->
 		<!--            v-if="route.name === 'event'"-->

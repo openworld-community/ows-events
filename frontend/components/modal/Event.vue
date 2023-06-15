@@ -329,6 +329,7 @@ const setIsSelectOpen = (value: boolean) => {
 				</ModalSection>
 
 				<ModalSection
+						type="row"
 						:label="$translate('component.new_event_modal.fields.start')"
 				>
 					<template #child>
@@ -348,6 +349,7 @@ const setIsSelectOpen = (value: boolean) => {
 				</ModalSection>
 
 				<ModalSection
+						type="row"
 						:label="$translate('component.new_event_modal.fields.end')"
 				>
 					<template #child>

@@ -10,6 +10,7 @@ import {
 	IUpdateEventHandler
 } from './type';
 import { ITokenData } from '../../types';
+import { eventsValidator } from '../../../validators/event-validator';
 
 export const addEvent: IAddEventHandler = async (request, reply) => {
 	const token = request.headers.authorization;
@@ -32,6 +33,16 @@ export const addEvent: IAddEventHandler = async (request, reply) => {
 			type: 'error'
 		};
 	}
+
+	const validationResult = eventsValidator.validateEvent(body);
+
+	if (!validationResult.isValid) {
+		return {
+			type: 'error',
+			errors: validationResult.errors
+		};
+	}
+
 	const { event } = body;
 	if (!event) {
 		return {

@@ -9,12 +9,9 @@ const emit = defineEmits<{
 
 const locationStore = useLocationStore();
 function updateCountry(country: typeof props.country) {
-	locationStore.loadCitiesByCountry(country);
 	emit('update:country', country);
 	emit('update:city', '');
 }
-
-locationStore.loadCountries();
 </script>
 
 <template>
@@ -34,7 +31,7 @@ locationStore.loadCountries();
 			input-type="datalist"
 			input-name="city"
 			:input-placeholder="$translate('global.city')"
-			:options-list="locationStore.citiesByCountry.get(country)"
+			:options-list="locationStore.getCitiesByCountry(country)"
 			:model-value="city"
 			@update:model-value="(value: typeof city) => emit('update:city',value)"
 		/>

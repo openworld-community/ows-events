@@ -14,12 +14,11 @@ const t = $i18n.t.bind($i18n);
 type Props = {
 	dataForEdit?: EventOnPoster;
 	closeEventModal: () => void;
-	refreshEvent: () => void;
+	refreshEvent?: () => void;
 };
 
 const props = defineProps<Props>();
 const locationStore = useLocationStore();
-locationStore.loadCountries();
 
 const isLoading = ref(false);
 const newImageFile = ref<ImageLoaderFile>(null);
@@ -102,7 +101,6 @@ watch(
 	() => inputValues.value.country && inputValues.value.city,
 	async () => {
 		inputValues.value.timezone = '';
-
 		inputValues.value.timezone = await getTimezone({
 			country: inputValues.value.country,
 			city: inputValues.value.city
@@ -176,7 +174,7 @@ const submitEvent = async () => {
 		const { data } = await apiRouter.events.edit.useMutation({ data: { event } });
 
 		if (data.value?.type === 'success') {
-			props.refreshEvent();
+			props.refreshEvent?.();
 		} else {
 			console.error(data.value?.errors);
 		}
@@ -223,18 +221,16 @@ type InputEvent = {
 	name: keyof typeof inputValues.value;
 	required: boolean;
 	min?: number;
-	options?: string[] | Set<string>; // TODO тип
+	options?: string[] | Set<string> | Ref<string[] | undefined>; // TODO тип
 	isDisabled?: Ref<boolean>;
 };
 
-const eventInputs = ref<
-	{
-		type: 'row' | 'column';
-		name: string;
-		label?: string;
-		child: InputEvent[];
-	}[]
->([
+const eventInputs: {
+	type: 'row' | 'column';
+	name: string;
+	label?: string;
+	child: InputEvent[];
+}[] = [
 	{
 		type: 'column',
 		name: 'location',
@@ -250,7 +246,9 @@ const eventInputs = ref<
 			{
 				type: 'datalist',
 				name: 'city',
-				options: locationStore.citiesByCountry.get(inputValues.value.country),
+				options: computed(() =>
+					locationStore.getCitiesByCountry(inputValues.value.country)
+				),
 				label: $translate('component.new_event_modal.fields.city'),
 				required: true,
 				isDisabled: isCityDisabled
@@ -344,7 +342,7 @@ const eventInputs = ref<
 			}
 		]
 	}
-]);
+];
 </script>
 
 <template>
@@ -375,14 +373,24 @@ const eventInputs = ref<
 						{{ input.label }}
 					</h3>
 					<div :class="input.type === 'column' ? 'section__column' : 'section__row'">
+						<!-- TODO переписать это уродство с c.options -->
+						<!-- TODO при создании ивента в случае datalist не работает автокомплит, хотя данные в даталист подтягиваются корректно -->
 						<CommonInput
 							v-for="c in input.child"
-							:key="c.name + c.options?.toString() + c.isDisabled"
+							:key="
+								c.name +
+								(c.options && 'value' in c.options
+									? c.options.value
+									: c.options)?.toString() +
+								c.isDisabled
+							"
 							v-model="inputValues[c.name]"
-							:input-disabled="c.isDisabled ?? false"
+							:input-disabled="c.isDisabled?.value ?? false"
 							class="section__input"
 							:input-type="c.type"
-							:options-list="c.options"
+							:options-list="
+								c.options && 'value' in c.options ? c.options.value : c.options
+							"
 							:input-placeholder="c.label"
 							:input-name="c.name"
 							:is-required="c.required"

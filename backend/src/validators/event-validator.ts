@@ -96,6 +96,7 @@ class EventsValidator {
 			words.some((word) => {
 				const isExcludeWord = excludeWord === word;
 				if (isExcludeWord) {
+					// eslint-disable-next-line no-console
 					console.warn('directIncluding', word);
 				}
 				return isExcludeWord;
@@ -109,6 +110,7 @@ class EventsValidator {
 			words.some((word) => {
 				const isByRegexp = new RegExp(regexp, 'gm').test(word);
 				if (isByRegexp) {
+					// eslint-disable-next-line no-console
 					console.warn('regexpIncluding', word);
 				}
 				return isByRegexp;

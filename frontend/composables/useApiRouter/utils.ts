@@ -104,9 +104,17 @@ export function useBackendFetch<T>(
 	opts: UseFetchOptions<T> = {},
 	{ auth, noDefaults }: { auth?: boolean; noDefaults?: boolean } = {}
 ) {
-	if (noDefaults) return (opts: UseFetchOptions<T> = {}) => useFetch(request, opts);
+	if (noDefaults)
+		return (opts_: UseFetchOptions<T> = {}) => useFetch(request, Object.assign(opts, opts_));
 
 	opts.baseURL ??= API_URL;
+	opts.onRequestError ??= ({ error }) => {
+		console.error(error);
+	};
+	opts.onResponseError ??= ({ error }) => {
+		console.error(error);
+	};
+
 	if (auth) {
 		const token = useCookie('token').value;
 		if (!token) {
@@ -116,14 +124,9 @@ export function useBackendFetch<T>(
 			? Object.assign(opts.headers, { Authorization: token })
 			: (opts.headers = { Authorization: token });
 	}
+
 	if (opts.body) {
 		opts.method ??= 'POST';
 	}
-	opts.onRequestError = ({ error }) => {
-		console.error(error);
-	};
-	opts.onResponseError = ({ error }) => {
-		console.error(error);
-	};
 	return (opts_: UseFetchOptions<T> = {}) => useFetch(request, Object.assign(opts, opts_));
 }

@@ -5,17 +5,23 @@ import { fileURLToPath, URL } from 'node:url';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	modules: ['@pinia/nuxt', '@vueuse/nuxt'],
-	app: {
-		head: {
-			script: [
-				{
-					defer: true,
-					'data-domain': 'poster-peredelano.orby-tech.space',
-					src: 'http://metrics.orby-tech.space/js/script.js'
-				}
-			]
-		}
+	modules: ['@pinia/nuxt', '@vueuse/nuxt', '@nuxtjs/plausible'],
+	// На случай добавления скриптов:
+	// app: {
+	// 	head: {
+	// 		script: [
+	// 			{
+	// 				defer: true,
+	// 				'data-domain': 'poster-peredelano.orby-tech.space',
+	// 				src: 'http://metrics.orby-tech.space/js/script.js'
+	// 			}
+	// 		]
+	// 	}
+	// },
+	//https://github.com/nuxt-modules/plausible#module-options
+	plausible: {
+		domain: 'poster-peredelano.orby-tech.space',
+		apiHost: 'http://metrics.orby-tech.space/js/script.js'
 	},
 	typescript: { strict: true },
 	vite: {

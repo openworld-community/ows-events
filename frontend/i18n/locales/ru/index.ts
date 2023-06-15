@@ -56,6 +56,9 @@ export const defaultTranslation = {
     },
     image: {
       event: 'изображение мероприятия'
+    },
+    price: {
+      free: 'Бесплатно'
     }
   },
   component: {
@@ -93,6 +96,14 @@ export const defaultTranslation = {
       button: {
         cancel: 'Отмена',
         submit: 'Подтвердить'
+      }
+    },
+    pre_authorisation_modal: {
+      title: 'Войдите в аккаунт',
+      button: {
+        cancel: 'Отмена',
+        login: 'Войти',
+        logout: 'Выйти',
       }
     },
     language_selector: {

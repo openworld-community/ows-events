@@ -47,12 +47,12 @@ const loadImage = (event: Event) => {
 		{ once: true }
 	);
 	reader.readAsDataURL(file);
-	emit('update:modelValue', file);
+	emit('update:model-value', file);
 };
 
 const removeImage = () => {
 	imageSrc.value = null;
-	emit('update:modelValue', 'DELETED');
+	emit('update:model-value', 'DELETED');
 };
 </script>
 

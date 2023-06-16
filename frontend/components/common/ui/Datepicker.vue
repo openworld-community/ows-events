@@ -1,118 +1,82 @@
 <script lang="ts" setup>
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
-import {DatepickerType} from './types/types';
-import {dateFormat, timeFormat} from '~/utils/dateFormat';
-import {computed, ref} from 'vue';
 
-const props =  defineProps({
-		className: {
-			type: String,
-			default: ''
-		},
-		modelValue: {
-			type: Date,
-			default: new Date()
-		},
-		placeholder: {
-			type: String,
-			default: 'дд.мм.гг'
-		},
-		type: {
-			type: String,
-			default: DatepickerType.date
-		},
-		name: {
-			type: String,
-			required: true
-		},
-		label: {
-			type: String,
-			default: ''
-		},
-		minDate: {
-			type: Date,
-			default: null,
-		},
-		disabled: {
-			type: Boolean,
-			default: false,
-		},
-		error: {
-			type: String,
-			default: ''
-		},
-	})
+const props = defineProps<{
+	className?: string;
+	modelValue: Date;
+	placeholder?: string;
+	type: 'date' | 'time';
+	name: string;
+	label?: string;
+	minDate?: Date;
+	disabled?: boolean;
+	error?: string;
+}>();
 
-const date = ref();
+const emit = defineEmits<{ 'update:model-value': [modelValue: typeof props.modelValue] }>();
+const isDateType = computed(() => props.type === 'date');
 
-const emit = defineEmits(['update:modelValue']);
-const handleDate = (modelData: Date) => {
-	// view
-	emit('update:modelValue', modelData);
-	// model
-	date.value = modelData;
-};
-
-const isDateType = computed(() => {
-	return props.type === DatepickerType.date
-});
-
+function handleDate(modelData: Date) {
+	emit('update:model-value', modelData);
+}
 </script>
 
 <template>
-	<div :class="`input__wrapper ${props.className}`">
+	<div
+		class="input__wrapper"
+		:class="{ [className ?? '']: className }"
+	>
 		<label
-				v-if="props.label"
-				class="form__label"
-				:for="props.name"
+			v-if="label"
+			class="form__label"
+			:for="name"
 		>
-			{{ props.label }}
+			{{ label }}
 		</label>
-			<VueDatePicker
-				:model-value="modelValue"
-				:name="props.name"
-				:placeholder="props.placeholder"
-				:input-class-name="`input form__field ${props.error ? 'form__error' : ''}`"
-				auto-apply
-				:close-on-auto-apply="!isDateType"
-				partial-flow
-				:flow="['calendar']"
-				:time-picker="!isDateType"
-				:enable-time-picker="!isDateType"
-				:min-date="props.minDate"
-				:format="isDateType ? dateFormat : timeFormat"
-				:disabled="props.disabled"
-				is-24
-				@update:model-value="handleDate"
-			>
-				<template
-						v-if="!isDateType"
-						#input-icon
-				>
-					<CommonIcon
-							name="clock"
-							:alt="$translate('dates.clock')"
-					/>
-				</template>
-			</VueDatePicker>
-		<span
-				v-if="props.error"
-				class="form__error"
+		<VueDatePicker
+			:model-value="modelValue"
+			:name="name"
+			:placeholder="placeholder ?? 'дд.мм.гг'"
+			:input-class-name="`input form__field ${error ? 'form__error' : ''}`"
+			auto-apply
+			:close-on-auto-apply="!isDateType"
+			partial-flow
+			:flow="['calendar']"
+			:time-picker="!isDateType"
+			:enable-time-picker="!isDateType"
+			:min-date="minDate"
+			:format="isDateType ? dateFormat : timeFormat"
+			:disabled="disabled"
+			is-24
+			@update:model-value="handleDate"
 		>
-				{{ props.error }}
+			<template
+				v-if="!isDateType"
+				#input-icon
+			>
+				<CommonIcon
+					name="clock"
+					:alt="$translate('dates.clock')"
+				/>
+			</template>
+		</VueDatePicker>
+		<span
+			v-if="error"
+			class="form__error"
+		>
+			{{ error }}
 		</span>
 	</div>
 </template>
 
 <style lang="less">
-
 .dp__menu_transitioned,
-.dp__input  {
+.dp__input {
 	border-radius: 24px;
 }
 
-.dp__input  {
+.dp__input {
 	padding: 8px 12px;
 }
 
@@ -225,5 +189,4 @@ const isDateType = computed(() => {
 .dp__selection_preview {
 	opacity: 0;
 }
-
 </style>

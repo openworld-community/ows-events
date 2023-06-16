@@ -13,15 +13,14 @@ withDefaults(defineProps<Props>(), {
 	error: ''
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:model-value']);
 const updateValue = (event: Event) => {
-	emit('update:modelValue', (event.target as HTMLTextAreaElement).value);
+	emit('update:model-value', (event.target as HTMLTextAreaElement).value);
 };
 
 const onRemove = () => {
-	emit('update:modelValue', '');
+	emit('update:model-value', '');
 };
-
 </script>
 
 <template>
@@ -35,13 +34,13 @@ const onRemove = () => {
 			@input="updateValue"
 		/>
 		<button
-				class="textarea__remove"
-				v-if="modelValue"
-				@click="onRemove"
+			class="textarea__remove"
+			v-if="modelValue"
+			@click="onRemove"
 		>
 			<CommonIcon
-					name="delete"
-					:alt="$translate('global.button.delete')"
+				name="delete"
+				:alt="$translate('global.button.delete')"
 			/>
 		</button>
 		<span

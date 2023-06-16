@@ -1,135 +1,64 @@
 <script setup lang="ts">
 import { getAllTimezones, getTimezone } from '@/services/timezone.services';
-import { useLocationStore } from '@/stores/location.store';
-import { storeToRefs } from 'pinia';
-import { computed, onMounted, ref, watch } from 'vue';
-import { type EventOnPoster } from '../../../common/types';
-import { EventValidatorErrorTypes } from '../../../common/types/event-validation-error';
+import { useLocationStore, type Country, type City } from '@/stores/location.store';
+import { type EventOnPoster } from '@/../common/types';
+import { EventValidatorErrorTypes } from '@/../common/types/event-validation-error';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
-import BaseSelect from '~/components/common/ui/BaseSelect/BaseSelect.vue';
-import BaseInput from '~/components/common/ui/BaseInput/BaseInput.vue';
-import TextArea from '~/components/common/ui/TextArea/TextArea.vue';
-import Datepicker from '~/components/common/ui/Datepicker/Datepicker.vue';
-import ModalSection from './ui/ModalSection.vue';
-import { stringToTimezone } from '../../utils/timezones';
 
 const { $translate, $i18n } = useNuxtApp();
 const t = $i18n.t.bind($i18n);
 
-type Props = {
-	dataForEdit?: EventOnPoster;
-	closeEventModal: () => void;
-	refreshEvent: () => void;
-};
-
+// if dataForEdit exists then so does the refreshEvent
+type Props = { closeEventModal: () => void } & (
+	| { dataForEdit?: undefined }
+	| { dataForEdit: EventOnPoster; refreshEvent: () => void }
+);
 const props = defineProps<Props>();
 const locationStore = useLocationStore();
-locationStore.loadCountries();
-const { countries, cities } = storeToRefs(locationStore);
 
 const isLoading = ref(false);
 const newImageFile = ref<ImageLoaderFile>(null);
 
-const allTimezones = ref<string[]>([]);
+const allTimezones = (await getAllTimezones()).map((timezone) => timezoneToString(timezone));
 const minDate = ref(new Date());
 
-const loadAllTimezones = async () => {
-	const _allTimezones = await getAllTimezones();
-	if (!_allTimezones) return;
+const [eventStartDate, eventStartTime] = props.dataForEdit
+	? timestampDateTimeParse(props.dataForEdit.date, props.dataForEdit.timezone)
+	: ['', ''];
+const [eventEndDate, eventEndTime] = props.dataForEdit
+	? timestampDateTimeParse(
+			props.dataForEdit.date + props.dataForEdit.durationInSeconds,
+			props.dataForEdit.timezone
+	  )
+	: ['', ''];
 
-	allTimezones.value = _allTimezones.map((timezone) => timezoneToString(timezone));
-};
-
-await loadAllTimezones();
-
-type inputValuesType = {
-	id: string;
-	title: string;
-	description: string;
-	startDate: Date | string;
-	startTime: string;
-	endDate: Date | string;
-	endTime: string;
-	country: string;
-	city: string;
-	image: string;
-	price: number;
-	timezone: string;
-	url: string;
-};
-
-const inputValues = ref<inputValuesType>({
-	id: '',
-	title: '',
-	description: '',
-	startDate: '',
-	startTime: '',
-	endDate: '',
-	endTime: '',
-	country: '',
-	city: '',
-	image: '',
-	price: 0,
-	timezone: '',
-	url: ''
+// todo startDate & endDate can be Date instead of string - why?
+const inputValues = ref({
+	id: props.dataForEdit?.id ?? '',
+	title: props.dataForEdit?.title ?? '',
+	description: props.dataForEdit?.description ?? '',
+	startDate: eventStartDate,
+	startTime: eventStartTime,
+	endDate: eventEndDate,
+	endTime: eventEndTime,
+	country: (props.dataForEdit?.location.country ?? '') satisfies Country,
+	city: (props.dataForEdit?.location.city ?? '') satisfies City,
+	image: props.dataForEdit?.image ?? '',
+	price: props.dataForEdit?.price ?? 0,
+	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
+	url: props.dataForEdit?.url ?? ''
 });
-
-onMounted(() => {
-	if (props.dataForEdit) {
-		setEventData(props.dataForEdit);
-	}
-});
-
-const setEventData = (data: EventOnPoster) => {
-	const start = timestampDateTimeParse(data.date, data.timezone);
-	const end = timestampDateTimeParse(data.date + data.durationInSeconds, data.timezone);
-
-	inputValues.value.id = data.id;
-	inputValues.value.title = data.title;
-	inputValues.value.description = data.description;
-	inputValues.value.country = data.location.country;
-	inputValues.value.city = data.location.city;
-	inputValues.value.price = data.price;
-	inputValues.value.startDate = start[0];
-	inputValues.value.startTime = start[1];
-	inputValues.value.endDate = end[0];
-	inputValues.value.endTime = end[1];
-	inputValues.value.image = data.image;
-	inputValues.value.url = data.url;
-};
 
 watch(
 	() => inputValues.value.country,
-	(_country) => {
-		if (!_country) {
-			inputValues.value.city = '';
-			return;
-		}
-		locationStore.pickCountry(_country);
-	},
-	{ deep: true }
+	() => {
+		inputValues.value.city = '';
+	}
 );
 
-watch(
-	() => inputValues.value.city,
-	(_city) => {
-		locationStore.pickCity(_city);
-	},
-	{ deep: true }
-);
-
-watch(
-	() => inputValues.value.country && inputValues.value.city,
-	async () => {
-		inputValues.value.timezone = '';
-
-		inputValues.value.timezone = await getTimezone({
-			country: inputValues.value.country,
-			city: inputValues.value.city
-		});
-	},
-	{ deep: true }
-);
+watch([() => inputValues.value.country, () => inputValues.value.city], async ([country, city]) => {
+	inputValues.value.timezone = country ? await getTimezone({ country, city }) : '';
+});
 
 const checkFormFilling = computed(() => {
 	return !!(
@@ -140,7 +69,7 @@ const checkFormFilling = computed(() => {
 		inputValues.value.country &&
 		inputValues.value.city &&
 		inputValues.value.timezone &&
-		allTimezones.value.includes(inputValues.value.timezone)
+		allTimezones.includes(inputValues.value.timezone)
 	);
 });
 
@@ -154,7 +83,6 @@ const dateTime = (date: Date, time: any, timezone: string): Date => {
 	const d = date.getDay();
 	return new Date(`${m} ${d} ${y} ${time?.hours ?? '00'}:${time?.minutes ?? '00'} ${timezone}`);
 };
-
 const paramsForSubmit = computed(() => {
 	const tz = stringToTimezone(inputValues.value.timezone);
 	return {
@@ -192,13 +120,15 @@ const submitEvent = async () => {
 	if (props.dataForEdit) {
 		let image = props.dataForEdit.image;
 		if (newImageFile.value && props.dataForEdit.image) {
-			await apiRouter.events.image.delete.useMutation({ path: props.dataForEdit.image });
+			await apiRouter.events.image.delete.useMutation({
+				data: { path: props.dataForEdit.image }
+			});
 			image = '';
 		}
 		image = (await addImage(newImageFile.value)) ?? image;
 
 		const event = Object.assign(paramsForSubmit.value, { id: inputValues.value.id, image });
-		const { data } = await apiRouter.events.edit.useMutation({ event });
+		const { data } = await apiRouter.events.edit.useMutation({ data: { event } });
 
 		if (data.value?.type === 'success') {
 			props.refreshEvent();
@@ -208,7 +138,8 @@ const submitEvent = async () => {
 	} else {
 		const image = (await addImage(newImageFile.value)) ?? '';
 		const event = Object.assign(paramsForSubmit.value, { image });
-		const { data } = await apiRouter.events.add.useMutation({ event });
+		const { data } = await apiRouter.events.add.useMutation({ data: { event } });
+
 		if (data.value?.type === 'success') {
 			await navigateTo(`/event/${data.value.data.id}`);
 		} else {
@@ -229,7 +160,7 @@ const submitEvent = async () => {
 
 async function addImage(image: ImageLoaderFile) {
 	if (!image || image === 'DELETED') return;
-	const { data } = await apiRouter.events.image.add.useMutation({ image });
+	const { data } = await apiRouter.events.image.add.useMutation({ data: { image } });
 	if (data.value?.type !== 'success') return;
 	return data.value.data.path;
 }
@@ -250,24 +181,14 @@ const onClose = () => {
 	isSelectCityOpen.value = false;
 };
 
-const setIsSelectOpen = (value: boolean) => {
-	isSelectCountryOpen.value = value;
-	isSelectCityOpen.value = value;
+const setIsSelectOpen = () => {
+	isSelectCountryOpen.value = true;
+	isSelectCityOpen.value = true;
 };
 </script>
 
 <template>
-	<CommonModalWrapper
-		:hide-overlay="false"
-		overlay-transition="vfm-fade"
-		overlay-transition-duration="2600"
-		content-transition="vfm-fade"
-		swipe-to-close="down"
-		:click-to-close="true"
-		:esc-to-close="true"
-		:lock-scroll="true"
-		@on-close-select="onClose"
-	>
+	<CommonModalWrapper @on-close-select="onClose">
 		<div class="modal-card">
 			<header class="modal-card__head">
 				<h2 class="modal-card__title">
@@ -276,46 +197,52 @@ const setIsSelectOpen = (value: boolean) => {
 			</header>
 
 			<form class="modal-card__body body">
-				<ModalSection :label="$translate('component.new_event_modal.fields.location')">
+				<ModalUiModalSection
+					:label="$translate('component.new_event_modal.fields.location')"
+				>
 					<template #child>
-						<BaseSelect
+						<CommonUiBaseSelect
 							v-model="inputValues.country"
 							name="country"
 							:placeholder="$translate('global.country')"
-							:list="countries"
+							:list="locationStore.countries"
+							@set-open="setIsSelectOpen"
+							:is-open="true"
 						/>
-						<BaseSelect
+						<CommonUiBaseSelect
 							:key="inputValues.country"
 							v-model="inputValues.city"
 							:is-open="isSelectCountryOpen"
-							@setOpen="setIsSelectOpen"
-							:input-disabled="isCityDisabled"
 							name="city"
+							:input-disabled="isCityDisabled"
 							:placeholder="$translate('global.city')"
-							:list="cities"
+							:list="locationStore.getCitiesByCountry(inputValues.country) ?? []"
+							@set-open="setIsSelectOpen"
 						/>
 
-						<BaseSelect
+						<CommonUiBaseSelect
 							:key="inputValues.timezone"
 							v-model="inputValues.timezone"
 							:is-open="isSelectCityOpen"
-							@setOpen="setIsSelectOpen"
 							:input-disabled="isTimezoneDisabled"
 							name="timezone"
 							:placeholder="$translate('global.timezone')"
 							:list="allTimezones"
+							@set-open="setIsSelectOpen"
 						/>
 					</template>
-				</ModalSection>
+				</ModalUiModalSection>
 
-				<ModalSection :label="$translate('component.new_event_modal.fields.main_info')">
+				<ModalUiModalSection
+					:label="$translate('component.new_event_modal.fields.main_info')"
+				>
 					<template #child>
-						<BaseInput
+						<CommonUiBaseInput
 							v-model="inputValues.title"
 							name="title"
 							:placeholder="$translate('component.new_event_modal.fields.title')"
 						/>
-						<TextArea
+						<CommonUiTextArea
 							v-model="inputValues.description"
 							name="description"
 							:placeholder="
@@ -323,57 +250,57 @@ const setIsSelectOpen = (value: boolean) => {
 							"
 						/>
 					</template>
-				</ModalSection>
+				</ModalUiModalSection>
 
-				<ModalSection
+				<ModalUiModalSection
 					type="row"
 					:label="$translate('component.new_event_modal.fields.start')"
 				>
 					<template #child>
-						<Datepicker
+						<CommonUiDatepicker
 							v-model="inputValues.startDate"
 							type="date"
 							name="startDate"
 							:min-date="minDate"
 						/>
-						<Datepicker
+						<CommonUiDatepicker
 							v-model="inputValues.startTime"
 							type="time"
 							name="startTime"
 							placeholder="--:--"
 						/>
 					</template>
-				</ModalSection>
+				</ModalUiModalSection>
 
-				<ModalSection
+				<ModalUiModalSection
 					type="row"
 					:label="$translate('component.new_event_modal.fields.end')"
 				>
 					<template #child>
-						<Datepicker
+						<CommonUiDatepicker
 							v-model="inputValues.endDate"
 							type="date"
 							name="endDate"
 							:min-date="minDate"
 						/>
-						<Datepicker
+						<CommonUiDatepicker
 							v-model="inputValues.endTime"
 							type="time"
 							name="endTime"
 							placeholder="--:--"
 						/>
 					</template>
-				</ModalSection>
+				</ModalUiModalSection>
 
-				<ModalSection :label="$translate('component.new_event_modal.fields.price')">
+				<ModalUiModalSection :label="$translate('component.new_event_modal.fields.price')">
 					<template #child>
-						<BaseInput
+						<CommonUiBaseInput
 							v-model="inputValues.price"
 							name="price"
 							type="number"
 							:placeholder="$translate('component.new_event_modal.fields.price')"
 						/>
-						<!--						<BaseSelect-->
+						<!--						<CommonUiBaseSelect-->
 						<!--								:key="inputValues.currency"-->
 						<!--								v-model="inputValues.currency"-->
 						<!--								:input-disabled="!inputValues.currency"-->
@@ -382,18 +309,18 @@ const setIsSelectOpen = (value: boolean) => {
 						<!--								:list="cities"-->
 						<!--						/>-->
 					</template>
-				</ModalSection>
+				</ModalUiModalSection>
 
-				<ModalSection
+				<ModalUiModalSection
 					:label="$translate('component.new_event_modal.fields.url_to_rigistration')"
 				>
 					<template #child>
-						<BaseInput
+						<CommonUiBaseInput
 							v-model="inputValues.url"
 							name="url"
 						/>
 					</template>
-				</ModalSection>
+				</ModalUiModalSection>
 
 				<CommonImageLoader
 					v-model="newImageFile"

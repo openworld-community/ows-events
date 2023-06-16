@@ -15,7 +15,7 @@ const ICON_DICTIONARY: { [key: string]: string } = {
 	timezone: 'container'
 };
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:model-value']);
 
 const props = defineProps({
 	inputName: {
@@ -61,7 +61,7 @@ const inputData = computed({
 		return props.modelValue;
 	},
 	set(value) {
-		emit('update:modelValue', value);
+		emit('update:model-value', value);
 	}
 });
 

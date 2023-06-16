@@ -1,55 +1,22 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+const props = defineProps<{
+	className?: string;
+	modelValue: string;
+	list: string[] | Set<string>;
+	name: string;
+	placeholder?: string;
+	label?: string;
+	isOpen?: boolean;
+	disabled?: boolean;
+	error?: string;
+}>();
 
-const props = defineProps({
-	className: {
-		type: String,
-		default: ''
-	},
-	modelValue: {
-		type: String,
-		default: ''
-	},
-	list: {
-		type: Array as () => string[],
-		default: () => ['']
-	},
-	name: {
-		type: String,
-		required: true
-	},
-	placeholder: {
-		type: String,
-		default: ''
-	},
-	label: {
-		type: String,
-		default: ''
-	},
-	isOpen: {
-		type: Boolean,
-		default: false
-	},
-	isOpen: {
-		type: Boolean,
-		default: false,
-	},
-	disabled: {
-		type: Boolean,
-		default: false
-	},
-	error: {
-		type: String,
-		default: ''
-	}
-});
-
-const inputData = ref('');
-
-const emit = defineEmits(['update:modelValue', 'update:setIsOpen']);
+const emit = defineEmits<{
+	'update:model-value': [model: typeof props.modelValue];
+	'set-open': [];
+}>();
 const updateValue = (value: string) => {
-	emit('update:modelValue', value);
-	inputData.value = value;
+	emit('update:model-value', value);
 	setIsOpen();
 };
 
@@ -57,41 +24,44 @@ const setIsOpen = () => {
 	// if(!props.disabled) {
 	// 	isOpen.value = !isOpen.value;
 	// }
-	if(!props.disabled) {
-		emit('update:setIsOpen');
+	if (!props.disabled) {
+		emit('set-open');
 	}
 };
 
 const onRemove = () => {
-	emit('update:modelValue', '');
-	inputData.value = '';
+	emit('update:model-value', '');
 };
 
-const filteredValues = computed(() => {
-	if (props.list) {
-		return props.list.filter((option) => {
-			return option.toLowerCase().includes(inputData.value.toLowerCase() ?? '');
-		});
-	} else {
-		return [''];
-	}
-});
+// const filteredValues = computed(() => {
+// 	if (props.list) {
+// 		return props.list.filter((option) => {
+// 			return option.toLowerCase().includes(props.modelValue.toLowerCase() ?? '');
+// 		});
+// 	} else {
+// 		return [''];
+// 	}
+// });
 </script>
 
 <template>
-	<div :class="`select__wrapper ${props.className}`">
+	<div
+		class="select__wrapper"
+		:class="{ [className ?? '']: className }"
+	>
 		<CommonUiBaseInput
-			v-model="inputData"
-			:name="props.name"
-			:label="props.label"
-			:disabled="props.disabled"
-			:placeholder="props.placeholder"
-			:error="props.error"
+			:name="name"
+			:label="label"
+			:disabled="disabled"
+			:placeholder="placeholder"
+			:error="error"
+			:model-value="modelValue"
+			@update:model-value="(value: typeof modelValue)=>emit('update:model-value',value)"
 			@click="setIsOpen"
 		>
 			<template #icon-right>
 				<button
-					v-if="props.modelValue || inputData"
+					v-if="props.modelValue"
 					@click.prevent="onRemove"
 				>
 					<CommonIcon
@@ -116,7 +86,8 @@ const filteredValues = computed(() => {
 		<div :class="`select__list-box ${isOpen ? 'isOpen' : ''}`">
 			<ul class="select__list benefits">
 				<li
-					v-for="item in filteredValues"
+					v-for="item in list"
+					v-if="item !== modelValue"
 					:key="item"
 					class="select__list-item"
 					@click="updateValue(item)"

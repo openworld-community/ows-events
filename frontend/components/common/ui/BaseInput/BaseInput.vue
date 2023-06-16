@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { InputValue } from './types/types';
-import type {PropType} from 'vue';
-import {useSlots} from 'vue';
+import type { PropType } from 'vue';
+import { useSlots } from 'vue';
 
 defineOptions({
 	inheritAttrs: false
@@ -43,20 +43,19 @@ const props = defineProps({
 	autocomplete: {
 		type: String,
 		default: 'off'
-	},
-})
+	}
+});
 
 const slots = useSlots();
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:model-value']);
 const updateValue = (event: Event) => {
-	emit('update:modelValue', (event.target as HTMLInputElement).value);
+	emit('update:model-value', (event.target as HTMLInputElement).value);
 };
 
 const onRemove = () => {
-	emit('update:modelValue', '');
+	emit('update:model-value', '');
 };
-
 </script>
 
 <template>
@@ -83,17 +82,17 @@ const onRemove = () => {
 				@change="updateValue"
 			/>
 			<slot
-					v-if="slots['icon-right']"
-					name="icon-right"
+				v-if="slots['icon-right']"
+				name="icon-right"
 			>
 			</slot>
 			<button
-					v-else-if="props.modelValue"
-					@click.prevent="onRemove"
+				v-else-if="props.modelValue"
+				@click.prevent="onRemove"
 			>
 				<CommonIcon
-						name="delete"
-						:alt="$translate('global.button.delete')"
+					name="delete"
+					:alt="$translate('global.button.delete')"
 				/>
 			</button>
 		</div>

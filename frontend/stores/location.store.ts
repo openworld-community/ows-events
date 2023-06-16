@@ -22,7 +22,7 @@ export const useLocationStore = defineStore('location', {
 	getters: {
 		countries(state): LocationStore['_countries'] {
 			(async function () {
-				if (state._countries.size) return;
+				if (process.server || state._countries.size) return;
 
 				const { $locationStoreForage } = useNuxtApp();
 				const localCountries: Country[] | null = await $locationStoreForage.getItem(
@@ -45,7 +45,12 @@ export const useLocationStore = defineStore('location', {
 	actions: {
 		getCitiesByCountry(country: Country) {
 			(async () => {
-				if (this._citiesByCountry.get(country) || !this.countries.has(country)) return;
+				if (
+					process.server ||
+					this._citiesByCountry.get(country) ||
+					!this.countries.has(country)
+				)
+					return;
 
 				const { $locationStoreForage } = useNuxtApp();
 				const localCities: City[] | null = await $locationStoreForage.getItem(country);

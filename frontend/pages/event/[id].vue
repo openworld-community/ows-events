@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
-import EventModal from '../../components/modal/Event.vue';
+import EventModal from '../../components/modal/Event.client.vue';
 import type { UserInfo } from '@/../common/types/user';
 import DeleteEvent from '../../components/modal/DeleteEvent.vue';
 

@@ -10,6 +10,7 @@ const props = defineProps<{
 	label?: string;
 	disabled?: boolean;
 	error?: string;
+	required?: boolean;
 }>();
 
 const isOpen = ref(false);
@@ -51,6 +52,7 @@ const filteredList = computed(() =>
 			:placeholder="placeholder"
 			:error="error"
 			:model-value="modelValue"
+			:required="required"
 			@update:model-value="(value: typeof modelValue)=>emit('update:model-value',value)"
 			@click="openSelect"
 		>

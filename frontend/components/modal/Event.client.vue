@@ -22,7 +22,6 @@ const newImageFile = ref<ImageLoaderFile>(null);
 const allTimezones = (await getAllTimezones()).map((timezone) => timezoneToString(timezone));
 const minDate = new Date();
 
-console.log(props.dataForEdit?.date);
 const inputValues = ref({
 	id: props.dataForEdit?.id ?? '',
 	title: props.dataForEdit?.title ?? '',
@@ -151,7 +150,7 @@ const isCityDisabled = computed(() => {
 });
 
 const isTimezoneDisabled = computed(() => {
-	return !inputValues.value.city;
+	return !inputValues.value.country;
 });
 </script>
 
@@ -164,7 +163,10 @@ const isTimezoneDisabled = computed(() => {
 				</h2>
 			</header>
 
-			<form class="modal-card__body body">
+			<form
+				class="modal-card__body body"
+				@submit.prevent="() => void 0"
+			>
 				<ModalUiModalSection
 					:label="$translate('component.new_event_modal.fields.location')"
 				>
@@ -174,6 +176,7 @@ const isTimezoneDisabled = computed(() => {
 							name="country"
 							:placeholder="$translate('global.country')"
 							:list="locationStore.countries"
+							required
 						/>
 						<CommonUiBaseSelect
 							v-model="inputValues.city"
@@ -181,6 +184,7 @@ const isTimezoneDisabled = computed(() => {
 							:disabled="isCityDisabled"
 							:placeholder="$translate('global.city')"
 							:list="locationStore.getCitiesByCountry(inputValues.country) ?? []"
+							required
 						/>
 
 						<CommonUiBaseSelect
@@ -189,6 +193,7 @@ const isTimezoneDisabled = computed(() => {
 							:disabled="isTimezoneDisabled"
 							:placeholder="$translate('global.timezone')"
 							:list="allTimezones"
+							required
 						/>
 					</template>
 				</ModalUiModalSection>
@@ -201,6 +206,7 @@ const isTimezoneDisabled = computed(() => {
 							v-model="inputValues.title"
 							name="title"
 							:placeholder="$translate('component.new_event_modal.fields.title')"
+							required
 						/>
 						<CommonUiTextArea
 							v-model="inputValues.description"
@@ -208,6 +214,7 @@ const isTimezoneDisabled = computed(() => {
 							:placeholder="
 								$translate('component.new_event_modal.fields.description')
 							"
+							required
 						/>
 					</template>
 				</ModalUiModalSection>
@@ -222,6 +229,7 @@ const isTimezoneDisabled = computed(() => {
 							type="date"
 							name="startDate"
 							:min-date="minDate"
+							required
 						/>
 						<CommonUiDatepicker
 							v-model="inputValues.startTime"
@@ -229,6 +237,7 @@ const isTimezoneDisabled = computed(() => {
 							name="startTime"
 							placeholder="--:--"
 							:disabled="!inputValues.startDate"
+							required
 						/>
 					</template>
 				</ModalUiModalSection>
@@ -282,6 +291,7 @@ const isTimezoneDisabled = computed(() => {
 						<CommonUiBaseInput
 							v-model="inputValues.url"
 							name="url"
+							required
 						/>
 					</template>
 				</ModalUiModalSection>

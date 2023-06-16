@@ -16,6 +16,7 @@ const props = defineProps<{
 	minDate?: Date;
 	disabled?: boolean;
 	error?: string;
+	required?: boolean;
 }>();
 
 const emit = defineEmits<{ 'update:model-value': [modelValue: typeof props.modelValue] }>();
@@ -62,6 +63,7 @@ function timeFormat(date: Date) {
 			:min-date="minDate"
 			:format="isDateType ? dateFormat : timeFormat"
 			:disabled="disabled"
+			:required="required"
 			is-24
 			:clearable="false"
 			@update:model-value="handleDate"
@@ -89,6 +91,18 @@ function timeFormat(date: Date) {
 .dp__menu_transitioned,
 .dp__input {
 	border-radius: 24px;
+}
+.dp__input_wrap {
+	&:has(input:required)::after {
+		top: -5px;
+		left: -5px;
+		position: absolute;
+		content: '*';
+		color: red;
+	}
+	&:has(input:disabled)::after {
+		color: var(--color-text-secondary);
+	}
 }
 
 .dp__input {

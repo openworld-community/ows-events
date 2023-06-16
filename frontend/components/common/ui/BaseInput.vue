@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-defineOptions({ inheritAttrs: false });
-
 defineProps<{
 	className?: string;
 	modelValue?: string | number;
@@ -12,6 +10,7 @@ defineProps<{
 	error?: string;
 	autocomplete?: string;
 	minValue?: number;
+	required?: boolean;
 }>();
 const slots = useSlots();
 
@@ -37,7 +36,7 @@ const onRemove = () => {
 		<div class="input__box">
 			<input
 				class="input form__field"
-				:class="{ error: 'form__error' }"
+				:class="{ form__error: error }"
 				v-bind="$attrs"
 				:name="name"
 				:type="type"
@@ -45,6 +44,7 @@ const onRemove = () => {
 				:disabled="disabled"
 				:placeholder="placeholder ?? ''"
 				:autocomplete="autocomplete ?? 'off'"
+				:required="required"
 				:min="
 					type === 'number' || type === 'date' || type === 'time' ? minValue : undefined
 				"
@@ -79,6 +79,9 @@ const onRemove = () => {
 .input {
 	border: 1px solid #ccc;
 	outline: none;
+	&:disabled {
+		filter: brightness(0.95);
+	}
 }
 
 .input__wrapper {
@@ -89,6 +92,16 @@ const onRemove = () => {
 	position: relative;
 	display: flex;
 	align-items: center;
+	&:has(input:required)::after {
+		top: -5px;
+		left: -5px;
+		position: absolute;
+		content: '*';
+		color: var(--color-accent-red);
+	}
+	&:has(input:disabled)::after {
+		color: var(--color-text-secondary);
+	}
 }
 
 .input__box input {

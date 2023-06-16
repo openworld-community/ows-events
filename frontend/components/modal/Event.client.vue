@@ -172,23 +172,10 @@ const isCityDisabled = computed(() => {
 const isTimezoneDisabled = computed(() => {
 	return !inputValues.value.city;
 });
-
-const isSelectCountryOpen = ref(false);
-const isSelectCityOpen = ref(false);
-
-const onClose = () => {
-	isSelectCountryOpen.value = false;
-	isSelectCityOpen.value = false;
-};
-
-const setIsSelectOpen = () => {
-	isSelectCountryOpen.value = true;
-	isSelectCityOpen.value = true;
-};
 </script>
 
 <template>
-	<CommonModalWrapper @on-close-select="onClose">
+	<CommonModalWrapper>
 		<div class="modal-card">
 			<header class="modal-card__head">
 				<h2 class="modal-card__title">
@@ -206,29 +193,23 @@ const setIsSelectOpen = () => {
 							name="country"
 							:placeholder="$translate('global.country')"
 							:list="locationStore.countries"
-							@set-open="setIsSelectOpen"
-							:is-open="true"
 						/>
 						<CommonUiBaseSelect
 							:key="inputValues.country"
 							v-model="inputValues.city"
-							:is-open="isSelectCountryOpen"
 							name="city"
-							:input-disabled="isCityDisabled"
+							:disabled="isCityDisabled"
 							:placeholder="$translate('global.city')"
 							:list="locationStore.getCitiesByCountry(inputValues.country) ?? []"
-							@set-open="setIsSelectOpen"
 						/>
 
 						<CommonUiBaseSelect
 							:key="inputValues.timezone"
 							v-model="inputValues.timezone"
-							:is-open="isSelectCityOpen"
-							:input-disabled="isTimezoneDisabled"
 							name="timezone"
+							:disabled="isTimezoneDisabled"
 							:placeholder="$translate('global.timezone')"
 							:list="allTimezones"
-							@set-open="setIsSelectOpen"
 						/>
 					</template>
 				</ModalUiModalSection>

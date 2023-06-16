@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { InputValue } from './types/types';
-import type { PropType } from 'vue';
 import { useSlots } from 'vue';
 
 defineOptions({
@@ -13,7 +11,7 @@ const props = defineProps({
 		default: ''
 	},
 	modelValue: {
-		type: String,
+		type: [String, Number],
 		default: ''
 	},
 	name: {
@@ -21,7 +19,7 @@ const props = defineProps({
 		required: true
 	},
 	type: {
-		type: String as PropType<InputValue> | Number as PropType<InputValue>,
+		type: String as PropType<'text' | 'date' | 'time' | 'number' | 'textarea' | 'datalist'>,
 		default: 'text'
 	},
 	placeholder: {

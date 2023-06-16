@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { vOnClickOutside } from '@vueuse/components';
+
 const props = defineProps<{
 	className?: string;
 	modelValue: string;
@@ -6,42 +8,27 @@ const props = defineProps<{
 	name: string;
 	placeholder?: string;
 	label?: string;
-	isOpen?: boolean;
 	disabled?: boolean;
 	error?: string;
 }>();
 
+const isOpen = ref(false);
+
 const emit = defineEmits<{
 	'update:model-value': [model: typeof props.modelValue];
-	'set-open': [];
 }>();
-const updateValue = (value: string) => {
-	emit('update:model-value', value);
-	setIsOpen();
-};
 
-const setIsOpen = () => {
-	// if(!props.disabled) {
-	// 	isOpen.value = !isOpen.value;
-	// }
-	if (!props.disabled) {
-		emit('set-open');
-	}
-};
+function openSelect() {
+	if (props.disabled) return;
+	isOpen.value = true;
+}
+function closeSelect() {
+	isOpen.value = false;
+}
 
 const onRemove = () => {
 	emit('update:model-value', '');
 };
-
-// const filteredValues = computed(() => {
-// 	if (props.list) {
-// 		return props.list.filter((option) => {
-// 			return option.toLowerCase().includes(props.modelValue.toLowerCase() ?? '');
-// 		});
-// 	} else {
-// 		return [''];
-// 	}
-// });
 </script>
 
 <template>
@@ -50,6 +37,7 @@ const onRemove = () => {
 		:class="{ [className ?? '']: className }"
 	>
 		<CommonUiBaseInput
+			v-on-click-outside="closeSelect"
 			:name="name"
 			:label="label"
 			:disabled="disabled"
@@ -57,7 +45,7 @@ const onRemove = () => {
 			:error="error"
 			:model-value="modelValue"
 			@update:model-value="(value: typeof modelValue)=>emit('update:model-value',value)"
-			@click="setIsOpen"
+			@click="openSelect"
 		>
 			<template #icon-right>
 				<button
@@ -78,7 +66,7 @@ const onRemove = () => {
 					width="24"
 					height="24"
 					alt="Открыть"
-					@click.prevent="setIsOpen"
+					@click.prevent="openSelect"
 				/>
 			</template>
 		</CommonUiBaseInput>
@@ -90,7 +78,8 @@ const onRemove = () => {
 					v-if="item !== modelValue"
 					:key="item"
 					class="select__list-item"
-					@click="updateValue(item)"
+					:class="{ this_oneHere: item === modelValue }"
+					@click="emit('update:model-value', item)"
 				>
 					{{ item }}
 				</li>
@@ -108,6 +97,7 @@ const onRemove = () => {
 
 	&__box {
 		//width: 100%;
+		position: static;
 	}
 
 	&__list-box {
@@ -123,17 +113,21 @@ const onRemove = () => {
 		z-index: 99;
 		border-radius: 24px;
 		border: 1px solid #ccc;
-		pointer-events: none;
 		&.isOpen {
 			display: block;
 		}
 	}
 
 	&__list {
-		width: 100%;
 		height: 100%;
 		overflow-y: scroll;
-		overflow-x: hidden;
+		& li {
+			transition: background-color 200ms;
+			cursor: pointer;
+			&:hover {
+				background-color: var(--color-input-icons);
+			}
+		}
 	}
 
 	&__list::-webkit-scrollbar {

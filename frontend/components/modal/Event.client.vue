@@ -57,7 +57,10 @@ watch(
 );
 
 watch([() => inputValues.value.country, () => inputValues.value.city], async () => {
-	if (!inputValues.value.country) return;
+	if (!inputValues.value.country) {
+		inputValues.value.timezone = '';
+		return;
+	}
 	inputValues.value.timezone = await getTimezone({
 		country: inputValues.value.country,
 		city: inputValues.value.city
@@ -194,7 +197,7 @@ const eventInputs: {
 			{
 				type: 'datalist',
 				name: 'country',
-				options: locationStore.countries,
+				options: computed(() => locationStore.countries),
 				label: $translate('component.new_event_modal.fields.country'),
 				required: true
 			},

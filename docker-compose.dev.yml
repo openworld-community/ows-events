@@ -32,6 +32,7 @@ services:
             - mongo
         environment:
             - FRONTEND_URL=http://localhost:3000
+            - MONGO_URI=mongodb://mongo:27017/dev
         ports:
             - '7080:7080'
         volumes:

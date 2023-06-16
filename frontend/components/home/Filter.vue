@@ -33,7 +33,7 @@ function updateCountry(country: typeof props.country) {
 			:input-placeholder="$translate('global.city')"
 			:options-list="locationStore.getCitiesByCountry(country)"
 			:model-value="city"
-			@update:model-value="(value: typeof city) => emit('update:city',value)"
+			@update:model-value="(value: typeof city) => emit('update:city', value)"
 		/>
 	</section>
 </template>

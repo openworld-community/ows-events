@@ -2,7 +2,7 @@
 export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
 </script>
 <script lang="ts" setup>
-import VueDatePicker from '@vuepic/vue-datepicker';
+import VueDatePicker, { type DatePickerInstance } from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import dayjs from 'dayjs';
 
@@ -20,8 +20,10 @@ const props = defineProps<{
 
 const emit = defineEmits<{ 'update:model-value': [modelValue: typeof props.modelValue] }>();
 const isDateType = computed(() => props.type === 'date');
+const datepicker = ref<DatePickerInstance>(null);
 
 function handleDate(modelData: Date) {
+	isDateType.value && datepicker.value?.closeMenu();
 	emit('update:model-value', modelData);
 }
 
@@ -30,7 +32,7 @@ function dateFormat(date: Date) {
 }
 
 function timeFormat(date: Date) {
-	return dayjs(date).format('HH:MM');
+	return dayjs(date).format('HH:mm');
 }
 </script>
 
@@ -47,6 +49,7 @@ function timeFormat(date: Date) {
 			{{ label }}
 		</label>
 		<VueDatePicker
+			ref="datepicker"
 			:model-value="modelValue"
 			:name="name"
 			:placeholder="placeholder ?? 'дд.мм.гг'"

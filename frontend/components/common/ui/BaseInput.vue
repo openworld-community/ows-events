@@ -1,53 +1,18 @@
 <script lang="ts" setup>
-  import {PropType, useSlots} from 'vue';
+defineOptions({ inheritAttrs: false });
 
-defineOptions({
-	inheritAttrs: false
-});
-
-const props = defineProps({
-	className: {
-		type: String as PropType<string>,
-		default: ''
-	},
-	modelValue: {
-		type: [String, Number] as PropType<string | number>,
-		default: ''
-	},
-	name: {
-		type: String as PropType<string>,
-		required: true
-	},
-	type: {
-		type: String as PropType<'text' | 'date' | 'time' | 'number' | 'textarea' | 'datalist'>,
-		default: 'text'
-	},
-	placeholder: {
-		type: String as PropType<string>,
-		default: ''
-	},
-	label: {
-		type: String as PropType<string>,
-		default: ''
-	},
-	disabled: {
-		type: Boolean as PropType<boolean>,
-		default: false
-	},
-	error: {
-		type: String as PropType<string>,
-		default: ''
-	},
-	autocomplete: {
-		type: String as PropType<string>,
-		default: 'off'
-	},
-  minValue: {
-    type: Number as PropType<number>,
-    default: null
-  }
-});
-
+defineProps<{
+	className?: string;
+	modelValue?: string | number;
+	name: string;
+	type?: 'text' | 'date' | 'time' | 'number' | 'textarea' | 'datalist';
+	placeholder?: string;
+	label?: string;
+	disabled?: boolean;
+	error?: string;
+	autocomplete?: string;
+	minValue?: number;
+}>();
 const slots = useSlots();
 
 const emit = defineEmits(['update:model-value']);
@@ -61,26 +26,28 @@ const onRemove = () => {
 </script>
 
 <template>
-	<div :class="`input__wrapper ${props.className}`">
+	<div :class="`input__wrapper ${className ?? ''}`">
 		<label
-			v-if="props.label"
+			v-if="label"
 			class="form__label"
-			:for="props.name"
+			:for="name"
 		>
-			{{ props.label }}
+			{{ label }}
 		</label>
 		<div class="input__box">
 			<input
 				class="input form__field"
 				:class="{ error: 'form__error' }"
 				v-bind="$attrs"
-				:name="props.name"
-				:type="props.type"
-				:value="props.modelValue"
-				:disabled="props.disabled"
-				:placeholder="props.placeholder"
-				:autocomplete="autocomplete"
-        :min="type === 'number' || 'date' || 'time' ? minValue : null"
+				:name="name"
+				:type="type"
+				:value="modelValue"
+				:disabled="disabled"
+				:placeholder="placeholder ?? ''"
+				:autocomplete="autocomplete ?? 'off'"
+				:min="
+					type === 'number' || type === 'date' || type === 'time' ? minValue : undefined
+				"
 				@input="updateValue"
 				@change="updateValue"
 			/>
@@ -90,7 +57,7 @@ const onRemove = () => {
 			>
 			</slot>
 			<button
-				v-else-if="props.modelValue"
+				v-else-if="modelValue"
 				@click.prevent="onRemove"
 			>
 				<CommonIcon
@@ -100,10 +67,10 @@ const onRemove = () => {
 			</button>
 		</div>
 		<span
-			v-if="props.error"
+			v-if="error"
 			class="form__error"
 		>
-			{{ props.error }}
+			{{ error }}
 		</span>
 	</div>
 </template>

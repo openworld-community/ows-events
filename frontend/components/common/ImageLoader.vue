@@ -2,7 +2,6 @@
 export type ImageLoaderFile = File | null | 'DELETED';
 </script>
 <script setup lang="ts">
-import { ref, watch } from 'vue';
 import { BASE_URL } from '@/constants/url';
 
 const props = defineProps<{
@@ -10,7 +9,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-	'update:modelValue': [file: ImageLoaderFile];
+	'update:model-value': [file: ImageLoaderFile];
 }>();
 
 const input = ref<HTMLInputElement | null>(null);

@@ -29,3 +29,10 @@ export function convertToLocaleString(epoch: number) {
 		minute: '2-digit'
 	});
 }
+
+export const day = 1000 * 60 * 60 * 24;
+// Second date getTime() must be greater than firstDate
+export const getDatesDayDifference = (firstDate: Date, secondDate: Date): number => {
+	const diffTime = Math.abs(secondDate.getTime() - firstDate.getTime());
+	return Math.ceil(diffTime / day);
+};

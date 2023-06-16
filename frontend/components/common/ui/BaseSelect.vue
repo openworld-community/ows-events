@@ -57,7 +57,7 @@ const filteredList = computed(() =>
 			<template #icon-right>
 				<button
 					v-if="props.modelValue"
-					@click.prevent="onRemove"
+					@click.prevent="() => (onRemove(), closeSelect())"
 				>
 					<CommonIcon
 						name="delete"

@@ -1,5 +1,5 @@
 import { defineTranslation } from '..';
-import { EventValidatorErrorTypes } from '../../../../common/types/event-validation-error';
+import { EventValidatorErrorTypes } from '../../../../common/enums/event-validation-error';
 
 const EventValidatorErrors: {
 	[key in EventValidatorErrorTypes]: string;
@@ -22,8 +22,8 @@ const EventValidatorErrors: {
 	URL_IS_NOT_DEFINED: 'Ссылка на мероприятие не определена',
 	URL_IS_TOO_SHORT: 'Ссылка на мероприятие слишком короткая',
 	URL_IS_TOO_LONG: 'Ссылка на мероприятие слишком длинная',
-  TITLE_IS_NOT_CLEAN: 'В заголовоке ненормативная лексика',
-  DESCRIPTION_IS_NOT_CLEAN: 'В описании ненормативная лексика'
+	TITLE_IS_NOT_CLEAN: 'В заголовоке ненормативная лексика',
+	DESCRIPTION_IS_NOT_CLEAN: 'В описании ненормативная лексика'
 };
 
 export const defaultTranslation = {

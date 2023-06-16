@@ -4,7 +4,7 @@ import type { City, Country } from '@/stores/location.store';
 import { useLocationStore } from '@/stores/location.store';
 import { computed, ref, watch } from 'vue';
 import { type EventOnPoster } from '../../../common/types';
-import { EventValidatorErrorTypes } from '../../../common/types/event-validation-error';
+import { EventValidatorErrorTypes } from '../../../common/enums/event-validation-error';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
 
 const { $translate, $i18n } = useNuxtApp();

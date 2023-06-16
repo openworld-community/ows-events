@@ -1,7 +1,15 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import { EventOnPoster } from '@common/types/event';
 
-export type IEventDocument = EventOnPoster & Document;
+export type IEventMeta = {
+	meta: {
+		moderation: {
+			status: string;
+			problems: string[];
+		};
+	};
+};
+export type IEventDocument = EventOnPoster & IEventMeta & Document;
 
 const schema = new Schema<IEventDocument>(
 	{
@@ -56,6 +64,20 @@ const schema = new Schema<IEventDocument>(
 				type: String,
 				required: true
 			}
+		},
+		meta: {
+			moderation: {
+				status: {
+					type: String,
+					required: true,
+					default: 'allow'
+				},
+				problems: [
+					{
+						type: String
+					}
+				]
+			}
 		}
 	},
 	{
@@ -71,4 +93,4 @@ schema.index({
 	'location.country': 'text'
 });
 
-export const EventModel = mongoose.model<EventOnPoster>('Event', schema);
+export const EventModel = mongoose.model<IEventDocument>('Event', schema);

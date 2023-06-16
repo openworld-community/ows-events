@@ -34,14 +34,17 @@ class EventsStateController {
 			queryObject['location.city'] = query?.city;
 		}
 
-		const events = await EventModel.find(queryObject);
+		const events: EventOnPoster[] = await EventModel.find(queryObject, { meta: 0 });
 		return events;
 	}
 
 	async getEvent(id: string) {
-		const event = await EventModel.findOne({
-			id
-		});
+		const event = await EventModel.findOne(
+			{
+				id
+			},
+			{ meta: 0 }
+		);
 		return event;
 	}
 

@@ -11,6 +11,7 @@ import {
 } from './type';
 import { ITokenData } from '../../types';
 import { eventsValidator } from '../../../validators/event-validator';
+import { manualModerationController } from '../../../controllers/manual-moderation-controller';
 
 export const addEvent: IAddEventHandler = async (request, reply) => {
 	const token = request.headers.authorization;
@@ -34,15 +35,6 @@ export const addEvent: IAddEventHandler = async (request, reply) => {
 		};
 	}
 
-	const validationResult = eventsValidator.validateEvent(body);
-
-	if (!validationResult.isValid) {
-		return {
-			type: 'error',
-			errors: validationResult.errors
-		};
-	}
-
 	const { event } = body;
 	if (!event) {
 		return {
@@ -52,6 +44,19 @@ export const addEvent: IAddEventHandler = async (request, reply) => {
 
 	event.creatorId = jwtData.id;
 	const newPostId = await eventsStateController.addEvent(event);
+
+	const validationResult = eventsValidator.validateEvent({ event });
+	if (!validationResult.isValid) {
+		await manualModerationController.inProgress(newPostId, validationResult.errors);
+		return {
+			type: 'error',
+			errors: [
+				`Ваше событие отправлено на модерацию по причинам: ${validationResult.errors.join(
+					', '
+				)}`
+			]
+		};
+	}
 
 	return {
 		type: 'success',

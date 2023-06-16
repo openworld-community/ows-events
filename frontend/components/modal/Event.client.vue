@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { getAllTimezones, getTimezone } from '@/services/timezone.services';
+import type { City, Country } from '@/stores/location.store';
 import { useLocationStore } from '@/stores/location.store';
-import { storeToRefs } from 'pinia';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { type EventOnPoster } from '../../../common/types';
 import { EventValidatorErrorTypes } from '../../../common/types/event-validation-error';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
@@ -13,116 +13,59 @@ const t = $i18n.t.bind($i18n);
 type Props = {
 	dataForEdit?: EventOnPoster;
 	closeEventModal: () => void;
-	refreshEvent: () => void;
+	refreshEvent?: () => void;
 };
 
 const props = defineProps<Props>();
 const locationStore = useLocationStore();
-locationStore.loadCountries();
-const { countries, cities } = storeToRefs(locationStore);
 
 const isLoading = ref(false);
 const newImageFile = ref<ImageLoaderFile>(null);
+const allTimezones = (await getAllTimezones()).map((timezone) => timezoneToString(timezone));
 
-const allTimezones = ref<string[]>([]);
+const [eventStartDate, eventStartTime] = props.dataForEdit
+	? timestampDateTimeParse(props.dataForEdit.date, props.dataForEdit.timezone)
+	: ['', ''];
+const [eventEndDate, eventEndTime] = props.dataForEdit
+	? timestampDateTimeParse(
+			props.dataForEdit.date + props.dataForEdit.durationInSeconds,
+			props.dataForEdit.timezone
+	  )
+	: ['', ''];
 
-const loadAllTimezones = async () => {
-	const _allTimezones = await getAllTimezones();
-	if (!_allTimezones) return;
-
-	allTimezones.value = _allTimezones.map((timezone) => timezoneToString(timezone));
-};
-
-await loadAllTimezones();
-
-type inputValuesType = {
-	id: string;
-	title: string;
-	description: string;
-	startDate: string;
-	startTime: string;
-	endDate: string;
-	endTime: string;
-	country: string;
-	city: string;
-	image: string;
-	price: number;
-	timezone: string;
-	url: string;
-};
-
-const inputValues = ref<inputValuesType>({
-	id: '',
-	title: '',
-	description: '',
-	startDate: '',
-	startTime: '',
-	endDate: '',
-	endTime: '',
-	country: '',
-	city: '',
-	image: '',
-	price: 0,
-	timezone: '',
-	url: ''
+const inputValues = ref({
+	id: props.dataForEdit?.id ?? '',
+	title: props.dataForEdit?.title ?? '',
+	description: props.dataForEdit?.description ?? '',
+	startDate: eventStartDate,
+	startTime: eventStartTime,
+	endDate: eventEndDate,
+	endTime: eventEndTime,
+	country: (props.dataForEdit?.location.country ?? '') satisfies Country,
+	city: (props.dataForEdit?.location.city ?? '') satisfies City,
+	image: props.dataForEdit?.image ?? '',
+	price: props.dataForEdit?.price ?? 0,
+	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
+	url: props.dataForEdit?.url ?? ''
 });
-
-onMounted(() => {
-	if (props.dataForEdit) {
-		setEventData(props.dataForEdit);
-	}
-});
-
-const setEventData = (data: EventOnPoster) => {
-	const start = timestampDateTimeParse(data.date, data.timezone);
-	const end = timestampDateTimeParse(data.date + data.durationInSeconds, data.timezone);
-
-	inputValues.value.id = data.id;
-	inputValues.value.title = data.title;
-	inputValues.value.description = data.description;
-	inputValues.value.country = data.location.country;
-	inputValues.value.city = data.location.city;
-	inputValues.value.price = data.price;
-	inputValues.value.startDate = start[0];
-	inputValues.value.startTime = start[1];
-	inputValues.value.endDate = end[0];
-	inputValues.value.endTime = end[1];
-	inputValues.value.image = data.image;
-	inputValues.value.url = data.url;
-};
 
 watch(
 	() => inputValues.value.country,
-	(_country) => {
-		if (!_country) {
-			inputValues.value.city = '';
-			return;
-		}
-		locationStore.pickCountry(_country);
-	},
-	{ deep: true }
+	() => {
+		inputValues.value.city = '';
+	}
 );
 
-watch(
-	() => inputValues.value.city,
-	(_city) => {
-		locationStore.pickCity(_city);
-	},
-	{ deep: true }
-);
-
-watch(
-	() => inputValues.value.country && inputValues.value.city,
-	async () => {
+watch([() => inputValues.value.country, () => inputValues.value.city], async () => {
+	if (!inputValues.value.country) {
 		inputValues.value.timezone = '';
-
-		inputValues.value.timezone = await getTimezone({
-			country: inputValues.value.country,
-			city: inputValues.value.city
-		});
-	},
-	{ deep: true }
-);
+		return;
+	}
+	inputValues.value.timezone = await getTimezone({
+		country: inputValues.value.country,
+		city: inputValues.value.city
+	});
+});
 
 const checkFormFilling = computed(() => {
 	return !!(
@@ -133,7 +76,7 @@ const checkFormFilling = computed(() => {
 		inputValues.value.country &&
 		inputValues.value.city &&
 		inputValues.value.timezone &&
-		allTimezones.value.includes(inputValues.value.timezone)
+		allTimezones.includes(inputValues.value.timezone)
 	);
 });
 
@@ -189,7 +132,7 @@ const submitEvent = async () => {
 		const { data } = await apiRouter.events.edit.useMutation({ data: { event } });
 
 		if (data.value?.type === 'success') {
-			props.refreshEvent();
+			props.refreshEvent?.();
 		} else {
 			console.error(data.value?.errors);
 		}
@@ -236,7 +179,7 @@ type InputEvent = {
 	name: keyof typeof inputValues.value;
 	required: boolean;
 	min?: number;
-	options?: any; // TODO тип
+	options?: string[] | Set<string> | Ref<string[] | undefined> | Ref<Set<string>>; // TODO тип
 	isDisabled?: Ref<boolean>;
 };
 
@@ -254,14 +197,16 @@ const eventInputs: {
 			{
 				type: 'datalist',
 				name: 'country',
-				options: countries,
+				options: computed(() => locationStore.countries),
 				label: $translate('component.new_event_modal.fields.country'),
 				required: true
 			},
 			{
 				type: 'datalist',
 				name: 'city',
-				options: cities,
+				options: computed(() =>
+					locationStore.getCitiesByCountry(inputValues.value.country)
+				),
 				label: $translate('component.new_event_modal.fields.city'),
 				required: true,
 				isDisabled: isCityDisabled
@@ -386,14 +331,25 @@ const eventInputs: {
 						{{ input.label }}
 					</h3>
 					<div :class="input.type === 'column' ? 'section__column' : 'section__row'">
+						<!-- TODO переписать это уродство с c.options -->
+						<!-- TODO при создании ивента в случае datalist не работает автокомплит, хотя данные в даталист подтягиваются корректно -->
 						<CommonInput
 							v-for="c in input.child"
-							:key="c.name + c.options?.value.join('') + c.isDisabled"
+							:key="
+								c.name +
+								(c.options && 'value' in c.options
+									? c.options.value
+									: c.options
+								)?.toString() +
+								c.isDisabled
+							"
 							v-model="inputValues[c.name]"
-							:input-disabled="c.isDisabled?.value || false"
+							:input-disabled="c.isDisabled?.value ?? false"
 							class="section__input"
 							:input-type="c.type"
-							:options-list="c.options?.value"
+							:options-list="
+								c.options && 'value' in c.options ? c.options.value : c.options
+							"
 							:input-placeholder="c.label"
 							:input-name="c.name"
 							:is-required="c.required"

@@ -1,106 +1,71 @@
 import { defineStore } from 'pinia';
-import { parseJSON } from '~/utils';
 import type { UserLocation } from '../../common/types/location';
 
-const useLocationStore = defineStore('location', {
-	state: () => {
-		if (process.server) {
-			return {
-				pickedCountry: '',
-				countries: [],
-				cities: [],
-				citiesByCountry: {},
-				pickedCity: '',
-				userLocation: {}
-			};
-		}
+export type City = string;
+export type Country = string;
+type LocationStore = {
+	_countries: Set<Country>;
+	_citiesByCountry: Map<Country, City[]>;
+	userLocation: UserLocation;
+};
 
+const COUNTRIES_KEY = 'COUNTRIES';
+
+export const useLocationStore = defineStore('location', {
+	state: (): LocationStore => {
 		return {
-			pickedCountry: localStorage.getItem('LOCATIONS_PICKED_COUNTRY') ?? '',
-			countries: parseJSON<string[]>(localStorage.getItem('LOCATIONS_COUNTRIES') ?? '[]', []),
-			cities: parseJSON<string[]>(localStorage.getItem('LOCATIONS_CITIES') ?? '[]', []),
-			citiesByCountry: parseJSON<Record<string, string[]>>(
-				localStorage.getItem('LOCATIONS_CITIES_BY_COUNTRY') ?? '{}',
-				{}
-			),
-			pickedCity: localStorage.getItem('LOCATIONS_PICKED_CITY') ?? '',
-			userLocation: parseJSON<UserLocation>(
-				localStorage.getItem('LOCATIONS_USER_LOCATION') ?? '{}'
-			)
+			_countries: new Set(),
+			_citiesByCountry: new Map(),
+			userLocation: {}
 		};
 	},
-	getters: {},
+	getters: {
+		countries(state): LocationStore['_countries'] {
+			(async function () {
+				if (process.server) return;
+				if (state._countries.size) return;
+
+				const { $locationStoreForage } = useNuxtApp();
+				const localCountries: Country[] | null = await $locationStoreForage.getItem(
+					COUNTRIES_KEY
+				);
+				if (localCountries) {
+					state._countries = new Set(localCountries);
+					return;
+				}
+
+				const { data } = await apiRouter.location.country.getAll.useQuery({});
+				if (!data.value) return;
+				state._countries = new Set(data.value);
+				// data.value is Proxy which can't copied to storage directly - spread operator converts back to native object
+				$locationStoreForage.setItem(COUNTRIES_KEY, [...data.value]);
+			})();
+			return state._countries;
+		}
+	},
 	actions: {
-		pickCountry(country: string) {
-			if (this.pickedCountry === country) {
-				return;
-			}
-			this.pickCity('');
+		getCitiesByCountry(country: Country) {
+			(async () => {
+				if (process.server) return;
+				if (this._citiesByCountry.get(country) || !this.countries.has(country)) return;
 
-			this.pickedCountry = country;
-			if (process.client) {
-				localStorage.setItem('LOCATIONS_PICKED_COUNTRY', country);
-			}
+				const { $locationStoreForage } = useNuxtApp();
+				const localCities: City[] | null = await $locationStoreForage.getItem(country);
+				if (localCities) {
+					this._citiesByCountry.set(country, localCities);
+					return;
+				}
 
-			this.loadCitiesByCountry(country);
-		},
+				const { data } = await apiRouter.location.country.getCities.useQuery({
+					data: { country }
+				});
+				if (!data.value) return;
+				this._citiesByCountry.set(country, data.value);
+				// data.value is Proxy which can't copied to storage directly - spread operator converts back to native object
+				$locationStoreForage.setItem(country, [...data.value]);
+			})();
 
-		pickCity(city: string) {
-			this.pickedCity = city;
-			if (process.client) {
-				localStorage.setItem('LOCATIONS_PICKED_CITY', city);
-			}
-		},
-
-		async loadCountries() {
-			if (this.countries.length) {
-				return;
-			}
-
-			const { data } = await apiRouter.location.country.getAll.useQuery({});
-			this.countries = data.value ?? [];
-
-			if (process.client) {
-				localStorage.setItem('LOCATIONS_COUNTRIES', JSON.stringify(this.countries));
-			}
-		},
-		async loadCitiesByCountry(country: string) {
-			if (this.citiesByCountry[country]) {
-				this.cities = this.citiesByCountry[country];
-				return;
-			}
-
-			if (!this.countries.find((x) => x === country)) {
-				return;
-			}
-
-			const { data } = await apiRouter.location.country.getCities.useQuery({
-				data: { country }
-			});
-			const cities = data.value ?? [];
-
-			this.citiesByCountry[country] = cities;
-			this.cities = this.citiesByCountry[country] ?? [];
-			localStorage.setItem(
-				'LOCATIONS_CITIES_BY_COUNTRY',
-				JSON.stringify(this.citiesByCountry)
-			);
-			localStorage.setItem('LOCATIONS_CITIES', JSON.stringify(cities));
-		},
-		async init(userLocation: UserLocation) {
-			this.userLocation = userLocation;
-			await this.loadCountries();
-
-			if (!this.pickedCountry) return;
-
-			this.loadCitiesByCountry(this.pickedCountry);
-			this.pickCountry(this.pickedCountry);
-
-			if (!this.pickedCity) return;
-
-			this.pickCity(this.pickedCity);
+			return this._citiesByCountry.get(country);
 		}
 	}
 });
-
-export { useLocationStore };

@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '@/constants/enums/route';
-import { computed } from 'vue';
-import { type UseModalOptions, VueFinalModal, useModal } from 'vue-final-modal';
-import NeedAuthorize from '~/components/modal/NeedAuthorize.vue';
-import { useLocationStore } from '~/stores/location.store';
-import EventModal from '../components/modal/Event.vue';
+import { VueFinalModal, useModal, type UseModalOptions } from 'vue-final-modal';
+import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
+import EventModal from '@/components/modal/Event.client.vue';
 const { $translate } = useNuxtApp();
 useHead({ titleTemplate: `%s / ${$translate('meta.home.title')}` });
 definePageMeta({ name: RouteNameEnum.HOME });
@@ -26,19 +24,14 @@ const {
 >);
 needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
 
-const locationStore = useLocationStore();
-
 const route = useRoute();
-const search = ref(route.query.search?.toString() ?? '');
-const debouncedEventsRequestQuery = refDebounced(
-	computed(() => ({
-		city: locationStore.pickedCity,
-		country: locationStore.pickedCountry,
-		searchLine: search.value
-	})),
-	500,
-	{ maxWait: 5000 }
-);
+const eventsQuery = ref({
+	searchLine: route.query.search?.toString() ?? '',
+	city: '',
+	country: ''
+});
+// todo - fix debouncing, doesnt seem to work with non-primitives
+const debouncedEventsRequestQuery = refDebounced(eventsQuery, 500, { maxWait: 5000 });
 const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 	data: { query: debouncedEventsRequestQuery }
 });
@@ -56,7 +49,7 @@ const now = Date.now();
 <template>
 	<div class="main-page">
 		<HomeSearch
-			v-model:search="search"
+			v-model:search="eventsQuery.searchLine"
 			class="main-page__search"
 		/>
 		<div class="main-page__location">
@@ -65,7 +58,11 @@ const now = Date.now();
 		<h1 class="main-page__title">
 			{{ $translate('home.title') }}
 		</h1>
-		<HomeFilter class="main-page__filter" />
+		<HomeFilter
+			v-model:country="eventsQuery.country"
+			v-model:city="eventsQuery.city"
+			class="main-page__filter"
+		/>
 
 		<ul class="main-page__card-list">
 			<li

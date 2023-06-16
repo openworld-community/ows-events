@@ -19,7 +19,7 @@ export const timestampDateParse = (timestamp: number) => {
 export const timestampDateTimeParse = (
 	timestamp: number,
 	timezone: { timezoneName: string; timezoneOffset: string } | undefined
-) => {
+): [date: string, time: string] => {
 	try {
 		const date = new Date(timestamp)
 			.toLocaleString('ru-RU', {

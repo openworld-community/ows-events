@@ -29,6 +29,13 @@ function closeSelect() {
 const onRemove = () => {
 	emit('update:model-value', '');
 };
+const filteredList = computed(() =>
+	[...props.list].filter(
+		(item) =>
+			item.toLowerCase().startsWith(props.modelValue.toLowerCase()) &&
+			item !== props.modelValue
+	)
+);
 </script>
 
 <template>
@@ -71,14 +78,13 @@ const onRemove = () => {
 			</template>
 		</CommonUiBaseInput>
 
-		<div :class="`select__list-box ${isOpen ? 'isOpen' : ''}`">
+		<div :class="`select__list-box ${isOpen && filteredList.length ? 'isOpen' : ''}`">
 			<ul class="select__list benefits">
 				<li
-					v-for="item in list"
-					v-if="item !== modelValue"
+					v-for="item in filteredList"
 					:key="item"
 					class="select__list-item"
-					:class="{ this_oneHere: item === modelValue }"
+					:class="{ current: item === modelValue }"
 					@click="emit('update:model-value', item)"
 				>
 					{{ item }}
@@ -126,6 +132,10 @@ const onRemove = () => {
 			cursor: pointer;
 			&:hover {
 				background-color: var(--color-input-icons);
+			}
+			&.current {
+				font-weight: 1000;
+				text-decoration: underline;
 			}
 		}
 	}

@@ -55,6 +55,7 @@ function timeFormat(date: Date) {
 			:name="name"
 			:placeholder="placeholder ?? 'дд.мм.гг'"
 			:input-class-name="`input form__field ${error ? 'form__error' : ''}`"
+			:menu-class-name="`${!isDateType ? 'time_picker' : ''}`"
 			auto-apply
 			partial-flow
 			:flow="['calendar']"
@@ -88,6 +89,16 @@ function timeFormat(date: Date) {
 </template>
 
 <style lang="less">
+.dp__menu {
+	left: unset !important;
+	transform: unset !important;
+	&.time_picker {
+		right: 0 !important;
+	}
+}
+.dp__main {
+	position: relative;
+}
 .dp__menu_transitioned,
 .dp__input {
 	border-radius: 24px;

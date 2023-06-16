@@ -15,27 +15,31 @@ export const events = {
 		return useBackendFetch(`events/${input.id}`);
 	}),
 	add: defineMutation<(input: PostEventPayload) => StandardResponse<{ id: string }>>((input) => {
-		return useBackendFetch('events/add', { body: input }, true);
+		return useBackendFetch('events/add', { body: input }, { auth: true });
 	}),
 	edit: defineMutation<(input: { event: EventOnPoster }) => StandardResponse<undefined>>(
 		(input) => {
-			return useBackendFetch('events/update', { body: input }, true);
+			return useBackendFetch('events/update', { body: input }, { auth: true });
 		}
 	),
 	delete: defineMutation<(input: { id: string }) => StandardResponse<undefined>>((input) => {
-		return useBackendFetch('events/delete', { body: { id: input.id } }, true);
+		return useBackendFetch('events/delete', { body: { id: input.id } }, { auth: true });
 	}),
 	image: {
 		add: defineMutation<(input: { image: File }) => StandardResponse<{ path: string }>>(
 			(input) => {
 				const formData = new FormData();
 				formData.append('image', input.image);
-				return useBackendFetch('image/add', { body: formData }, true);
+				return useBackendFetch('image/add', { body: formData }, { auth: true });
 			}
 		),
 		delete: defineMutation<(input: { path: string }) => StandardResponse<undefined>>(
 			(input) => {
-				return useBackendFetch('image/delete', { body: { path: input.path } }, true);
+				return useBackendFetch(
+					'image/delete',
+					{ body: { path: input.path } },
+					{ auth: true }
+				);
 			}
 		)
 	},

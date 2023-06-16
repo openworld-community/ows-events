@@ -150,7 +150,8 @@ export const defaultTranslation = {
 			authorization: {
 				authorize: 'Авторизоваться с помощью Telegram',
 				deauthorize: 'Выйти из личного кабинета'
-			}
+			},
+			support: 'Обратиться в поддержку через Telegram'
 		}
 	},
 	dates: {

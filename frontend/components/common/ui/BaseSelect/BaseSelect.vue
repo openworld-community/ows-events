@@ -1,32 +1,34 @@
 <script lang="ts" setup>
-import {computed, ref} from 'vue';
-import CommonIcon from '~/components/common/Icon.vue';
-import BaseInput from '~/components/common/ui/BaseInput/BaseInput.vue';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
 	className: {
 		type: String,
-		default: '',
+		default: ''
 	},
 	modelValue: {
 		type: String,
-		default: '',
+		default: ''
 	},
 	list: {
 		type: Array as () => string[],
-		default: () => [''],
+		default: () => ['']
 	},
 	name: {
 		type: String,
-		required: true,
+		required: true
 	},
 	placeholder: {
 		type: String,
-		default: '',
+		default: ''
 	},
 	label: {
 		type: String,
-		default: '',
+		default: ''
+	},
+	isOpen: {
+		type: Boolean,
+		default: false
 	},
 	isOpen: {
 		type: Boolean,
@@ -34,13 +36,13 @@ const props = defineProps({
 	},
 	disabled: {
 		type: Boolean,
-		default: false,
+		default: false
 	},
 	error: {
 		type: String,
 		default: ''
 	}
-})
+});
 
 const inputData = ref('');
 
@@ -65,22 +67,20 @@ const onRemove = () => {
 	inputData.value = '';
 };
 
-
 const filteredValues = computed(() => {
 	if (props.list) {
-		return props.list.filter(option => {
-			return option.toLowerCase().includes(inputData.value.toLowerCase() ?? '')
+		return props.list.filter((option) => {
+			return option.toLowerCase().includes(inputData.value.toLowerCase() ?? '');
 		});
 	} else {
 		return [''];
 	}
 });
-
 </script>
 
 <template>
 	<div :class="`select__wrapper ${props.className}`">
-		<BaseInput
+		<CommonUiBaseInput
 			v-model="inputData"
 			:name="props.name"
 			:label="props.label"
@@ -91,8 +91,8 @@ const filteredValues = computed(() => {
 		>
 			<template #icon-right>
 				<button
-						v-if="props.modelValue || inputData || isOpen"
-						@click.prevent="onRemove"
+					v-if="props.modelValue || inputData"
+					@click.prevent="onRemove"
 				>
 					<CommonIcon
 						name="delete"
@@ -103,15 +103,15 @@ const filteredValues = computed(() => {
 				</button>
 
 				<CommonIcon
-						v-else
-						name="container"
-						width="24"
-						height="24"
-						alt="Открыть"
-						@click.prevent="setIsOpen"
-					/>
+					v-else
+					name="container"
+					width="24"
+					height="24"
+					alt="Открыть"
+					@click.prevent="setIsOpen"
+				/>
 			</template>
-		</BaseInput>
+		</CommonUiBaseInput>
 
 		<div :class="`select__list-box ${isOpen ? 'isOpen' : ''}`">
 			<ul class="select__list benefits">

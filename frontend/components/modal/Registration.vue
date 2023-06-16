@@ -86,14 +86,17 @@ const submit = async () => {
 	if (!submitAvailable.value) {
 		return;
 	}
-	apiRouter.events.registration.add
-		.useMutation({ registration: submitInfo.value })
-		.then(async () => {
-			// TODO добавить запись в localStorage для формы ивента (by Emilia)
-			localStorage.setItem('REGISTRATION', 'true');
-			localStorage.setItem('REGISTRATION_DATA', JSON.stringify(submitInfo.value));
-			await navigateTo(`/payment/${submitInfo.value.eventId}`);
-		});
+	apiRouter.events.registration.add.useMutation({
+		data: { registration: submitInfo.value },
+		opts: {
+			async onResponse() {
+				// TODO добавить запись в localStorage для формы ивента (by Emilia)
+				localStorage.setItem('REGISTRATION', 'true');
+				localStorage.setItem('REGISTRATION_DATA', JSON.stringify(submitInfo.value));
+				await navigateTo(`/payment/${submitInfo.value.eventId}`);
+			}
+		}
+	});
 };
 
 const closeModal = () => {

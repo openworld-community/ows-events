@@ -11,7 +11,7 @@ import BaseInput from '~/components/common/ui/BaseInput/BaseInput.vue';
 import TextArea from '~/components/common/ui/TextArea/TextArea.vue';
 import Datepicker from '~/components/common/ui/Datepicker/Datepicker.vue';
 import ModalSection from './ui/ModalSection.vue';
-import {stringToTimezone} from '../../utils/timezones';
+import { stringToTimezone } from '../../utils/timezones';
 
 const { $translate, $i18n } = useNuxtApp();
 const t = $i18n.t.bind($i18n);
@@ -165,7 +165,8 @@ const paramsForSubmit = computed(() => {
 			inputValues.value.startTime,
 			tz.timezoneOffset
 		).getTime(),
-		durationInSeconds: dateTime(
+		durationInSeconds:
+			dateTime(
 				inputValues.value.endDate,
 				inputValues.value.endTime,
 				tz.timezoneOffset
@@ -174,8 +175,7 @@ const paramsForSubmit = computed(() => {
 				inputValues.value.startDate,
 				inputValues.value.startTime,
 				tz.timezoneOffset
-			).getTime()
-		,
+			).getTime(),
 		location: {
 			country: inputValues.value.country,
 			city: inputValues.value.city
@@ -248,13 +248,12 @@ const isSelectCityOpen = ref(false);
 const onClose = () => {
 	isSelectCountryOpen.value = false;
 	isSelectCityOpen.value = false;
-}
+};
 
 const setIsSelectOpen = (value: boolean) => {
 	isSelectCountryOpen.value = value;
 	isSelectCityOpen.value = value;
-}
-
+};
 </script>
 
 <template>
@@ -277,131 +276,124 @@ const setIsSelectOpen = (value: boolean) => {
 			</header>
 
 			<form class="modal-card__body body">
-				<ModalSection
-						:label="$translate('component.new_event_modal.fields.location')"
-				>
+				<ModalSection :label="$translate('component.new_event_modal.fields.location')">
 					<template #child>
 						<BaseSelect
-								v-model="inputValues.country"
-								name="country"
-								:placeholder="$translate('global.country')"
-								:list="countries"
+							v-model="inputValues.country"
+							name="country"
+							:placeholder="$translate('global.country')"
+							:list="countries"
 						/>
 						<BaseSelect
-								:key="inputValues.country"
-								v-model="inputValues.city"
-								:is-open="isSelectCountryOpen"
-								@setOpen="setIsSelectOpen"
-								:input-disabled="isCityDisabled"
-								name="city"
-								:placeholder="$translate('global.city')"
-								:list="cities"
+							:key="inputValues.country"
+							v-model="inputValues.city"
+							:is-open="isSelectCountryOpen"
+							@setOpen="setIsSelectOpen"
+							:input-disabled="isCityDisabled"
+							name="city"
+							:placeholder="$translate('global.city')"
+							:list="cities"
 						/>
 
 						<BaseSelect
-								:key="inputValues.timezone"
-								v-model="inputValues.timezone"
-								:is-open="isSelectCityOpen"
-								@setOpen="setIsSelectOpen"
-								:input-disabled="isTimezoneDisabled"
-								name="timezone"
-								:placeholder="$translate('global.timezone')"
-								:list="allTimezones"
+							:key="inputValues.timezone"
+							v-model="inputValues.timezone"
+							:is-open="isSelectCityOpen"
+							@setOpen="setIsSelectOpen"
+							:input-disabled="isTimezoneDisabled"
+							name="timezone"
+							:placeholder="$translate('global.timezone')"
+							:list="allTimezones"
 						/>
 					</template>
 				</ModalSection>
 
-				<ModalSection
-						:label="$translate('component.new_event_modal.fields.main_info')"
-				>
+				<ModalSection :label="$translate('component.new_event_modal.fields.main_info')">
 					<template #child>
 						<BaseInput
-								v-model="inputValues.title"
-								name="title"
-								:placeholder="$translate('component.new_event_modal.fields.title')"
+							v-model="inputValues.title"
+							name="title"
+							:placeholder="$translate('component.new_event_modal.fields.title')"
 						/>
 						<TextArea
-								v-model="inputValues.description"
-								name="description"
-								:placeholder="$translate('component.new_event_modal.fields.description')"
+							v-model="inputValues.description"
+							name="description"
+							:placeholder="
+								$translate('component.new_event_modal.fields.description')
+							"
 						/>
 					</template>
 				</ModalSection>
 
 				<ModalSection
-						type="row"
-						:label="$translate('component.new_event_modal.fields.start')"
+					type="row"
+					:label="$translate('component.new_event_modal.fields.start')"
 				>
 					<template #child>
 						<Datepicker
-								v-model="inputValues.startDate"
-								type="date"
-								name="startDate"
-								:min-date="minDate"
+							v-model="inputValues.startDate"
+							type="date"
+							name="startDate"
+							:min-date="minDate"
 						/>
 						<Datepicker
-								v-model="inputValues.startTime"
-								type="time"
-								name="startTime"
-								placeholder="--:--"
+							v-model="inputValues.startTime"
+							type="time"
+							name="startTime"
+							placeholder="--:--"
 						/>
 					</template>
 				</ModalSection>
 
 				<ModalSection
-						type="row"
-						:label="$translate('component.new_event_modal.fields.end')"
+					type="row"
+					:label="$translate('component.new_event_modal.fields.end')"
 				>
 					<template #child>
 						<Datepicker
-								v-model="inputValues.endDate"
-								type="date"
-								name="endDate"
-								:min-date="minDate"
+							v-model="inputValues.endDate"
+							type="date"
+							name="endDate"
+							:min-date="minDate"
 						/>
 						<Datepicker
-								v-model="inputValues.endTime"
-								type="time"
-								name="endTime"
-								placeholder="--:--"
+							v-model="inputValues.endTime"
+							type="time"
+							name="endTime"
+							placeholder="--:--"
 						/>
 					</template>
 				</ModalSection>
 
+				<ModalSection :label="$translate('component.new_event_modal.fields.price')">
+					<template #child>
+						<BaseInput
+							v-model="inputValues.price"
+							name="price"
+							type="number"
+							:placeholder="$translate('component.new_event_modal.fields.price')"
+						/>
+						<!--						<BaseSelect-->
+						<!--								:key="inputValues.currency"-->
+						<!--								v-model="inputValues.currency"-->
+						<!--								:input-disabled="!inputValues.currency"-->
+						<!--								name="current"-->
+						<!--								:placeholder="$translate('global.city')"-->
+						<!--								:list="cities"-->
+						<!--						/>-->
+					</template>
+				</ModalSection>
 
 				<ModalSection
-						:label="$translate('component.new_event_modal.fields.price')"
+					:label="$translate('component.new_event_modal.fields.url_to_rigistration')"
 				>
 					<template #child>
 						<BaseInput
-								v-model="inputValues.price"
-								name="price"
-								type="number"
-								:placeholder="$translate('component.new_event_modal.fields.price')"
-						/>
-<!--						<BaseSelect-->
-<!--								:key="inputValues.currency"-->
-<!--								v-model="inputValues.currency"-->
-<!--								:input-disabled="!inputValues.currency"-->
-<!--								name="current"-->
-<!--								:placeholder="$translate('global.city')"-->
-<!--								:list="cities"-->
-<!--						/>-->
-					</template>
-				</ModalSection>
-
-
-				<ModalSection
-						:label="$translate('component.new_event_modal.fields.url_to_rigistration')"
-				>
-					<template #child>
-						<BaseInput
-								v-model="inputValues.url"
-								name="url"
+							v-model="inputValues.url"
+							name="url"
 						/>
 					</template>
 				</ModalSection>
-
 
 				<CommonImageLoader
 					v-model="newImageFile"

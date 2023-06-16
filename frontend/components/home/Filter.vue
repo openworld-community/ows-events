@@ -1,10 +1,17 @@
 <script setup lang="ts">
-import { useLocationStore } from '~/stores/location.store';
-import { storeToRefs } from 'pinia';
+import { useLocationStore, type City, type Country } from '~/stores/location.store';
+
+const props = defineProps<{ city: City; country: Country }>();
+const emit = defineEmits<{
+	'update:city': [city: typeof props.city];
+	'update:country': [country: typeof props.country];
+}>();
 
 const locationStore = useLocationStore();
-await locationStore.loadCountries();
-const { countries, cities, pickedCountry, pickedCity } = storeToRefs(locationStore);
+function updateCountry(country: typeof props.country) {
+	emit('update:country', country);
+	emit('update:city', '');
+}
 </script>
 
 <template>
@@ -14,20 +21,19 @@ const { countries, cities, pickedCountry, pickedCity } = storeToRefs(locationSto
 			input-type="datalist"
 			input-name="country"
 			:input-placeholder="$translate('global.country')"
-			:options-list="countries"
-			:model-value="pickedCountry"
-			@update:model-value="(value) => locationStore.pickCountry(value)"
+			:options-list="locationStore.countries"
+			:model-value="country"
+			@update:model-value="(value: typeof country) => updateCountry(value)"
 		/>
 		<CommonInput
-			:key="pickedCountry"
-			:input-disabled="!pickedCountry"
+			:input-disabled="!country"
 			class="filter__field"
 			input-type="datalist"
 			input-name="city"
 			:input-placeholder="$translate('global.city')"
-			:options-list="cities"
-			:model-value="pickedCity"
-			@update:model-value="(value) => locationStore.pickCity(value)"
+			:options-list="locationStore.getCitiesByCountry(country)"
+			:model-value="city"
+			@update:model-value="(value: typeof city) => emit('update:city', value)"
 		/>
 	</section>
 </template>

@@ -10,6 +10,12 @@ type IAddEventRoute = {
 };
 type IAddEventHandler = IRouteHandler<IAddEventRoute>;
 
+type IAddEventsBatchRoute = {
+	Body: { events: EventOnPoster[] };
+	Reply: { success: number; error: number };
+};
+type IAddEventsBatchHandler = IRouteHandler<IAddEventsBatchRoute>;
+
 type IGetEventRoute = {
 	Reply: StandardResponse<EventOnPoster>;
 	Params: EventParams;

@@ -3,6 +3,7 @@ import { EventOnPoster } from '@common/types';
 import { eventsStateController } from '../../../controllers/events-state-controller';
 import {
 	IAddEventHandler,
+	IAddEventsBatchHandler,
 	IDeleteEventHandler,
 	IFindEventHandler,
 	IGetEventHandler,
@@ -11,6 +12,28 @@ import {
 } from './type';
 import { ITokenData } from '../../types';
 import { eventsValidator } from '../../../validators/event-validator';
+
+export const addEventsBatch: IAddEventsBatchHandler = async (request) => {
+	const { events } = request.body;
+	return events.reduce(
+		(accum, event) => {
+			const validationResult = eventsValidator.validateEvent({ event });
+			if (!validationResult.isValid) {
+				// eslint-disable-next-line no-param-reassign
+				accum.error += 1;
+			} else {
+				eventsStateController.addEvent(event);
+				// eslint-disable-next-line no-param-reassign
+				accum.success += 1;
+			}
+			return accum;
+		},
+		{
+			success: 0,
+			error: 0
+		}
+	);
+};
 
 export const addEvent: IAddEventHandler = async (request, reply) => {
 	const token = request.headers.authorization;

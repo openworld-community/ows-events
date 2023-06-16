@@ -1,10 +1,13 @@
+<script lang="ts">
+export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
+</script>
 <script lang="ts" setup>
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
 const props = defineProps<{
 	className?: string;
-	modelValue: Date;
+	modelValue: Date | Time | null;
 	placeholder?: string;
 	type: 'date' | 'time';
 	name: string;
@@ -20,6 +23,8 @@ const isDateType = computed(() => props.type === 'date');
 function handleDate(modelData: Date) {
 	emit('update:model-value', modelData);
 }
+console.log(props.type);
+console.log(props.modelValue);
 </script>
 
 <template>
@@ -40,7 +45,6 @@ function handleDate(modelData: Date) {
 			:placeholder="placeholder ?? 'дд.мм.гг'"
 			:input-class-name="`input form__field ${error ? 'form__error' : ''}`"
 			auto-apply
-			:close-on-auto-apply="!isDateType"
 			partial-flow
 			:flow="['calendar']"
 			:time-picker="!isDateType"
@@ -49,6 +53,7 @@ function handleDate(modelData: Date) {
 			:format="isDateType ? dateFormat : timeFormat"
 			:disabled="disabled"
 			is-24
+			:clearable="false"
 			@update:model-value="handleDate"
 		>
 			<template
@@ -183,7 +188,8 @@ function handleDate(modelData: Date) {
 }
 
 .dp__clear_icon {
-	display: none;
+	// display: none;
+	position: static;
 }
 
 .dp__selection_preview {

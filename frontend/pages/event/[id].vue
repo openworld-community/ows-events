@@ -109,19 +109,16 @@ patchDeleteEventModal({
 
 			<p class="event-description__datetime">
 				<span v-if="posterEvent.durationInSeconds">
-					{{ convertToLocaleString(posterEvent.date, posterEvent.timezone) }}
+					{{ convertToLocaleString(posterEvent.date) }}
 					-
 					{{
 						convertToLocaleString(
-							posterEvent.date + posterEvent.durationInSeconds,
-							posterEvent.timezone
+							posterEvent.date + posterEvent.durationInSeconds * 1000
 						)
 					}}
 				</span>
 				<span v-else>
-					{{
-						convertToLocaleString(posterEvent.date ?? Date.now(), posterEvent.timezone)
-					}}
+					{{ convertToLocaleString(posterEvent.date ?? Date.now()) }}
 				</span>
 				<br />
 				({{ posterEvent.timezone?.timezoneOffset }}

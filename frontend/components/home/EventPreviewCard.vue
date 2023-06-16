@@ -16,10 +16,13 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 					{ 'card__image-container--background': !eventData.image }
 				]"
 			>
-				<span class="card__price">{{
-					eventData.price === 0 ? $translate('event.price.free') : `${eventData.price} €`
-				}}
-        </span>
+				<span class="card__price"
+					>{{
+						eventData.price === 0
+							? $translate('event.price.free')
+							: `${eventData.price} €`
+					}}
+				</span>
 				<img
 					v-if="eventData.image"
 					:alt="$translate('home.events.image_alt')"
@@ -37,7 +40,7 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 					{{ props.eventData.title }}
 				</h2>
 				<p class="card-description__datetime">
-					{{ convertToLocaleString(props.eventData.date, props.eventData?.timezone) }}
+					{{ convertToLocaleString(props.eventData.date) }}
 					({{ props.eventData.timezone?.timezoneOffset }}
 					{{ props.eventData.timezone?.timezoneName }})
 				</p>

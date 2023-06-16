@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { timestampDateParse } from '~/utils/dates';
-
 const ICON_DICTIONARY: { [key: string]: string } = {
 	search: 'search',
 	date: 'calendar',
@@ -74,8 +71,6 @@ const showPicker = () => {
 		input.value?.showPicker();
 	}
 };
-
-const now = timestampDateParse(Date.now());
 </script>
 
 <template>
@@ -96,7 +91,6 @@ const now = timestampDateParse(Date.now());
 				class="custom-input__field"
 				:name="props.inputName"
 				:type="props.inputType"
-				:min="props.inputType === 'date' ? now : ''"
 				:placeholder="props.inputPlaceholder"
 				:required="props.isRequired"
 			/>

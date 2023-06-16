@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '@/constants/enums/route';
-import { VueFinalModal, useModal, type UseModalOptions } from 'vue-final-modal';
+import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
 const { $translate } = useNuxtApp();
@@ -11,17 +11,13 @@ const {
 	open: openEventModal,
 	close: closeEventModal,
 	patchOptions: eventModalPatch
-} = useModal({ component: EventModal } as UseModalOptions<
-	InstanceType<typeof VueFinalModal>['$props']
->);
+} = useModal({ component: EventModal });
 eventModalPatch({ attrs: { closeEventModal } });
 const {
 	open: openNeedAuthorizeModal,
 	close: closeNeedAuthorizeModal,
 	patchOptions: needAuthorizeModalPatch
-} = useModal({ component: NeedAuthorize } as UseModalOptions<
-	InstanceType<typeof VueFinalModal>['$props']
->);
+} = useModal({ component: NeedAuthorize });
 needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
 
 const route = useRoute();

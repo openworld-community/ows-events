@@ -84,7 +84,6 @@ const filteredList = computed(() =>
 					v-for="item in filteredList"
 					:key="item"
 					class="select__list-item"
-					:class="{ current: item === modelValue }"
 					@click="emit('update:model-value', item)"
 				>
 					{{ item }}
@@ -111,7 +110,8 @@ const filteredList = computed(() =>
 		position: absolute;
 		top: 50px;
 		left: 0;
-		width: 267px;
+		max-width: 100%;
+		min-width: 267px;
 		height: 202px;
 		padding: 14px 16px;
 		background-color: var(--color-white);
@@ -127,15 +127,13 @@ const filteredList = computed(() =>
 	&__list {
 		height: 100%;
 		overflow-y: scroll;
+		overflow-x: hidden;
+		white-space: nowrap;
 		& li {
 			transition: background-color 200ms;
 			cursor: pointer;
 			&:hover {
 				background-color: var(--color-input-icons);
-			}
-			&.current {
-				font-weight: 1000;
-				text-decoration: underline;
 			}
 		}
 	}

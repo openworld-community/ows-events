@@ -5,14 +5,14 @@ import { type EventOnPoster } from '@/../common/types';
 import { EventValidatorErrorTypes } from '@/../common/types/event-validation-error';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
 
-const { $translate, $i18n } = useNuxtApp();
+const { $i18n } = useNuxtApp();
 const t = $i18n.t.bind($i18n);
 
-// if dataForEdit exists then so does the refreshEvent
-type Props = { closeEventModal: () => void } & (
-	| { dataForEdit?: undefined }
-	| { dataForEdit: EventOnPoster; refreshEvent: () => void }
-);
+type Props = {
+	closeEventModal: () => void;
+	dataForEdit?: EventOnPoster;
+	refreshEvent?: () => void;
+};
 const props = defineProps<Props>();
 const locationStore = useLocationStore();
 
@@ -20,27 +20,21 @@ const isLoading = ref(false);
 const newImageFile = ref<ImageLoaderFile>(null);
 
 const allTimezones = (await getAllTimezones()).map((timezone) => timezoneToString(timezone));
-const minDate = ref(new Date());
+const minDate = new Date();
 
-const [eventStartDate, eventStartTime] = props.dataForEdit
-	? timestampDateTimeParse(props.dataForEdit.date, props.dataForEdit.timezone)
-	: ['', ''];
-const [eventEndDate, eventEndTime] = props.dataForEdit
-	? timestampDateTimeParse(
-			props.dataForEdit.date + props.dataForEdit.durationInSeconds,
-			props.dataForEdit.timezone
-	  )
-	: ['', ''];
-
-// todo startDate & endDate can be Date instead of string - why?
+console.log(props.dataForEdit?.date);
 const inputValues = ref({
 	id: props.dataForEdit?.id ?? '',
 	title: props.dataForEdit?.title ?? '',
 	description: props.dataForEdit?.description ?? '',
-	startDate: eventStartDate,
-	startTime: eventStartTime,
-	endDate: eventEndDate,
-	endTime: eventEndTime,
+	startDate: getDateFromEpochInMs(props.dataForEdit?.date),
+	startTime: getTimeFromEpochInMs(props.dataForEdit?.date),
+	endDate: getDateFromEpochInMs(
+		(props.dataForEdit?.date ?? 0) + (props.dataForEdit?.durationInSeconds ?? 0) * 1000
+	),
+	endTime: getTimeFromEpochInMs(
+		(props.dataForEdit?.date ?? 0) + (props.dataForEdit?.durationInSeconds ?? 0) * 1000
+	),
 	country: (props.dataForEdit?.location.country ?? '') satisfies Country,
 	city: (props.dataForEdit?.location.city ?? '') satisfies City,
 	image: props.dataForEdit?.image ?? '',
@@ -77,33 +71,20 @@ const closeModal = () => {
 	setTimeout(() => props.closeEventModal(), 300);
 };
 
-const dateTime = (date: Date, time: any, timezone: string): Date => {
-	const y = date.getUTCFullYear();
-	const m = date.toLocaleString('default', { month: 'long' });
-	const d = date.getDay();
-	return new Date(`${m} ${d} ${y} ${time?.hours ?? '00'}:${time?.minutes ?? '00'} ${timezone}`);
-};
 const paramsForSubmit = computed(() => {
 	const tz = stringToTimezone(inputValues.value.timezone);
+
 	return {
 		title: inputValues.value.title,
 		description: inputValues.value.description,
-		date: dateTime(
-			inputValues.value.startDate,
-			inputValues.value.startTime,
-			tz.timezoneOffset
-		).getTime(),
+		date: combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
 		durationInSeconds:
-			dateTime(
-				inputValues.value.endDate,
-				inputValues.value.endTime,
-				tz.timezoneOffset
-			).getTime() -
-			dateTime(
-				inputValues.value.startDate,
-				inputValues.value.startTime,
-				tz.timezoneOffset
-			).getTime(),
+			(combineDateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() -
+				combineDateTime(
+					inputValues.value.startDate,
+					inputValues.value.startTime
+				).getTime()) /
+			1000,
 		location: {
 			country: inputValues.value.country,
 			city: inputValues.value.city
@@ -131,7 +112,7 @@ const submitEvent = async () => {
 		const { data } = await apiRouter.events.edit.useMutation({ data: { event } });
 
 		if (data.value?.type === 'success') {
-			props.refreshEvent();
+			props.refreshEvent?.();
 		} else {
 			console.error(data.value?.errors);
 		}
@@ -195,7 +176,6 @@ const isTimezoneDisabled = computed(() => {
 							:list="locationStore.countries"
 						/>
 						<CommonUiBaseSelect
-							:key="inputValues.country"
 							v-model="inputValues.city"
 							name="city"
 							:disabled="isCityDisabled"
@@ -204,7 +184,6 @@ const isTimezoneDisabled = computed(() => {
 						/>
 
 						<CommonUiBaseSelect
-							:key="inputValues.timezone"
 							v-model="inputValues.timezone"
 							name="timezone"
 							:disabled="isTimezoneDisabled"
@@ -249,6 +228,7 @@ const isTimezoneDisabled = computed(() => {
 							type="time"
 							name="startTime"
 							placeholder="--:--"
+							:disabled="!inputValues.startDate"
 						/>
 					</template>
 				</ModalUiModalSection>
@@ -263,12 +243,14 @@ const isTimezoneDisabled = computed(() => {
 							type="date"
 							name="endDate"
 							:min-date="minDate"
+							:disabled="!inputValues.startDate"
 						/>
 						<CommonUiDatepicker
 							v-model="inputValues.endTime"
 							type="time"
 							name="endTime"
 							placeholder="--:--"
+							:disabled="!(inputValues.startDate && inputValues.endDate)"
 						/>
 					</template>
 				</ModalUiModalSection>

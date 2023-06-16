@@ -261,6 +261,7 @@ const isTimezoneDisabled = computed(() => {
 							v-model="inputValues.price"
 							name="price"
 							type="number"
+              min-value="0"
 							:placeholder="$translate('component.new_event_modal.fields.price')"
 						/>
 						<!--						<CommonUiBaseSelect-->

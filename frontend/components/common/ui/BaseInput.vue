@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useSlots } from 'vue';
+  import {PropType, useSlots} from 'vue';
 
 defineOptions({
 	inheritAttrs: false
@@ -7,15 +7,15 @@ defineOptions({
 
 const props = defineProps({
 	className: {
-		type: String,
+		type: String as PropType<string>,
 		default: ''
 	},
 	modelValue: {
-		type: [String, Number],
+		type: [String, Number] as PropType<string | number>,
 		default: ''
 	},
 	name: {
-		type: String,
+		type: String as PropType<string>,
 		required: true
 	},
 	type: {
@@ -23,25 +23,29 @@ const props = defineProps({
 		default: 'text'
 	},
 	placeholder: {
-		type: String,
+		type: String as PropType<string>,
 		default: ''
 	},
 	label: {
-		type: String,
+		type: String as PropType<string>,
 		default: ''
 	},
 	disabled: {
-		type: Boolean,
+		type: Boolean as PropType<boolean>,
 		default: false
 	},
 	error: {
-		type: String,
+		type: String as PropType<string>,
 		default: ''
 	},
 	autocomplete: {
-		type: String,
+		type: String as PropType<string>,
 		default: 'off'
-	}
+	},
+  minValue: {
+    type: Number as PropType<number>,
+    default: null
+  }
 });
 
 const slots = useSlots();
@@ -76,6 +80,7 @@ const onRemove = () => {
 				:disabled="props.disabled"
 				:placeholder="props.placeholder"
 				:autocomplete="autocomplete"
+        :min="type === 'number' || 'date' || 'time' ? minValue : null"
 				@input="updateValue"
 				@change="updateValue"
 			/>
@@ -121,7 +126,7 @@ const onRemove = () => {
 
 .input__box input {
 	width: 100%;
-	padding: 8px 15px;
+	padding: 8px 35px 8px 15px;
 	outline: none;
 	font-size: 1rem;
 	border: 1px solid #ccc;

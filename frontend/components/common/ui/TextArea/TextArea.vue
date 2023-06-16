@@ -57,11 +57,15 @@ const onRemove = () => {
 	width: 100%;
 	border: 1px solid #ccc;
 	flex-grow: 1;
-	padding: 10px 15px;
+	padding: 10px 35px 10px 15px;
 	outline: none;
 	font-size: 1rem;
 	color: #333;
 	border-radius: 24px;
+
+  &::-webkit-resizer {
+    display: none;
+  }
 
 	&__wrapper {
 		position: relative;

@@ -33,7 +33,7 @@ const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 });
 
 const onButtonClick = () => {
-	if (useCookie('token').value) {
+	if (!useCookie('token').value) {
 		openEventModal();
 	} else {
 		openNeedAuthorizeModal();

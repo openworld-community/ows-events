@@ -4,6 +4,7 @@ export type Time = { hours: number | string; minutes: number | string; seconds?:
 <script lang="ts" setup>
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
+import dayjs from 'dayjs';
 
 const props = defineProps<{
 	className?: string;
@@ -23,8 +24,14 @@ const isDateType = computed(() => props.type === 'date');
 function handleDate(modelData: Date) {
 	emit('update:model-value', modelData);
 }
-console.log(props.type);
-console.log(props.modelValue);
+
+function dateFormat(date: Date) {
+	return dayjs(date).format('DD.MM.YYYY');
+}
+
+function timeFormat(date: Date) {
+	return dayjs(date).format('HH:MM');
+}
 </script>
 
 <template>

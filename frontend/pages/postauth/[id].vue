@@ -8,7 +8,7 @@ definePageMeta({
 		const userCookie = useCookie<UserInfo | null>('user');
 		const tokenCookie = useCookie<string>('token');
 		tokenCookie.value = userToken;
-		const { data: user } = await apiRouter.auth.getUser.useQuery({ userToken });
+		const { data: user } = await apiRouter.auth.getUser.useQuery({ data: { userToken } });
 		if (!user.value) {
 			console.error('No user data retrieved');
 		} else {

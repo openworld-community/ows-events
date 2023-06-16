@@ -30,7 +30,7 @@ const onRemove = () => {
 	emit('update:model-value', '');
 };
 const filteredList = computed(() =>
-	[...props.list].filter(
+	(Array.isArray(props.list) ? props.list : [...props.list]).filter(
 		(item) =>
 			item.toLowerCase().startsWith(props.modelValue.toLowerCase()) &&
 			item !== props.modelValue

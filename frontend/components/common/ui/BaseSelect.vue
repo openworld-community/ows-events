@@ -47,18 +47,15 @@ const emit = defineEmits<{
 	'update:model-value': [model: typeof props.modelValue];
 }>();
 
-function openSelect() {
+const openSelect = () => {
 	if (props.disabled) return;
 	isOpen.value = true;
 }
 
-function closeSelect() {
+const closeSelect = () => {
 	isOpen.value = false;
 }
 
-const onRemove = () => {
-	emit('update:model-value', '');
-};
 const filteredList = computed(() =>
 	(Array.isArray(props.list) ? props.list : [...props.list]).filter(
 		(item) =>

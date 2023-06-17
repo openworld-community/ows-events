@@ -16,8 +16,8 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 					{ 'card__image-container--background': !eventData.image }
 				]"
 			>
-				<span class="card__price"
-					>{{
+				<span class="card__price">
+          {{
 						eventData.price === '0'
 							? $translate('event.price.free')
 							: `${eventData.price} €`

@@ -20,8 +20,8 @@ watch(
 			type="text"
 			icon-name="search"
 			:model-value="search"
+      :placeholder="$translate('global.search')"
 			@update:model-value="emit('update:search', $event)"
-			:input-placeholder="$translate('global.search')"
 		/>
 	</div>
 </template>

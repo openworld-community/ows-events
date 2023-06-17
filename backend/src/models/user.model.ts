@@ -13,17 +13,20 @@ const schema = new Schema<IUserDocument>(
 			type: String,
 			required: true
 		},
-		userNickName: {
-			type: String,
-			required: true
+		username: {
+			type: String
 		},
-		firstNickName: {
-			type: String,
-			required: true
+		first_name: {
+			type: String
 		},
-		lastNickName: {
-			type: String,
-			required: true
+		last_name: {
+			type: String
+		},
+		photo_url: {
+			type: String
+		},
+		auth_date: {
+			type: Number
 		}
 	},
 	{

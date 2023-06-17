@@ -144,3 +144,4 @@ assets/img/
 
 bot-status-checker/assets/db/
 auth-bot/assets/db/
+.vscode/settings.json

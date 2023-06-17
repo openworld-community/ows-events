@@ -51,7 +51,7 @@ const props = defineProps({
 		default: false
 	},
 	optionsList: {
-		type: [Array<string>, String],
+		type: [Array<string>, String, Set<string>],
 		default: null
 	}
 });
@@ -121,7 +121,6 @@ const now = timestampDateParse(Date.now());
 				:placeholder="props.inputPlaceholder"
 				:list="props.inputName"
 				:disabled="props.inputDisabled"
-				@change="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
 			/>
 			<datalist :id="props.inputName">
 				<option

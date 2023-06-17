@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { UserInfo } from '../../../common/types/user';
-import { v4 } from 'uuid';
-import { AUTH_SERVER_URL, SERVER_URL } from '~/constants/url';
+import { TELEGRAM_AUTH_BOT_NAME, BASE_URL } from '../../constants/url';
+import LoadSpinner from '../common/ui/LoadSpinner.vue';
 
 type Props = {
 	close: () => void;
@@ -10,24 +10,46 @@ type Props = {
 };
 
 const props = defineProps<Props>();
-const user = useCookie<UserInfo | null>('user');
+const userCookie = useCookie<UserInfo | null>('user');
 
 const username =
-	user.value?.userNickName ||
-	(user.value?.firstNickName || user.value?.lastNickName
-		? user.value?.firstNickName + ' ' + user.value?.lastNickName
-		: null);
+	userCookie.value?.username ||
+	userCookie.value?.first_name ||
+	userCookie.value?.last_name ||
+	null;
 
-const temporaryId = v4();
-const authLink: string = `${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backurl=${encodeURIComponent(
-	`${SERVER_URL}/postauth/${temporaryId}`
-)}`;
+const onTelegramAuth = (user: any) => {
+	alert(
+		'Logged in as ' +
+			user.first_name +
+			' ' +
+			user.last_name +
+			' (' +
+			user.id +
+			(user.username ? ', @' + user.username : '') +
+			')'
+	);
+};
+const telegram = ref<HTMLElement | null>(null);
+onMounted(() => {
+	const script = document.createElement('script');
+	script.async = true;
+	script.src = 'https://telegram.org/js/telegram-widget.js?22';
+
+	script.setAttribute('data-size', 'large');
+	script.setAttribute('data-userpic', 'false');
+	script.setAttribute('data-telegram-login', TELEGRAM_AUTH_BOT_NAME);
+	script.setAttribute('data-request-access', 'write');
+
+	script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
+	telegram.value?.appendChild(script);
+});
 </script>
 
 <template>
 	<!--  TODO костылище, пока у нас нет финального макета-->
 	<CommonModalWrapper
-		:hide-overlay="true"
+		:hide-overlay="false"
 		overlay-transition="vfm-fade"
 		overlay-transition-duration="2600"
 		content-transition="vfm-fade"
@@ -35,75 +57,107 @@ const authLink: string = `${AUTH_SERVER_URL}/auth/${temporaryId}?encodede_backur
 		:esc-to-close="true"
 		:lock-scroll="false"
 	>
-		<div>
-			<NuxtLink
-				v-if="isAuthorized"
-				class="authorisation-button"
-				@click="props.deauthorize()"
-			>
-				<p class="authorisation-button__user">
-					{{ username }}
+		<div class="modal">
+			<div class="modal-card__head">
+				<p class="modal-card__title">
+					{{
+						isAuthorized
+							? username
+							: $translate('component.pre_authorisation_modal.title')
+					}}
 				</p>
-				<div class="authorisation-button__container">
-					<p class="authorisation-button__text">Выйти</p>
-					<CommonIcon
-						class="authorisation-button__icon"
-						name="sign-out"
-						width="20"
-						height="20"
+			</div>
+			<div class="modal-card__foot">
+				<CommonButton
+					class="modal-card__cancel-button"
+					button-kind="ordinary"
+					:button-text="$translate('component.pre_authorisation_modal.button.cancel')"
+					@click="props.close()"
+				/>
+				<CommonButton
+					v-if="isAuthorized"
+					button-kind="success"
+					:button-text="$translate('component.pre_authorisation_modal.button.logout')"
+					class="modal-card__logout-button"
+					@click="props.deauthorize()"
+				/>
+				<div
+					v-else
+					class="modal-card__login-button"
+				>
+					<div class="modal-card__loader">
+						<LoadSpinner class="modal-card__spinner" />
+					</div>
+					<div
+						class="modal-card__telegram-button"
+						ref="telegram"
 					/>
 				</div>
-			</NuxtLink>
-			<NuxtLink
-				v-else
-				:to="authLink"
-				target="_blank"
-				class="authorisation-button"
-			>
-				<div class="authorisation-button__container">
-					<p class="authorisation-button__text">Войти</p>
-					<CommonIcon
-						class="authorisation-button__icon"
-						name="sign-in"
-						width="20"
-						height="20"
-					/>
-				</div>
-			</NuxtLink>
+			</div>
 		</div>
 	</CommonModalWrapper>
 </template>
 
 <style scoped lang="less">
-.authorisation-button {
-	display: flex;
-	flex-direction: column;
-	width: max-content;
-	justify-content: center;
-	align-items: center;
-	position: absolute;
-	top: var(--header-height);
-	right: var(--padding-side);
-	background-color: var(--color-white);
-	box-shadow: 0 8px 16px -2px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.02);
-	border-radius: 6px;
-	padding: 8px 16px;
+.modal {
+	//TODO: пока верстка только мобилки
+	max-width: 350px;
+	overflow: hidden;
+	border-radius: 10px;
+	margin: 40vh auto auto;
+}
 
-	&__container {
-		display: flex;
+.modal-card {
+	&__head {
+		height: max-content;
+		justify-content: center;
 	}
 
-	&__text {
-		margin-right: 9px;
+	&__foot {
+		padding: 12px 57px;
+		justify-content: center;
 	}
 
-	&__user {
-		font-size: var(--font-size-XS);
-		color: var(--color-text-secondary);
+	&__cancel-button {
+		padding: 7px 16px;
+		margin-right: 8px;
 	}
 
-	&__icon {
-		color: var(--color-input-field);
+	&__logout-button {
+		padding: 7px 23px;
+	}
+
+	&__login-button {
+		position: relative;
+		min-width: 231px;
+		height: 40px;
+		line-height: 0;
+	}
+
+	&__loader,
+	&__telegram-button {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 231px;
+		height: 40px;
+		border-radius: 20px;
+	}
+
+	&__loader {
+		background-color: #54a9eb;
+		z-index: 0;
+	}
+
+	&__telegram-button {
+		z-index: 1;
+	}
+
+	&__spinner {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 	}
 }
 </style>

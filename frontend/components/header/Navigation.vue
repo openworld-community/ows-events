@@ -16,6 +16,7 @@ const route = useRoute();
 			:link="SUPPORT_TG_URL"
 			is-external-link
 			is-icon
+			button-kind="ordinary"
 			icon-name="contact-tg"
 			:alt="$translate('component.header.support')"
 		/>
@@ -23,6 +24,7 @@ const route = useRoute();
 			:link="{ name: RouteNameEnum.ABOUT }"
 			is-icon
 			icon-name="info"
+			button-kind="ordinary"
 			:alt="$translate('component.header.about')"
 		/>
 

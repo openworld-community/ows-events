@@ -1,73 +1,37 @@
-// создает дату, используя компоненты в местной временной зоне
-
-export const dateTime = (date: string, time: string, timezone: string) => {
-	return new Date(`${date} ${time} ${timezone}`);
-};
-
-export const timestampDateParse = (timestamp: number) => {
-	return new Date(timestamp)
-		.toLocaleString('ru-RU', {
-			day: 'numeric',
-			month: 'numeric',
-			year: 'numeric'
-		})
-		.split('.')
-		.reverse()
-		.join('-');
-};
-
-export const timestampDateTimeParse = (
-	timestamp: number,
-	timezone: { timezoneName: string; timezoneOffset: string } | undefined
-): [date: string, time: string] => {
-	try {
-		const date = new Date(timestamp)
-			.toLocaleString('ru-RU', {
-				timeZone: timezone?.timezoneName,
-				day: 'numeric',
-				month: 'numeric',
-				year: 'numeric'
-			})
-			.split('.')
-			.reverse()
-			.join('-');
-
-		const time = new Date(timestamp).toLocaleString('ru-RU', {
-			timeZone: timezone?.timezoneName,
-			hour: '2-digit',
-			minute: '2-digit'
-		});
-
-		return [date, time];
-	} catch (e) {
-		console.error(e);
-		return ['', ''];
-	}
-};
+import dayjs from 'dayjs';
+export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
+export function getDateFromEpochInMs(epoch: number | undefined) {
+	if (!epoch) return null;
+	const djs = dayjs(epoch);
+	if (!djs.isValid()) return null;
+	return djs.toDate();
+}
+export function getTimeFromEpochInMs(epoch: number | undefined): Time | null {
+	if (!epoch) return null;
+	const djs = dayjs(epoch);
+	if (!djs.isValid()) return null;
+	return { hours: djs.hour(), minutes: djs.minute(), seconds: djs.second() };
+}
+export function combineDateTime(date: Date | null, time: Time | null): Date {
+	if (!date || !time) return new Date();
+	return dayjs(date)
+		.set('hour', +time.hours)
+		.set('minute', +time.minutes)
+		.set('second', +(time.seconds ?? 0))
+		.toDate();
+}
+export function convertToLocaleString(epoch: number) {
+	return new Date(epoch).toLocaleString('ru', {
+		month: 'long',
+		day: 'numeric',
+		hour: '2-digit',
+		minute: '2-digit'
+	});
+}
 
 export const day = 1000 * 60 * 60 * 24;
-
 // Second date getTime() must be greater than firstDate
 export const getDatesDayDifference = (firstDate: Date, secondDate: Date): number => {
 	const diffTime = Math.abs(secondDate.getTime() - firstDate.getTime());
 	return Math.ceil(diffTime / day);
-};
-
-export const convertToLocaleString = (
-	date: number,
-	timezone: { timezoneName: string; timezoneOffset: string } | undefined
-) => {
-	try {
-		const localDate = new Date(date);
-		return localDate.toLocaleString('ru-RU', {
-			timeZone: timezone?.timezoneName,
-			month: 'long',
-			day: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit'
-		});
-	} catch (e) {
-		console.error(e);
-		return '';
-	}
 };

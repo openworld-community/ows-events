@@ -12,7 +12,7 @@ export type EventOnPoster = {
 		city: string;
 	};
 	image: string;
-	price: number;
+	price: string;
 	timezone?: Timezone;
 	url: string;
 };

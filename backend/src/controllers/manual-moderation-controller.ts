@@ -6,7 +6,8 @@ export class Controller {
 		const filter: FilterQuery<IEventDocument> = status
 			? { 'meta.moderation.status': status }
 			: {};
-		await EventModel.find(filter);
+		const events = await EventModel.find(filter);
+		return events;
 	}
 
 	async inProgress(eventId: string, problems: string[]) {

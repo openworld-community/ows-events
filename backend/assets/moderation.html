@@ -4,7 +4,18 @@
 	<meta charset='UTF-8'>
 	<title>Moderation</title>
 	<style>
+        body {
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
         .event {
+            min-width: 375px;
+            min-height: 100%;
+            max-width: 480px;
             display: flex;
             flex-direction: column;
             width: 100%;
@@ -55,10 +66,11 @@
 
         .event-actions {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             background-color: var(--color-white);
             gap: var(--space-unrelated-items);
             margin-top: auto;
+			justify-content: center;
         }
 
         .event-actions__button {
@@ -90,12 +102,17 @@
             border-radius: 4px;
         }
 
+		#approveBtn {
+			background-color: #00dc82;
+		}
+
+		#declineBtn {
+			background-color: #ef5f5f;
+		}
 	</style>
 </head>
 <body>
-<div
-	class='event'
->
+<div class='event'>
 	<div>
 		<div
 			class='event-image event-image__container'
@@ -122,8 +139,8 @@
 
 	<div class='event-actions'>
 		<button class='event-actions__button' id='toPreviousBtn'>Previous</button>
-		<button class='event-actions__button' id='approveBtn'>Approve</button>
 		<button class='event-actions__button' id='declineBtn'>Decline</button>
+		<button class='event-actions__button' id='approveBtn'>Approve</button>
 		<button class='event-actions__button' id='toNextBtn'>Next</button>
 	</div>
 </div>
@@ -131,6 +148,7 @@
 <script>
 	window.addEventListener(`DOMContentLoaded`, async () => {
 		const events = await getEventsForModeration();
+		console.log(events);
 		let currentEventNumber = 0;
 		const toNextBtn = document.getElementById('toNextBtn');
 		const toPreviousBtn = document.getElementById('toPreviousBtn');
@@ -150,6 +168,7 @@
 		declineBtn.addEventListener('click', () => {
 			decline(events[currentEventNumber].id);
 		});
+		updateEvent(events, currentEventNumber);
 	});
 
 	const updateEvent = (events, eventNumber) => {
@@ -167,8 +186,8 @@
 		eventImageField.src = currentEvent.image;
 		eventTitleField.innerHTML = currentEvent.title;
 		eventDatetimeField.innerHTML = dateTimeString +
-			<br /> + currentEvent.timezone?.timezoneOffset + ',' + currentEvent.timezone?.timezoneOffset;
-		eventLocationField.innerHTML = currentEvent.location.cite + ',' + currentEvent.location.country;
+			'<br />' + currentEvent.timezone?.timezoneOffset + ',' + currentEvent.timezone?.timezoneOffset;
+		eventLocationField.innerHTML = currentEvent.location.city + ',' + currentEvent.location.country;
 		eventDescriptionField.innerHTML = currentEvent.description;
 
 	};
@@ -176,7 +195,7 @@
 	const getEventsForModeration = async () => {
 		return await fetch('/api/moderation/get', {
 			method: 'POST',
-			body: JSON.stringify({ status: 'in-progress' })
+			body: JSON.stringify({})
 		}).then(res => res.json());
 	};
 
@@ -191,6 +210,25 @@
 			method: 'POST',
 			body: JSON.stringify({ id })
 		}).then(res => res.json());
+	};
+
+	const convertToLocaleString = (
+		date,
+		timezone
+	) => {
+		try {
+			const localDate = new Date(date);
+			return localDate.toLocaleString('ru-RU', {
+				timeZone: timezone?.timezoneName,
+				month: 'long',
+				day: 'numeric',
+				hour: '2-digit',
+				minute: '2-digit'
+			});
+		} catch (e) {
+			console.error(e);
+			return '';
+		}
 	};
 </script>
 </body>

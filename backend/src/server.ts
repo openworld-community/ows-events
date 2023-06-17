@@ -42,7 +42,8 @@ fastify.default({
 });
 
 server.register(Static, {
-	root: path.join(__dirname, '../frontend/dist/')
+	root: path.join(__dirname, '../assets/'),
+	prefix: '/static/'
 });
 
 server.register(Static, {
@@ -59,10 +60,6 @@ server.register(timezonesApi, { prefix: '/api/timezones' });
 server.register(registrationApi, { prefix: '/api/registration' });
 server.register(paymentInfoApi, { prefix: '/api/payment-info' });
 server.register(imageApi, { prefix: '/api/image' });
-
-server.get('/moderation.html', (request, reply) => {
-	reply.sendFile('./assets/moderation.html');
-});
 
 server.get<{
 	Params: {

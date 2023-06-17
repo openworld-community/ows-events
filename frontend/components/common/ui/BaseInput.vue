@@ -1,17 +1,65 @@
 <script lang="ts" setup>
-defineProps<{
-	className?: string;
-	modelValue?: string | number;
-	name: string;
-	type?: 'text' | 'date' | 'time' | 'number' | 'textarea' | 'datalist';
-	placeholder?: string;
-	label?: string;
-	disabled?: boolean;
-	error?: string;
-	autocomplete?: string;
-	minValue?: number;
-	required?: boolean;
-}>();
+import { type PropType, useSlots } from 'vue';
+
+defineOptions({ inheritAttrs: false });
+
+defineProps({
+	className: {
+		type: String as PropType<string>,
+		default: ''
+	},
+	modelValue: {
+		type: [String, Number] as PropType<string | number>,
+		default: ''
+	},
+	name: {
+		type: String as PropType<string>,
+		required: true
+	},
+	type: {
+		type: String as PropType<'text' | 'date' | 'time' | 'number' | 'textarea' | 'datalist'>,
+		default: 'text'
+	},
+	required: {
+		type: Boolean as PropType<boolean>,
+		default: false
+	},
+	placeholder: {
+		type: String as PropType<string>,
+		default: ''
+	},
+	label: {
+		type: String as PropType<string>,
+		default: ''
+	},
+	disabled: {
+		type: Boolean as PropType<boolean>,
+		default: false
+	},
+	error: {
+		type: String as PropType<string>,
+		default: ''
+	},
+	autocomplete: {
+		type: String as PropType<string>,
+		default: 'off'
+	},
+	minValue: {
+		type: Number as PropType<number>,
+		default: null
+	},
+	// Если нужна иконка в правом углу
+	iconName: {
+		type: String as PropType<string>,
+		default: ''
+	},
+	// Если нужна кнопка в правом углу (кроме закрывающего крестика)
+	buttonName: {
+		type: String as PropType<string>,
+		default: ''
+	}
+});
+
 const slots = useSlots();
 
 const emit = defineEmits(['update:model-value']);
@@ -25,7 +73,7 @@ const onRemove = () => {
 </script>
 
 <template>
-	<div :class="`input__wrapper ${className ?? ''}`">
+	<div :class="`input input__wrapper ${className}`">
 		<label
 			v-if="label"
 			class="form__label"
@@ -33,39 +81,48 @@ const onRemove = () => {
 		>
 			{{ label }}
 		</label>
-		<div class="input__box">
-			<input
-				class="input form__field"
-				:class="{ form__error: error }"
-				v-bind="$attrs"
-				:name="name"
-				:type="type"
-				:value="modelValue"
-				:disabled="disabled"
-				:placeholder="placeholder ?? ''"
-				:autocomplete="autocomplete ?? 'off'"
-				:required="required"
-				:min="
-					type === 'number' || type === 'date' || type === 'time' ? minValue : undefined
-				"
-				@input="updateValue"
-				@change="updateValue"
-			/>
-			<slot
-				v-if="slots['icon-right']"
-				name="icon-right"
-			>
-			</slot>
-			<button
-				v-else-if="modelValue"
-				@click.prevent="onRemove"
-			>
-				<CommonIcon
-					name="delete"
-					:alt="$translate('global.button.delete')"
-				/>
-			</button>
-		</div>
+		<input
+			class="input__field"
+			:class="{ form__error: error }"
+			v-bind="$attrs"
+			:name="name"
+			:type="type"
+			:value="modelValue"
+			:disabled="disabled"
+			:placeholder="required ? `${placeholder} *` : placeholder"
+			:autocomplete="autocomplete"
+			:required="required"
+			:min="type === 'number' || type === 'date' || type === 'time' ? minValue : undefined"
+			@input="updateValue"
+			@change="updateValue"
+		/>
+
+		<slot
+			v-if="slots['icon-right']"
+			name="icon-right"
+		/>
+
+		<CommonIcon
+			v-if="iconName && !modelValue"
+			:name="iconName"
+			class="input__button"
+		/>
+
+		<CommonButton
+			v-if="buttonName && !modelValue"
+			is-icon
+			:icon-name="buttonName"
+			class="input__button"
+		/>
+
+		<CommonButton
+			v-else-if="modelValue"
+			class="input__button input__button--clear"
+			is-icon
+			icon-name="delete"
+			:alt="$translate('global.button.delete')"
+			@click="onRemove"
+		/>
 		<span
 			v-if="error"
 			class="form__error"
@@ -74,59 +131,3 @@ const onRemove = () => {
 		</span>
 	</div>
 </template>
-
-<style lang="less" scoped>
-.input {
-	border: 1px solid #ccc;
-	outline: none;
-	&:disabled {
-		filter: brightness(0.95);
-	}
-}
-
-.input__wrapper {
-	margin-bottom: 20px;
-}
-
-.input__box {
-	position: relative;
-	display: flex;
-	align-items: center;
-	&:has(input:required)::after {
-		top: -5px;
-		left: -5px;
-		position: absolute;
-		content: '*';
-		color: var(--color-accent-red);
-	}
-	&:has(input:disabled)::after {
-		color: var(--color-text-secondary);
-	}
-}
-
-.input__box input {
-	width: 100%;
-	padding: 8px 35px 8px 15px;
-	outline: none;
-	font-size: 1rem;
-	border: 1px solid #ccc;
-	border-radius: 24px;
-	overflow: hidden;
-}
-
-/* If using Font Awesome or similar, you can add some spacing to the icons */
-:deep(.input__box svg) {
-	margin: 0 10px;
-	color: var(--color-input-icons);
-}
-
-:deep(.input__box > button),
-:deep(.input__box > svg) {
-	position: absolute;
-	right: 0;
-}
-:deep(.input__box > button) {
-	display: flex;
-	align-items: center;
-}
-</style>

@@ -19,14 +19,16 @@ const locationStore = useLocationStore();
 const isLoading = ref(false);
 const newImageFile = ref<ImageLoaderFile>(null);
 
-const allTimezones = (await getAllTimezones()).map((timezone) => timezoneToString(timezone));
+const allTimezones = (await getAllTimezones()).map((timezone) =>
+	timezoneToString(timezone)
+) as string[];
 const minDate = new Date();
 
 const inputValues = ref({
 	id: props.dataForEdit?.id ?? '',
 	title: props.dataForEdit?.title ?? '',
 	description: props.dataForEdit?.description ?? '',
-	startDate: getDateFromEpochInMs(props.dataForEdit?.date),
+	startDate: getDateFromEpochInMs(props.dataForEdit?.date) ?? null,
 	startTime: getTimeFromEpochInMs(props.dataForEdit?.date),
 	endDate: getDateFromEpochInMs(
 		(props.dataForEdit?.date ?? 0) + (props.dataForEdit?.durationInSeconds ?? 0) * 1000
@@ -37,7 +39,7 @@ const inputValues = ref({
 	country: (props.dataForEdit?.location.country ?? '') satisfies Country,
 	city: (props.dataForEdit?.location.city ?? '') satisfies City,
 	image: props.dataForEdit?.image ?? '',
-	price: props.dataForEdit?.price ?? 0,
+	price: props.dataForEdit?.price ?? '0',
 	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
 	url: props.dataForEdit?.url ?? ''
 });
@@ -72,18 +74,17 @@ const closeModal = () => {
 
 const paramsForSubmit = computed(() => {
 	const tz = stringToTimezone(inputValues.value.timezone);
+	const durationInSeconds = Math.floor(
+		(combineDateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() -
+			combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime()) /
+			1000
+	);
 
 	return {
 		title: inputValues.value.title,
 		description: inputValues.value.description,
 		date: combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
-		durationInSeconds:
-			(combineDateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() -
-				combineDateTime(
-					inputValues.value.startDate,
-					inputValues.value.startTime
-				).getTime()) /
-			1000,
+		durationInSeconds: durationInSeconds <= 0 ? 0 : durationInSeconds,
 		location: {
 			country: inputValues.value.country,
 			city: inputValues.value.city
@@ -178,6 +179,7 @@ const isTimezoneDisabled = computed(() => {
 							:list="locationStore.countries"
 							required
 						/>
+
 						<CommonUiBaseSelect
 							v-model="inputValues.city"
 							name="city"
@@ -224,14 +226,14 @@ const isTimezoneDisabled = computed(() => {
 					:label="$translate('component.new_event_modal.fields.start')"
 				>
 					<template #child>
-						<CommonUiDatepicker
+						<CommonUiDateTimepicker
 							v-model="inputValues.startDate"
 							type="date"
 							name="startDate"
 							:min-date="minDate"
 							required
 						/>
-						<CommonUiDatepicker
+						<CommonUiDateTimepicker
 							v-model="inputValues.startTime"
 							type="time"
 							name="startTime"
@@ -247,14 +249,14 @@ const isTimezoneDisabled = computed(() => {
 					:label="$translate('component.new_event_modal.fields.end')"
 				>
 					<template #child>
-						<CommonUiDatepicker
+						<CommonUiDateTimepicker
 							v-model="inputValues.endDate"
 							type="date"
 							name="endDate"
 							:min-date="minDate"
 							:disabled="!inputValues.startDate"
 						/>
-						<CommonUiDatepicker
+						<CommonUiDateTimepicker
 							v-model="inputValues.endTime"
 							type="time"
 							name="endTime"
@@ -269,9 +271,8 @@ const isTimezoneDisabled = computed(() => {
 						<CommonUiBaseInput
 							v-model="inputValues.price"
 							name="price"
-							type="number"
-							:min-value="0"
-							:placeholder="$translate('component.new_event_modal.fields.price')"
+							type="text"
+							:placeholder="$translate('component.new_event_modal.fields.price_placeholder')"
 						/>
 						<!--						<CommonUiBaseSelect-->
 						<!--								:key="inputValues.currency"-->
@@ -291,6 +292,7 @@ const isTimezoneDisabled = computed(() => {
 						<CommonUiBaseInput
 							v-model="inputValues.url"
 							name="url"
+							:placeholder="$translate('component.new_event_modal.fields.url_placeholder')"
 							required
 						/>
 					</template>
@@ -322,28 +324,4 @@ const isTimezoneDisabled = computed(() => {
 	</CommonModalWrapper>
 </template>
 
-<style scoped lang="less">
-.body {
-	overflow-y: auto;
-	background-color: var(--color-white);
-	padding: 20px var(--padding-side);
-}
-
-.section {
-	display: flex;
-	flex-direction: column;
-	margin-bottom: 8px;
-
-	&__input {
-		margin-bottom: 16px;
-	}
-}
-
-.new-event-container {
-	.row {
-		display: flex;
-		gap: 16px;
-		margin-bottom: 10px;
-	}
-}
-</style>
+<style scoped lang="less"></style>

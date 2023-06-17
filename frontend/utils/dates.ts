@@ -1,6 +1,5 @@
-import type { Time } from '~/components/common/ui/Datepicker.vue';
 import dayjs from 'dayjs';
-
+export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
 export function getDateFromEpochInMs(epoch: number | undefined) {
 	if (!epoch) return null;
 	const djs = dayjs(epoch);

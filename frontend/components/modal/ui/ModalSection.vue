@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-
 const props = defineProps({
 	type: {
 		type: String,
@@ -8,15 +7,12 @@ const props = defineProps({
 	label: {
 		type: String,
 		default: ''
-	},
+	}
 });
-
 </script>
 
 <template>
-	<div
-			class="body__section section"
-	>
+	<div class="body__section section">
 		<h3 class="section__subtitle">
 			{{ props.label }}
 		</h3>
@@ -30,10 +26,11 @@ const props = defineProps({
 .section {
 	display: flex;
 	flex-direction: column;
-	margin-bottom: 8px;
+	margin-bottom: 24px;
 
 	&__subtitle {
-		font-weight: var(--font-size-L);
+		font-size: var(--font-size-L);
+		font-weight: var(--font-weight-regular);
 		margin-bottom: 12px;
 	}
 
@@ -41,6 +38,7 @@ const props = defineProps({
 		display: flex;
 		flex-direction: column;
 		width: 100%;
+		gap: 20px;
 	}
 
 	&__row {

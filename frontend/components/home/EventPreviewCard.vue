@@ -18,7 +18,7 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 			>
 				<span class="card__price"
 					>{{
-						eventData.price === 0
+						eventData.price === '0'
 							? $translate('event.price.free')
 							: `${eventData.price} €`
 					}}

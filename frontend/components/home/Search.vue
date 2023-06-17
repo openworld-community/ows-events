@@ -13,14 +13,17 @@ watch(
 </script>
 
 <template>
-	<CommonInput
-		input-class="input is-info search-input"
-		input-type="text"
-		input-name="search"
-		:input-placeholder="$translate('global.search')"
-		:model-value="search"
-		@update:model-value="(value:typeof search) => emit('update:search', value)"
-	/>
+	<div>
+		<CommonUiBaseInput
+			class="main-page__search"
+			name="search"
+			type="text"
+			icon-name="search"
+			:model-value="search"
+			@update:model-value="emit('update:search', $event)"
+			:input-placeholder="$translate('global.search')"
+		/>
+	</div>
 </template>
 
 <style scoped lang="less"></style>

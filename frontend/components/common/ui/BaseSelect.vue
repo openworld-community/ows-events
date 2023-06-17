@@ -1,17 +1,45 @@
 <script lang="ts" setup>
 import { vOnClickOutside } from '@vueuse/components';
+import type { PropType } from 'vue';
 
-const props = defineProps<{
-	className?: string;
-	modelValue: string;
-	list: string[] | Set<string>;
-	name: string;
-	placeholder?: string;
-	label?: string;
-	disabled?: boolean;
-	error?: string;
-	required?: boolean;
-}>();
+const props = defineProps({
+	className: {
+		type: String as PropType<string>,
+		default: ''
+	},
+	modelValue: {
+		type: String as PropType<string>,
+		required: true
+	},
+	list: {
+		type: [Array, String, Set] as PropType<string[] | Set<string>>,
+		default: ''
+	},
+	name: {
+		type: String as PropType<string>,
+		required: true
+	},
+	placeholder: {
+		type: String as PropType<string>,
+		default: ''
+	},
+	label: {
+		type: String as PropType<string>,
+		default: ''
+	},
+	disabled: {
+		type: Boolean as PropType<boolean>,
+		default: false
+	},
+	error: {
+		type: String as PropType<string>,
+		default: ''
+	},
+	required: {
+		type: Boolean as PropType<boolean>,
+		default: false
+	}
+});
 
 const isOpen = ref(false);
 
@@ -23,6 +51,7 @@ function openSelect() {
 	if (props.disabled) return;
 	isOpen.value = true;
 }
+
 function closeSelect() {
 	isOpen.value = false;
 }
@@ -53,32 +82,11 @@ const filteredList = computed(() =>
 			:error="error"
 			:model-value="modelValue"
 			:required="required"
-			@update:model-value="(value: typeof modelValue)=>emit('update:model-value',value)"
+			icon-name="container"
+			@update:model-value="emit('update:model-value', $event)"
 			@click="openSelect"
-		>
-			<template #icon-right>
-				<button
-					v-if="props.modelValue"
-					@click.prevent="() => (onRemove(), closeSelect())"
-				>
-					<CommonIcon
-						name="delete"
-						width="24"
-						height="24"
-						alt="Очистить"
-					/>
-				</button>
-
-				<CommonIcon
-					v-else
-					name="container"
-					width="24"
-					height="24"
-					alt="Открыть"
-					@click.prevent="openSelect"
-				/>
-			</template>
-		</CommonUiBaseInput>
+			@click-outside="closeSelect"
+		/>
 
 		<div :class="`select__list-box ${isOpen && filteredList.length ? 'isOpen' : ''}`">
 			<ul class="select__list benefits">
@@ -121,6 +129,7 @@ const filteredList = computed(() =>
 		z-index: 99;
 		border-radius: 24px;
 		border: 1px solid #ccc;
+
 		&.isOpen {
 			display: block;
 		}
@@ -131,24 +140,27 @@ const filteredList = computed(() =>
 		overflow-y: scroll;
 		overflow-x: hidden;
 		white-space: nowrap;
+
 		& li {
 			transition: background-color 200ms;
 			cursor: pointer;
+			border-radius: 5px;
+
 			&:hover {
-				background-color: var(--color-input-icons);
+				background-color: var(--color-background-secondary);
 			}
 		}
 	}
 
 	&__list::-webkit-scrollbar {
-		width: 10px;
+		width: 5px;
 		background-color: var(--color-white);
 		border-radius: 5px;
 		height: 200px;
 	}
 
 	&__list::-webkit-scrollbar-thumb {
-		background: var(--color-input-icons);
+		background: var(--color-input-field);
 		border-radius: 5px;
 		height: 20px;
 	}

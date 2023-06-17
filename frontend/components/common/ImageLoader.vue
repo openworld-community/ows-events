@@ -1,9 +1,7 @@
-<script lang="ts">
-export type ImageLoaderFile = File | null | 'DELETED';
-</script>
 <script setup lang="ts">
 import { BASE_URL } from '@/constants/url';
 
+export type ImageLoaderFile = File | null | 'DELETED';
 const props = defineProps<{
 	externalImage?: string;
 }>();
@@ -68,7 +66,7 @@ const removeImage = () => {
 			<CommonButton
 				v-if="!imageSrc"
 				class="loader__button"
-				button-class="button__ordinary"
+				button-kind="ordinary"
 				:button-text="$translate('component.new_event_modal.add_image')"
 				icon-name="picture"
 				@click="fileIsLoading ? null : input?.click()"
@@ -85,7 +83,7 @@ const removeImage = () => {
 				</div>
 				<CommonButton
 					class="loader__button"
-					button-class="button__ordinary"
+					button-kind="ordinary"
 					:button-text="$translate('component.new_event_modal.remove_image')"
 					@click="removeImage"
 				/>

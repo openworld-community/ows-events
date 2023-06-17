@@ -31,6 +31,7 @@ const scrollToTop = () => {
 					:link="{ name: RouteNameEnum.HOME }"
 					is-icon
 					icon-name="back"
+					button-kind="ordinary"
 					:alt="$translate('global.button.back')"
 				/>
 			</div>

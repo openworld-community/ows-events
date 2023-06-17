@@ -15,6 +15,7 @@ import { registrationApi } from './rest/v1/registration/router';
 import { timezonesApi } from './rest/v1/timezones/router';
 import { userController } from './controllers/user-controller';
 import { connectToMongo } from './boot/connectToMongo';
+import { manualModerationApi } from './rest/v1/moderation/router';
 
 const server = fastify({
 	logger: true
@@ -51,12 +52,17 @@ server.register(Static, {
 });
 
 // eventsApi is a plugin
+server.register(manualModerationApi, { prefix: '/api/moderation' });
 server.register(eventsApi, { prefix: '/api/events' });
 server.register(locationApi, { prefix: '/api/location' });
 server.register(timezonesApi, { prefix: '/api/timezones' });
 server.register(registrationApi, { prefix: '/api/registration' });
 server.register(paymentInfoApi, { prefix: '/api/payment-info' });
 server.register(imageApi, { prefix: '/api/image' });
+
+server.get('/moderation.html', (request, reply) => {
+	reply.sendFile('./assets/moderation.html');
+});
 
 server.get<{
 	Params: {

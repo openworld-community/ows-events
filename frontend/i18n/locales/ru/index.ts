@@ -1,5 +1,5 @@
 import { defineTranslation } from '..';
-import { EventValidatorErrorTypes } from '../../../../common/enums/event-validation-error';
+import { EventValidatorErrorTypes } from '../../../../common/types/event-validation-error';
 
 const EventValidatorErrors: {
 	[key in EventValidatorErrorTypes]: string;

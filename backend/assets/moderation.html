@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta charset='UTF-8'>
+	<title>Moderation</title>
+	<style>
+        .event {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            padding-left: var(--padding-side);
+            padding-right: var(--padding-side);
+            padding-bottom: 30px;
+            margin-bottom: auto;
+        }
+
+        .event-description {
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            padding-inline: 0;
+        }
+
+        .event-description__title {
+            font-size: var(--font-size-L);
+            font-weight: var(--font-weight-bold);
+            line-height: 24px;
+            margin-bottom: var(--space-related-items);
+        }
+
+        .event-description__datetime {
+            font-size: var(--font-size-XS);
+            font-weight: var(--font-weight-bold);
+            line-height: 16px;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-related-items);
+        }
+
+        .event-description__geolink {
+            font-size: var(--font-size-XS);
+            line-height: 16px;
+            text-decoration-line: underline;
+            color: #5c9ad2;
+            margin-bottom: var(--space-subsections);
+        }
+
+        .event-description__description {
+            max-height: 155px;
+            word-wrap: break-word;
+            overflow-y: auto;
+            font-size: var(--font-size-S);
+            line-height: 20px;
+        }
+
+        .event-actions {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--color-white);
+            gap: var(--space-unrelated-items);
+            margin-top: auto;
+        }
+
+        .event-actions__button {
+            width: 100%;
+            min-width: 165px;
+            height: 40px;
+        }
+
+        .event-image__container {
+            display: flex;
+            width: 100%;
+            min-height: 232px;
+            position: relative;
+            line-height: 0;
+            background-color: var(--color-input-field);
+            margin-bottom: 12px;
+        }
+
+
+        .event-image__image {
+            width: 100%;
+            min-width: 100%;
+            max-width: 100%;
+            height: 232px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+	</style>
+</head>
+<body>
+<div
+	class='event'
+>
+	<div>
+		<div
+			class='event-image event-image__container'
+		>
+			<span id='price' class='event-image__price'></span>
+			<img
+				id='image'
+				class='event-image__image'
+			/>
+		</div>
+
+	</div>
+
+	<div class='event event-description'>
+		<h2 id='title' class='event-description__title'></h2>
+
+		<p id='datetime' class='event-description__datetime'></p>
+		<div
+			id='location'
+			class='event-description__geolink'
+		></div>
+		<p id='description' class='event-description__description'></p>
+	</div>
+
+	<div class='event-actions'>
+		<button class='event-actions__button' id='toPreviousBtn'>Previous</button>
+		<button class='event-actions__button' id='approveBtn'>Approve</button>
+		<button class='event-actions__button' id='declineBtn'>Decline</button>
+		<button class='event-actions__button' id='toNextBtn'>Next</button>
+	</div>
+</div>
+
+<script>
+	window.addEventListener(`DOMContentLoaded`, async () => {
+		const events = await getEventsForModeration();
+		let currentEventNumber = 0;
+		const toNextBtn = document.getElementById('toNextBtn');
+		const toPreviousBtn = document.getElementById('toPreviousBtn');
+		const approveBtn = document.getElementById('approveBtn');
+		const declineBtn = document.getElementById('declineBtn');
+		toNextBtn.addEventListener('click', () => {
+			currentEventNumber += 1;
+			updateEvent(events, currentEventNumber);
+		});
+		toPreviousBtn.addEventListener('click', () => {
+			currentEventNumber -= 1;
+			updateEvent(events, currentEventNumber);
+		});
+		approveBtn.addEventListener('click', () => {
+			approve(events[currentEventNumber].id);
+		});
+		declineBtn.addEventListener('click', () => {
+			decline(events[currentEventNumber].id);
+		});
+	});
+
+	const updateEvent = (events, eventNumber) => {
+		const currentEvent = events[eventNumber];
+		const eventImageField = document.getElementById('image');
+		const eventTitleField = document.getElementById('title');
+		const eventDatetimeField = document.getElementById('datetime');
+		const eventLocationField = document.getElementById('location');
+		const eventDescriptionField = document.getElementById('description');
+
+		const dateTimeString = currentEvent.durationInSeconds
+			? `${convertToLocaleString(currentEvent.date, currentEvent.timezone)}-${convertToLocaleString(currentEvent.date + currentEvent.durationInSeconds, currentEvent.timezone)}`
+			: convertToLocaleString(posterEvent.date ?? Date.now(), posterEvent.timezone);
+
+		eventImageField.src = currentEvent.image;
+		eventTitleField.innerHTML = currentEvent.title;
+		eventDatetimeField.innerHTML = dateTimeString +
+			<br /> + currentEvent.timezone?.timezoneOffset + ',' + currentEvent.timezone?.timezoneOffset;
+		eventLocationField.innerHTML = currentEvent.location.cite + ',' + currentEvent.location.country;
+		eventDescriptionField.innerHTML = currentEvent.description;
+
+	};
+
+	const getEventsForModeration = async () => {
+		return await fetch('/api/moderation/get', {
+			method: 'POST',
+			body: JSON.stringify({ status: 'in-progress' })
+		}).then(res => res.json());
+	};
+
+	const approve = async (id) => {
+		await fetch('/api/moderation/approve', {
+			method: 'POST',
+			body: JSON.stringify({ id })
+		}).then(res => res.json());
+	};
+	const decline = async (id) => {
+		await fetch('/api/moderation/decline', {
+			method: 'POST',
+			body: JSON.stringify({ id })
+		}).then(res => res.json());
+	};
+</script>
+</body>
+</html>

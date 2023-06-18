@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { type PropType, useSlots } from 'vue';
+import { type PropType } from 'vue';
 
 defineOptions({ inheritAttrs: false });
 
@@ -60,8 +60,6 @@ defineProps({
 	}
 });
 
-const slots = useSlots();
-
 const emit = defineEmits(['update:model-value']);
 const updateValue = (event: Event) => {
 	emit('update:model-value', (event.target as HTMLInputElement).value);
@@ -97,11 +95,6 @@ const onRemove = () => {
 			@change="updateValue"
 		/>
 
-		<slot
-			v-if="slots['icon-right']"
-			name="icon-right"
-		/>
-
 		<CommonIcon
 			v-if="iconName && !modelValue"
 			:name="iconName"
@@ -116,7 +109,7 @@ const onRemove = () => {
 		/>
 
 		<CommonButton
-			v-else-if="modelValue"
+			v-else-if="modelValue && !disabled"
 			class="input__button input__button--clear"
 			is-icon
 			icon-name="delete"

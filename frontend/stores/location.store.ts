@@ -43,6 +43,9 @@ export const useLocationStore = defineStore('location', {
 				if (process.server) return;
 				if (state._countries.size) return;
 
+				// otherwise Nuxt doesn't do request on client during initial hydration, I'm not smart enough to tell why
+				await new Promise((r) => r(0));
+
 				const { $locationStoreForage } = useNuxtApp();
 				const localCountries: Country[] | null = await $locationStoreForage.getItem(
 					COUNTRIES_KEY
@@ -53,6 +56,7 @@ export const useLocationStore = defineStore('location', {
 				}
 
 				const { data } = await apiRouter.location.country.getAll.useQuery({});
+
 				if (!data.value) return;
 				state._countries = new Set(data.value);
 				// data.value is Proxy which can't copied to storage directly - spread operator converts back to native object
@@ -65,20 +69,12 @@ export const useLocationStore = defineStore('location', {
 				if (process.server) return;
 				if (state._usedCountries.size) return;
 
-				const { data } = await apiRouter.location.country.getUsedCountries.useQuery({});
+				// otherwise Nuxt doesn't do request on client during initial hydration, I'm not smart enough to tell why
+				await new Promise((r) => r(0));
 
-				// Грязный хак без которого в первую загрузку не отображаются страны
-				let _data = data; 
-				if (data.value === null) {
-					const { data } = await apiRouter.location.country.getUsedCountries.useQuery({});
-					_data = data;
-				}
+				const { data } = await apiRouter.location.country.getAll.useQuery({});
 
-				if (!_data.value) {
-					return;
-				}
-
-				state._usedCountries = new Set(_data.value);
+				state._usedCountries = new Set(data.value);
 			})();
 
 			return state._usedCountries;
@@ -106,24 +102,22 @@ export const useLocationStore = defineStore('location', {
 				$locationStoreForage.setItem(country, [...data.value]);
 			})();
 
-			return sortCitiesByCapital(this._citiesByCountry.get(country) || [], country);
+			return sortCitiesByCapital(this._citiesByCountry.get(country) ?? [], country);
 		},
 		getUsedCitiesByCountry(country: Country) {
 			(async () => {
-				if (!country) return;
 				if (process.server) return;
-				if (this._usedСitiesByCountry.get(country)?.length) return;
+				if (!country || this._usedСitiesByCountry.get(country)) return;
 
 				const { data } = await apiRouter.location.country.getUsedCities.useQuery({
 					data: { country }
 				});
 
 				if (!data.value) return;
-
 				this._usedСitiesByCountry.set(country, data.value);
 			})();
 
-			return this._usedСitiesByCountry.get(country) || [];
+			return this._usedСitiesByCountry.get(country) ?? [];
 		}
 	}
 });

@@ -33,7 +33,6 @@ const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 });
 
 const onButtonClick = () => {
-	// todo - temp solution while auth is down
 	if (useCookie('token').value) {
 		openEventModal();
 	} else {

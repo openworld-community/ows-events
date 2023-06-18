@@ -36,7 +36,7 @@ const inputValues = ref({
 	endTime: getTimeFromEpochInMs(
 		(props.dataForEdit?.date ?? 0) + (props.dataForEdit?.durationInSeconds ?? 0) * 1000
 	),
-	country: (props.dataForEdit?.location.country ?? '') satisfies Country,
+	country: (props.dataForEdit?.location.country ?? 'Serbia') satisfies Country, // Временно фиксируем страну для добавления события
 	city: (props.dataForEdit?.location.city ?? '') satisfies City,
 	image: props.dataForEdit?.image ?? '',
 	price: props.dataForEdit?.price ?? '0',
@@ -177,6 +177,7 @@ const isTimezoneDisabled = computed(() => {
 							name="country"
 							:placeholder="$translate('global.country')"
 							:list="locationStore.countries"
+							:disabled="true"
 							required
 						/>
 

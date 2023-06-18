@@ -23,7 +23,7 @@ const updateCity = (city: typeof props.city) => {
       class="filter__field"
       name="country"
       :placeholder="$translate('global.country')"
-      :list="locationStore.countries"
+      :list="locationStore.usedCountries"
       :model-value="country"
       @update:model-value="updateCountry($event)"
     />
@@ -31,9 +31,10 @@ const updateCity = (city: typeof props.city) => {
       class="filter__field"
       name="city"
       :placeholder="$translate('global.city')"
-      :list="locationStore.getCitiesByCountry(country)"
+      :list="locationStore.getUsedCitiesByCountry(country) ?? []"
       :disabled="!country"
       :model-value="city"
+      v-bind:key="country"
       @update:model-value="updateCity($event)"
     />
 	</section>

@@ -22,6 +22,11 @@ class CountriesAndCitiesController {
 		return countries
 	}
 
+	async getUsedCities(country: string) {
+		const cities: string[] = await EventModel.distinct("location.city", { "location.country": country });
+		return cities
+	}
+
 	getRandomPair({ country, city }: { country?: string; city?: string }) {
 		const getRandomCountry = () => {
 			const randomCountryIndex = Math.floor(Math.random() * this.countries.length);

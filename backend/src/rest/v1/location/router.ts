@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { getCitiesByCountry, getCountries, getMeta, getUsedCountries} from "./controller";
+import { getCitiesByCountry, getCountries, getMeta, getUsedCountries, getUsedCities} from "./controller";
 import {
   IGetCitiesByCountryRouteProps,
   IGetCountriesRouteProps,
@@ -16,5 +16,6 @@ export const locationApi = async (fastify: FastifyInstance) => {
 
   fastify.get<IGetMetaRouteProps>("/meta/:country/:city", getMeta);
 
-  fastify.get<IGetCountriesRouteProps>("/used", getUsedCountries);
+  fastify.get<IGetCountriesRouteProps>("/usedCountries", getUsedCountries);
+  fastify.get<IGetCitiesByCountryRouteProps>("/usedCities/:country", getUsedCities);
 };

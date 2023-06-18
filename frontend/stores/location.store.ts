@@ -5,17 +5,35 @@ export type City = string;
 export type Country = string;
 type LocationStore = {
 	_countries: Set<Country>;
+	_usedCountries: Set<Country>;
 	_citiesByCountry: Map<Country, City[]>;
+	_usedСitiesByCountry: Map<Country, City[]>;
 	userLocation: UserLocation;
 };
 
 const COUNTRIES_KEY = 'COUNTRIES';
+const USED_COUNTRIES_KEY = 'USED_COUNTRIES';
+
+const sortCitiesByCapital = (cities: string[], country: string): string[] => {
+	if (country === 'Serbia') {
+		return [
+			'Belgrade',
+			'Niš',
+			'Novi Sad',
+			...cities.filter((city) => city !== 'Belgrade' && city !== 'Niš' && city !== 'Novi Sad')
+		];
+	}
+
+	return cities;
+};
 
 export const useLocationStore = defineStore('location', {
 	state: (): LocationStore => {
 		return {
 			_countries: new Set(),
+			_usedCountries: new Set(),
 			_citiesByCountry: new Map(),
+			_usedСitiesByCountry: new Map(),
 			userLocation: {}
 		};
 	},
@@ -41,6 +59,29 @@ export const useLocationStore = defineStore('location', {
 				$locationStoreForage.setItem(COUNTRIES_KEY, [...data.value]);
 			})();
 			return state._countries;
+		},
+		usedCountries(state): LocationStore['_usedCountries'] {
+			(async function () {
+				if (process.server) return;
+				if (state._usedCountries.size) return;
+
+				const { data } = await apiRouter.location.country.getUsedCountries.useQuery({});
+
+				// Грязный хак без которого в первую загрузку не отображаются страны
+				let _data = data; 
+				if (data.value === null) {
+					const { data } = await apiRouter.location.country.getUsedCountries.useQuery({});
+					_data = data;
+				}
+
+				if (!_data.value) {
+					return;
+				}
+
+				state._usedCountries = new Set(_data.value);
+			})();
+
+			return state._usedCountries;
 		}
 	},
 	actions: {
@@ -65,7 +106,24 @@ export const useLocationStore = defineStore('location', {
 				$locationStoreForage.setItem(country, [...data.value]);
 			})();
 
-			return this._citiesByCountry.get(country);
+			return sortCitiesByCapital(this._citiesByCountry.get(country) || [], country);
+		},
+		getUsedCitiesByCountry(country: Country) {
+			(async () => {
+				if (!country) return;
+				if (process.server) return;
+				if (this._usedСitiesByCountry.get(country)?.length) return;
+
+				const { data } = await apiRouter.location.country.getUsedCities.useQuery({
+					data: { country }
+				});
+
+				if (!data.value) return;
+
+				this._usedСitiesByCountry.set(country, data.value);
+			})();
+
+			return this._usedСitiesByCountry.get(country) || [];
 		}
 	}
 });

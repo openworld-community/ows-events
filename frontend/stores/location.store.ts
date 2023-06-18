@@ -12,20 +12,8 @@ type LocationStore = {
 };
 
 const COUNTRIES_KEY = 'COUNTRIES';
-const USED_COUNTRIES_KEY = 'USED_COUNTRIES';
 
-const sortCitiesByCapital = (cities: string[], country: string): string[] => {
-	if (country === 'Serbia') {
-		return [
-			'Belgrade',
-			'Niš',
-			'Novi Sad',
-			...cities.filter((city) => city !== 'Belgrade' && city !== 'Niš' && city !== 'Novi Sad')
-		];
-	}
 
-	return cities;
-};
 
 export const useLocationStore = defineStore('location', {
 	state: (): LocationStore => {
@@ -102,7 +90,7 @@ export const useLocationStore = defineStore('location', {
 				$locationStoreForage.setItem(country, [...data.value]);
 			})();
 
-			return sortCitiesByCapital(this._citiesByCountry.get(country) ?? [], country);
+			return this._citiesByCountry.get(country) ?? [], country;
 		},
 		getUsedCitiesByCountry(country: Country) {
 			(async () => {

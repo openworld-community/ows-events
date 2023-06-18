@@ -13,8 +13,6 @@ type LocationStore = {
 
 const COUNTRIES_KEY = 'COUNTRIES';
 
-
-
 export const useLocationStore = defineStore('location', {
 	state: (): LocationStore => {
 		return {
@@ -60,7 +58,7 @@ export const useLocationStore = defineStore('location', {
 				// otherwise Nuxt doesn't do request on client during initial hydration, I'm not smart enough to tell why
 				await new Promise((r) => r(0));
 
-				const { data } = await apiRouter.location.country.getAll.useQuery({});
+				const { data } = await apiRouter.location.country.getUsedCountries.useQuery({});
 
 				state._usedCountries = new Set(data.value);
 			})();
@@ -90,7 +88,7 @@ export const useLocationStore = defineStore('location', {
 				$locationStoreForage.setItem(country, [...data.value]);
 			})();
 
-			return this._citiesByCountry.get(country) ?? [], country;
+			return this._citiesByCountry.get(country) ?? [];
 		},
 		getUsedCitiesByCountry(country: Country) {
 			(async () => {

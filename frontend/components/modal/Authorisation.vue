@@ -18,18 +18,6 @@ const username =
 	userCookie.value?.last_name ||
 	null;
 
-const onTelegramAuth = (user: any) => {
-	alert(
-		'Logged in as ' +
-			user.first_name +
-			' ' +
-			user.last_name +
-			' (' +
-			user.id +
-			(user.username ? ', @' + user.username : '') +
-			')'
-	);
-};
 const telegram = ref<HTMLElement | null>(null);
 onMounted(() => {
 	const script = document.createElement('script');
@@ -89,8 +77,8 @@ onMounted(() => {
 						<LoadSpinner class="modal-card__spinner" />
 					</div>
 					<div
+            ref="telegram"
 						class="modal-card__telegram-button"
-						ref="telegram"
 					/>
 				</div>
 			</div>

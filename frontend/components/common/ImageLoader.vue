@@ -1,16 +1,13 @@
-<script lang="ts">
-export type ImageLoaderFile = File | null | 'DELETED';
-</script>
 <script setup lang="ts">
-import { ref, watch } from 'vue';
 import { BASE_URL } from '@/constants/url';
 
+export type ImageLoaderFile = File | null | 'DELETED';
 const props = defineProps<{
 	externalImage?: string;
 }>();
 
 const emit = defineEmits<{
-	'update:modelValue': [file: ImageLoaderFile];
+	'update:model-value': [file: ImageLoaderFile];
 }>();
 
 const input = ref<HTMLInputElement | null>(null);
@@ -47,12 +44,12 @@ const loadImage = (event: Event) => {
 		{ once: true }
 	);
 	reader.readAsDataURL(file);
-	emit('update:modelValue', file);
+	emit('update:model-value', file);
 };
 
 const removeImage = () => {
 	imageSrc.value = null;
-	emit('update:modelValue', 'DELETED');
+	emit('update:model-value', 'DELETED');
 };
 </script>
 
@@ -69,7 +66,7 @@ const removeImage = () => {
 			<CommonButton
 				v-if="!imageSrc"
 				class="loader__button"
-				button-class="button__ordinary"
+				button-kind="ordinary"
 				:button-text="$translate('component.new_event_modal.add_image')"
 				icon-name="picture"
 				@click="fileIsLoading ? null : input?.click()"
@@ -86,7 +83,7 @@ const removeImage = () => {
 				</div>
 				<CommonButton
 					class="loader__button"
-					button-class="button__ordinary"
+					button-kind="ordinary"
 					:button-text="$translate('component.new_event_modal.remove_image')"
 					@click="removeImage"
 				/>

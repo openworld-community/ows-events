@@ -22,7 +22,7 @@ export type PostEventPayload = {
 		date: number;
 		image: string;
 		durationInSeconds: number;
-		price: number;
+		price: string;
 		timezone: Timezone;
 		description: string;
 		location: { country: string; city: string };

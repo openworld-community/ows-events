@@ -168,7 +168,7 @@ const closeModal = () => {
 					<CommonInput
 						v-model="fromWhichCity"
 						input-type="input"
-						input-name="fromWichCity"
+						input-name="fromWhichCity"
 						input-placeholder="From which city will you go to the meetup?"
 					/>
 					<CommonInput

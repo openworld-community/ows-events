@@ -10,6 +10,11 @@ useHead({
 	title: $translate('meta.title'),
 	meta: [{ name: 'Афиша переделано', content: 'Это площадка для поиска мероприятий' }]
 });
+
+if (import.meta.env.DEV) {
+const tokenCookie = useCookie<string>('token');
+tokenCookie.value = 'blablabla';
+}
 </script>
 <template>
 	<HeaderCommon />

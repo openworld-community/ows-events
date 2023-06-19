@@ -89,11 +89,9 @@ patchDeleteEventModal({
 				{ 'event-image__container--background': !posterEvent.image }
 			]"
 		>
-			<span class="event-image__price">{{
-				posterEvent.price === '0'
-					? $translate('event.price.free')
-					: `${posterEvent.price} RSD`
-			}}</span>
+			<span class="event-image__price">
+        {{ getPrice(posterEvent) }}
+      </span>
 			<img
 				v-if="posterEvent.image"
 				:src="getEventImage(posterEvent)"

@@ -2,7 +2,7 @@
 import { getAllTimezones, getTimezone } from '@/services/timezone.services';
 import { useLocationStore, type Country, type City } from '@/stores/location.store';
 import { type EventOnPoster } from '@/../common/types';
-import { EventValidatorErrorTypes } from '@/../common/types/event-validation-error';
+import { EventValidatorErrorTypes } from '@/../common/const';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
 
 const { $i18n } = useNuxtApp();
@@ -273,7 +273,9 @@ const isTimezoneDisabled = computed(() => {
 							v-model="inputValues.price"
 							name="price"
 							type="text"
-							:placeholder="$translate('component.new_event_modal.fields.price_placeholder')"
+							:placeholder="
+								$translate('component.new_event_modal.fields.price_placeholder')
+							"
 						/>
 						<!--						<CommonUiBaseSelect-->
 						<!--								:key="inputValues.currency"-->
@@ -293,7 +295,9 @@ const isTimezoneDisabled = computed(() => {
 						<CommonUiBaseInput
 							v-model="inputValues.url"
 							name="url"
-							:placeholder="$translate('component.new_event_modal.fields.url_placeholder')"
+							:placeholder="
+								$translate('component.new_event_modal.fields.url_placeholder')
+							"
 							required
 						/>
 					</template>

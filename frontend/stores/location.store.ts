@@ -42,8 +42,8 @@ export const useLocationStore = defineStore('location', {
 				}
 
 				const { data } = await apiRouter.location.country.getAll.useQuery({});
+				if (!data.value?.length) return;
 
-				if (!data.value) return;
 				state._countries = new Set(data.value);
 				// data.value is Proxy which can't copied to storage directly - spread operator converts back to native object
 				$locationStoreForage.setItem(COUNTRIES_KEY, [...data.value]);
@@ -59,6 +59,7 @@ export const useLocationStore = defineStore('location', {
 				await new Promise((r) => r(0));
 
 				const { data } = await apiRouter.location.country.getUsedCountries.useQuery({});
+				if (!data.value?.length) return;
 
 				state._usedCountries = new Set(data.value);
 			})();
@@ -94,7 +95,6 @@ export const useLocationStore = defineStore('location', {
 			(async () => {
 				if (process.server) return;
 				if (!country || this._usedСitiesByCountry.get(country)) return;
-
 				const { data } = await apiRouter.location.country.getUsedCities.useQuery({
 					data: { country }
 				});

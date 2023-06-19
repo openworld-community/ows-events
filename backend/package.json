@@ -7,7 +7,7 @@
     "start:watch": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/app/src/server.js",
-    "type:check": "tsc -p tsconfig.json --noEmit --traceResolution",
+    "type:check": "tsc -p tsconfig.json --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

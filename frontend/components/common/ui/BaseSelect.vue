@@ -50,11 +50,11 @@ const emit = defineEmits<{
 const openSelect = () => {
 	if (props.disabled) return;
 	isOpen.value = true;
-}
+};
 
 const closeSelect = () => {
 	isOpen.value = false;
-}
+};
 
 const filteredList = computed(() =>
 	(Array.isArray(props.list) ? props.list : [...props.list]).filter(
@@ -82,7 +82,6 @@ const filteredList = computed(() =>
 			icon-name="container"
 			@update:model-value="emit('update:model-value', $event)"
 			@click="openSelect"
-			@click-outside="closeSelect"
 		/>
 
 		<div :class="`select__list-box ${isOpen && filteredList.length ? 'isOpen' : ''}`">

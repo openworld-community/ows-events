@@ -3,6 +3,8 @@ import cors from '@fastify/cors';
 import path from 'path';
 import Static from '@fastify/static';
 
+import fastifySwagger from '@fastify/swagger';
+import fastifySwaggerUi from '@fastify/swagger-ui';
 import { eventsApi } from './rest/v1/events/router';
 import { imageApi } from './rest/v1/image/router';
 import { locationApi } from './rest/v1/location/router';
@@ -14,8 +16,6 @@ import { userController } from './controllers/user-controller';
 import { connectToMongo } from './boot/connectToMongo';
 import { authApi } from './rest/v1/auth/router';
 import { ajvFilePlugin } from './config/ajvPlugins';
-import fastifySwagger from '@fastify/swagger';
-import fastifySwaggerUi from '@fastify/swagger-ui';
 
 const server = fastify({
 	logger: true,

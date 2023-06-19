@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:watch": "nodemon src/server.ts",
+    "start:watch": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/app/src/server.js",
-    "type:check": "tsc -p tsconfig.json --noEmit",
+    "type:check": "tsc -p tsconfig.json --noEmit --traceResolution",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -36,11 +36,16 @@
     "@types/node": "^20.2.0",
     "@types/node-telegram-bot-api": "^0.61.6",
     "@types/uuid": "^9.0.1",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.4"
   },
   "nodemonConfig": {
     "ignore": [
       "assets/**"
+    ],
+    "watch": [
+      "./src",
+      "../common"
     ]
   }
 }

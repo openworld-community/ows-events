@@ -1,7 +1,7 @@
 export const deleteImageSchema = {
-	description: 'Dellete image',
+	description: 'Delete image',
 	tags: ['Image'],
-	summary: 'Dellete image',
+	summary: 'Delete image',
 	body: {
 		type: 'object',
 		properties: {

@@ -1,4 +1,4 @@
-import { ItemEvent } from "../events/schema";
+import { ItemEvent } from '../events/schema';
 
 const paymentsInfo = {
 	type: 'object',
@@ -14,7 +14,7 @@ const paymentsInfo = {
 			}
 		}
 	}
-}
+};
 
 export const getPaymentInfoSchema = {
 	description: 'PaymentInfo',
@@ -25,16 +25,16 @@ export const getPaymentInfoSchema = {
 			type: 'object',
 			properties: {
 				event: ItemEvent,
-				paymentsInfo: paymentsInfo,
-			},
+				paymentsInfo
+			}
 		}
 	},
 	params: {
 		type: 'object',
 		properties: {
-			id: { type: 'string' },
+			id: { type: 'string' }
 		}
-	},
+	}
 };
 
 export const getJSONPaymentInfoSchema = {

@@ -1,4 +1,3 @@
-
 export const getCountriesSchema = {
 	description: 'get all countries',
 	tags: ['Location'],
@@ -29,7 +28,6 @@ export const getCitiesByCountrySchema = {
 	}
 };
 
-
 export const getMetaSchema = {
 	description: 'get by countries',
 	tags: ['Location'],
@@ -50,11 +48,9 @@ export const getMetaSchema = {
 				timezone: { type: 'string' },
 				timezoneOffset: { type: 'string' }
 			}
-		},
-
+		}
 	}
-}
-
+};
 
 export const getUsedCountriesSchema = {
 	description: 'get used countries',
@@ -62,8 +58,7 @@ export const getUsedCountriesSchema = {
 	summary: 'Get used countries',
 	response: {
 		200: {
-			type: 'object',
-			items: { type: 'string' }
+			type: 'array'
 		}
 	}
 };

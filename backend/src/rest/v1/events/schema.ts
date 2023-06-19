@@ -2,6 +2,7 @@ export const ItemEvent = {
 	type: 'object',
 	properties: {
 		id: { type: 'string' },
+		creatorId: { type: 'string' },
 		title: { type: 'string' },
 		description: { type: 'string' },
 		date: { type: 'number' },
@@ -14,7 +15,7 @@ export const ItemEvent = {
 				city: { type: 'string' }
 			}
 		},
-		price: { type: 'number' },
+		price: { type: 'string' },
 		timezone: {
 			type: 'object',
 			properties: {

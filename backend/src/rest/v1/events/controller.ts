@@ -11,22 +11,9 @@ import {
 } from './type';
 import { ITokenData } from '../../types';
 import { eventsValidator } from '../../../validators/event-validator';
+import { vars } from '../../../config/vars';
 
 export const addEvent: IAddEventHandler = async (request, reply) => {
-	const token = request.headers.authorization;
-	if (!token) {
-		return reply.status(401).send({
-			type: 'error'
-		});
-	}
-
-	const jwtData = jwt.verify(token, 'secret') as ITokenData;
-	if (!jwtData.id) {
-		return reply.status(401).send({
-			type: 'error'
-		});
-	}
-
 	const body = request.body as { event: EventOnPoster | undefined };
 	if (!body) {
 		return {
@@ -50,7 +37,26 @@ export const addEvent: IAddEventHandler = async (request, reply) => {
 		};
 	}
 
-	event.creatorId = jwtData.id;
+	if (vars.env !== 'dev') {
+		const token = request.headers.authorization;
+		if (!token) {
+			return reply.status(401).send({
+				type: 'error'
+			});
+		}
+
+		const jwtData = jwt.verify(token, 'secret') as ITokenData;
+		if (!jwtData.id) {
+			return reply.status(401).send({
+				type: 'error'
+			});
+		}
+
+		event.creatorId = jwtData.id;
+	} else {
+		event.creatorId = 'dev-user';
+	}
+
 	const newPostId = await eventsStateController.addEvent(event);
 
 	return {
@@ -78,26 +84,28 @@ export const getEvent: IGetEventHandler = async (request) => {
 };
 
 export const deleteEvent: IDeleteEventHandler = async (request, reply) => {
-	const token = request.headers.authorization;
-	if (!token) {
-		return reply.status(401).send({
-			type: 'error',
-			errors: ['No token']
-		});
-	}
+	if (vars.env !== 'dev') {
+		const token = request.headers.authorization;
+		if (!token) {
+			return reply.status(401).send({
+				type: 'error',
+				errors: ['No token']
+			});
+		}
 
-	const jwtData = jwt.verify(token, 'secret') as ITokenData;
-	if (!jwtData.id) {
-		return reply.status(401).send({
-			type: 'error',
-			errors: ['Wrong token']
-		});
-	}
-	const oldEvent = await eventsStateController.getEvent(request.body.id);
-	if (oldEvent?.creatorId !== String(jwtData.id)) {
-		return reply.status(403).send({
-			type: 'error'
-		});
+		const jwtData = jwt.verify(token, 'secret') as ITokenData;
+		if (!jwtData.id) {
+			return reply.status(401).send({
+				type: 'error',
+				errors: ['Wrong token']
+			});
+		}
+		const oldEvent = await eventsStateController.getEvent(request.body.id);
+		if (oldEvent?.creatorId !== String(jwtData.id)) {
+			return reply.status(403).send({
+				type: 'error'
+			});
+		}
 	}
 
 	await eventsStateController.deleteEvent(request.body.id);
@@ -108,26 +116,28 @@ export const deleteEvent: IDeleteEventHandler = async (request, reply) => {
 };
 
 export const updateEvent: IUpdateEventHandler = async (request, reply) => {
-	const token = request.headers.authorization;
-	if (!token) {
-		return reply.status(401).send({
-			type: 'error'
-		});
-	}
+	if (vars.env !== 'dev') {
+		const token = request.headers.authorization;
+		if (!token) {
+			return reply.status(401).send({
+				type: 'error'
+			});
+		}
 
-	const jwtData = jwt.verify(token, 'secret') as ITokenData;
-	if (!jwtData.id) {
-		return reply.status(401).send({
-			type: 'error'
-		});
-	}
+		const jwtData = jwt.verify(token, 'secret') as ITokenData;
+		if (!jwtData.id) {
+			return reply.status(401).send({
+				type: 'error'
+			});
+		}
 
-	const oldEvent = await eventsStateController.getEvent(request.body.event.id);
+		const oldEvent = await eventsStateController.getEvent(request.body.event.id);
 
-	if (oldEvent?.creatorId !== String(jwtData.id)) {
-		return reply.status(403).send({
-			type: 'error'
-		});
+		if (oldEvent?.creatorId !== String(jwtData.id)) {
+			return reply.status(403).send({
+				type: 'error'
+			});
+		}
 	}
 
 	const body = request.body as { event: EventOnPoster | undefined };

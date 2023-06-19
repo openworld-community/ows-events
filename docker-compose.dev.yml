@@ -31,6 +31,7 @@ services:
         links:
             - mongo
         environment:
+            - MODE=dev
             - FRONTEND_URL=http://localhost:3000
             - MONGO_URI=mongodb://mongo:27017/dev
         ports:

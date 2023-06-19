@@ -19,6 +19,7 @@ services:
                 - VITE_AUTH_SERVER_URL=https://auth.poster-test-peredelano.orby-tech.space
                 - VITE_POSTAUTH_URL=http://backend:3000
                 - VITE_TELEGRAM_AUTH_BOT_NAME=afisha_oauth_local_bot
+                - VITE_MODE=production
         logging: *default-logging
         ports:
             - 80:3000

@@ -92,7 +92,7 @@ patchDeleteEventModal({
 			<span class="event-image__price">{{
 				posterEvent.price === '0'
 					? $translate('event.price.free')
-					: `${posterEvent.price} €`
+					: `${posterEvent.price} RSD`
 			}}</span>
 			<img
 				v-if="posterEvent.image"
@@ -160,7 +160,7 @@ patchDeleteEventModal({
 				<!--				/>-->
 			</template>
 			<div
-				v-if="user?.id === posterEvent.creatorId"
+				v-if="user?.id === posterEvent.creatorId || posterEvent.creatorId === 'dev-user'"
 				class="event-actions__manage"
 			>
 				<CommonButton
@@ -174,6 +174,7 @@ patchDeleteEventModal({
 				/>
 				<CommonButton
 					class="event-actions__button"
+					button-kind="ordinary"
 					:button-text="$translate('event.button.edit')"
 					icon-name="edit"
 					icon-width="16"

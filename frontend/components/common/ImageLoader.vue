@@ -11,15 +11,8 @@ const emit = defineEmits<{
 }>();
 
 const input = ref<HTMLInputElement | null>(null);
-const imageSrc = ref<string | null>(null);
+const imageSrc = ref(props.externalImage ? `${BASE_URL}${props.externalImage}` : '');
 const fileIsLoading = ref(false);
-
-watch(
-	() => props.externalImage,
-	() => {
-		imageSrc.value = `${BASE_URL}${props.externalImage}`;
-	}
-);
 
 const loadImage = (event: Event) => {
 	if (!event.target) return console.warn('Load Image Event has no target attached');
@@ -48,7 +41,7 @@ const loadImage = (event: Event) => {
 };
 
 const removeImage = () => {
-	imageSrc.value = null;
+	imageSrc.value = '';
 	emit('update:model-value', 'DELETED');
 };
 </script>

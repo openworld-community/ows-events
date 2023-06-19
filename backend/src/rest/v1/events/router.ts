@@ -8,17 +8,26 @@ import {
 	IGetEventsRoute,
 	IUpdateEventRoute
 } from './type';
+import { 
+	getEventSchema, 
+	getEventsSchema,
+	addEventSchema,
+	deleteEventSchema,
+	updateEventSchema,
+	findEventsSchema
+} from './schema';
+
 
 export const eventsApi = async (fastify: FastifyInstance) => {
-	fastify.get<IGetEventsRoute>('/', getEvents);
+	fastify.get<IGetEventsRoute>('/', { schema: getEventsSchema, handler: getEvents }) 
 
-	fastify.get<IGetEventRoute>('/:id', getEvent);
+	fastify.get<IGetEventRoute>('/:id', { schema: getEventSchema, handler: getEvent });
 
-	fastify.post<IAddEventRoute>('/add', addEvent);
+	fastify.post<IAddEventRoute>('/add', { schema: addEventSchema, handler: addEvent });
 
-	fastify.post<IDeleteEventRoute>('/delete', deleteEvent);
+	fastify.post<IDeleteEventRoute>('/delete', { schema: deleteEventSchema, handler: deleteEvent });
 
-	fastify.post<IUpdateEventRoute>('/update', updateEvent);
+	fastify.post<IUpdateEventRoute>('/update', { schema: updateEventSchema, handler: updateEvent });
 
-	fastify.post<IFindEventRoute>('/find', findEvents);
+	fastify.post<IFindEventRoute>('/find', { schema: findEventsSchema, handler: findEvents });
 };

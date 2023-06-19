@@ -1,17 +1,13 @@
 import fs from 'fs';
 import fsP from 'fs/promises';
 import { PaymentInfo } from '@common/types/payment-info';
+import { CommonErrorsEnum } from '@common/const';
 import { eventsStateController } from '../../../controllers/events-state-controller';
 import { IGetJSONPaymentInfoHandlerProps, IGetPaymentInfoHandlerProps } from './type';
 
 export const getPaymentInfo: IGetPaymentInfoHandlerProps = async (request) => {
 	const event = await eventsStateController.getEvent(request.params.id);
-	if (!event) {
-		return {
-			type: 'error',
-			errors: ['Event not found']
-		};
-	}
+	if (!event) throw new Error(CommonErrorsEnum.EVENT_NOT_FOUND);
 
 	const paymentsFileMd = `assets/presets/${request.params.id}.md`;
 	if (fs.existsSync(paymentsFileMd)) {
@@ -34,12 +30,7 @@ export const getPaymentInfo: IGetPaymentInfoHandlerProps = async (request) => {
 		fs.existsSync(paymentsFile) ? fs.readFileSync(paymentsFile, 'utf-8') : '[]' || '[]'
 	) as PaymentInfo[];
 
-	if (!paymentsInfo?.length) {
-		return {
-			type: 'error',
-			errors: ['Payments not found']
-		};
-	}
+	if (!paymentsInfo?.length) throw new Error(CommonErrorsEnum.PAYMENT_INFO_NOT_FOUND);
 
 	// todo - временная заглушка, чтоб возвращал хоть что-то для тестов
 	const eventPaymentsInfo =
@@ -58,17 +49,9 @@ export const getJSONPaymentInfo: IGetJSONPaymentInfoHandlerProps = async (reques
 	const data = await fsP.readFile('assets/presets/payments-info.json', {
 		encoding: 'utf-8'
 	});
-	if (!data) {
-		return {
-			type: 'error'
-		};
-	}
+	if (!data) throw new Error(CommonErrorsEnum.PAYMENT_INFO_FILE_NOT_EXIST);
 	const info = JSON.parse(data);
-	if (!info) {
-		return {
-			type: 'error'
-		};
-	}
+	if (!info) throw new Error(CommonErrorsEnum.PAYMENT_INFO_FILE_PARSE_ERROR);
 
 	const eventPaymentInfo = info.filter((item: PaymentInfo) => item.id === eventId);
 	return {

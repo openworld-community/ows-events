@@ -1,34 +1,38 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '@/constants/enums/route';
-import { SUPPORT_TG_URL } from '../../constants/url';
+import { SUPPORT_TG_URL } from '../../../constants/url';
 
-const route = useRoute();
+const emit = defineEmits(['close']);
 </script>
 
 <template>
 	<nav
-		v-if="route.name === RouteNameEnum.HOME"
 		class="navigation"
 		role="navigation"
-		:aria-label="$translate('global.nav')"
 	>
-		<CommonButton
-			:link="SUPPORT_TG_URL"
-			is-external-link
-			is-icon
-			button-kind="ordinary"
-			icon-name="contact-tg"
-			:alt="$translate('component.header.support')"
-		/>
-		<CommonButton
-			:link="{ name: RouteNameEnum.ABOUT }"
-			is-icon
+		<HeaderAuthorisation class="navigation__item" />
+
+		<HeaderNavigationNavItem
+			:link-to="{ name: RouteNameEnum.ABOUT }"
+			:text="$translate('component.header.about')"
 			icon-name="info"
-			button-kind="ordinary"
-			:alt="$translate('component.header.about')"
+			@click="emit('close')"
 		/>
 
-		<HeaderAuthorisation />
+		<HeaderNavigationNavItem
+			:link-to="SUPPORT_TG_URL"
+			:text="$translate('component.header.support')"
+			is-external-link
+			icon-name="contact-tg"
+			@click="emit('close')"
+		/>
+
+		<HeaderNavigationNavItem
+			:link-to="{ name: RouteNameEnum.ABOUT }"
+			:text="$translate('component.header.policy')"
+			icon-name="privacy"
+			@click="emit('close')"
+		/>
 
 		<!--          <div-->
 		<!--            v-if="route.name === 'event'"-->
@@ -53,6 +57,17 @@ const route = useRoute();
 <style scoped lang="less">
 .navigation {
 	display: flex;
-	align-items: center;
+	width: max-content;
+	flex-direction: column;
+	align-items: flex-end;
+	position: absolute;
+	top: 0;
+	right: 0;
+	background-color: var(--color-white);
+	box-shadow: var(--shadow-sidebar);
+	border-radius: 6px;
+
+	transition: transform 0.3s ease;
+	transform: translateY(var(--header-height));
 }
 </style>

@@ -22,6 +22,7 @@ services:
                 - VITE_BASE_URL=https://api.poster-demo-peredelano.orby-tech.space
                 - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
                 - VITE_TELEGRAM_AUTH_BOT_NAME
+                - VITE_MODE=production
         logging: *default-logging
         restart: always
         labels:

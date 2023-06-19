@@ -90,7 +90,8 @@ export const defaultTranslation = {
 			event: 'изображение мероприятия'
 		},
 		price: {
-			free: 'Бесплатно'
+			free: 'Бесплатно',
+			not_found: 'Цена не указана'
 		},
 		validation_errors: EventValidatorErrors
 	},

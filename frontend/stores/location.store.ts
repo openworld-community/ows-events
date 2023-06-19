@@ -5,7 +5,9 @@ export type City = string;
 export type Country = string;
 type LocationStore = {
 	_countries: Set<Country>;
+	_usedCountries: Set<Country>;
 	_citiesByCountry: Map<Country, City[]>;
+	_usedСitiesByCountry: Map<Country, City[]>;
 	userLocation: UserLocation;
 };
 
@@ -15,7 +17,9 @@ export const useLocationStore = defineStore('location', {
 	state: (): LocationStore => {
 		return {
 			_countries: new Set(),
+			_usedCountries: new Set(),
 			_citiesByCountry: new Map(),
+			_usedСitiesByCountry: new Map(),
 			userLocation: {}
 		};
 	},
@@ -24,6 +28,9 @@ export const useLocationStore = defineStore('location', {
 			(async function () {
 				if (process.server) return;
 				if (state._countries.size) return;
+
+				// otherwise Nuxt doesn't do request on client during initial hydration, I'm not smart enough to tell why
+				await new Promise((r) => r(0));
 
 				const { $locationStoreForage } = useNuxtApp();
 				const localCountries: Country[] | null = await $locationStoreForage.getItem(
@@ -35,12 +42,28 @@ export const useLocationStore = defineStore('location', {
 				}
 
 				const { data } = await apiRouter.location.country.getAll.useQuery({});
+
 				if (!data.value) return;
 				state._countries = new Set(data.value);
 				// data.value is Proxy which can't copied to storage directly - spread operator converts back to native object
 				$locationStoreForage.setItem(COUNTRIES_KEY, [...data.value]);
 			})();
 			return state._countries;
+		},
+		usedCountries(state): LocationStore['_usedCountries'] {
+			(async function () {
+				if (process.server) return;
+				if (state._usedCountries.size) return;
+
+				// otherwise Nuxt doesn't do request on client during initial hydration, I'm not smart enough to tell why
+				await new Promise((r) => r(0));
+
+				const { data } = await apiRouter.location.country.getUsedCountries.useQuery({});
+
+				state._usedCountries = new Set(data.value);
+			})();
+
+			return state._usedCountries;
 		}
 	},
 	actions: {
@@ -65,7 +88,22 @@ export const useLocationStore = defineStore('location', {
 				$locationStoreForage.setItem(country, [...data.value]);
 			})();
 
-			return this._citiesByCountry.get(country);
+			return this._citiesByCountry.get(country) ?? [];
+		},
+		getUsedCitiesByCountry(country: Country) {
+			(async () => {
+				if (process.server) return;
+				if (!country || this._usedСitiesByCountry.get(country)) return;
+
+				const { data } = await apiRouter.location.country.getUsedCities.useQuery({
+					data: { country }
+				});
+
+				if (!data.value) return;
+				this._usedСitiesByCountry.set(country, data.value);
+			})();
+
+			return this._usedСitiesByCountry.get(country) ?? [];
 		}
 	}
 });

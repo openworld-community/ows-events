@@ -62,4 +62,9 @@ export const getCitiesByCountry: IGetCitiesByCountryHandlerProps = async (reques
 };
 
 export const getUsedCountries: IGetCountriesHandlerProps = async () =>
-	countriesAndCitiesController.getUsedCountries()
+	countriesAndCitiesController.getUsedCountries();
+
+export const getUsedCities: IGetCitiesByCountryHandlerProps = async (request) => {
+	const { country } = request.params;
+	return countriesAndCitiesController.getUsedCities(country);
+};

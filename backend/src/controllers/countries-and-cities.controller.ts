@@ -1,5 +1,5 @@
 import fs from 'fs';
-import {EventModel} from "../models/event.model";
+import { EventModel } from '../models/event.model';
 
 class CountriesAndCitiesController {
 	countries: string[];
@@ -14,12 +14,20 @@ class CountriesAndCitiesController {
 	}
 
 	getCitiesByCountry(country: string) {
-		return this.citiesByCountry[country];
+		const citiesByCountry = this.citiesByCountry[country];
+		return citiesByCountry;
 	}
 
 	async getUsedCountries() {
-		const countries: string[] = await EventModel.distinct("location.country");
-		return countries
+		const countries: string[] = await EventModel.distinct('location.country');
+		return countries;
+	}
+
+	async getUsedCities(country: string) {
+		const cities: string[] = await EventModel.distinct('location.city', {
+			'location.country': country
+		});
+		return cities;
 	}
 
 	getRandomPair({ country, city }: { country?: string; city?: string }) {

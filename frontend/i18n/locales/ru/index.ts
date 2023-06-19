@@ -90,7 +90,8 @@ export const defaultTranslation = {
 			event: 'изображение мероприятия'
 		},
 		price: {
-			free: 'Бесплатно'
+			free: 'Бесплатно',
+			not_found: 'Цена не указана'
 		},
 		validation_errors: EventValidatorErrors
 	},
@@ -114,8 +115,10 @@ export const defaultTranslation = {
 				description: 'Описание',
 				start: 'Начало',
 				end: 'Окончание',
-				price: 'Стоимость',
-				url_to_rigistration: 'Ссылка на регистрацию'
+				price: 'Стоимость, RSD',
+				price_placeholder: 'Укажите стоимость в RSD',
+				url_to_rigistration: 'Ссылка на регистрацию',
+				url_placeholder: 'https://example.com'
 			}
 		},
 		need_authorize_modal: {

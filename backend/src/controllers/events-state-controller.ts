@@ -60,7 +60,8 @@ class EventsStateController {
 		const event = await EventModel.findOne({
 			id
 		});
-		if (event?.image) await imageController.deleteImg(`.${event.image}`);
+		if (event?.image && !event.image.includes('https://') && !event.image.includes('http://'))
+			await imageController.deleteImg(`.${event.image}`);
 
 		await EventModel.deleteOne({ id });
 	}

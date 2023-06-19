@@ -20,6 +20,7 @@ services:
             - VITE_API_URL=http://localhost:7080/api
             - VITE_BASE_URL=http://localhost:7080
             - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
+            - VITE_MODE=development
 
     backend:
         build:
@@ -31,6 +32,7 @@ services:
         links:
             - mongo
         environment:
+            - MODE=dev
             - FRONTEND_URL=http://localhost:3000
             - MONGO_URI=mongodb://mongo:27017/dev
         ports:

@@ -37,6 +37,7 @@ export const useLocationStore = defineStore('location', {
 					COUNTRIES_KEY
 				);
 				if (localCountries) {
+					if (!localCountries.length) return;
 					state._countries = new Set(localCountries);
 					return;
 				}

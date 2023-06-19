@@ -5,16 +5,17 @@ import {
   IGetCountriesRouteProps,
   IGetMetaRouteProps,
 } from "./type";
+import { getCitiesByCountrySchema, getCountriesSchema, getMetaSchema, getUsedCountriesSchema } from "./schema";
 
 export const locationApi = async (fastify: FastifyInstance) => {
-  fastify.get<IGetCountriesRouteProps>("/countries", getCountries);
+  fastify.get<IGetCountriesRouteProps>("/countries",  { schema: getCountriesSchema, handler: getCountries } ); 
 
-  fastify.get<IGetCitiesByCountryRouteProps>(
+  fastify.get<IGetCitiesByCountryRouteProps>(      //ошибка с боди когда подключаешь
     "/cities/:country",
-    getCitiesByCountry
-  );
+    { schema: getCitiesByCountrySchema, handler: getCitiesByCountry }
+  );  
 
-  fastify.get<IGetMetaRouteProps>("/meta/:country/:city", getMeta);
+  fastify.get<IGetMetaRouteProps>("/meta/:country/:city", { schema: getMetaSchema, handler: getMeta } );
 
-  fastify.get<IGetCountriesRouteProps>("/used", getUsedCountries);
+  fastify.get<IGetCountriesRouteProps>("/used", { schema: getUsedCountriesSchema, handler: getUsedCountries });  
 };

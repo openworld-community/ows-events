@@ -1,8 +1,26 @@
 
 export const getCountriesSchema = {
-	description: 'get all events',
-	tags: ['Events'],
-	summary: 'Get all events',
+	description: 'get all countries',
+	tags: ['Location'],
+	summary: 'Get all countries',
+	response: {
+		200: {
+			type: 'object',
+			country: { type: 'string' }
+		}
+	}
+};
+
+export const getCitiesByCountrySchema = {
+	description: 'get by countries',
+	tags: ['Location'],
+	summary: 'Get by countries',
+	params: {
+		type: 'object',
+		properties: {
+			country: { type: 'string' }
+		}
+	},
 	response: {
 		200: {
 			type: 'object',
@@ -11,102 +29,41 @@ export const getCountriesSchema = {
 	}
 };
 
-export const getEventSchema = {
-	description: 'get event by id',
-	tags: ['Events'],
-	summary: 'Get event by id',
-	response: {
-		200: {
-			type: 'object',
-			properties: {
-				type: { type: 'string' },
-				data: { ItemEvent }
-			}
-		}
-	},
+
+export const getMetaSchema = {
+	description: 'get by countries',
+	tags: ['Location'],
+	summary: 'Get by countries',
 	params: {
 		type: 'object',
 		properties: {
-			id: {
-				type: 'string',
-				description: 'Event id'
-			}
-		}
-	}
-};
-
-export const addEventSchema = {
-	description: 'Add new event',
-	tags: ['Events'],
-	summary: 'Add new event',
-	response: {
-		201: {
-			type: 'object',
-			properties: {
-				type: { type: 'string' },
-				data: {
-					type: 'object',
-					id: { type: 'string' }
-				}
-			}
+			country: { type: 'string' },
+			city: { type: 'string' }
 		}
 	},
-	body: {
-		type: 'object',
-		properties: {
-			event: ItemEvent
-		},
-		required: ['event']
-	},
-	security: [{ authJWT: [] }]
-};
-
-export const deleteEventSchema = {
-	description: 'Delete event',
-	tags: ['Events'],
-	summary: 'Delete event',
-	response: {
-		200: {}
-	},
-	body: {
-		type: 'object',
-		properties: { id: { type: 'string' } },
-		required: ['id']
-	},
-	security: [{ authJWT: [] }]
-};
-
-export const updateEventSchema = {
-	description: 'Update event',
-	tags: ['Events'],
-	summary: 'Update event',
-	response: {
-		200: {}
-	},
-	body: {
-		type: 'object',
-		properties: ItemEvent.properties
-	},
-	security: [{ authJWT: [] }]
-};
-
-export const findEventsSchema = {
-	description: 'Update event',
-	tags: ['Events'],
-	summary: 'Update event',
 	response: {
 		200: {
-			type: 'array',
-			items: ItemEvent
+			type: 'object',
+			properties: {
+				country: { type: 'string' },
+				city: { type: 'string' },
+				timezone: { type: 'string' },
+				timezoneOffset: { type: 'string' }
+			}
+		},
+
+	}
+}
+
+
+export const getUsedCountriesSchema = {
+	description: 'get used countries',
+	tags: ['Location'],
+	summary: 'Get used countries',
+	response: {
+		200: {
+			type: 'object',
+			items: { type: 'string' }
 		}
-	},
-	body: {
-		type: 'object',
-		properties: {
-			searchLine: { type: 'string' },
-			city: { type: 'string' },
-			country: { type: 'string' }
-		}
-	},
-	security: [{ authJWT: [] }]
+	}
 };

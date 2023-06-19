@@ -1,4 +1,4 @@
-const ItemEvent = {
+export const ItemEvent = {
 	type: 'object',
 	properties: {
 		id: { type: 'string' },

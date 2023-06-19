@@ -13,6 +13,9 @@ import { openApiOptions, openApiUiOptions } from './docs';
 import { userController } from './controllers/user-controller';
 import { connectToMongo } from './boot/connectToMongo';
 import { authApi } from './rest/v1/auth/router';
+import { ajvFilePlugin } from './config/ajvPlugins';
+import fastifySwagger from '@fastify/swagger';
+import fastifySwaggerUi from '@fastify/swagger-ui';
 
 const server = fastify({
 	logger: true,

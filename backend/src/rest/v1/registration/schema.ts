@@ -1,140 +1,31 @@
-const ItemEvent = {
-	type: 'object',
-	properties: {
-		id: { type: 'string' },
-		title: { type: 'string' },
-		description: { type: 'string' },
-		date: { type: 'number' },
-		durationInSeconds: { type: 'number' },
-		image: { type: 'string' },
-		location: {
-			type: 'object',
-			properties: {
-				country: { type: 'string' },
-				city: { type: 'string' }
-			}
-		},
-		price: { type: 'number' },
-		timezone: {
-			type: 'object',
-			properties: {
-				timezoneName: { type: 'string' },
-				timezoneOffset: { type: 'string' }
-			},
-			required: ['timezoneName', 'timezoneOffset']
-		},
-		url: { type: 'string' }
-	}
-};
+const Registration = {
+	eventId: { type: 'string' },
+	telegramNickname: { type: 'string' },
+	name: { type: 'string' },
+	profession: { type: 'string' },
+	workplace: { type: 'string' },
+	experienceInStartups: { type: 'string' },
+	fromYouKnow: { type: 'string' },
+	beenEarly: { type: 'string' },
+	fromWhichCity: { type: 'string' },
+	email: { type: 'string' },
+	personaldataAgree: { type: 'boolean' },
+	feeAgree: { type: 'boolean' },
+}
 
-export const getEventsSchema = {
-	description: 'get all events',
-	tags: ['Events'],
-	summary: 'Get all events',
-	response: {
-		200: {
-			type: 'array',
-			items: ItemEvent
-		}
-	}
-};
 
-export const getEventSchema = {
-	description: 'get event by id',
-	tags: ['Events'],
-	summary: 'Get event by id',
+export const addRegistrationSchema = {
+	description: 'Registration',
+	tags: ['Registration'],
+	summary: 'Registration',
+	body: {
+		type: 'object',
+		properties: Registration
+	},
 	response: {
 		200: {
 			type: 'object',
-			properties: {
-				type: { type: 'string' },
-				data: { ItemEvent }
-			}
-		}
-	},
-	params: {
-		type: 'object',
-		properties: {
-			id: {
-				type: 'string',
-				description: 'Event id'
-			}
+			properties: Registration
 		}
 	}
-};
-
-export const addEventSchema = {
-	description: 'Add new event',
-	tags: ['Events'],
-	summary: 'Add new event',
-	response: {
-		201: {
-			type: 'object',
-			properties: {
-				type: { type: 'string' },
-				data: {
-					type: 'object',
-					id: { type: 'string' }
-				}
-			}
-		}
-	},
-	body: {
-		type: 'object',
-		properties: {
-			event: ItemEvent
-		},
-		required: ['event']
-	},
-	security: [{ authJWT: [] }]
-};
-
-export const deleteEventSchema = {
-	description: 'Delete event',
-	tags: ['Events'],
-	summary: 'Delete event',
-	response: {
-		200: {}
-	},
-	body: {
-		type: 'object',
-		properties: { id: { type: 'string' } },
-		required: ['id']
-	},
-	security: [{ authJWT: [] }]
-};
-
-export const updateEventSchema = {
-	description: 'Update event',
-	tags: ['Events'],
-	summary: 'Update event',
-	response: {
-		200: {}
-	},
-	body: {
-		type: 'object',
-		properties: ItemEvent.properties
-	},
-	security: [{ authJWT: [] }]
-};
-
-export const findEventsSchema = {
-	description: 'Update event',
-	tags: ['Events'],
-	summary: 'Update event',
-	response: {
-		200: {
-			type: 'array',
-			items: ItemEvent
-		}
-	},
-	body: {
-		type: 'object',
-		properties: {
-			searchLine: { type: 'string' },
-			city: { type: 'string' },
-			country: { type: 'string' }
-		}
-	},
-	security: [{ authJWT: [] }]
 };

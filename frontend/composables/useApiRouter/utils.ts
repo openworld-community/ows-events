@@ -149,15 +149,16 @@ export function useBackendFetch<T>(
 		opts.method ??= 'POST';
 	}
 	return async (opts_: UseFetchOptions<T> = {}) => {
+		const getData = () => useFetch(request, Object.assign(opts, opts_));
+		if (process.server) return await getData();
+
 		// logs an error on first invocation - works fine tho
 		const { translate } = useTranslation();
 		const { $errorToast } = useNuxtApp();
-		const data = await useFetch(request, Object.assign(opts, opts_));
-		if (data.error.value) {
-			const errorMessages: (keyof typeof ServerErrors)[] = data.error.value?.data.errors;
-			errorMessages.forEach((error) => {
-				$errorToast(translate(`error.${error}`));
-			});
+		const data = await getData();
+		if (data.error.value?.data) {
+			const errorMessage: keyof typeof ServerErrors = data.error.value?.data.message;
+			$errorToast(translate(`error.${errorMessage}`));
 		}
 		return data;
 	};

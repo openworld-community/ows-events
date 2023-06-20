@@ -70,7 +70,7 @@
             background-color: var(--color-white);
             gap: var(--space-unrelated-items);
             margin-top: auto;
-			justify-content: center;
+            justify-content: center;
         }
 
         .event-actions__button {
@@ -102,13 +102,13 @@
             border-radius: 4px;
         }
 
-		#approveBtn {
-			background-color: #00dc82;
-		}
+        #approveBtn {
+            background-color: #00dc82;
+        }
 
-		#declineBtn {
-			background-color: #ef5f5f;
-		}
+        #declineBtn {
+            background-color: #ef5f5f;
+        }
 	</style>
 </head>
 <body>
@@ -140,15 +140,28 @@
 	<div class='event-actions'>
 		<button class='event-actions__button' id='toPreviousBtn'>Previous</button>
 		<button class='event-actions__button' id='declineBtn'>Decline</button>
+		<label>
+			Type
+			<select id='typeSelect'>
+				<option value='all'>All</option>
+				<option value='in-progress'>In progress</option>
+				<option value='declined'>Declined</option>
+			</select>
+		</label>
 		<button class='event-actions__button' id='approveBtn'>Approve</button>
 		<button class='event-actions__button' id='toNextBtn'>Next</button>
+	</div>
+	<div class='event-actions'>
+		<label>
+			Токен
+			<input id='token' type='text' />
+		</label>
 	</div>
 </div>
 
 <script>
-	window.addEventListener(`DOMContentLoaded`, async () => {
-		const events = await getEventsForModeration();
-		console.log(events);
+	document.getElementById('typeSelect').addEventListener(`change`, async (event) => {
+		const events = await getEventsForModeration(event.target.value);
 		let currentEventNumber = 0;
 		const toNextBtn = document.getElementById('toNextBtn');
 		const toPreviousBtn = document.getElementById('toPreviousBtn');
@@ -192,23 +205,27 @@
 
 	};
 
-	const getEventsForModeration = async () => {
-		return await fetch('/api/moderation/get', {
-			method: 'POST',
-			body: JSON.stringify({})
+	const getEventsForModeration = async (type) => {
+		console.log(JSON.stringify({ status: type }));
+		return await fetch(`/api/moderation/get/${type}`, {
+			headers: {
+				Authorization: document.getElementById('token').value
+			}
 		}).then(res => res.json());
 	};
 
 	const approve = async (id) => {
-		await fetch('/api/moderation/approve', {
-			method: 'POST',
-			body: JSON.stringify({ id })
+		await fetch(`/api/moderation/approve/${id}`, {
+			headers: {
+				Authorization: document.getElementById('token').value
+			}
 		}).then(res => res.json());
 	};
 	const decline = async (id) => {
-		await fetch('/api/moderation/decline', {
-			method: 'POST',
-			body: JSON.stringify({ id })
+		await fetch(`/api/moderation/decline/${id}`, {
+			headers: {
+				Authorization: document.getElementById('token').value
+			}
 		}).then(res => res.json());
 	};
 

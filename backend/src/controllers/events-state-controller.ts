@@ -33,6 +33,7 @@ class EventsStateController {
 		if (query?.city) {
 			queryObject['location.city'] = query?.city;
 		}
+		queryObject['meta.moderation.status'] = { $nin: ['declined', 'in-progress'] };
 
 		const events: EventOnPoster[] = await EventModel.find(queryObject, { meta: 0 });
 		return events;

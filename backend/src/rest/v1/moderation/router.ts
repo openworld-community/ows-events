@@ -3,9 +3,9 @@ import { approve, decline, get } from './controller';
 import { IApproveEventRoute, IDeclineEventRoute, IGetEventsRoute } from './types';
 
 export const manualModerationApi = async (fastify: FastifyInstance) => {
-	fastify.post<IGetEventsRoute>('/get', get);
+	fastify.get<IGetEventsRoute>('/get/:status', get);
 
-	fastify.post<IApproveEventRoute>('/approve', approve);
+	fastify.get<IApproveEventRoute>('/approve/:eventId', approve);
 
-	fastify.post<IDeclineEventRoute>('/decline', decline);
+	fastify.get<IDeclineEventRoute>('/decline/:eventId', decline);
 };

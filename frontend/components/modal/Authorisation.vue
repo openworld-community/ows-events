@@ -75,7 +75,7 @@ setTimeout(() => (hiddenTGButtonClass.value = 'modal-card__telegram-button--hidd
 					@click="props.close()"
 				/>
 				<CommonButton
-					v-if="!isAuthorized"
+					v-if="isAuthorized"
 					button-kind="success"
 					:button-text="translate('component.pre_authorisation_modal.button.logout')"
 					class="modal-card__logout-button"

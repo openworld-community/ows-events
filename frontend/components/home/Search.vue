@@ -2,6 +2,8 @@
 const route = useRoute();
 const props = defineProps<{ search: string }>();
 const emit = defineEmits<{ 'update:search': [search: typeof props.search] }>();
+
+const { translate } = useTranslation();
 watch(
 	() => props.search,
 	async (search) => {
@@ -20,7 +22,7 @@ watch(
 			type="text"
 			icon-name="search"
 			:model-value="search"
-      :placeholder="$translate('global.search')"
+			:placeholder="translate('global.search')"
 			@update:model-value="emit('update:search', $event)"
 		/>
 	</div>

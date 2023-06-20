@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '../../constants/enums/route';
 
+const { translate } = useTranslation();
 const route = useRoute();
 
 const scrollToTop = () => {
@@ -26,7 +27,7 @@ onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 					v-if="route.name === RouteNameEnum.HOME"
 					:to="{ name: RouteNameEnum.HOME }"
 					class="header__navigation-link"
-					:aria-label="$translate('home.button.afisha_logo_aria')"
+					:aria-label="translate('home.button.afisha_logo_aria')"
 					@click.prevent="scrollToTop"
 				>
 					<CommonIcon
@@ -42,7 +43,7 @@ onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"
-					:alt="$translate('global.button.back')"
+					:alt="translate('global.button.back')"
 				/>
 			</div>
 
@@ -58,8 +59,8 @@ onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 					:is-cross="isNavbarOpen"
 					:aria-label="
 						isNavbarOpen
-							? $translate('component.header.button.close')
-							: $translate('component.header.button.open')
+							? translate('component.header.button.close')
+							: translate('component.header.button.open')
 					"
 					@click="navbarToggle"
 				/>

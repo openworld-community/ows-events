@@ -8,6 +8,7 @@ type Props = {
 	deauthorize: () => void;
 };
 
+const { translate } = useTranslation();
 const props = defineProps<Props>();
 const userCookie = useCookie<UserInfo | null>('user');
 
@@ -19,25 +20,18 @@ const username =
 
 const telegram = ref<HTMLElement | null>(null);
 
-const loadScript = () => {
-  const script = document.createElement('script');
-  script.src = 'https://telegram.org/js/telegram-widget.js?22';
+onMounted(() => {
+	const script = document.createElement('script');
+	script.src = 'https://telegram.org/js/telegram-widget.js?22';
 
-  script.setAttribute('data-size', 'large');
-  script.setAttribute('data-userpic', 'false');
-  script.setAttribute('data-telegram-login', TELEGRAM_AUTH_BOT_NAME);
-  script.setAttribute('data-request-access', 'write');
+	script.setAttribute('data-size', 'large');
+	script.setAttribute('data-userpic', 'false');
+	script.setAttribute('data-telegram-login', TELEGRAM_AUTH_BOT_NAME);
+	script.setAttribute('data-request-access', 'write');
 
-  script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
-  script.addEventListener('load', () => setTimeout(() => hiddenTGButtonClass.value = 'modal-card__telegram-button--hidden', 200), {once: true});
-  telegram.value?.appendChild(script);
-}
-
-onMounted(async () => {
-  await loadScript()
+	script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
+	telegram.value?.appendChild(script);
 });
-
-const hiddenTGButtonClass = ref('');
 </script>
 
 <template>
@@ -57,7 +51,7 @@ const hiddenTGButtonClass = ref('');
 					{{
 						isAuthorized
 							? username
-							: $translate('component.pre_authorisation_modal.title')
+							: translate('component.pre_authorisation_modal.title')
 					}}
 				</p>
 			</div>
@@ -65,13 +59,13 @@ const hiddenTGButtonClass = ref('');
 				<CommonButton
 					class="modal-card__cancel-button"
 					button-kind="ordinary"
-					:button-text="$translate('component.pre_authorisation_modal.button.cancel')"
+					:button-text="translate('component.pre_authorisation_modal.button.cancel')"
 					@click="props.close()"
 				/>
 				<CommonButton
 					v-if="isAuthorized"
 					button-kind="success"
-					:button-text="$translate('component.pre_authorisation_modal.button.logout')"
+					:button-text="translate('component.pre_authorisation_modal.button.logout')"
 					class="modal-card__logout-button"
 					@click="props.deauthorize()"
 				/>
@@ -84,11 +78,11 @@ const hiddenTGButtonClass = ref('');
 							class="modal-card__icon"
 							name="telegram"
 						/>
-						{{ $translate('component.pre_authorisation_modal.telegram_login') }}
+						{{ translate('component.pre_authorisation_modal.telegram_login') }}
 					</div>
 					<div
 						ref="telegram"
-						:class="['modal-card__telegram-button', hiddenTGButtonClass]"
+						:class="'modal-card__telegram-button modal-card__telegram-button--hidden'"
 					/>
 				</div>
 			</div>
@@ -170,9 +164,10 @@ const hiddenTGButtonClass = ref('');
 
 	&__telegram-button {
 		z-index: 1;
-    &--hidden {
-      opacity: 0;
-    }
+		&--hidden {
+			// да, так надо
+			opacity: 0.0000001;
+		}
 	}
 
 	&__spinner {

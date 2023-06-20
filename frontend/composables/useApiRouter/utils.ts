@@ -1,5 +1,6 @@
 import type { UseFetchOptions } from 'nuxt/app';
 import { API_URL } from '~/constants/url';
+import type { ServerErrors } from '~/i18n/locales/ru';
 
 type ApiRouter = {
 	[K in string]: ApiRouter | ReturnType<typeof defineQuery> | ReturnType<typeof defineMutation>;
@@ -90,6 +91,9 @@ export function defineQuery<T extends ((data: any) => any) | void = void>(
 		: (_: any) => () => 'DO NOT USE ME WITHOUT A GENERIC'
 ) {
 	return {
+		/**
+		 * If query requires no arguments you need to provide an empty obejct
+		 */
 		useQuery: (
 			args: Datatify<typeof routeCallback> & {
 				opts?: Parameters<ReturnType<typeof routeCallback>>[0];
@@ -124,20 +128,14 @@ export function defineMutation<T extends ((data: any) => any) | void = void>(
 export function useBackendFetch<T>(
 	request: Parameters<typeof useFetch>[0],
 	opts: UseFetchOptions<T> = {},
-	{ auth, noDefaults }: { auth?: boolean; noDefaults?: boolean } = {}
+	modifiers: { auth?: boolean; noDefaults?: boolean } = {}
 ) {
-	if (noDefaults)
+	if (modifiers.noDefaults)
 		return (opts_: UseFetchOptions<T> = {}) => useFetch(request, Object.assign(opts, opts_));
 
 	opts.baseURL ??= API_URL;
-	opts.onRequestError ??= ({ response }) => {
-		console.error(response?._data);
-	};
-	opts.onResponseError ??= ({ response }) => {
-		console.error(response._data);
-	};
 
-	if (auth) {
+	if (modifiers.auth) {
 		const token = useCookie('token').value;
 		if (!token) {
 			throw new Error('You are not authorized');
@@ -150,5 +148,19 @@ export function useBackendFetch<T>(
 	if (opts.body) {
 		opts.method ??= 'POST';
 	}
-	return (opts_: UseFetchOptions<T> = {}) => useFetch(request, Object.assign(opts, opts_));
+	return async (opts_: UseFetchOptions<T> = {}) => {
+		const getData = () => useFetch(request, Object.assign(opts, opts_));
+		if (process.server) return await getData();
+
+		// logs an error on first invocation - works fine tho
+		const { translate } = useTranslation();
+		const { $errorToast } = useNuxtApp();
+		const data = await getData();
+		// todo - переделать эту проверку когда бэк уже стандартизирует вывод своих ошибок везде
+		if (data.error.value?.data?.message) {
+			const errorMessage: keyof typeof ServerErrors = data.error.value.data.message;
+			$errorToast(translate(`error.${errorMessage}`));
+		}
+		return data;
+	};
 }

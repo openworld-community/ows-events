@@ -12,19 +12,12 @@ import {
 } from './type';
 import { ITokenData } from '../../types';
 import { eventsValidator } from '../../../validators/event-validator';
+import { manualModerationController } from '../../../controllers/manual-moderation-controller';
 import { vars } from '../../../config/vars';
 import { EventModel } from '../../../models/event.model';
 
 export const addEvent: IAddEventHandler = async (request) => {
 	const { event } = request.body;
-	const validationResult = eventsValidator.validateEvent(request.body);
-	if (!validationResult.isValid) {
-		return {
-			type: 'error',
-			errors: validationResult.errors
-		};
-	}
-
 	if (vars.env !== 'dev') {
 		const token = request.headers.authorization;
 		if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
@@ -45,6 +38,12 @@ export const addEvent: IAddEventHandler = async (request) => {
 	if (isEventWithThisLinkExists) throw new Error(CommonErrorsEnum.EVENT_ALREADY_EXISTS);
 
 	const newPostId = await eventsStateController.addEvent(event);
+
+	const validationResult = eventsValidator.validateEvent({ event });
+	if (!validationResult.isValid) {
+		await manualModerationController.inProgress(newPostId, validationResult.errors);
+		throw new Error(validationResult.errors.join(','));
+	}
 
 	return {
 		type: 'success',

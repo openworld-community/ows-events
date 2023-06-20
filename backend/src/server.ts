@@ -16,6 +16,7 @@ import { userController } from './controllers/user-controller';
 import { connectToMongo } from './boot/connectToMongo';
 import { authApi } from './rest/v1/auth/router';
 import { ajvFilePlugin } from './config/ajvPlugins';
+import { manualModerationApi } from './rest/v1/moderation/router';
 
 const server = fastify({
 	logger: true,
@@ -46,7 +47,8 @@ fastify.default({
 });
 
 server.register(Static, {
-	root: path.join(__dirname, '../frontend/dist/')
+	root: path.join(__dirname, '../assets/'),
+	prefix: '/static/'
 });
 
 server.register(Static, {
@@ -56,6 +58,7 @@ server.register(Static, {
 });
 
 // eventsApi is a plugin
+server.register(manualModerationApi, { prefix: '/api/moderation' });
 server.register(authApi, { prefix: '/api/auth' });
 server.register(eventsApi, { prefix: '/api/events' });
 server.register(locationApi, { prefix: '/api/location' });

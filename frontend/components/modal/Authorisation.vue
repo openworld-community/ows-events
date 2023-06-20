@@ -29,7 +29,7 @@ const loadScript = () => {
   script.setAttribute('data-request-access', 'write');
 
   script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
-  script.addEventListener('load', () => setTimeout(() => hiddenTGButtonClass.value = 'modal-card__telegram-button--hidden', 300), {once: true});
+  script.addEventListener('load', () => setTimeout(() => hiddenTGButtonClass.value = 'modal-card__telegram-button--hidden', 200), {once: true});
   telegram.value?.appendChild(script);
 }
 

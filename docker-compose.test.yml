@@ -23,6 +23,7 @@ services:
                 - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
                 - VITE_TELEGRAM_AUTH_BOT_NAME
                 - VITE_MODE=production
+                - VITE_DOMAIN=poster-test-peredelano.orby-tech.space
         logging: *default-logging
         restart: always
         labels:

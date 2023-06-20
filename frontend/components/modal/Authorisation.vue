@@ -79,10 +79,7 @@ onMounted(() => {
 						/>
 						{{ $translate('component.pre_authorisation_modal.telegram_login') }}
 					</div>
-					<div
-						id="telegram"
-						class="modal-card__telegram-button"
-					/>
+					<div class="modal-card__telegram-button" />
 				</div>
 			</div>
 		</div>

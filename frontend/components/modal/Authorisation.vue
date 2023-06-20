@@ -18,7 +18,6 @@ const username =
 	null;
 
 const telegram = ref<HTMLElement | null>(null);
-const isHoveredTelegramButton = ref(false);
 onMounted(() => {
 	const script = document.createElement('script');
 	script.async = true;
@@ -73,12 +72,7 @@ onMounted(() => {
 					v-else
 					class="modal-card__login-button"
 				>
-					<div
-						:class="[
-							'modal-card__login-background',
-							{ 'modal-card__login-background--hovered': isHoveredTelegramButton }
-						]"
-					>
+					<div class="modal-card__login-background">
 						<CommonIcon
 							class="modal-card__icon"
 							name="telegram"
@@ -86,10 +80,8 @@ onMounted(() => {
 						{{ $translate('component.pre_authorisation_modal.telegram_login') }}
 					</div>
 					<div
-						ref="telegram"
+						id="telegram"
 						class="modal-card__telegram-button"
-						@mouseenter="isHoveredTelegramButton = true"
-						@mouseleave="isHoveredTelegramButton = false"
 					/>
 				</div>
 			</div>
@@ -133,6 +125,10 @@ onMounted(() => {
 		line-height: 0;
 		overflow: hidden;
 		cursor: pointer;
+
+		&:hover > .modal-card__login-background {
+			background-color: var(--color-accent-green-dark);
+		}
 	}
 
 	&__login-background {
@@ -145,10 +141,6 @@ onMounted(() => {
 		align-items: center;
 		color: var(--color-white);
 		transition: background-color 0.3s ease;
-
-		&--hovered {
-			background-color: var(--color-accent-green-dark);
-		}
 	}
 
 	&__icon {

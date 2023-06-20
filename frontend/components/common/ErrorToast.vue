@@ -18,12 +18,7 @@ defineProps<{ error: string }>();
 		/>
 	</div>
 </template>
-<!-- unscoped to apply styles to toast wrapper. CSS modules is scoped anyway -->
 <style lang="less" module>
-.Vue-Toastification__toast--default.errorToast {
-	padding: 0;
-	box-shadow: hsla(0, 0%, 0%, 0.4) 0 2px 3px, hsla(0, 0%, 0%, 0.25) 0 4px 8px 3px;
-}
 .content {
 	font-family: var(--font-family-main);
 	font-size: var(--font-size-XS);
@@ -43,5 +38,12 @@ defineProps<{ error: string }>();
 }
 .icon {
 	flex-shrink: 0;
+}
+</style>
+<!-- unscoped to apply styles to toast wrapper. -->
+<style>
+.Vue-Toastification__toast--default.errorToast {
+	padding: 0;
+	box-shadow: hsla(0, 0%, 0%, 0.4) 0 2px 3px, hsla(0, 0%, 0%, 0.25) 0 4px 8px 3px;
 }
 </style>

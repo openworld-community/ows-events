@@ -21,7 +21,7 @@ export default defineNuxtConfig({
 	//https://github.com/nuxt-modules/plausible#module-options
 	plausible: {
 		domain: 'poster-peredelano.orby-tech.space',
-		apiHost: 'http://metrics.orby-tech.space/js/script.js'
+		apiHost: 'https://metrics.orby-tech.space/js/script.js'
 	},
 	typescript: { strict: true },
 	vite: {

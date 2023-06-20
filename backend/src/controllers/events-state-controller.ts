@@ -34,7 +34,15 @@ class EventsStateController {
 			queryObject['location.city'] = query?.city;
 		}
 
-		const events = await EventModel.find(queryObject);
+		queryObject.date = { $gte: Date.now() + 1000 * 60 * 60 * 24 };
+
+		const events = await EventModel.find(queryObject, {}, {
+			sort: {
+				date: 1
+			},
+			
+		});
+
 		return events;
 	}
 

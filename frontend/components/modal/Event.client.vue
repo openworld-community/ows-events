@@ -39,7 +39,7 @@ const inputValues = ref({
 	country: (props.dataForEdit?.location.country ?? 'Serbia') satisfies Country, // Временно фиксируем страну для добавления события
 	city: (props.dataForEdit?.location.city ?? '') satisfies City,
 	image: props.dataForEdit?.image ?? '',
-	price: props.dataForEdit?.price ?? '0',
+	price: props.dataForEdit?.price ?? '',
 	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
 	url: props.dataForEdit?.url ?? ''
 });
@@ -58,6 +58,8 @@ watch([() => inputValues.value.country, () => inputValues.value.city], async ([c
 const checkFormFilling = computed(() => {
 	return !!(
 		inputValues.value.title &&
+		inputValues.value.description &&
+		inputValues.value.price &&
 		inputValues.value.url &&
 		inputValues.value.startDate &&
 		inputValues.value.startTime &&
@@ -276,6 +278,7 @@ const isTimezoneDisabled = computed(() => {
 							:placeholder="
 								$translate('component.new_event_modal.fields.price_placeholder')
 							"
+							required
 						/>
 						<!--						<CommonUiBaseSelect-->
 						<!--								:key="inputValues.currency"-->

@@ -33,7 +33,7 @@ onMounted(() => {
 });
 
 const hiddenTGButtonClass = ref('');
-setTimeout(() => hiddenTGButtonClass.value = 'modal-card__telegram-button--hidden');
+setTimeout(() => hiddenTGButtonClass.value = 'modal-card__telegram-button--hidden', 300);
 </script>
 
 <template>

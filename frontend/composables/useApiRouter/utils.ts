@@ -5,6 +5,7 @@ import type { ServerErrors } from '~/i18n/locales/ru';
 type ApiRouter = {
 	[K in string]: ApiRouter | ReturnType<typeof defineQuery> | ReturnType<typeof defineMutation>;
 };
+
 export function defineRouter<T extends ApiRouter>(router: T) {
 	return router;
 }
@@ -74,6 +75,7 @@ type Mutify<
 	: P & undefined extends never
 	? (data: P) => Fetchify<R>
 	: (data?: P) => Fetchify<R>;
+
 /**
  * Specify a function and the wrapper will transform its type
  * to conform with the expected shape of a query.

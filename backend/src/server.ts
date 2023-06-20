@@ -2,20 +2,26 @@ import fastify from 'fastify';
 import cors from '@fastify/cors';
 import path from 'path';
 import Static from '@fastify/static';
-import Multipart from '@fastify/multipart';
 
+import fastifySwagger from '@fastify/swagger';
+import fastifySwaggerUi from '@fastify/swagger-ui';
 import { eventsApi } from './rest/v1/events/router';
 import { imageApi } from './rest/v1/image/router';
 import { locationApi } from './rest/v1/location/router';
 import { paymentInfoApi } from './rest/v1/payment-info/router';
 import { registrationApi } from './rest/v1/registration/router';
 import { timezonesApi } from './rest/v1/timezones/router';
+import { openApiOptions, openApiUiOptions } from './docs';
 import { userController } from './controllers/user-controller';
 import { connectToMongo } from './boot/connectToMongo';
 import { authApi } from './rest/v1/auth/router';
+import { ajvFilePlugin } from './config/ajvPlugins';
 
 const server = fastify({
-	logger: true
+	logger: true,
+	ajv: {
+		plugins: [ajvFilePlugin]
+	}
 });
 
 connectToMongo()
@@ -30,9 +36,10 @@ connectToMongo()
 		console.error(e);
 	});
 
-server.register(cors, {});
+server.register(fastifySwagger, openApiOptions);
+server.register(fastifySwaggerUi, openApiUiOptions);
 
-server.register(Multipart);
+server.register(cors, {});
 
 fastify.default({
 	maxParamLength: 1000

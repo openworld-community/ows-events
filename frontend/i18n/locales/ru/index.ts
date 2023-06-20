@@ -1,5 +1,5 @@
 import { defineTranslation } from '..';
-import { type ErrorCodes } from '@/../common/types/client-errors';
+import { type ErrorCodes } from '@/../common/const';
 
 export const ServerErrors: {
 	[key in ErrorCodes]: string;
@@ -24,7 +24,20 @@ export const ServerErrors: {
 	URL_IS_TOO_LONG: 'Ссылка на мероприятие слишком длинная',
 	TITLE_IS_NOT_CLEAN: 'В заголовоке ненормативная лексика',
 	DESCRIPTION_IS_NOT_CLEAN: 'В описании ненормативная лексика',
-	NOT_FOUND: 'Мероприятие не найдено'
+	'event-not-found': 'Мероприятие не найдено',
+	'image-addition-error': 'Ошибка при добавлении изображения',
+	'image-deletion-error': 'Ошибка при удалении изображения',
+	'image-encoding-problem': 'Ошибка формата изображения',
+	'image-too-large': 'Файл изображения слишком большой',
+	'no-image-to-add': 'Файл изображения не найден',
+	'no-image-to-delete': 'Файл изображения не найден',
+	'paymant-info-file-parse-error': 'Ошибка при ',
+	'payment-info-file-not-exist': 'Метод оплаты не задан',
+	'payment-info-not-found': 'Метод оплаты не найден',
+	'unknown-image-route-error': 'Непредвиденная ошибка при обработке изображения',
+	'wrong-token': 'Ваш токен авторизации поврежден',
+	forbidden: 'Ошибка допуска',
+	unauthorized: 'У вас нет доступа к данному ресурсу'
 };
 
 export const defaultTranslation = {

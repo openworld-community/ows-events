@@ -6,7 +6,6 @@ import 'virtual:svg-icons-register';
 import { ModalsContainer } from 'vue-final-modal';
 import { isDevelopmentMode } from './constants/common';
 
-
 const { translate } = useTranslation();
 useHead({
 	//TODO доработать метаданные
@@ -16,7 +15,7 @@ useHead({
 
 if (isDevelopmentMode) {
 	const tokenCookie = useCookie<string>('token');
-	tokenCookie.value = 'blablabla';
+	tokenCookie.value ??= 'blablabla';
 }
 </script>
 <template>

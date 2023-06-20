@@ -13,7 +13,6 @@ import {
 import { ITokenData } from '../../types';
 import { eventsValidator } from '../../../validators/event-validator';
 import { vars } from '../../../config/vars';
-import { EventModel } from '../../../models/event.model';
 
 export const addEvent: IAddEventHandler = async (request) => {
 	const { event } = request.body;
@@ -36,13 +35,6 @@ export const addEvent: IAddEventHandler = async (request) => {
 	} else {
 		event.creatorId = 'dev-user';
 	}
-
-	const eventWithThisLink = await EventModel.findOne({
-		url: event.url,
-		date: { $gt: Date.now() }
-	});
-	const isEventWithThisLinkExists = !!eventWithThisLink;
-	if (isEventWithThisLinkExists) throw new Error(CommonErrorsEnum.EVENT_ALREADY_EXISTS);
 
 	const newPostId = await eventsStateController.addEvent(event);
 

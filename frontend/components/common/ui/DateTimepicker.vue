@@ -3,7 +3,7 @@ import VueDatePicker, { type DatePickerInstance } from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import dayjs from 'dayjs';
 import type { PropType } from 'vue';
-import type {Time} from "../../../utils/dates";
+import type { Time } from '../../../utils/dates';
 
 const props = defineProps({
 	className: {
@@ -55,7 +55,6 @@ const datepicker = ref<DatePickerInstance>(null);
 const handleDate = (modelData: Date) => {
 	isDateType.value && datepicker.value?.closeMenu();
 	emit('update:model-value', modelData);
-	console.log(modelData);
 };
 
 const dateFormat = (date: Date) => {

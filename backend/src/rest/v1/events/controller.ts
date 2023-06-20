@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { EventOnPoster } from '@common/types';
+import { CommonErrorsEnum } from '../../../../../common/const';
 import { eventsStateController } from '../../../controllers/events-state-controller';
 import {
 	IAddEventHandler,
@@ -11,31 +12,11 @@ import {
 } from './type';
 import { ITokenData } from '../../types';
 import { eventsValidator } from '../../../validators/event-validator';
+import { vars } from '../../../config/vars';
 
-export const addEvent: IAddEventHandler = async (request, reply) => {
-	const token = request.headers.authorization;
-	if (!token) {
-		return reply.status(401).send({
-			type: 'error'
-		});
-	}
-
-	const jwtData = jwt.verify(token, 'secret') as ITokenData;
-	if (!jwtData.id) {
-		return reply.status(401).send({
-			type: 'error'
-		});
-	}
-
-	const body = request.body as { event: EventOnPoster | undefined };
-	if (!body) {
-		return {
-			type: 'error'
-		};
-	}
-
-	const validationResult = eventsValidator.validateEvent(body);
-
+export const addEvent: IAddEventHandler = async (request) => {
+	const { event } = request.body;
+	const validationResult = eventsValidator.validateEvent(request.body);
 	if (!validationResult.isValid) {
 		return {
 			type: 'error',
@@ -43,14 +24,18 @@ export const addEvent: IAddEventHandler = async (request, reply) => {
 		};
 	}
 
-	const { event } = body;
-	if (!event) {
-		return {
-			type: 'error'
-		};
+	if (vars.env !== 'dev') {
+		const token = request.headers.authorization;
+		if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
+
+		const jwtData = jwt.verify(token, 'secret') as ITokenData;
+		if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+
+		event.creatorId = jwtData.id;
+	} else {
+		event.creatorId = 'dev-user';
 	}
 
-	event.creatorId = jwtData.id;
 	const newPostId = await eventsStateController.addEvent(event);
 
 	return {
@@ -65,39 +50,25 @@ export const getEvents: IGetEventsHandler = async (): Promise<EventOnPoster[]> =
 export const getEvent: IGetEventHandler = async (request) => {
 	const eventId = request.params.id;
 	const event = await eventsStateController.getEvent(eventId);
-	if (!event) {
-		return {
-			type: 'error',
-			errors: ['Event not found']
-		};
-	}
+	if (!event) throw new Error(CommonErrorsEnum.EVENT_NOT_FOUND);
+
 	return {
 		type: 'success',
 		data: event
 	};
 };
 
-export const deleteEvent: IDeleteEventHandler = async (request, reply) => {
-	const token = request.headers.authorization;
-	if (!token) {
-		return reply.status(401).send({
-			type: 'error',
-			errors: ['No token']
-		});
-	}
+export const deleteEvent: IDeleteEventHandler = async (request) => {
+	if (vars.env !== 'dev') {
+		const token = request.headers.authorization;
+		if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const jwtData = jwt.verify(token, 'secret') as ITokenData;
-	if (!jwtData.id) {
-		return reply.status(401).send({
-			type: 'error',
-			errors: ['Wrong token']
-		});
-	}
-	const oldEvent = await eventsStateController.getEvent(request.body.id);
-	if (oldEvent?.creatorId !== String(jwtData.id)) {
-		return reply.status(403).send({
-			type: 'error'
-		});
+		const jwtData = jwt.verify(token, 'secret') as ITokenData;
+		if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+
+		const oldEvent = await eventsStateController.getEvent(request.body.id);
+		const isAuthor = oldEvent?.creatorId === String(jwtData.id);
+		if (!isAuthor) throw new Error(CommonErrorsEnum.FORBIDDEN);
 	}
 
 	await eventsStateController.deleteEvent(request.body.id);
@@ -107,44 +78,20 @@ export const deleteEvent: IDeleteEventHandler = async (request, reply) => {
 	};
 };
 
-export const updateEvent: IUpdateEventHandler = async (request, reply) => {
-	const token = request.headers.authorization;
-	if (!token) {
-		return reply.status(401).send({
-			type: 'error'
-		});
+export const updateEvent: IUpdateEventHandler = async (request) => {
+	if (vars.env !== 'dev') {
+		const token = request.headers.authorization;
+		if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
+
+		const jwtData = jwt.verify(token, 'secret') as ITokenData;
+		if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+
+		const oldEvent = await eventsStateController.getEvent(request.body.event.id);
+		const isAuthor = oldEvent?.creatorId === String(jwtData.id);
+		if (!isAuthor) throw new Error(CommonErrorsEnum.FORBIDDEN);
 	}
 
-	const jwtData = jwt.verify(token, 'secret') as ITokenData;
-	if (!jwtData.id) {
-		return reply.status(401).send({
-			type: 'error'
-		});
-	}
-
-	const oldEvent = await eventsStateController.getEvent(request.body.event.id);
-
-	if (oldEvent?.creatorId !== String(jwtData.id)) {
-		return reply.status(403).send({
-			type: 'error'
-		});
-	}
-
-	const body = request.body as { event: EventOnPoster | undefined };
-	if (!body) {
-		return {
-			type: 'error'
-		};
-	}
-
-	const { event } = body;
-	if (!event) {
-		return {
-			type: 'error'
-		};
-	}
-
-	await eventsStateController.updateEvent(event);
+	await eventsStateController.updateEvent(request.body.event);
 	return {
 		type: 'success',
 		data: undefined

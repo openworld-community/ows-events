@@ -2,7 +2,7 @@
 import { getAllTimezones, getTimezone } from '@/services/timezone.services';
 import { useLocationStore, type Country, type City } from '@/stores/location.store';
 import { type EventOnPoster } from '@/../common/types';
-import { EventValidatorErrorTypes } from '@/../common/types/event-validation-error';
+import { EventValidatorErrorTypes } from '@/../common/const';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
 
 const { $i18n } = useNuxtApp();
@@ -36,7 +36,7 @@ const inputValues = ref({
 	endTime: getTimeFromEpochInMs(
 		(props.dataForEdit?.date ?? 0) + (props.dataForEdit?.durationInSeconds ?? 0) * 1000
 	),
-	country: (props.dataForEdit?.location.country ?? '') satisfies Country,
+	country: (props.dataForEdit?.location.country ?? 'Serbia') satisfies Country, // Временно фиксируем страну для добавления события
 	city: (props.dataForEdit?.location.city ?? '') satisfies City,
 	image: props.dataForEdit?.image ?? '',
 	price: props.dataForEdit?.price ?? '0',
@@ -177,6 +177,7 @@ const isTimezoneDisabled = computed(() => {
 							name="country"
 							:placeholder="$translate('global.country')"
 							:list="locationStore.countries"
+							:disabled="true"
 							required
 						/>
 
@@ -272,7 +273,9 @@ const isTimezoneDisabled = computed(() => {
 							v-model="inputValues.price"
 							name="price"
 							type="text"
-							:placeholder="$translate('component.new_event_modal.fields.price_placeholder')"
+							:placeholder="
+								$translate('component.new_event_modal.fields.price_placeholder')
+							"
 						/>
 						<!--						<CommonUiBaseSelect-->
 						<!--								:key="inputValues.currency"-->
@@ -292,7 +295,9 @@ const isTimezoneDisabled = computed(() => {
 						<CommonUiBaseInput
 							v-model="inputValues.url"
 							name="url"
-							:placeholder="$translate('component.new_event_modal.fields.url_placeholder')"
+							:placeholder="
+								$translate('component.new_event_modal.fields.url_placeholder')
+							"
 							required
 						/>
 					</template>

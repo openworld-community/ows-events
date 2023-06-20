@@ -20,7 +20,7 @@ const username =
 
 const telegram = ref<HTMLElement | null>(null);
 
-onMounted(() => {
+const loadScript = () => {
 	const script = document.createElement('script');
 	script.src = 'https://telegram.org/js/telegram-widget.js?22';
 
@@ -30,7 +30,20 @@ onMounted(() => {
 	script.setAttribute('data-request-access', 'write');
 
 	script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
+	script.addEventListener(
+		'load',
+		() =>
+			setTimeout(
+				() => (hiddenTGButtonClass.value = 'modal-card__telegram-button--hidden'),
+				200
+			),
+		{ once: true }
+	);
 	telegram.value?.appendChild(script);
+};
+
+onMounted(async () => {
+	await loadScript();
 });
 </script>
 
@@ -82,7 +95,7 @@ onMounted(() => {
 					</div>
 					<div
 						ref="telegram"
-						:class="'modal-card__telegram-button modal-card__telegram-button--hidden'"
+						:class="'modal-card__telegram-button'"
 					/>
 				</div>
 			</div>
@@ -165,8 +178,7 @@ onMounted(() => {
 	&__telegram-button {
 		z-index: 1;
 		&--hidden {
-			// да, так надо
-			opacity: 0.0000001;
+			opacity: 0;
 		}
 	}
 

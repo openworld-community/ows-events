@@ -9,6 +9,7 @@ type Props = {
 	deauthorize: () => void;
 };
 
+const { translate } = useTranslation();
 const props = defineProps<Props>();
 const userCookie = useCookie<UserInfo | null>('user');
 
@@ -51,7 +52,7 @@ onMounted(() => {
 					{{
 						isAuthorized
 							? username
-							: $translate('component.pre_authorisation_modal.title')
+							: translate('component.pre_authorisation_modal.title')
 					}}
 				</p>
 			</div>
@@ -59,13 +60,13 @@ onMounted(() => {
 				<CommonButton
 					class="modal-card__cancel-button"
 					button-kind="ordinary"
-					:button-text="$translate('component.pre_authorisation_modal.button.cancel')"
+					:button-text="translate('component.pre_authorisation_modal.button.cancel')"
 					@click="props.close()"
 				/>
 				<CommonButton
 					v-if="isAuthorized"
 					button-kind="success"
-					:button-text="$translate('component.pre_authorisation_modal.button.logout')"
+					:button-text="translate('component.pre_authorisation_modal.button.logout')"
 					class="modal-card__logout-button"
 					@click="props.deauthorize()"
 				/>
@@ -77,7 +78,7 @@ onMounted(() => {
 						<LoadSpinner class="modal-card__spinner" />
 					</div>
 					<div
-            ref="telegram"
+						ref="telegram"
 						class="modal-card__telegram-button"
 					/>
 				</div>

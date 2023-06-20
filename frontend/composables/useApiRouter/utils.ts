@@ -1,5 +1,6 @@
 import type { UseFetchOptions } from 'nuxt/app';
 import { API_URL } from '~/constants/url';
+import type { ServerErrors } from '~/i18n/locales/ru';
 
 type ApiRouter = {
 	[K in string]: ApiRouter | ReturnType<typeof defineQuery> | ReturnType<typeof defineMutation>;
@@ -88,6 +89,9 @@ export function defineQuery<T extends ((data: any) => any) | void = void>(
 		: (_: any) => () => 'DO NOT USE ME WITHOUT A GENERIC'
 ) {
 	return {
+		/**
+		 * If query requires no arguments you need to provide an empty obejct
+		 */
 		useQuery: (
 			args: Datatify<typeof routeCallback> & {
 				opts?: Parameters<ReturnType<typeof routeCallback>>[0];
@@ -122,20 +126,14 @@ export function defineMutation<T extends ((data: any) => any) | void = void>(
 export function useBackendFetch<T>(
 	request: Parameters<typeof useFetch>[0],
 	opts: UseFetchOptions<T> = {},
-	{ auth, noDefaults }: { auth?: boolean; noDefaults?: boolean } = {}
+	modifiers: { auth?: boolean; noDefaults?: boolean } = {}
 ) {
-	if (noDefaults)
+	if (modifiers.noDefaults)
 		return (opts_: UseFetchOptions<T> = {}) => useFetch(request, Object.assign(opts, opts_));
 
 	opts.baseURL ??= API_URL;
-	opts.onRequestError ??= ({ error }) => {
-		console.error(error);
-	};
-	opts.onResponseError ??= ({ error }) => {
-		console.error(error);
-	};
 
-	if (auth) {
+	if (modifiers.auth) {
 		const token = useCookie('token').value;
 		if (!token) {
 			throw new Error('You are not authorized');
@@ -148,5 +146,17 @@ export function useBackendFetch<T>(
 	if (opts.body) {
 		opts.method ??= 'POST';
 	}
-	return (opts_: UseFetchOptions<T> = {}) => useFetch(request, Object.assign(opts, opts_));
+	return async (opts_: UseFetchOptions<T> = {}) => {
+		// logs an error on first invocation - works fine tho
+		const { translate } = useTranslation();
+		const { $errorToast } = useNuxtApp();
+		const data = await useFetch(request, Object.assign(opts, opts_));
+		if (data.error.value) {
+			const errorMessages: (keyof typeof ServerErrors)[] = data.error.value?.data.errors;
+			errorMessages.forEach((error) => {
+				$errorToast(translate(`error.${error}`));
+			});
+		}
+		return data;
+	};
 }

@@ -1,5 +1,5 @@
 import { type EventOnPoster, type PostEventPayload } from '@common/types/event';
-import { EventValidatorErrorTypes } from '../../../common/types/event-validation-error';
+import { EventValidatorErrorTypes } from '../../../common/types/client-errors';
 
 type ValidateInput = PostEventPayload | { event: EventOnPoster | undefined };
 

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { UserInfo } from '../../../common/types/user';
-
 import { useModal } from 'vue-final-modal';
 import { ModalAuthorisation } from '#components';
 
+const { translate } = useTranslation();
 const tokenCookie = useCookie<string | null>('token');
 
 const isAuthorized = computed(() => !!tokenCookie.value);
@@ -36,8 +36,8 @@ updateModalData();
 		:button-kind="isAuthorized ? 'success' : 'ordinary'"
 		:alt="
 			isAuthorized
-				? $translate('component.header.authorization.deauthorize')
-				: $translate('component.header.authorization.authorize')
+				? translate('component.header.authorization.deauthorize')
+				: translate('component.header.authorization.authorize')
 		"
 		@click="openAuthModal"
 	/>

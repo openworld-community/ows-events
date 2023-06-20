@@ -1,8 +1,8 @@
 import { defineTranslation } from '..';
-import { EventValidatorErrorTypes } from '../../../../common/types/event-validation-error';
+import { type ErrorCodes } from '@/../common/types/client-errors';
 
-const EventValidatorErrors: {
-	[key in EventValidatorErrorTypes]: string;
+export const ServerErrors: {
+	[key in ErrorCodes]: string;
 } = {
 	EVENT_IS_NOT_DEFINED: 'Мероприятие не определено',
 	TITLE_IS_NOT_DEFINED: 'Заголовок не определен',
@@ -22,8 +22,9 @@ const EventValidatorErrors: {
 	URL_IS_NOT_DEFINED: 'Ссылка на мероприятие не определена',
 	URL_IS_TOO_SHORT: 'Ссылка на мероприятие слишком короткая',
 	URL_IS_TOO_LONG: 'Ссылка на мероприятие слишком длинная',
-  TITLE_IS_NOT_CLEAN: 'В заголовоке ненормативная лексика',
-  DESCRIPTION_IS_NOT_CLEAN: 'В описании ненормативная лексика'
+	TITLE_IS_NOT_CLEAN: 'В заголовоке ненормативная лексика',
+	DESCRIPTION_IS_NOT_CLEAN: 'В описании ненормативная лексика',
+	NOT_FOUND: 'Мероприятие не найдено'
 };
 
 export const defaultTranslation = {
@@ -92,8 +93,7 @@ export const defaultTranslation = {
 		price: {
 			free: 'Бесплатно',
 			not_found: 'Цена не указана'
-		},
-		validation_errors: EventValidatorErrors
+		}
 	},
 	component: {
 		user_location: {
@@ -168,7 +168,8 @@ export const defaultTranslation = {
 	},
 	header: {
 		subscription_expired: '$t(dates.day.key) до конца подписки'
-	}
+	},
+	error: ServerErrors
 };
 
 export default defineTranslation(defaultTranslation);

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '@/constants/enums/route';
 
+const { translate } = useTranslation();
 const route = useRoute();
 
 const scrollToTop = () => {
@@ -12,11 +13,12 @@ const scrollToTop = () => {
 	<header class="header">
 		<div class="header__container">
 			<div class="header__left">
+				<HeaderLanguageSelector />
 				<NuxtLink
 					v-if="route.name === RouteNameEnum.HOME"
 					:to="{ name: RouteNameEnum.HOME }"
 					class="header__navigation-link"
-					:aria-label="$translate('home.button.afisha_logo_aria')"
+					:aria-label="translate('home.button.afisha_logo_aria')"
 					@click.prevent="scrollToTop"
 				>
 					<CommonIcon
@@ -32,7 +34,7 @@ const scrollToTop = () => {
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"
-					:alt="$translate('global.button.back')"
+					:alt="translate('global.button.back')"
 				/>
 			</div>
 

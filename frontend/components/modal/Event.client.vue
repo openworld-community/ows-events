@@ -2,11 +2,9 @@
 import { getAllTimezones, getTimezone } from '@/services/timezone.services';
 import { useLocationStore, type Country, type City } from '@/stores/location.store';
 import { type EventOnPoster } from '@/../common/types';
-import { EventValidatorErrorTypes } from '@/../common/types/event-validation-error';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
 
-const { $i18n } = useNuxtApp();
-const t = $i18n.t.bind($i18n);
+const { translate } = useTranslation();
 
 type Props = {
 	closeEventModal: () => void;
@@ -124,12 +122,6 @@ const submitEvent = async () => {
 		if (data.value?.type === 'success') {
 			await navigateTo(`/event/${data.value.data.id}`);
 		} else {
-			alert(
-				'Ошибка при добавлении события:\n' +
-					data.value?.errors
-						?.map((e) => t(`event.validation_errors.${e as EventValidatorErrorTypes}`))
-						.join('\n')
-			);
 			isLoading.value = false;
 			return;
 		}
@@ -160,7 +152,7 @@ const isTimezoneDisabled = computed(() => {
 		<div class="modal-card">
 			<header class="modal-card__head">
 				<h2 class="modal-card__title">
-					{{ $translate('component.new_event_modal.title') }}
+					{{ translate('component.new_event_modal.title') }}
 				</h2>
 			</header>
 
@@ -169,13 +161,13 @@ const isTimezoneDisabled = computed(() => {
 				@submit.prevent="() => void 0"
 			>
 				<ModalUiModalSection
-					:label="$translate('component.new_event_modal.fields.location')"
+					:label="translate('component.new_event_modal.fields.location')"
 				>
 					<template #child>
 						<CommonUiBaseSelect
 							v-model="inputValues.country"
 							name="country"
-							:placeholder="$translate('global.country')"
+							:placeholder="translate('global.country')"
 							:list="locationStore.countries"
 							:disabled="true"
 							required
@@ -185,7 +177,7 @@ const isTimezoneDisabled = computed(() => {
 							v-model="inputValues.city"
 							name="city"
 							:disabled="isCityDisabled"
-							:placeholder="$translate('global.city')"
+							:placeholder="translate('global.city')"
 							:list="locationStore.getCitiesByCountry(inputValues.country) ?? []"
 							required
 						/>
@@ -194,7 +186,7 @@ const isTimezoneDisabled = computed(() => {
 							v-model="inputValues.timezone"
 							name="timezone"
 							:disabled="isTimezoneDisabled"
-							:placeholder="$translate('global.timezone')"
+							:placeholder="translate('global.timezone')"
 							:list="allTimezones"
 							required
 						/>
@@ -202,20 +194,20 @@ const isTimezoneDisabled = computed(() => {
 				</ModalUiModalSection>
 
 				<ModalUiModalSection
-					:label="$translate('component.new_event_modal.fields.main_info')"
+					:label="translate('component.new_event_modal.fields.main_info')"
 				>
 					<template #child>
 						<CommonUiBaseInput
 							v-model="inputValues.title"
 							name="title"
-							:placeholder="$translate('component.new_event_modal.fields.title')"
+							:placeholder="translate('component.new_event_modal.fields.title')"
 							required
 						/>
 						<CommonUiTextArea
 							v-model="inputValues.description"
 							name="description"
 							:placeholder="
-								$translate('component.new_event_modal.fields.description')
+								translate('component.new_event_modal.fields.description')
 							"
 							required
 						/>
@@ -224,7 +216,7 @@ const isTimezoneDisabled = computed(() => {
 
 				<ModalUiModalSection
 					type="row"
-					:label="$translate('component.new_event_modal.fields.start')"
+					:label="translate('component.new_event_modal.fields.start')"
 				>
 					<template #child>
 						<CommonUiDateTimepicker
@@ -247,7 +239,7 @@ const isTimezoneDisabled = computed(() => {
 
 				<ModalUiModalSection
 					type="row"
-					:label="$translate('component.new_event_modal.fields.end')"
+					:label="translate('component.new_event_modal.fields.end')"
 				>
 					<template #child>
 						<CommonUiDateTimepicker
@@ -267,33 +259,37 @@ const isTimezoneDisabled = computed(() => {
 					</template>
 				</ModalUiModalSection>
 
-				<ModalUiModalSection :label="$translate('component.new_event_modal.fields.price')">
+				<ModalUiModalSection :label="translate('component.new_event_modal.fields.price')">
 					<template #child>
 						<CommonUiBaseInput
 							v-model="inputValues.price"
 							name="price"
 							type="text"
-							:placeholder="$translate('component.new_event_modal.fields.price_placeholder')"
+							:placeholder="
+								translate('component.new_event_modal.fields.price_placeholder')
+							"
 						/>
 						<!--						<CommonUiBaseSelect-->
 						<!--								:key="inputValues.currency"-->
 						<!--								v-model="inputValues.currency"-->
 						<!--								:input-disabled="!inputValues.currency"-->
 						<!--								name="current"-->
-						<!--								:placeholder="$translate('global.city')"-->
+						<!--								:placeholder="translate('global.city')"-->
 						<!--								:list="cities"-->
 						<!--						/>-->
 					</template>
 				</ModalUiModalSection>
 
 				<ModalUiModalSection
-					:label="$translate('component.new_event_modal.fields.url_to_rigistration')"
+					:label="translate('component.new_event_modal.fields.url_to_rigistration')"
 				>
 					<template #child>
 						<CommonUiBaseInput
 							v-model="inputValues.url"
 							name="url"
-							:placeholder="$translate('component.new_event_modal.fields.url_placeholder')"
+							:placeholder="
+								translate('component.new_event_modal.fields.url_placeholder')
+							"
 							required
 						/>
 					</template>
@@ -308,14 +304,14 @@ const isTimezoneDisabled = computed(() => {
 				<CommonButton
 					class="modal-card__button"
 					button-kind="ordinary"
-					:button-text="$translate('component.new_event_modal.cancel')"
+					:button-text="translate('component.new_event_modal.cancel')"
 					:is-active="!isLoading"
 					@click="closeModal()"
 				/>
 				<CommonButton
 					class="modal-card__button"
 					button-kind="success"
-					:button-text="$translate('component.new_event_modal.submit')"
+					:button-text="translate('component.new_event_modal.submit')"
 					:is-loading="isLoading"
 					:is-disabled="!checkFormFilling || isLoading"
 					@click="isLoading ? null : submitEvent()"

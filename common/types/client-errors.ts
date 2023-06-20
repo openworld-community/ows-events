@@ -1,3 +1,5 @@
+export type ErrorCodes = EventValidatorErrorTypes | EventErrors;
+
 export enum EventValidatorErrorTypes {
 	EVENT_IS_NOT_DEFINED = 'EVENT_IS_NOT_DEFINED',
 	TITLE_IS_NOT_DEFINED = 'TITLE_IS_NOT_DEFINED',
@@ -19,4 +21,8 @@ export enum EventValidatorErrorTypes {
 	URL_IS_TOO_LONG = 'URL_IS_TOO_LONG',
 	TITLE_IS_NOT_CLEAN = 'TITLE_IS_NOT_CLEAN',
 	DESCRIPTION_IS_NOT_CLEAN = 'DESCRIPTION_IS_NOT_CLEAN'
+}
+
+export enum EventErrors {
+	NOT_FOUND = 'NOT_FOUND'
 }

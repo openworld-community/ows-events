@@ -1,4 +1,3 @@
-x
 <script setup lang="ts">
 import { RouteNameEnum } from '@/constants/enums/route';
 import { SUPPORT_TG_URL } from '../../../constants/url';

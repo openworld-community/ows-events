@@ -153,6 +153,7 @@ export function useBackendFetch<T>(
 		if (process.server) return await getData();
 
 		// logs an error on first invocation - works fine tho
+		// todo - fix error i18n
 		// const { translate } = useTranslation();
 		const { $errorToast } = useNuxtApp();
 		const data = await getData();

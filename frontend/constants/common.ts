@@ -1,0 +1,1 @@
+export const isDevelopmentMode = import.meta.env.VITE_MODE === 'development' || process.env.VITE_MODE === 'development'

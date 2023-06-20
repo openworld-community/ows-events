@@ -1,6 +1,5 @@
-import axios from 'axios';
-import { UserDbEntity } from '@common/types/user';
-import { vars } from '../config/vars';
+import { TGUser } from '@common/types/user';
+import jwt from 'jsonwebtoken';
 import { UserModel } from '../models/user.model';
 
 export type FindEventParams = {
@@ -10,38 +9,32 @@ export type FindEventParams = {
 };
 
 class UserController {
-	async getUserFromAuthService(id: string) {
-		const response = await axios.get<UserDbEntity>(`${vars.auth_server_url}/user/${id}`);
-		if (!response.data) {
-			throw new Error('No data');
-		}
-		if (!response.data.token) {
-			throw new Error('No token');
-		}
-
+	async addTGUser(user: TGUser) {
+		const newToken = jwt.sign(
+			{
+				id: user.id,
+				username: user.username
+			},
+			'secret'
+		);
 		await UserModel.findOneAndUpdate(
-			{ id: response.data.id },
-			{ $set: { ...response.data } },
+			{ id: user.id },
+			{ $set: { ...user, token: newToken } },
 			{ upsert: true, new: true }
 		);
-
-		return response.data.token;
+		return newToken;
 	}
 
 	async getUserInfoByToken(token: string) {
-		const userEntity = await UserModel.findOne({ token });
+		const userEntity = await UserModel.findOne({ token }, { token: 0, auth_date: 0 });
 		if (!userEntity) return "User doesn't exists";
 
-		return {
-			firstNickName: userEntity.firstNickName,
-			lastNickName: userEntity.lastNickName,
-			userNickName: userEntity.userNickName,
-			id: userEntity.id
-		};
+		return userEntity;
 	}
 
 	async getUserById(tgId: string) {
 		const userEntity = await UserModel.findOne({ id: tgId }, { _id: 1 });
+		if (!userEntity) return "User doesn't exists";
 
 		return userEntity;
 	}

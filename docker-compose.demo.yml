@@ -21,8 +21,9 @@ services:
                 - VITE_API_URL=https://api.poster-demo-peredelano.orby-tech.space/api
                 - VITE_BASE_URL=https://api.poster-demo-peredelano.orby-tech.space
                 - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
-                - VITE_AUTH_SERVER_URL=https://auth.poster-demo-peredelano.orby-tech.space
-                - VITE_POSTAUTH_URL=https://poster-demo-peredelano.orby-tech.space
+                - VITE_TELEGRAM_AUTH_BOT_NAME
+                - VITE_MODE=production
+                - VITE_DOMAIN=poster-demo-peredelano.orby-tech.space
         logging: *default-logging
         restart: always
         labels:
@@ -38,29 +39,6 @@ services:
             - traefikpublic
         ports:
             - '3001:3000'
-
-    auth:
-        build:
-            context: .
-            dockerfile: ./auth-bot/Dockerfile
-        logging: *default-logging
-        restart: always
-        environment:
-            - AUTH_TELEGRAM_BOT_TOKEN
-            - AUTH_TELEGRAM_BOT_NAME
-        labels:
-            - 'traefik.enable=true'
-            - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
-            - 'traefik.http.routers.demo_auth_https.rule=Host(`auth.poster-demo-peredelano.orby-tech.space`)'
-            - 'traefik.http.routers.demo_auth_https.middlewares=sslheader@docker'
-            - 'traefik.http.routers.demo_auth_https.entrypoints=http, https'
-            - 'traefik.http.routers.demo_auth_https.tls.certresolver=myresolver'
-            - 'traefik.http.routers.demo_auth_http.rule=Host(`auth.poster-demo-peredelano.orby-tech.space`)'
-            - 'traefik.http.routers.demo_auth_http.entrypoints=http'
-        networks:
-            - traefikpublic
-        ports:
-            - '7091:7090'
 
     backend:
         build:
@@ -82,9 +60,9 @@ services:
             - 'traefik.http.routers.demo_backend_http.rule=Host(`api.poster-demo-peredelano.orby-tech.space`)'
             - 'traefik.http.routers.demo_backend_http.entrypoints=http'
         environment:
-            - AUTH_SERVER_URL=https://auth.poster-demo-peredelano.orby-tech.space
             - MODE=prod
             - MONGO_URI=mongodb://mongo:27017/demo
+            - FRONTEND_URL=https://poster-demo-peredelano.orby-tech.space
         networks:
             - traefikpublic
         ports:

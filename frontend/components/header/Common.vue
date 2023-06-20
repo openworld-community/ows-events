@@ -1,11 +1,21 @@
 <script setup lang="ts">
-import { RouteNameEnum } from '@/constants/enums/route';
+import { RouteNameEnum } from '../../constants/enums/route';
 
 const route = useRoute();
 
 const scrollToTop = () => {
 	window.scrollTo({ top: 0, behavior: 'smooth' });
 };
+
+const isNavbarOpen = ref<boolean>(false);
+const navbarToggle = () => {
+	isNavbarOpen.value = !isNavbarOpen.value;
+};
+
+const sidebar = ref(null);
+const navigationBurger = ref(null);
+
+onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 </script>
 
 <template>
@@ -31,20 +41,33 @@ const scrollToTop = () => {
 					:link="{ name: RouteNameEnum.HOME }"
 					is-icon
 					icon-name="back"
+					button-kind="ordinary"
 					:alt="$translate('global.button.back')"
 				/>
 			</div>
 
-			<div
-				v-if="route.name !== RouteNameEnum.ABOUT"
-				class="header__right"
-			>
+			<div class="header__right">
 				<!--        TODO: вернуться при доработке подписки-->
 				<!--				<HeaderSubscriptionExpired-->
 				<!--					v-if="route.name === RouteNameEnum.HOME"-->
 				<!--					class="header__subscription"-->
 				<!--				/>-->
-				<HeaderNavigation />
+				<HeaderNavigationBurger
+					v-if="route.name === RouteNameEnum.HOME"
+					ref="navigationBurger"
+					:is-cross="isNavbarOpen"
+					:aria-label="
+						isNavbarOpen
+							? $translate('component.header.button.close')
+							: $translate('component.header.button.open')
+					"
+					@click="navbarToggle"
+				/>
+				<HeaderNavigationSidebar
+					v-if="isNavbarOpen"
+					ref="sidebar"
+					@close="navbarToggle"
+				/>
 			</div>
 		</div>
 	</header>
@@ -83,14 +106,14 @@ const scrollToTop = () => {
 		display: flex;
 		height: 100%;
 		align-items: center;
-		margin-right: 12px;
+		margin-right: auto;
 	}
 
 	&__right {
 		display: flex;
 		justify-content: flex-end;
 		text-align: center;
-		padding: 14px 0;
+		position: relative;
 		margin-left: 12px;
 		gap: 18px;
 	}

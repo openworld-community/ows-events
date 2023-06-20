@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useLocationStore, type City, type Country } from '~/stores/location.store';
+import { useLocationStore, type City, type Country } from '@/stores/location.store';
 
 const props = defineProps<{ city: City; country: Country }>();
 const emit = defineEmits<{
@@ -8,32 +8,33 @@ const emit = defineEmits<{
 }>();
 
 const locationStore = useLocationStore();
-function updateCountry(country: typeof props.country) {
+const updateCountry = (country: typeof props.country) => {
 	emit('update:country', country);
 	emit('update:city', '');
-}
+};
+const updateCity = (city: typeof props.city) => {
+	emit('update:city', city);
+};
 </script>
 
 <template>
 	<section class="filter">
-		<CommonInput
+		<CommonUiBaseSelect
 			class="filter__field"
-			input-type="datalist"
-			input-name="country"
-			:input-placeholder="$translate('global.country')"
-			:options-list="locationStore.countries"
+			name="country"
+			:placeholder="$translate('global.country')"
+			:list="locationStore.usedCountries"
 			:model-value="country"
-			@update:model-value="(value: typeof country) => updateCountry(value)"
+			@update:model-value="updateCountry($event)"
 		/>
-		<CommonInput
-			:input-disabled="!country"
+		<CommonUiBaseSelect
 			class="filter__field"
-			input-type="datalist"
-			input-name="city"
-			:input-placeholder="$translate('global.city')"
-			:options-list="locationStore.getCitiesByCountry(country)"
+			name="city"
+			:placeholder="$translate('global.city')"
+			:list="locationStore.getUsedCitiesByCountry(country) ?? []"
+			:disabled="!country"
 			:model-value="city"
-			@update:model-value="(value: typeof city) => emit('update:city', value)"
+			@update:model-value="updateCity($event)"
 		/>
 	</section>
 </template>

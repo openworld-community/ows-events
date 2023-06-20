@@ -16,7 +16,7 @@ const props = defineProps({
 	buttonKind: {
 		// для обычных кнопок задает внешний вид согласно стайл-гайду, для кнопок-инонок раскрашивает в соответствующие цвета
 		type: String as PropType<ButtonKind>,
-		default: 'ordinary'
+		default: ''
 	},
 	buttonText: {
 		type: String as PropType<string>,
@@ -52,7 +52,7 @@ const props = defineProps({
 		default: IconDefaultParams.WIDTH
 	},
 	iconHeight: {
-    type: [String, Number] as PropType<string | number>,
+		type: [String, Number] as PropType<string | number>,
 		default: IconDefaultParams.HEIGHT
 	},
 	alt: {

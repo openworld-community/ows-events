@@ -51,7 +51,6 @@ export const defaultTranslation = {
 			search: 'Поиск',
 			delete: 'Очистить'
 		},
-		nav: 'Навигация'
 	},
 	about: {
 		title: 'О нас',
@@ -90,7 +89,8 @@ export const defaultTranslation = {
 			event: 'изображение мероприятия'
 		},
 		price: {
-			free: 'Бесплатно'
+			free: 'Бесплатно',
+			not_found: 'Цена не указана'
 		},
 		validation_errors: EventValidatorErrors
 	},
@@ -114,8 +114,10 @@ export const defaultTranslation = {
 				description: 'Описание',
 				start: 'Начало',
 				end: 'Окончание',
-				price: 'Стоимость',
-				url_to_rigistration: 'Ссылка на регистрацию'
+				price: 'Стоимость, RSD',
+				price_placeholder: 'Укажите стоимость в RSD',
+				url_to_rigistration: 'Ссылка на регистрацию',
+				url_placeholder: 'https://example.com'
 			}
 		},
 		need_authorize_modal: {
@@ -133,6 +135,7 @@ export const defaultTranslation = {
 		},
 		pre_authorisation_modal: {
 			title: 'Войдите в аккаунт',
+			telegram_login: 'Войти через Telegram',
 			button: {
 				cancel: 'Отмена',
 				login: 'Войти',
@@ -143,15 +146,21 @@ export const defaultTranslation = {
 			label: 'Язык'
 		},
 		header: {
-			about: 'Подробнее об Афише',
+			button: {
+				open: 'Открыть меню навигации',
+				close: 'Скрыть меню навигации'
+			},
+			about: 'Oб Афише',
+			support: 'Поддержка',
+			policy: 'Политика конфиденциальности',
 			event: {
 				manage: 'Управление событием'
 			},
 			authorization: {
-				authorize: 'Авторизоваться с помощью Telegram',
-				deauthorize: 'Выйти из личного кабинета'
+				authorize: 'Авторизоваться',
+				deauthorize: 'Выйти из аккаунта'
 			},
-			support: 'Обратиться в поддержку через Telegram'
+
 		}
 	},
 	dates: {

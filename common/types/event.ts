@@ -12,7 +12,7 @@ export type EventOnPoster = {
 		city: string;
 	};
 	image: string;
-	price: number;
+	price: string;
 	timezone?: Timezone;
 	url: string;
 };
@@ -22,7 +22,7 @@ export type PostEventPayload = {
 		date: number;
 		image: string;
 		durationInSeconds: number;
-		price: number;
+		price: string;
 		timezone: Timezone;
 		description: string;
 		location: { country: string; city: string };

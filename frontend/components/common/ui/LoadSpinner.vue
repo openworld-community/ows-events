@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { PropType } from 'vue';
+
 defineProps({
 	color: {
 		type: String as PropType<string>,

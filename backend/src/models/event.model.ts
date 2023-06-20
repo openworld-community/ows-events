@@ -53,7 +53,7 @@ const schema = new Schema<IEventDocument>(
 			type: String
 		},
 		price: {
-			type: Number
+			type: String
 		},
 		timezone: {
 			timezoneName: {

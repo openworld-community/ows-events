@@ -3,6 +3,8 @@ import './assets/less/app.less';
 import 'vue-final-modal/style.css';
 import 'virtual:svg-icons-register';
 import { ModalsContainer } from 'vue-final-modal';
+import {isDevelopmentMode} from "./constants/common";
+
 const { $translate } = useNuxtApp();
 
 useHead({
@@ -10,6 +12,11 @@ useHead({
 	title: $translate('meta.title'),
 	meta: [{ name: 'Афиша переделано', content: 'Это площадка для поиска мероприятий' }]
 });
+
+if (isDevelopmentMode) {
+	const tokenCookie = useCookie<string>('token');
+	tokenCookie.value = 'blablabla';
+}
 </script>
 <template>
 	<HeaderCommon />

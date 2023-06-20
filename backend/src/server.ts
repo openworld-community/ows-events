@@ -2,23 +2,27 @@ import fastify from 'fastify';
 import cors from '@fastify/cors';
 import path from 'path';
 import Static from '@fastify/static';
-import Multipart from '@fastify/multipart';
 
-import TelegramBot from 'node-telegram-bot-api';
-
-import { UserInfo } from '@common/types/user';
+import fastifySwagger from '@fastify/swagger';
+import fastifySwaggerUi from '@fastify/swagger-ui';
 import { eventsApi } from './rest/v1/events/router';
 import { imageApi } from './rest/v1/image/router';
 import { locationApi } from './rest/v1/location/router';
 import { paymentInfoApi } from './rest/v1/payment-info/router';
 import { registrationApi } from './rest/v1/registration/router';
 import { timezonesApi } from './rest/v1/timezones/router';
+import { openApiOptions, openApiUiOptions } from './docs';
 import { userController } from './controllers/user-controller';
 import { connectToMongo } from './boot/connectToMongo';
+import { authApi } from './rest/v1/auth/router';
+import { ajvFilePlugin } from './config/ajvPlugins';
 import { manualModerationApi } from './rest/v1/moderation/router';
 
 const server = fastify({
-	logger: true
+	logger: true,
+	ajv: {
+		plugins: [ajvFilePlugin]
+	}
 });
 
 connectToMongo()
@@ -33,9 +37,10 @@ connectToMongo()
 		console.error(e);
 	});
 
-server.register(cors, {});
+server.register(fastifySwagger, openApiOptions);
+server.register(fastifySwaggerUi, openApiUiOptions);
 
-server.register(Multipart);
+server.register(cors, {});
 
 fastify.default({
 	maxParamLength: 1000
@@ -47,13 +52,14 @@ server.register(Static, {
 });
 
 server.register(Static, {
-	root: path.join(__dirname, '../assets/img'),
+	root: path.resolve('assets/img'),
 	prefix: '/image/',
 	decorateReply: false
 });
 
 // eventsApi is a plugin
 server.register(manualModerationApi, { prefix: '/api/moderation' });
+server.register(authApi, { prefix: '/api/auth' });
 server.register(eventsApi, { prefix: '/api/events' });
 server.register(locationApi, { prefix: '/api/location' });
 server.register(timezonesApi, { prefix: '/api/timezones' });
@@ -62,23 +68,9 @@ server.register(paymentInfoApi, { prefix: '/api/payment-info' });
 server.register(imageApi, { prefix: '/api/image' });
 
 server.get<{
-	Params: {
-		id: string;
-	};
-	Body: TelegramBot.Message | null;
-}>('/api/postauth/token/:id', async (request) =>
-	userController.getUserFromAuthService(request.params.id).catch((e) => {
-		// eslint-disable-next-line no-console
-		console.error(e);
-		return '';
-	})
-);
-
-server.get<{
 	Querystring: {
 		token: string;
 	};
-	Body: UserInfo;
 }>('/api/user/info', async (request) => userController.getUserInfoByToken(request.query.token));
 
 server.setNotFoundHandler((req, reply) => {

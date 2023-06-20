@@ -4,6 +4,7 @@ import { API_URL } from '~/constants/url';
 type ApiRouter = {
 	[K in string]: ApiRouter | ReturnType<typeof defineQuery> | ReturnType<typeof defineMutation>;
 };
+
 export function defineRouter<T extends ApiRouter>(router: T) {
 	return router;
 }
@@ -73,6 +74,7 @@ type Mutify<
 	: P & undefined extends never
 	? (data: P) => Fetchify<R>
 	: (data?: P) => Fetchify<R>;
+
 /**
  * Specify a function and the wrapper will transform its type
  * to conform with the expected shape of a query.
@@ -128,11 +130,11 @@ export function useBackendFetch<T>(
 		return (opts_: UseFetchOptions<T> = {}) => useFetch(request, Object.assign(opts, opts_));
 
 	opts.baseURL ??= API_URL;
-	opts.onRequestError ??= ({ error }) => {
-		console.error(error);
+	opts.onRequestError ??= ({ response }) => {
+		console.error(response?._data);
 	};
-	opts.onResponseError ??= ({ error }) => {
-		console.error(error);
+	opts.onResponseError ??= ({ response }) => {
+		console.error(response._data);
 	};
 
 	if (auth) {

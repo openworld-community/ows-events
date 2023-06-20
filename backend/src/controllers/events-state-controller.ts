@@ -35,7 +35,27 @@ class EventsStateController {
 		}
 		queryObject['meta.moderation.status'] = { $nin: ['declined', 'in-progress'] };
 
-		const events: EventOnPoster[] = await EventModel.find(queryObject, { meta: 0 });
+		const pastEvents = await EventModel.find(
+			{ ...queryObject, date: { $lte: Date.now() } },
+			{},
+			{
+				sort: {
+					date: 'descending'
+				}
+			}
+		);
+		const futureEvents = await EventModel.find(
+			{ ...queryObject, date: { $gt: Date.now() } },
+			{},
+			{
+				sort: {
+					date: 'ascending'
+				}
+			}
+		);
+
+		const events = futureEvents.concat(pastEvents);
+
 		return events;
 	}
 
@@ -64,7 +84,8 @@ class EventsStateController {
 		const event = await EventModel.findOne({
 			id
 		});
-		if (event?.image) await imageController.deleteImg(`.${event.image}`);
+		if (event?.image && !event.image.includes('https://') && !event.image.includes('http://'))
+			await imageController.deleteImg(`.${event.image}`);
 
 		await EventModel.deleteOne({ id });
 	}

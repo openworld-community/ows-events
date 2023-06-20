@@ -1,7 +1,16 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { PropType } from 'vue';
+
+defineProps({
+	isCross: {
+		type: Boolean as PropType<boolean>,
+		default: false
+	}
+});
+</script>
 
 <template>
-	<button class="burger">
+	<button :class="['burger', { 'burger--cross': isCross }]">
 		<span></span>
 		<span></span>
 		<span></span>

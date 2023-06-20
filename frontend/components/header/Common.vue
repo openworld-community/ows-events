@@ -55,7 +55,7 @@ onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 				<HeaderNavigationBurger
 					v-if="route.name === RouteNameEnum.HOME"
 					ref="navigationBurger"
-					:class="{ 'burger--cross': isNavbarOpen }"
+					:is-cross="isNavbarOpen"
 					:aria-label="
 						isNavbarOpen
 							? $translate('component.header.button.close')

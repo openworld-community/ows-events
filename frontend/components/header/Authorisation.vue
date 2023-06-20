@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import type { UserInfo } from '../../../common/types/user';
-
+import ModalAuthorisation from '@/components/modal/Authorisation.vue';
 import { useModal } from 'vue-final-modal';
-import {ModalAuthorisation} from "../../.nuxt/components";
-
 
 const tokenCookie = useCookie<string | null>('token');
 

@@ -24,7 +24,14 @@ useHead({
 	title: `${$translate('meta.title')} / ${posterEvent.value?.title}`
 });
 
-const trackRedirects = () => useTrackEvent('redirect');
+const redirect = () => {
+	useTrackEvent('redirect');
+	const tmpEl = document.createElement('a');
+	if (!posterEvent.value?.url) return 0;
+	tmpEl.href = posterEvent.value?.url;
+	tmpEl.target = '_blank';
+	tmpEl.click();
+};
 
 const deleteCard = async () => {
 	const { data } = await apiRouter.events.delete.useMutation({ data: { id } });
@@ -90,8 +97,8 @@ patchDeleteEventModal({
 			]"
 		>
 			<span class="event-image__price">
-        {{ getPrice(posterEvent) }}
-      </span>
+				{{ getPrice(posterEvent) }}
+			</span>
 			<img
 				v-if="posterEvent.image"
 				:src="getEventImage(posterEvent)"
@@ -144,9 +151,7 @@ patchDeleteEventModal({
 					button-kind="success"
 					class="event-actions__button"
 					:button-text="$translate('event.button.contact')"
-					:link="posterEvent.url"
-					is-external-link
-					@click="trackRedirects"
+					@click="redirect"
 				/>
 				<!--TODO подключить, когда вернемся к проработке регистрации-->
 				<!--				<CommonButton-->

@@ -156,8 +156,9 @@ export function useBackendFetch<T>(
 		const { translate } = useTranslation();
 		const { $errorToast } = useNuxtApp();
 		const data = await getData();
-		if (data.error.value?.data) {
-			const errorMessage: keyof typeof ServerErrors = data.error.value?.data.message;
+		// todo - переделать эту проверку когда бэк уже стандартизирует вывод своих ошибок везде
+		if (data.error.value?.data?.message) {
+			const errorMessage: keyof typeof ServerErrors = data.error.value.data.message;
 			$errorToast(translate(`error.${errorMessage}`));
 		}
 		return data;

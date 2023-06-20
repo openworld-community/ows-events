@@ -34,7 +34,27 @@ class EventsStateController {
 			queryObject['location.city'] = query?.city;
 		}
 
-		const events = await EventModel.find(queryObject);
+		const pastEvents = await EventModel.find(
+			{ ...queryObject, date: { $lte: Date.now() } },
+			{},
+			{
+				sort: {
+					date: 'descending'
+				}
+			}
+		);
+		const futureEvents = await EventModel.find(
+			{ ...queryObject, date: { $gt: Date.now() } },
+			{},
+			{
+				sort: {
+					date: 'ascending'
+				}
+			}
+		);
+
+		const events = futureEvents.concat(pastEvents);
+
 		return events;
 	}
 

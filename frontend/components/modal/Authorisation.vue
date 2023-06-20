@@ -35,7 +35,7 @@ const loadScript = () => {
 		() =>
 			setTimeout(
 				() => (hiddenTGButtonClass.value = 'modal-card__telegram-button--hidden'),
-				300
+				200
 			),
 		{ once: true }
 	);

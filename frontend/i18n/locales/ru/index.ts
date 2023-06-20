@@ -65,7 +65,6 @@ export const defaultTranslation = {
 			search: 'Поиск',
 			delete: 'Очистить'
 		},
-		nav: 'Навигация'
 	},
 	about: {
 		title: 'О нас',
@@ -149,6 +148,7 @@ export const defaultTranslation = {
 		},
 		pre_authorisation_modal: {
 			title: 'Войдите в аккаунт',
+			telegram_login: 'Войти через Telegram',
 			button: {
 				cancel: 'Отмена',
 				login: 'Войти',
@@ -159,15 +159,21 @@ export const defaultTranslation = {
 			label: 'Язык'
 		},
 		header: {
-			about: 'Подробнее об Афише',
+			button: {
+				open: 'Открыть меню навигации',
+				close: 'Скрыть меню навигации'
+			},
+			about: 'Oб Афише',
+			support: 'Поддержка',
+			policy: 'Политика конфиденциальности',
 			event: {
 				manage: 'Управление событием'
 			},
 			authorization: {
-				authorize: 'Авторизоваться с помощью Telegram',
-				deauthorize: 'Выйти из личного кабинета'
+				authorize: 'Авторизоваться',
+				deauthorize: 'Выйти из аккаунта'
 			},
-			support: 'Обратиться в поддержку через Telegram'
+
 		}
 	},
 	dates: {

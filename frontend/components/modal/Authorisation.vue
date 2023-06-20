@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { UserInfo } from '../../../common/types/user';
 import { TELEGRAM_AUTH_BOT_NAME, BASE_URL } from '../../constants/url';
-import LoadSpinner from '../common/ui/LoadSpinner.vue';
 
 type Props = {
 	close: () => void;
@@ -73,11 +72,15 @@ onMounted(() => {
 					v-else
 					class="modal-card__login-button"
 				>
-					<div class="modal-card__loader">
-						<LoadSpinner class="modal-card__spinner" />
+					<div class="modal-card__login-background">
+						<CommonIcon
+							class="modal-card__icon"
+							name="telegram"
+						/>
+						{{ $translate('component.pre_authorisation_modal.telegram_login') }}
 					</div>
 					<div
-            ref="telegram"
+						ref="telegram"
 						class="modal-card__telegram-button"
 					/>
 				</div>
@@ -120,9 +123,30 @@ onMounted(() => {
 		min-width: 231px;
 		height: 40px;
 		line-height: 0;
+		overflow: hidden;
+		cursor: pointer;
+
+		&:hover > .modal-card__login-background {
+			background-color: var(--color-accent-green-dark);
+		}
 	}
 
-	&__loader,
+	&__login-background {
+		width: 100%;
+		background-color: var(--color-accent-green-main);
+		display: flex;
+		height: 40px;
+		border-radius: 24px;
+		padding: 7px 14px;
+		align-items: center;
+		color: var(--color-white);
+		transition: background-color 0.3s ease;
+	}
+
+	&__icon {
+		margin-right: 6px;
+	}
+
 	&__telegram-button {
 		position: absolute;
 		top: 0;
@@ -138,6 +162,7 @@ onMounted(() => {
 	}
 
 	&__telegram-button {
+		opacity: 0;
 		z-index: 1;
 	}
 

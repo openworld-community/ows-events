@@ -18,22 +18,26 @@ const username =
 	null;
 
 const telegram = ref<HTMLElement | null>(null);
-onMounted(() => {
-	const script = document.createElement('script');
-	script.async = true;
-	script.src = 'https://telegram.org/js/telegram-widget.js?22';
 
-	script.setAttribute('data-size', 'large');
-	script.setAttribute('data-userpic', 'false');
-	script.setAttribute('data-telegram-login', TELEGRAM_AUTH_BOT_NAME);
-	script.setAttribute('data-request-access', 'write');
+const loadScript = () => {
+  const script = document.createElement('script');
+  script.src = 'https://telegram.org/js/telegram-widget.js?22';
 
-	script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
-	telegram.value?.appendChild(script);
+  script.setAttribute('data-size', 'large');
+  script.setAttribute('data-userpic', 'false');
+  script.setAttribute('data-telegram-login', TELEGRAM_AUTH_BOT_NAME);
+  script.setAttribute('data-request-access', 'write');
+
+  script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
+  script.addEventListener('load', () => hiddenTGButtonClass.value = 'modal-card__telegram-button--hidden', {once: true});
+  telegram.value?.appendChild(script);
+}
+
+onMounted(async () => {
+  await loadScript()
 });
 
 const hiddenTGButtonClass = ref('');
-setTimeout(() => hiddenTGButtonClass.value = 'modal-card__telegram-button--hidden', 200);
 </script>
 
 <template>
@@ -65,7 +69,7 @@ setTimeout(() => hiddenTGButtonClass.value = 'modal-card__telegram-button--hidde
 					@click="props.close()"
 				/>
 				<CommonButton
-					v-if="isAuthorized"
+					v-if="!isAuthorized"
 					button-kind="success"
 					:button-text="$translate('component.pre_authorisation_modal.button.logout')"
 					class="modal-card__logout-button"

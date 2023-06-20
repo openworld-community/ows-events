@@ -59,8 +59,8 @@ onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 					:is-cross="isNavbarOpen"
 					:aria-label="
 						isNavbarOpen
-							? $translate('component.header.button.close')
-							: $translate('component.header.button.open')
+							? translate('component.header.button.close')
+							: translate('component.header.button.open')
 					"
 					@click="navbarToggle"
 				/>

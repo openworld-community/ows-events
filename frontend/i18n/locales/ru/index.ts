@@ -37,7 +37,8 @@ export const ServerErrors: {
 	'unknown-image-route-error': 'Непредвиденная ошибка при обработке изображения',
 	'wrong-token': 'Ваш токен авторизации поврежден',
 	forbidden: 'Ошибка допуска',
-	unauthorized: 'У вас нет доступа к данному ресурсу'
+	unauthorized: 'У вас нет доступа к данному ресурсу',
+	'event-already-exists': 'Данное мероприятие	уже существует'
 };
 
 export const defaultTranslation = {
@@ -64,7 +65,7 @@ export const defaultTranslation = {
 			cancel: 'Отмена',
 			search: 'Поиск',
 			delete: 'Очистить'
-		},
+		}
 	},
 	about: {
 		title: 'О нас',
@@ -172,8 +173,7 @@ export const defaultTranslation = {
 			authorization: {
 				authorize: 'Авторизоваться',
 				deauthorize: 'Выйти из аккаунта'
-			},
-
+			}
 		}
 	},
 	dates: {

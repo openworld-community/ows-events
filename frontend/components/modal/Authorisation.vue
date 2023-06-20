@@ -31,6 +31,9 @@ onMounted(() => {
 	script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
 	telegram.value?.appendChild(script);
 });
+
+const hiddenTGButtonClass = ref('');
+setTimeout(() => hiddenTGButtonClass.value = 'modal-card__telegram-button--hidden');
 </script>
 
 <template>
@@ -81,7 +84,7 @@ onMounted(() => {
 					</div>
 					<div
 						ref="telegram"
-						class="modal-card__telegram-button"
+						:class="['modal-card__telegram-button', hiddenTGButtonClass]"
 					/>
 				</div>
 			</div>
@@ -162,8 +165,10 @@ onMounted(() => {
 	}
 
 	&__telegram-button {
-		opacity: 0;
 		z-index: 1;
+    &--hidden {
+      opacity: 0;
+    }
 	}
 
 	&__spinner {

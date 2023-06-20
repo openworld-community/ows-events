@@ -21,6 +21,10 @@ defineProps({
 		type: String as PropType<string>,
 		default: ''
 	},
+	required: {
+		type: Boolean as PropType<boolean>,
+		default: false
+	},
 	error: {
 		type: String as PropType<string>,
 		default: ''
@@ -50,7 +54,8 @@ const onRemove = () => {
 			:class="`input__field input__field--textarea ${error ? 'form__error' : ''}`"
 			:name="name"
 			:value="modelValue"
-			:placeholder="placeholder"
+			:placeholder="required ? `${placeholder} *` : placeholder"
+			:required="required"
 			@input="updateValue"
 		/>
 		<CommonButton

@@ -12,5 +12,6 @@ export enum CommonErrorsEnum {
 	UNKNOWN_IMAGE_ROUTE_ERROR = 'unknown-image-route-error',
 	PAYMENT_INFO_NOT_FOUND = 'payment-info-not-found',
 	PAYMENT_INFO_FILE_NOT_EXIST = 'payment-info-file-not-exist',
-	PAYMENT_INFO_FILE_PARSE_ERROR = 'paymant-info-file-parse-error'
+	PAYMENT_INFO_FILE_PARSE_ERROR = 'paymant-info-file-parse-error',
+	EVENT_ALREADY_EXISTS = 'event-already-exists'
 }

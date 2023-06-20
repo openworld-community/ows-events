@@ -19,9 +19,9 @@ const username =
 	null;
 
 const telegram = ref<HTMLElement | null>(null);
-onMounted(() => {
+
+const loadScript = () => {
 	const script = document.createElement('script');
-	script.async = true;
 	script.src = 'https://telegram.org/js/telegram-widget.js?22';
 
 	script.setAttribute('data-size', 'large');
@@ -30,7 +30,16 @@ onMounted(() => {
 	script.setAttribute('data-request-access', 'write');
 
 	script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
+	script.addEventListener(
+		'load',
+		() => (hiddenTGButtonClass.value = 'modal-card__telegram-button--hidden'),
+		{ once: true }
+	);
 	telegram.value?.appendChild(script);
+};
+
+onMounted(async () => {
+	await loadScript();
 });
 
 const hiddenTGButtonClass = ref('');
@@ -66,7 +75,7 @@ setTimeout(() => (hiddenTGButtonClass.value = 'modal-card__telegram-button--hidd
 					@click="props.close()"
 				/>
 				<CommonButton
-					v-if="isAuthorized"
+					v-if="!isAuthorized"
 					button-kind="success"
 					:button-text="translate('component.pre_authorisation_modal.button.logout')"
 					class="modal-card__logout-button"

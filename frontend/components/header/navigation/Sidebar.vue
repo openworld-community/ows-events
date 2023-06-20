@@ -10,7 +10,10 @@ const emit = defineEmits(['close']);
 		class="navigation"
 		role="navigation"
 	>
-		<HeaderAuthorisation class="navigation__item" />
+		<HeaderAuthorisation
+			class="navigation__item"
+			@click.capture="emit('close')"
+		/>
 
 		<HeaderNavigationNavItem
 			:link-to="{ name: RouteNameEnum.ABOUT }"

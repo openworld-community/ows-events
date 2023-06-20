@@ -4,13 +4,11 @@ import ModalAuthorisation from '@/components/modal/Authorisation.vue';
 import { useModal } from 'vue-final-modal';
 
 const tokenCookie = useCookie<string | null>('token');
-
 const isAuthorized = computed(() => !!tokenCookie.value);
-const user = useCookie<UserInfo | null>('user');
 
 const deauthorize = () => {
-	user.value = null;
-	tokenCookie.value = null;
+	useCookie<UserInfo | null>('user').value = null;
+	useCookie('token').value = null;
 	setTimeout(() => close(), 300);
 	updateModalData();
 };

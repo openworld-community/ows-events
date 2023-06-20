@@ -29,7 +29,7 @@ const loadScript = () => {
   script.setAttribute('data-request-access', 'write');
 
   script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
-  script.addEventListener('load', () => hiddenTGButtonClass.value = 'modal-card__telegram-button--hidden', {once: true});
+  script.addEventListener('load', () => setTimeout(() => hiddenTGButtonClass.value = 'modal-card__telegram-button--hidden'), {once: true});
   telegram.value?.appendChild(script);
 }
 
@@ -69,7 +69,7 @@ const hiddenTGButtonClass = ref('');
 					@click="props.close()"
 				/>
 				<CommonButton
-					v-if="!isAuthorized"
+					v-if="isAuthorized"
 					button-kind="success"
 					:button-text="$translate('component.pre_authorisation_modal.button.logout')"
 					class="modal-card__logout-button"

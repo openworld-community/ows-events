@@ -16,7 +16,8 @@ export default defineNuxtPlugin((nuxtApp) => {
 			{
 				toastClassName: 'errorToast',
 				icon: false,
-				closeButton: false
+				closeButton: false,
+				timeout: false
 			}
 		);
 	};

@@ -264,7 +264,7 @@ const isTimezoneDisabled = computed(() => {
 							name="price"
 							type="text"
 							:placeholder="
-								$translate('component.new_event_modal.fields.price_placeholder')
+								translate('component.new_event_modal.fields.price_placeholder')
 							"
 						/>
 						<!--						<CommonUiBaseSelect-->
@@ -286,7 +286,7 @@ const isTimezoneDisabled = computed(() => {
 							v-model="inputValues.url"
 							name="url"
 							:placeholder="
-								$translate('component.new_event_modal.fields.url_placeholder')
+								translate('component.new_event_modal.fields.url_placeholder')
 							"
 							required
 						/>

@@ -13,7 +13,6 @@ const scrollToTop = () => {
 	<header class="header">
 		<div class="header__container">
 			<div class="header__left">
-				<HeaderLanguageSelector />
 				<NuxtLink
 					v-if="route.name === RouteNameEnum.HOME"
 					:to="{ name: RouteNameEnum.HOME }"

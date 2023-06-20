@@ -20,7 +20,7 @@ const username =
 
 const telegram = ref<HTMLElement | null>(null);
 
-onMounted(async () => {
+onMounted(() => {
 	const script = document.createElement('script');
 	script.src = 'https://telegram.org/js/telegram-widget.js?22';
 

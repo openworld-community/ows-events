@@ -9,7 +9,3 @@ export const vars = {
 		uri: process.env.MONGO_URI || 'mongodb://mongo:27020/dev'
 	}
 };
-
-export enum Data {
-	qq = 1
-}

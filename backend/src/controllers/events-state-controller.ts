@@ -33,6 +33,7 @@ class EventsStateController {
 		if (query?.city) {
 			queryObject['location.city'] = query?.city;
 		}
+		queryObject['meta.moderation.status'] = { $nin: ['declined', 'in-progress'] };
 
 		const pastEvents = await EventModel.find(
 			{ ...queryObject, date: { $lte: Date.now() } },
@@ -59,9 +60,12 @@ class EventsStateController {
 	}
 
 	async getEvent(id: string) {
-		const event = await EventModel.findOne({
-			id
-		});
+		const event = await EventModel.findOne(
+			{
+				id
+			},
+			{ meta: 0 }
+		);
 		return event;
 	}
 

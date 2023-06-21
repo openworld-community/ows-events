@@ -6,11 +6,14 @@ export const getTimezonesSchema = {
 	summary: 'get time zone',
 	response: {
 		200: {
-			type: 'object',
-			properties: {
-				timezoneName: { type: 'string' },
-				timezoneOffset: { type: 'string' }
-			} satisfies Record<keyof Timezone, {}>
+			type: 'array',
+			items: {
+				type: 'object',
+				properties: {
+					timezoneName: { type: 'string' },
+					timezoneOffset: { type: 'string' }
+				} satisfies Record<keyof Timezone, {}>
+			}
 		}
 	}
 };

@@ -106,9 +106,9 @@ export const updateEventSchema = {
 };
 
 export const findEventsSchema = {
-	description: 'Update event',
+	description: 'find events',
 	tags: ['Events'],
-	summary: 'Update event',
+	summary: 'Find events',
 	response: {
 		200: {
 			type: 'array',

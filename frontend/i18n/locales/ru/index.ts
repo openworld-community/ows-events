@@ -38,7 +38,11 @@ export const ServerErrors: {
 	'wrong-token': 'Ваш токен авторизации поврежден',
 	forbidden: 'Ошибка допуска',
 	unauthorized: 'У вас нет доступа к данному ресурсу',
-	'event-already-exists': 'Данное мероприятие	уже существует'
+	'event-already-exists': 'Данное мероприятие	уже существует',
+	'event-sent-on-moderation': 'Мероприятие отправлено на модерацию',
+	'no-payload-provided': 'ОТправлен пустой запрос',
+	'timezone-city-not-found': 'Не удалось найти часовой пояс по указанным параметрам',
+	'user-does-not-exist': 'Пользователь не найден'
 };
 
 export const defaultTranslation = {

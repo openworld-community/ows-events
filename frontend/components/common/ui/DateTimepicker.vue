@@ -105,6 +105,7 @@ const onRemove = () => {
 			is-24
 			:clearable="false"
 			@update:model-value="handleDate"
+      @keydown.enter.capture="datepicker?.closeMenu()"
 		/>
 		<CommonIcon
 			v-if="!modelValue"

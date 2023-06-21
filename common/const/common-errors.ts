@@ -13,5 +13,6 @@ export enum CommonErrorsEnum {
 	PAYMENT_INFO_NOT_FOUND = 'payment-info-not-found',
 	PAYMENT_INFO_FILE_NOT_EXIST = 'payment-info-file-not-exist',
 	PAYMENT_INFO_FILE_PARSE_ERROR = 'paymant-info-file-parse-error',
-	EVENT_ALREADY_EXISTS = 'event-already-exists'
+	EVENT_ALREADY_EXISTS = 'event-already-exists',
+	EVENT_SENT_ON_MODERATION = 'event-sent-on-moderation'
 }

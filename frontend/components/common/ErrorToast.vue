@@ -2,23 +2,23 @@
 defineProps<{ error: string }>();
 </script>
 <template>
-	<div :class="$style.content">
+	<div class="content">
 		<CommonIcon
 			name="error"
 			:height="24"
 			color="var(--color-alert-error)"
-			:class="$style.icon"
+			class="icon"
 		/><span>
 			{{ error ?? 'UNEXPECTED ERROR' }}
 		</span>
 		<CommonIcon
 			name="close"
 			:width="25"
-			:class="$style.icon"
+			class="icon"
 		/>
 	</div>
 </template>
-<style lang="less" module>
+<style lang="less" scoped>
 .content {
 	font-family: var(--font-family-main);
 	font-size: var(--font-size-XS);

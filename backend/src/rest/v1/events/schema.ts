@@ -44,15 +44,7 @@ export const getEventSchema = {
 	description: 'get event by id',
 	tags: ['Events'],
 	summary: 'Get event by id',
-	response: {
-		200: {
-			type: 'object',
-			properties: {
-				type: { type: 'string' },
-				data: { ItemEvent }
-			}
-		}
-	},
+	response: { 200: ItemEvent },
 	params: {
 		type: 'object',
 		properties: {
@@ -71,13 +63,7 @@ export const addEventSchema = {
 	response: {
 		201: {
 			type: 'object',
-			properties: {
-				type: { type: 'string' },
-				data: {
-					type: 'object',
-					id: { type: 'string' }
-				}
-			}
+			properties: { id: { type: 'string' } }
 		}
 	},
 	body: {

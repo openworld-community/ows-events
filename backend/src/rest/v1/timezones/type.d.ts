@@ -1,13 +1,8 @@
-import { StandardResponse } from "@common/types";
-import { IRouteHandler } from "../../types";
+import { Timezone } from '@common/types/location';
+import { IRouteHandler } from '../../types';
 
 type ITimezonesRouteProps = {
-  Reply: StandardResponse<
-    {
-      timezoneName: string;
-      timezoneOffset: string;
-    }[]
-  >;
+	Reply: Timezone[];
 };
 
 type ITimezonesHandlerProps = IRouteHandler<ITimezonesRouteProps>;

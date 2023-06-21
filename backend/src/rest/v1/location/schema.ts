@@ -45,7 +45,7 @@ export const getMetaSchema = {
 			properties: {
 				country: { type: 'string' },
 				city: { type: 'string' },
-				timezone: { type: 'string' },
+				timezoneName: { type: 'string' },
 				timezoneOffset: { type: 'string' }
 			}
 		}

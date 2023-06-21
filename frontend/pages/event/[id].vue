@@ -14,8 +14,8 @@ const user = useCookie<UserInfo | null>('user');
 const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ data: { id } });
 
 const posterEvent = computed(() => {
-	if (data.value?.type !== 'success') return null;
-	return data.value.data;
+	if (!data.value) return null;
+	return data.value;
 });
 
 const { $translate } = useNuxtApp();
@@ -35,12 +35,10 @@ const redirect = () => {
 
 const deleteCard = async () => {
 	const { data } = await apiRouter.events.delete.useMutation({ data: { id } });
-	if (data.value?.type === 'success') {
-		await closeDeleteEventModal();
-		navigateTo({ name: RouteNameEnum.HOME });
-	} else {
-		console.error(data.value?.errors);
-	}
+	if (!data.value) return;
+
+	await closeDeleteEventModal();
+	navigateTo({ name: RouteNameEnum.HOME });
 };
 
 // TODO подключить, когда вернемся к проработке регистрации

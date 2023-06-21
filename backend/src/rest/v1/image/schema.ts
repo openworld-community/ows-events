@@ -9,7 +9,7 @@ export const deleteImageSchema = {
 		}
 	},
 	response: {
-		200: { success: { type: 'string' } }
+		200: {}
 	},
 	security: [{ authJWT: [] }]
 };
@@ -28,12 +28,7 @@ export const addImageSchema = {
 	response: {
 		200: {
 			type: 'object',
-			properties: {
-				type: { type: 'string' },
-				data: {
-					path: { type: 'string' }
-				}
-			}
+			properties: { path: { type: 'string' } }
 		}
 	},
 	security: [{ authJWT: [] }]

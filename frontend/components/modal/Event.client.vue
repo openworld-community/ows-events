@@ -2,11 +2,7 @@
 import { getAllTimezones, getTimezone } from '@/services/timezone.services';
 import { useLocationStore, type Country, type City } from '@/stores/location.store';
 import { type EventOnPoster } from '@/../common/types';
-import { EventValidatorErrorTypes } from '@/../common/const';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
-
-const { $i18n } = useNuxtApp();
-const t = $i18n.t.bind($i18n);
 
 type Props = {
 	closeEventModal: () => void;
@@ -111,27 +107,17 @@ const submitEvent = async () => {
 		image = (await addImage(newImageFile.value)) ?? image;
 
 		const event = Object.assign(paramsForSubmit.value, { id: inputValues.value.id, image });
-		const { data } = await apiRouter.events.edit.useMutation({ data: { event } });
+		const { error } = await apiRouter.events.edit.useMutation({ data: { event } });
 
-		if (data.value?.type === 'success') {
-			props.refreshEvent?.();
-		} else {
-			console.error(data.value?.errors);
-		}
+		if (!error.value) props.refreshEvent?.();
 	} else {
 		const image = (await addImage(newImageFile.value)) ?? '';
 		const event = Object.assign(paramsForSubmit.value, { image });
 		const { data } = await apiRouter.events.add.useMutation({ data: { event } });
 
-		if (data.value?.type === 'success') {
-			await navigateTo(`/event/${data.value.data.id}`);
+		if (data.value) {
+			await navigateTo(`/event/${data.value.id}`);
 		} else {
-			alert(
-				'Ошибка при добавлении события:\n' +
-					data.value?.errors
-						?.map((e) => t(`event.validation_errors.${e as EventValidatorErrorTypes}`))
-						.join('\n')
-			);
 			isLoading.value = false;
 			return;
 		}
@@ -144,8 +130,8 @@ const submitEvent = async () => {
 async function addImage(image: ImageLoaderFile) {
 	if (!image || image === 'DELETED') return;
 	const { data } = await apiRouter.events.image.add.useMutation({ data: { image } });
-	if (data.value?.type !== 'success') return;
-	return data.value.data.path;
+	if (!data.value) return;
+	return data.value.path;
 }
 
 const isCityDisabled = computed(() => {

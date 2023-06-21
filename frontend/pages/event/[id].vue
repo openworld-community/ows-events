@@ -160,7 +160,10 @@ patchDeleteEventModal({
 				<!--				/>-->
 			</template>
 			<div
-				v-if="user?.id === posterEvent.creatorId || posterEvent.creatorId === 'dev-user'"
+				v-if="
+					posterEvent.creatorId &&
+					(user?.id === posterEvent.creatorId || posterEvent.creatorId === 'dev-user')
+				"
 				class="event-actions__manage"
 			>
 				<CommonButton
@@ -238,7 +241,7 @@ patchDeleteEventModal({
 		}
 
 		&__description {
-			max-height: 155px;
+			max-height: 150px;
 			word-wrap: break-word;
 			overflow-y: auto;
 			font-size: var(--font-size-S);

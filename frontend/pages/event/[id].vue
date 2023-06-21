@@ -163,7 +163,10 @@ patchDeleteEventModal({
 				<!--				/>-->
 			</template>
 			<div
-				v-if="user?.id === posterEvent.creatorId || posterEvent.creatorId === 'dev-user'"
+				v-if="
+					posterEvent.creatorId &&
+					(user?.id === posterEvent.creatorId || posterEvent.creatorId === 'dev-user')
+				"
 				class="event-actions__manage"
 			>
 				<CommonButton

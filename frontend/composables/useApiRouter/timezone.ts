@@ -1,4 +1,3 @@
-import type { StandardResponse } from '~/../common/types';
 import { defineQuery, useBackendFetch } from './utils';
 import type { Timezone } from '~/../common/types/location';
 import type { City, Country } from '~/stores/location.store';

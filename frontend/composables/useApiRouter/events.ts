@@ -1,4 +1,4 @@
-import type { EventOnPoster, StandardResponse } from '~/../common/types';
+import type { EventOnPoster } from '~/../common/types';
 import type { PostEventPayload } from '~/../common/types/event';
 import type { Registration } from '~/../common/types/registration';
 import { defineMutation, defineQuery, useBackendFetch } from './utils';

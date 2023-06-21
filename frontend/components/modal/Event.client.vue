@@ -2,11 +2,7 @@
 import { getAllTimezones, getTimezone } from '@/services/timezone.services';
 import { useLocationStore, type Country, type City } from '@/stores/location.store';
 import { type EventOnPoster } from '@/../common/types';
-import { EventValidatorErrorTypes } from '@/../common/const';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
-
-const { $i18n } = useNuxtApp();
-const t = $i18n.t.bind($i18n);
 
 type Props = {
 	closeEventModal: () => void;

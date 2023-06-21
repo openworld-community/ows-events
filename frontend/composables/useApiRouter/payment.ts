@@ -1,6 +1,6 @@
 import type { PaymentInfo } from '~/../common/types/payment-info';
 import { defineQuery, useBackendFetch } from './utils';
-import type { EventOnPoster, StandardResponse } from '~/../common/types';
+import type { EventOnPoster } from '~/../common/types';
 
 export const payment = {
 	get: defineQuery<

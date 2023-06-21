@@ -242,7 +242,7 @@ patchDeleteEventModal({
 		}
 
 		&__description {
-			max-height: 155px;
+			max-height: 150px;
 			word-wrap: break-word;
 			overflow-y: auto;
 			font-size: var(--font-size-S);

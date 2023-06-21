@@ -15,10 +15,8 @@ const user = useCookie<UserInfo | null>('user');
 const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ data: { id } });
 
 const posterEvent = computed(() => {
-	if (data.value?.type !== 'success') {
-		return void navigateTo({ name: RouteNameEnum.HOME });
-	}
-	return data.value.data;
+	if (!data.value) return void navigateTo({ name: RouteNameEnum.HOME });
+	return data.value;
 });
 
 useHead({
@@ -36,12 +34,10 @@ const redirect = () => {
 
 const deleteCard = async () => {
 	const { data } = await apiRouter.events.delete.useMutation({ data: { id } });
-	if (data.value?.type === 'success') {
-		await closeDeleteEventModal();
-		navigateTo({ name: RouteNameEnum.HOME });
-	} else {
-		console.error(data.value?.errors);
-	}
+	if (!data.value) return;
+
+	await closeDeleteEventModal();
+	navigateTo({ name: RouteNameEnum.HOME });
 };
 
 // TODO подключить, когда вернемся к проработке регистрации

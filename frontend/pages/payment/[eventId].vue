@@ -20,9 +20,8 @@ const paymentInfo = ref<{ event: EventOnPoster; paymentsInfo: PaymentInfo } | nu
 const loadPaymentInfo = async () => {
 	const { data } = await apiRouter.payment.get.useQuery({ data: { eventId } });
 	if (!data.value) return console.error('No payment info retrieved');
-	if (data.value.type !== 'success') return console.error(data.value.errors);
 
-	paymentInfo.value = data.value.data;
+	paymentInfo.value = data.value;
 };
 
 await loadPaymentInfo();

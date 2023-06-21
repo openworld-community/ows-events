@@ -109,20 +109,16 @@ const submitEvent = async () => {
 		image = (await addImage(newImageFile.value)) ?? image;
 
 		const event = Object.assign(paramsForSubmit.value, { id: inputValues.value.id, image });
-		const { data } = await apiRouter.events.edit.useMutation({ data: { event } });
+		const { error } = await apiRouter.events.edit.useMutation({ data: { event } });
 
-		if (data.value?.type === 'success') {
-			props.refreshEvent?.();
-		} else {
-			console.error(data.value?.errors);
-		}
+		if (!error.value) props.refreshEvent?.();
 	} else {
 		const image = (await addImage(newImageFile.value)) ?? '';
 		const event = Object.assign(paramsForSubmit.value, { image });
 		const { data } = await apiRouter.events.add.useMutation({ data: { event } });
 
-		if (data.value?.type === 'success') {
-			await navigateTo(`/event/${data.value.data.id}`);
+		if (data.value) {
+			await navigateTo(`/event/${data.value.id}`);
 		} else {
 			isLoading.value = false;
 			return;
@@ -136,8 +132,8 @@ const submitEvent = async () => {
 async function addImage(image: ImageLoaderFile) {
 	if (!image || image === 'DELETED') return;
 	const { data } = await apiRouter.events.image.add.useMutation({ data: { image } });
-	if (data.value?.type !== 'success') return;
-	return data.value.data.path;
+	if (!data.value) return;
+	return data.value.path;
 }
 
 const isCityDisabled = computed(() => {

@@ -7,7 +7,4 @@ const allTimezones: Timezone[] = moment.tz.names().map((name) => ({
 	timezoneOffset: moment.tz(name).format('Z')
 }));
 
-export const getTimezones: ITimezonesHandlerProps = async () => ({
-	type: 'success',
-	data: allTimezones
-});
+export const getTimezones: ITimezonesHandlerProps = async () => allTimezones;

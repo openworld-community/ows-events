@@ -45,10 +45,7 @@ export const addEvent: IAddEventHandler = async (request) => {
 		throw new Error(CommonErrorsEnum.EVENT_SENT_ON_MODERATION);
 	}
 
-	return {
-		type: 'success',
-		data: { id: newPostId }
-	};
+	return { id: newPostId };
 };
 
 export const getEvents: IGetEventsHandler = async (): Promise<EventOnPoster[]> =>
@@ -59,10 +56,7 @@ export const getEvent: IGetEventHandler = async (request) => {
 	const event = await eventsStateController.getEvent(eventId);
 	if (!event) throw new Error(CommonErrorsEnum.EVENT_NOT_FOUND);
 
-	return {
-		type: 'success',
-		data: event
-	};
+	return event;
 };
 
 export const deleteEvent: IDeleteEventHandler = async (request) => {
@@ -79,10 +73,7 @@ export const deleteEvent: IDeleteEventHandler = async (request) => {
 	}
 
 	await eventsStateController.deleteEvent(request.body.id);
-	return {
-		type: 'success',
-		data: undefined
-	};
+	return undefined;
 };
 
 export const updateEvent: IUpdateEventHandler = async (request) => {
@@ -99,10 +90,7 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 	}
 
 	await eventsStateController.updateEvent(request.body.event);
-	return {
-		type: 'success',
-		data: undefined
-	};
+	return undefined;
 };
 
 export const findEvents: IFindEventHandler = async (request) => {

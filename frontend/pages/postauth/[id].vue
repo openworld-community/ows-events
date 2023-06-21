@@ -5,15 +5,13 @@ definePageMeta({
 	middleware: async () => {
 		const route = useRoute();
 		const userToken = getFirstParam(route.params.id);
-		const userCookie = useCookie<UserInfo | null>('user');
-		const tokenCookie = useCookie<string>('token');
-		tokenCookie.value = userToken;
+		useCookie<string>('token').value = userToken;
 		const { data: user } = await apiRouter.auth.getUser.useQuery({ data: { userToken } });
 		if (!user.value) {
 			console.error('No user data retrieved');
-		} else {
-			userCookie.value = user.value;
+			return;
 		}
+		useCookie<UserInfo | null>('user').value = user.value;
 	}
 });
 await navigateTo({ name: RouteNameEnum.HOME });

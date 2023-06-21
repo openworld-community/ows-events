@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "nuxt dev",
     "dev:local": "nuxt dev --dotenv .env.dev",
@@ -38,6 +39,7 @@
     "vue-final-modal": "^4.4.2",
     "vue-flag-icon": "^2.1.0",
     "vue-markdown": "^2.2.4",
+    "vue-toastification": "^2.0.0-rc.5",
     "vue3-markdown-it": "^1.0.10"
   },
   "devDependencies": {

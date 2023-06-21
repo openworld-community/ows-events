@@ -1,8 +1,8 @@
 import { defineTranslation } from '..';
-import { EventValidatorErrorTypes } from '../../../../common/const/event-validation-error';
+import { type ErrorCodes } from '@/../common/const';
 
-const EventValidatorErrors: {
-	[key in EventValidatorErrorTypes]: string;
+export const ServerErrors: {
+	[key in ErrorCodes]: string;
 } = {
 	EVENT_IS_NOT_DEFINED: 'Мероприятие не определено',
 	TITLE_IS_NOT_DEFINED: 'Заголовок не определен',
@@ -23,7 +23,26 @@ const EventValidatorErrors: {
 	URL_IS_TOO_SHORT: 'Ссылка на мероприятие слишком короткая',
 	URL_IS_TOO_LONG: 'Ссылка на мероприятие слишком длинная',
 	TITLE_IS_NOT_CLEAN: 'В заголовоке ненормативная лексика',
-	DESCRIPTION_IS_NOT_CLEAN: 'В описании ненормативная лексика'
+	DESCRIPTION_IS_NOT_CLEAN: 'В описании ненормативная лексика',
+	'event-not-found': 'Мероприятие не найдено',
+	'image-addition-error': 'Ошибка при добавлении изображения',
+	'image-deletion-error': 'Ошибка при удалении изображения',
+	'image-encoding-problem': 'Ошибка формата изображения',
+	'image-too-large': 'Файл изображения слишком большой',
+	'no-image-to-add': 'Файл изображения не найден',
+	'no-image-to-delete': 'Файл изображения не найден',
+	'paymant-info-file-parse-error': 'Ошибка при ',
+	'payment-info-file-not-exist': 'Метод оплаты не задан',
+	'payment-info-not-found': 'Метод оплаты не найден',
+	'unknown-image-route-error': 'Непредвиденная ошибка при обработке изображения',
+	'wrong-token': 'Ваш токен авторизации поврежден',
+	forbidden: 'Ошибка допуска',
+	unauthorized: 'У вас нет доступа к данному ресурсу',
+	'event-already-exists': 'Данное мероприятие	уже существует',
+	'event-sent-on-moderation': 'Мероприятие отправлено на модерацию',
+	'no-payload-provided': 'ОТправлен пустой запрос',
+	'timezone-city-not-found': 'Не удалось найти часовой пояс по указанным параметрам',
+	'user-does-not-exist': 'Пользователь не найден'
 };
 
 export const defaultTranslation = {
@@ -50,7 +69,7 @@ export const defaultTranslation = {
 			cancel: 'Отмена',
 			search: 'Поиск',
 			delete: 'Очистить'
-		},
+		}
 	},
 	about: {
 		title: 'О нас',
@@ -91,8 +110,7 @@ export const defaultTranslation = {
 		price: {
 			free: 'Бесплатно',
 			not_found: 'Цена не указана'
-		},
-		validation_errors: EventValidatorErrors
+		}
 	},
 	component: {
 		user_location: {
@@ -159,8 +177,7 @@ export const defaultTranslation = {
 			authorization: {
 				authorize: 'Авторизоваться',
 				deauthorize: 'Выйти из аккаунта'
-			},
-
+			}
 		}
 	},
 	dates: {
@@ -174,7 +191,8 @@ export const defaultTranslation = {
 	},
 	header: {
 		subscription_expired: '$t(dates.day.key) до конца подписки'
-	}
+	},
+	error: ServerErrors
 };
 
 export default defineTranslation(defaultTranslation);

@@ -4,6 +4,8 @@ import { useLocationStore, type Country, type City } from '@/stores/location.sto
 import { type EventOnPoster } from '@/../common/types';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
 
+const { translate } = useTranslation();
+
 type Props = {
 	closeEventModal: () => void;
 	dataForEdit?: EventOnPoster;
@@ -148,7 +150,7 @@ const isTimezoneDisabled = computed(() => {
 		<div class="modal-card">
 			<header class="modal-card__head">
 				<h2 class="modal-card__title">
-					{{ $translate('component.new_event_modal.title') }}
+					{{ translate('component.new_event_modal.title') }}
 				</h2>
 			</header>
 
@@ -157,13 +159,13 @@ const isTimezoneDisabled = computed(() => {
 				@submit.prevent="() => void 0"
 			>
 				<ModalUiModalSection
-					:label="$translate('component.new_event_modal.fields.location')"
+					:label="translate('component.new_event_modal.fields.location')"
 				>
 					<template #child>
 						<CommonUiBaseSelect
 							v-model="inputValues.country"
 							name="country"
-							:placeholder="$translate('global.country')"
+							:placeholder="translate('global.country')"
 							:list="locationStore.countries"
 							:disabled="true"
 							required
@@ -173,7 +175,7 @@ const isTimezoneDisabled = computed(() => {
 							v-model="inputValues.city"
 							name="city"
 							:disabled="isCityDisabled"
-							:placeholder="$translate('global.city')"
+							:placeholder="translate('global.city')"
 							:list="locationStore.getCitiesByCountry(inputValues.country) ?? []"
 							required
 						/>
@@ -182,7 +184,7 @@ const isTimezoneDisabled = computed(() => {
 							v-model="inputValues.timezone"
 							name="timezone"
 							:disabled="isTimezoneDisabled"
-							:placeholder="$translate('global.timezone')"
+							:placeholder="translate('global.timezone')"
 							:list="allTimezones"
 							required
 						/>
@@ -190,21 +192,19 @@ const isTimezoneDisabled = computed(() => {
 				</ModalUiModalSection>
 
 				<ModalUiModalSection
-					:label="$translate('component.new_event_modal.fields.main_info')"
+					:label="translate('component.new_event_modal.fields.main_info')"
 				>
 					<template #child>
 						<CommonUiBaseInput
 							v-model="inputValues.title"
 							name="title"
-							:placeholder="$translate('component.new_event_modal.fields.title')"
+							:placeholder="translate('component.new_event_modal.fields.title')"
 							required
 						/>
 						<CommonUiTextArea
 							v-model="inputValues.description"
 							name="description"
-							:placeholder="
-								$translate('component.new_event_modal.fields.description')
-							"
+							:placeholder="translate('component.new_event_modal.fields.description')"
 							required
 						/>
 					</template>
@@ -212,7 +212,7 @@ const isTimezoneDisabled = computed(() => {
 
 				<ModalUiModalSection
 					type="row"
-					:label="$translate('component.new_event_modal.fields.start')"
+					:label="translate('component.new_event_modal.fields.start')"
 				>
 					<template #child>
 						<CommonUiDateTimepicker
@@ -235,7 +235,7 @@ const isTimezoneDisabled = computed(() => {
 
 				<ModalUiModalSection
 					type="row"
-					:label="$translate('component.new_event_modal.fields.end')"
+					:label="translate('component.new_event_modal.fields.end')"
 				>
 					<template #child>
 						<CommonUiDateTimepicker
@@ -255,14 +255,14 @@ const isTimezoneDisabled = computed(() => {
 					</template>
 				</ModalUiModalSection>
 
-				<ModalUiModalSection :label="$translate('component.new_event_modal.fields.price')">
+				<ModalUiModalSection :label="translate('component.new_event_modal.fields.price')">
 					<template #child>
 						<CommonUiBaseInput
 							v-model="inputValues.price"
 							name="price"
 							type="text"
 							:placeholder="
-								$translate('component.new_event_modal.fields.price_placeholder')
+								translate('component.new_event_modal.fields.price_placeholder')
 							"
 							required
 						/>
@@ -271,21 +271,21 @@ const isTimezoneDisabled = computed(() => {
 						<!--								v-model="inputValues.currency"-->
 						<!--								:input-disabled="!inputValues.currency"-->
 						<!--								name="current"-->
-						<!--								:placeholder="$translate('global.city')"-->
+						<!--								:placeholder="translate('global.city')"-->
 						<!--								:list="cities"-->
 						<!--						/>-->
 					</template>
 				</ModalUiModalSection>
 
 				<ModalUiModalSection
-					:label="$translate('component.new_event_modal.fields.url_to_rigistration')"
+					:label="translate('component.new_event_modal.fields.url_to_rigistration')"
 				>
 					<template #child>
 						<CommonUiBaseInput
 							v-model="inputValues.url"
 							name="url"
 							:placeholder="
-								$translate('component.new_event_modal.fields.url_placeholder')
+								translate('component.new_event_modal.fields.url_placeholder')
 							"
 							required
 						/>
@@ -301,14 +301,14 @@ const isTimezoneDisabled = computed(() => {
 				<CommonButton
 					class="modal-card__button"
 					button-kind="ordinary"
-					:button-text="$translate('component.new_event_modal.cancel')"
+					:button-text="translate('component.new_event_modal.cancel')"
 					:is-active="!isLoading"
 					@click="closeModal()"
 				/>
 				<CommonButton
 					class="modal-card__button"
 					button-kind="success"
-					:button-text="$translate('component.new_event_modal.submit')"
+					:button-text="translate('component.new_event_modal.submit')"
 					:is-loading="isLoading"
 					:is-disabled="!checkFormFilling || isLoading"
 					@click="isLoading ? null : submitEvent()"

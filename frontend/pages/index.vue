@@ -3,8 +3,9 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
-const { $translate } = useNuxtApp();
-useHead({ titleTemplate: `%s / ${$translate('meta.home.title')}` });
+
+const { translate } = useTranslation();
+useHead({ titleTemplate: `%s / ${translate('meta.home.title')}` });
 definePageMeta({ name: RouteNameEnum.HOME });
 
 const {
@@ -26,8 +27,11 @@ const eventsQuery = ref({
 	city: '',
 	country: ''
 });
-// todo - fix debouncing, doesnt seem to work with non-primitives
-const debouncedEventsRequestQuery = refDebounced(eventsQuery, 500, { maxWait: 5000 });
+const debouncedEventsRequestQuery = refDebounced(
+	computed(() => ({ ...eventsQuery.value })),
+	500,
+	{ maxWait: 5000 }
+);
 const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 	data: { query: debouncedEventsRequestQuery }
 });
@@ -52,7 +56,7 @@ const now = Date.now();
 			<HomeUserLocation />
 		</div>
 		<h1 class="main-page__title">
-			{{ $translate('home.title') }}
+			{{ translate('home.title') }}
 		</h1>
 		<HomeFilter
 			v-model:country="eventsQuery.country"
@@ -78,7 +82,7 @@ const now = Date.now();
 			button-kind="success"
 			is-round
 			icon-name="plus"
-			:alt="$translate('home.button.add_event_aria')"
+			:alt="translate('home.button.add_event_aria')"
 			aria-haspopup="true"
 			@click="onButtonClick"
 		/>

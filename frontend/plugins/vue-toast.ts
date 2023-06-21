@@ -1,7 +1,8 @@
 import Toast, { type PluginOptions } from 'vue-toastification';
-import { useToast } from 'vue-toastification';
+import * as pkg from 'vue-toastification/dist/index.mjs';
 import ErrorToastVue from '~/components/common/ErrorToast.vue';
 
+const { useToast } = pkg;
 export default defineNuxtPlugin((nuxtApp) => {
 	const options: PluginOptions = {};
 	nuxtApp.vueApp.use(Toast, options);

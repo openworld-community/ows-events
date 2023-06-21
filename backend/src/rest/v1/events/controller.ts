@@ -42,7 +42,7 @@ export const addEvent: IAddEventHandler = async (request) => {
 	const validationResult = eventsValidator.validateEvent({ event });
 	if (!validationResult.isValid) {
 		await manualModerationController.inProgress(newPostId, validationResult.errors);
-		throw new Error(validationResult.errors.join(','));
+		throw new Error(CommonErrorsEnum.EVENT_SENT_ON_MODERATION);
 	}
 
 	return {

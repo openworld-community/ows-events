@@ -6,17 +6,17 @@ export const getAllTimezones = async (): Promise<Timezone[]> => {
 	if (local) return parseJSON(local);
 
 	const { data } = await apiRouter.timezone.getAll.useQuery({});
-	if (!data.value || data.value.type !== 'success') return [];
+	if (!data.value) return [];
 
-	localStorage.setItem('ALL_TIMEZONES', JSON.stringify(data.value.data));
-	return data.value.data;
+	localStorage.setItem('ALL_TIMEZONES', JSON.stringify(data.value));
+	return data.value;
 };
 
 type _Args = { country: string; city: string };
 //TODO летят ошибки, пока не выберешь город с привязанной таймзоной
 export const getTimezone = async ({ city, country }: _Args) => {
 	const { data } = await apiRouter.timezone.get.useQuery({ data: { city, country } });
-	if (!data.value || data.value.type !== 'success') return '';
+	if (!data.value) return '';
 
-	return timezoneToString(data.value.data);
+	return timezoneToString(data.value);
 };

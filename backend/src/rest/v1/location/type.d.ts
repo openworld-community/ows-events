@@ -1,3 +1,4 @@
+import { Timezone } from '@common/types/location';
 import { IRouteHandler } from '../../types';
 
 type IGetCountriesRouteProps = {
@@ -17,8 +18,6 @@ type IGetMetaRouteProps = {
 	Reply: {
 		country: string;
 		city: string;
-		timezoneName: string;
-		timezoneOffset: string;
-	};
+	} & Timezone;
 };
 type IGetMetaHandlerProps = IRouteHandler<IGetMetaRouteProps>;

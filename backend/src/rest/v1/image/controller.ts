@@ -8,10 +8,7 @@ export const deleteImage: IDeleteImageHandlerProps = async (request) => {
 
 	try {
 		await imageController.deleteImg(`.${filePath}`);
-		return {
-			type: 'success',
-			data: undefined
-		};
+		return undefined;
 	} catch (e) {
 		throw new Error(CommonErrorsEnum.IMAGE_DELETION_ERROR);
 	}
@@ -29,12 +26,7 @@ export const addImage: IAddImageHandlerProps = async (request) => {
 			data: Buffer.from(data, 'base64'),
 			filetype: filename.split('.').reverse()[0]
 		});
-		return {
-			type: 'success',
-			data: {
-				path
-			}
-		};
+		return { path };
 	} catch (e) {
 		throw new Error(CommonErrorsEnum.IMAGE_ADDITION_ERROR);
 	}

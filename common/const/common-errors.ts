@@ -14,5 +14,7 @@ export enum CommonErrorsEnum {
 	PAYMENT_INFO_FILE_NOT_EXIST = 'payment-info-file-not-exist',
 	PAYMENT_INFO_FILE_PARSE_ERROR = 'payment-info-file-parse-error',
 	EVENT_ALREADY_EXISTS = 'event-already-exists',
-	TIMEZONE_CITY_NOT_FOUND = 'timezone-city-not-found'
+	TIMEZONE_CITY_NOT_FOUND = 'timezone-city-not-found',
+	USER_DOES_NOT_EXIST = 'user-does-not-exist',
+	NO_PAYLOAD_PROVIDED = 'no-payload-provided'
 }

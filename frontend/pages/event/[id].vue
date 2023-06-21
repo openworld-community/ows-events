@@ -33,8 +33,8 @@ const redirect = () => {
 };
 
 const deleteCard = async () => {
-	const { data } = await apiRouter.events.delete.useMutation({ data: { id } });
-	if (!data.value) return;
+	const { error } = await apiRouter.events.delete.useMutation({ data: { id } });
+	if (!error.value) return;
 
 	await closeDeleteEventModal();
 	navigateTo({ name: RouteNameEnum.HOME });

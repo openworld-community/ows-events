@@ -4,8 +4,8 @@ export const getCountriesSchema = {
 	summary: 'Get all countries',
 	response: {
 		200: {
-			type: 'object',
-			country: { type: 'string' }
+			type: 'array',
+			items: { type: 'string' }
 		}
 	}
 };
@@ -22,7 +22,7 @@ export const getCitiesByCountrySchema = {
 	},
 	response: {
 		200: {
-			type: 'object',
+			type: 'array',
 			items: { type: 'string' }
 		}
 	}
@@ -58,7 +58,8 @@ export const getUsedCountriesSchema = {
 	summary: 'Get used countries',
 	response: {
 		200: {
-			type: 'array'
+			type: 'array',
+			items: { type: 'string' }
 		}
 	}
 };

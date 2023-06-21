@@ -166,7 +166,7 @@ const isTimezoneDisabled = computed(() => {
 							v-model="inputValues.country"
 							name="country"
 							:placeholder="translate('global.country')"
-							:list="locationStore.countries as Set<typeof Countryxsz>"
+							:list="locationStore.countries as Set<typeof Country>"
 							:disabled="true"
 							required
 						/>

@@ -161,6 +161,8 @@ export function useBackendFetch<T>(
 		if (data.error.value?.data?.message) {
 			const errorMessage: keyof typeof ServerErrors = data.error.value.data.message;
 			$errorToast(`error.${errorMessage}`);
+		} else {
+			console.error(data.error.value);
 		}
 		return data;
 	};

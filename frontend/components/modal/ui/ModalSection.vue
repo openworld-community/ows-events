@@ -38,13 +38,19 @@ const props = defineProps({
 		display: flex;
 		flex-direction: column;
 		width: 100%;
-		gap: 20px;
+
+		& > :deep(div:not(:last-child)) {
+			margin-bottom: 20px;
+		}
 	}
 
 	&__row {
 		display: flex;
 		width: 100%;
-		gap: 16px;
+
+		& > :deep(div:not(:last-child)) {
+			margin-right: 16px;
+		}
 	}
 }
 </style>

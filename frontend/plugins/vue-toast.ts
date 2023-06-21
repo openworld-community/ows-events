@@ -8,16 +8,19 @@ export default defineNuxtPlugin((nuxtApp) => {
 
 	const useErrorToast = useToast();
 	const errorToast = (errorMessage: string) => {
-		return useErrorToast(
+		return useErrorToast.update(
+			errorMessage,
 			{
-				component: ErrorToastVue,
-				props: { error: errorMessage }
+				content: { component: ErrorToastVue, props: { error: errorMessage } },
+				options: {
+					toastClassName: 'errorToast',
+					icon: false,
+					closeButton: false,
+					id: errorMessage,
+					timeout: 5000
+				}
 			},
-			{
-				toastClassName: 'errorToast',
-				icon: false,
-				closeButton: false
-			}
+			true
 		);
 	};
 

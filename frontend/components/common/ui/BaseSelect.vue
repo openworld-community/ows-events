@@ -12,8 +12,8 @@ const props = defineProps({
 		required: true
 	},
 	list: {
-		type: [Array, String, Set] as PropType<string[] | Set<string>>,
-		default: ''
+		type: [Array, Set] as PropType<string[] | Set<string>>,
+		default: () => []
 	},
 	name: {
 		type: String as PropType<string>,
@@ -57,7 +57,10 @@ const closeSelect = () => {
 };
 
 const filteredList = computed(() =>
-	(Array.isArray(props.list) ? props.list : [...props.list]).filter(
+	(Array.isArray(props.list)
+		? (props.list as string[])
+		: ([...(props.list as Set<string>)] as string[])
+	).filter(
 		(item) =>
 			item.toLowerCase().startsWith(props.modelValue.toLowerCase()) &&
 			item !== props.modelValue

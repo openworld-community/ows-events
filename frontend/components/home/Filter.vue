@@ -24,17 +24,17 @@ const updateCity = (city: typeof props.city) => {
 			class="filter__field"
 			name="country"
 			:placeholder="translate('global.country')"
-			:list="locationStore.usedCountries"
-			:model-value="country"
+			:list="locationStore.usedCountries as Set<typeof Country>"
+			:model-value="country as typeof Country"
 			@update:model-value="updateCountry($event)"
 		/>
 		<CommonUiBaseSelect
 			class="filter__field"
 			name="city"
 			:placeholder="translate('global.city')"
-			:list="locationStore.getUsedCitiesByCountry(country) ?? []"
+			:list="locationStore.getUsedCitiesByCountry(country as typeof Country) ?? []"
 			:disabled="!country"
-			:model-value="city"
+			:model-value="city as typeof City"
 			@update:model-value="updateCity($event)"
 		/>
 	</section>

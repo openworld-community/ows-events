@@ -23,7 +23,6 @@ body {
   //TODO: пока верстка только мобилки
   max-width: 480px;
   display: flex;
-  flex-direction: column;
   font-family: var(--font-family-main);
   font-size: var(--font-size-M);
   line-height: var(--line-height);
@@ -35,7 +34,8 @@ body {
 }
 
 #__nuxt {
-  height: 100vh;
+  min-width: 100%;
+  min-height: 100%;
 }
 
 a {

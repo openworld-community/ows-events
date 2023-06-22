@@ -6,6 +6,7 @@ import {
 	IGetCountriesHandlerProps,
 	IGetMetaHandlerProps
 } from './type';
+import { CommonErrorsEnum } from '../../../../../common/const';
 
 export const getMeta: IGetMetaHandlerProps = async (request) => {
 	const countryString = request.params.country;
@@ -18,23 +19,15 @@ export const getMeta: IGetMetaHandlerProps = async (request) => {
 
 	if (!city) {
 		const byProvince = cityTimezones.findFromCityStateProvince(countryString)[0];
-		if (!byProvince) {
-			return {
-				type: 'error',
-				errors: ['City not found. Please, check the city name and try again.']
-			};
-		}
+		if (!byProvince) throw new Error(CommonErrorsEnum.TIMEZONE_CITY_NOT_FOUND);
 
 		timezone = byProvince.timezone;
 
 		return {
-			type: 'success',
-			data: {
-				country: countryString,
-				city: cityString,
-				timezoneName: timezone,
-				timezoneOffset: moment.tz(timezone).format('Z')
-			}
+			country: countryString,
+			city: cityString,
+			timezoneName: timezone,
+			timezoneOffset: moment.tz(timezone).format('Z')
 		};
 	}
 	timezone = city.timezone;
@@ -42,13 +35,10 @@ export const getMeta: IGetMetaHandlerProps = async (request) => {
 	const timezoneOffset = moment.tz(timezone).format('Z');
 
 	return {
-		type: 'success',
-		data: {
-			country: countryString,
-			city: cityString,
-			timezoneName: timezone,
-			timezoneOffset
-		}
+		country: countryString,
+		city: cityString,
+		timezoneName: timezone,
+		timezoneOffset
 	};
 };
 

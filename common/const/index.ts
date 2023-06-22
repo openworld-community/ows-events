@@ -1,2 +1,5 @@
-export { CommonErrorsEnum } from './common-errors';
-export { EventValidatorErrorTypes } from './event-validation-error';
+import { CommonErrorsEnum } from './common-errors';
+import { EventValidatorErrorTypes } from './event-validation-error';
+
+export { CommonErrorsEnum, EventValidatorErrorTypes };
+export type ErrorCodes = EventValidatorErrorTypes | CommonErrorsEnum;

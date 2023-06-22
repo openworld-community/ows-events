@@ -1,14 +1,11 @@
 import fs from 'fs';
 import { IAddRegistrationHandler } from './type';
+import { CommonErrorsEnum } from '../../../../../common/const';
 
 // eslint-disable-next-line consistent-return
 export const addRegistration: IAddRegistrationHandler = async (request) => {
 	const data = await request.body;
-	if (!data) {
-		return {
-			type: 'error'
-		};
-	}
+	if (!data) throw new Error(CommonErrorsEnum.NO_PAYLOAD_PROVIDED);
 
 	const oldRegistrations = !fs.existsSync('assets/db/registrations.json')
 		? '[]'

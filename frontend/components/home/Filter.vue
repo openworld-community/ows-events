@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useLocationStore, type City, type Country } from '@/stores/location.store';
 
+const { translate } = useTranslation();
 const props = defineProps<{ city: City; country: Country }>();
 const emit = defineEmits<{
 	'update:city': [city: typeof props.city];
@@ -22,7 +23,7 @@ const updateCity = (city: typeof props.city) => {
 		<CommonUiBaseSelect
 			class="filter__field"
 			name="country"
-			:placeholder="$translate('global.country')"
+			:placeholder="translate('global.country')"
 			:list="locationStore.usedCountries"
 			:model-value="country"
 			@update:model-value="updateCountry($event)"
@@ -30,7 +31,7 @@ const updateCity = (city: typeof props.city) => {
 		<CommonUiBaseSelect
 			class="filter__field"
 			name="city"
-			:placeholder="$translate('global.city')"
+			:placeholder="translate('global.city')"
 			:list="locationStore.getUsedCitiesByCountry(country) ?? []"
 			:disabled="!country"
 			:model-value="city"

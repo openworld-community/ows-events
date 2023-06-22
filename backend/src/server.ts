@@ -47,7 +47,7 @@ fastify.default({
 });
 
 server.register(Static, {
-	root: path.join(__dirname, '../assets/'),
+	root: path.resolve('assets'),
 	prefix: '/static/'
 });
 

@@ -12,14 +12,11 @@ export const getPaymentInfo: IGetPaymentInfoHandlerProps = async (request) => {
 	const paymentsFileMd = `assets/presets/${request.params.id}.md`;
 	if (fs.existsSync(paymentsFileMd)) {
 		return {
-			type: 'success',
-			data: {
-				event,
-				paymentsInfo: {
-					id: event.id,
-					type: 'markdown',
-					source: fs.readFileSync(paymentsFileMd, 'utf-8')
-				}
+			event,
+			paymentsInfo: {
+				id: event.id,
+				type: 'markdown',
+				source: fs.readFileSync(paymentsFileMd, 'utf-8')
 			}
 		};
 	}
@@ -36,11 +33,8 @@ export const getPaymentInfo: IGetPaymentInfoHandlerProps = async (request) => {
 	const eventPaymentsInfo =
 		paymentsInfo.find((p) => p.id === request.params.id) ?? paymentsInfo[0];
 	return {
-		type: 'success',
-		data: {
-			event,
-			paymentsInfo: eventPaymentsInfo
-		}
+		event,
+		paymentsInfo: eventPaymentsInfo
 	};
 };
 

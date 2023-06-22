@@ -7,21 +7,20 @@ import type { UserInfo } from '@/../common/types/user';
 
 definePageMeta({ name: RouteNameEnum.EVENT });
 const route = useRoute();
-const id = route.params.id as string;
+const id = getFirstParam(route.params.id);
 
+const { translate } = useTranslation();
 const user = useCookie<UserInfo | null>('user');
 
 const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ data: { id } });
 
 const posterEvent = computed(() => {
-	if (data.value?.type !== 'success') return null;
-	return data.value.data;
+	if (!data.value) return void navigateTo({ name: RouteNameEnum.HOME });
+	return data.value;
 });
 
-const { $translate } = useNuxtApp();
-
 useHead({
-	title: `${$translate('meta.title')} / ${posterEvent.value?.title}`
+	title: `${translate('meta.title')} / ${posterEvent.value?.title}`
 });
 
 const redirect = () => {
@@ -34,13 +33,11 @@ const redirect = () => {
 };
 
 const deleteCard = async () => {
-	const { data } = await apiRouter.events.delete.useMutation({ data: { id } });
-	if (data.value?.type === 'success') {
-		await closeDeleteEventModal();
-		navigateTo({ name: RouteNameEnum.HOME });
-	} else {
-		console.error(data.value?.errors);
-	}
+	const { error } = await apiRouter.events.delete.useMutation({ data: { id } });
+	if (error.value) return;
+
+	await closeDeleteEventModal();
+	navigateTo({ name: RouteNameEnum.HOME });
 };
 
 // TODO подключить, когда вернемся к проработке регистрации
@@ -102,7 +99,7 @@ patchDeleteEventModal({
 			<img
 				v-if="posterEvent.image"
 				:src="getEventImage(posterEvent)"
-				:alt="$translate('event.image.event')"
+				:alt="translate('event.image.event')"
 				class="event-image__image"
 			/>
 		</div>
@@ -150,7 +147,7 @@ patchDeleteEventModal({
 					v-if="posterEvent.url !== 'self'"
 					button-kind="success"
 					class="event-actions__button"
-					:button-text="$translate('event.button.contact')"
+					:button-text="translate('event.button.contact')"
 					@click="redirect"
 				/>
 				<!--TODO подключить, когда вернемся к проработке регистрации-->
@@ -158,18 +155,21 @@ patchDeleteEventModal({
 				<!--					v-else-->
 				<!--					button-kind="success"-->
 				<!--					class="event-actions__button"-->
-				<!--					:button-text="$translate('event.button.register')"-->
+				<!--					:button-text="translate('event.button.register')"-->
 				<!--					@click="openRegistrationModal"-->
 				<!--				/>-->
 			</template>
 			<div
-				v-if="user?.id === posterEvent.creatorId || posterEvent.creatorId === 'dev-user'"
+				v-if="
+					posterEvent.creatorId &&
+					(user?.id === posterEvent.creatorId || posterEvent.creatorId === 'dev-user')
+				"
 				class="event-actions__manage"
 			>
 				<CommonButton
 					class="event-actions__button"
 					button-kind="warning"
-					:button-text="$translate('event.button.delete')"
+					:button-text="translate('event.button.delete')"
 					icon-name="trash"
 					icon-width="16"
 					icon-height="16"
@@ -178,7 +178,7 @@ patchDeleteEventModal({
 				<CommonButton
 					class="event-actions__button"
 					button-kind="ordinary"
-					:button-text="$translate('event.button.edit')"
+					:button-text="translate('event.button.edit')"
 					icon-name="edit"
 					icon-width="16"
 					icon-height="16"
@@ -241,7 +241,7 @@ patchDeleteEventModal({
 		}
 
 		&__description {
-			max-height: 155px;
+			max-height: 150px;
 			word-wrap: break-word;
 			overflow-y: auto;
 			font-size: var(--font-size-S);

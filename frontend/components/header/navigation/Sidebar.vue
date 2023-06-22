@@ -2,6 +2,7 @@
 import { RouteNameEnum } from '@/constants/enums/route';
 import { SUPPORT_TG_URL } from '../../../constants/url';
 
+const { translate } = useTranslation();
 const emit = defineEmits(['close']);
 </script>
 
@@ -17,14 +18,14 @@ const emit = defineEmits(['close']);
 
 		<HeaderNavigationNavItem
 			:link-to="{ name: RouteNameEnum.ABOUT }"
-			:text="$translate('component.header.about')"
+			:text="translate('component.header.about')"
 			icon-name="info"
 			@click="emit('close')"
 		/>
 
 		<HeaderNavigationNavItem
 			:link-to="SUPPORT_TG_URL"
-			:text="$translate('component.header.support')"
+			:text="translate('component.header.support')"
 			is-external-link
 			icon-name="contact-tg"
 			@click="emit('close')"
@@ -32,26 +33,26 @@ const emit = defineEmits(['close']);
 
 		<HeaderNavigationNavItem
 			:link-to="{ name: RouteNameEnum.ABOUT }"
-			:text="$translate('component.header.policy')"
+			:text="translate('component.header.policy')"
 			icon-name="privacy"
 			@click="emit('close')"
 		/>
 
 		<!--          <div-->
 		<!--            v-if="route.name === 'event'"-->
-		<!--            :aria-label="$translate('component.header.event.manage')"-->
+		<!--            :aria-label="translate('component.header.event.manage')"-->
 		<!--          >-->
 		<!--            <img-->
 		<!--              src="@/assets/img/icon/edit.svg"-->
 		<!--              width="24"-->
 		<!--              height="24"-->
-		<!--              :alt="$translate('event.button.edit')"-->
+		<!--              :alt="translate('event.button.edit')"-->
 		<!--            />-->
 		<!--            <img-->
 		<!--              src="@/assets/img/icon/share.svg"-->
 		<!--              width="24"-->
 		<!--              height="24"-->
-		<!--              :alt="$translate('global.button.share')"-->
+		<!--              :alt="translate('global.button.share')"-->
 		<!--            />-->
 		<!--          </div>-->
 	</nav>

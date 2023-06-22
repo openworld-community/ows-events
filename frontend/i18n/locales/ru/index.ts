@@ -112,6 +112,9 @@ export const defaultTranslation = {
 			not_found: 'Цена не указана'
 		}
 	},
+	privacy_policy: {
+		title: 'Политика конфиденциальности'
+	},
 	component: {
 		user_location: {
 			not_found: 'Мы не смогли найти вас('

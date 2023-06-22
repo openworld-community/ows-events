@@ -8,6 +8,13 @@ const scrollToTop = () => {
 	window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
+const router = useRouter();
+const isFromHome = ref(false);
+router.beforeEach((_, from, next) => {
+	isFromHome.value = from.name === RouteNameEnum.HOME;
+	next();
+});
+
 const isNavbarOpen = ref<boolean>(false);
 const navbarToggle = () => {
 	isNavbarOpen.value = !isNavbarOpen.value;
@@ -43,10 +50,10 @@ onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 					icon-name="back"
 					button-kind="ordinary"
 					:alt="translate('global.button.back')"
-					@click="useRouter().back()"
+					:link="!isFromHome ? { name: RouteNameEnum.HOME } : undefined"
+					@click="isFromHome && router.back()"
 				/>
 			</div>
-
 			<div class="header__right">
 				<!--        TODO: вернуться при доработке подписки-->
 				<!--				<HeaderSubscriptionExpired-->

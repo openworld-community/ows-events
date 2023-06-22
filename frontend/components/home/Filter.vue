@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useLocationStore, type City, type Country } from '@/stores/location.store';
 
+const route = useRoute();
 const { translate } = useTranslation();
 const props = defineProps<{ city: City; country: Country }>();
 const emit = defineEmits<{
@@ -12,9 +13,15 @@ const locationStore = useLocationStore();
 const updateCountry = (country: typeof props.country) => {
 	emit('update:country', country);
 	emit('update:city', '');
+	return navigateTo({
+		query: { ...route.query, country: country || undefined }
+	});
 };
 const updateCity = (city: typeof props.city) => {
 	emit('update:city', city);
+	return navigateTo({
+		query: { ...route.query, city: city || undefined }
+	});
 };
 </script>
 
@@ -26,7 +33,7 @@ const updateCity = (city: typeof props.city) => {
 			:placeholder="translate('global.country')"
 			:list="locationStore.usedCountries"
 			:model-value="country"
-			@update:model-value="updateCountry($event)"
+			@update:model-value="updateCountry"
 		/>
 		<CommonUiBaseSelect
 			class="filter__field"
@@ -35,7 +42,7 @@ const updateCity = (city: typeof props.city) => {
 			:list="locationStore.getUsedCitiesByCountry(country) ?? []"
 			:disabled="!country"
 			:model-value="city"
-			@update:model-value="updateCity($event)"
+			@update:model-value="updateCity"
 		/>
 	</section>
 </template>

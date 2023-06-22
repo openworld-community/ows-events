@@ -24,7 +24,7 @@ export default defineNuxtConfig({
 			import.meta.env.VITE_DOMAIN ||
 			process.env.VITE_DOMAIN ||
 			'poster-test-peredelano.orby-tech.space',
-		apiHost: 'https://metrics.orby-tech.space'
+		apiHost: 'https://afisha-metrics.orby-tech.space'
 	},
 	typescript: { strict: true },
 	vite: {

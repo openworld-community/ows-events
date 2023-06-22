@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '../../constants/enums/route';
+import type { RouteLocationRaw } from '.nuxt/vue-router';
 
 const { translate } = useTranslation();
 const route = useRoute();
-
-const scrollToTop = () => {
-	window.scrollTo({ top: 0, behavior: 'smooth' });
-};
 
 const router = useRouter();
 const isFromHome = ref(false);
@@ -25,6 +22,14 @@ const navigationBurger = ref(null);
 
 onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 const isAtHome = computed(() => route.name === RouteNameEnum.HOME);
+const homePageLink = computed<RouteLocationRaw | undefined>(() => {
+	if (isAtHome.value || isFromHome.value) return;
+	return { name: RouteNameEnum.HOME };
+});
+function navigateToHomepage() {
+	if (isAtHome.value) return window.scrollTo({ top: 0, behavior: 'smooth' });
+	if (isFromHome.value) router.back();
+}
 </script>
 
 <template>
@@ -34,8 +39,8 @@ const isAtHome = computed(() => route.name === RouteNameEnum.HOME);
 				<NuxtLink
 					class="header__navigation-link"
 					:aria-label="translate('home.button.afisha_logo_aria')"
-					:to="!isAtHome && !isFromHome ? { name: RouteNameEnum.HOME } : undefined"
-					@click="isAtHome ? scrollToTop() : isFromHome && router.back()"
+					:to="homePageLink"
+					@click="navigateToHomepage"
 				>
 					<CommonIcon
 						name="peredelano-afisha"

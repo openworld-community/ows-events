@@ -24,6 +24,7 @@ const sidebar = ref(null);
 const navigationBurger = ref(null);
 
 onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
+const isAtHome = computed(() => route.name === RouteNameEnum.HOME);
 </script>
 
 <template>
@@ -31,11 +32,10 @@ onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 		<div class="header__container">
 			<div class="header__left">
 				<NuxtLink
-					v-if="route.name === RouteNameEnum.HOME"
-					:to="{ name: RouteNameEnum.HOME }"
 					class="header__navigation-link"
 					:aria-label="translate('home.button.afisha_logo_aria')"
-					@click.prevent="scrollToTop"
+					:to="!isAtHome && !isFromHome ? { name: RouteNameEnum.HOME } : undefined"
+					@click="isAtHome ? scrollToTop() : isFromHome && router.back()"
 				>
 					<CommonIcon
 						name="peredelano-afisha"
@@ -44,15 +44,6 @@ onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 						alt="Peredelano Афиша"
 					/>
 				</NuxtLink>
-				<CommonButton
-					v-else
-					is-icon
-					icon-name="back"
-					button-kind="ordinary"
-					:alt="translate('global.button.back')"
-					:link="!isFromHome ? { name: RouteNameEnum.HOME } : undefined"
-					@click="isFromHome && router.back()"
-				/>
 			</div>
 			<div class="header__right">
 				<!--        TODO: вернуться при доработке подписки-->
@@ -61,7 +52,6 @@ onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 				<!--					class="header__subscription"-->
 				<!--				/>-->
 				<HeaderNavigationBurger
-					v-if="route.name === RouteNameEnum.HOME"
 					ref="navigationBurger"
 					:is-cross="isNavbarOpen"
 					:aria-label="

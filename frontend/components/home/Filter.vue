@@ -10,19 +10,23 @@ const emit = defineEmits<{
 }>();
 
 const locationStore = useLocationStore();
+
 const updateCountry = (country: typeof props.country) => {
 	emit('update:country', country);
 	emit('update:city', '');
-	return navigateTo({
-		query: { ...route.query, country: country || undefined }
-	});
 };
 const updateCity = (city: typeof props.city) => {
 	emit('update:city', city);
-	return navigateTo({
-		query: { ...route.query, city: city || undefined }
-	});
 };
+
+watch(
+	() => [props.country, props.city] as const,
+	([country, city]) => {
+		return navigateTo({
+			query: { ...route.query, country: country || undefined, city: city || undefined }
+		});
+	}
+);
 </script>
 
 <template>

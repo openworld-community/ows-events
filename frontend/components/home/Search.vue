@@ -4,12 +4,15 @@ const props = defineProps<{ search: string }>();
 const emit = defineEmits<{ 'update:search': [search: typeof props.search] }>();
 
 const { translate } = useTranslation();
-function searchUpdate(search: typeof props.search) {
-	emit('update:search', search);
-	return navigateTo({
-		query: { ...route.query, search: search || undefined }
-	});
-}
+
+watch(
+	() => props.search,
+	(search) => {
+		return navigateTo({
+			query: { ...route.query, search: search || undefined }
+		});
+	}
+);
 </script>
 
 <template>
@@ -21,7 +24,7 @@ function searchUpdate(search: typeof props.search) {
 			icon-name="search"
 			:model-value="search"
 			:placeholder="translate('global.search')"
-			@update:model-value="searchUpdate"
+			@update:model-value="(search: typeof search)=>emit('update:search', search)"
 		/>
 	</div>
 </template>

@@ -39,11 +39,11 @@ onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 				</NuxtLink>
 				<CommonButton
 					v-else
-					:link="{ name: RouteNameEnum.HOME }"
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"
 					:alt="translate('global.button.back')"
+					@click="useRouter().back()"
 				/>
 			</div>
 

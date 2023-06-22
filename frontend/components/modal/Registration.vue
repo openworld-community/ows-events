@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { sendFormAboutRegistration } from '@/services/event-registration.services';
-import { Registration } from '../../../common/types/registration';
+import type { Registration } from '../../../common/types/registration';
 
+const { translate } = useTranslation();
 const props = defineProps({
 	eventId: {
 		type: String,
@@ -88,10 +87,17 @@ const submit = async () => {
 	if (!submitAvailable.value) {
 		return;
 	}
-
-	await sendFormAboutRegistration(submitInfo.value).then(
-		async () => await navigateTo(`/payment/${submitInfo.value.eventId}`)
-	);
+	apiRouter.events.registration.add.useMutation({
+		data: { registration: submitInfo.value },
+		opts: {
+			async onResponse() {
+				// TODO добавить запись в localStorage для формы ивента (by Emilia)
+				localStorage.setItem('REGISTRATION', 'true');
+				localStorage.setItem('REGISTRATION_DATA', JSON.stringify(submitInfo.value));
+				await navigateTo(`/payment/${submitInfo.value.eventId}`);
+			}
+		}
+	});
 };
 
 const closeModal = () => {
@@ -163,7 +169,7 @@ const closeModal = () => {
 					<CommonInput
 						v-model="fromWhichCity"
 						input-type="input"
-						input-name="fromWichCity"
+						input-name="fromWhichCity"
 						input-placeholder="From which city will you go to the meetup?"
 					/>
 					<CommonInput
@@ -207,13 +213,13 @@ const closeModal = () => {
 				<CommonButton
 					class="modal-card__button"
 					button-kind="ordinary"
-					:button-text="$translate('component.new_event_modal.cancel')"
+					:button-text="translate('component.new_event_modal.cancel')"
 					@click="closeModal"
 				/>
 				<CommonButton
 					class="modal-card__button"
 					button-kind="success"
-					:button-text="$translate('component.new_event_modal.submit')"
+					:button-text="translate('component.new_event_modal.submit')"
 					@click="submit"
 				/>
 			</div>

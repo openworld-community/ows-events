@@ -1,25 +1,20 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
 import { BASE_URL } from '@/constants/url';
 
-type Props = {
-	externalImage?: string;
-};
+const { translate } = useTranslation();
 
-const props = defineProps<Props>();
-const emit = defineEmits(['update:modelValue']);
+export type ImageLoaderFile = File | null | 'DELETED';
+const props = defineProps<{
+	externalImage?: string;
+}>();
+
+const emit = defineEmits<{
+	'update:model-value': [file: ImageLoaderFile];
+}>();
 
 const input = ref<HTMLInputElement | null>(null);
-
-const imageSrc = ref<string | null>(null);
+const imageSrc = ref(props.externalImage ? `${BASE_URL}${props.externalImage}` : '');
 const fileIsLoading = ref(false);
-
-watch(
-	() => props.externalImage,
-	() => {
-		imageSrc.value = `${BASE_URL}${props.externalImage}`;
-	}
-);
 
 const loadImage = (event: Event) => {
 	if (!event.target) return console.warn('Load Image Event has no target attached');
@@ -44,12 +39,12 @@ const loadImage = (event: Event) => {
 		{ once: true }
 	);
 	reader.readAsDataURL(file);
-	emit('update:modelValue', file);
+	emit('update:model-value', file);
 };
 
 const removeImage = () => {
-	imageSrc.value = null;
-	emit('update:modelValue', null);
+	imageSrc.value = '';
+	emit('update:model-value', 'DELETED');
 };
 </script>
 
@@ -66,12 +61,11 @@ const removeImage = () => {
 			<CommonButton
 				v-if="!imageSrc"
 				class="loader__button"
-				button-class="button__ordinary"
-				:button-text="$translate('component.new_event_modal.add_image')"
+				button-kind="ordinary"
+				:button-text="translate('component.new_event_modal.add_image')"
 				icon-name="picture"
 				@click="fileIsLoading ? null : input?.click()"
 			/>
-
 			<div
 				v-if="imageSrc"
 				class="loader__preview"
@@ -84,8 +78,8 @@ const removeImage = () => {
 				</div>
 				<CommonButton
 					class="loader__button"
-					button-class="button__ordinary"
-					:button-text="$translate('component.new_event_modal.remove_image')"
+					button-kind="ordinary"
+					:button-text="translate('component.new_event_modal.remove_image')"
 					@click="removeImage"
 				/>
 			</div>

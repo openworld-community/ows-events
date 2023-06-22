@@ -11,10 +11,10 @@ type IGetJSONPaymentInfoHandlerProps = IRouteHandler<IGetJSONPaymentInfoRoutePro
 
 type IGetPaymentInfoRouteProps = {
 	Params: { id: string };
-	Reply: StandardResponse<{
+	Reply: {
 		event: EventOnPoster;
 		paymentsInfo: PaymentInfo;
-	}>;
+	};
 };
 
 type IGetPaymentInfoHandlerProps = IRouteHandler<IGetPaymentInfoRouteProps>;

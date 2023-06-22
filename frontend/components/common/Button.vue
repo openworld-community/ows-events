@@ -16,7 +16,7 @@ const props = defineProps({
 	buttonKind: {
 		// для обычных кнопок задает внешний вид согласно стайл-гайду, для кнопок-инонок раскрашивает в соответствующие цвета
 		type: String as PropType<ButtonKind>,
-		default: 'ordinary'
+		default: ''
 	},
 	buttonText: {
 		type: String as PropType<string>,
@@ -52,7 +52,7 @@ const props = defineProps({
 		default: IconDefaultParams.WIDTH
 	},
 	iconHeight: {
-    type: [String, Number] as PropType<string | number>,
+		type: [String, Number] as PropType<string | number>,
 		default: IconDefaultParams.HEIGHT
 	},
 	alt: {
@@ -128,7 +128,7 @@ const loaderColor = computed(() => {
 	justify-content: center;
 	height: 40px;
 	border-radius: 24px;
-	padding: 5px 14px;
+	padding: 7px 14px;
 	align-items: center;
 	transition: background-color 0.3s ease;
 

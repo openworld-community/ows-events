@@ -1,11 +1,22 @@
 <script setup lang="ts">
-import { RouteNameEnum } from '@/constants/enums/route';
+import { RouteNameEnum } from '../../constants/enums/route';
 
+const { translate } = useTranslation();
 const route = useRoute();
 
 const scrollToTop = () => {
 	window.scrollTo({ top: 0, behavior: 'smooth' });
 };
+
+const isNavbarOpen = ref<boolean>(false);
+const navbarToggle = () => {
+	isNavbarOpen.value = !isNavbarOpen.value;
+};
+
+const sidebar = ref(null);
+const navigationBurger = ref(null);
+
+onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 </script>
 
 <template>
@@ -16,13 +27,13 @@ const scrollToTop = () => {
 					v-if="route.name === RouteNameEnum.HOME"
 					:to="{ name: RouteNameEnum.HOME }"
 					class="header__navigation-link"
-					:aria-label="$translate('home.button.afisha_logo_aria')"
+					:aria-label="translate('home.button.afisha_logo_aria')"
 					@click.prevent="scrollToTop"
 				>
 					<CommonIcon
 						name="peredelano-afisha"
-						width="142"
-						height="24"
+						width="86"
+						height="40"
 						alt="Peredelano Афиша"
 					/>
 				</NuxtLink>
@@ -31,19 +42,33 @@ const scrollToTop = () => {
 					:link="{ name: RouteNameEnum.HOME }"
 					is-icon
 					icon-name="back"
-					:alt="$translate('global.button.back')"
+					button-kind="ordinary"
+					:alt="translate('global.button.back')"
 				/>
 			</div>
 
-			<div
-				v-if="route.name !== RouteNameEnum.ABOUT"
-				class="header__right"
-			>
-				<HeaderSubscriptionExpired
+			<div class="header__right">
+				<!--        TODO: вернуться при доработке подписки-->
+				<!--				<HeaderSubscriptionExpired-->
+				<!--					v-if="route.name === RouteNameEnum.HOME"-->
+				<!--					class="header__subscription"-->
+				<!--				/>-->
+				<HeaderNavigationBurger
 					v-if="route.name === RouteNameEnum.HOME"
-					class="header__subscription"
+					ref="navigationBurger"
+					:is-cross="isNavbarOpen"
+					:aria-label="
+						isNavbarOpen
+							? translate('component.header.button.close')
+							: translate('component.header.button.open')
+					"
+					@click="navbarToggle"
 				/>
-				<HeaderNavigation />
+				<HeaderNavigationSidebar
+					v-if="isNavbarOpen"
+					ref="sidebar"
+					@close="navbarToggle"
+				/>
 			</div>
 		</div>
 	</header>
@@ -80,17 +105,16 @@ const scrollToTop = () => {
 
 	&__left {
 		display: flex;
-		align-items: flex-start;
-		flex-direction: column;
-		padding: 14px 0;
-		margin-right: 12px;
+		height: 100%;
+		align-items: center;
+		margin-right: auto;
 	}
 
 	&__right {
 		display: flex;
 		justify-content: flex-end;
 		text-align: center;
-		padding: 14px 0;
+		position: relative;
 		margin-left: 12px;
 		gap: 18px;
 	}
@@ -102,6 +126,7 @@ const scrollToTop = () => {
 
 	&__navigation-link {
 		height: 100%;
+		align-items: center;
 		display: flex;
 	}
 }

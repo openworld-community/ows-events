@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { EventOnPoster } from '../../../common/types';
+import type { EventOnPoster } from '../../../common/types';
 
+const { translate } = useTranslation();
 const props = defineProps<{ eventData: EventOnPoster }>();
 
 //TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
@@ -10,23 +11,38 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 <template>
 	<div class="card">
 		<NuxtLink :to="`/event/${props.eventData.id}`">
-			<div class="card__image-container">
-				<span class="card__price">{{ props.eventData.price }} €</span>
+			<div
+				:class="[
+					'card__image-container',
+					{ 'card__image-container--background': !eventData.image }
+				]"
+			>
+				<span class="card__price">
+					{{ getPrice(eventData) }}
+				</span>
 				<img
-					:alt="$translate('home.events.image_alt')"
+					v-if="eventData.image"
+					:alt="translate('home.events.image_alt')"
 					class="card__image"
 					:src="getEventImage(props.eventData)"
+					width="375"
+					height="176"
 				/>
 			</div>
 
 			<div class="card-description">
-				<!--      TODO когда будет регистрация, нужно будет подставлять имя создавшего-->
-				<p class="card-description__author">Peredelano</p>
+				<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
+				<p
+					v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
+					class="card-description__author"
+				>
+					Peredelano
+				</p>
 				<h2 class="card-description__title">
 					{{ props.eventData.title }}
 				</h2>
 				<p class="card-description__datetime">
-					{{ convertToLocaleString(props.eventData.date, props.eventData?.timezone) }}
+					{{ convertToLocaleString(props.eventData.date) }}
 					({{ props.eventData.timezone?.timezoneOffset }}
 					{{ props.eventData.timezone?.timezoneName }})
 				</p>
@@ -39,7 +55,7 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 			target="_blank"
 			class="card-link card-link__geolink"
 		>
-				{{ props.eventData.location.country }}, {{ props.eventData.location.city }}
+			{{ props.eventData.location.country }}, {{ props.eventData.location.city }}
 		</NuxtLink>
 	</div>
 </template>
@@ -47,16 +63,23 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 <style scoped lang="less">
 .card {
 	width: 100%;
+  min-height: 287px;
 	position: relative;
-	padding-bottom: 44px;
+	margin-bottom: 44px;
 
 	&__image-container {
 		display: flex;
-		height: 176px;
-		background-color: var(--color-background-secondary);
-		margin-bottom: 12px;
 		width: 100%;
+		height: 176px;
+		background-color: var(--color-input-field);
+		background-size: cover;
+		margin-bottom: 12px;
 		line-height: 0;
+
+		&--background {
+			background: url('@/assets/img/event-preview@2x.png') center center no-repeat;
+			background-size: cover;
+		}
 	}
 
 	&__image {
@@ -93,16 +116,21 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 		padding-right: 16px;
 
 		&__author {
+      //TODO: пока верстка только мобилки
+      max-width: 480px;
+      word-wrap: break-word;
 			font-size: var(--font-size-XS);
 			font-weight: var(--font-weight-bold);
 			line-height: 16px;
 			text-align: left;
 			color: var(--color-text-secondary);
-
 			margin-bottom: 12px;
 		}
 
 		&__title {
+      //TODO: пока верстка только мобилки
+      max-width: 480px;
+      word-wrap: break-word;
 			font-size: var(--font-size-L);
 			font-weight: var(--font-weight-bold);
 			line-height: 24px;

@@ -1,3 +1,5 @@
+import type { Timezone } from './location';
+
 export type EventOnPoster = {
 	id: string;
 	creatorId?: string;
@@ -10,11 +12,8 @@ export type EventOnPoster = {
 		city: string;
 	};
 	image: string;
-	price: number;
-	timezone?: {
-		timezoneName: string;
-		timezoneOffset: string;
-	};
+	price: string;
+	timezone?: Timezone;
 	url: string;
 };
 
@@ -23,11 +22,8 @@ export type PostEventPayload = {
 		date: number;
 		image: string;
 		durationInSeconds: number;
-		price: number;
-		timezone: {
-			timezoneOffset: string;
-			timezoneName: string;
-		};
+		price: string;
+		timezone: Timezone;
 		description: string;
 		location: { country: string; city: string };
 		title: string;
@@ -37,4 +33,10 @@ export type PostEventPayload = {
 
 export type EventParams = {
 	id: string;
+};
+
+export type SearchEventPayload = {
+	searchLine?: string;
+	country?: string;
+	city?: string;
 };

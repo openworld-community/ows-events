@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { translate } = useTranslation();
 const props = defineProps({
 	adData: {
 		type: Object,
@@ -13,8 +14,8 @@ const props = defineProps({
 			class="add-label"
 			role="button"
 			tabindex="0"
-			:aria-label="$translate('home.events.ad')"
-			>{{ $translate('home.events.ad') }}
+			:aria-label="translate('home.events.ad')"
+			>{{ translate('home.events.ad') }}
 		</span>
 		<div class="card-title">
 			{{ props.adData.title }}
@@ -23,7 +24,7 @@ const props = defineProps({
 			{{ props.adData.description }}
 		</div>
 		<div class="card-action">
-			<a :href="props.adData.link"> {{ $translate('home.events.anchor_chat') }}! </a>
+			<a :href="props.adData.link"> {{ translate('home.events.anchor_chat') }}! </a>
 		</div>
 	</div>
 </template>

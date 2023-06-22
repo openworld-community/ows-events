@@ -105,8 +105,13 @@ patchDeleteEventModal({
 		</div>
 
 		<div class="event event-description">
-			<!--      TODO когда будет регистрация, нужно будет подставлять имя создавшего-->
-			<p class="event-description__author">Peredelano</p>
+			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
+			<p
+				v-if="posterEvent.title.toLowerCase().includes('peredelanoconf')"
+				class="event-description__author"
+			>
+				Peredelano
+			</p>
 			<h2 class="event-description__title">
 				{{ posterEvent.title }}
 			</h2>
@@ -209,6 +214,9 @@ patchDeleteEventModal({
 		padding-inline: 0;
 
 		&__author {
+			//TODO: пока верстка только мобилки
+			max-width: 480px;
+			word-wrap: break-word;
 			font-size: var(--font-size-XS);
 			font-weight: var(--font-weight-bold);
 			line-height: 16px;
@@ -218,6 +226,9 @@ patchDeleteEventModal({
 		}
 
 		&__title {
+			//TODO: пока верстка только мобилки
+			max-width: 480px;
+			word-wrap: break-word;
 			font-size: var(--font-size-L);
 			font-weight: var(--font-weight-bold);
 			line-height: 24px;
@@ -241,6 +252,8 @@ patchDeleteEventModal({
 		}
 
 		&__description {
+			//TODO: пока верстка только мобилки
+			max-width: 480px;
 			max-height: 150px;
 			word-wrap: break-word;
 			overflow-y: auto;

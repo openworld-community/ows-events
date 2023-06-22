@@ -34,6 +34,10 @@ defineProps({
 		type: String as PropType<string>,
 		default: ''
 	},
+	maxLength: {
+		type: String as PropType<string>,
+		default: ''
+	},
 	disabled: {
 		type: Boolean as PropType<boolean>,
 		default: false
@@ -88,6 +92,7 @@ const onRemove = () => {
 			:name="name"
 			:type="type"
 			:value="modelValue"
+			:maxlength="maxLength ? maxLength : undefined"
 			:disabled="disabled"
 			:placeholder="required ? `${placeholder} *` : placeholder"
 			:autocomplete="autocomplete"

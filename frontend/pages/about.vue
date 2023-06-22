@@ -21,7 +21,7 @@ useHead({
 		<br />
 		<p>{{ translate('about.functionality') }}</p>
 		<br />
-		<p>{{ translate('about.monetization') }}</p>
+		<p>{{ translate('about.perspectives') }}</p>
 		<br />
 		<p>
 			{{ translate('about.github') }}:

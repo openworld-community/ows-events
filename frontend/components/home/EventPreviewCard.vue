@@ -31,8 +31,13 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 			</div>
 
 			<div class="card-description">
-				<!--      TODO когда будет регистрация, нужно будет подставлять имя создавшего-->
-				<p class="card-description__author">Peredelano</p>
+				<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
+				<p
+					v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
+					class="card-description__author"
+				>
+					Peredelano
+				</p>
 				<h2 class="card-description__title">
 					{{ props.eventData.title }}
 				</h2>
@@ -58,8 +63,9 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 <style scoped lang="less">
 .card {
 	width: 100%;
+  min-height: 287px;
 	position: relative;
-	padding-bottom: 44px;
+	margin-bottom: 44px;
 
 	&__image-container {
 		display: flex;
@@ -110,16 +116,21 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 		padding-right: 16px;
 
 		&__author {
+      //TODO: пока верстка только мобилки
+      max-width: 480px;
+      word-wrap: break-word;
 			font-size: var(--font-size-XS);
 			font-weight: var(--font-weight-bold);
 			line-height: 16px;
 			text-align: left;
 			color: var(--color-text-secondary);
-
 			margin-bottom: 12px;
 		}
 
 		&__title {
+      //TODO: пока верстка только мобилки
+      max-width: 480px;
+      word-wrap: break-word;
 			font-size: var(--font-size-L);
 			font-weight: var(--font-weight-bold);
 			line-height: 24px;

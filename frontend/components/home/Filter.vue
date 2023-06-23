@@ -13,7 +13,7 @@ const locationStore = useLocationStore();
 
 const updateCountry = (country: typeof props.country) => {
 	emit('update:country', country);
-	emit('update:city', '');
+	props.city && emit('update:city', '');
 };
 const updateCity = (city: typeof props.city) => {
 	emit('update:city', city);

@@ -46,6 +46,7 @@ watch(
 			:list="locationStore.getUsedCitiesByCountry(country) ?? []"
 			:disabled="!country"
 			:model-value="city"
+			dropdown-position="right"
 			@update:model-value="updateCity"
 		/>
 	</section>
@@ -56,10 +57,9 @@ watch(
 	display: flex;
 
 	&__field {
-
-    &:not(:last-child) {
-      margin-right: 15px;
-    }
+		&:not(:last-child) {
+			margin-right: 15px;
+		}
 	}
 }
 </style>

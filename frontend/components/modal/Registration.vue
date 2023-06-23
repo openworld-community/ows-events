@@ -234,7 +234,6 @@ const closeModal = () => {
 	width: 100%;
 	min-height: auto;
 	align-items: center;
-	gap: var(--space-unrelated-items);
 	background: var(--color-white);
 
 	&__head,
@@ -255,18 +254,18 @@ const closeModal = () => {
 	&-agreements-list {
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-related-items);
 		align-items: center;
 	}
 
 	&-agreements-item {
 		display: flex;
 		align-items: center;
-		gap: var(--space-related-items);
+    margin-bottom: var(--space-related-items);
 
 		&__label {
 			font-size: var(--font-size-XS);
 			line-height: var(--line-height-XS);
+      margin-left: var(--space-related-items);;
 		}
 	}
 }

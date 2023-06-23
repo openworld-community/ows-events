@@ -31,6 +31,11 @@ const props = defineProps({
 		type: Boolean as PropType<boolean>,
 		default: false
 	},
+	dropdownPosition: {
+		// позиционирование дропдауна по правому/левому крою инпута
+		type: String as PropType<'left' | 'right'>,
+		default: 'left'
+	},
 	error: {
 		type: String as PropType<string>,
 		default: ''
@@ -80,11 +85,15 @@ const filteredList = computed(() =>
 			:model-value="modelValue"
 			:required="required"
 			icon-name="container"
+			:aria-expanded="isOpen"
 			@update:model-value="emit('update:model-value', $event)"
 			@click="openSelect"
 		/>
 
-		<div :class="`select__list-box ${isOpen && filteredList.length ? 'isOpen' : ''}`">
+		<div
+			v-if="isOpen && filteredList.length"
+			:class="['select__list-box', `select__list-box--${dropdownPosition}`]"
+		>
 			<ul class="select__list benefits">
 				<li
 					v-for="item in filteredList"
@@ -107,15 +116,12 @@ const filteredList = computed(() =>
 	}
 
 	&__box {
-		//width: 100%;
 		position: static;
 	}
 
 	&__list-box {
-		display: none;
 		position: absolute;
 		top: 50px;
-		left: 0;
 		max-width: 100%;
 		min-width: 267px;
 		height: 202px;
@@ -126,8 +132,12 @@ const filteredList = computed(() =>
 		border-radius: 24px;
 		border: 1px solid #ccc;
 
-		&.isOpen {
-			display: block;
+		&--left {
+			left: 0;
+		}
+
+		&--right {
+			right: 0;
 		}
 	}
 
@@ -135,12 +145,12 @@ const filteredList = computed(() =>
 		height: 100%;
 		overflow-y: scroll;
 		overflow-x: hidden;
-		white-space: nowrap;
 
 		& li {
 			transition: background-color 200ms;
 			cursor: pointer;
 			border-radius: 5px;
+			max-width: 100%;
 
 			&:hover {
 				background-color: var(--color-background-secondary);
@@ -156,6 +166,7 @@ const filteredList = computed(() =>
 	}
 
 	&__list::-webkit-scrollbar-thumb {
+		width: 5px;
 		background: var(--color-input-field);
 		border-radius: 5px;
 		height: 20px;

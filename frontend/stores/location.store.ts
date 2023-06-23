@@ -74,6 +74,9 @@ export const useLocationStore = defineStore('location', {
 				if (process.server) return;
 				if (this._citiesByCountry.get(country) || !this.countries.has(country)) return;
 
+				// forces Nuxt to await function calls if there are multiple of them(avoid duplication of requests)
+				await new Promise((r) => r(0));
+
 				const { $locationStoreForage } = useNuxtApp();
 				const localCities: City[] | null = await $locationStoreForage.getItem(country);
 				if (localCities) {
@@ -96,6 +99,10 @@ export const useLocationStore = defineStore('location', {
 			(async () => {
 				if (process.server) return;
 				if (!country || this._usedСitiesByCountry.get(country)) return;
+
+				// forces Nuxt to await function calls if there are multiple of them(avoid duplication of requests)
+				await new Promise((r) => r(0));
+
 				const { data } = await apiRouter.location.country.getUsedCities.useQuery({
 					data: { country }
 				});

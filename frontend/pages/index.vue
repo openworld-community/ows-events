@@ -22,10 +22,11 @@ const {
 needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
 
 const route = useRoute();
+// todo - move this to the components?
 const eventsQuery = ref({
-	searchLine: route.query.search?.toString() ?? '',
-	city: '',
-	country: ''
+	searchLine: getFirstQuery(route.query.search),
+	city: getFirstQuery(route.query.city),
+	country: getFirstQuery(route.query.country)
 });
 const debouncedEventsRequestQuery = refDebounced(
 	computed(() => ({ ...eventsQuery.value })),

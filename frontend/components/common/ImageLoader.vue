@@ -114,7 +114,6 @@ const removeImage = () => {
 	&__buttons {
 		display: flex;
 		align-items: center;
-		gap: 15px;
 	}
 
 	&__button {

@@ -13,10 +13,9 @@ const sidebar = ref(null);
 const navigationBurger = ref(null);
 
 onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
+
 const isAtHome = computed(() => route.name === RouteNameEnum.HOME);
-function scrollToTop() {
-	window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 </script>
 
 <template>
@@ -109,7 +108,6 @@ function scrollToTop() {
 		text-align: center;
 		position: relative;
 		margin-left: 12px;
-		gap: 18px;
 	}
 
 	&__subscription {

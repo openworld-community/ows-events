@@ -70,18 +70,12 @@ const props = defineProps({
 	}
 });
 
-const loaderColor = computed(() => {
-	switch (props.buttonKind) {
-		case 'ordinary':
-			return 'var(--color-text-main)';
-		case 'success':
-			return 'var(--color-white)';
-		case 'warning':
-			return 'var(--color-accent-red)';
-		default:
-			return '';
-	}
-});
+const loaderColorDict = {
+	ordinary: 'var(--color-text-main)',
+	success: 'var(--color-white)',
+	warning: 'var(--color-accent-red)'
+} satisfies Record<ButtonKind, string>;
+const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 </script>
 
 <template>

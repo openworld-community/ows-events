@@ -1,16 +1,8 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '../../constants/enums/route';
-import type { RouteLocationRaw } from '.nuxt/vue-router';
 
 const { translate } = useTranslation();
 const route = useRoute();
-
-const router = useRouter();
-const isFromHome = ref(false);
-router.beforeEach((_, from, next) => {
-	isFromHome.value = from.name === RouteNameEnum.HOME;
-	next();
-});
 
 const isNavbarOpen = ref<boolean>(false);
 const navbarToggle = () => {
@@ -22,13 +14,9 @@ const navigationBurger = ref(null);
 
 onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 const isAtHome = computed(() => route.name === RouteNameEnum.HOME);
-const homePageLink = computed<RouteLocationRaw | undefined>(() => {
-	if (isAtHome.value || isFromHome.value) return;
-	return { name: RouteNameEnum.HOME };
-});
-function navigateToHomepage() {
-	if (isAtHome.value) return window.scrollTo({ top: 0, behavior: 'smooth' });
-	if (isFromHome.value) router.back();
+function scrollToTop() {
+	console.log('scrolled');
+	window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 </script>
 
@@ -38,9 +26,13 @@ function navigateToHomepage() {
 			<div class="header__left">
 				<NuxtLink
 					class="header__navigation-link"
-					:aria-label="translate('home.button.afisha_logo_aria')"
-					:to="homePageLink"
-					@click="navigateToHomepage"
+					:aria-label="
+						isAtHome
+							? translate('home.button.afisha_logo_aria')
+							: translate('component.header.button.home')
+					"
+					:to="!isAtHome ? { name: RouteNameEnum.HOME } : undefined"
+					@click="isAtHome && scrollToTop()"
 				>
 					<CommonIcon
 						name="peredelano-afisha"

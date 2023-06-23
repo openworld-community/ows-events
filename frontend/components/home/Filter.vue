@@ -43,9 +43,12 @@ const updateCity = (city: typeof props.city) => {
 <style scoped lang="less">
 .filter {
 	display: flex;
-	gap: 15px;
 
 	&__field {
+
+    &:not(:last-child) {
+      margin-right: 15px;
+    }
 	}
 }
 </style>

@@ -15,7 +15,6 @@ const navigationBurger = ref(null);
 onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 const isAtHome = computed(() => route.name === RouteNameEnum.HOME);
 function scrollToTop() {
-	console.log('scrolled');
 	window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 </script>

@@ -45,5 +45,7 @@ defineProps<{ error: string }>();
 .Vue-Toastification__toast--default.errorToast {
 	padding: 0;
 	box-shadow: hsla(0, 0%, 0%, 0.4) 0 2px 3px, hsla(0, 0%, 0%, 0.25) 0 4px 8px 3px;
+	align-self: center;
+	max-width: fit-content;
 }
 </style>

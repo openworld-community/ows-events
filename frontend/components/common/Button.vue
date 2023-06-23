@@ -2,6 +2,7 @@
 import { computed, type PropType } from 'vue';
 import NuxtLink from '#app/components/nuxt-link';
 import { IconDefaultParams } from '@/constants/defaultValues/icon';
+import type { IconName } from './Icon.vue';
 
 const emit = defineEmits(['click']);
 
@@ -44,7 +45,7 @@ const props = defineProps({
 	},
 	iconName: {
 		// можно передать иконку в кнопку или сделать кнопкой-иконкой
-		type: String as PropType<string>,
+		type: String as PropType<IconName>,
 		default: ''
 	},
 	iconWidth: {
@@ -69,19 +70,12 @@ const props = defineProps({
 	}
 });
 
-const loaderColor = computed(() => {
-	let color = '';
-	if (props.buttonKind === 'success') {
-		color = 'var(--color-white)';
-	}
-	if (props.buttonKind === 'warning') {
-		color = 'var(--color-accent-red)';
-	}
-	if (props.buttonKind === 'ordinary') {
-		color = 'var(--color-text-main)';
-	}
-	return color;
-});
+const loaderColorDict = {
+	ordinary: 'var(--color-text-main)',
+	success: 'var(--color-white)',
+	warning: 'var(--color-accent-red)'
+} satisfies Record<ButtonKind, string>;
+const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 </script>
 
 <template>

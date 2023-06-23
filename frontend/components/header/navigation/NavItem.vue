@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
+import type { IconName } from '~/components/common/Icon.vue';
 
-type NavItemKind = 'warning'
+type NavItemKind = 'warning';
 
 const props = defineProps({
 	linkTo: {
-    // если есть ссылка, компонент NuxtLink, иначе - button
+		// если есть ссылка, компонент NuxtLink, иначе - button
 		type: [String, Object] as PropType<string | { name: string } | null>,
 		default: null
 	},
@@ -19,7 +20,7 @@ const props = defineProps({
 		required: true
 	},
 	iconName: {
-		type: String as PropType<string>,
+		type: String as PropType<IconName>,
 		required: true
 	},
 	itemKind: {

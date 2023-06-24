@@ -99,7 +99,7 @@ const removeImage = () => {
 	width: fit-content;
 
 	.image {
-		min-width: 0;
+		min-width: unset;
 		width: 69px;
 		height: 56px;
 		overflow: hidden;

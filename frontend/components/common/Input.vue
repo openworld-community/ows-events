@@ -1,5 +1,11 @@
 <script setup lang="ts">
-const ICON_DICTIONARY: { [key: string]: string } = {
+import type { IconName } from './Icon.vue';
+function defineIconDictionary<T extends Record<string, IconName>>(
+	dictionary: T
+): { [K in keyof T | (string & {})]: IconName } {
+	return dictionary;
+}
+const ICON_DICTIONARY = defineIconDictionary({
 	search: 'search',
 	date: 'calendar',
 	endDate: 'calendar',
@@ -10,13 +16,13 @@ const ICON_DICTIONARY: { [key: string]: string } = {
 	country: 'container',
 	city: 'container',
 	timezone: 'container'
-};
+});
 
 const emit = defineEmits(['update:model-value']);
 
 const props = defineProps({
 	inputName: {
-		type: String,
+		type: String as PropType<keyof typeof ICON_DICTIONARY>,
 		required: true
 	},
 	inputType: {

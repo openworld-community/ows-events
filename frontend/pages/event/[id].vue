@@ -151,7 +151,7 @@ patchDeleteEventModal({
 				<CommonButton
 					v-if="posterEvent.url !== 'self'"
 					button-kind="success"
-					class="event-actions__button"
+					class="event-actions__button event-actions__button--connect"
 					:button-text="translate('event.button.contact')"
 					@click="redirect"
 				/>
@@ -172,7 +172,7 @@ patchDeleteEventModal({
 				class="event-actions__manage"
 			>
 				<CommonButton
-					class="event-actions__button"
+					class="event-actions__button event-actions__button--admin"
 					button-kind="warning"
 					:button-text="translate('event.button.delete')"
 					icon-name="trash"
@@ -181,7 +181,7 @@ patchDeleteEventModal({
 					@click="openDeleteEventModal"
 				/>
 				<CommonButton
-					class="event-actions__button"
+					class="event-actions__button event-actions__button--admin"
 					button-kind="ordinary"
 					:button-text="translate('event.button.edit')"
 					icon-name="edit"
@@ -266,19 +266,27 @@ patchDeleteEventModal({
 		display: flex;
 		flex-direction: column;
 		background-color: var(--color-white);
-		gap: var(--space-unrelated-items);
 		margin-top: auto;
 
 		&__manage {
 			display: flex;
 			justify-content: center;
-			gap: 10px;
 		}
 
 		&__button {
 			width: 100%;
 			min-width: 165px;
 			height: 40px;
+
+			&--connect {
+				margin-bottom: var(--space-unrelated-items);
+			}
+
+			&--admin {
+				&:not(:last-child) {
+					margin-right: 17px;
+				}
+			}
 		}
 	}
 }

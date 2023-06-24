@@ -22,7 +22,7 @@ export const addEvent: IAddEventHandler = async (request) => {
 		const token = request.headers.authorization;
 		if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-		const jwtData = jwt.verify(token, 'secret') as ITokenData;
+		const jwtData = jwt.verify(token, vars.secret) as ITokenData;
 		if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
 		event.creatorId = jwtData.id;
@@ -64,7 +64,7 @@ export const deleteEvent: IDeleteEventHandler = async (request) => {
 		const token = request.headers.authorization;
 		if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-		const jwtData = jwt.verify(token, 'secret') as ITokenData;
+		const jwtData = jwt.verify(token, vars.secret) as ITokenData;
 		if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
 		const oldEvent = await eventsStateController.getEvent(request.body.id);
@@ -81,7 +81,7 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 		const token = request.headers.authorization;
 		if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-		const jwtData = jwt.verify(token, 'secret') as ITokenData;
+		const jwtData = jwt.verify(token, vars.secret) as ITokenData;
 		if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
 		const oldEvent = await eventsStateController.getEvent(request.body.event.id);

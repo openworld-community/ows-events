@@ -4,10 +4,6 @@ import { RouteNameEnum } from '../../constants/enums/route';
 const { translate } = useTranslation();
 const route = useRoute();
 
-const scrollToTop = () => {
-	window.scrollTo({ top: 0, behavior: 'smooth' });
-};
-
 const isNavbarOpen = ref<boolean>(false);
 const navbarToggle = () => {
 	isNavbarOpen.value = !isNavbarOpen.value;
@@ -17,6 +13,9 @@ const sidebar = ref(null);
 const navigationBurger = ref(null);
 
 onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
+
+const isAtHome = computed(() => route.name === RouteNameEnum.HOME);
+const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 </script>
 
 <template>
@@ -24,11 +23,14 @@ onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 		<div class="header__container">
 			<div class="header__left">
 				<NuxtLink
-					v-if="route.name === RouteNameEnum.HOME"
-					:to="{ name: RouteNameEnum.HOME }"
 					class="header__navigation-link"
-					:aria-label="translate('home.button.afisha_logo_aria')"
-					@click.prevent="scrollToTop"
+					:aria-label="
+						isAtHome
+							? translate('home.button.afisha_logo_aria')
+							: translate('component.header.button.home')
+					"
+					:to="!isAtHome ? { name: RouteNameEnum.HOME } : undefined"
+					@click="isAtHome && scrollToTop()"
 				>
 					<CommonIcon
 						name="peredelano-afisha"
@@ -37,16 +39,7 @@ onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 						alt="Peredelano Афиша"
 					/>
 				</NuxtLink>
-				<CommonButton
-					v-else
-					:link="{ name: RouteNameEnum.HOME }"
-					is-icon
-					icon-name="back"
-					button-kind="ordinary"
-					:alt="translate('global.button.back')"
-				/>
 			</div>
-
 			<div class="header__right">
 				<!--        TODO: вернуться при доработке подписки-->
 				<!--				<HeaderSubscriptionExpired-->
@@ -54,7 +47,6 @@ onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 				<!--					class="header__subscription"-->
 				<!--				/>-->
 				<HeaderNavigationBurger
-					v-if="route.name === RouteNameEnum.HOME"
 					ref="navigationBurger"
 					:is-cross="isNavbarOpen"
 					:aria-label="
@@ -116,7 +108,6 @@ onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 		text-align: center;
 		position: relative;
 		margin-left: 12px;
-		gap: 18px;
 	}
 
 	&__subscription {

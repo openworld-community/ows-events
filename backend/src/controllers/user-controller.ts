@@ -2,6 +2,7 @@ import { TGUser } from '@common/types/user';
 import jwt from 'jsonwebtoken';
 import { UserModel } from '../models/user.model';
 import { CommonErrorsEnum } from '../../../common/const';
+import { vars } from '../config/vars';
 
 export type FindEventParams = {
 	searchLine?: string;
@@ -16,7 +17,7 @@ class UserController {
 				id: user.id,
 				username: user.username
 			},
-			'secret'
+			vars.secret
 		);
 		await UserModel.findOneAndUpdate(
 			{ id: user.id },

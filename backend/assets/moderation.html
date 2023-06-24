@@ -194,7 +194,7 @@
 
 		const dateTimeString = currentEvent.durationInSeconds
 			? `${convertToLocaleString(currentEvent.date, currentEvent.timezone)}-${convertToLocaleString(currentEvent.date + currentEvent.durationInSeconds, currentEvent.timezone)}`
-			: convertToLocaleString(posterEvent.date ?? Date.now(), posterEvent.timezone);
+			: convertToLocaleString(currentEvent.date ?? Date.now(), currentEvent.timezone);
 
 		eventImageField.src = currentEvent.image;
 		eventTitleField.innerHTML = currentEvent.title;

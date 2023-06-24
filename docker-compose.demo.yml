@@ -63,6 +63,7 @@ services:
             - MODE=prod
             - MONGO_URI=mongodb://mongo:27017/demo
             - FRONTEND_URL=https://poster-demo-peredelano.orby-tech.space
+            - SECRET_KEY
         networks:
             - traefikpublic
         ports:

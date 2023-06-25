@@ -46,6 +46,10 @@ services:
             dockerfile: ./backend/Dockerfile
         logging: *default-logging
         restart: always
+        depends_on:
+            - mongo
+        links:
+            - mongo
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'

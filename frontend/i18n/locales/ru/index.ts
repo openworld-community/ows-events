@@ -112,9 +112,6 @@ export const defaultTranslation = {
 			not_found: 'Цена не указана'
 		}
 	},
-	privacy_policy: {
-		title: 'Политика конфиденциальности'
-	},
 	limitation_of_liability: {
 		title: 'Оговорка об ограничении ответственности'
 	},

@@ -15,6 +15,7 @@ const { translate } = useTranslation();
 				<NuxtLink
 					to="https://afisha.peredelano.com"
 					class="link"
+					target="_blank"
 				>
 					afisha.peredelano.com
 				</NuxtLink>
@@ -23,6 +24,7 @@ const { translate } = useTranslation();
 				<NuxtLink
 					to="https://afisha.peredelano.com"
 					class="link"
+					target="_blank"
 				>
 					afisha.peredelano.com
 				</NuxtLink>

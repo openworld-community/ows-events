@@ -115,6 +115,9 @@ export const defaultTranslation = {
 	privacy_policy: {
 		title: 'Политика конфиденциальности'
 	},
+	limitation_of_liability: {
+		title: 'Оговорка об ограничении ответственности'
+	},
 	component: {
 		user_location: {
 			not_found: 'Мы не смогли найти вас('
@@ -174,6 +177,7 @@ export const defaultTranslation = {
 			about: 'Oб Афише',
 			support: 'Поддержка',
 			policy: 'Политика конфиденциальности',
+			limitation_of_liability: 'Оговорка об ограничении ответственности',
 			event: {
 				manage: 'Управление событием'
 			},

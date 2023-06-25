@@ -32,8 +32,8 @@ const emit = defineEmits(['close']);
 		/>
 
 		<HeaderNavigationNavItem
-			:link-to="{ name: RouteNameEnum.PRIVACY_POLICY }"
-			:text="translate('component.header.policy')"
+			:link-to="{ name: RouteNameEnum.LIMITATION_OF_LIABILITY }"
+			:text="translate('component.header.limitation_of_liability')"
 			icon-name="privacy"
 			@click="emit('close')"
 		/>

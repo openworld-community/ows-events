@@ -3,5 +3,6 @@ export enum RouteNameEnum {
   EVENT = 'event',
   ABOUT = 'about',
   PAYMENT_INFO = 'paymentInfo',
-  PRIVACY_POLICY = 'privacypolicy'
+  PRIVACY_POLICY = 'privacypolicy',
+  LIMITATION_OF_LIABILITY = 'limitation_of_liability',
 }

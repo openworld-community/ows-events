@@ -13,7 +13,7 @@ const { translate } = useTranslation();
 			<li>
 				Администрация сайта
 				<NuxtLink
-					:to="{ name: RouteNameEnum.HOME }"
+					to="https://afisha.peredelano.com"
 					class="link"
 				>
 					afisha.peredelano.com
@@ -21,7 +21,7 @@ const { translate } = useTranslation();
 				и социальных сетей AfishaPeredelano (Далее — Афиша) не занимается самостоятельной
 				организацией мероприятий, освещаемых на сайте
 				<NuxtLink
-					:to="{ name: RouteNameEnum.HOME }"
+					to="https://afisha.peredelano.com"
 					class="link"
 				>
 					afisha.peredelano.com

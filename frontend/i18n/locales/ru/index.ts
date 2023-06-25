@@ -169,7 +169,8 @@ export const defaultTranslation = {
 		header: {
 			button: {
 				open: 'Открыть меню навигации',
-				close: 'Скрыть меню навигации'
+				close: 'Скрыть меню навигации',
+				home: 'Вернуться на домашнюю страницу'
 			},
 			about: 'Oб Афише',
 			support: 'Поддержка',

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { type PropType } from 'vue';
+import type { IconName } from '../Icon.vue';
 
 const { translate } = useTranslation();
 
@@ -56,12 +57,12 @@ defineProps({
 	},
 	// Если нужна иконка в правом углу
 	iconName: {
-		type: String as PropType<string>,
+		type: String as PropType<IconName>,
 		default: ''
 	},
 	// Если нужна кнопка в правом углу (кроме закрывающего крестика)
 	buttonName: {
-		type: String as PropType<string>,
+		type: String as PropType<IconName>,
 		default: ''
 	}
 });

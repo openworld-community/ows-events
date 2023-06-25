@@ -21,8 +21,9 @@ services:
                 - VITE_API_URL=https://api.poster-demo-peredelano.orby-tech.space/api
                 - VITE_BASE_URL=https://api.poster-demo-peredelano.orby-tech.space
                 - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
-                - VITE_AUTH_SERVER_URL=https://auth.poster-demo-peredelano.orby-tech.space
-                - VITE_POSTAUTH_URL=https://poster-demo-peredelano.orby-tech.space
+                - VITE_TELEGRAM_AUTH_BOT_NAME
+                - VITE_MODE=production
+                - VITE_DOMAIN=poster-demo-peredelano.orby-tech.space
         logging: *default-logging
         restart: always
         labels:
@@ -39,34 +40,16 @@ services:
         ports:
             - '3001:3000'
 
-    auth:
-        build:
-            context: .
-            dockerfile: ./auth-bot/Dockerfile
-        logging: *default-logging
-        restart: always
-        environment:
-            - AUTH_TELEGRAM_BOT_TOKEN
-        labels:
-            - 'traefik.enable=true'
-            - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
-            - 'traefik.http.routers.demo_auth_https.rule=Host(`auth.poster-demo-peredelano.orby-tech.space`)'
-            - 'traefik.http.routers.demo_auth_https.middlewares=sslheader@docker'
-            - 'traefik.http.routers.demo_auth_https.entrypoints=http, https'
-            - 'traefik.http.routers.demo_auth_https.tls.certresolver=myresolver'
-            - 'traefik.http.routers.demo_auth_http.rule=Host(`auth.poster-demo-peredelano.orby-tech.space`)'
-            - 'traefik.http.routers.demo_auth_http.entrypoints=http'
-        networks:
-            - traefikpublic
-        ports:
-            - '7091:7090'
-
     backend:
         build:
             context: .
             dockerfile: ./backend/Dockerfile
         logging: *default-logging
         restart: always
+        depends_on:
+            - mongo
+        links:
+            - mongo
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
@@ -77,24 +60,33 @@ services:
             - 'traefik.http.routers.demo_backend_http.rule=Host(`api.poster-demo-peredelano.orby-tech.space`)'
             - 'traefik.http.routers.demo_backend_http.entrypoints=http'
         environment:
-            - AUTH_SERVER_URL=https://auth.poster-demo-peredelano.orby-tech.space
             - MODE=prod
+            - MONGO_URI=mongodb://mongo:27017/demo
+            - FRONTEND_URL=https://poster-demo-peredelano.orby-tech.space
+            - SECRET_KEY
         networks:
             - traefikpublic
         ports:
             - '7081:7080'
         volumes:
-            - assets-db-demo:/app/backend/assets/db
             - assets-img-demo:/app/backend/assets/img
 
-volumes:
-    assets-db-demo:
-        driver: local
-        driver_opts:
-            type: none
-            o: bind
-            device: /root/ows-events_demo/assets/db
+    mongo:
+        image: mongo:6.0
+        restart: unless-stopped
+        command: ['--bind_ip_all']
+        ports:
+            - '127.0.0.1:27001:27017'
+        networks:
+            - traefikpublic
+        healthcheck:
+            test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo --quiet) -eq 1
+            interval: 10s
+            start_period: 30s
+        volumes:
+            - /root/db/demo:/data/db
 
+volumes:
     assets-img-demo:
         driver: local
         driver_opts:

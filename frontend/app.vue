@@ -1,11 +1,22 @@
 <script lang="ts" setup>
 import './assets/less/app.less';
 import 'vue-final-modal/style.css';
+import 'vue-toastification/dist/index.css';
 import 'virtual:svg-icons-register';
-import { useLocationStore } from './stores/location.store';
 import { ModalsContainer } from 'vue-final-modal';
+import { isDevelopmentMode } from './constants/common';
 
-await useLocationStore().init();
+const { translate } = useTranslation();
+useHead({
+	//TODO доработать метаданные
+	title: translate('meta.title'),
+	meta: [{ name: 'Афиша переделано', content: 'Это площадка для поиска мероприятий' }]
+});
+
+if (isDevelopmentMode) {
+	const tokenCookie = useCookie<string>('token');
+	tokenCookie.value ??= 'blablabla';
+}
 </script>
 <template>
 	<HeaderCommon />

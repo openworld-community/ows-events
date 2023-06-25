@@ -3,6 +3,7 @@ type Props = {
 	closeNeedAuthorizeModal: () => void;
 };
 
+const { translate } = useTranslation();
 const props = defineProps<Props>();
 </script>
 
@@ -19,13 +20,13 @@ const props = defineProps<Props>();
 		<div class="modal">
 			<div class="modal-card__head">
 				<p class="modal-card__title">
-					{{ $translate('component.need_authorize_modal.title') }}
+					{{ translate('component.need_authorize_modal.title') }}
 				</p>
 			</div>
 			<div class="modal-card__foot">
 				<CommonButton
 					button-kind="success"
-					:button-text="$translate('component.need_authorize_modal.button.close')"
+					:button-text="translate('component.need_authorize_modal.button.close')"
 					@click="props.closeNeedAuthorizeModal"
 				/>
 			</div>

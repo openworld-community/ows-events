@@ -3,6 +3,11 @@ html {
   height: 100%;
 }
 
+* {
+  // убирает на андроиде дефолтную желтую рамку при нажатии кнопки (баг #330)
+  -webkit-tap-highlight-color: transparent;
+}
+
 *,
 *::before,
 *::after {
@@ -18,7 +23,6 @@ body {
   //TODO: пока верстка только мобилки
   max-width: 480px;
   display: flex;
-  flex-direction: column;
   font-family: var(--font-family-main);
   font-size: var(--font-size-M);
   line-height: var(--line-height);
@@ -29,8 +33,9 @@ body {
   margin-right: auto;
 }
 
-#app {
-  height: 100vh;
+#__nuxt {
+  min-width: 100%;
+  min-height: 100%;
 }
 
 a {
@@ -84,6 +89,9 @@ input,
 optgroup,
 select,
 textarea {
+  //TODO временно, пока нет стилей для outline
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
   font-family: inherit;
   font-size: 100%;
   font-weight: inherit;

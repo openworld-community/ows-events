@@ -1,13 +1,13 @@
-import { StandardResponse } from "@common/types";
-import { IRouteHandler } from "../../types";
+import { IRouteHandler } from '../../types';
 
 type IDeleteImageRouteProps = {
-  Body: { path: string };
-  Reply: StandardResponse<undefined>;
+	Body: { path: string };
+	Reply: undefined;
 };
 type IDeleteImageHandlerProps = IRouteHandler<IDeleteImageRouteProps>;
 
 type IAddImageRouteProps = {
-  Reply: StandardResponse<{ path: string }>;
+	Body: { image: string };
+	Reply: { path: string };
 };
 type IAddImageHandlerProps = IRouteHandler<IAddImageRouteProps>;

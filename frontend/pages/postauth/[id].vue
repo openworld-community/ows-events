@@ -1,30 +1,18 @@
 <script setup lang="ts">
-import { UserInfo } from '../../../common/types/user';
-import { getToken, getUserInfoByToken } from '~/services/auth';
-
-const route = useRoute();
-const router = useRouter();
-const eventId = route.params.id as string;
-const user = useCookie<UserInfo | null>('user');
-const tokenCookie = useCookie<string>('token');
-try {
-	const token = await getToken(eventId);
-	if (token) {
-		tokenCookie.value = token;
-
-		const userInfo = await getUserInfoByToken(token);
-
-		user.value = userInfo;
-
-		router.push(`/`);
+import { RouteNameEnum } from '~/constants/enums/route';
+import type { UserInfo } from '../../../common/types/user';
+definePageMeta({
+	middleware: async () => {
+		const route = useRoute();
+		const userToken = getFirstParam(route.params.id);
+		useCookie<string>('token').value = userToken;
+		const { data: user } = await apiRouter.auth.getUser.useQuery({ data: { userToken } });
+		if (!user.value) {
+			console.error('No user data retrieved');
+			return;
+		}
+		useCookie<UserInfo | null>('user').value = user.value;
 	}
-} catch (e) {
-	console.log(e);
-}
+});
+await navigateTo({ name: RouteNameEnum.HOME });
 </script>
-
-<template>
-	<main></main>
-</template>
-
-<style lang="less" scoped></style>

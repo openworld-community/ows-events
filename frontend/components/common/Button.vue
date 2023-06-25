@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, type PropType } from 'vue';
 import NuxtLink from '#app/components/nuxt-link';
+import { IconDefaultParams } from '@/constants/defaultValues/icon';
+import type { IconName } from './Icon.vue';
 
 const emit = defineEmits(['click']);
 
@@ -15,7 +17,7 @@ const props = defineProps({
 	buttonKind: {
 		// для обычных кнопок задает внешний вид согласно стайл-гайду, для кнопок-инонок раскрашивает в соответствующие цвета
 		type: String as PropType<ButtonKind>,
-		default: 'ordinary'
+		default: ''
 	},
 	buttonText: {
 		type: String as PropType<string>,
@@ -43,8 +45,16 @@ const props = defineProps({
 	},
 	iconName: {
 		// можно передать иконку в кнопку или сделать кнопкой-иконкой
-		type: String as PropType<string>,
+		type: String as PropType<IconName>,
 		default: ''
+	},
+	iconWidth: {
+		type: [String, Number] as PropType<string | number>,
+		default: IconDefaultParams.WIDTH
+	},
+	iconHeight: {
+		type: [String, Number] as PropType<string | number>,
+		default: IconDefaultParams.HEIGHT
 	},
 	alt: {
 		type: String as PropType<string>,
@@ -60,19 +70,12 @@ const props = defineProps({
 	}
 });
 
-const loaderColor = computed(() => {
-	let color = '';
-	if (props.buttonKind === 'success') {
-		color = 'var(--color-white)';
-	}
-	if (props.buttonKind === 'warning') {
-		color = 'var(--color-accent-red)';
-	}
-	if (props.buttonKind === 'ordinary') {
-		color = 'var(--color-text-main)';
-	}
-	return color;
-});
+const loaderColorDict = {
+	ordinary: 'var(--color-text-main)',
+	success: 'var(--color-white)',
+	warning: 'var(--color-accent-red)'
+} satisfies Record<ButtonKind, string>;
+const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 </script>
 
 <template>
@@ -101,6 +104,8 @@ const loaderColor = computed(() => {
 			:class="{ button__icon: buttonText }"
 			:name="iconName"
 			:alt="alt ? alt : null"
+			:width="iconWidth"
+			:height="iconHeight"
 		/>
 		<span
 			v-if="!isIcon"
@@ -117,7 +122,7 @@ const loaderColor = computed(() => {
 	justify-content: center;
 	height: 40px;
 	border-radius: 24px;
-	padding: 5px 14px;
+	padding: 7px 14px;
 	align-items: center;
 	transition: background-color 0.3s ease;
 

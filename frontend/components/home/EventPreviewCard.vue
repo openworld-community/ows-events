@@ -1,66 +1,85 @@
 <script setup lang="ts">
-import { EventOnPoster } from '../../../common/types';
+import type { EventOnPoster } from '../../../common/types';
 
+const { translate } = useTranslation();
 const props = defineProps<{ eventData: EventOnPoster }>();
-
-const openLocation = (url: string) => {
-	window.open(url, '_blank');
-};
 
 //TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
 const templateURL = `https://www.google.com/maps/place/${props.eventData?.location.city}+${props.eventData?.location.country}`;
 </script>
 
 <template>
-	<NuxtLink
-		:to="`/event/${props.eventData.id}`"
-		class="card"
-	>
-		<div class="card__image-container">
-			<span class="card__price">{{ props.eventData.price }} €</span>
-			<img
-				:alt="$translate('home.events.image_alt')"
-				class="card__image"
-				:src="getEventImage(props.eventData)"
-			/>
-		</div>
-
-		<div class="card card-description">
-			<!--      TODO когда будет регистрация, нужно будет подставлять имя создавшего-->
-			<p class="card-description__author">Peredelano</p>
-			<h2 class="card-description__title">
-				{{ props.eventData.title }}
-			</h2>
-			<p class="card-description__datetime">
-				{{ convertToLocaleString(props.eventData.date, props.eventData?.timezone) }}
-				({{ props.eventData.timezone?.timezoneOffset }}
-				{{ props.eventData.timezone?.timezoneName }})
-			</p>
-			<span
-				class="card-description__geolink"
-				role="link"
-				tabindex="0"
-				@click.prevent="openLocation(templateURL)"
+	<div class="card">
+		<NuxtLink :to="`/event/${props.eventData.id}`">
+			<div
+				:class="[
+					'card__image-container',
+					{ 'card__image-container--background': !eventData.image }
+				]"
 			>
-				{{ props.eventData.location.country }}, {{ props.eventData.location.city }}
-			</span>
-		</div>
-	</NuxtLink>
+				<span class="card__price">
+					{{ getPrice(eventData) }}
+				</span>
+				<img
+					v-if="eventData.image"
+					:alt="translate('home.events.image_alt')"
+					class="card__image"
+					:src="getEventImage(props.eventData)"
+					width="375"
+					height="176"
+				/>
+			</div>
+
+			<div class="card-description">
+				<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
+				<p
+					v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
+					class="card-description__author"
+				>
+					Peredelano
+				</p>
+				<h2 class="card-description__title">
+					{{ props.eventData.title }}
+				</h2>
+				<p class="card-description__datetime">
+					{{ convertToLocaleString(props.eventData.date) }}
+					({{ props.eventData.timezone?.timezoneOffset }}
+					{{ props.eventData.timezone?.timezoneName }})
+				</p>
+			</div>
+		</NuxtLink>
+
+		<!--    отдельный линк, т.к. нельзя ссылку класть в ссылку, а если делать другим типом контейнера и переходить по @click.prevent, отрабатывает некорректно и местами багует-->
+		<NuxtLink
+			:to="templateURL"
+			target="_blank"
+			class="card-link card-link__geolink"
+		>
+			{{ props.eventData.location.country }}, {{ props.eventData.location.city }}
+		</NuxtLink>
+	</div>
 </template>
 
 <style scoped lang="less">
 .card {
 	width: 100%;
-	box-shadow: none;
+  min-height: 287px;
 	position: relative;
+	margin-bottom: 44px;
 
 	&__image-container {
 		display: flex;
-		height: 176px;
-		background-color: var(--color-background-secondary);
-		margin-bottom: 12px;
 		width: 100%;
+		height: 176px;
+		background-color: var(--color-input-field);
+		background-size: cover;
+		margin-bottom: 12px;
 		line-height: 0;
+
+		&--background {
+			background: url('@/assets/img/event-preview@2x.png') center center no-repeat;
+			background-size: cover;
+		}
 	}
 
 	&__image {
@@ -95,19 +114,23 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 		flex-direction: column;
 		padding-left: 16px;
 		padding-right: 16px;
-		margin-bottom: 44px;
 
 		&__author {
+      //TODO: пока верстка только мобилки
+      max-width: 480px;
+      word-wrap: break-word;
 			font-size: var(--font-size-XS);
 			font-weight: var(--font-weight-bold);
 			line-height: 16px;
 			text-align: left;
 			color: var(--color-text-secondary);
-
 			margin-bottom: 12px;
 		}
 
 		&__title {
+      //TODO: пока верстка только мобилки
+      max-width: 480px;
+      word-wrap: break-word;
 			font-size: var(--font-size-L);
 			font-weight: var(--font-weight-bold);
 			line-height: 24px;
@@ -121,6 +144,13 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 			color: var(--color-text-secondary);
 			margin-bottom: var(--space-related-items);
 		}
+	}
+
+	.card-link {
+		display: block;
+		width: max-content;
+		padding-left: 16px;
+		padding-right: 16px;
 
 		&__geolink {
 			width: max-content;

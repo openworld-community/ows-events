@@ -1,4 +1,3 @@
-// import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import path from 'path';
@@ -6,7 +5,27 @@ import { fileURLToPath, URL } from 'node:url';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	modules: ['@pinia/nuxt'],
+	modules: ['@pinia/nuxt', '@vueuse/nuxt', '@nuxtjs/plausible'],
+	// На случай добавления скриптов:
+	// app: {
+	// 	head: {
+	// 		script: [
+	// 			{
+	// 				defer: true,
+	// 				'data-domain': 'poster-peredelano.orby-tech.space',
+	// 				src: 'http://metrics.orby-tech.space/js/script.js'
+	// 			}
+	// 		]
+	// 	}
+	// },
+	//https://github.com/nuxt-modules/plausible#module-options
+	plausible: {
+		domain:
+			import.meta.env.VITE_DOMAIN ||
+			process.env.VITE_DOMAIN ||
+			'poster-test-peredelano.orby-tech.space',
+		apiHost: 'https://afisha-metrics.orby-tech.space'
+	},
 	typescript: { strict: true },
 	vite: {
 		server: {

@@ -1,10 +1,38 @@
+<script lang="ts">
+export type IconName =
+	| 'user'
+	| 'trash'
+	| 'telegram'
+	| 'share'
+	| 'search'
+	| 'privacy'
+	| 'plus'
+	| 'picture'
+	| 'peredelano-afisha'
+	| 'map-pin'
+	| 'logout'
+	| 'login'
+	| 'info'
+	| 'error'
+	| 'edit'
+	| 'delete'
+	| 'container'
+	| 'contact-tg'
+	| 'close'
+	| 'clock'
+	| 'calendar'
+	| 'button-plus'
+	| 'back'
+	// хак, из-за которого ТС не мерджит этот юнион в просто string, из-за чего и работает автокомплит, и можно указать все равно любую строку
+	| (string & {});
+</script>
 <script setup lang="ts">
-import { computed, PropType } from 'vue';
 import { IconDefaultParams } from '@/constants/defaultValues/icon';
+import type { PropType } from 'vue';
 
 const props = defineProps({
 	name: {
-		type: String as PropType<string>,
+		type: String as PropType<IconName>,
 		required: true
 	},
 	color: {

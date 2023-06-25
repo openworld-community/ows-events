@@ -1,106 +1,117 @@
 import { defineStore } from 'pinia';
-import { getCitiesByCountry, getCountries, getUserLocation } from '@/services/location.services';
-import { UserLocation } from '../../common/types/location';
-import parseJSON from '@/utils/json';
+import type { UserLocation } from '../../common/types/location';
 
-const useLocationStore = defineStore('counter', {
-	state: () => {
-		if (process.server) {
-			return {
-				pickedCountry: '',
-				countries: [],
-				cities: [],
-				citiesByCountry: {},
-				pickedCity: '',
-				userLocation: {}
-			};
-		}
+export type City = string;
+export type Country = string;
+type LocationStore = {
+	_countries: Set<Country>;
+	_usedCountries: Set<Country>;
+	_citiesByCountry: Map<Country, City[]>;
+	_usedСitiesByCountry: Map<Country, City[]>;
+	userLocation: UserLocation;
+};
 
+const COUNTRIES_KEY = 'COUNTRIES';
+
+export const useLocationStore = defineStore('location', {
+	state: (): LocationStore => {
 		return {
-			pickedCountry: localStorage.getItem('LOCATIONS_PICKED_COUNTRY') ?? '',
-			countries: parseJSON<string[]>(localStorage.getItem('LOCATIONS_COUNTRIES') ?? '[]', []),
-			cities: parseJSON<string[]>(localStorage.getItem('LOCATIONS_CITIES') ?? '[]', []),
-			citiesByCountry: parseJSON<Record<string, string[]>>(
-				localStorage.getItem('LOCATIONS_CITIES_BY_COUNTRY') ?? '{}',
-				{}
-			),
-			pickedCity: localStorage.getItem('LOCATIONS_PICKED_CITY') ?? '',
-			userLocation: parseJSON<UserLocation>(
-				localStorage.getItem('LOCATIONS_USER_LOCATION') ?? '{}'
-			)
+			_countries: new Set(),
+			_usedCountries: new Set(),
+			_citiesByCountry: new Map(),
+			_usedСitiesByCountry: new Map(),
+			userLocation: {}
 		};
 	},
-	getters: {},
-	actions: {
-		pickCountry(country: string) {
-			if (this.pickedCountry === country) {
-				return;
-			}
-			this.pickCity('');
+	getters: {
+		countries(state): LocationStore['_countries'] {
+			(async function () {
+				if (process.server) return;
+				if (state._countries.size) return;
 
-			this.pickedCountry = country;
-			if (process.client) {
-				localStorage.setItem('LOCATIONS_PICKED_COUNTRY', country);
-			}
+				// otherwise Nuxt doesn't do request on client during initial hydration, I'm not smart enough to tell why
+				await new Promise((r) => r(0));
 
-			this.loadCitiesByCountry(country);
-		},
-
-		pickCity(city: string) {
-			this.pickedCity = city;
-			if (process.client) {
-				localStorage.setItem('LOCATIONS_PICKED_CITY', city);
-			}
-		},
-
-		async loadCountries() {
-			if (this.countries.length) {
-				return;
-			}
-
-			this.countries = await getCountries();
-
-			if (process.client) {
-				localStorage.setItem('LOCATIONS_COUNTRIES', JSON.stringify(this.countries));
-			}
-		},
-		async loadCitiesByCountry(country: string) {
-			if (this.citiesByCountry[country]) {
-				this.cities = this.citiesByCountry[country];
-				return;
-			}
-
-			if (!this.countries.find((x) => x === country)) {
-				return;
-			}
-
-			const cities = await getCitiesByCountry(country);
-
-			if (cities) {
-				this.citiesByCountry[country] = cities;
-				this.cities = this.citiesByCountry[country] || [];
-				this.citiesByCountry = { ...this.citiesByCountry };
-				localStorage.setItem(
-					'LOCATIONS_CITIES_BY_COUNTRY',
-					JSON.stringify(this.citiesByCountry)
+				const { $locationStoreForage } = useNuxtApp();
+				const localCountries: Country[] | null = await $locationStoreForage.getItem(
+					COUNTRIES_KEY
 				);
-				localStorage.setItem('LOCATIONS_CITIES', JSON.stringify(cities));
-			}
+				if (localCountries) {
+					if (!localCountries.length) return;
+					state._countries = new Set(localCountries);
+					return;
+				}
+
+				const { data } = await apiRouter.location.country.getAll.useQuery({});
+				if (!data.value?.length) return;
+
+				state._countries = new Set(data.value);
+				// data.value is Proxy which can't copied to storage directly - spread operator converts back to native object
+				$locationStoreForage.setItem(COUNTRIES_KEY, [...data.value]);
+			})();
+			return state._countries;
 		},
-		async init() {
-			this.userLocation = await getUserLocation();
-			await this.loadCountries();
+		usedCountries(state): LocationStore['_usedCountries'] {
+			(async function () {
+				if (process.server) return;
+				if (state._usedCountries.size) return;
 
-			if (!this.pickedCountry) return;
+				// otherwise Nuxt doesn't do request on client during initial hydration, I'm not smart enough to tell why
+				await new Promise((r) => r(0));
 
-			await this.loadCitiesByCountry(this.pickedCountry);
-			await this.pickCountry(this.pickedCountry);
+				const { data } = await apiRouter.location.country.getUsedCountries.useQuery({});
+				if (!data.value?.length) return;
 
-			if (!this.pickedCity) return;
+				state._usedCountries = new Set(data.value);
+			})();
 
-			await this.pickCity(this.pickedCity);
+			return state._usedCountries;
+		}
+	},
+	actions: {
+		getCitiesByCountry(country: Country) {
+			(async () => {
+				if (process.server) return;
+				if (this._citiesByCountry.get(country) || !this.countries.has(country)) return;
+
+				// forces Nuxt to await function calls if there are multiple of them(avoid duplication of requests)
+				await new Promise((r) => r(0));
+
+				const { $locationStoreForage } = useNuxtApp();
+				const localCities: City[] | null = await $locationStoreForage.getItem(country);
+				if (localCities) {
+					this._citiesByCountry.set(country, localCities);
+					return;
+				}
+
+				const { data } = await apiRouter.location.country.getCities.useQuery({
+					data: { country }
+				});
+				if (!data.value) return;
+				this._citiesByCountry.set(country, data.value);
+				// data.value is Proxy which can't copied to storage directly - spread operator converts back to native object
+				$locationStoreForage.setItem(country, [...data.value]);
+			})();
+
+			return this._citiesByCountry.get(country) ?? [];
+		},
+		getUsedCitiesByCountry(country: Country) {
+			(async () => {
+				if (process.server) return;
+				if (!country || this._usedСitiesByCountry.get(country)) return;
+
+				// forces Nuxt to await function calls if there are multiple of them(avoid duplication of requests)
+				await new Promise((r) => r(0));
+
+				const { data } = await apiRouter.location.country.getUsedCities.useQuery({
+					data: { country }
+				});
+
+				if (!data.value) return;
+				this._usedСitiesByCountry.set(country, data.value);
+			})();
+
+			return this._usedСitiesByCountry.get(country) ?? [];
 		}
 	}
 });
-
-export { useLocationStore };

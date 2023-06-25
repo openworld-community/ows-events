@@ -1,6 +1,5 @@
 import { BASE_URL } from '@/constants/url';
-import { EventOnPoster } from '../../common/types';
-import eventCard from '@/assets/img/event-screen@2x.png';
+import type { EventOnPoster } from '../../common/types';
 
 export const getEventImage = (eventData: EventOnPoster) => {
 	if (eventData?.image) {
@@ -9,7 +8,5 @@ export const getEventImage = (eventData: EventOnPoster) => {
 			return eventData.image;
 		}
 		return `${BASE_URL}${eventData.image}`;
-	} else {
-		return eventCard;
 	}
 };

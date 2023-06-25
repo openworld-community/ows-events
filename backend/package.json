@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:watch": "nodemon src/server.ts",
+    "start:watch": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/app/src/server.js",
+    "type:check": "tsc -p tsconfig.json --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -16,11 +17,15 @@
     "@fastify/cors": "^8.2.1",
     "@fastify/multipart": "^7.6.0",
     "@fastify/static": "^6.10.1",
+    "@fastify/swagger": "^8.5.1",
+    "@fastify/swagger-ui": "^1.8.1",
     "axios": "^1.4.0",
     "city-timezones": "^1.2.1",
+    "dotenv": "^16.1.4",
     "fastify": "^4.17.0",
     "jsonwebtoken": "^9.0.0",
     "moment-timezone": "^0.5.43",
+    "mongoose": "^7.2.3",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
     "uuid": "^9.0.0"
@@ -31,11 +36,16 @@
     "@types/node": "^20.2.0",
     "@types/node-telegram-bot-api": "^0.61.6",
     "@types/uuid": "^9.0.1",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.4"
   },
   "nodemonConfig": {
     "ignore": [
       "assets/**"
+    ],
+    "watch": [
+      "./src",
+      "../common"
     ]
   }
 }

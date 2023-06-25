@@ -1,24 +1,30 @@
 <script setup lang="ts">
 import eventScreen from '@/assets/img/event-screen@2x.png';
 import { REPO_URL } from '@/constants/url';
+
+const { translate } = useTranslation();
+
+useHead({
+	title: `${translate('meta.title')} / ${translate('meta.about_us.title')}`
+});
 </script>
 
 <template>
 	<section class="about">
-		<h2 class="title">{{ $translate('about.title') }}</h2>
+		<h2 class="title">{{ translate('about.title') }}</h2>
 		<img
 			:src="eventScreen"
 			class="about__img"
-			:alt="$translate('about.alt')"
+			:alt="translate('about.alt')"
 		/>
-		<p>{{ $translate('about.idea') }}</p>
+		<p>{{ translate('about.idea') }}</p>
 		<br />
-		<p>{{ $translate('about.functionality') }}</p>
+		<p>{{ translate('about.functionality') }}</p>
 		<br />
-		<p>{{ $translate('about.monetization') }}</p>
+		<p>{{ translate('about.perspectives') }}</p>
 		<br />
 		<p>
-			{{ $translate('about.github') }}:
+			{{ translate('about.github') }}:
 			<NuxtLink
 				:href="REPO_URL"
 				class="about__link"

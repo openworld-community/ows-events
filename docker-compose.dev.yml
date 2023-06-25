@@ -6,9 +6,6 @@ x-logging: &default-logging
         max-size: '10m'
         max-file: '5'
 
-networks:
-    tmp:
-
 services:
     frontend:
         build:
@@ -23,17 +20,35 @@ services:
             - VITE_API_URL=http://localhost:7080/api
             - VITE_BASE_URL=http://localhost:7080
             - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
-            - VITE_AUTH_SERVER_URL=https://auth.afisha.peredelano.com
-            - VITE_POSTAUTH_URL=http://localhost:3000
+            - VITE_MODE=development
 
     backend:
         build:
             context: .
             dockerfile: ./backend/Dockerfile.dev
         logging: *default-logging
+        depends_on:
+            - mongo
+        links:
+            - mongo
         environment:
-            - AUTH_SERVER_URL=https://auth.afisha.peredelano.com
+            - MODE=dev
+            - FRONTEND_URL=http://localhost:3000
+            - MONGO_URI=mongodb://mongo:27017/dev
         ports:
             - '7080:7080'
         volumes:
             - ./:/app
+
+    mongo:
+        image: mongo:6.0
+        restart: unless-stopped
+        command: ['--bind_ip_all']
+        healthcheck:
+            test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo --quiet) -eq 1
+            interval: 10s
+            start_period: 30s
+        ports:
+            - '27020:27017'
+        volumes:
+            - /tmp/ows-events/db:/data/db

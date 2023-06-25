@@ -16,7 +16,7 @@ const { translate } = useTranslation();
 					:to="{ name: RouteNameEnum.HOME }"
 					class="link"
 				>
-					AfishaPeredelano
+					afisha.peredelano.com
 				</NuxtLink>
 				и социальных сетей AfishaPeredelano (Далее — Афиша) не занимается самостоятельной
 				организацией мероприятий, освещаемых на сайте
@@ -24,7 +24,7 @@ const { translate } = useTranslation();
 					:to="{ name: RouteNameEnum.HOME }"
 					class="link"
 				>
-					AfishaPeredelano
+					afisha.peredelano.com
 				</NuxtLink>
 				или в социальных сетях AfishaPeredelano (Далее — Сервис). Состоится мероприятие или
 				нет, зависит от третьих лиц, за действия которых Афиша не отвечает и не может

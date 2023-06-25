@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { RouteNameEnum } from '~/constants/enums/route';
+
 const { translate } = useTranslation();
 </script>
 
@@ -10,13 +12,24 @@ const { translate } = useTranslation();
 		<ol class="privacy__list">
 			<li>
 				Администрация сайта
-				<a href="https://afisha.peredelano.com/">AfishaPeredelano</a> и социальных сетей
-				AfishaPeredelano (Далее — Афиша) не занимается самостоятельной организацией
-				мероприятий, освещаемых на сайте
-				<a href="https://afisha.peredelano.com/">AfishaPeredelano</a> или в социальных сетях
-				AfishaPeredelano (Далее — Сервис). Состоится мероприятие или нет, зависит от третьих
-				лиц, за действия которых Афиша не отвечает и не может оказывать на них влияние. В
-				связи с этим Афиша не гарантирует достоверность сведений, размещенных на Сервисе.
+				<NuxtLink
+					:to="{ name: RouteNameEnum.HOME }"
+					class="link"
+				>
+					AfishaPeredelano
+				</NuxtLink>
+				и социальных сетей AfishaPeredelano (Далее — Афиша) не занимается самостоятельной
+				организацией мероприятий, освещаемых на сайте
+				<NuxtLink
+					:to="{ name: RouteNameEnum.HOME }"
+					class="link"
+				>
+					AfishaPeredelano
+				</NuxtLink>
+				или в социальных сетях AfishaPeredelano (Далее — Сервис). Состоится мероприятие или
+				нет, зависит от третьих лиц, за действия которых Афиша не отвечает и не может
+				оказывать на них влияние. В связи с этим Афиша не гарантирует достоверность
+				сведений, размещенных на Сервисе.
 			</li>
 			<li>
 				Афиша не гарантирует корректную работу сайтов, ссылки на которые размещены на
@@ -93,7 +106,7 @@ const { translate } = useTranslation();
 		list-style-type: decimal;
 		list-style-position: outside;
 
-		a {
+		.link {
 			text-decoration: underline;
 			font-weight: 500;
 		}

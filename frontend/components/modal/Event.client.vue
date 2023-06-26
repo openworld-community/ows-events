@@ -79,14 +79,11 @@ const paramsForSubmit = computed(() => {
 			combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime()) /
 			1000
 	);
-	const UTCDatetime =
-		combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime() +
-		new Date().getTimezoneOffset() * 60 * 1000;
 
 	return {
 		title: inputValues.value.title,
 		description: inputValues.value.description,
-		date: UTCDatetime,
+		date: combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
 		durationInSeconds: durationInSeconds <= 0 ? 0 : durationInSeconds,
 		location: {
 			country: inputValues.value.country,

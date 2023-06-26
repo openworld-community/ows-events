@@ -84,7 +84,7 @@ const paramsForSubmit = computed(() => {
 		title: inputValues.value.title,
 		description: inputValues.value.description,
 		date: combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
-		durationInSeconds: durationInSeconds <= 0 ? 0 : durationInSeconds,
+		durationInSeconds: Math.max(0, durationInSeconds),
 		location: {
 			country: inputValues.value.country,
 			city: inputValues.value.city

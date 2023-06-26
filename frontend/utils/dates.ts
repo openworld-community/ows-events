@@ -22,6 +22,7 @@ export function combineDateTime(date: Date | null, time: Time | null): Date {
 }
 export function convertToLocaleString(epoch: number) {
 	return new Date(epoch).toLocaleString('ru', {
+		timeZone: 'UTC',
 		month: 'long',
 		day: 'numeric',
 		hour: '2-digit',

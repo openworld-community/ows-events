@@ -69,7 +69,7 @@ services:
         ports:
             - '7080:7080'
         volumes:
-            - /root/ows-events/assets/img:/app/backend/assets/img
+            - /root/ows-events/assets/img:/app/assets/img
 
     mongo:
         image: mongo:6.0

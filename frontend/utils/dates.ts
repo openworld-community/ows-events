@@ -12,7 +12,6 @@ export function getTimeFromEpochInMs(epoch: number | undefined): Time | null {
 	if (!djs.isValid()) return null;
 	return { hours: djs.hour(), minutes: djs.minute(), seconds: djs.second() };
 }
-
 /**
  * @returns UTC epoch time
  */

@@ -12,11 +12,14 @@ export function getTimeFromEpochInMs(epoch: number | undefined): Time | null {
 	if (!djs.isValid()) return null;
 	return { hours: djs.hour(), minutes: djs.minute(), seconds: djs.second() };
 }
+/**
+ * @returns UTC epoch time
+ */
 export function combineDateTime(date: Date | null, time: Time | null): Date {
 	if (!date || !time) return new Date();
 	return dayjs(date)
 		.set('hour', +time.hours)
-		.set('minute', +time.minutes)
+		.set('minute', +time.minutes - date.getTimezoneOffset())
 		.set('second', +(time.seconds ?? 0))
 		.toDate();
 }

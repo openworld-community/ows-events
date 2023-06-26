@@ -28,12 +28,16 @@ const inputValues = ref({
 	description: props.dataForEdit?.description ?? '',
 	startDate: getDateFromEpochInMs(props.dataForEdit?.date) ?? null,
 	startTime: getTimeFromEpochInMs(props.dataForEdit?.date),
-	endDate: getDateFromEpochInMs(
-		(props.dataForEdit?.date ?? 0) + (props.dataForEdit?.durationInSeconds ?? 0) * 1000
-	),
-	endTime: getTimeFromEpochInMs(
-		(props.dataForEdit?.date ?? 0) + (props.dataForEdit?.durationInSeconds ?? 0) * 1000
-	),
+	endDate: props.dataForEdit?.durationInSeconds
+		? getDateFromEpochInMs(
+				(props.dataForEdit?.date ?? 0) + props.dataForEdit.durationInSeconds * 1000
+		  )
+		: null,
+	endTime: props.dataForEdit?.durationInSeconds
+		? getTimeFromEpochInMs(
+				(props.dataForEdit?.date ?? 0) + props.dataForEdit.durationInSeconds * 1000
+		  )
+		: null,
 	country: (props.dataForEdit?.location.country ?? 'Serbia') satisfies Country, // Временно фиксируем страну для добавления события
 	city: (props.dataForEdit?.location.city ?? '') satisfies City,
 	image: props.dataForEdit?.image ?? '',

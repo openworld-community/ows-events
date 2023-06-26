@@ -32,8 +32,12 @@ const props = defineProps({
 		default: ''
 	},
 	minDate: {
-		type: [Date, null] as PropType<Date | undefined>,
-		default: undefined
+		type: [Date, null] as PropType<Date | null>,
+		default: null
+	},
+	minTime: {
+		type: [Object, null] as PropType<Time | null>,
+		default: null
 	},
 	disabled: {
 		type: Boolean as PropType<boolean>,
@@ -53,7 +57,7 @@ const emit = defineEmits<{ 'update:model-value': [modelValue: typeof props.model
 const isDateType = computed(() => props.type === 'date');
 const datepicker = ref<DatePickerInstance>(null);
 
-const handleDate = (modelData: Date) => {
+const handleDate = (modelData: typeof props.modelValue) => {
 	isDateType.value && datepicker.value?.closeMenu();
 	emit('update:model-value', modelData);
 };
@@ -98,7 +102,9 @@ const onRemove = () => {
 			:flow="['calendar']"
 			:time-picker="!isDateType"
 			:enable-time-picker="!isDateType"
-			:min-date="minDate"
+			:min-date="minDate ?? undefined"
+			:start-date="minDate ?? undefined"
+			:min-time="minTime ?? undefined"
 			:format="isDateType ? dateFormat : timeFormat"
 			:disabled="disabled"
 			:required="required"

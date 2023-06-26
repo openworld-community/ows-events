@@ -246,13 +246,19 @@ const isTimezoneDisabled = computed(() => {
 							v-model="inputValues.endDate"
 							type="date"
 							name="endDate"
-							:min-date="minDate"
+							:min-date="inputValues.startDate ?? minDate"
 							:disabled="!inputValues.startDate"
 						/>
 						<CommonUiDateTimepicker
 							v-model="inputValues.endTime"
 							type="time"
 							name="endTime"
+							:min-time="
+								inputValues.startDate?.toDateString() ===
+								inputValues.endDate?.toDateString()
+									? inputValues.startTime
+									: undefined
+							"
 							placeholder="--:--"
 							:disabled="!(inputValues.startDate && inputValues.endDate)"
 						/>

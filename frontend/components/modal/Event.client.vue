@@ -24,9 +24,8 @@ const inputValues = ref({
 	id: props.dataForEdit?.id ?? '',
 	title: props.dataForEdit?.title ?? '',
 	description: props.dataForEdit?.description ?? '',
-	// todo - убери временные фоллбэка на Date.now() потом
-	startDate: getDateFromEpochInMs(props.dataForEdit?.date ?? Date.now()) ?? null,
-	startTime: getTimeFromEpochInMs(props.dataForEdit?.date ?? Date.now()),
+	startDate: getDateFromEpochInMs(props.dataForEdit?.date) ?? null,
+	startTime: getTimeFromEpochInMs(props.dataForEdit?.date),
 	endDate: props.dataForEdit?.durationInSeconds
 		? getDateFromEpochInMs(
 				(props.dataForEdit?.date ?? 0) + props.dataForEdit.durationInSeconds * 1000

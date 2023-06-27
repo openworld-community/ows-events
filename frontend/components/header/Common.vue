@@ -41,8 +41,6 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 					/>
 				</NuxtLink>
 			</div>
-			<!-- todo - не забудь убрать его после тестов -->
-			<HeaderLanguageSelector />
 			<div class="header__right">
 				<!--        TODO: вернуться при доработке подписки-->
 				<!--				<HeaderSubscriptionExpired-->

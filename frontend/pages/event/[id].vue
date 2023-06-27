@@ -12,11 +12,17 @@ const id = getFirstParam(route.params.id);
 const { translate } = useTranslation();
 const user = useCookie<UserInfo | null>('user');
 
+
+
 const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ data: { id } });
 
 const posterEvent = computed(() => {
 	if (!data.value) return void navigateTo({ name: RouteNameEnum.HOME });
 	return data.value;
+});
+
+const isEdible = computed(() => {
+	return posterEvent.value?.date > new Date().getTime();
 });
 
 useHead({
@@ -181,6 +187,7 @@ patchDeleteEventModal({
 					@click="openDeleteEventModal"
 				/>
 				<CommonButton
+					v-if="isEdible"
 					class="event-actions__button event-actions__button--admin"
 					button-kind="ordinary"
 					:button-text="translate('event.button.edit')"

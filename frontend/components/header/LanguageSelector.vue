@@ -2,15 +2,15 @@
 import { watch, ref } from 'vue';
 import { supportedLocales } from '@/i18n';
 
-const { translate, i18n } = useTranslation();
+const { $i18n } = useNuxtApp();
 
-const language = ref(i18n.language);
-watch(language, (language) => i18n.changeLanguage(language));
+const language = ref($i18n.language);
+watch(language, (language) => $i18n.changeLanguage(language));
 </script>
 
 <template>
 	<label>
-		{{ translate('component.language_selector.label') }}
+		{{ $t('component.language_selector.label') }}
 		<select v-model="language">
 			<option
 				v-for="locale in supportedLocales"

@@ -16,10 +16,14 @@ export function getTimeFromEpochInMs(epoch: number | undefined): Time | null {
 	return { hours: djs.hour(), minutes: djs.minute(), seconds: djs.second() };
 }
 /**
- * @returns UTC epoch time
+ *
+ * @param date will be interpreted as UTC Date object. If not provided will use current date
+ * @param time time to combine with the provided date. If not provided will be set to midnight
+ * @returns a UTC Date object
  */
 export function combineDateTime(date: Date | null, time: Time | null): Date {
-	if (!date || !time) return new Date();
+	date ??= new Date();
+	time ??= { hours: 0, minutes: 0, seconds: 0 };
 	return dayjs
 		.utc(date)
 		.set('hour', +time.hours)

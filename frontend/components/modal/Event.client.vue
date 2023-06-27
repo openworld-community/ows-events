@@ -45,6 +45,15 @@ const inputValues = ref({
 	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
 	url: props.dataForEdit?.url ?? ''
 });
+const eventStartEpoch = computed(() =>
+	combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime()
+);
+const eventEndEpoch = computed(() =>
+	combineDateTime(inputValues.value.endDate, inputValues.value.endTime).getTime()
+);
+const eventDuration = computed(() =>
+	Math.floor(Math.max(0, eventEndEpoch.value - eventStartEpoch.value) / 1000)
+);
 
 watch(
 	() => inputValues.value.country,
@@ -53,9 +62,12 @@ watch(
 	}
 );
 
-watch([() => inputValues.value.country, () => inputValues.value.city], async ([country, city]) => {
-	inputValues.value.timezone = country ? await getTimezone({ country, city }) : '';
-});
+watch(
+	() => [inputValues.value.country, inputValues.value.city],
+	async ([country, city]) => {
+		inputValues.value.timezone = country ? await getTimezone({ country, city }) : '';
+	}
+);
 
 const checkFormFilling = computed(() => {
 	return !!(
@@ -77,24 +89,17 @@ const closeModal = () => {
 };
 
 const paramsForSubmit = computed(() => {
-	const tz = stringToTimezone(inputValues.value.timezone);
-	const durationInSeconds = Math.floor(
-		(combineDateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() -
-			combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime()) /
-			1000
-	);
-
 	return {
 		title: inputValues.value.title,
 		description: inputValues.value.description,
-		date: combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
-		durationInSeconds: Math.max(0, durationInSeconds),
+		date: eventStartEpoch.value,
+		durationInSeconds: eventDuration.value,
 		location: {
 			country: inputValues.value.country,
 			city: inputValues.value.city
 		},
 		price: inputValues.value.price,
-		timezone: tz,
+		timezone: stringToTimezone(inputValues.value.timezone),
 		url: inputValues.value.url
 	};
 });
@@ -147,6 +152,51 @@ const isCityDisabled = computed(() => {
 const isTimezoneDisabled = computed(() => {
 	return !inputValues.value.country;
 });
+
+//#region datetime input relationship logic
+watch(
+	() => inputValues.value.startDate,
+	(startDate) => {
+		if (!startDate) {
+			inputValues.value.startTime = null;
+			inputValues.value.endDate = null;
+			return;
+		}
+
+		const { endDate } = inputValues.value;
+		if (endDate && eventStartEpoch.value > eventEndEpoch.value) {
+			inputValues.value.endDate = null;
+		}
+	}
+);
+watch(
+	() => inputValues.value.startTime,
+	(startTime) => {
+		if (startTime && !inputValues.value.startDate) return (inputValues.value.startTime = null);
+
+		const { endDate, endTime } = inputValues.value;
+		if (endDate && endTime && eventStartEpoch.value > eventEndEpoch.value) {
+			inputValues.value.endTime = null;
+		}
+	}
+);
+watch(
+	() => inputValues.value.endDate,
+	(endDate) => {
+		if (endDate && !inputValues.value.startDate) return (inputValues.value.endDate = null);
+
+		if (!endDate) {
+			inputValues.value.endTime = null;
+			return;
+		}
+
+		const { endTime } = inputValues.value;
+		if (endTime && eventStartEpoch.value > eventEndEpoch.value) {
+			inputValues.value.endTime = null;
+		}
+	}
+);
+//#endregion
 </script>
 
 <template>
@@ -236,7 +286,6 @@ const isTimezoneDisabled = computed(() => {
 						/>
 					</template>
 				</ModalUiModalSection>
-
 				<ModalUiModalSection
 					type="row"
 					:label="translate('component.new_event_modal.fields.end')"

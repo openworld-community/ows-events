@@ -105,6 +105,7 @@ const onRemove = () => {
 			:min-date="minDate ?? undefined"
 			:start-date="minDate ?? undefined"
 			:min-time="minTime ?? undefined"
+			:start-time="minTime ?? undefined"
 			:format="isDateType ? dateFormat : timeFormat"
 			:disabled="disabled"
 			:required="required"

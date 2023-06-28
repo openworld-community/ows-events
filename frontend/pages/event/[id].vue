@@ -22,7 +22,7 @@ const posterEvent = computed(() => {
 });
 
 const isEdible = computed(() => {
-	return posterEvent?.value?.date > new Date().getTime();
+	return posterEvent?.value?.date ? posterEvent.value.date > new Date().getTime() : false;
 });
 
 useHead({

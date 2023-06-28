@@ -2,7 +2,6 @@
 import { RouteNameEnum } from '@/constants/enums/route';
 import { SUPPORT_TG_URL } from '../../../constants/url';
 
-const { translate } = useTranslation();
 const emit = defineEmits(['close']);
 </script>
 
@@ -18,14 +17,14 @@ const emit = defineEmits(['close']);
 
 		<HeaderNavigationNavItem
 			:link-to="{ name: RouteNameEnum.ABOUT }"
-			:text="translate('component.header.about')"
+			:text="$t('component.header.about')"
 			icon-name="info"
 			@click="emit('close')"
 		/>
 
 		<HeaderNavigationNavItem
 			:link-to="SUPPORT_TG_URL"
-			:text="translate('component.header.support')"
+			:text="$t('component.header.support')"
 			is-external-link
 			icon-name="contact-tg"
 			@click="emit('close')"
@@ -33,7 +32,7 @@ const emit = defineEmits(['close']);
 
 		<HeaderNavigationNavItem
 			:link-to="{ name: RouteNameEnum.LIMITATION_OF_LIABILITY }"
-			:text="translate('component.header.limitation_of_liability')"
+			:text="$t('component.header.limitation_of_liability')"
 			icon-name="privacy"
 			@click="emit('close')"
 		/>

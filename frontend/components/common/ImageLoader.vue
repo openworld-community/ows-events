@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { BASE_URL } from '@/constants/url';
 
-const { translate } = useTranslation();
-
 export type ImageLoaderFile = File | null | 'DELETED';
 const props = defineProps<{
 	externalImage?: string;
@@ -69,7 +67,7 @@ const removeImage = () => {
 			/>
 			<button
 				class="delete-button"
-				:aria-label="translate('component.new_event_modal.remove_image')"
+				:aria-label="$t('component.new_event_modal.remove_image')"
 				@click="removeImage"
 			>
 				<CommonIcon
@@ -82,7 +80,7 @@ const removeImage = () => {
 			v-else
 			class="add-button"
 			button-kind="ordinary"
-			:button-text="translate('component.new_event_modal.add_image')"
+			:button-text="$t('component.new_event_modal.add_image')"
 			icon-name="picture"
 			@click="input?.click()"
 		/>

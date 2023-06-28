@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '../../constants/enums/route';
 
-const { translate } = useTranslation();
 const route = useRoute();
 
 const isNavbarOpen = ref<boolean>(false);
@@ -25,9 +24,11 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 				<NuxtLink
 					class="header__navigation-link"
 					:aria-label="
-						isAtHome
-							? translate('home.button.afisha_logo_aria')
-							: translate('component.header.button.home')
+						$t(
+							isAtHome
+								? 'home.button.afisha_logo_aria'
+								: 'component.header.button.home'
+						)
 					"
 					:to="!isAtHome ? { name: RouteNameEnum.HOME } : undefined"
 					@click="isAtHome && scrollToTop()"
@@ -50,9 +51,11 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 					ref="navigationBurger"
 					:is-cross="isNavbarOpen"
 					:aria-label="
-						isNavbarOpen
-							? translate('component.header.button.close')
-							: translate('component.header.button.open')
+						$t(
+							isNavbarOpen
+								? 'component.header.button.close'
+								: 'component.header.button.open'
+						)
 					"
 					@click="navbarToggle"
 				/>

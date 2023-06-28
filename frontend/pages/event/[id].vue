@@ -76,6 +76,24 @@ patchDeleteEventModal({
 		removeEvent: deleteCard
 	}
 });
+
+const imgWrapper = ref<HTMLDivElement | undefined>(undefined);
+const actionsWrapper = ref<HTMLDivElement | null>(null);
+const infoWrapper = ref<HTMLDivElement | null>(null);
+const descriptionHeight = ref();
+const getDescriptionHeight = () => {
+	descriptionHeight.value = `max-height: calc(${window.innerHeight}px - (52px + ${
+		actionsWrapper.value?.getBoundingClientRect().height
+	}px + ${infoWrapper.value?.getBoundingClientRect().height}px + ${
+		imgWrapper.value?.getBoundingClientRect().height
+	}px))`;
+};
+
+onMounted(() => {
+	window.addEventListener('resize', getDescriptionHeight);
+	getDescriptionHeight();
+});
+onBeforeUnmount(() => window.removeEventListener('resize', getDescriptionHeight));
 </script>
 
 <template>
@@ -89,6 +107,7 @@ patchDeleteEventModal({
 				'event-image__container',
 				{ 'event-image__container--background': !posterEvent.image }
 			]"
+			ref="imgWrapper"
 		>
 			<span class="event-image__price">
 				{{ getPrice(posterEvent) }}
@@ -101,49 +120,60 @@ patchDeleteEventModal({
 			/>
 		</div>
 
-		<div class="event event-description">
+		<div class="event event-info">
 			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
-			<p
-				v-if="posterEvent.title.toLowerCase().includes('peredelanoconf')"
-				class="event-description__author"
+			<div
+				class="event-info__wrapper"
+				ref="infoWrapper"
 			>
-				Peredelano
-			</p>
-			<h2 class="event-description__title">
-				{{ posterEvent.title }}
-			</h2>
+				<p
+					v-if="posterEvent.title.toLowerCase().includes('peredelanoconf')"
+					class="event-info__author"
+				>
+					Peredelano
+				</p>
+				<h2 class="event-info__title">
+					{{ posterEvent.title }}
+				</h2>
 
-			<p class="event-description__datetime">
-				<span v-if="posterEvent.durationInSeconds">
-					{{ convertToLocaleString(posterEvent.date) }}
-					-
-					{{
-						convertToLocaleString(
-							posterEvent.date + posterEvent.durationInSeconds * 1000
-						)
-					}}
-				</span>
-				<span v-else>
-					{{ convertToLocaleString(posterEvent.date ?? Date.now()) }}
-				</span>
-				<br />
-				({{ posterEvent.timezone?.timezoneOffset }}
-				{{ posterEvent.timezone?.timezoneName }})
-			</p>
-			<!-- TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса -->
-			<NuxtLink
-				class="event-description__geolink"
-				:to="`https://www.google.com/maps/place/${posterEvent.location.city}+${posterEvent.location.country}`"
-				target="_blank"
+				<p class="event-info__datetime">
+					<span v-if="posterEvent.durationInSeconds">
+						{{ convertToLocaleString(posterEvent.date) }}
+						-
+						{{
+							convertToLocaleString(
+								posterEvent.date + posterEvent.durationInSeconds * 1000
+							)
+						}}
+					</span>
+					<span v-else>
+						{{ convertToLocaleString(posterEvent.date ?? Date.now()) }}
+					</span>
+					<br />
+					({{ posterEvent.timezone?.timezoneOffset }}
+					{{ posterEvent.timezone?.timezoneName }})
+				</p>
+				<!-- TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса -->
+				<NuxtLink
+					class="event-info__geolink"
+					:to="`https://www.google.com/maps/place/${posterEvent.location.city}+${posterEvent.location.country}`"
+					target="_blank"
+				>
+					{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
+				</NuxtLink>
+			</div>
+			<p
+				class="event-info__description"
+				:style="descriptionHeight"
 			>
-				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
-			</NuxtLink>
-			<p class="event-description__description">
 				{{ posterEvent.description }}
 			</p>
 		</div>
 
-		<div class="event-actions">
+		<div
+			class="event-actions"
+			ref="actionsWrapper"
+		>
 			<template v-if="posterEvent.url">
 				<CommonButton
 					v-if="posterEvent.url !== 'self'"
@@ -199,16 +229,20 @@ patchDeleteEventModal({
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
+	max-height: 100vh;
 	padding-left: var(--padding-side);
 	padding-right: var(--padding-side);
-	padding-bottom: 30px;
 	margin-bottom: auto;
 
-	&-description {
+	&-info {
 		display: flex;
 		width: 100%;
 		flex-direction: column;
 		padding-inline: 0;
+
+		&__wrapper {
+			padding-bottom: 15px;
+		}
 
 		&__author {
 			//TODO: пока верстка только мобилки
@@ -219,7 +253,7 @@ patchDeleteEventModal({
 			line-height: 16px;
 			text-align: left;
 			color: var(--color-text-secondary);
-			margin-bottom: 12px;
+			padding-bottom: 12px;
 		}
 
 		&__title {
@@ -229,7 +263,8 @@ patchDeleteEventModal({
 			font-size: var(--font-size-L);
 			font-weight: var(--font-weight-bold);
 			line-height: 24px;
-			margin-bottom: var(--space-related-items);
+			padding-top: 12px;
+			padding-bottom: var(--space-related-items);
 		}
 
 		&__datetime {
@@ -237,7 +272,7 @@ patchDeleteEventModal({
 			font-weight: var(--font-weight-bold);
 			line-height: 16px;
 			color: var(--color-text-secondary);
-			margin-bottom: var(--space-related-items);
+			padding-bottom: var(--space-related-items);
 		}
 
 		&__geolink {
@@ -245,13 +280,12 @@ patchDeleteEventModal({
 			line-height: 16px;
 			text-decoration-line: underline;
 			color: #5c9ad2;
-			margin-bottom: var(--space-subsections);
 		}
 
 		&__description {
 			//TODO: пока верстка только мобилки
 			max-width: 480px;
-			max-height: 150px;
+			min-height: 150px;
 			word-wrap: break-word;
 			overflow-y: auto;
 			font-size: var(--font-size-S);
@@ -264,6 +298,8 @@ patchDeleteEventModal({
 		flex-direction: column;
 		background-color: var(--color-white);
 		margin-top: auto;
+		padding-top: 15px;
+		padding-bottom: 15px;
 
 		&__manage {
 			display: flex;
@@ -296,7 +332,6 @@ patchDeleteEventModal({
 		position: relative;
 		line-height: 0;
 		background-color: var(--color-input-field);
-		margin-bottom: 12px;
 
 		&--background {
 			background: url('@/assets/img/event-card@2x.png') center center no-repeat;

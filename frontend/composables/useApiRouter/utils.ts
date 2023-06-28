@@ -152,16 +152,14 @@ export function useBackendFetch<T>(
 		const getData = () => useFetch(request, Object.assign(opts, opts_));
 		if (process.server) return await getData();
 
-		const { $errorToast } = useNuxtApp();
 		const data = await getData();
 		if (data.error.value) {
-			// logs an error on first invocation - works fine tho
-			// todo - fix error i18n
-			// const { translate } = useTranslation();
 			// todo - переделать эту проверку когда бэк уже стандартизирует вывод своих ошибок везде
 			if (data.error.value?.data?.message) {
 				const errorMessage: keyof typeof ServerErrors = data.error.value.data.message;
-				$errorToast(`error.${errorMessage}`);
+
+				const { $errorToast, $i18n } = useNuxtApp();
+				$errorToast($i18n.t(`error.${errorMessage}`));
 			} else {
 				console.error(data.error.value);
 			}

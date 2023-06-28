@@ -21,7 +21,7 @@ const posterEvent = computed(() => {
 	return data?.value;
 });
 
-const isEdible = computed(() => {
+const isEditable = computed(() => {
 	return posterEvent?.value?.date ? posterEvent.value.date > new Date().getTime() : false;
 });
 
@@ -187,7 +187,7 @@ patchDeleteEventModal({
 					@click="openDeleteEventModal"
 				/>
 				<CommonButton
-					v-if="isEdible"
+					v-if="isEditable"
 					class="event-actions__button event-actions__button--admin"
 					button-kind="ordinary"
 					:button-text="translate('event.button.edit')"

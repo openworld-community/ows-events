@@ -3,23 +3,27 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
 export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
-export function getDateFromEpochInMs(epoch: number | undefined) {
+export function getDateFromEpochInMs(epoch: number | undefined, keepTimezone = false) {
 	if (!epoch) return null;
-	const djs = dayjs.utc(epoch);
+	const djs = !keepTimezone ? dayjs.utc(epoch) : dayjs(epoch);
 	if (!djs.isValid()) return null;
 	return djs.toDate();
 }
-export function getTimeFromEpochInMs(epoch: number | undefined): Time | null {
+export function getTimeFromEpochInMs(epoch: number | undefined, keepTimezone = false): Time | null {
 	if (!epoch) return null;
-	const djs = dayjs.utc(epoch);
+	const djs = !keepTimezone ? dayjs.utc(epoch) : dayjs(epoch);
 	if (!djs.isValid()) return null;
 	return { hours: djs.hour(), minutes: djs.minute(), seconds: djs.second() };
 }
 /**
- * @returns UTC epoch time
+ *
+ * @param date will be interpreted as UTC Date object. If not provided will use current date
+ * @param time time to combine with the provided date. If not provided will be set to midnight
+ * @returns a UTC Date object
  */
 export function combineDateTime(date: Date | null, time: Time | null): Date {
-	if (!date || !time) return new Date();
+	date ??= new Date();
+	time ??= { hours: 0, minutes: 0, seconds: 0 };
 	return dayjs
 		.utc(date)
 		.set('hour', +time.hours)

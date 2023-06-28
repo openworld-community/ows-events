@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 
-const { translate } = useTranslation();
 defineOptions({ inheritAttrs: false });
 
 defineProps({
@@ -63,7 +62,7 @@ const onRemove = () => {
 			class="input__button input__button--clear"
 			is-icon
 			icon-name="delete"
-			:alt="translate('global.button.delete')"
+			:alt="$t('global.button.delete')"
 			@click="onRemove"
 		/>
 		<span

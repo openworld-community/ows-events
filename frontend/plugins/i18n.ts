@@ -11,5 +11,5 @@ export default defineNuxtPlugin(({ vueApp }) => {
 	if (supportedLocales.includes(initLanguage as (typeof supportedLocales)[number]))
 		i18next.changeLanguage(initLanguage);
 
-	return { provide: {} };
+	return { provide: { i18n: i18next } };
 });

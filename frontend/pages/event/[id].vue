@@ -9,7 +9,6 @@ definePageMeta({ name: RouteNameEnum.EVENT });
 const route = useRoute();
 const id = getFirstParam(route.params.id);
 
-const { translate } = useTranslation();
 const user = useCookie<UserInfo | null>('user');
 
 const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ data: { id } });
@@ -19,9 +18,7 @@ const posterEvent = computed(() => {
 	return data.value;
 });
 
-useHead({
-	title: `${translate('meta.title')} / ${posterEvent.value?.title}`
-});
+useHead({ titleTemplate: `%s / ${posterEvent.value?.title}` });
 
 const redirect = () => {
 	useTrackEvent('redirect');
@@ -99,7 +96,7 @@ patchDeleteEventModal({
 			<img
 				v-if="posterEvent.image"
 				:src="getEventImage(posterEvent)"
-				:alt="translate('event.image.event')"
+				:alt="$t('event.image.event')"
 				class="event-image__image"
 			/>
 		</div>
@@ -152,7 +149,7 @@ patchDeleteEventModal({
 					v-if="posterEvent.url !== 'self'"
 					button-kind="success"
 					class="event-actions__button event-actions__button--connect"
-					:button-text="translate('event.button.contact')"
+					:button-text="$t('event.button.contact')"
 					@click="redirect"
 				/>
 				<!--TODO подключить, когда вернемся к проработке регистрации-->
@@ -160,7 +157,7 @@ patchDeleteEventModal({
 				<!--					v-else-->
 				<!--					button-kind="success"-->
 				<!--					class="event-actions__button"-->
-				<!--					:button-text="translate('event.button.register')"-->
+				<!--					:button-text="$t('event.button.register')"-->
 				<!--					@click="openRegistrationModal"-->
 				<!--				/>-->
 			</template>
@@ -174,7 +171,7 @@ patchDeleteEventModal({
 				<CommonButton
 					class="event-actions__button event-actions__button--admin"
 					button-kind="warning"
-					:button-text="translate('event.button.delete')"
+					:button-text="$t('event.button.delete')"
 					icon-name="trash"
 					icon-width="16"
 					icon-height="16"
@@ -183,7 +180,7 @@ patchDeleteEventModal({
 				<CommonButton
 					class="event-actions__button event-actions__button--admin"
 					button-kind="ordinary"
-					:button-text="translate('event.button.edit')"
+					:button-text="$t('event.button.edit')"
 					icon-name="edit"
 					icon-width="16"
 					icon-height="16"

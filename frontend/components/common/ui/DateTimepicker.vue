@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 import type { PropType } from 'vue';
 import type { Time } from '../../../utils/dates';
 
-const { translate } = useTranslation();
 const props = defineProps({
 	className: {
 		type: String as PropType<string>,
@@ -118,7 +117,7 @@ const onRemove = () => {
 			v-if="!modelValue"
 			:name="isDateType ? 'calendar' : 'clock'"
 			class="input__button"
-			:alt="translate('dates.clock')"
+			:alt="$t('dates.clock')"
 		/>
 		<CommonButton
 			v-else

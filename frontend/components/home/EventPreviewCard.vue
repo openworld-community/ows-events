@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { EventOnPoster } from '../../../common/types';
 
-const { translate } = useTranslation();
 const props = defineProps<{ eventData: EventOnPoster }>();
 
 //TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
@@ -22,7 +21,7 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 				</span>
 				<img
 					v-if="eventData.image"
-					:alt="translate('home.events.image_alt')"
+					:alt="$t('home.events.image_alt')"
 					class="card__image"
 					:src="getEventImage(props.eventData)"
 					width="375"

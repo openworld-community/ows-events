@@ -5,6 +5,6 @@ import type { City, Country } from '~/stores/location.store';
 export const timezone = {
 	getAll: defineQuery<() => Timezone[]>(() => useBackendFetch('timezones')),
 	get: defineQuery<
-		(input: { country: string; city: string }) => Timezone & { country: Country; city: City }
-	>((input) => useBackendFetch(`location/meta/${input.country}/${input.city}`))
+		(input: { country: Country; city?: City }) => Timezone & { country: Country; city: City }
+	>((input) => useBackendFetch(`location/meta/${input.country}/${input.city ?? ''}`))
 };

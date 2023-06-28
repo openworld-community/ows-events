@@ -1,4 +1,5 @@
 import type { Timezone } from '~/../common/types/location';
+import type { City, Country } from '~/stores/location.store';
 import { timezoneToString } from '~/utils/timezones';
 
 export const getAllTimezones = async (): Promise<Timezone[]> => {
@@ -12,9 +13,8 @@ export const getAllTimezones = async (): Promise<Timezone[]> => {
 	return data.value;
 };
 
-type _Args = { country: string; city: string };
 //TODO летят ошибки, пока не выберешь город с привязанной таймзоной
-export const getTimezone = async ({ city, country }: _Args) => {
+export const getTimezone = async (country: Country, city?: City) => {
 	const { data } = await apiRouter.timezone.get.useQuery({ data: { city, country } });
 	if (!data.value) return '';
 

@@ -65,7 +65,8 @@ watch(
 watch(
 	() => [inputValues.value.country, inputValues.value.city],
 	async ([country, city]) => {
-		inputValues.value.timezone = country ? await getTimezone({ country, city }) : '';
+		if (!country) return;
+		inputValues.value.timezone = await getTimezone(country, city);
 	}
 );
 

@@ -49,24 +49,6 @@ const eventStartEpoch = computed(() =>
 const eventEndEpoch = computed(() =>
 	combineDateTime(inputValues.value.endDate, inputValues.value.endTime).getTime()
 );
-const eventDuration = computed(() =>
-	Math.floor(Math.max(0, eventEndEpoch.value - eventStartEpoch.value) / 1000)
-);
-
-watch(
-	() => inputValues.value.country,
-	() => {
-		inputValues.value.city = '';
-	}
-);
-
-watch(
-	() => [inputValues.value.country, inputValues.value.city],
-	async ([country, city]) => {
-		if (!country) return;
-		inputValues.value.timezone = await getTimezone(country, city);
-	}
-);
 
 const checkFormFilling = computed(() => {
 	return !!(
@@ -76,6 +58,8 @@ const checkFormFilling = computed(() => {
 		inputValues.value.url &&
 		inputValues.value.startDate &&
 		inputValues.value.startTime &&
+		// endDate & endTime both must be null or non-null
+		(inputValues.value.endDate ? inputValues.value.endTime : !inputValues.value.endTime) &&
 		inputValues.value.country &&
 		inputValues.value.city &&
 		inputValues.value.timezone &&
@@ -92,7 +76,9 @@ const paramsForSubmit = computed(() => {
 		title: inputValues.value.title,
 		description: inputValues.value.description,
 		date: eventStartEpoch.value,
-		durationInSeconds: eventDuration.value,
+		durationInSeconds: Math.floor(
+			Math.max(0, eventEndEpoch.value - eventStartEpoch.value) / 1000
+		),
 		location: {
 			country: inputValues.value.country,
 			city: inputValues.value.city
@@ -144,55 +130,53 @@ async function addImage(image: ImageLoaderFile) {
 	return data.value.path;
 }
 
-const isCityDisabled = computed(() => {
-	return !inputValues.value.country;
-});
+// #region country & string input relationship logic
+watch(
+	() => inputValues.value.country,
+	() => {
+		inputValues.value.city = '';
+	}
+);
 
-const isTimezoneDisabled = computed(() => {
-	return !inputValues.value.country;
-});
+watch(
+	() => [inputValues.value.country, inputValues.value.city],
+	async ([country, city]) => {
+		if (!country) return;
+		inputValues.value.timezone = await getTimezone(country, city);
+	}
+);
+// #endregion
 
 //#region datetime input relationship logic
 watch(
-	() => inputValues.value.startDate,
-	(startDate) => {
-		if (!startDate) {
-			inputValues.value.startTime = null;
-			inputValues.value.endDate = null;
-			return;
-		}
-
-		const { endDate } = inputValues.value;
-		if (endDate && eventStartEpoch.value > eventEndEpoch.value) {
-			inputValues.value.endDate = null;
-		}
+	() => !!inputValues.value.startDate,
+	(isStartSet) => {
+		if (isStartSet) return;
+		inputValues.value.startTime = null;
+		inputValues.value.endDate = null;
 	}
 );
 watch(
-	() => inputValues.value.startTime,
-	(startTime) => {
-		if (startTime && !inputValues.value.startDate) return (inputValues.value.startTime = null);
-
-		const { endDate, endTime } = inputValues.value;
-		if (endDate && endTime && eventStartEpoch.value > eventEndEpoch.value) {
-			inputValues.value.endTime = null;
-		}
+	() => !!inputValues.value.endDate,
+	(isEndSet) => {
+		if (isEndSet) return;
+		inputValues.value.endTime = null;
 	}
 );
 watch(
-	() => inputValues.value.endDate,
-	(endDate) => {
-		if (endDate && !inputValues.value.startDate) return (inputValues.value.endDate = null);
+	() => [eventStartEpoch.value, eventEndEpoch.value],
+	([startEpoch, endEpoch]) => {
+		const { endDate, startDate, endTime } = inputValues.value;
+		if (!endDate || !startDate) return;
+		if (endEpoch >= startEpoch) return;
 
-		if (!endDate) {
+		if (endTime) {
 			inputValues.value.endTime = null;
 			return;
 		}
 
-		const { endTime } = inputValues.value;
-		if (endTime && eventStartEpoch.value > eventEndEpoch.value) {
-			inputValues.value.endTime = null;
-		}
+		if (startDate.toDateString() === endDate.toDateString()) return;
+		inputValues.value.endDate = null;
 	}
 );
 //#endregion
@@ -225,7 +209,7 @@ watch(
 						<CommonUiBaseSelect
 							v-model="inputValues.city"
 							name="city"
-							:disabled="isCityDisabled"
+							:disabled="!inputValues.country"
 							:placeholder="$t('global.city')"
 							:list="locationStore.getCitiesByCountry(inputValues.country) ?? []"
 							required
@@ -234,7 +218,7 @@ watch(
 						<CommonUiBaseSelect
 							v-model="inputValues.timezone"
 							name="timezone"
-							:disabled="isTimezoneDisabled"
+							:disabled="!inputValues.country"
 							:placeholder="$t('global.timezone')"
 							:list="allTimezones"
 							required
@@ -304,7 +288,8 @@ watch(
 									: undefined
 							"
 							placeholder="--:--"
-							:disabled="!(inputValues.startDate && inputValues.endDate)"
+							:disabled="!inputValues.endDate"
+							:required="!!inputValues.endDate"
 						/>
 					</template>
 				</ModalUiModalSection>

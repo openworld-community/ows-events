@@ -24,7 +24,7 @@ const inputValues = ref({
 	id: props.dataForEdit?.id ?? '',
 	title: props.dataForEdit?.title ?? '',
 	description: props.dataForEdit?.description ?? '',
-	startDate: getDateFromEpochInMs(props.dataForEdit?.date) ?? null,
+	startDate: getDateFromEpochInMs(props.dataForEdit?.date),
 	startTime: getTimeFromEpochInMs(props.dataForEdit?.date),
 	endDate: props.dataForEdit?.durationInSeconds
 		? getDateFromEpochInMs(
@@ -39,21 +39,16 @@ const inputValues = ref({
 	country: (props.dataForEdit?.location.country ?? 'Serbia') satisfies Country, // Временно фиксируем страну для добавления события
 	city: (props.dataForEdit?.location.city ?? '') satisfies City,
 	image: props.dataForEdit?.image ?? '',
-	price: props.dataForEdit?.price ?? 0,
+	price: props.dataForEdit?.price ?? '0',
 	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
 	url: props.dataForEdit?.url ?? ''
 });
-
-watch(
-	() => inputValues.value.country,
-	() => {
-		inputValues.value.city = '';
-	}
+const eventStartEpoch = computed(() =>
+	combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime()
 );
-
-watch([() => inputValues.value.country, () => inputValues.value.city], async ([country, city]) => {
-	inputValues.value.timezone = country ? await getTimezone({ country, city }) : '';
-});
+const eventEndEpoch = computed(() =>
+	combineDateTime(inputValues.value.endDate, inputValues.value.endTime).getTime()
+);
 
 const checkFormFilling = computed(() => {
 	return !!(
@@ -63,6 +58,8 @@ const checkFormFilling = computed(() => {
 		inputValues.value.url &&
 		inputValues.value.startDate &&
 		inputValues.value.startTime &&
+		// endDate & endTime both must be null or non-null
+		(inputValues.value.endDate ? inputValues.value.endTime : !inputValues.value.endTime) &&
 		inputValues.value.country &&
 		inputValues.value.city &&
 		inputValues.value.timezone &&
@@ -75,24 +72,19 @@ const closeModal = () => {
 };
 
 const paramsForSubmit = computed(() => {
-	const tz = stringToTimezone(inputValues.value.timezone);
-	const durationInSeconds = Math.floor(
-		(combineDateTime(inputValues.value.endDate, inputValues.value.endTime).getTime() -
-			combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime()) /
-			1000
-	);
-
 	return {
 		title: inputValues.value.title,
 		description: inputValues.value.description,
-		date: combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
-		durationInSeconds: Math.max(0, durationInSeconds),
+		date: eventStartEpoch.value,
+		durationInSeconds: Math.floor(
+			Math.max(0, eventEndEpoch.value - eventStartEpoch.value) / 1000
+		),
 		location: {
 			country: inputValues.value.country,
 			city: inputValues.value.city
 		},
-		price: inputValues.value.price.toString(),
-		timezone: tz,
+		price: inputValues.value.price,
+		timezone: stringToTimezone(inputValues.value.timezone),
 		url: inputValues.value.url
 	};
 });
@@ -138,13 +130,56 @@ async function addImage(image: ImageLoaderFile) {
 	return data.value.path;
 }
 
-const isCityDisabled = computed(() => {
-	return !inputValues.value.country;
-});
+// #region country & string input relationship logic
+watch(
+	() => inputValues.value.country,
+	() => {
+		inputValues.value.city = '';
+	}
+);
 
-const isTimezoneDisabled = computed(() => {
-	return !inputValues.value.country;
-});
+watch(
+	() => [inputValues.value.country, inputValues.value.city],
+	async ([country, city]) => {
+		if (!country) return;
+		inputValues.value.timezone = await getTimezone(country, city);
+	}
+);
+// #endregion
+
+// #region datetime input relationship logic
+watch(
+	() => !!inputValues.value.startDate,
+	(isStartSet) => {
+		if (isStartSet) return;
+		inputValues.value.startTime = null;
+		inputValues.value.endDate = null;
+	}
+);
+watch(
+	() => !!inputValues.value.endDate,
+	(isEndSet) => {
+		if (isEndSet) return;
+		inputValues.value.endTime = null;
+	}
+);
+watch(
+	() => [eventStartEpoch.value, eventEndEpoch.value],
+	([startEpoch, endEpoch]) => {
+		const { endDate, startDate, endTime } = inputValues.value;
+		if (!endDate || !startDate) return;
+		if (endEpoch >= startEpoch) return;
+
+		if (endTime) {
+			inputValues.value.endTime = null;
+			return;
+		}
+
+		if (startDate.toDateString() === endDate.toDateString()) return;
+		inputValues.value.endDate = null;
+	}
+);
+// #endregion
 </script>
 
 <template>
@@ -174,7 +209,7 @@ const isTimezoneDisabled = computed(() => {
 						<CommonUiBaseSelect
 							v-model="inputValues.city"
 							name="city"
-							:disabled="isCityDisabled"
+							:disabled="!inputValues.country"
 							:placeholder="$t('global.city')"
 							:list="locationStore.getCitiesByCountry(inputValues.country) ?? []"
 							required
@@ -183,7 +218,7 @@ const isTimezoneDisabled = computed(() => {
 						<CommonUiBaseSelect
 							v-model="inputValues.timezone"
 							name="timezone"
-							:disabled="isTimezoneDisabled"
+							:disabled="!inputValues.country"
 							:placeholder="$t('global.timezone')"
 							:list="allTimezones"
 							required
@@ -226,11 +261,15 @@ const isTimezoneDisabled = computed(() => {
 							name="startTime"
 							placeholder="--:--"
 							:disabled="!inputValues.startDate"
+							:min-time="
+								inputValues.startDate?.toDateString() === new Date().toDateString()
+									? getTimeFromEpochInMs(Date.now(), true)
+									: undefined
+							"
 							required
 						/>
 					</template>
 				</ModalUiModalSection>
-
 				<ModalUiModalSection
 					type="row"
 					:label="$t('component.new_event_modal.fields.end')"
@@ -240,15 +279,22 @@ const isTimezoneDisabled = computed(() => {
 							v-model="inputValues.endDate"
 							type="date"
 							name="endDate"
-							:min-date="minDate"
+							:min-date="inputValues.startDate ?? minDate"
 							:disabled="!inputValues.startDate"
 						/>
 						<CommonUiDateTimepicker
 							v-model="inputValues.endTime"
 							type="time"
 							name="endTime"
+							:min-time="
+								inputValues.startDate?.toDateString() ===
+								inputValues.endDate?.toDateString()
+									? inputValues.startTime
+									: undefined
+							"
 							placeholder="--:--"
-							:disabled="!(inputValues.startDate && inputValues.endDate)"
+							:disabled="!inputValues.endDate"
+							:required="!!inputValues.endDate"
 						/>
 					</template>
 				</ModalUiModalSection>

@@ -24,7 +24,7 @@ const inputValues = ref({
 	id: props.dataForEdit?.id ?? '',
 	title: props.dataForEdit?.title ?? '',
 	description: props.dataForEdit?.description ?? '',
-	startDate: getDateFromEpochInMs(props.dataForEdit?.date) ?? null,
+	startDate: getDateFromEpochInMs(props.dataForEdit?.date),
 	startTime: getTimeFromEpochInMs(props.dataForEdit?.date),
 	endDate: props.dataForEdit?.durationInSeconds
 		? getDateFromEpochInMs(
@@ -261,6 +261,11 @@ watch(
 							name="startTime"
 							placeholder="--:--"
 							:disabled="!inputValues.startDate"
+							:min-time="
+								inputValues.startDate?.toDateString() === new Date().toDateString()
+									? getTimeFromEpochInMs(Date.now(), false)
+									: undefined
+							"
 							required
 						/>
 					</template>

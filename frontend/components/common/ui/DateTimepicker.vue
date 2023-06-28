@@ -236,8 +236,7 @@ const onRemove = () => {
 		font-size: var(--font-size-M);
 		margin: 0;
 
-		svg {
-			fill: var(--color-accent-green-main);
+		&:hover {
 			color: var(--color-accent-green-main);
 		}
 	}
@@ -283,5 +282,24 @@ const onRemove = () => {
 	&__arrow_top {
 		opacity: 0;
 	}
+}
+
+.dp__inner_nav svg {
+	color: var(--color-accent-green-main);
+}
+
+.dp__inc_dec_button_disabled,
+.dp__inner_nav_disabled,
+.dp__overlay_cell_disabled {
+	background: none;
+	&:hover {
+		cursor: unset;
+	}
+	svg {
+		color: var(--color-input-field);
+	}
+}
+.dp__btn:focus {
+	background: var(--dp-hover-color);
 }
 </style>

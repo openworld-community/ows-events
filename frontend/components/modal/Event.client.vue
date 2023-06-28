@@ -28,12 +28,16 @@ const inputValues = ref({
 	description: props.dataForEdit?.description ?? '',
 	startDate: getDateFromEpochInMs(props.dataForEdit?.date) ?? null,
 	startTime: getTimeFromEpochInMs(props.dataForEdit?.date),
-	endDate: getDateFromEpochInMs(
-		(props.dataForEdit?.date ?? 0) + (props.dataForEdit?.durationInSeconds ?? 0) * 1000
-	),
-	endTime: getTimeFromEpochInMs(
-		(props.dataForEdit?.date ?? 0) + (props.dataForEdit?.durationInSeconds ?? 0) * 1000
-	),
+	endDate: props.dataForEdit?.durationInSeconds
+		? getDateFromEpochInMs(
+				(props.dataForEdit?.date ?? 0) + props.dataForEdit.durationInSeconds * 1000
+		  )
+		: null,
+	endTime: props.dataForEdit?.durationInSeconds
+		? getTimeFromEpochInMs(
+				(props.dataForEdit?.date ?? 0) + props.dataForEdit.durationInSeconds * 1000
+		  )
+		: null,
 	country: (props.dataForEdit?.location.country ?? 'Serbia') satisfies Country, // Временно фиксируем страну для добавления события
 	city: (props.dataForEdit?.location.city ?? '') satisfies City,
 	image: props.dataForEdit?.image ?? '',
@@ -84,7 +88,7 @@ const paramsForSubmit = computed(() => {
 		title: inputValues.value.title,
 		description: inputValues.value.description,
 		date: combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime(),
-		durationInSeconds: durationInSeconds <= 0 ? 0 : durationInSeconds,
+		durationInSeconds: Math.max(0, durationInSeconds),
 		location: {
 			country: inputValues.value.country,
 			city: inputValues.value.city

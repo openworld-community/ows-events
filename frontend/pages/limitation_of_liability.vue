@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { RouteNameEnum } from '~/constants/enums/route';
-
 const { translate } = useTranslation();
 </script>
 

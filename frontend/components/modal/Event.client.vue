@@ -147,7 +147,7 @@ watch(
 );
 // #endregion
 
-//#region datetime input relationship logic
+// #region datetime input relationship logic
 watch(
 	() => !!inputValues.value.startDate,
 	(isStartSet) => {
@@ -179,7 +179,7 @@ watch(
 		inputValues.value.endDate = null;
 	}
 );
-//#endregion
+// #endregion
 </script>
 
 <template>

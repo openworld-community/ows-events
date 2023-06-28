@@ -263,7 +263,7 @@ watch(
 							:disabled="!inputValues.startDate"
 							:min-time="
 								inputValues.startDate?.toDateString() === new Date().toDateString()
-									? getTimeFromEpochInMs(Date.now(), false)
+									? getTimeFromEpochInMs(Date.now(), true)
 									: undefined
 							"
 							required

@@ -115,7 +115,7 @@ const onRemove = () => {
 		/>
 
 		<CommonButton
-			v-else-if="(modelValue || modelValue === 0) && !disabled"
+			v-else-if="modelValue && !disabled"
 			class="input__button input__button--clear"
 			is-icon
 			icon-name="delete"

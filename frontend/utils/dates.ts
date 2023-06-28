@@ -3,15 +3,15 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
 export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
-export function getDateFromEpochInMs(epoch: number | undefined, toUTC = true) {
+export function getDateFromEpochInMs(epoch: number | undefined, keepTimezone = false) {
 	if (!epoch) return null;
-	const djs = toUTC ? dayjs.utc(epoch) : dayjs(epoch);
+	const djs = !keepTimezone ? dayjs.utc(epoch) : dayjs(epoch);
 	if (!djs.isValid()) return null;
 	return djs.toDate();
 }
-export function getTimeFromEpochInMs(epoch: number | undefined, toUTC = true): Time | null {
+export function getTimeFromEpochInMs(epoch: number | undefined, keepTimezone = false): Time | null {
 	if (!epoch) return null;
-	const djs = toUTC ? dayjs.utc(epoch) : dayjs(epoch);
+	const djs = !keepTimezone ? dayjs.utc(epoch) : dayjs(epoch);
 	if (!djs.isValid()) return null;
 	return { hours: djs.hour(), minutes: djs.minute(), seconds: djs.second() };
 }

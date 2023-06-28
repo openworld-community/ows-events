@@ -33,6 +33,7 @@ const props = defineProps<Props>();
 						id="form-name"
 						class="user-page__input"
 						type="text"
+						value="Random Surname"
 					/>
 				</label>
 				<label
@@ -154,9 +155,7 @@ const props = defineProps<Props>();
 	box-shadow: var(--shadow-sidebar);
 	//box-shadow: 0px 1px 6px 0px rgba(78, 78, 78, 0.15);  <--Изначальный вариант тени, т.к. мне кажется, что в итоге получилось темнее, чем на макете
 	color: var(--main-text, #4e4e4e);
-	font-size: 16px;
-	font-family: Inter;
-	line-height: 150%;
+	font-size: var(--font-size-M);
 }
 
 .user-page__input::placeholder {

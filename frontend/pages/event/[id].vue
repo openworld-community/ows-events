@@ -102,12 +102,12 @@ onBeforeUnmount(() => window.removeEventListener('resize', getDescriptionHeight)
 		class="event"
 	>
 		<div
+      ref="imgWrapper"
 			:class="[
 				'event-image',
 				'event-image__container',
 				{ 'event-image__container--background': !posterEvent.image }
 			]"
-			ref="imgWrapper"
 		>
 			<span class="event-image__price">
 				{{ getPrice(posterEvent) }}
@@ -123,8 +123,8 @@ onBeforeUnmount(() => window.removeEventListener('resize', getDescriptionHeight)
 		<div class="event event-info">
 			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
 			<div
+        ref="infoWrapper"
 				class="event-info__wrapper"
-				ref="infoWrapper"
 			>
 				<p
 					v-if="posterEvent.title.toLowerCase().includes('peredelanoconf')"
@@ -171,8 +171,8 @@ onBeforeUnmount(() => window.removeEventListener('resize', getDescriptionHeight)
 		</div>
 
 		<div
+      ref="actionsWrapper"
 			class="event-actions"
-			ref="actionsWrapper"
 		>
 			<template v-if="posterEvent.url">
 				<CommonButton

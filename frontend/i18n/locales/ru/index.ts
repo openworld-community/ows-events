@@ -115,6 +115,20 @@ export const defaultTranslation = {
 	limitation_of_liability: {
 		title: 'Оговорка об ограничении ответственности'
 	},
+	user: {
+		title_profile: 'Профиль',
+		title_contacts: 'контакты',
+		nickname: 'Никнейм',
+		name: 'Имя',
+		surname: 'Фамилия',
+		affiliation: 'Компания',
+		email: 'E-mail',
+		phone: 'Номер телефона',
+		buttons: {
+			edit: 'Редактировать',
+			logout: 'Выйти из аккаунта'
+		}
+	},
 	component: {
 		user_location: {
 			not_found: 'Мы не смогли найти вас('
@@ -176,6 +190,7 @@ export const defaultTranslation = {
 			support: 'Поддержка',
 			policy: 'Политика конфиденциальности',
 			limitation_of_liability: 'Оговорка об ограничении ответственности',
+			user_page: 'Пользователь',
 			event: {
 				manage: 'Управление событием'
 			},

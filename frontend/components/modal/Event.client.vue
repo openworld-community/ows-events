@@ -39,7 +39,7 @@ const inputValues = ref({
 	country: (props.dataForEdit?.location.country ?? 'Serbia') satisfies Country, // Временно фиксируем страну для добавления события
 	city: (props.dataForEdit?.location.city ?? '') satisfies City,
 	image: props.dataForEdit?.image ?? '',
-	price: props.dataForEdit?.price ?? 0,
+	price: props.dataForEdit?.price ?? '0',
 	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
 	url: props.dataForEdit?.url ?? ''
 });
@@ -83,7 +83,7 @@ const paramsForSubmit = computed(() => {
 			country: inputValues.value.country,
 			city: inputValues.value.city
 		},
-		price: inputValues.value.price.toString(),
+		price: inputValues.value.price,
 		timezone: stringToTimezone(inputValues.value.timezone),
 		url: inputValues.value.url
 	};

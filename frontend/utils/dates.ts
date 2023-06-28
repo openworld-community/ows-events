@@ -3,16 +3,13 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
 export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
-export function getDateFromEpochInMs(epoch: number | undefined, toUTC: boolean = true) {
+export function getDateFromEpochInMs(epoch: number | undefined, toUTC = true) {
 	if (!epoch) return null;
 	const djs = toUTC ? dayjs.utc(epoch) : dayjs(epoch);
 	if (!djs.isValid()) return null;
 	return djs.toDate();
 }
-export function getTimeFromEpochInMs(
-	epoch: number | undefined,
-	toUTC: boolean = true
-): Time | null {
+export function getTimeFromEpochInMs(epoch: number | undefined, toUTC = true): Time | null {
 	if (!epoch) return null;
 	const djs = toUTC ? dayjs.utc(epoch) : dayjs(epoch);
 	if (!djs.isValid()) return null;

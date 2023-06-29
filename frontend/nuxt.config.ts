@@ -34,9 +34,6 @@ export default defineNuxtConfig({
 			}
 		},
 		plugins: [
-			// плагин выдает ошибку из-за компонента /node_modules/nuxt/dist/app/components/nuxt-root.vue
-			// убрал пока не пойму нужен ли он вообще на самом деле
-			// vue(),
 			vueJsx(),
 			createSvgIconsPlugin({
 				iconDirs: [path.resolve(process.cwd(), 'assets/img/icon')],

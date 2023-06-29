@@ -97,6 +97,7 @@ const onRemove = () => {
 			:autocomplete="autocomplete"
 			:required="required"
 			:min="type === 'number' || type === 'date' || type === 'time' ? minValue : undefined"
+			:aria-label="placeholder"
 			@input="updateValue"
 			@change="updateValue"
 		/>

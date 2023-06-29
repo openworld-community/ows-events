@@ -79,11 +79,6 @@ const props = defineProps<Props>();
 		margin-bottom: var(--space-related-items);
 	}
 
-	&__form {
-		padding-left: var(--padding-side);
-		padding-right: var(--padding-side);
-	}
-
 	&__form-button {
 		width: 100%;
 		height: 40px;

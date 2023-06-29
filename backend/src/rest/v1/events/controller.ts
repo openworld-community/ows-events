@@ -87,6 +87,8 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 		const oldEvent = await eventsStateController.getEvent(request.body.event.id);
 		const isAuthor = oldEvent?.creatorId === String(jwtData.id);
 		if (!isAuthor) throw new Error(CommonErrorsEnum.FORBIDDEN);
+		const isEventInPast = oldEvent?.date < Date.now();
+		if (isEventInPast) throw new Error(CommonErrorsEnum.FORBIDDEN);
 	}
 
 	await eventsStateController.updateEvent(request.body.event);

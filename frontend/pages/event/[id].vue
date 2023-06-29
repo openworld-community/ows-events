@@ -18,6 +18,10 @@ const posterEvent = computed(() => {
 	return data.value;
 });
 
+const isEditable = computed(() => {
+	return posterEvent.value ? posterEvent.value.date > Date.now() : false;
+});
+
 useHead({ titleTemplate: `%s / ${posterEvent.value?.title}` });
 
 const redirect = () => {
@@ -178,6 +182,7 @@ patchDeleteEventModal({
 					@click="openDeleteEventModal"
 				/>
 				<CommonButton
+					v-if="isEditable"
 					class="event-actions__button event-actions__button--admin"
 					button-kind="ordinary"
 					:button-text="$t('event.button.edit')"

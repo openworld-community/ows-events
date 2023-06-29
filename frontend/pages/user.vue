@@ -64,6 +64,12 @@ const props = defineProps<Props>();
 		//box-shadow: 0px 1px 6px 0px rgba(78, 78, 78, 0.15);
 	}
 
+	&__title {
+		font-size: var(--font-size-L);
+		font-weight: var(--font-weight-regular);
+		margin-bottom: var(--space-unrelated-items);
+	}
+
 	&__field p {
 		margin: 0;
 		padding: 0;
@@ -87,11 +93,5 @@ const props = defineProps<Props>();
 			margin-bottom: var(--space-unrelated-items);
 		}
 	}
-}
-
-.user-page__title {
-	font-size: var(--font-size-L);
-	font-weight: var(--font-weight-regular);
-	margin-bottom: var(--space-unrelated-items);
 }
 </style>

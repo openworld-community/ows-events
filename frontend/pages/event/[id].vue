@@ -199,6 +199,7 @@ patchDeleteEventModal({
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
+  max-height: calc(100svh - 52px);
 	padding-left: var(--padding-side);
 	padding-right: var(--padding-side);
 	padding-bottom: 30px;
@@ -207,6 +208,7 @@ patchDeleteEventModal({
 	&-description {
 		display: flex;
 		width: 100%;
+    overflow-y: auto;
 		flex-direction: column;
 		padding-inline: 0;
 
@@ -251,7 +253,6 @@ patchDeleteEventModal({
 		&__description {
 			//TODO: пока верстка только мобилки
 			max-width: 480px;
-			max-height: 150px;
 			word-wrap: break-word;
 			overflow-y: auto;
 			font-size: var(--font-size-S);

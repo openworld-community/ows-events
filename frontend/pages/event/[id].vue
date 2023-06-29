@@ -287,7 +287,9 @@ patchDeleteEventModal({
 			height: 40px;
 
 			&--connect {
-				margin-bottom: var(--space-unrelated-items);
+				&:not(:last-child) {
+					margin-bottom: var(--space-unrelated-items);
+				}
 			}
 
 			&--admin {

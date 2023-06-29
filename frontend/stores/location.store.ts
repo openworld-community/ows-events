@@ -30,7 +30,7 @@ export const useLocationStore = defineStore('location', {
 				if (state._countries.size) return;
 
 				// otherwise Nuxt doesn't do request on client during initial hydration, I'm not smart enough to tell why
-				await new Promise((r) => r(0));
+				await Promise.resolve(0);
 
 				const { $locationStoreForage } = useNuxtApp();
 				const localCountries: Country[] | null = await $locationStoreForage.getItem(
@@ -57,7 +57,7 @@ export const useLocationStore = defineStore('location', {
 				if (state._usedCountries.size) return;
 
 				// otherwise Nuxt doesn't do request on client during initial hydration, I'm not smart enough to tell why
-				await new Promise((r) => r(0));
+				await Promise.resolve(0);
 
 				const { data } = await apiRouter.location.country.getUsedCountries.useQuery({});
 				if (!data.value?.length) return;
@@ -75,7 +75,7 @@ export const useLocationStore = defineStore('location', {
 				if (this._citiesByCountry.get(country) || !this.countries.has(country)) return;
 
 				// forces Nuxt to await function calls if there are multiple of them(avoid duplication of requests)
-				await new Promise((r) => r(0));
+				await Promise.resolve(0);
 
 				const { $locationStoreForage } = useNuxtApp();
 				const localCities: City[] | null = await $locationStoreForage.getItem(country);
@@ -101,7 +101,7 @@ export const useLocationStore = defineStore('location', {
 				if (!country || this._usedСitiesByCountry.get(country)) return;
 
 				// forces Nuxt to await function calls if there are multiple of them(avoid duplication of requests)
-				await new Promise((r) => r(0));
+				await Promise.resolve(0);
 
 				const { data } = await apiRouter.location.country.getUsedCities.useQuery({
 					data: { country }

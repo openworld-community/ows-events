@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 import type { PropType } from 'vue';
 import type { Time } from '../../../utils/dates';
 
-const { translate } = useTranslation();
 const props = defineProps({
 	className: {
 		type: String as PropType<string>,
@@ -32,8 +31,12 @@ const props = defineProps({
 		default: ''
 	},
 	minDate: {
-		type: [Date, null] as PropType<Date | undefined>,
-		default: undefined
+		type: [Date, null] as PropType<Date | null>,
+		default: null
+	},
+	minTime: {
+		type: [Object, null] as PropType<Time | null>,
+		default: null
 	},
 	disabled: {
 		type: Boolean as PropType<boolean>,
@@ -53,7 +56,7 @@ const emit = defineEmits<{ 'update:model-value': [modelValue: typeof props.model
 const isDateType = computed(() => props.type === 'date');
 const datepicker = ref<DatePickerInstance>(null);
 
-const handleDate = (modelData: Date) => {
+const handleDate = (modelData: typeof props.modelValue) => {
 	isDateType.value && datepicker.value?.closeMenu();
 	emit('update:model-value', modelData);
 };
@@ -98,7 +101,10 @@ const onRemove = () => {
 			:flow="['calendar']"
 			:time-picker="!isDateType"
 			:enable-time-picker="!isDateType"
-			:min-date="minDate"
+			:min-date="minDate ?? undefined"
+			:start-date="minDate ?? undefined"
+			:min-time="minTime ?? undefined"
+			:start-time="minTime ?? undefined"
 			:format="isDateType ? dateFormat : timeFormat"
 			:disabled="disabled"
 			:required="required"
@@ -111,7 +117,7 @@ const onRemove = () => {
 			v-if="!modelValue"
 			:name="isDateType ? 'calendar' : 'clock'"
 			class="input__button"
-			:alt="translate('dates.clock')"
+			:alt="$t('dates.clock')"
 		/>
 		<CommonButton
 			v-else
@@ -230,8 +236,7 @@ const onRemove = () => {
 		font-size: var(--font-size-M);
 		margin: 0;
 
-		svg {
-			fill: var(--color-accent-green-main);
+		&:hover {
 			color: var(--color-accent-green-main);
 		}
 	}
@@ -277,5 +282,24 @@ const onRemove = () => {
 	&__arrow_top {
 		opacity: 0;
 	}
+}
+
+.dp__inner_nav svg {
+	color: var(--color-accent-green-main);
+}
+
+.dp__inc_dec_button_disabled,
+.dp__inner_nav_disabled,
+.dp__overlay_cell_disabled {
+	background: none;
+	&:hover {
+		cursor: unset;
+	}
+	svg {
+		color: var(--color-input-field);
+	}
+}
+.dp__btn:focus {
+	background: var(--dp-hover-color);
 }
 </style>

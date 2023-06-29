@@ -69,7 +69,7 @@ services:
         ports:
             - '7081:7080'
         volumes:
-            - assets-img-demo:/app/backend/assets/img
+            - /root/ows-events_demo/assets/img:/app/assets/img
 
     mongo:
         image: mongo:6.0
@@ -85,11 +85,3 @@ services:
             start_period: 30s
         volumes:
             - /root/db/demo:/data/db
-
-volumes:
-    assets-img-demo:
-        driver: local
-        driver_opts:
-            type: none
-            o: bind
-            device: /root/ows-events_demo/assets/img

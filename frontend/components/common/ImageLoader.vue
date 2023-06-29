@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { BASE_URL } from '@/constants/url';
 
-const { translate } = useTranslation();
-
 export type ImageLoaderFile = File | null | 'DELETED';
 const props = defineProps<{
 	externalImage?: string;
@@ -12,9 +10,8 @@ const emit = defineEmits<{
 	'update:model-value': [file: ImageLoaderFile];
 }>();
 
-const input = ref<HTMLInputElement | null>(null);
+const input = ref<HTMLInputElement>();
 const imageSrc = ref(props.externalImage ? `${BASE_URL}${props.externalImage}` : '');
-const fileIsLoading = ref(false);
 
 const loadImage = (event: Event) => {
 	if (!event.target) return console.warn('Load Image Event has no target attached');
@@ -44,12 +41,15 @@ const loadImage = (event: Event) => {
 
 const removeImage = () => {
 	imageSrc.value = '';
+	if (input.value) {
+		input.value.value = '';
+	}
 	emit('update:model-value', 'DELETED');
 };
 </script>
 
 <template>
-	<div class="loader">
+	<div>
 		<input
 			ref="input"
 			accept="image/*"
@@ -57,33 +57,33 @@ const removeImage = () => {
 			class="d-none"
 			@change="loadImage"
 		/>
-		<div class="loader__buttons">
-			<CommonButton
-				v-if="!imageSrc"
-				class="loader__button"
-				button-kind="ordinary"
-				:button-text="translate('component.new_event_modal.add_image')"
-				icon-name="picture"
-				@click="fileIsLoading ? null : input?.click()"
+		<div
+			v-if="imageSrc"
+			class="preview"
+		>
+			<img
+				:src="imageSrc"
+				class="image"
 			/>
-			<div
-				v-if="imageSrc"
-				class="loader__preview"
+			<button
+				class="delete-button"
+				:aria-label="$t('component.new_event_modal.remove_image')"
+				@click="removeImage"
 			>
-				<div class="loader__img-wrapper">
-					<img
-						:src="imageSrc"
-						class="loader__image"
-					/>
-				</div>
-				<CommonButton
-					class="loader__button"
-					button-kind="ordinary"
-					:button-text="translate('component.new_event_modal.remove_image')"
-					@click="removeImage"
+				<CommonIcon
+					name="delete"
+					color="var(--color-accend-red-dark)"
 				/>
-			</div>
+			</button>
 		</div>
+		<CommonButton
+			v-else
+			class="add-button"
+			button-kind="ordinary"
+			:button-text="$t('component.new_event_modal.add_image')"
+			icon-name="picture"
+			@click="input?.click()"
+		/>
 	</div>
 </template>
 
@@ -92,32 +92,33 @@ const removeImage = () => {
 	display: none;
 }
 
-.loader {
-	&__preview {
-		display: flex;
-		align-items: center;
-	}
+.preview {
+	position: relative;
+	width: fit-content;
 
-	&__img-wrapper {
-		max-width: 69px;
-		max-height: 59px;
+	.image {
+		min-width: unset;
+		width: 69px;
+		height: 56px;
 		overflow: hidden;
-		margin-right: 10px;
-		border-radius: 8px;
+		object-fit: cover;
+		border-radius: 4px;
 	}
 
-	&__image {
-		max-height: 59px;
-		max-width: 69px;
-	}
+	.delete-button {
+		height: 24px;
+		right: 0;
+		transform: translate(50%, -50%);
+		position: absolute;
+		transition: filter 0.3s;
 
-	&__buttons {
-		display: flex;
-		align-items: center;
+		&:hover {
+			filter: brightness(0.8);
+		}
 	}
+}
 
-	&__button {
-		max-height: 40px;
-	}
+.add-button {
+	max-height: 40px;
 }
 </style>

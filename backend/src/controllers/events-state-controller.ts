@@ -85,7 +85,12 @@ class EventsStateController {
 			id
 		});
 		if (event?.image && !event.image.includes('https://') && !event.image.includes('http://'))
-			await imageController.deleteImg(`.${event.image}`);
+			try {
+				await imageController.deleteImg(`.${event.image}`);
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.log(e);
+			}
 
 		await EventModel.deleteOne({ id });
 	}

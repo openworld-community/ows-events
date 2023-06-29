@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Registration } from '../../../common/types/registration';
 
-const { translate } = useTranslation();
 const props = defineProps({
 	eventId: {
 		type: String,
@@ -213,13 +212,13 @@ const closeModal = () => {
 				<CommonButton
 					class="modal-card__button"
 					button-kind="ordinary"
-					:button-text="translate('component.new_event_modal.cancel')"
+					:button-text="$t('component.new_event_modal.cancel')"
 					@click="closeModal"
 				/>
 				<CommonButton
 					class="modal-card__button"
 					button-kind="success"
-					:button-text="translate('component.new_event_modal.submit')"
+					:button-text="$t('component.new_event_modal.submit')"
 					@click="submit"
 				/>
 			</div>
@@ -260,12 +259,12 @@ const closeModal = () => {
 	&-agreements-item {
 		display: flex;
 		align-items: center;
-    margin-bottom: var(--space-related-items);
+		margin-bottom: var(--space-related-items);
 
 		&__label {
 			font-size: var(--font-size-XS);
 			line-height: var(--line-height-XS);
-      margin-left: var(--space-related-items);;
+			margin-left: var(--space-related-items);
 		}
 	}
 }

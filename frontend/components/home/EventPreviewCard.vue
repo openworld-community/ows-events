@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { EventOnPoster } from '../../../common/types';
 
-const { translate } = useTranslation();
 const props = defineProps<{ eventData: EventOnPoster }>();
 
 //TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
@@ -22,7 +21,7 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 				</span>
 				<img
 					v-if="eventData.image"
-					:alt="translate('home.events.image_alt')"
+					:alt="$t('home.events.image_alt')"
 					class="card__image"
 					:src="getEventImage(props.eventData)"
 					width="375"
@@ -63,7 +62,7 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 <style scoped lang="less">
 .card {
 	width: 100%;
-  min-height: 287px;
+	min-height: 287px;
 	position: relative;
 	margin-bottom: 44px;
 
@@ -116,9 +115,9 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 		padding-right: 16px;
 
 		&__author {
-      //TODO: пока верстка только мобилки
-      max-width: 480px;
-      word-wrap: break-word;
+			//TODO: пока верстка только мобилки
+			max-width: 480px;
+			word-wrap: break-word;
 			font-size: var(--font-size-XS);
 			font-weight: var(--font-weight-bold);
 			line-height: 16px;
@@ -128,9 +127,9 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 		}
 
 		&__title {
-      //TODO: пока верстка только мобилки
-      max-width: 480px;
-      word-wrap: break-word;
+			//TODO: пока верстка только мобилки
+			max-width: 480px;
+			word-wrap: break-word;
 			font-size: var(--font-size-L);
 			font-weight: var(--font-weight-bold);
 			line-height: 24px;

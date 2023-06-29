@@ -3,7 +3,6 @@ import { useLocationStore } from '@/stores/location.store';
 import { LOCATION_API_URL } from '~/constants/url';
 import type { UserLocation } from '../../../common/types/location';
 
-const { translate } = useTranslation();
 const locationStore = useLocationStore();
 // fyi - doesn't work locally cause your IP is just localhost or smth. Works remotely, I promise
 const { data } = await useFetch(
@@ -54,7 +53,7 @@ locationStore.userLocation = data.value ?? locationStore.userLocation;
 			v-else
 			class="user-location__text"
 		>
-			{{ translate('component.user_location.not_found') }}
+			{{ $t('component.user_location.not_found') }}
 		</div>
 	</div>
 </template>

@@ -22,7 +22,7 @@ const posterEvent = computed(() => {
 });
 
 const isEditable = computed(() => {
-	return posterEvent.value?.date ? posterEvent.value.date > new Date().getTime() : false;
+	return posterEvent.value ? posterEvent.value.date > Date.now() : false;
 });
 
 useHead({

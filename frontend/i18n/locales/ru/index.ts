@@ -177,6 +177,13 @@ export const defaultTranslation = {
 				logout: 'Выйти'
 			}
 		},
+		edit_profile_modal: {
+			title: 'Редактирование',
+			button: {
+				cancel: 'Отмена',
+				submit: 'Сохранить'
+			}
+		},
 		language_selector: {
 			label: 'Язык'
 		},

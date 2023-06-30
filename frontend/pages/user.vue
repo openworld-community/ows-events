@@ -1,6 +1,21 @@
 <script setup lang="ts">
+import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
+import EditProfile from '@/components/modal/EditProfile.vue';
+
+const {
+	open: openEditProfileModal,
+	close: closeEditProfileModal,
+	patchOptions: patchEditProfileModal
+} = useModal({ component: EditProfile } as UseModalOptions<
+	InstanceType<typeof VueFinalModal>['$props']
+>);
+patchEditProfileModal({
+	attrs: {
+		closeEditProfileModal
+	}
+});
+
 type Props = {
-	editProfile: () => void;
 	logout: () => void;
 };
 
@@ -29,7 +44,7 @@ const props = defineProps<Props>();
 			button-kind="ordinary"
 			:button-text="$t('user.buttons.edit')"
 			icon-name="edit"
-			@click="props.editProfile"
+			@click="openEditProfileModal"
 		/>
 		<CommonButton
 			class="user-page__form-button"

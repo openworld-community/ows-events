@@ -86,7 +86,6 @@ const filteredList = computed(() =>
 			:required="required"
 			icon-name="container"
 			:aria-expanded="isOpen"
-			:aria-label="placeholder"
 			@update:model-value="emit('update:model-value', $event)"
 			@click="openSelect"
 		/>

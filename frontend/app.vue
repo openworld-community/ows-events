@@ -12,7 +12,7 @@ useHead({
 	title: $i18n.t('meta.title'),
 	meta: [{ name: 'Афиша переделано', content: 'Это площадка для поиска мероприятий' }],
 	htmlAttrs: {
-		lang: 'ru'
+		lang: $i18n.language
 	}
 });
 

@@ -54,7 +54,6 @@ const onRemove = () => {
 			:name="name"
 			:value="modelValue"
 			:placeholder="required ? `${placeholder} *` : placeholder"
-			:aria-label="placeholder"
 			:required="required"
 			@input="updateValue"
 		/>

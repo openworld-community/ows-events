@@ -1,8 +1,5 @@
 <script setup lang="ts">
-type MockProfileInfo = {
-	name: string;
-	company: string;
-};
+import { type MockProfileInfo } from '@/pages/user.vue';
 
 type Props = {
 	closeEditProfileModal: () => void;

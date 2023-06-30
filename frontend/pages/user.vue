@@ -15,28 +15,41 @@ patchEditProfileModal({
 	}
 });
 
+export type MockProfileInfo = {
+	nickname: string;
+	name: string;
+	company: string;
+};
+
 type Props = {
 	logout: () => void;
+	dataForEdit?: MockProfileInfo;
 };
 
 const props = defineProps<Props>();
+
+const inputValues = ref({
+	nickname: props.dataForEdit?.nickname ?? '',
+	name: props.dataForEdit?.name ?? '',
+	company: props.dataForEdit?.company ?? ''
+});
 </script>
 
 <template>
 	<section class="user-page">
+		<h2 class="user-page__title">{{ $t('user.title_profile') }}</h2>
 		<div class="user-page__fieldset">
-			<h2 class="user-page__title">{{ $t('user.title_profile') }}</h2>
 			<div class="user-page__field">
 				<p class="user-page__field-name">{{ $t('user.nickname') }}</p>
-				<p class="user-page__field-value">{{ nickname }}</p>
+				<p class="user-page__field-value">{{ inputValues.nickname }}</p>
 			</div>
 			<div class="user-page__field">
 				<p class="user-page__field-name">{{ $t('user.name') }}</p>
-				<p class="user-page__field-value">{{ name }}</p>
+				<p class="user-page__field-value">{{ inputValues.name }}</p>
 			</div>
 			<div class="user-page__field">
 				<p class="user-page__field-name">{{ $t('user.affiliation') }}</p>
-				<p class="user-page__field-value">{{ affiliation }}</p>
+				<p class="user-page__field-value">{{ inputValues.company }}</p>
 			</div>
 		</div>
 		<div class="user-page__actions">
@@ -69,6 +82,11 @@ const props = defineProps<Props>();
 	padding-right: var(--padding-side);
 	padding-bottom: 30px;
 	margin-bottom: auto;
+	max-height: calc(100vh - var(--header-height));
+
+	@supports (-webkit-touch-callout: none) {
+		max-height: -webkit-fill-available;
+	}
 
 	&__fieldset {
 		display: flex;
@@ -76,6 +94,7 @@ const props = defineProps<Props>();
 		width: 100%;
 		padding-inline: 0;
 		margin-bottom: var(--space-sections);
+		overflow-y: auto;
 	}
 
 	&__field {

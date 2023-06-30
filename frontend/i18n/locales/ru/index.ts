@@ -182,6 +182,17 @@ export const defaultTranslation = {
 			button: {
 				cancel: 'Отмена',
 				submit: 'Сохранить'
+			},
+			fields: {
+				nickname: 'Никнейм',
+				name: 'Имя',
+				surname: 'Фамилия',
+				organizer: 'Организатор',
+				email: 'E-mail',
+				phone: 'Номер телефона',
+				name_placeholder: 'Как к вам обращаться?',
+				surname_placeholder: 'Введите вашу фамилию',
+				organizer_placeholder: 'Компания-организатор события'
 			}
 		},
 		language_selector: {

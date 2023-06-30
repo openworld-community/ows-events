@@ -36,6 +36,7 @@ watch(
 			:placeholder="$t('global.country')"
 			:list="locationStore.usedCountries"
 			:model-value="country"
+			:aria-label="$t('home.filter.aria_country')"
 			@update:model-value="updateCountry"
 		/>
 		<CommonUiBaseSelect
@@ -46,6 +47,7 @@ watch(
 			:disabled="!country"
 			:model-value="city"
 			dropdown-position="right"
+			:aria-label="$t('home.filter.aria_city')"
 			@update:model-value="updateCity"
 		/>
 	</section>

@@ -32,29 +32,32 @@ locationStore.userLocation = data.value ?? locationStore.userLocation;
 </script>
 
 <template>
-	<div class="user-location__container">
+	<div
+		class="user-location__container"
+		:aria-label="$t('home.location.aria')"
+	>
 		<CommonIcon
 			class="user-location__pin"
 			name="map-pin"
 		/>
-		<div
+		<p
 			v-if="locationStore.userLocation?.city"
 			class="user-location__text"
 		>
 			{{ locationStore.userLocation?.country }}, {{ locationStore.userLocation?.city }}
-		</div>
-		<div
+		</p>
+		<p
 			v-else-if="locationStore.userLocation?.country"
 			class="user-location__text"
 		>
 			{{ locationStore.userLocation.country }}
-		</div>
-		<div
+		</p>
+		<p
 			v-else
 			class="user-location__text"
 		>
 			{{ $t('component.user_location.not_found') }}
-		</div>
+		</p>
 	</div>
 </template>
 

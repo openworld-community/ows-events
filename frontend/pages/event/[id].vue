@@ -18,6 +18,10 @@ const posterEvent = computed(() => {
 	return data.value;
 });
 
+const isEditable = computed(() => {
+	return posterEvent.value ? posterEvent.value.date > Date.now() : false;
+});
+
 useHead({ titleTemplate: `%s / ${posterEvent.value?.title}` });
 
 const redirect = () => {
@@ -101,19 +105,19 @@ patchDeleteEventModal({
 			/>
 		</div>
 
-		<div class="event event-description">
+		<div class="event event-info">
 			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
 			<p
 				v-if="posterEvent.title.toLowerCase().includes('peredelanoconf')"
-				class="event-description__author"
+				class="event-info__author"
 			>
 				Peredelano
 			</p>
-			<h2 class="event-description__title">
+			<h2 class="event-info__title">
 				{{ posterEvent.title }}
 			</h2>
 
-			<p class="event-description__datetime">
+			<p class="event-info__datetime">
 				<span v-if="posterEvent.durationInSeconds">
 					{{ convertToLocaleString(posterEvent.date) }}
 					-
@@ -132,13 +136,13 @@ patchDeleteEventModal({
 			</p>
 			<!-- TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса -->
 			<NuxtLink
-				class="event-description__geolink"
+				class="event-info__geolink"
 				:to="`https://www.google.com/maps/place/${posterEvent.location.city}+${posterEvent.location.country}`"
 				target="_blank"
 			>
 				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
 			</NuxtLink>
-			<p class="event-description__description">
+			<p class="event-info__description">
 				{{ posterEvent.description }}
 			</p>
 		</div>
@@ -178,6 +182,7 @@ patchDeleteEventModal({
 					@click="openDeleteEventModal"
 				/>
 				<CommonButton
+					v-if="isEditable"
 					class="event-actions__button event-actions__button--admin"
 					button-kind="ordinary"
 					:button-text="$t('event.button.edit')"
@@ -199,14 +204,19 @@ patchDeleteEventModal({
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
+	max-height: calc(100vh - var(--header-height));
 	padding-left: var(--padding-side);
 	padding-right: var(--padding-side);
-	padding-bottom: 30px;
-	margin-bottom: auto;
 
-	&-description {
+	// Для адаптивной height на iOs
+	@supports (-webkit-touch-callout: none) {
+		max-height: -webkit-fill-available;
+	}
+
+	&-info {
 		display: flex;
 		width: 100%;
+		min-height: 250px;
 		flex-direction: column;
 		padding-inline: 0;
 
@@ -251,7 +261,6 @@ patchDeleteEventModal({
 		&__description {
 			//TODO: пока верстка только мобилки
 			max-width: 480px;
-			max-height: 150px;
 			word-wrap: break-word;
 			overflow-y: auto;
 			font-size: var(--font-size-S);
@@ -264,6 +273,8 @@ patchDeleteEventModal({
 		flex-direction: column;
 		background-color: var(--color-white);
 		margin-top: auto;
+		padding-top: 15px;
+		padding-bottom: 15px;
 
 		&__manage {
 			display: flex;
@@ -276,7 +287,9 @@ patchDeleteEventModal({
 			height: 40px;
 
 			&--connect {
-				margin-bottom: var(--space-unrelated-items);
+				&:not(:last-child) {
+					margin-bottom: var(--space-unrelated-items);
+				}
 			}
 
 			&--admin {

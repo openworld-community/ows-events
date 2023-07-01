@@ -22,7 +22,10 @@ defineProps<{
 			{{ label }}
 		</span>
 		<slot />
-		<div class="input-icon">
+		<div
+			v-if="icon && (icon === 'DELETE' || icon.name)"
+			class="input-icon"
+		>
 			<CommonButton
 				v-if="icon === 'DELETE'"
 				is-icon
@@ -36,7 +39,7 @@ defineProps<{
 				:icon-name="icon.name"
 			/>
 			<CommonIcon
-				v-else-if="icon"
+				v-else
 				:name="icon.name"
 			/>
 		</div>

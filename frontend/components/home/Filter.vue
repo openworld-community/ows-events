@@ -55,7 +55,7 @@ watch(
 .filter {
 	display: flex;
 
-	> *:not(:last-child) {
+	> :not(:last-child) {
 		margin-right: 15px;
 	}
 }

@@ -31,7 +31,6 @@ watch(
 <template>
 	<section class="filter">
 		<CommonUiBaseSelect
-			class="filter__field"
 			name="country"
 			:placeholder="$t('global.country')"
 			:list="locationStore.usedCountries"
@@ -40,7 +39,6 @@ watch(
 			@update:model-value="updateCountry"
 		/>
 		<CommonUiBaseSelect
-			class="filter__field"
 			name="city"
 			:placeholder="$t('global.city')"
 			:list="locationStore.getUsedCitiesByCountry(country) ?? []"
@@ -57,10 +55,8 @@ watch(
 .filter {
 	display: flex;
 
-	&__field {
-		&:not(:last-child) {
-			margin-right: 15px;
-		}
+	> *:not(:last-child) {
+		margin-right: 15px;
 	}
 }
 </style>

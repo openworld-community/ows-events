@@ -39,7 +39,7 @@ const props = defineProps({
 		flex-direction: column;
 		width: 100%;
 
-		& > :deep(div:not(:last-child)) {
+		& > :deep(:not(:last-child)) {
 			margin-bottom: 20px;
 		}
 	}
@@ -48,7 +48,7 @@ const props = defineProps({
 		display: flex;
 		width: 100%;
 
-		& > :deep(div:not(:last-child)) {
+		& > :deep(:not(:last-child)) {
 			margin-right: 16px;
 		}
 	}

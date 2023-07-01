@@ -19,6 +19,7 @@ module.exports = {
 		'vue/multi-word-component-names': 'off',
 		'vue/html-indent': 'off',
 		'vue/singleline-html-element-content-newline': 'off',
-		'no-mixed-spaces-and-tabs': 'off'
+		'no-mixed-spaces-and-tabs': 'off',
+		'vue/require-default-prop': 'off'
 	}
 };

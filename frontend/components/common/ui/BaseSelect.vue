@@ -73,7 +73,7 @@ const filteredList = computed(() =>
 <template>
 	<div
 		class="select__wrapper"
-		:class="{ [className ?? '']: className }"
+		:class="[className]"
 	>
 		<CommonUiBaseInput
 			v-on-click-outside="closeSelect"
@@ -84,7 +84,7 @@ const filteredList = computed(() =>
 			:error="error"
 			:model-value="modelValue"
 			:required="required"
-			icon-name="container"
+			:icon-name="!disabled ? 'container' : ''"
 			:aria-expanded="isOpen"
 			@update:model-value="emit('update:model-value', $event)"
 			@click="openSelect"

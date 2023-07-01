@@ -1,38 +1,15 @@
 <script lang="ts" setup>
-import type { PropType } from 'vue';
+import type { WrappedInputClass } from './InputWrapper.vue';
 
-defineOptions({ inheritAttrs: false });
-
-defineProps({
-	className: {
-		type: String as PropType<string>,
-		default: ''
-	},
-	modelValue: {
-		type: String as PropType<string>,
-		default: ''
-	},
-	placeholder: {
-		type: String as PropType<string>,
-		default: ''
-	},
-	label: {
-		type: String as PropType<string>,
-		default: ''
-	},
-	required: {
-		type: Boolean as PropType<boolean>,
-		default: false
-	},
-	error: {
-		type: String as PropType<string>,
-		default: ''
-	},
-	name: {
-		type: String as PropType<string>,
-		required: true
-	}
-});
+defineProps<{
+	modelValue: string;
+	name: string;
+	placeholder?: string;
+	label?: string;
+	required?: boolean;
+	error?: string;
+	disabled?: boolean;
+}>();
 
 const emit = defineEmits(['update:model-value']);
 const updateValue = (event: Event) => {
@@ -45,33 +22,31 @@ const onRemove = () => {
 </script>
 
 <template>
-	<div :class="`input input__wrapper ${className}`">
-		<label :for="name">
-			{{ label }}
-		</label>
+	<CommonUiInputWrapper
+		:on-remove="onRemove"
+		:label="label"
+		:icon="modelValue && !disabled ? 'DELETE' : undefined"
+		:error="error"
+	>
 		<textarea
-			:class="`input__field input__field--textarea ${error ? 'form__error' : ''}`"
+			class="textarea"
+			:class="['wrapped-input' satisfies WrappedInputClass]"
 			:name="name"
 			:value="modelValue"
-			:placeholder="required ? `${placeholder} *` : placeholder"
+			:placeholder="`${placeholder}${required ? ' *' : ''}`"
 			:required="required"
 			@input="updateValue"
 		/>
-		<CommonButton
-			v-if="modelValue"
-			class="input__button input__button--clear"
-			is-icon
-			icon-name="delete"
-			:alt="$t('global.button.delete')"
-			@click="onRemove"
-		/>
-		<span
-			v-if="error"
-			class="textarea__error"
-		>
-			{{ error }}
-		</span>
-	</div>
+	</CommonUiInputWrapper>
 </template>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+textarea {
+	min-height: 80px;
+	resize: vertical;
+
+	&::-webkit-resizer {
+		display: none;
+	}
+}
+</style>

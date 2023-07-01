@@ -64,7 +64,6 @@ const symbolId = computed(() => `#${props.name}`);
 
 <style scoped lang="less">
 svg {
-	pointer-events: none;
 	color: v-bind('color');
 }
 </style>

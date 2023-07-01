@@ -4,12 +4,9 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import dayjs from 'dayjs';
 import type { PropType } from 'vue';
 import type { Time } from '../../../utils/dates';
+import type { WrappedInputClass } from './InputWrapper.vue';
 
 const props = defineProps({
-	className: {
-		type: String as PropType<string>,
-		default: ''
-	},
 	modelValue: {
 		type: [Date, null, Object] as PropType<Date | Time | null>,
 		required: true
@@ -75,23 +72,18 @@ const onRemove = () => {
 </script>
 
 <template>
-	<div
-		class="input__wrapper"
-		:class="{ [className ?? '']: className }"
+	<CommonUiInputWrapper
+		:on-remove="onRemove"
+		:label="label"
+		:icon="modelValue && !disabled ? 'DELETE' : { name: isDateType ? 'calendar' : 'clock' }"
+		:error="error"
 	>
-		<label
-			v-if="label"
-			class="form__label"
-			:for="name"
-		>
-			{{ label }}
-		</label>
 		<VueDatePicker
 			ref="datepicker"
 			:model-value="modelValue"
 			:name="name"
-			:placeholder="required ? `${placeholder} *` : placeholder"
-			:input-class-name="`input input__field ${error ? 'form__error' : ''}`"
+			:placeholder="`${placeholder}${required ? ' *' : ''}`"
+			:input-class-name="`${'wrapped-input' satisfies WrappedInputClass}`"
 			:menu-class-name="`${!isDateType ? 'time_picker' : ''}`"
 			mode-height="80"
 			prevent-min-max-navigation
@@ -113,29 +105,8 @@ const onRemove = () => {
 			@update:model-value="handleDate"
 			@keydown.enter.capture="datepicker?.closeMenu()"
 		/>
-		<CommonIcon
-			v-if="!modelValue"
-			:name="isDateType ? 'calendar' : 'clock'"
-			class="input__button"
-			:alt="$t('dates.clock')"
-		/>
-		<CommonButton
-			v-else
-			is-icon
-			icon-name="delete"
-			class="input__button"
-			@click="onRemove"
-		/>
-
-		<span
-			v-if="error"
-			class="form__error"
-		>
-			{{ error }}
-		</span>
-	</div>
+	</CommonUiInputWrapper>
 </template>
-
 <style lang="less">
 .dp {
 	&__menu {
@@ -152,41 +123,13 @@ const onRemove = () => {
 		}
 	}
 
-	&__main {
-		position: relative;
-	}
-
-	&__menu_transitioned,
-	&__input {
+	&__menu_transitioned {
 		border-radius: 24px;
 	}
 
 	&__input {
-		padding: 8px 12px;
-		font-family: var(--font-family-main);
-		color: var(--color-text-main);
-		border: 1px solid var(--color-input-field);
-		font-size: var(--font-size-M);
-
 		&:hover {
 			border-color: var(--color-input-field);
-		}
-
-		&:active,
-		&:focus {
-			outline: none;
-			border: 1px solid #48c78e;
-			box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-		}
-
-		&:disabled {
-			background-color: var(--color-background-secondary);
-		}
-
-		&::placeholder {
-			font-family: var(--font-family-main);
-			font-size: var(--font-size-M);
-			color: var(--color-input-icons);
 		}
 
 		&_icon {
@@ -222,12 +165,6 @@ const onRemove = () => {
 	&__month_year {
 		&_wrap {
 			justify-content: center;
-		}
-
-		&_select {
-			&:hover {
-				color: var(--color-accent-green-main);
-			}
 		}
 	}
 

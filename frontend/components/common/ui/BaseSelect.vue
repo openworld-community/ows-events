@@ -84,7 +84,7 @@ const filteredList = computed(() =>
 			:error="error"
 			:model-value="modelValue"
 			:required="required"
-			:icon-name="!disabled ? 'container' : ''"
+			:icon-name="!disabled ? 'container' : undefined"
 			:aria-expanded="isOpen"
 			@update:model-value="emit('update:model-value', $event)"
 			@click="openSelect"

@@ -39,7 +39,8 @@
     "vue-flag-icon": "^2.1.0",
     "vue-markdown": "^2.2.4",
     "vue-toastification": "^2.0.0-rc.5",
-    "vue3-markdown-it": "^1.0.10"
+    "vue3-markdown-it": "^1.0.10",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@nuxt/eslint-config": "^0.1.1",

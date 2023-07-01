@@ -37,6 +37,7 @@ defineProps<{
 				v-else-if="icon?.onClick"
 				is-icon
 				:icon-name="icon.name"
+				@click="icon.onClick"
 			/>
 			<CommonIcon
 				v-else

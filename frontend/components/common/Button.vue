@@ -92,7 +92,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			{ 'button--round': isRound }
 		]"
 		:aria-label="alt ? alt : null"
-		@click="(event: MouseEvent) => (!link && !isDisabled ? emit('click', event) : null)"
+		@click="!link && !isDisabled ? emit('click') : null"
 	>
 		<CommonUiLoadSpinner
 			v-if="isLoading"

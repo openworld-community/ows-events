@@ -1,26 +1,38 @@
 <script setup lang="ts">
 import type { EventOnPoster } from '../../../common/types';
+import Currency from '../common/Currency.vue';
+import Address from '../common/Address.vue';
+const { $i18n } = useNuxtApp();
 
 const props = defineProps<{ eventData: EventOnPoster }>();
 
-//TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
-const templateURL = `https://www.google.com/maps/place/${props.eventData?.location.city}+${props.eventData?.location.country}`;
 </script>
 
 <template>
-	<div class="card">
-		<NuxtLink :to="`/event/${props.eventData.id}`">
+	<div
+		itemscope
+		itemtype="https://schema.org/Event"
+	>
+		<NuxtLink
+				class="card"
+				:to="`/event/${props.eventData.id}`"
+				itemprop="url"
+		>
 			<div
 				:class="[
 					'card__image-container',
 					{ 'card__image-container--background': !eventData.image }
 				]"
+				itemprop="image"
 			>
-				<span class="card__price">
-					{{ getPrice(eventData) }}
-				</span>
+				<Currency
+						:price="eventData.price"
+						:currency="'RSD'"
+				/>
+
 				<img
 					v-if="eventData.image"
+					itemprop="image"
 					:alt="$t('home.events.image_alt')"
 					class="card__image"
 					:src="getEventImage(props.eventData)"
@@ -35,26 +47,36 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 					v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
 					class="card-description__author"
 				>
-					Peredelano
+					<span itemprop="composer">
+						Peredelano
+					</span>
 				</p>
-				<h2 class="card-description__title">
+				<h2
+						class="card-description__title"
+						itemprop="name"
+				>
 					{{ props.eventData.title }}
 				</h2>
 				<p class="card-description__datetime">
-					{{ convertToLocaleString(props.eventData.date) }}
+					<span itemprop="startDate">
+						{{ convertToLocaleString(props.eventData.date) }}
+					</span>
 					({{ props.eventData.timezone?.timezoneOffset }}
 					{{ props.eventData.timezone?.timezoneName }})
 				</p>
-			</div>
-		</NuxtLink>
 
-		<!--    отдельный линк, т.к. нельзя ссылку класть в ссылку, а если делать другим типом контейнера и переходить по @click.prevent, отрабатывает некорректно и местами багует-->
-		<NuxtLink
-			:to="templateURL"
-			target="_blank"
-			class="card-link card-link__geolink"
-		>
-			{{ props.eventData.location.country }}, {{ props.eventData.location.city }}
+				<div class="card-description__geo-box">
+					<CommonIcon
+							name="map-pin"
+							class="card-description__pin"
+					/>
+					<Address
+							class-name="card-description__geo"
+							:country="props.eventData.location.country"
+							:city="props.eventData.location.city"
+					/>
+				</div>
+			</div>
 		</NuxtLink>
 	</div>
 </template>
@@ -87,24 +109,6 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 		max-width: 100%;
 		height: 100%;
 		object-fit: cover;
-	}
-
-	&__price {
-		min-width: 50px;
-		position: absolute;
-		left: 16px;
-		top: 12px;
-
-		font-size: var(--font-size-XS);
-		line-height: 16px;
-		text-align: center;
-
-		border-radius: 16px;
-		color: var(--color-white);
-		background-color: var(--color-accent-green-main);
-
-		padding: 6px 10px;
-		z-index: 1;
 	}
 
 	.card-description {
@@ -143,20 +147,24 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 			color: var(--color-text-secondary);
 			margin-bottom: var(--space-related-items);
 		}
-	}
 
-	.card-link {
-		display: block;
-		width: max-content;
-		padding-left: 16px;
-		padding-right: 16px;
+		&__geo-box {
+			display: flex;
+			align-items: center;
+		}
 
-		&__geolink {
+		&__geo {
+			display: block;
 			width: max-content;
 			font-size: var(--font-size-XS);
+			color: var(--color-text-secondary);
+			font-weight: var(--font-weight-bold);
 			line-height: 16px;
-			text-decoration-line: underline;
-			color: #5c9ad2;
+		}
+
+		&__pin {
+			color: var(--color-text-secondary);
+			margin-right: 13px;
 		}
 	}
 }

@@ -4,6 +4,11 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
 import type { UserInfo } from '@/../common/types/user';
+import {BASE_URL} from '../../constants/url';
+import Currency from '../../components/common/Currency.vue';
+import Address from '../../components/common/Address.vue';
+
+const { $i18n } = useNuxtApp();
 
 definePageMeta({ name: RouteNameEnum.EVENT });
 const route = useRoute();
@@ -18,7 +23,21 @@ const posterEvent = computed(() => {
 	return data.value;
 });
 
-useHead({ titleTemplate: `%s / ${posterEvent.value?.title}` });
+const eventImage = computed(() => {
+	return getEventImage(posterEvent.value);
+});
+
+useHead({
+	titleTemplate: `%s / ${posterEvent.value?.title}`,
+	meta: [
+		{ property: 'og:site_name', content: $i18n.t('meta.title') },
+		{ property: 'og:type', content: 'website' },
+		{ property: 'og:title', content: posterEvent.value?.title ?? $i18n.t('meta.title') },
+		{ property: 'og:description', content: posterEvent.value?.description ?? $i18n.t('meta.event.description') },
+		{ property: 'og:image', content: eventImage },
+		{ property: 'og:url', content: BASE_URL + route.path },
+	]
+});
 
 const redirect = () => {
 	useTrackEvent('redirect');
@@ -82,6 +101,8 @@ patchDeleteEventModal({
 	<div
 		v-if="posterEvent"
 		class="event"
+		itemscope
+		itemtype="https://schema.org/Event"
 	>
 		<div
 			:class="[
@@ -89,15 +110,19 @@ patchDeleteEventModal({
 				'event-image__container',
 				{ 'event-image__container--background': !posterEvent.image }
 			]"
+			itemprop="image"
 		>
-			<span class="event-image__price">
-				{{ getPrice(posterEvent) }}
-			</span>
+			<Currency
+					:class-name="'event-image__price'"
+					:price="posterEvent.price"
+					:currency="'RSD'"
+			/>
 			<img
 				v-if="posterEvent.image"
-				:src="getEventImage(posterEvent)"
+				:src="eventImage"
 				:alt="$t('event.image.event')"
 				class="event-image__image"
+				itemprop="image"
 			/>
 		</div>
 
@@ -106,15 +131,22 @@ patchDeleteEventModal({
 			<p
 				v-if="posterEvent.title.toLowerCase().includes('peredelanoconf')"
 				class="event-description__author"
+				itemprop="composer">
 			>
 				Peredelano
 			</p>
-			<h2 class="event-description__title">
+			<h1
+					class="event-description__title"
+					itemprop="name"
+			>
 				{{ posterEvent.title }}
-			</h2>
+			</h1>
 
 			<p class="event-description__datetime">
-				<span v-if="posterEvent.durationInSeconds">
+				<span
+						v-if="posterEvent.durationInSeconds"
+						itemprop="duration"
+				>
 					{{ convertToLocaleString(posterEvent.date) }}
 					-
 					{{
@@ -135,10 +167,17 @@ patchDeleteEventModal({
 				class="event-description__geolink"
 				:to="`https://www.google.com/maps/place/${posterEvent.location.city}+${posterEvent.location.country}`"
 				target="_blank"
+				itemprop="url"
 			>
-				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
+				<Address
+					:country="posterEvent.location.country"
+					:city="posterEvent.location.city"
+				/>
 			</NuxtLink>
-			<p class="event-description__description">
+			<p
+					class="event-description__description"
+					itemprop="description"
+			>
 				{{ posterEvent.description }}
 			</p>
 		</div>

@@ -2,6 +2,18 @@
 import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import EditProfile from '@/components/modal/EditProfile.vue';
 
+export type ProfileInfo = {
+	nickname: string;
+	name: string;
+	company: string;
+};
+
+const userData = ref({
+	nickname: '@Gosha',
+	name: 'Гоша',
+	company: 'EverParty'
+});
+
 const {
 	open: openEditProfileModal,
 	close: closeEditProfileModal,
@@ -11,28 +23,14 @@ const {
 >);
 patchEditProfileModal({
 	attrs: {
-		closeEditProfileModal
+		closeEditProfileModal,
+		dataForEdit: userData.value
 	}
 });
 
-export type MockProfileInfo = {
-	nickname: string;
-	name: string;
-	company: string;
+const logout = () => {
+	console.log('Здесь должен происходить выход из аккаунта');
 };
-
-type Props = {
-	logout: () => void;
-	dataForEdit?: MockProfileInfo;
-};
-
-const props = defineProps<Props>();
-
-const inputValues = ref({
-	nickname: props.dataForEdit?.nickname ?? '',
-	name: props.dataForEdit?.name ?? '',
-	company: props.dataForEdit?.company ?? ''
-});
 </script>
 
 <template>
@@ -41,15 +39,15 @@ const inputValues = ref({
 		<div class="user-page__fieldset">
 			<div class="user-page__field">
 				<p class="user-page__field-name">{{ $t('user.nickname') }}</p>
-				<p class="user-page__field-value">{{ inputValues.nickname }}</p>
+				<p class="user-page__field-value">{{ userData.nickname }}</p>
 			</div>
 			<div class="user-page__field">
 				<p class="user-page__field-name">{{ $t('user.name') }}</p>
-				<p class="user-page__field-value">{{ inputValues.name }}</p>
+				<p class="user-page__field-value">{{ userData.name }}</p>
 			</div>
 			<div class="user-page__field">
 				<p class="user-page__field-name">{{ $t('user.affiliation') }}</p>
-				<p class="user-page__field-value">{{ inputValues.company }}</p>
+				<p class="user-page__field-value">{{ userData.company }}</p>
 			</div>
 		</div>
 		<div class="user-page__actions">
@@ -65,7 +63,7 @@ const inputValues = ref({
 				button-kind="warning"
 				:button-text="$t('user.buttons.logout')"
 				icon-name="logout"
-				@click="props.logout"
+				@click="logout()"
 			/>
 		</div>
 	</section>

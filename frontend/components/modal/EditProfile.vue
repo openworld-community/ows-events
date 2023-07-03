@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { type MockProfileInfo } from '@/pages/user.vue';
+import { type ProfileInfo } from '@/pages/user.vue';
 
 type Props = {
 	closeEditProfileModal: () => void;
-	dataForEdit?: MockProfileInfo;
+	dataForEdit?: ProfileInfo;
 };
 
 const props = defineProps<Props>();

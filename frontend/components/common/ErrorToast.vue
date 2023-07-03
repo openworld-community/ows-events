@@ -7,15 +7,15 @@ defineProps<{ error: string }>();
 			name="error"
 			:height="24"
 			color="var(--color-alert-error)"
-			class="item icon"
+			class="content__item content__icon"
 		/>
-		<span class="item text">
+		<span class="content__item content-text">
 			{{ error ?? 'UNEXPECTED ERROR' }}
 		</span>
 		<CommonIcon
 			name="close"
 			:width="25"
-			class="item icon"
+			class="content__item content__icon"
 		/>
 	</div>
 </template>
@@ -33,19 +33,19 @@ defineProps<{ error: string }>();
 	cursor: pointer;
 }
 
-.item {
+.content__item {
 	&:not(:last-child) {
 		margin-right: 14px;
 	}
 }
 
-.text {
+.content-text {
 	font-family: var(--font-family-main);
 	font-size: var(--font-size-XS);
 	line-height: 18px;
 }
 
-.icon {
+.content__icon {
 	flex-shrink: 0;
 }
 </style>

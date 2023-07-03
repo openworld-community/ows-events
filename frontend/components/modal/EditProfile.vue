@@ -8,13 +8,13 @@ type Props = {
 
 const props = defineProps<Props>();
 
-const inputValues = ref({
+const userData = ref({
 	name: props.dataForEdit?.name ?? '',
 	company: props.dataForEdit?.company ?? ''
 });
 
 const checkProfileFilling = computed(() => {
-	return !!(inputValues.value.name || inputValues.value.company);
+	return !!(userData.value.name || userData.value.company);
 });
 </script>
 
@@ -48,7 +48,7 @@ const checkProfileFilling = computed(() => {
 				<ModalUiModalSection :label="$t('component.edit_profile_modal.fields.name')">
 					<template #child>
 						<CommonUiBaseInput
-							v-model="inputValues.name"
+							v-model="userData.name"
 							name="username"
 							:placeholder="
 								$t('component.edit_profile_modal.fields.name_placeholder')
@@ -59,7 +59,7 @@ const checkProfileFilling = computed(() => {
 				<ModalUiModalSection :label="$t('component.edit_profile_modal.fields.organizer')">
 					<template #child>
 						<CommonUiBaseInput
-							v-model="inputValues.company"
+							v-model="userData.company"
 							name="organizer"
 							:placeholder="
 								$t('component.edit_profile_modal.fields.organizer_placeholder')

@@ -55,7 +55,8 @@ const symbolId = computed(() => `#${props.name}`);
 <template>
 	<svg
 		aria-hidden="true"
-		:style="{ width, height }"
+		:width="width"
+		:height="height"
 		:color="color"
 	>
 		<use :href="symbolId" />

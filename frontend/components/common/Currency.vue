@@ -3,6 +3,7 @@ import { type PropType } from 'vue';
 const { $i18n } = useNuxtApp();
 
 const free = computed(() => $i18n.t('event.price.free'));
+const unknown = computed(() => $i18n.t('event.price.not_found'));
 
 defineProps({
 	price: {
@@ -29,7 +30,14 @@ defineProps({
 			itemtype="https://schema.org/Offer"
 	>
 		<span
-				v-if="price"
+				v-if="price === '0'"
+				itemprop="isAccessibleForFree"
+				content="true"
+		>
+			{{ free }}
+		</span>
+		<span
+				v-else-if="price"
 				itemprop="price"
 		>
 			<span
@@ -49,10 +57,8 @@ defineProps({
 		</span>
 		<span
 				v-else
-				itemprop="isAccessibleForFree"
-				content="true"
 		>
-			{{ free }}
+			{{ unknown }}
 		</span>
 	</span>
 </template>

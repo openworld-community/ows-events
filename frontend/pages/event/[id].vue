@@ -33,7 +33,7 @@ useHead({
 		{ property: 'og:site_name', content: $i18n.t('meta.title') },
 		{ property: 'og:type', content: 'website' },
 		{ property: 'og:title', content: posterEvent.value?.title ?? $i18n.t('meta.title') },
-		{ property: 'og:description', content: posterEvent.value?.description ?? $i18n.t('meta.event.description') },
+		{ property: 'og:description', content: posterEvent.value?.description ?? $i18n.t('meta.home.description') },
 		{ property: 'og:image', content: eventImage },
 		{ property: 'og:url', content: BASE_URL + route.path },
 	]

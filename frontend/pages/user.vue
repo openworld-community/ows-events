@@ -60,7 +60,7 @@ const logout = () => {
 		<h2 class="user-page__title">
 			{{ isAuthorized ? $t('user.title_profile') : $t('user.title_unauthorized') }}
 		</h2>
-		<div v-if="isAuthorized">
+		<template v-if="isAuthorized">
 			<div class="user-page__fieldset">
 				<div class="user-page__field">
 					<p class="user-page__field-name">{{ $t('user.login') }}</p>
@@ -75,9 +75,7 @@ const logout = () => {
 					<p class="user-page__field-value">{{ userData.company }}</p>
 				</div>
 			</div>
-		</div>
-		<div class="user-page__actions">
-			<div v-if="isAuthorized">
+			<div class="user-page__actions">
 				<CommonButton
 					class="user-page__form-button user-page__form-button--edit"
 					button-kind="ordinary"
@@ -93,16 +91,13 @@ const logout = () => {
 					@click="logout()"
 				/>
 			</div>
-			<div
-				v-else
-				class="user-page__login-button"
-			>
-				<div
-					ref="telegram"
-					:class="'user-page__telegram-button'"
-				/>
-			</div>
-		</div>
+		</template>
+		<div
+			v-else
+			ref="telegram"
+			:class="'user-page__telegram-button'"
+			:aria-label="$t('user.buttons.login')"
+		/>
 	</section>
 </template>
 
@@ -181,16 +176,12 @@ const logout = () => {
 		}
 	}
 
-	&__login-button {
+	&__telegram-button {
 		width: 100%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-	}
-
-	&__telegram-button {
-		width: 100%;
-		align-self: center;
+		padding-top: 50%;
 	}
 }
 </style>

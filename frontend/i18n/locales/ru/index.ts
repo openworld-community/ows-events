@@ -123,7 +123,7 @@ export const defaultTranslation = {
 		title: 'Оговорка об ограничении ответственности'
 	},
 	user: {
-		title_unauthorized: 'Необходимо авторизироваться',
+		title_unauthorized: 'Авторизация',
 		title_profile: 'Профиль',
 		title_contacts: 'контакты',
 		login: 'Логин',
@@ -134,7 +134,8 @@ export const defaultTranslation = {
 		phone: 'Номер телефона',
 		buttons: {
 			edit: 'Редактировать',
-			logout: 'Выйти из аккаунта'
+			logout: 'Выйти из аккаунта',
+			login: 'Войти с помощью Telegram'
 		}
 	},
 	component: {

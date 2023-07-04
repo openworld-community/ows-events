@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '~/constants/enums/route';
 import type { UserInfo } from '../../../common/types/user';
+
 definePageMeta({
 	middleware: async () => {
 		const route = useRoute();
@@ -14,5 +15,5 @@ definePageMeta({
 		useCookie<UserInfo | null>('user').value = user.value;
 	}
 });
-await navigateTo({ name: RouteNameEnum.HOME });
+await navigateTo({ name: RouteNameEnum.USER_PAGE });
 </script>

@@ -183,12 +183,14 @@ const logout = () => {
 
 	&__login-button {
 		width: 100%;
-		align-content: center;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 
 	&__telegram-button {
 		width: 100%;
-		min-width: 231px;
+		align-self: center;
 	}
 }
 </style>

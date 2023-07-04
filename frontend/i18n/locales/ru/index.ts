@@ -123,7 +123,7 @@ export const defaultTranslation = {
 		title: 'Оговорка об ограничении ответственности'
 	},
 	user: {
-		title_unauthorized: 'Вы не авторизированы',
+		title_unauthorized: 'Необходимо авторизироваться',
 		title_profile: 'Профиль',
 		title_contacts: 'контакты',
 		login: 'Логин',

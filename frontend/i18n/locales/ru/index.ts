@@ -1,7 +1,6 @@
-import { defineTranslation } from '..';
 import { type ErrorCodes } from '@/../common/const';
 
-export const ServerErrors: {
+const ServerErrors: {
 	[key in ErrorCodes]: string;
 } = {
 	EVENT_IS_NOT_DEFINED: 'Мероприятие не определено',
@@ -45,7 +44,7 @@ export const ServerErrors: {
 	'user-does-not-exist': 'Пользователь не найден'
 };
 
-export const defaultTranslation = {
+const defaultTranslation = {
 	meta: {
 		title: 'Афиша',
 		home: {
@@ -194,10 +193,10 @@ export const defaultTranslation = {
 	},
 	dates: {
 		day: {
-			key_zero: '{{count}} дней',
-			key_one: '{{count}} день',
-			key_few: '{{count}} дня',
-			key_many: '{{count}} дней'
+			key_zero: '{count} дней',
+			key_one: '{count} день',
+			key_few: '{count} дня',
+			key_many: '{count} дней'
 		},
 		clock: 'часы'
 	},
@@ -207,4 +206,4 @@ export const defaultTranslation = {
 	error: ServerErrors
 };
 
-export default defineTranslation(defaultTranslation);
+export default defaultTranslation;

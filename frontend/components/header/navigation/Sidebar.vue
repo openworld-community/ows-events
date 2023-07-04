@@ -17,14 +17,14 @@ const emit = defineEmits(['close']);
 
 		<HeaderNavigationNavItem
 			:link-to="{ name: RouteNameEnum.ABOUT }"
-			:text="$t('component.header.about')"
+			:text="$t('header.about')"
 			icon-name="info"
 			@click="emit('close')"
 		/>
 
 		<HeaderNavigationNavItem
 			:link-to="SUPPORT_TG_URL"
-			:text="$t('component.header.support')"
+			:text="$t('header.support')"
 			is-external-link
 			icon-name="contact-tg"
 			@click="emit('close')"
@@ -32,7 +32,7 @@ const emit = defineEmits(['close']);
 
 		<HeaderNavigationNavItem
 			:link-to="{ name: RouteNameEnum.LIMITATION_OF_LIABILITY }"
-			:text="$t('component.header.limitation_of_liability')"
+			:text="$t('header.limitation_of_liability')"
 			icon-name="privacy"
 			@click="emit('close')"
 		/>

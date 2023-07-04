@@ -29,11 +29,7 @@ updateModalData();
 <template>
 	<HeaderNavigationNavItem
 		:text="
-			$t(
-				isAuthorized
-					? 'component.header.authorization.deauthorize'
-					: 'component.header.authorization.authorize'
-			)
+			$t(isAuthorized ? 'header.authorization.deauthorize' : 'header.authorization.authorize')
 		"
 		:icon-name="isAuthorized ? 'logout' : 'login'"
 		:item-kind="isAuthorized ? 'warning' : ''"

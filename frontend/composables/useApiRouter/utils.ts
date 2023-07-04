@@ -1,6 +1,6 @@
 import type { UseFetchOptions } from 'nuxt/app';
 import { API_URL } from '~/constants/url';
-import type { ServerErrors } from '~/i18n/locales/ru';
+import type { ServerErrors } from '~/i18n/locales/ru/errors';
 
 type ApiRouter = {
 	[K in string]: ApiRouter | ReturnType<typeof defineQuery> | ReturnType<typeof defineMutation>;

@@ -10,6 +10,7 @@ export type EventOnPoster = {
 	location: {
 		country: string;
 		city: string;
+        adress: string;
 	};
 	image: string;
 	price: string;

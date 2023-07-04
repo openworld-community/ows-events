@@ -44,6 +44,10 @@ const schema = new Schema<IEventDocument>(
 			city: {
 				type: String,
 				required: true
+			},
+			adress: {
+				type: String,
+				required: false
 			}
 		},
 		image: {

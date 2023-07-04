@@ -16,6 +16,11 @@ const userData = ref({
 const checkProfileFilling = computed(() => {
 	return !!(userData.value.name || userData.value.company);
 });
+
+const updateUserData = () => {
+	console.log('Здесь должен обновляться отредактированный профиль юзера');
+	props.closeEditProfileModal;
+};
 </script>
 
 <template>
@@ -80,7 +85,7 @@ const checkProfileFilling = computed(() => {
 					button-kind="success"
 					:button-text="$t('component.edit_profile_modal.button.submit')"
 					:is-disabled="!checkProfileFilling"
-					@click="props.closeEditProfileModal"
+					@click="updateUserData"
 				/>
 			</footer>
 		</div>

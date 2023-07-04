@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import EditProfile from '@/components/modal/EditProfile.vue';
+import { TELEGRAM_AUTH_BOT_NAME, BASE_URL } from '../../frontend/constants/url';
+
+const tokenCookie = useCookie<string | null>('token');
+const isAuthorized = computed(() => !!tokenCookie.value);
 
 export type ProfileInfo = {
 	nickname: string;
@@ -28,43 +32,76 @@ patchEditProfileModal({
 	}
 });
 
+const telegram = ref<HTMLElement | null>(null);
+
+onMounted(() => {
+	const script = document.createElement('script');
+	script.async = true;
+	script.src = 'https://telegram.org/js/telegram-widget.js?22';
+
+	script.setAttribute('data-size', 'large');
+	script.setAttribute('data-userpic', 'false');
+	script.setAttribute('data-telegram-login', TELEGRAM_AUTH_BOT_NAME);
+	script.setAttribute('data-request-access', 'write');
+
+	script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
+	telegram.value?.appendChild(script);
+});
+
 const logout = () => {
-	console.log('Здесь должен происходить выход из аккаунта');
+	useCookie<ProfileInfo | null>('user').value = null;
+	useCookie('token').value = null;
+	setTimeout(() => close(), 300);
 };
 </script>
 
 <template>
 	<section class="user-page">
-		<h2 class="user-page__title">{{ $t('user.title_profile') }}</h2>
-		<div class="user-page__fieldset">
-			<div class="user-page__field">
-				<p class="user-page__field-name">{{ $t('user.nickname') }}</p>
-				<p class="user-page__field-value">{{ userData.nickname }}</p>
-			</div>
-			<div class="user-page__field">
-				<p class="user-page__field-name">{{ $t('user.name') }}</p>
-				<p class="user-page__field-value">{{ userData.name }}</p>
-			</div>
-			<div class="user-page__field">
-				<p class="user-page__field-name">{{ $t('user.affiliation') }}</p>
-				<p class="user-page__field-value">{{ userData.company }}</p>
+		<h2 class="user-page__title">
+			{{ isAuthorized ? $t('user.title_profile') : $t('user.title_unauthorized') }}
+		</h2>
+		<div v-if="isAuthorized">
+			<div class="user-page__fieldset">
+				<div class="user-page__field">
+					<p class="user-page__field-name">{{ $t('user.login') }}</p>
+					<p class="user-page__field-value">{{ userData.nickname }}</p>
+				</div>
+				<div class="user-page__field">
+					<p class="user-page__field-name">{{ $t('user.name') }}</p>
+					<p class="user-page__field-value">{{ userData.name }}</p>
+				</div>
+				<div class="user-page__field">
+					<p class="user-page__field-name">{{ $t('user.affiliation') }}</p>
+					<p class="user-page__field-value">{{ userData.company }}</p>
+				</div>
 			</div>
 		</div>
 		<div class="user-page__actions">
-			<CommonButton
-				class="user-page__form-button user-page__form-button--edit"
-				button-kind="ordinary"
-				:button-text="$t('user.buttons.edit')"
-				icon-name="edit"
-				@click="openEditProfileModal"
-			/>
-			<CommonButton
-				class="user-page__form-button"
-				button-kind="warning"
-				:button-text="$t('user.buttons.logout')"
-				icon-name="logout"
-				@click="logout()"
-			/>
+			<div v-if="isAuthorized">
+				<CommonButton
+					class="user-page__form-button user-page__form-button--edit"
+					button-kind="ordinary"
+					:button-text="$t('user.buttons.edit')"
+					icon-name="edit"
+					@click="openEditProfileModal"
+				/>
+				<CommonButton
+					class="user-page__form-button"
+					button-kind="warning"
+					:button-text="$t('user.buttons.logout')"
+					icon-name="logout"
+					@click="logout()"
+				/>
+			</div>
+			<div
+				v-else
+				class="user-page__login-button"
+			>
+				<div
+					ref="telegram"
+					:class="'user-page__telegram-button'"
+				/>
+			</div>
 		</div>
 	</section>
 </template>
@@ -142,6 +179,16 @@ const logout = () => {
 		&--edit {
 			margin-bottom: var(--space-unrelated-items);
 		}
+	}
+
+	&__login-button {
+		width: 100%;
+		align-content: center;
+	}
+
+	&__telegram-button {
+		width: 100%;
+		min-width: 231px;
 	}
 }
 </style>

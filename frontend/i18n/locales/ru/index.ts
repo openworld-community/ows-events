@@ -123,9 +123,10 @@ export const defaultTranslation = {
 		title: 'Оговорка об ограничении ответственности'
 	},
 	user: {
+		title_unauthorized: 'Вы не авторизированы',
 		title_profile: 'Профиль',
 		title_contacts: 'контакты',
-		nickname: 'Никнейм',
+		login: 'Логин',
 		name: 'Имя',
 		surname: 'Фамилия',
 		affiliation: 'Компания',
@@ -191,7 +192,6 @@ export const defaultTranslation = {
 				submit: 'Сохранить'
 			},
 			fields: {
-				nickname: 'Никнейм',
 				name: 'Имя',
 				surname: 'Фамилия',
 				organizer: 'Организатор',

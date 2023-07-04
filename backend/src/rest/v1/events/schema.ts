@@ -13,7 +13,7 @@ export const ItemEvent = {
 			properties: {
 				country: { type: 'string' },
 				city: { type: 'string' },
-                adress: { type: 'string' }
+                address: { type: 'string' }
 			}
 		},
 		price: { type: 'string' },

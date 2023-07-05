@@ -27,6 +27,12 @@ export default defineNuxtConfig({
 		apiHost: 'https://afisha-metrics.orby-tech.space'
 	},
 	typescript: { strict: true },
+	nitro: {
+		devProxy: {
+			'/api': 'http://backend:7080/api',
+			'/image': 'http://backend:7080/image'
+		}
+	},
 	vite: {
 		server: {
 			watch: {

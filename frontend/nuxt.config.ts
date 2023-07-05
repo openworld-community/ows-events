@@ -5,7 +5,20 @@ import { fileURLToPath, URL } from 'node:url';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	modules: ['@pinia/nuxt', '@vueuse/nuxt', '@nuxtjs/plausible'],
+	modules: [
+		[
+			'@nuxtjs/i18n',
+			{
+				// debug: true,
+				experimental: {
+					jsTsFormatResource: true
+				}
+			}
+		],
+		'@pinia/nuxt',
+		'@vueuse/nuxt',
+		'@nuxtjs/plausible'
+	],
 	// На случай добавления скриптов:
 	// app: {
 	// 	head: {

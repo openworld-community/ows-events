@@ -1,9 +1,9 @@
-import { defineTranslation } from '..';
+import {ServerErrors} from "./errors";
 import {header} from "./header";
 import {about} from "./about";
-import {ServerErrors} from "./errors";
 
-export const defaultTranslation = {
+const ruTranslation = {
+	error: ServerErrors,
 	header,
 	about,
 	meta: {
@@ -126,14 +126,13 @@ export const defaultTranslation = {
 	},
 	dates: {
 		day: {
-			key_zero: '{{count}} дней',
-			key_one: '{{count}} день',
-			key_few: '{{count}} дня',
-			key_many: '{{count}} дней'
+			key_zero: '{count} дней',
+			key_one: '{count} день',
+			key_few: '{count} дня',
+			key_many: '{count} дней'
 		},
 		clock: 'часы'
 	},
-	error: ServerErrors
 };
 
-export default defineTranslation(defaultTranslation);
+export default ruTranslation;

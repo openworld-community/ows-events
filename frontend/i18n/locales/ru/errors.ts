@@ -1,9 +1,10 @@
 import { type ErrorCodes } from '@/../common/const';
+import { CommonErrorsEnum, EventValidatorErrorTypes } from '@/../common/const';
 
 export const ServerErrors: {
 	[key in ErrorCodes]: string;
 } = {
-	EVENT_IS_NOT_DEFINED: 'Мероприятие не определено',
+	[EventValidatorErrorTypes.EVENT_IS_NOT_DEFINED]: 'Мероприятие не определено',
 	TITLE_IS_NOT_DEFINED: 'Заголовок не определен',
 	TITLE_IS_TOO_SHORT: 'Заголовок слишком короткий',
 	TITLE_IS_TOO_LONG: 'Заголовок слишком длинный',
@@ -23,7 +24,7 @@ export const ServerErrors: {
 	URL_IS_TOO_LONG: 'Ссылка на мероприятие слишком длинная',
 	TITLE_IS_NOT_CLEAN: 'В заголовоке ненормативная лексика',
 	DESCRIPTION_IS_NOT_CLEAN: 'В описании ненормативная лексика',
-	'event-not-found': 'Мероприятие не найдено',
+	[CommonErrorsEnum.EVENT_NOT_FOUND]: 'Мероприятие не найдено',
 	'image-addition-error': 'Ошибка при добавлении изображения',
 	'image-deletion-error': 'Ошибка при удалении изображения',
 	'image-encoding-problem': 'Ошибка формата изображения',

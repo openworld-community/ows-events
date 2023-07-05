@@ -46,8 +46,7 @@ const schema = new Schema<IEventDocument>(
 				required: true
 			},
 			address: {
-				type: String,
-				required: false
+				type: String
 			}
 		},
 		image: {

@@ -2,7 +2,7 @@ export const header = {
 	button: {
 		open: 'Открыть меню навигации',
 		close: 'Скрыть меню навигации',
-		at_home_logo_aria:'Вернуться к началу страницы',
+		at_home_logo_aria: 'Вернуться к началу страницы',
 		other_page_logo_aria: 'Вернуться на домашнюю страницу'
 	},
 	about: 'Oб Афише',

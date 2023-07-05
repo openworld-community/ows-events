@@ -1,23 +1,15 @@
-import {ServerErrors} from "./errors";
-import {header} from "./header";
-import {about} from "./about";
+import { ServerErrors } from './errors';
+import { header } from './header';
+import { about } from './about';
+import { meta } from './meta';
+import { limitation_of_liability } from './limitation-of-liability';
 
 const ruTranslation = {
 	error: ServerErrors,
 	header,
 	about,
-	meta: {
-		title: 'Афиша',
-		home: {
-			title: 'Главная'
-		},
-		about_us: {
-			title: 'О нас'
-		},
-		payment_info: {
-			title: 'Оплата'
-		}
-	},
+	meta,
+	limitation_of_liability,
 	global: {
 		country: 'Страна',
 		city: 'Город',
@@ -35,7 +27,7 @@ const ruTranslation = {
 	home: {
 		title: 'Мероприятия',
 		button: {
-			add_event_aria: 'Добавить мероприятие',
+			add_event_aria: 'Добавить мероприятие'
 		},
 		events: {
 			image_alt: 'Фото мероприятия',
@@ -68,9 +60,6 @@ const ruTranslation = {
 			free: 'Бесплатно',
 			not_found: 'Цена не указана'
 		}
-	},
-	limitation_of_liability: {
-		title: 'Ограничение ответственности'
 	},
 	component: {
 		user_location: {
@@ -122,7 +111,7 @@ const ruTranslation = {
 		},
 		language_selector: {
 			label: 'Язык'
-		},
+		}
 	},
 	dates: {
 		day: {
@@ -132,7 +121,7 @@ const ruTranslation = {
 			key_many: '{count} дней'
 		},
 		clock: 'часы'
-	},
+	}
 };
 
 export default ruTranslation;

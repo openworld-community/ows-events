@@ -5,10 +5,10 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import { ref } from 'vue';
 import Markdown from 'vue3-markdown-it';
 
-const { $i18n } = useNuxtApp();
+const { t } = useI18n();
 
 useHead({
-	titleTemplate: `%s / ${$i18n.t('meta.payment_info.title')}`
+	titleTemplate: `%s / ${t('meta.payment_info.title')}`
 });
 definePageMeta({ name: RouteNameEnum.PAYMENT_INFO });
 

@@ -1,4 +1,7 @@
-const defaultTranslation = {
+import {ServerErrors} from "./errors";
+
+const ruTranslation = {
+	error: ServerErrors,
 	meta: {
 		title: 'Афиша',
 		home: {
@@ -159,4 +162,4 @@ const defaultTranslation = {
 	}
 };
 
-export default defaultTranslation;
+export default ruTranslation;

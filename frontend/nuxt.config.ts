@@ -9,7 +9,7 @@ export default defineNuxtConfig({
 		[
 			'@nuxtjs/i18n',
 			{
-				debug: true,
+				// debug: true,
 				experimental: {
 					jsTsFormatResource: true
 				}

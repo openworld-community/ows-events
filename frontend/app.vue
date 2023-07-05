@@ -6,13 +6,14 @@ import 'virtual:svg-icons-register';
 import { ModalsContainer } from 'vue-final-modal';
 import { isDevelopmentMode } from './constants/common';
 
-const { $i18n } = useNuxtApp();
+const { locale, t } = useI18n();
+
 useHead({
 	//TODO доработать метаданные
-	title: $i18n.t('meta.title'),
+	title: t('meta.title'),
 	meta: [{ name: 'Афиша переделано', content: 'Это площадка для поиска мероприятий' }],
 	htmlAttrs: {
-		lang: $i18n.language
+		lang: locale.value
 	}
 });
 

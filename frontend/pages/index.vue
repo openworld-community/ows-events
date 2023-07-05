@@ -4,8 +4,8 @@ import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
 
-const { $i18n } = useNuxtApp();
-useHead({ titleTemplate: `%s / ${$i18n.t('meta.home.title')}` });
+const { t } = useI18n();
+useHead({ titleTemplate: `%s / ${t('meta.home.title')}` });
 definePageMeta({ name: RouteNameEnum.HOME });
 
 const {

@@ -1,7 +1,7 @@
 import { type ErrorCodes } from '@/../common/const';
 import { CommonErrorsEnum, EventValidatorErrorTypes } from '@/../common/const';
 
-const ServerErrors: {
+export const ServerErrors: {
 	[key in ErrorCodes]: string;
 } = {
 	[EventValidatorErrorTypes.EVENT_IS_NOT_DEFINED]: 'Мероприятие не определено',
@@ -44,5 +44,3 @@ const ServerErrors: {
 	'timezone-city-not-found': 'Не удалось найти часовой пояс по указанным параметрам',
 	'user-does-not-exist': 'Пользователь не найден'
 };
-
-export default ServerErrors;

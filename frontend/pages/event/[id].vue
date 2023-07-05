@@ -29,15 +29,19 @@ const eventImage = computed(() => {
 
 useHead({
 	titleTemplate: `%s / ${posterEvent.value?.title}`,
-	meta: [
-		{ property: 'og:site_name', content: $i18n.t('meta.title') },
-		{ property: 'og:type', content: 'website' },
-		{ property: 'og:title', content: posterEvent.value?.title ?? $i18n.t('meta.title') },
-		{ property: 'og:description', content: posterEvent.value?.description ?? $i18n.t('meta.home.description') },
-		{ property: 'og:image', content: eventImage },
-		{ property: 'og:url', content: BASE_URL + route.path },
-	]
 });
+
+useSeoMeta({
+	// для реактивных тегов используем () => value
+	ogSiteName: () => $i18n.t('meta.title'),
+	ogType: 'website',
+	ogTitle: () => posterEvent.value?.title ?? $i18n.t('meta.title'),
+	description: () => posterEvent.value?.description ?? $i18n.t('meta.home.description'),
+	ogDescription: () => posterEvent.value?.description ?? $i18n.t('meta.home.description'),
+	ogImage: eventImage,
+	ogUrl: () => BASE_URL + route.path,
+})
+
 const isEditable = computed(() => {
 	return posterEvent.value ? posterEvent.value.date > Date.now() : false;
 });
@@ -113,7 +117,6 @@ patchDeleteEventModal({
 			:class="[
 				'event-image',
 				'event-image__container',
-				{ 'event-image__container--background': !posterEvent.image }
 			]"
 			itemprop="image"
 		>
@@ -123,7 +126,14 @@ patchDeleteEventModal({
 					:currency="'RSD'"
 			/>
 			<img
-				v-if="posterEvent.image"
+				v-if="!posterEvent?.image"
+				src="@/assets/img/event-card@2x.png"
+				:alt="$t('event.image.event')"
+				class="event-image__image"
+				itemprop="image"
+			/>
+			<img
+				v-else
 				:src="eventImage"
 				:alt="$t('event.image.event')"
 				class="event-image__image"
@@ -141,12 +151,12 @@ patchDeleteEventModal({
 			>
 				Peredelano
 			</p>
-			<h2
+			<h1
 					class="event-info__title"
 					itemprop="name"
 			>
 				{{ posterEvent.title }}
-			</h2>
+			</h1>
 
 			<p class="event-info__datetime">
 				<span
@@ -351,11 +361,6 @@ patchDeleteEventModal({
 		line-height: 0;
 		background-color: var(--color-input-field);
 		margin-bottom: 12px;
-
-		&--background {
-			background: url('@/assets/img/event-card@2x.png') center center no-repeat;
-			background-size: cover;
-		}
 	}
 
 	&__image {

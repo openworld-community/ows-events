@@ -122,6 +122,22 @@ export const defaultTranslation = {
 	limitation_of_liability: {
 		title: 'Оговорка об ограничении ответственности'
 	},
+	user: {
+		title_unauthorized: 'Авторизация',
+		title_profile: 'Профиль',
+		title_contacts: 'контакты',
+		login: 'Логин',
+		name: 'Имя',
+		surname: 'Фамилия',
+		affiliation: 'Компания',
+		email: 'E-mail',
+		phone: 'Номер телефона',
+		buttons: {
+			edit: 'Редактировать',
+			logout: 'Выйти из аккаунта',
+			login: 'Войти с помощью Telegram'
+		}
+	},
 	component: {
 		user_location: {
 			not_found: 'Мы не смогли найти вас('
@@ -170,6 +186,23 @@ export const defaultTranslation = {
 				logout: 'Выйти'
 			}
 		},
+		edit_profile_modal: {
+			title: 'Редактирование',
+			button: {
+				cancel: 'Отмена',
+				submit: 'Сохранить'
+			},
+			fields: {
+				name: 'Имя',
+				surname: 'Фамилия',
+				organizer: 'Организатор',
+				email: 'E-mail',
+				phone: 'Номер телефона',
+				name_placeholder: 'Как к вам обращаться?',
+				surname_placeholder: 'Введите вашу фамилию',
+				organizer_placeholder: 'Компания-организатор события'
+			}
+		},
 		language_selector: {
 			label: 'Язык'
 		},
@@ -183,6 +216,7 @@ export const defaultTranslation = {
 			support: 'Поддержка',
 			policy: 'Политика конфиденциальности',
 			limitation_of_liability: 'Оговорка об ограничении ответственности',
+			user_page: 'Пользователь',
 			event: {
 				manage: 'Управление событием'
 			},

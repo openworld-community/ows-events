@@ -16,6 +16,13 @@ const emit = defineEmits(['close']);
 		/>
 
 		<HeaderNavigationNavItem
+			:link-to="{ name: RouteNameEnum.USER_PAGE }"
+			:text="$t('component.header.user_page')"
+			icon-name="user"
+			@click="emit('close')"
+		/>
+
+		<HeaderNavigationNavItem
 			:link-to="{ name: RouteNameEnum.ABOUT }"
 			:text="$t('component.header.about')"
 			icon-name="info"

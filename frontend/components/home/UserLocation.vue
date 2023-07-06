@@ -56,7 +56,7 @@ locationStore.userLocation = data.value ?? locationStore.userLocation;
 			v-else
 			class="user-location__text"
 		>
-			{{ $t('component.user_location.not_found') }}
+			{{ $t('modal.user_location.not_found') }}
 		</p>
 	</div>
 </template>

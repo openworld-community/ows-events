@@ -48,20 +48,20 @@ onMounted(() => {
 		<div class="modal">
 			<div class="modal-card__head">
 				<p class="modal-card__title">
-					{{ isAuthorized ? username : $t('component.pre_authorisation_modal.title') }}
+					{{ isAuthorized ? username : $t('modal.pre_authorisation_modal.title') }}
 				</p>
 			</div>
 			<div class="modal-card__foot">
 				<CommonButton
 					class="modal-card__cancel-button"
 					button-kind="ordinary"
-					:button-text="$t('component.pre_authorisation_modal.button.cancel')"
+					:button-text="$t('modal.pre_authorisation_modal.button.cancel')"
 					@click="props.close()"
 				/>
 				<CommonButton
 					v-if="isAuthorized"
 					button-kind="success"
-					:button-text="$t('component.pre_authorisation_modal.button.logout')"
+					:button-text="$t('modal.pre_authorisation_modal.button.logout')"
 					class="modal-card__logout-button"
 					@click="props.deauthorize()"
 				/>
@@ -74,7 +74,7 @@ onMounted(() => {
 							class="modal-card__icon"
 							name="telegram"
 						/>
-						{{ $t('component.pre_authorisation_modal.telegram_login') }}
+						{{ $t('modal.pre_authorisation_modal.telegram_login') }}
 					</div>
 					<div
 						ref="telegram"

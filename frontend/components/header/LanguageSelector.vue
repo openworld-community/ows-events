@@ -11,7 +11,7 @@ watch(language, (lang) => {
 
 <template>
 	<label>
-		{{ $t('component.language_selector.label') }}
+		{{ $t('modal.language_selector.label') }}
 		<select v-model="language">
 			<option
 				v-for="loc in supportedLocales"

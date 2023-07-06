@@ -187,7 +187,7 @@ watch(
 		<div class="modal-card">
 			<header class="modal-card__head">
 				<h2 class="modal-card__title">
-					{{ $t('component.new_event_modal.title') }}
+					{{ $t('modal.new_event_modal.title') }}
 				</h2>
 			</header>
 
@@ -195,7 +195,7 @@ watch(
 				class="modal-card__body body"
 				@submit.prevent="() => void 0"
 			>
-				<ModalUiModalSection :label="$t('component.new_event_modal.fields.location')">
+				<ModalUiModalSection :label="$t('modal.new_event_modal.fields.location')">
 					<template #child>
 						<CommonUiBaseSelect
 							v-model="inputValues.country"
@@ -226,18 +226,18 @@ watch(
 					</template>
 				</ModalUiModalSection>
 
-				<ModalUiModalSection :label="$t('component.new_event_modal.fields.main_info')">
+				<ModalUiModalSection :label="$t('modal.new_event_modal.fields.main_info')">
 					<template #child>
 						<CommonUiBaseInput
 							v-model="inputValues.title"
 							name="title"
-							:placeholder="$t('component.new_event_modal.fields.title')"
+							:placeholder="$t('modal.new_event_modal.fields.title')"
 							required
 						/>
 						<CommonUiTextArea
 							v-model="inputValues.description"
 							name="description"
-							:placeholder="$t('component.new_event_modal.fields.description')"
+							:placeholder="$t('modal.new_event_modal.fields.description')"
 							required
 						/>
 					</template>
@@ -245,7 +245,7 @@ watch(
 
 				<ModalUiModalSection
 					type="row"
-					:label="$t('component.new_event_modal.fields.start')"
+					:label="$t('modal.new_event_modal.fields.start')"
 				>
 					<template #child>
 						<CommonUiDateTimepicker
@@ -272,7 +272,7 @@ watch(
 				</ModalUiModalSection>
 				<ModalUiModalSection
 					type="row"
-					:label="$t('component.new_event_modal.fields.end')"
+					:label="$t('modal.new_event_modal.fields.end')"
 				>
 					<template #child>
 						<CommonUiDateTimepicker
@@ -299,14 +299,14 @@ watch(
 					</template>
 				</ModalUiModalSection>
 
-				<ModalUiModalSection :label="$t('component.new_event_modal.fields.price')">
+				<ModalUiModalSection :label="$t('modal.new_event_modal.fields.price')">
 					<template #child>
 						<CommonUiBaseInput
 							v-model="inputValues.price"
 							name="price"
 							type="number"
 							:min-value="0"
-							:placeholder="$t('component.new_event_modal.fields.price_placeholder')"
+							:placeholder="$t('modal.new_event_modal.fields.price_placeholder')"
 							required
 						/>
 						<!--						<CommonUiBaseSelect-->
@@ -321,13 +321,13 @@ watch(
 				</ModalUiModalSection>
 
 				<ModalUiModalSection
-					:label="$t('component.new_event_modal.fields.url_to_rigistration')"
+					:label="$t('modal.new_event_modal.fields.url_to_rigistration')"
 				>
 					<template #child>
 						<CommonUiBaseInput
 							v-model="inputValues.url"
 							name="url"
-							:placeholder="$t('component.new_event_modal.fields.url_placeholder')"
+							:placeholder="$t('modal.new_event_modal.fields.url_placeholder')"
 							required
 						/>
 					</template>
@@ -342,14 +342,14 @@ watch(
 				<CommonButton
 					class="modal-card__button"
 					button-kind="ordinary"
-					:button-text="$t('component.new_event_modal.cancel')"
+					:button-text="$t('modal.new_event_modal.cancel')"
 					:is-active="!isLoading"
 					@click="closeModal()"
 				/>
 				<CommonButton
 					class="modal-card__button"
 					button-kind="success"
-					:button-text="$t('component.new_event_modal.submit')"
+					:button-text="$t('modal.new_event_modal.submit')"
 					:is-loading="isLoading"
 					:is-disabled="!checkFormFilling || isLoading"
 					@click="isLoading ? null : submitEvent()"

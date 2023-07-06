@@ -39,7 +39,7 @@ const emit = defineEmits(['close']);
 
 		<!--          <div-->
 		<!--            v-if="route.name === 'event'"-->
-		<!--            :aria-label="translate('component.header.event.manage')"-->
+		<!--            :aria-label="translate('modal.header.event.manage')"-->
 		<!--          >-->
 		<!--            <img-->
 		<!--              src="@/assets/img/icon/edit.svg"-->

@@ -5,7 +5,7 @@ import { meta } from './meta';
 import { global } from './global';
 import { home } from './home';
 import { event } from './event';
-import { component } from './component';
+import { modal } from './modal';
 import { dates } from './dates';
 import { limitation_of_liability } from './limitation-of-liability';
 
@@ -18,7 +18,7 @@ const ruTranslation = {
 	global,
 	home,
 	event,
-	component,
+	modal,
 	dates
 };
 

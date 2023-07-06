@@ -1,4 +1,4 @@
-export const component = {
+export const modal = {
   new_event_modal: {
     title: 'Добавьте мероприятие',
     cancel: 'Отмена',

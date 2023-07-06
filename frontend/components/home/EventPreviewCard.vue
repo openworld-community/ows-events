@@ -2,9 +2,6 @@
 import type { EventOnPoster } from '../../../common/types';
 
 const props = defineProps<{ eventData: EventOnPoster }>();
-
-//TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
-const templateURL = `https://www.google.com/maps/place/${props.eventData?.location.city}+${props.eventData?.location.country}`;
 </script>
 
 <template>
@@ -50,11 +47,12 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 
 		<!--    отдельный линк, т.к. нельзя ссылку класть в ссылку, а если делать другим типом контейнера и переходить по @click.prevent, отрабатывает некорректно и местами багует-->
 		<NuxtLink
-			:to="templateURL"
+			:to="getLocationLink(eventData.location)"
 			target="_blank"
 			class="card-link card-link__geolink"
 		>
 			{{ props.eventData.location.country }}, {{ props.eventData.location.city }}
+			{{ props.eventData.location?.address ? `, ${props.eventData.location.address}` : '' }}
 		</NuxtLink>
 	</div>
 </template>

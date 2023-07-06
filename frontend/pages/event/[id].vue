@@ -137,10 +137,11 @@ patchDeleteEventModal({
 			<!-- TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса -->
 			<NuxtLink
 				class="event-info__geolink"
-				:to="`https://www.google.com/maps/place/${posterEvent.location.city}+${posterEvent.location.country}`"
+				:to="getLocationLink(posterEvent.location)"
 				target="_blank"
 			>
 				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
+				{{ posterEvent.location?.address ? `, ${posterEvent.location.address}` : '' }}
 			</NuxtLink>
 			<p class="event-info__description">
 				{{ posterEvent.description }}

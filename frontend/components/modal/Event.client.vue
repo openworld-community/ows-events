@@ -38,6 +38,7 @@ const inputValues = ref({
 		: null,
 	country: (props.dataForEdit?.location.country ?? 'Serbia') satisfies Country, // Временно фиксируем страну для добавления события
 	city: (props.dataForEdit?.location.city ?? '') satisfies City,
+	address: props.dataForEdit?.location.address ?? '',
 	image: props.dataForEdit?.image ?? '',
 	price: props.dataForEdit?.price ?? '0',
 	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
@@ -62,6 +63,7 @@ const checkFormFilling = computed(() => {
 		(inputValues.value.endDate ? inputValues.value.endTime : !inputValues.value.endTime) &&
 		inputValues.value.country &&
 		inputValues.value.city &&
+		inputValues.value.address &&
 		inputValues.value.timezone &&
 		allTimezones.includes(inputValues.value.timezone)
 	);
@@ -81,7 +83,8 @@ const paramsForSubmit = computed(() => {
 		),
 		location: {
 			country: inputValues.value.country,
-			city: inputValues.value.city
+			city: inputValues.value.city,
+            address: inputValues.value.address
 		},
 		price: inputValues.value.price,
 		timezone: stringToTimezone(inputValues.value.timezone),

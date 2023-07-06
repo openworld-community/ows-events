@@ -212,13 +212,13 @@ const closeModal = () => {
 				<CommonButton
 					class="modal-card__button"
 					button-kind="ordinary"
-					:button-text="$t('component.new_event_modal.cancel')"
+					:button-text="$t('modal.new_event_modal.cancel')"
 					@click="closeModal"
 				/>
 				<CommonButton
 					class="modal-card__button"
 					button-kind="success"
-					:button-text="$t('component.new_event_modal.submit')"
+					:button-text="$t('modal.new_event_modal.submit')"
 					@click="submit"
 				/>
 			</div>

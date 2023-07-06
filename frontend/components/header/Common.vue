@@ -26,8 +26,8 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 					:aria-label="
 						$t(
 							isAtHome
-								? 'home.button.afisha_logo_aria'
-								: 'component.header.button.home'
+								? 'header.button.other_page_logo_aria'
+								: 'header.button.at_home_logo_aria'
 						)
 					"
 					:to="!isAtHome ? { name: RouteNameEnum.HOME } : undefined"
@@ -50,13 +50,7 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 				<HeaderNavigationBurger
 					ref="navigationBurger"
 					:is-cross="isNavbarOpen"
-					:aria-label="
-						$t(
-							isNavbarOpen
-								? 'component.header.button.close'
-								: 'component.header.button.open'
-						)
-					"
+					:aria-label="$t(isNavbarOpen ? 'header.button.close' : 'header.button.open')"
 					@click="navbarToggle"
 				/>
 				<HeaderNavigationSidebar

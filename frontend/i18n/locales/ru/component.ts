@@ -1,7 +1,4 @@
 export const component = {
-  user_location: {
-    not_found: 'Мы не смогли найти вас('
-  },
   new_event_modal: {
     title: 'Добавьте мероприятие',
     cancel: 'Отмена',
@@ -45,8 +42,5 @@ export const component = {
       login: 'Войти',
       logout: 'Выйти'
     }
-  },
-  language_selector: {
-    label: 'Язык'
   }
 };

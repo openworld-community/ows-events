@@ -13,5 +13,8 @@ export const header = {
 		authorize: 'Авторизоваться',
 		deauthorize: 'Выйти из аккаунта'
 	},
-	subscription_expired: '$t(dates.day.key) до конца подписки'
+	subscription_expired: '$t(dates.day.key) до конца подписки',
+  language_selector: {
+    label: 'Язык'
+  }
 };

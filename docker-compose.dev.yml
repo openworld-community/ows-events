@@ -12,15 +12,22 @@ services:
             context: .
             dockerfile: ./frontend/Dockerfile.dev
         logging: *default-logging
-        network_mode: host
+        ports:
+            - '80:80'
+            - '24678:24678'
         volumes:
             - ./:/app
+        depends_on:
+            - backend
+        links:
+            - backend
         environment:
             - NODE_ENV=dev
-            - VITE_API_URL=http://localhost:7080/api
-            - VITE_BASE_URL=http://localhost:7080
+            - VITE_API_URL=http://127.0.0.1/api
+            - VITE_BASE_URL=http://127.0.0.1
             - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
             - VITE_MODE=development
+            - VITE_TELEGRAM_AUTH_BOT_NAME=afisha_oauth_local_bot
 
     backend:
         build:
@@ -33,7 +40,7 @@ services:
             - mongo
         environment:
             - MODE=dev
-            - FRONTEND_URL=http://localhost:3000
+            - FRONTEND_URL=http://127.0.0.1
             - MONGO_URI=mongodb://mongo:27017/dev
         ports:
             - '7080:7080'

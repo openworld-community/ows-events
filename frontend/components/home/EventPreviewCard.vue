@@ -39,13 +39,12 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 			/>
 		</div>
 
-		<div class="card-description">
-			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
-			<p
-				v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
-				class="card-description__author"
-				itemprop="composer"
-			>
+			<div class="card-description">
+				<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
+				<p
+					v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
+					class="card-description__author"
+				>
 					Peredelano
 			</p>
 			<h2

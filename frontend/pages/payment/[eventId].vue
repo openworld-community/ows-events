@@ -6,16 +6,16 @@ import { ref } from 'vue';
 import Markdown from 'vue3-markdown-it';
 import {BASE_URL} from '../../constants/url';
 
-const { $i18n } = useNuxtApp();
+const { t } = useI18n();
 const route = useRoute();
 
 useHead({
-	titleTemplate: `%s / ${$i18n.t('meta.payment_info.title')}`,
+	titleTemplate: `%s / ${t('meta.payment_info.title')}`,
 		meta: [
-		{ property: 'og:site_name', content: $i18n.t('meta.title') },
+		{ property: 'og:site_name', content: t('meta.title') },
 		{ property: 'og:type', content: 'website' },
-		{ property: 'og:title', content: $i18n.t('meta.payment_info.title') },
-		{ property: 'og:description', content: $i18n.t('meta.home.description') },
+		{ property: 'og:title', content: t('meta.payment_info.title') },
+		{ property: 'og:description', content: t('meta.home.description') },
 		{ property: 'og:image', content: BASE_URL + '/assets/img/event-preview@2x.png' },
 		{ property: 'og:url', content: BASE_URL + route.path },
 	]

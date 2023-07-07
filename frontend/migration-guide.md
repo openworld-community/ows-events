@@ -37,7 +37,7 @@
 <template>
 <div>ONE</div>
 <div>TWO</div>
-</temaplte>
+</template>
 ```
 
 ## Configs

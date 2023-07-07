@@ -2,10 +2,10 @@
 import eventScreen from '@/assets/img/event-screen@2x.png';
 import { REPO_URL } from '@/constants/url';
 
-const { $i18n } = useNuxtApp();
+const { t } = useI18n();
 
 useHead({
-	titleTemplate: `%s / ${$i18n.t('meta.about_us.title')}`
+	titleTemplate: `%s / ${t('meta.about_us.title')}`
 });
 </script>
 

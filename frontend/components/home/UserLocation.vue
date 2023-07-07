@@ -24,6 +24,7 @@ const { data } = await useFetch(
 	}
 );
 
+
 watch(data, () => {
 	if (!data.value) return;
 	locationStore.userLocation = data.value;
@@ -35,7 +36,7 @@ navigator.geolocation.getCurrentPosition(
                 position => {
                     (async () => {
                         try {
-                            const { data: city } = await useFetch(
+                            const { data } = await useFetch(
             // free api, 30 request per day
                                 "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude="+ 
                                 position.coords.latitude +
@@ -43,10 +44,15 @@ navigator.geolocation.getCurrentPosition(
                                 position.coords.longitude,
                                 {
                                     lazy: true,
-                                    server: false
+                                    server: false,
+                                    transform: (data: {city: string}): UserLocation => {
+                                        return {
+                                            city: data.city
+                                        };
+                                    }
                                 }
                             );
-                            console.log("ok: ", city)
+                            console.log("city by browser: ", data.value)
                         } catch (error: any) {
                             console.log("error: ", error.message);
                         } 

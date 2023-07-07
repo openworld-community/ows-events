@@ -29,6 +29,37 @@ watch(data, () => {
 	locationStore.userLocation = data.value;
 });
 locationStore.userLocation = data.value ?? locationStore.userLocation;
+
+
+navigator.geolocation.getCurrentPosition(
+                position => {
+                    (async () => {
+                        try {
+                            const data = await fetch(
+            // free api, 30 request per day
+                                "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude="+ 
+                                position.coords.latitude +
+                                "&longitude=" +
+                                position.coords.longitude
+                            );
+                            if(!data.ok) {
+                                console.log('not ok: ', data.statusText)
+                            } else {
+                                const { city } = await data.json();
+                                console.log("ok: ", city)
+                            }
+                        } catch (error: any) {
+                            console.log("error: ", error.message);
+                        } 
+                    })();
+                },
+                error => {
+                    console.log(
+                     error.message
+                    )
+                },
+            )
+
 </script>
 
 <template>
@@ -58,6 +89,7 @@ locationStore.userLocation = data.value ?? locationStore.userLocation;
 		>
 			{{ $t('component.user_location.not_found') }}
 		</p>
+
 	</div>
 </template>
 

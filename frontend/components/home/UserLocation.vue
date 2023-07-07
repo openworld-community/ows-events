@@ -35,30 +35,27 @@ navigator.geolocation.getCurrentPosition(
                 position => {
                     (async () => {
                         try {
-                            const data = await fetch(
+                            const { data: city } = await useFetch(
             // free api, 30 request per day
                                 "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude="+ 
                                 position.coords.latitude +
                                 "&longitude=" +
-                                position.coords.longitude
+                                position.coords.longitude,
+                                {
+                                    lazy: true,
+                                    server: false
+                                }
                             );
-                            if(!data.ok) {
-                                console.log('not ok: ', data.statusText)
-                            } else {
-                                const { city } = await data.json();
-                                console.log("ok: ", city)
-                            }
+                            console.log("ok: ", city)
                         } catch (error: any) {
                             console.log("error: ", error.message);
                         } 
                     })();
                 },
                 error => {
-                    console.log(
-                     error.message
-                    )
+                    console.log(error.message)
                 },
-            )
+)
 
 </script>
 

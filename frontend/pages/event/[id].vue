@@ -9,6 +9,8 @@ definePageMeta({ name: RouteNameEnum.EVENT });
 const route = useRoute();
 const id = getFirstParam(route.params.id);
 
+const showTranslatedDescription = ref(true);
+
 const user = useCookie<UserInfo | null>('user');
 
 const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ data: { id } });
@@ -143,9 +145,33 @@ patchDeleteEventModal({
 				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
 				{{ posterEvent.location?.address ? `, ${posterEvent.location.address}` : '' }}
 			</NuxtLink>
-			<p class="event-info__description">
-				{{ posterEvent.description }}
-			</p>
+			<div
+				class="event-info__description"
+				v-if="posterEvent.localisatedDescription"
+			>
+				<p>
+					{{
+						showTranslatedDescription
+							? posterEvent.localisatedDescription
+							: posterEvent.description
+					}}
+				</p>
+				<CommonButton
+					@click="showTranslatedDescription = !showTranslatedDescription"
+					:button-text="
+						!showTranslatedDescription ? 'Показать перевод' : 'Показать оригинал'
+					"
+				>
+				</CommonButton>
+			</div>
+			<div
+				class="event-info__description"
+				v-else
+			>
+				<p>
+					{{ posterEvent.description }}
+				</p>
+			</div>
 		</div>
 
 		<div class="event-actions">
@@ -266,6 +292,7 @@ patchDeleteEventModal({
 			overflow-y: auto;
 			font-size: var(--font-size-S);
 			line-height: 20px;
+			white-space: pre-wrap;
 		}
 	}
 

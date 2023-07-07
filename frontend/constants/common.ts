@@ -1,1 +1,2 @@
 export const isDevelopmentMode = import.meta.env.VITE_MODE === 'development' || process.env.VITE_MODE === 'development'
+export const localisationUrl =  import.meta.env.VITE_LOCALISATION_API_URL || process.env.VITE_LOCALISATION_API_URL

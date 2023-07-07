@@ -1,66 +1,83 @@
 <script setup lang="ts">
 import type { EventOnPoster } from '../../../common/types';
+import Currency from '../common/Currency.vue';
+import Address from '../common/Address.vue';
 
 const props = defineProps<{ eventData: EventOnPoster }>();
 </script>
 
 <template>
-	<div class="card">
-		<NuxtLink :to="`/event/${props.eventData.id}`">
-			<div
-				:class="[
-					'card__image-container',
-					{ 'card__image-container--background': !eventData.image }
-				]"
+	<NuxtLink
+		itemscope
+		itemtype="https://schema.org/Event"
+		class="card"
+		:to="`/event/${props.eventData.id}`"
+		itemprop="url"
+	>
+		<div
+			:class="[
+				'card__image-container',
+				{ 'card__image-container--background': !eventData.image }
+			]"
+			itemprop="image"
+		>
+			<Currency
+				:price="eventData.price"
+				:currency="'RSD'"
+			/>
+
+			<img
+				v-if="eventData.image"
+				itemprop="image"
+				:alt="$t('home.events.image_alt')"
+				class="card__image"
+				:src="getEventImage(props.eventData)"
+				width="375"
+				height="176"
+			/>
+		</div>
+
+		<div class="card-description">
+			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
+			<p
+				v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
+				class="card-description__author"
+        itemprop="composer"
 			>
-				<span class="card__price">
-					{{ getPrice(eventData) }}
+				Peredelano
+			</p>
+			<h2
+				class="card-description__title"
+				itemprop="name"
+			>
+				{{ props.eventData.title }}
+			</h2>
+			<p class="card-description__datetime">
+				<span itemprop="startDate">
+					{{ convertToLocaleString(props.eventData.date) }}
 				</span>
-				<img
-					v-if="eventData.image"
-					:alt="$t('home.events.image_alt')"
-					class="card__image"
-					:src="getEventImage(props.eventData)"
-					width="375"
-					height="176"
+				({{ props.eventData.timezone?.timezoneOffset }}
+				{{ props.eventData.timezone?.timezoneName }})
+			</p>
+
+			<div class="card-description__geo-box">
+				<CommonIcon
+					name="map-pin"
+					class="card-description__pin"
+				/>
+				<Address
+					class-name="card-description__geo"
+					:location="props.eventData.location"
 				/>
 			</div>
-
-			<div class="card-description">
-				<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
-				<p
-					v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
-					class="card-description__author"
-				>
-					Peredelano
-				</p>
-				<h2 class="card-description__title">
-					{{ props.eventData.title }}
-				</h2>
-				<p class="card-description__datetime">
-					{{ convertToLocaleString(props.eventData.date) }}
-					({{ props.eventData.timezone?.timezoneOffset }}
-					{{ props.eventData.timezone?.timezoneName }})
-				</p>
-			</div>
-		</NuxtLink>
-
-		<!--    отдельный линк, т.к. нельзя ссылку класть в ссылку, а если делать другим типом контейнера и переходить по @click.prevent, отрабатывает некорректно и местами багует-->
-		<NuxtLink
-			:to="getLocationLink(eventData.location)"
-			target="_blank"
-			class="card-link card-link__geolink"
-		>
-			{{ props.eventData.location.country }}, {{ props.eventData.location.city }}
-			{{ props.eventData.location?.address ? `, ${props.eventData.location.address}` : '' }}
-		</NuxtLink>
-	</div>
+		</div>
+	</NuxtLink>
 </template>
 
 <style scoped lang="less">
 .card {
+	display: block;
 	width: 100%;
-	min-height: 287px;
 	position: relative;
 	margin-bottom: 44px;
 
@@ -85,24 +102,6 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 		max-width: 100%;
 		height: 100%;
 		object-fit: cover;
-	}
-
-	&__price {
-		min-width: 50px;
-		position: absolute;
-		left: 16px;
-		top: 12px;
-
-		font-size: var(--font-size-XS);
-		line-height: 16px;
-		text-align: center;
-
-		border-radius: 16px;
-		color: var(--color-white);
-		background-color: var(--color-accent-green-main);
-
-		padding: 6px 10px;
-		z-index: 1;
 	}
 
 	.card-description {
@@ -141,20 +140,24 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 			color: var(--color-text-secondary);
 			margin-bottom: var(--space-related-items);
 		}
-	}
 
-	.card-link {
-		display: block;
-		width: max-content;
-		padding-left: 16px;
-		padding-right: 16px;
+		&__geo-box {
+			display: flex;
+			align-items: center;
+		}
 
-		&__geolink {
+		&__geo {
+			display: block;
 			width: max-content;
 			font-size: var(--font-size-XS);
+			color: var(--color-text-secondary);
+			font-weight: var(--font-weight-bold);
 			line-height: 16px;
-			text-decoration-line: underline;
-			color: #5c9ad2;
+		}
+
+		&__pin {
+			color: var(--color-text-secondary);
+			margin-right: 5px;
 		}
 	}
 }

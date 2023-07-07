@@ -4,6 +4,12 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
 import type { UserInfo } from '@/../common/types/user';
+import { BASE_URL } from '../../constants/url';
+import Currency from '../../components/common/Currency.vue';
+import Address from '../../components/common/Address.vue';
+import { trimString } from '../../utils/trimString';
+
+const { t } = useI18n();
 
 definePageMeta({ name: RouteNameEnum.EVENT });
 const route = useRoute();
@@ -18,11 +24,25 @@ const posterEvent = computed(() => {
 	return data.value;
 });
 
+const eventImage = computed(() => {
+	return getEventImage(posterEvent.value);
+});
+
+useSeoMeta({
+	// для реактивных тегов используем () => value
+	ogSiteName: () => t('meta.title'),
+	ogType: 'website',
+	title: () => `${posterEvent.value?.title ?? t('meta.title')} / ${posterEvent.value?.location?.city ?? ''}`,
+	ogTitle: () => `${posterEvent.value?.title ?? t('meta.title')} / ${posterEvent.value?.location?.city ?? ''}`,
+	description: () => trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
+	ogDescription: () => trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
+	ogImage: eventImage,
+	ogUrl: () => BASE_URL + route.path,
+})
+
 const isEditable = computed(() => {
 	return posterEvent.value ? posterEvent.value.date > Date.now() : false;
 });
-
-useHead({ titleTemplate: `%s / ${posterEvent.value?.title}` });
 
 const redirect = () => {
 	useTrackEvent('redirect');
@@ -86,22 +106,31 @@ patchDeleteEventModal({
 	<div
 		v-if="posterEvent"
 		class="event"
+		itemscope
+		itemtype="https://schema.org/Event"
 	>
 		<div
-			:class="[
-				'event-image',
-				'event-image__container',
-				{ 'event-image__container--background': !posterEvent.image }
-			]"
+			:class="['event-image', 'event-image__container']"
+			itemprop="image"
 		>
-			<span class="event-image__price">
-				{{ getPrice(posterEvent) }}
-			</span>
+			<Currency
+				:class-name="'event-image__price'"
+				:price="posterEvent.price"
+				:currency="'RSD'"
+			/>
 			<img
-				v-if="posterEvent.image"
-				:src="getEventImage(posterEvent)"
+				v-if="!posterEvent?.image"
+				src="@/assets/img/event-card@2x.png"
 				:alt="$t('event.image.event')"
 				class="event-image__image"
+				itemprop="image"
+			/>
+			<img
+				v-else
+				:src="eventImage"
+				:alt="$t('event.image.event')"
+				class="event-image__image"
+				itemprop="image"
 			/>
 		</div>
 
@@ -110,15 +139,22 @@ patchDeleteEventModal({
 			<p
 				v-if="posterEvent.title.toLowerCase().includes('peredelanoconf')"
 				class="event-info__author"
+				itemprop="composer"
 			>
 				Peredelano
 			</p>
-			<h2 class="event-info__title">
+			<h1
+				class="event-info__title"
+				itemprop="name"
+			>
 				{{ posterEvent.title }}
-			</h2>
+			</h1>
 
 			<p class="event-info__datetime">
-				<span v-if="posterEvent.durationInSeconds">
+				<span
+					v-if="posterEvent.durationInSeconds"
+					itemprop="duration"
+				>
 					{{ convertToLocaleString(posterEvent.date) }}
 					-
 					{{
@@ -127,23 +163,28 @@ patchDeleteEventModal({
 						)
 					}}
 				</span>
-				<span v-else>
+				<span
+					v-else
+					itemprop="duration"
+				>
 					{{ convertToLocaleString(posterEvent.date ?? Date.now()) }}
 				</span>
 				<br />
 				({{ posterEvent.timezone?.timezoneOffset }}
 				{{ posterEvent.timezone?.timezoneName }})
 			</p>
-			<!-- TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса -->
 			<NuxtLink
 				class="event-info__geolink"
 				:to="getLocationLink(posterEvent.location)"
 				target="_blank"
+				itemprop="url"
 			>
-				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
-				{{ posterEvent.location?.address ? `, ${posterEvent.location.address}` : '' }}
+				<Address :location="posterEvent.location" />
 			</NuxtLink>
-			<p class="event-info__description">
+			<p
+				class="event-info__description"
+				itemprop="description"
+			>
 				{{ posterEvent.description }}
 			</p>
 		</div>
@@ -311,11 +352,6 @@ patchDeleteEventModal({
 		line-height: 0;
 		background-color: var(--color-input-field);
 		margin-bottom: 12px;
-
-		&--background {
-			background: url('@/assets/img/event-card@2x.png') center center no-repeat;
-			background-size: cover;
-		}
 	}
 
 	&__image {

@@ -7,6 +7,7 @@ import type { UserInfo } from '@/../common/types/user';
 import {BASE_URL} from '../../constants/url';
 import Currency from '../../components/common/Currency.vue';
 import Address from '../../components/common/Address.vue';
+import {trimString} from '../../utils/trimString';
 
 const { $i18n } = useNuxtApp();
 
@@ -27,17 +28,14 @@ const eventImage = computed(() => {
 	return getEventImage(posterEvent.value);
 });
 
-useHead({
-	titleTemplate: `%s / ${posterEvent.value?.title}`,
-});
-
 useSeoMeta({
 	// для реактивных тегов используем () => value
 	ogSiteName: () => $i18n.t('meta.title'),
 	ogType: 'website',
-	ogTitle: () => posterEvent.value?.title ?? $i18n.t('meta.title'),
-	description: () => posterEvent.value?.description ?? $i18n.t('meta.home.description'),
-	ogDescription: () => posterEvent.value?.description ?? $i18n.t('meta.home.description'),
+	title: () => `${posterEvent.value?.title ?? $i18n.t('meta.title')} / ${posterEvent.value?.location?.city ?? ''}`,
+	ogTitle: () => `${posterEvent.value?.title ?? $i18n.t('meta.title')} / ${posterEvent.value?.location?.city ?? ''}`,
+	description: () => trimString(posterEvent.value?.description ?? '', 120) ?? $i18n.t('meta.home.description'),
+	ogDescription: () => trimString(posterEvent.value?.description ?? '', 120) ?? $i18n.t('meta.home.description'),
 	ogImage: eventImage,
 	ogUrl: () => BASE_URL + route.path,
 })
@@ -171,7 +169,10 @@ patchDeleteEventModal({
 						)
 					}}
 				</span>
-				<span v-else>
+				<span
+						v-else
+						itemprop="duration"
+				>
 					{{ convertToLocaleString(posterEvent.date ?? Date.now()) }}
 				</span>
 				<br />
@@ -186,8 +187,7 @@ patchDeleteEventModal({
 				itemprop="url"
 			>
 				<Address
-					:country="posterEvent.location.country"
-					:city="posterEvent.location.city"
+					:location="posterEvent.location"
 				/>
 			</NuxtLink>
 			<p

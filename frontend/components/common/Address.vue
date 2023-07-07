@@ -1,26 +1,13 @@
 <script setup lang="ts">
-import { type PropType } from 'vue';
+import type {Address} from '../../../common/types/address';
 
-defineProps({
-	country: {
-		type: String as PropType<string>,
-		default: '0'
-	},
-	city: {
-		type: String as PropType<string>,
-		default: ''
-	},
-	className: {
-		type: String as PropType<string>,
-		default: ''
-	},
-});
+const props = defineProps<{ location: Address, className?: string }>();
 
 </script>
 
 <template>
 	<span
-			:class="className"
+			:class="props.className ?? ''"
 	>
 		<span
 				itemprop="address"
@@ -28,16 +15,16 @@ defineProps({
 				itemtype="https://schema.org/PostalAddress"
 		>
 			<span
-					v-if="country"
+					v-if="props.location?.country"
 					itemprop="addressRegion"
 			>
-				{{ country }},
+				{{ props.location.country }},
 			</span>
 			<span
-					v-if="city"
+					v-if="props.location?.city"
 					itemprop="addressLocality"
 			>
-				{{ city }}
+				{{ props.location.city }}
 			</span>
 		</span>
 	</span>

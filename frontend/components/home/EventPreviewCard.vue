@@ -9,80 +9,76 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 </script>
 
 <template>
-	<div
-		itemscope
-		itemtype="https://schema.org/Event"
+	<NuxtLink
+			itemscope
+			itemtype="https://schema.org/Event"
+			class="card"
+			:to="`/event/${props.eventData.id}`"
+			itemprop="url"
 	>
-		<NuxtLink
-				class="card"
-				:to="`/event/${props.eventData.id}`"
-				itemprop="url"
+		<div
+			:class="[
+				'card__image-container',
+				{ 'card__image-container--background': !eventData.image }
+			]"
+			itemprop="image"
 		>
-			<div
-				:class="[
-					'card__image-container',
-					{ 'card__image-container--background': !eventData.image }
-				]"
+			<Currency
+					:price="eventData.price"
+					:currency="'RSD'"
+			/>
+
+			<img
+				v-if="eventData.image"
 				itemprop="image"
+				:alt="$t('home.events.image_alt')"
+				class="card__image"
+				:src="getEventImage(props.eventData)"
+				width="375"
+				height="176"
+			/>
+		</div>
+
+		<div class="card-description">
+			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
+			<p
+				v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
+				class="card-description__author"
+				itemprop="composer"
 			>
-				<Currency
-						:price="eventData.price"
-						:currency="'RSD'"
-				/>
+					Peredelano
+			</p>
+			<h2
+					class="card-description__title"
+					itemprop="name"
+			>
+				{{ props.eventData.title }}
+			</h2>
+			<p class="card-description__datetime">
+				<span itemprop="startDate">
+					{{ convertToLocaleString(props.eventData.date) }}
+				</span>
+				({{ props.eventData.timezone?.timezoneOffset }}
+				{{ props.eventData.timezone?.timezoneName }})
+			</p>
 
-				<img
-					v-if="eventData.image"
-					itemprop="image"
-					:alt="$t('home.events.image_alt')"
-					class="card__image"
-					:src="getEventImage(props.eventData)"
-					width="375"
-					height="176"
+			<div class="card-description__geo-box">
+				<CommonIcon
+						name="map-pin"
+						class="card-description__pin"
+				/>
+				<Address
+						class-name="card-description__geo"
+						:location="props.eventData.location"
 				/>
 			</div>
-
-			<div class="card-description">
-				<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
-				<p
-					v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
-					class="card-description__author"
-				>
-					<span itemprop="composer">
-						Peredelano
-					</span>
-				</p>
-				<h2
-						class="card-description__title"
-						itemprop="name"
-				>
-					{{ props.eventData.title }}
-				</h2>
-				<p class="card-description__datetime">
-					<span itemprop="startDate">
-						{{ convertToLocaleString(props.eventData.date) }}
-					</span>
-					({{ props.eventData.timezone?.timezoneOffset }}
-					{{ props.eventData.timezone?.timezoneName }})
-				</p>
-
-				<div class="card-description__geo-box">
-					<CommonIcon
-							name="map-pin"
-							class="card-description__pin"
-					/>
-					<Address
-							class-name="card-description__geo"
-							:country="props.eventData.location.country"
-							:city="props.eventData.location.city"
-					/>
-				</div>
-			</div>
-		</NuxtLink>
-	</div>
+		</div>
+	</NuxtLink>
 </template>
 
 <style scoped lang="less">
 .card {
+	display: block;
 	width: 100%;
 	min-height: 287px;
 	position: relative;

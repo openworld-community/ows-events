@@ -5,10 +5,10 @@ const { $i18n } = useNuxtApp();
 const free = computed(() => $i18n.t('event.price.free'));
 const unknown = computed(() => $i18n.t('event.price.not_found'));
 
-defineProps({
+const props = defineProps({
 	price: {
 		type: String as PropType<string>,
-		default: '0'
+		default: ''
 	},
 	currency: {
 		type: String as PropType<string>,
@@ -20,6 +20,21 @@ defineProps({
 	},
 });
 
+
+const priceData = computed(() => {
+	if (props.price) {
+		//TODO: временное решение для MVP, далее обсудить с командой парсинга финальный формат
+		if (props.price.includes('RSD') || props.price.includes('EUR') || props.price.includes('€'))
+			return props.price;
+		else if (props.price === '0') {
+			return $i18n.t('event.price.free');
+		}
+		return `${props.price} RSD`;
+	}
+	//not found - только если при парсинге не была определена цена
+	return $i18n.t('event.price.not_found');
+});
+
 </script>
 
 <template>
@@ -29,37 +44,38 @@ defineProps({
 			itemscope
 			itemtype="https://schema.org/Offer"
 	>
-		<span
-				v-if="price === '0'"
-				itemprop="isAccessibleForFree"
-				content="true"
-		>
-			{{ free }}
-		</span>
-		<span
-				v-else-if="price"
-				itemprop="price"
-		>
-			<span
-					class="event-price"
-					itemprop="price"
-					:content="price"
-			>
-				{{ price }}
-				<span itemprop="priceCurrency">
-					{{ currency }}
-				</span>
-			</span>
-			<meta
-					itemprop="priceCurrency"
-					:content="currency"
-			>
-		</span>
-		<span
-				v-else
-		>
-			{{ unknown }}
-		</span>
+		{{ priceData }}
+<!--		<span-->
+<!--				v-if="price === '0'"-->
+<!--				itemprop="isAccessibleForFree"-->
+<!--				content="true"-->
+<!--		>-->
+<!--			{{ free }}-->
+<!--		</span>-->
+<!--		<span-->
+<!--				v-else-if="price"-->
+<!--				itemprop="price"-->
+<!--		>-->
+<!--			<span-->
+<!--					class="event-price"-->
+<!--					itemprop="price"-->
+<!--					:content="price"-->
+<!--			>-->
+<!--				{{ price }}-->
+<!--				<span itemprop="priceCurrency">-->
+<!--					{{ currency }}-->
+<!--				</span>-->
+<!--			</span>-->
+<!--			<meta-->
+<!--					itemprop="priceCurrency"-->
+<!--					:content="currency"-->
+<!--			>-->
+<!--		</span>-->
+<!--		<span-->
+<!--				v-else-->
+<!--		>-->
+<!--			{{ unknown }}-->
+<!--		</span>-->
 	</span>
 </template>
 <style lang="less" scoped>

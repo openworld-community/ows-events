@@ -1,7 +1,8 @@
 import type { EventOnPoster } from '~/../common/types';
-import type { PostEventPayload } from '~/../common/types/event';
+import type { EventOnPosterWithLocalisation, PostEventPayload } from '~/../common/types/event';
 import type { Registration } from '~/../common/types/registration';
 import { defineMutation, defineQuery, useBackendFetch } from './utils';
+import { localisationUrl } from '~/constants/common';
 
 export const events = {
 	findMany: defineQuery<
@@ -11,8 +12,29 @@ export const events = {
 	>((input) => {
 		return useBackendFetch('events/find', { body: input?.query ?? {} });
 	}),
-	get: defineQuery<(input: { id: string }) => EventOnPoster>((input) => {
-		return useBackendFetch(`events/${input.id}`);
+	get: defineQuery<(input: { id: string }) => EventOnPosterWithLocalisation>((input) => {
+		return async <T>() => {
+			const event = await useBackendFetch<EventOnPoster>(`events/${input.id}`)();
+			if (!event.data.value) {
+				return event;
+			}
+			if (!localisationUrl) {
+				return event;
+			}
+
+			const localisatedDescription = await useFetch<string>(
+				`${localisationUrl}/?text=${event.data.value?.description}&tl=ru`
+			);
+			if (!localisatedDescription.data.value) {
+				return event;
+			}
+
+			event.data.value = {
+				...event.data.value,
+				localisatedDescription: localisatedDescription.data.value
+			} as EventOnPosterWithLocalisation;
+			return event;
+		};
 	}),
 	add: defineMutation<(input: PostEventPayload) => { id: string }>((input) => {
 		return useBackendFetch('events/add', { body: input }, { auth: true });

@@ -18,6 +18,25 @@ export type EventOnPoster = {
 	url: string;
 };
 
+export type EventOnPosterWithLocalisation = {
+	id: string;
+	creatorId?: string;
+	title: string;
+	description: string;
+	localisatedDescription?: string;
+	date: number;
+	durationInSeconds: number;
+	location: {
+		country: string;
+		city: string;
+        address: string;
+	};
+	image: string;
+	price: string;
+	timezone?: Timezone;
+	url: string;
+};
+
 export type PostEventPayload = {
 	event: {
 		date: number;

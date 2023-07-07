@@ -5,8 +5,7 @@ import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
 import type { UserInfo } from '@/../common/types/user';
 import { BASE_URL } from '../../constants/url';
-import Currency from '../../components/common/Currency.vue';
-import Address from '../../components/common/Address.vue';
+
 import { trimString } from '../../utils/trimString';
 
 const { t } = useI18n();
@@ -38,7 +37,7 @@ useSeoMeta({
 	ogDescription: () => trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
 	ogImage: eventImage,
 	ogUrl: () => BASE_URL + route.path,
-})
+});
 
 const isEditable = computed(() => {
 	return posterEvent.value ? posterEvent.value.date > Date.now() : false;
@@ -173,14 +172,11 @@ patchDeleteEventModal({
 				({{ posterEvent.timezone?.timezoneOffset }}
 				{{ posterEvent.timezone?.timezoneName }})
 			</p>
-			<NuxtLink
-				class="event-info__geolink"
-				:to="getLocationLink(posterEvent.location)"
-				target="_blank"
-				itemprop="url"
-			>
-				<Address :location="posterEvent.location" />
-			</NuxtLink>
+				<Address
+					:location="posterEvent.location"
+					class="event-info__geolink"
+          is-link
+				/>
 			<p
 				class="event-info__description"
 				itemprop="description"
@@ -293,11 +289,7 @@ patchDeleteEventModal({
 		}
 
 		&__geolink {
-			font-size: var(--font-size-XS);
-			line-height: 16px;
-			text-decoration-line: underline;
-			color: #5c9ad2;
-			margin-bottom: var(--space-subsections);
+      margin-bottom: var(--space-unrelated-items);
 		}
 
 		&__description {

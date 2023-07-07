@@ -39,7 +39,7 @@ const priceData = computed(() => {
 
 <template>
 	<span
-		:class="`card__price ${className}`"
+		:class="`tag ${className}`"
 		itemprop="offers"
 		itemscope
 		itemtype="https://schema.org/Offer"
@@ -79,21 +79,17 @@ const priceData = computed(() => {
 	</span>
 </template>
 <style lang="less" scoped>
-.card__price {
+.tag {
 	min-width: 50px;
-	position: absolute;
-	left: 16px;
-	top: 12px;
+	max-width: max-content;
 
-	font-size: var(--font-size-XS);
-	line-height: 16px;
+	font-size: var(--font-size-S);
+	line-height: 20px;
 	text-align: center;
 
-	border-radius: 16px;
-	color: var(--color-white);
-	background-color: var(--color-accent-green-main);
+	border: 1px solid var(--color-accent-green-main);
+	border-radius: 8px;
 
-	padding: 6px 10px;
-	z-index: 1;
+	padding: 4px 10px;
 }
 </style>

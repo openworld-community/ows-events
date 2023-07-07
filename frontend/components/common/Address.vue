@@ -1,31 +1,32 @@
 <script setup lang="ts">
-import type {Address} from '../../../common/types/address';
+import type { Location } from '../../../common/types/address';
 
-const props = defineProps<{ location: Address, className?: string }>();
-
+const props = defineProps<{ location: Location; className?: string }>();
 </script>
 
 <template>
 	<span
-			:class="props.className ?? ''"
+		:class="props.className ?? ''"
+		itemprop="address"
+		itemscope
+		itemtype="https://schema.org/PostalAddress"
 	>
 		<span
-				itemprop="address"
-				itemscope
-				itemtype="https://schema.org/PostalAddress"
+			v-if="props.location.country"
+			itemprop="addressCountry"
 		>
-			<span
-					v-if="props.location?.country"
-					itemprop="addressRegion"
-			>
-				{{ props.location.country }},
-			</span>
-			<span
-					v-if="props.location?.city"
-					itemprop="addressLocality"
-			>
-				{{ props.location.city }}
-			</span>
+			{{ props.location.country }},
+		</span>
+		<span
+			v-if="props.location.city"
+			itemprop="addressLocality"
+		>
+			{{ props.location.city }}
+		</span>
+		<span
+			v-if="props.location?.address"
+			itemprop="location"
+			>, {{ props.location.address }}
 		</span>
 	</span>
 </template>

@@ -1,5 +1,6 @@
 import { BASE_URL } from '@/constants/url';
 import type { EventOnPoster } from '../../common/types';
+import type { Location } from "../../common/types/address";
 
 export const getEventImage = (eventData?: EventOnPoster) => {
 	if (eventData?.image) {
@@ -10,12 +11,6 @@ export const getEventImage = (eventData?: EventOnPoster) => {
 		return `${BASE_URL}${eventData.image}`;
 	}
 };
-
-type Location = {
-	country: string,
-	city: string,
-	address?: string
-}
 
 export const getLocationLink = (location: Location) => {
 	if (location.address) {

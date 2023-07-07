@@ -4,12 +4,12 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
 import type { UserInfo } from '@/../common/types/user';
-import {BASE_URL} from '../../constants/url';
+import { BASE_URL } from '../../constants/url';
 import Currency from '../../components/common/Currency.vue';
 import Address from '../../components/common/Address.vue';
-import {trimString} from '../../utils/trimString';
+import { trimString } from '../../utils/trimString';
 
-const { $i18n } = useNuxtApp();
+const { t } = useI18n();
 
 definePageMeta({ name: RouteNameEnum.EVENT });
 const route = useRoute();
@@ -30,12 +30,12 @@ const eventImage = computed(() => {
 
 useSeoMeta({
 	// для реактивных тегов используем () => value
-	ogSiteName: () => $i18n.t('meta.title'),
+	ogSiteName: () => t('meta.title'),
 	ogType: 'website',
-	title: () => `${posterEvent.value?.title ?? $i18n.t('meta.title')} / ${posterEvent.value?.location?.city ?? ''}`,
-	ogTitle: () => `${posterEvent.value?.title ?? $i18n.t('meta.title')} / ${posterEvent.value?.location?.city ?? ''}`,
-	description: () => trimString(posterEvent.value?.description ?? '', 120) ?? $i18n.t('meta.home.description'),
-	ogDescription: () => trimString(posterEvent.value?.description ?? '', 120) ?? $i18n.t('meta.home.description'),
+	title: () => `${posterEvent.value?.title ?? t('meta.title')} / ${posterEvent.value?.location?.city ?? ''}`,
+	ogTitle: () => `${posterEvent.value?.title ?? t('meta.title')} / ${posterEvent.value?.location?.city ?? ''}`,
+	description: () => trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
+	ogDescription: () => trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
 	ogImage: eventImage,
 	ogUrl: () => BASE_URL + route.path,
 })
@@ -43,8 +43,6 @@ useSeoMeta({
 const isEditable = computed(() => {
 	return posterEvent.value ? posterEvent.value.date > Date.now() : false;
 });
-
-useHead({ titleTemplate: `%s / ${posterEvent.value?.title}` });
 
 const redirect = () => {
 	useTrackEvent('redirect');
@@ -112,16 +110,13 @@ patchDeleteEventModal({
 		itemtype="https://schema.org/Event"
 	>
 		<div
-			:class="[
-				'event-image',
-				'event-image__container',
-			]"
+			:class="['event-image', 'event-image__container']"
 			itemprop="image"
 		>
 			<Currency
-					:class-name="'event-image__price'"
-					:price="posterEvent.price"
-					:currency="'RSD'"
+				:class-name="'event-image__price'"
+				:price="posterEvent.price"
+				:currency="'RSD'"
 			/>
 			<img
 				v-if="!posterEvent?.image"
@@ -144,22 +139,21 @@ patchDeleteEventModal({
 			<p
 				v-if="posterEvent.title.toLowerCase().includes('peredelanoconf')"
 				class="event-info__author"
-				itemprop="composer">
-				class="event-info__author"
+				itemprop="composer"
 			>
 				Peredelano
 			</p>
 			<h1
-					class="event-info__title"
-					itemprop="name"
+				class="event-info__title"
+				itemprop="name"
 			>
 				{{ posterEvent.title }}
 			</h1>
 
 			<p class="event-info__datetime">
 				<span
-						v-if="posterEvent.durationInSeconds"
-						itemprop="duration"
+					v-if="posterEvent.durationInSeconds"
+					itemprop="duration"
 				>
 					{{ convertToLocaleString(posterEvent.date) }}
 					-
@@ -170,8 +164,8 @@ patchDeleteEventModal({
 					}}
 				</span>
 				<span
-						v-else
-						itemprop="duration"
+					v-else
+					itemprop="duration"
 				>
 					{{ convertToLocaleString(posterEvent.date ?? Date.now()) }}
 				</span>
@@ -179,20 +173,17 @@ patchDeleteEventModal({
 				({{ posterEvent.timezone?.timezoneOffset }}
 				{{ posterEvent.timezone?.timezoneName }})
 			</p>
-			<!-- TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса -->
 			<NuxtLink
 				class="event-info__geolink"
 				:to="getLocationLink(posterEvent.location)"
 				target="_blank"
 				itemprop="url"
 			>
-				<Address
-					:location="posterEvent.location"
-				/>
+				<Address :location="posterEvent.location" />
 			</NuxtLink>
 			<p
-					class="event-info__description"
-					itemprop="description"
+				class="event-info__description"
+				itemprop="description"
 			>
 				{{ posterEvent.description }}
 			</p>

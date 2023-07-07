@@ -2,19 +2,17 @@
 import type { EventOnPoster } from '../../../common/types';
 import Currency from '../common/Currency.vue';
 import Address from '../common/Address.vue';
-const { $i18n } = useNuxtApp();
 
 const props = defineProps<{ eventData: EventOnPoster }>();
-
 </script>
 
 <template>
 	<NuxtLink
-			itemscope
-			itemtype="https://schema.org/Event"
-			class="card"
-			:to="`/event/${props.eventData.id}`"
-			itemprop="url"
+		itemscope
+		itemtype="https://schema.org/Event"
+		class="card"
+		:to="`/event/${props.eventData.id}`"
+		itemprop="url"
 	>
 		<div
 			:class="[
@@ -24,8 +22,8 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 			itemprop="image"
 		>
 			<Currency
-					:price="eventData.price"
-					:currency="'RSD'"
+				:price="eventData.price"
+				:currency="'RSD'"
 			/>
 
 			<img
@@ -39,17 +37,18 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 			/>
 		</div>
 
-			<div class="card-description">
-				<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
-				<p
-					v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
-					class="card-description__author"
-				>
-					Peredelano
+		<div class="card-description">
+			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
+			<p
+				v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
+				class="card-description__author"
+        itemprop="composer"
+			>
+				Peredelano
 			</p>
 			<h2
-					class="card-description__title"
-					itemprop="name"
+				class="card-description__title"
+				itemprop="name"
 			>
 				{{ props.eventData.title }}
 			</h2>
@@ -63,12 +62,12 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 
 			<div class="card-description__geo-box">
 				<CommonIcon
-						name="map-pin"
-						class="card-description__pin"
+					name="map-pin"
+					class="card-description__pin"
 				/>
 				<Address
-						class-name="card-description__geo"
-						:location="props.eventData.location"
+					class-name="card-description__geo"
+					:location="props.eventData.location"
 				/>
 			</div>
 		</div>
@@ -79,7 +78,6 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 .card {
 	display: block;
 	width: 100%;
-	min-height: 287px;
 	position: relative;
 	margin-bottom: 44px;
 
@@ -159,7 +157,7 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 
 		&__pin {
 			color: var(--color-text-secondary);
-			margin-right: 13px;
+			margin-right: 5px;
 		}
 	}
 }

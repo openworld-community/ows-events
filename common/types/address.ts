@@ -1,4 +1,5 @@
-export type Address = {
-	country?: string;
-	city?: string;
+export type Location = {
+	country: string;
+	city: string;
+	address?: string;
 }

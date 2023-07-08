@@ -88,8 +88,8 @@ const priceData = computed(() => {
 	text-align: center;
 
 	border: 1px solid var(--color-accent-green-main);
-	border-radius: 8px;
+	border-radius: 16px;
 
-	padding: 4px 10px;
+	padding: 3px 10px;
 }
 </style>

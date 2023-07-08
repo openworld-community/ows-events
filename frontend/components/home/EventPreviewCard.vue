@@ -133,7 +133,7 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 			font-weight: var(--font-weight-bold);
 			font-size: var(--font-size-S);
 			line-height: 20px;
-			margin-bottom: var(--space-related-items);
+			margin-bottom: 11px;
 
 			&--timezone {
 				font-size: var(--font-size-XS);

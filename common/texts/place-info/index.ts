@@ -279,6 +279,8 @@ export const countriesInfoTexts = {
 
 export const countriesNames = Object.keys(countriesInfoTexts);
 
+export const countryExist = (country: string): boolean => countriesNames.includes(country);
+
 export const getCitiesNamesByCountry = (country: string): string[] => {
 	if (!countryExist(country)) {
 		return [];
@@ -286,13 +288,8 @@ export const getCitiesNamesByCountry = (country: string): string[] => {
 	return Object.keys(countriesInfoTexts[country].cities);
 };
 
-export const countryExist = (country: string): boolean => {
-	return countriesNames.includes(country);
-};
-
-export const cityExist = (country: string, city: string): boolean => {
-	return getCitiesNamesByCountry(country).includes(city);
-};
+export const cityExist = (country: string, city: string): boolean =>
+	getCitiesNamesByCountry(country).includes(city);
 
 const getCitiesByCountry = (
 	country: string
@@ -300,11 +297,6 @@ const getCitiesByCountry = (
 	[key: string]: {
 		text: string;
 	};
-} => {
-	return countriesInfoTexts[country].cities;
-};
+} => countriesInfoTexts[country].cities;
 
-export const getCityInfoText = (country: string, city: string): string => {
-	city;
-	return getCitiesByCountry(country)[city].text;
-};
+export const getCityInfoText = (country: string, city: string): string => getCitiesByCountry(country)[city].text;

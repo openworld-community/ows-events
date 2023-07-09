@@ -10,35 +10,37 @@ useHead({
 </script>
 
 <template>
-	<section class="about">
-		<h2 class="title">{{ $t('about.title') }}</h2>
-		<img
-			:src="eventScreen"
-			class="about__img"
-			:alt="$t('about.alt')"
-		/>
-		<p>{{ $t('about.idea') }}</p>
-		<br />
-		<p>{{ $t('about.functionality') }}</p>
-		<br />
-		<p>{{ $t('about.perspectives') }}</p>
-		<br />
-		<p>
-			{{ $t('about.github') }}:
-			<NuxtLink
-				:href="REPO_URL"
-				class="about__link"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				Repo
-			</NuxtLink>
-		</p>
-	</section>
-	<section>
-		<h2>Узнайте больше о местах куда поедете</h2>
-		<NuxtLink :to="`/place-info`">Всё о странах и городах</NuxtLink>
-	</section>
+	<div>
+		<section class="about">
+			<h2 class="title">{{ $t('about.title') }}</h2>
+			<img
+				:src="eventScreen"
+				class="about__img"
+				:alt="$t('about.alt')"
+			/>
+			<p>{{ $t('about.idea') }}</p>
+			<br />
+			<p>{{ $t('about.functionality') }}</p>
+			<br />
+			<p>{{ $t('about.perspectives') }}</p>
+			<br />
+			<p>
+				{{ $t('about.github') }}:
+				<NuxtLink
+					:href="REPO_URL"
+					class="about__link"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					Repo
+				</NuxtLink>
+			</p>
+		</section>
+		<section>
+			<h2 class="title">Узнайте больше о местах куда поедете</h2>
+			<NuxtLink :to="`/place-info`">Всё о странах и городах</NuxtLink>
+		</section>
+	</div>
 </template>
 
 <style lang="less" scoped>

@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import {
-	countriesNames,
-	getCitiesNamesByCountry
-} from '../../../common/texts/place-info/index';
+import { countriesNames, getCitiesNamesByCountry } from '../../../common/texts/place-info/index';
 </script>
 
 <template>
@@ -20,6 +17,7 @@ import {
 				<li
 					v-for="city in getCitiesNamesByCountry(country)"
 					:key="city"
+					class="cities-list__item"
 				>
 					<NuxtLink :to="`/place-info/${country}/${city}`">{{ city }}</NuxtLink>
 				</li>
@@ -31,5 +29,9 @@ import {
 <style lang="less" scoped>
 .cities-list {
 	padding-left: 16px;
+
+	.cities-list__item {
+		list-style: inside;
+	}
 }
 </style>

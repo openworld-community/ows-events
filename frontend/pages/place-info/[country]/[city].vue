@@ -8,7 +8,7 @@ import {
 const route = useRoute();
 const router = useRouter();
 
-const country = route.params.country;
+const country = route.params.country as string;
 
 if (!country || !countriesNames.includes(country)) {
 	router.push({ name: 'place-info' });

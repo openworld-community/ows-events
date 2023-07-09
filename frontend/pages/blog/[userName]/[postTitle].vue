@@ -1,15 +1,6 @@
 <script setup lang="ts">
 import { posts } from '../../../../common/blog/posts';
 
-useSeoMeta({
-	title: 'Блог АфишаПеределано',
-	ogTitle: 'Блог АфишаПеределано',
-	description:
-		'Блог компании AfishaPeredelano, котороая делает афишу, чтобы объединять людей вокруг эвентов в Сербии',
-	ogDescription:
-		'Блог компании AfishaPeredelano, котороая делает афишу, чтобы объединять людей вокруг эвентов в Сербии'
-});
-
 const route = useRoute();
 const router = useRouter();
 const userName = route.params.userName as string;
@@ -27,6 +18,15 @@ if (!post) {
 	router.push({ name: '/blog/AfishaPeredelano' });
 	throw new Error('Post not found');
 }
+
+const description = `${postTitle} Статья из блога компании AfishaPeredelano, котороая делает афишу, чтобы объединять людей вокруг эвентов в Сербии`;
+
+useSeoMeta({
+	title: postTitle,
+	ogTitle: postTitle,
+	description,
+	ogDescription: description
+});
 </script>
 
 <template>
@@ -42,24 +42,28 @@ if (!post) {
 				>AfishaPeredelano</NuxtLink
 			>
 		</div>
+		<ul class="see-also">
+			<h2>Смотрите также:</h2>
+			<li class="see-also__item">
+				<NuxtLink
+					to="/blog/AfishaPeredelano"
+					class="link"
+					>Блог AfishaPeredelano</NuxtLink
+				>
+			</li>
+			<li
+				v-for="post of posts.slice(0, 4)"
+				v-bind:key="post.title"
+				class="see-also__item"
+			>
+				<NuxtLink
+					:to="`/blog/AfishaPeredelano/${post.title}`"
+					class="link"
+					>{{ post.title }}</NuxtLink
+				>
+			</li>
+		</ul>
 	</div>
-	<ul class="see-also">
-		<h2>Смотрите также:</h2>
-		<li class="see-also__item">
-			<NuxtLink
-				to="/blog/AfishaPeredelano"
-				class="link"
-				>Блог AfishaPeredelano</NuxtLink
-			>
-		</li>
-		<li v-for="post of posts.slice(0, 4)" class="see-also__item">
-			<NuxtLink
-				:to="`/blog/AfishaPeredelano/${post.title}`"
-				class="link"
-				>{{ post.title }}</NuxtLink
-			>
-		</li>
-	</ul>
 </template>
 
 <style scoped>
@@ -97,7 +101,7 @@ if (!post) {
 	padding: 20px;
 }
 
-.see-also__item{
-    list-style: inside;
+.see-also__item {
+	list-style: inside;
 }
 </style>

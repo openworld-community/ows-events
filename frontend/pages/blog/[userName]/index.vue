@@ -23,7 +23,7 @@ if (!userName || !['AfishaPeredelano'].includes(userName)) {
 		<h1>Блог {{ userName }}</h1>
 		<article
 			v-for="post of posts"
-			:key="post.body"
+			v-bind:key="post.body"
 			class="post"
 		>
 			<h2 class="post-header">{{ post.title }}</h2>

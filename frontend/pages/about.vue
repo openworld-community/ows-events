@@ -35,6 +35,10 @@ useHead({
 			</NuxtLink>
 		</p>
 	</section>
+	<section>
+		<h2>Узнайте больше о местах куда поедете</h2>
+		<NuxtLink :to="`/place-info`">Всё о странах и городах</NuxtLink>
+	</section>
 </template>
 
 <style lang="less" scoped>

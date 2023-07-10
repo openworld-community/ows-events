@@ -1,37 +1,37 @@
 <script setup lang="ts">
 import type { EventOnPoster } from '../../../common/types';
-import Currency from '../common/Currency.vue';
 import Address from '../common/Address.vue';
+import {
+	SeoItempropEventEnum,
+	SeoItempropGlobalEnum,
+	SeoItemTypeEnum
+} from '../../constants/enums/seo';
+import Tag from '../common/Tag.vue';
 
-const props = defineProps<{ eventData: EventOnPoster }>();
+defineProps<{ eventData: EventOnPoster }>();
 </script>
 
 <template>
 	<NuxtLink
 		itemscope
-		itemtype="https://schema.org/Event"
+		:itemtype="SeoItemTypeEnum.EVENT"
 		class="card"
-		:to="`/event/${props.eventData.id}`"
-		itemprop="url"
+		:to="`/event/${eventData.id}`"
+		:itemprop="SeoItempropGlobalEnum.URL"
 	>
 		<div
 			:class="[
 				'card__image-container',
 				{ 'card__image-container--background': !eventData.image }
 			]"
-			itemprop="image"
+			:itemprop="SeoItempropGlobalEnum.IMAGE"
 		>
-			<Currency
-				:price="eventData.price"
-				:currency="'RSD'"
-			/>
-
 			<img
 				v-if="eventData.image"
-				itemprop="image"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
 				:alt="$t('home.events.image_alt')"
 				class="card__image"
-				:src="getEventImage(props.eventData)"
+				:src="getEventImage(eventData)"
 				width="375"
 				height="176"
 			/>
@@ -42,34 +42,38 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 			<p
 				v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
 				class="card-description__author"
-        itemprop="composer"
+				:itemprop="SeoItempropEventEnum.ORGANIZER"
 			>
 				Peredelano
 			</p>
+			<Address
+				class="card-description__geo"
+				:location="eventData.location"
+				with-pin
+			/>
 			<h2
 				class="card-description__title"
-				itemprop="name"
+				:itemprop="SeoItempropEventEnum.NAME"
 			>
-				{{ props.eventData.title }}
+				{{ eventData.title }}
 			</h2>
-			<p class="card-description__datetime">
-				<span itemprop="startDate">
-					{{ convertToLocaleString(props.eventData.date) }}
+			<p
+				class="card-description__datetime"
+				:itemprop="SeoItempropEventEnum.START_DATE"
+			>
+				{{ convertToLocaleString(eventData.date) }}
+				<span
+					v-if="eventData.timezone"
+					class="card-description__datetime--timezone"
+				>
+					({{ eventData.timezone?.timezoneOffset }},
+					{{ eventData.timezone?.timezoneName }})
 				</span>
-				({{ props.eventData.timezone?.timezoneOffset }}
-				{{ props.eventData.timezone?.timezoneName }})
 			</p>
-
-			<div class="card-description__geo-box">
-				<CommonIcon
-					name="map-pin"
-					class="card-description__pin"
-				/>
-				<Address
-					class-name="card-description__geo"
-					:location="props.eventData.location"
-				/>
-			</div>
+			<Tag
+				:price="eventData.price"
+				:currency="'RSD'"
+			/>
 		</div>
 	</NuxtLink>
 </template>
@@ -79,12 +83,12 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 	display: block;
 	width: 100%;
 	position: relative;
-	margin-bottom: 44px;
+	padding-bottom: 44px;
 
 	&__image-container {
 		display: flex;
 		width: 100%;
-		height: 176px;
+		height: 250px;
 		background-color: var(--color-input-field);
 		background-size: cover;
 		margin-bottom: 12px;
@@ -130,34 +134,24 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 			font-size: var(--font-size-L);
 			font-weight: var(--font-weight-bold);
 			line-height: 24px;
-			margin-bottom: var(--space-related-items);
+			margin-bottom: 12px;
 		}
 
 		&__datetime {
-			font-size: var(--font-size-XS);
 			font-weight: var(--font-weight-bold);
-			line-height: 16px;
-			color: var(--color-text-secondary);
-			margin-bottom: var(--space-related-items);
-		}
+			font-size: var(--font-size-S);
+			line-height: 20px;
+			margin-bottom: 11px;
 
-		&__geo-box {
-			display: flex;
-			align-items: center;
+			&--timezone {
+				font-size: var(--font-size-XS);
+				line-height: 16px;
+				color: var(--color-text-secondary);
+			}
 		}
 
 		&__geo {
-			display: block;
-			width: max-content;
-			font-size: var(--font-size-XS);
-			color: var(--color-text-secondary);
-			font-weight: var(--font-weight-bold);
-			line-height: 16px;
-		}
-
-		&__pin {
-			color: var(--color-text-secondary);
-			margin-right: 5px;
+			margin-bottom: 12px;
 		}
 	}
 }

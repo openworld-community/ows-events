@@ -91,7 +91,7 @@ navigator.geolocation.getCurrentPosition(
 			v-else
 			class="user-location__text"
 		>
-			{{ $t('component.user_location.not_found') }}
+			{{ $t('home.user_location.not_found') }}
 		</p>
 
 	</div>

@@ -11,7 +11,7 @@ const { locale, t } = useI18n();
 useHead({
 	//TODO доработать метаданные
 	title: t('meta.title'),
-	meta: [{ name: 'Афиша переделано', content: 'Это площадка для поиска мероприятий' }],
+	meta: [{ name: 'description', content: 'Афиша Peredelano' }],
 	htmlAttrs: {
 		lang: locale.value
 	}

@@ -14,6 +14,10 @@ const navigationBurger = ref(null);
 onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 
 const isAtHome = computed(() => route.name === RouteNameEnum.HOME);
+const logoComponentIs = computed(() => {
+	if (isAtHome.value) return 'button';
+	else return defineNuxtLink({});
+});
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 </script>
 
@@ -21,14 +25,11 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 	<header class="header">
 		<div class="header__container">
 			<div class="header__left">
-				<NuxtLink
+				<component
+					:is="logoComponentIs"
 					class="header__navigation-link"
 					:aria-label="
-						$t(
-							isAtHome
-								? 'home.button.afisha_logo_aria'
-								: 'component.header.button.home'
-						)
+						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
 					"
 					:to="!isAtHome ? { name: RouteNameEnum.HOME } : undefined"
 					@click="isAtHome && scrollToTop()"
@@ -39,7 +40,7 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 						height="40"
 						alt="Peredelano Афиша"
 					/>
-				</NuxtLink>
+				</component>
 			</div>
 			<div class="header__right">
 				<!--        TODO: вернуться при доработке подписки-->
@@ -50,13 +51,7 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 				<HeaderNavigationBurger
 					ref="navigationBurger"
 					:is-cross="isNavbarOpen"
-					:aria-label="
-						$t(
-							isNavbarOpen
-								? 'component.header.button.close'
-								: 'component.header.button.open'
-						)
-					"
+					:aria-label="$t(isNavbarOpen ? 'header.button.close' : 'header.button.open')"
 					@click="navbarToggle"
 				/>
 				<HeaderNavigationSidebar

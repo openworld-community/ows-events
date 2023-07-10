@@ -36,8 +36,11 @@ const inputValues = ref({
 				(props.dataForEdit?.date ?? 0) + props.dataForEdit.durationInSeconds * 1000
 		  )
 		: null,
-	country: (props.dataForEdit?.location.country ?? 'Serbia') satisfies Country, // Временно фиксируем страну для добавления события
-	city: (props.dataForEdit?.location.city ?? '') satisfies City,
+	location: {
+		country: (props.dataForEdit?.location.country ?? 'Serbia') satisfies Country, // Временно фиксируем страну для добавления события
+		city: (props.dataForEdit?.location.city ?? '') satisfies City,
+		address: props.dataForEdit?.location.address ?? ''
+	},
 	image: props.dataForEdit?.image ?? '',
 	price: props.dataForEdit?.price ?? '0',
 	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
@@ -60,8 +63,9 @@ const checkFormFilling = computed(() => {
 		inputValues.value.startTime &&
 		// endDate & endTime both must be null or non-null
 		(inputValues.value.endDate ? inputValues.value.endTime : !inputValues.value.endTime) &&
-		inputValues.value.country &&
-		inputValues.value.city &&
+		inputValues.value.location.country &&
+		inputValues.value.location.city &&
+		inputValues.value.location.address &&
 		inputValues.value.timezone &&
 		allTimezones.includes(inputValues.value.timezone)
 	);
@@ -80,8 +84,9 @@ const paramsForSubmit = computed(() => {
 			Math.max(0, eventEndEpoch.value - eventStartEpoch.value) / 1000
 		),
 		location: {
-			country: inputValues.value.country,
-			city: inputValues.value.city
+			country: inputValues.value.location.country,
+			city: inputValues.value.location.city,
+			address: inputValues.value.location.address
 		},
 		price: inputValues.value.price,
 		timezone: stringToTimezone(inputValues.value.timezone),
@@ -132,14 +137,14 @@ async function addImage(image: ImageLoaderFile) {
 
 // #region country & string input relationship logic
 watch(
-	() => inputValues.value.country,
+	() => inputValues.value.location.country,
 	() => {
-		inputValues.value.city = '';
+		inputValues.value.location.city = '';
 	}
 );
 
 watch(
-	() => [inputValues.value.country, inputValues.value.city],
+	() => [inputValues.value.location.country, inputValues.value.location.city],
 	async ([country, city]) => {
 		if (!country) return;
 		inputValues.value.timezone = await getTimezone(country, city);
@@ -187,7 +192,7 @@ watch(
 		<div class="modal-card">
 			<header class="modal-card__head">
 				<h2 class="modal-card__title">
-					{{ $t('component.new_event_modal.title') }}
+					{{ $t('modal.new_event_modal.title') }}
 				</h2>
 			</header>
 
@@ -195,10 +200,10 @@ watch(
 				class="modal-card__body body"
 				@submit.prevent="() => void 0"
 			>
-				<ModalUiModalSection :label="$t('component.new_event_modal.fields.location')">
+				<ModalUiModalSection :label="$t('modal.new_event_modal.fields.location')">
 					<template #child>
 						<CommonUiBaseSelect
-							v-model="inputValues.country"
+							v-model="inputValues.location.country"
 							name="country"
 							:placeholder="$t('global.country')"
 							:list="locationStore.countries"
@@ -207,37 +212,70 @@ watch(
 						/>
 
 						<CommonUiBaseSelect
-							v-model="inputValues.city"
+							v-model="inputValues.location.city"
 							name="city"
-							:disabled="!inputValues.country"
+							:disabled="!inputValues.location.country"
 							:placeholder="$t('global.city')"
-							:list="locationStore.getCitiesByCountry(inputValues.country) ?? []"
+							:list="
+								locationStore.getCitiesByCountry(inputValues.location.country) ?? []
+							"
 							required
 						/>
 
 						<CommonUiBaseSelect
 							v-model="inputValues.timezone"
 							name="timezone"
-							:disabled="!inputValues.country"
+							:disabled="!inputValues.location.country"
 							:placeholder="$t('global.timezone')"
 							:list="allTimezones"
 							required
 						/>
+
+						<CommonUiBaseInput
+							v-model="inputValues.location.address"
+							name="address"
+							:placeholder="$t('modal.new_event_modal.fields.address_placeholder')"
+						/>
+
+						<div
+							v-if="inputValues.location.city && inputValues.location.address"
+							class="modal-card__check-location check-location"
+						>
+							<CommonIcon
+								class="check-location__icon"
+								name="error"
+								width="26"
+								height="26"
+								color="var(--color-accent-red)"
+							/>
+							<p class="check-location__text">
+								<span>
+									{{ $t('modal.new_event_modal.fields.check_address') }}
+								</span>
+								<NuxtLink
+									:to="getLocationLink(inputValues.location)"
+									target="_blank"
+									class="check-location__link"
+								>
+									{{ $t('modal.new_event_modal.fields.address_link') }}
+								</NuxtLink>
+							</p>
+						</div>
 					</template>
 				</ModalUiModalSection>
 
-				<ModalUiModalSection :label="$t('component.new_event_modal.fields.main_info')">
+				<ModalUiModalSection :label="$t('modal.new_event_modal.fields.main_info')">
 					<template #child>
 						<CommonUiBaseInput
 							v-model="inputValues.title"
 							name="title"
-							:placeholder="$t('component.new_event_modal.fields.title')"
+							:placeholder="$t('modal.new_event_modal.fields.title')"
 							required
 						/>
 						<CommonUiTextArea
 							v-model="inputValues.description"
 							name="description"
-							:placeholder="$t('component.new_event_modal.fields.description')"
+							:placeholder="$t('modal.new_event_modal.fields.description')"
 							required
 						/>
 					</template>
@@ -245,7 +283,7 @@ watch(
 
 				<ModalUiModalSection
 					type="row"
-					:label="$t('component.new_event_modal.fields.start')"
+					:label="$t('modal.new_event_modal.fields.start')"
 				>
 					<template #child>
 						<CommonUiDateTimepicker
@@ -270,9 +308,10 @@ watch(
 						/>
 					</template>
 				</ModalUiModalSection>
+
 				<ModalUiModalSection
 					type="row"
-					:label="$t('component.new_event_modal.fields.end')"
+					:label="$t('modal.new_event_modal.fields.end')"
 				>
 					<template #child>
 						<CommonUiDateTimepicker
@@ -299,14 +338,14 @@ watch(
 					</template>
 				</ModalUiModalSection>
 
-				<ModalUiModalSection :label="$t('component.new_event_modal.fields.price')">
+				<ModalUiModalSection :label="$t('modal.new_event_modal.fields.price')">
 					<template #child>
 						<CommonUiBaseInput
 							v-model="inputValues.price"
 							name="price"
 							type="number"
 							:min-value="0"
-							:placeholder="$t('component.new_event_modal.fields.price_placeholder')"
+							:placeholder="$t('modal.new_event_modal.fields.price_placeholder')"
 							required
 						/>
 						<!--						<CommonUiBaseSelect-->
@@ -321,13 +360,13 @@ watch(
 				</ModalUiModalSection>
 
 				<ModalUiModalSection
-					:label="$t('component.new_event_modal.fields.url_to_rigistration')"
+					:label="$t('modal.new_event_modal.fields.url_to_rigistration')"
 				>
 					<template #child>
 						<CommonUiBaseInput
 							v-model="inputValues.url"
 							name="url"
-							:placeholder="$t('component.new_event_modal.fields.url_placeholder')"
+							:placeholder="$t('modal.new_event_modal.fields.url_placeholder')"
 							required
 						/>
 					</template>
@@ -342,14 +381,14 @@ watch(
 				<CommonButton
 					class="modal-card__button"
 					button-kind="ordinary"
-					:button-text="$t('component.new_event_modal.cancel')"
+					:button-text="$t('modal.new_event_modal.cancel')"
 					:is-active="!isLoading"
 					@click="closeModal()"
 				/>
 				<CommonButton
 					class="modal-card__button"
 					button-kind="success"
-					:button-text="$t('component.new_event_modal.submit')"
+					:button-text="$t('modal.new_event_modal.submit')"
 					:is-loading="isLoading"
 					:is-disabled="!checkFormFilling || isLoading"
 					@click="isLoading ? null : submitEvent()"
@@ -359,4 +398,24 @@ watch(
 	</CommonModalWrapper>
 </template>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.check-location {
+	display: flex;
+	align-items: center;
+
+	&__icon {
+		flex-shrink: 0;
+		margin-right: 20px;
+	}
+
+	&__text {
+		font-size: var(--font-size-XS);
+		line-height: 18px;
+	}
+
+	&__link {
+		color: var(--color-link);
+		text-decoration: underline;
+	}
+}
+</style>

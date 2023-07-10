@@ -4,6 +4,17 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
 import type { UserInfo } from '@/../common/types/user';
+import { BASE_URL } from '../../constants/url';
+
+import { trimString } from '../../utils/trimString';
+import {
+	SeoItempropEventEnum,
+	SeoItempropGlobalEnum,
+	SeoItemTypeEnum
+} from '../../constants/enums/seo';
+import Tag from '../../components/common/Tag.vue';
+
+const { t } = useI18n();
 
 definePageMeta({ name: RouteNameEnum.EVENT });
 const route = useRoute();
@@ -18,11 +29,33 @@ const posterEvent = computed(() => {
 	return data.value;
 });
 
+const eventImage = computed(() => {
+	return getEventImage(posterEvent.value);
+});
+
+useSeoMeta({
+	// для реактивных тегов используем () => value
+	ogSiteName: () => t('meta.title'),
+	ogType: 'website',
+	title: () =>
+		`${posterEvent.value?.title ?? t('meta.title')} / ${
+			posterEvent.value?.location?.city ?? ''
+		}`,
+	ogTitle: () =>
+		`${posterEvent.value?.title ?? t('meta.title')} / ${
+			posterEvent.value?.location?.city ?? ''
+		}`,
+	description: () =>
+		trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
+	ogDescription: () =>
+		trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
+	ogImage: eventImage,
+	ogUrl: () => BASE_URL + route.path
+});
+
 const isEditable = computed(() => {
 	return posterEvent.value ? posterEvent.value.date > Date.now() : false;
 });
-
-useHead({ titleTemplate: `%s / ${posterEvent.value?.title}` });
 
 const redirect = () => {
 	useTrackEvent('redirect');
@@ -86,22 +119,31 @@ patchDeleteEventModal({
 	<div
 		v-if="posterEvent"
 		class="event"
+		itemscope
+		:itemtype="SeoItemTypeEnum.EVENT"
 	>
 		<div
-			:class="[
-				'event-image',
-				'event-image__container',
-				{ 'event-image__container--background': !posterEvent.image }
-			]"
+			:class="['event-image', 'event-image__container']"
+			:itemprop="SeoItempropGlobalEnum.IMAGE"
 		>
-			<span class="event-image__price">
-				{{ getPrice(posterEvent) }}
-			</span>
+			<Tag
+				:class-name="'event-image__price'"
+				:price="posterEvent.price"
+				:currency="'RSD'"
+			/>
 			<img
-				v-if="posterEvent.image"
-				:src="getEventImage(posterEvent)"
+				v-if="!posterEvent?.image"
+				src="@/assets/img/event-card@2x.png"
 				:alt="$t('event.image.event')"
 				class="event-image__image"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
+			/>
+			<img
+				v-else
+				:src="eventImage"
+				:alt="$t('event.image.event')"
+				class="event-image__image"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
 		</div>
 
@@ -110,15 +152,22 @@ patchDeleteEventModal({
 			<p
 				v-if="posterEvent.title.toLowerCase().includes('peredelanoconf')"
 				class="event-info__author"
+				:itemprop="SeoItempropEventEnum.ORGANIZER"
 			>
 				Peredelano
 			</p>
-			<h2 class="event-info__title">
+			<h1
+				class="event-info__title"
+				:itemprop="SeoItempropEventEnum.NAME"
+			>
 				{{ posterEvent.title }}
-			</h2>
+			</h1>
 
 			<p class="event-info__datetime">
-				<span v-if="posterEvent.durationInSeconds">
+				<span
+					v-if="posterEvent.durationInSeconds"
+					:itemprop="SeoItempropEventEnum.DURATION"
+				>
 					{{ convertToLocaleString(posterEvent.date) }}
 					-
 					{{
@@ -127,22 +176,25 @@ patchDeleteEventModal({
 						)
 					}}
 				</span>
-				<span v-else>
+				<span
+					v-else
+					:itemprop="SeoItempropEventEnum.DURATION"
+				>
 					{{ convertToLocaleString(posterEvent.date ?? Date.now()) }}
 				</span>
 				<br />
 				({{ posterEvent.timezone?.timezoneOffset }}
 				{{ posterEvent.timezone?.timezoneName }})
 			</p>
-			<!-- TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса -->
-			<NuxtLink
+			<Address
+				:location="posterEvent.location"
 				class="event-info__geolink"
-				:to="`https://www.google.com/maps/place/${posterEvent.location.city}+${posterEvent.location.country}`"
-				target="_blank"
+				is-link
+			/>
+			<p
+				class="event-info__description"
+				:itemprop="SeoItempropEventEnum.DESCRIPTION"
 			>
-				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
-			</NuxtLink>
-			<p class="event-info__description">
 				{{ posterEvent.description }}
 			</p>
 		</div>
@@ -251,11 +303,7 @@ patchDeleteEventModal({
 		}
 
 		&__geolink {
-			font-size: var(--font-size-XS);
-			line-height: 16px;
-			text-decoration-line: underline;
-			color: #5c9ad2;
-			margin-bottom: var(--space-subsections);
+			margin-bottom: var(--space-unrelated-items);
 		}
 
 		&__description {
@@ -310,11 +358,6 @@ patchDeleteEventModal({
 		line-height: 0;
 		background-color: var(--color-input-field);
 		margin-bottom: 12px;
-
-		&--background {
-			background: url('@/assets/img/event-card@2x.png') center center no-repeat;
-			background-size: cover;
-		}
 	}
 
 	&__image {

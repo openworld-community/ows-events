@@ -24,7 +24,6 @@
     "prettier": "2.8.8"
   },
   "dependencies": {
-    "@esbuild/win32-x64": "^0.18.11",
-    "vue-virtual-scroller": "^1.1.2"
+    "@esbuild/win32-x64": "^0.18.11"
   }
 }

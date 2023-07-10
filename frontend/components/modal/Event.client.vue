@@ -3,6 +3,7 @@ import { getAllTimezones, getTimezone } from '@/services/timezone.services';
 import { useLocationStore, type Country, type City } from '@/stores/location.store';
 import { type EventOnPoster } from '@/../common/types';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
+import { EventTags, EventTagsTypes } from '../../../common/types/event';
 
 type Props = {
 	closeEventModal: () => void;
@@ -44,7 +45,8 @@ const inputValues = ref({
 	image: props.dataForEdit?.image ?? '',
 	price: props.dataForEdit?.price ?? '0',
 	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
-	url: props.dataForEdit?.url ?? ''
+	url: props.dataForEdit?.url ?? '',
+	tag: props.dataForEdit?.tags?.[0] ?? '' // Временное решение, пока не сделаем элементы формы под множественный выбор
 });
 const eventStartEpoch = computed(() =>
 	combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime()
@@ -67,7 +69,8 @@ const checkFormFilling = computed(() => {
 		inputValues.value.location.city &&
 		inputValues.value.location.address &&
 		inputValues.value.timezone &&
-		allTimezones.includes(inputValues.value.timezone)
+		allTimezones.includes(inputValues.value.timezone) &&
+		inputValues.value.tag
 	);
 });
 
@@ -90,7 +93,8 @@ const paramsForSubmit = computed(() => {
 		},
 		price: inputValues.value.price,
 		timezone: stringToTimezone(inputValues.value.timezone),
-		url: inputValues.value.url
+		url: inputValues.value.url,
+		tags: [inputValues.value.tag] as EventTagsTypes[]
 	};
 });
 
@@ -367,6 +371,18 @@ watch(
 							v-model="inputValues.url"
 							name="url"
 							:placeholder="$t('modal.new_event_modal.fields.url_placeholder')"
+							required
+						/>
+					</template>
+				</ModalUiModalSection>
+
+				<ModalUiModalSection :label="$t('modal.new_event_modal.fields.tags')">
+					<template #child>
+						<CommonUiBaseSelect
+							v-model="inputValues.tag"
+							name="tags"
+							:placeholder="$t('modal.new_event_modal.fields.tags_placeholder')"
+							:list="Object.values(EventTags)"
 							required
 						/>
 					</template>

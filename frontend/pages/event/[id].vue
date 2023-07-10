@@ -6,6 +6,7 @@ import DeleteEvent from '@/components/modal/DeleteEvent.vue';
 import type { UserInfo } from '@/../common/types/user';
 import { BASE_URL } from '../../constants/url';
 import Currency from '../../components/common/Currency.vue';
+import Tags from '../../components/common/Tags.vue';
 import Address from '../../components/common/Address.vue';
 import { trimString } from '../../utils/trimString';
 
@@ -109,6 +110,8 @@ patchDeleteEventModal({
 		itemscope
 		itemtype="https://schema.org/Event"
 	>
+	{{ posterEvent }}
+	{{ posterEvent.tags }}
 		<div
 			:class="['event-image', 'event-image__container']"
 			itemprop="image"
@@ -118,6 +121,11 @@ patchDeleteEventModal({
 				:price="posterEvent.price"
 				:currency="'RSD'"
 			/>
+
+			<Tags
+				:tags="posterEvent.tags"
+			/>
+
 			<img
 				v-if="!posterEvent?.image"
 				src="@/assets/img/event-card@2x.png"

@@ -23,7 +23,9 @@ export const modal = {
 			price: 'Стоимость, RSD',
 			price_placeholder: 'Укажите стоимость в RSD',
 			url_to_rigistration: 'Ссылка на регистрацию',
-			url_placeholder: 'https://example.com'
+			url_placeholder: 'https://example.com',
+			tags: 'Теги',
+			tags_placeholder: 'Выберите теги',
 		}
 	},
 	need_authorize_modal: {

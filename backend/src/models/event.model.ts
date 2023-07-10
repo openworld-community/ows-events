@@ -81,6 +81,13 @@ const schema = new Schema<IEventDocument>(
 					}
 				]
 			}
+		},
+		tags: {
+			type: [
+				{
+					type: String
+				}
+			],
 		}
 	},
 	{

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { EventOnPoster } from '../../../common/types';
 import Currency from '../common/Currency.vue';
+import Tags from '../common/Tags.vue';
 import Address from '../common/Address.vue';
 
 const props = defineProps<{ eventData: EventOnPoster }>();
@@ -26,6 +27,10 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 				:currency="'RSD'"
 			/>
 
+			<Tags
+				:tags="eventData.tags"
+			/>
+
 			<img
 				v-if="eventData.image"
 				itemprop="image"
@@ -42,7 +47,7 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 			<p
 				v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
 				class="card-description__author"
-        itemprop="composer"
+				itemprop="composer"
 			>
 				Peredelano
 			</p>

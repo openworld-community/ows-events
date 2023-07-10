@@ -4,11 +4,7 @@ import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
 import { v4 as uuid } from 'uuid';
-import VirtualScroller from 'vue-virtual-scroller';
-
-defineNuxtPlugin((nuxtApp) => {
-	nuxtApp.vueApp.use(VirtualScroller);
-});
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
 
 const { t } = useI18n();
 useHead({ titleTemplate: `%s / ${t('meta.home.title')}` });
@@ -154,6 +150,7 @@ const onUpdate = (
 		<DynamicScroller
 			:items="posterEvents"
 			:emit-update="true"
+			:min-item-size="54"
 			class="main-page__card-list"
 			@update="onUpdate"
 		>

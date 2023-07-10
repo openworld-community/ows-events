@@ -34,16 +34,6 @@ useHead({
 				Repo
 			</NuxtLink>
 		</p>
-		<div class="donate-block">
-			<h2>Поддержать проект чашкой кофе</h2>
-
-			<NuxtLink
-				href="/donate"
-				class="about__link"
-			>
-				Донаты
-			</NuxtLink>
-		</div>
 	</section>
 </template>
 
@@ -80,13 +70,5 @@ useHead({
 	color: var(--color-link);
 	text-decoration: underline;
 	font-weight: var(--font-weight-bold);
-}
-
-.donate-block {
-	padding-top: 20px;
-	padding-bottom: 20px;
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
 }
 </style>

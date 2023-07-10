@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Location } from '../../../common/types/address';
 import type { PropType } from 'vue';
+import {SeoItempropGlobalEnum, SeoItempropLocationEnum, SeoItemTypeEnum} from "../../constants/enums/seo";
 
 const props = defineProps({
 	location: {
@@ -27,9 +28,9 @@ const component = computed(() => {
 	<component
 		:is="component"
 		class="address"
-		:to="isLink ? getLocationLink(location) : undefined"
-		:target="isLink ? '_blank' : undefined"
-		:itemprop="isLink ? 'url' : undefined"
+		:to="isLink ? getLocationLink(location) : null"
+		:target="isLink ? '_blank' : null"
+		:itemprop="isLink ? SeoItempropGlobalEnum.URL : null"
 	>
 		<CommonIcon
 			v-if="withPin"
@@ -38,26 +39,26 @@ const component = computed(() => {
 		/>
 		<span
 			:class="['address__text', { 'address__text--link': isLink }]"
-			itemprop="address"
+			:itemprop="SeoItempropLocationEnum.GROUP_ITEMPROP"
 			itemscope
-			itemtype="https://schema.org/PostalAddress"
+			:itemtype="SeoItemTypeEnum.ADDRESS"
 		>
 			<span
 				v-if="props.location.country"
-				itemprop="addressCountry"
+				:itemprop="SeoItempropLocationEnum.COUNTRY"
 			>
-				{{ props.location.country }},
+				{{ location.country }},
 			</span>
 			<span
-				v-if="props.location.city"
-				itemprop="addressLocality"
+				v-if="location.city"
+				:itemprop="SeoItempropLocationEnum.CITY"
 			>
-				{{ props.location.city }}
+				{{ location.city }}
 			</span>
 			<span
-				v-if="props.location?.address"
-				itemprop="location"
-				>, {{ props.location.address }}
+				v-if="location?.address"
+				:itemprop="SeoItempropLocationEnum.ADDRESS"
+				>, {{ location.address }}
 			</span>
 		</span>
 	</component>

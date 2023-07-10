@@ -1,32 +1,37 @@
 <script setup lang="ts">
 import type { EventOnPoster } from '../../../common/types';
-import Currency from '../common/Tag.vue';
 import Address from '../common/Address.vue';
+import {
+	SeoItempropEventEnum,
+	SeoItempropGlobalEnum,
+	SeoItemTypeEnum
+} from '../../constants/enums/seo';
+import Tag from '../common/Tag.vue';
 
-const props = defineProps<{ eventData: EventOnPoster }>();
+defineProps<{ eventData: EventOnPoster }>();
 </script>
 
 <template>
 	<NuxtLink
 		itemscope
-		itemtype="https://schema.org/Event"
+		:itemtype="SeoItemTypeEnum.EVENT"
 		class="card"
-		:to="`/event/${props.eventData.id}`"
-		itemprop="url"
+		:to="`/event/${eventData.id}`"
+		:itemprop="SeoItempropGlobalEnum.URL"
 	>
 		<div
 			:class="[
 				'card__image-container',
 				{ 'card__image-container--background': !eventData.image }
 			]"
-			itemprop="image"
+			:itemprop="SeoItempropGlobalEnum.IMAGE"
 		>
 			<img
 				v-if="eventData.image"
-				itemprop="image"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
 				:alt="$t('home.events.image_alt')"
 				class="card__image"
-				:src="getEventImage(props.eventData)"
+				:src="getEventImage(eventData)"
 				width="375"
 				height="176"
 			/>
@@ -37,32 +42,35 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 			<p
 				v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
 				class="card-description__author"
-				itemprop="composer"
+				:itemprop="SeoItempropEventEnum.ORGANIZER"
 			>
 				Peredelano
 			</p>
 			<Address
 				class="card-description__geo"
-				:location="props.eventData.location"
+				:location="eventData.location"
 				with-pin
 			/>
 			<h2
 				class="card-description__title"
-				itemprop="name"
+				:itemprop="SeoItempropEventEnum.NAME"
 			>
-				{{ props.eventData.title }}
+				{{ eventData.title }}
 			</h2>
 			<p
 				class="card-description__datetime"
-				itemprop="startDate"
+				:itemprop="SeoItempropEventEnum.START_DATE"
 			>
-				{{ convertToLocaleString(props.eventData.date) }}
-				<span class="card-description__datetime--timezone">
-					({{ props.eventData.timezone?.timezoneOffset }},
-					{{ props.eventData.timezone?.timezoneName }})
+				{{ convertToLocaleString(eventData.date) }}
+				<span
+					v-if="eventData.timezone"
+					class="card-description__datetime--timezone"
+				>
+					({{ eventData.timezone?.timezoneOffset }},
+					{{ eventData.timezone?.timezoneName }})
 				</span>
 			</p>
-			<Currency
+			<Tag
 				:price="eventData.price"
 				:currency="'RSD'"
 			/>

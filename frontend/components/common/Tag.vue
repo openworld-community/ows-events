@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { type PropType } from 'vue';
+import { SeoItempropPriceEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
 
 const { t } = useI18n();
 
@@ -40,34 +41,34 @@ const priceData = computed(() => {
 <template>
 	<span
 		:class="`tag ${className}`"
-		itemprop="offers"
+		:itemprop="SeoItempropPriceEnum.GROUP_ITEMPROP"
 		itemscope
-		itemtype="https://schema.org/Offer"
+		:itemtype="SeoItemTypeEnum.OFFER"
 	>
 		{{ priceData }}
 		<!--		<span-->
 		<!--				v-if="price === '0'"-->
-		<!--				itemprop="isAccessibleForFree"-->
+		<!--				:itemprop="SeoItempropPriceEnum.FREE"-->
 		<!--				content="true"-->
 		<!--		>-->
 		<!--			{{ free }}-->
 		<!--		</span>-->
 		<!--		<span-->
 		<!--				v-else-if="price"-->
-		<!--				itemprop="price"-->
+		<!--				:itemprop="SeoItempropPriceEnum.PRICE"-->
 		<!--		>-->
 		<!--			<span-->
 		<!--					class="event-price"-->
-		<!--					itemprop="price"-->
+		<!--					:itemprop="SeoItempropPriceEnum.PRICE"-->
 		<!--					:content="price"-->
 		<!--			>-->
 		<!--				{{ price }}-->
-		<!--				<span itemprop="priceCurrency">-->
+		<!--				<span :itemprop="SeoItempropPriceEnum.CURRENCY">-->
 		<!--					{{ currency }}-->
 		<!--				</span>-->
 		<!--			</span>-->
 		<!--			<meta-->
-		<!--					itemprop="priceCurrency"-->
+		<!--					:itemprop="SeoItempropPriceEnum.CURRENCY"-->
 		<!--					:content="currency"-->
 		<!--			>-->
 		<!--		</span>-->

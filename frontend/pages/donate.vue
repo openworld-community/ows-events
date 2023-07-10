@@ -22,8 +22,7 @@ const copy = (text: string) => {
 			<li class="donate-row">
 				<h3>patreon</h3>
 				<a href="https://patreon.com/afisha_peredelano">
-					https://patreon.com/afisha_peredelano</a
-				>
+					https://patreon.com/afisha_peredelano</a>
 				<button
 					aria-label="Копировать"
 					@click="copy('https://patreon.com/afisha_peredelano')"

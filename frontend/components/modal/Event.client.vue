@@ -3,7 +3,7 @@ import { getAllTimezones, getTimezone } from '@/services/timezone.services';
 import { useLocationStore, type Country, type City } from '@/stores/location.store';
 import { type EventOnPoster } from '@/../common/types';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
-import { EventTags, EventTagsTypes } from '../../../common/types/event';
+import { EventTags, type EventTagsTypes } from '../../../common/types/event';
 
 type Props = {
 	closeEventModal: () => void;

@@ -31,7 +31,16 @@ useHead({
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				Repo
+				Репозиторий
+			</NuxtLink>
+		</p>
+		<p>
+			Читайте наш блог:
+			<NuxtLink
+				to="/blog/AfishaPeredelano"
+				class="about__link"
+			>
+				Блог
 			</NuxtLink>
 		</p>
 	</section>

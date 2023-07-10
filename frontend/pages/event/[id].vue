@@ -33,13 +33,21 @@ useSeoMeta({
 	// для реактивных тегов используем () => value
 	ogSiteName: () => t('meta.title'),
 	ogType: 'website',
-	title: () => `${posterEvent.value?.title ?? t('meta.title')} / ${posterEvent.value?.location?.city ?? ''}`,
-	ogTitle: () => `${posterEvent.value?.title ?? t('meta.title')} / ${posterEvent.value?.location?.city ?? ''}`,
-	description: () => trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
-	ogDescription: () => trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
+	title: () =>
+		`${posterEvent.value?.title ?? t('meta.title')} / ${
+			posterEvent.value?.location?.city ?? ''
+		}`,
+	ogTitle: () =>
+		`${posterEvent.value?.title ?? t('meta.title')} / ${
+			posterEvent.value?.location?.city ?? ''
+		}`,
+	description: () =>
+		trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
+	ogDescription: () =>
+		trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
 	ogImage: eventImage,
-	ogUrl: () => BASE_URL + route.path,
-})
+	ogUrl: () => BASE_URL + route.path
+});
 
 const isEditable = computed(() => {
 	return posterEvent.value ? posterEvent.value.date > Date.now() : false;
@@ -110,8 +118,6 @@ patchDeleteEventModal({
 		itemscope
 		itemtype="https://schema.org/Event"
 	>
-	{{ posterEvent }}
-	{{ posterEvent.tags }}
 		<div
 			:class="['event-image', 'event-image__container']"
 			itemprop="image"
@@ -122,9 +128,7 @@ patchDeleteEventModal({
 				:currency="'RSD'"
 			/>
 
-			<Tags
-				:tags="posterEvent.tags"
-			/>
+			<Tags :tags="posterEvent.tags" />
 
 			<img
 				v-if="!posterEvent?.image"

@@ -3,6 +3,12 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
+import { v4 as uuid } from 'uuid';
+import VirtualScroller from 'vue-virtual-scroller';
+
+defineNuxtPlugin((nuxtApp) => {
+	nuxtApp.vueApp.use(VirtualScroller);
+});
 
 const { t } = useI18n();
 useHead({ titleTemplate: `%s / ${t('meta.home.title')}` });
@@ -28,14 +34,64 @@ const eventsQuery = ref({
 	city: getFirstQuery(route.query.city),
 	country: getFirstQuery(route.query.country)
 });
-const debouncedEventsRequestQuery = refDebounced(
-	computed(() => ({ ...eventsQuery.value })),
-	500,
-	{ maxWait: 5000 }
-);
-const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
-	data: { query: debouncedEventsRequestQuery }
-});
+// const debouncedEventsRequestQuery = refDebounced(
+// 	computed(() => ({ ...eventsQuery.value })),
+// 	500,
+// 	{ maxWait: 5000 }
+// );
+// const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
+// 	data: { query: debouncedEventsRequestQuery }
+// });
+
+type Timezone = {
+	timezoneName: string;
+	timezoneOffset: string;
+};
+
+interface EventOnPoster {
+	id: string;
+	creatorId?: string;
+	title: string;
+	description: string;
+	date: number;
+	durationInSeconds: number;
+	location: {
+		country: string;
+		city: string;
+		address: string;
+	};
+	image: string;
+	price: string;
+	timezone?: Timezone;
+	url: string;
+}
+
+const posterEvents: Ref<EventOnPoster[] | null> = ref([]);
+
+for (let i = 0; i < 1000; i++) {
+	const event: EventOnPoster = {
+		date: +new Date(),
+		id: uuid(),
+		description: 'Хочу пицу, чтоб прям вкусная с ума сойдешь и вообще еще че нить',
+		durationInSeconds: 0,
+		title: 'Darova',
+		image: '/image/7af2c5b3-3697-41b5-9f36-5151c11a6bb6.png',
+		location: {
+			country: 'Serbia',
+			city: 'Belgrade',
+			address: 'petushovskiy pr-kt'
+		},
+		price: '3000',
+		timezone: {
+			timezoneName: 'Europe/Belgrade',
+			timezoneOffset: '+02:00'
+		},
+		url: 'vk.com'
+	};
+	if (posterEvents.value) {
+		posterEvents.value.push(event);
+	}
+}
 
 const onButtonClick = () => {
 	if (useCookie('token').value) {
@@ -45,6 +101,36 @@ const onButtonClick = () => {
 	}
 };
 const now = Date.now();
+
+interface viewAndVisible {
+	viewStartIdx: number;
+	viewEndIdx: number;
+	visibleStartIdx: number;
+	visibleEndIdx: number;
+}
+
+const updateParts: Ref<viewAndVisible> = ref({
+	viewStartIdx: 0,
+	viewEndIdx: 0,
+	visibleStartIdx: 0,
+	visibleEndIdx: 0
+});
+
+// const onResize = () => {
+//   console.log('resize')
+// },
+
+const onUpdate = (
+	viewStartIndex: number,
+	viewEndIndex: number,
+	visibleStartIndex: number,
+	visibleEndIndex: number
+) => {
+	updateParts.value.viewStartIdx = viewStartIndex;
+	updateParts.value.viewEndIdx = viewEndIndex;
+	updateParts.value.visibleStartIdx = visibleStartIndex;
+	updateParts.value.visibleEndIdx = visibleEndIndex;
+};
 </script>
 
 <template>
@@ -65,7 +151,23 @@ const now = Date.now();
 			class="main-page__filter"
 		/>
 
-		<ul class="main-page__card-list">
+		<DynamicScroller
+			:items="posterEvents"
+			:emit-update="true"
+			class="main-page__card-list"
+			@update="onUpdate"
+		>
+			<template #default="{ item, index, active }">
+				<DynamicScrollerItem
+					:item="item"
+					:active="active"
+					:data-index="index"
+				>
+				</DynamicScrollerItem>
+			</template>
+		</DynamicScroller>
+
+		<!-- <ul class="main-page__card-list">
 			<li
 				v-for="event in posterEvents"
 				:key="event.id"
@@ -74,9 +176,9 @@ const now = Date.now();
 					:class="{ expired: event.date < now }"
 					:event-data="event"
 				/>
-				<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
+				<HomeAdCard v-else :ad-data="event" class="ad-block" />
 			</li>
-		</ul>
+		</ul> -->
 
 		<CommonButton
 			class="add-event-button"

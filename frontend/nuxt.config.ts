@@ -2,6 +2,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import path from 'path';
 import { fileURLToPath, URL } from 'node:url';
+import VirtualScroller from 'vue-virtual-scroller';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -61,7 +62,8 @@ export default defineNuxtConfig({
 				iconDirs: [path.resolve(process.cwd(), 'assets/img/icon')],
 				symbolId: '[name]',
 				inject: 'body-first'
-			})
+			}),
+			VirtualScroller
 		],
 		resolve: { alias: { '@common': fileURLToPath(new URL('../common', import.meta.url)) } }
 	},

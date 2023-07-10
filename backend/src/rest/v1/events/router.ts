@@ -8,8 +8,8 @@ import {
 	IGetEventsRoute,
 	IUpdateEventRoute
 } from './type';
-import { 
-	getEventSchema, 
+import {
+	getEventSchema,
 	getEventsSchema,
 	addEventSchema,
 	deleteEventSchema,
@@ -17,9 +17,8 @@ import {
 	findEventsSchema
 } from './schema';
 
-
 export const eventsApi = async (fastify: FastifyInstance) => {
-	fastify.get<IGetEventsRoute>('/', { schema: getEventsSchema, handler: getEvents }) 
+	fastify.get<IGetEventsRoute>('/', { schema: getEventsSchema, handler: getEvents });
 
 	fastify.get<IGetEventRoute>('/:id', { schema: getEventSchema, handler: getEvent });
 

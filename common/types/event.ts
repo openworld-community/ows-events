@@ -1,5 +1,34 @@
 import type { Timezone } from './location';
 
+export type EventTagsTypes =
+	| 'CONCERT'
+	| 'EXHIBITION'
+	| 'FESTIVAL'
+	| 'LECTURE'
+	| 'MASTER_CLASS'
+	| 'MEETING'
+	| 'PARTY'
+	| 'PERFORMANCE'
+	| 'SPORT'
+	| 'THEATRE'
+	| 'TOUR'
+	| 'OTHER';
+
+export const EventTags: EventTagsTypes[] = [
+	'CONCERT',
+	'EXHIBITION',
+	'FESTIVAL',
+	'LECTURE',
+	'MASTER_CLASS',
+	'MEETING',
+	'PARTY',
+	'PERFORMANCE',
+	'SPORT',
+	'THEATRE',
+	'TOUR',
+	'OTHER'
+];
+
 export type EventOnPoster = {
 	id: string;
 	creatorId?: string;
@@ -10,12 +39,13 @@ export type EventOnPoster = {
 	location: {
 		country: string;
 		city: string;
-        address: string;
+		address: string;
 	};
 	image: string;
 	price: string;
 	timezone?: Timezone;
 	url: string;
+	tags?: EventTagsTypes[];
 };
 
 export type PostEventPayload = {
@@ -29,6 +59,7 @@ export type PostEventPayload = {
 		location: { country: string; city: string; address: string };
 		title: string;
 		url: string;
+		tags: EventTagsTypes[];
 	};
 };
 

@@ -5,6 +5,9 @@ import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
 // TEST
 import { v4 as uuid } from 'uuid';
+// import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
+import { useVirtualList } from '@vueuse/core';
+import console, { dir } from 'console';
 
 const { t } = useI18n();
 useHead({ titleTemplate: `%s / ${t('meta.home.title')}` });
@@ -72,15 +75,17 @@ interface EventOnPoster {
 	url: string;
 }
 
-const posterEvents: Ref<EventOnPoster[] | null> = ref([]);
+const posterEvents: Ref<EventOnPoster[]> = ref([]);
 
-for (let i = 0; i < 1000; i++) {
+const loadEvents = (count: number) => {
+	const list = [];
+
 	const event: EventOnPoster = {
 		date: +new Date(),
 		id: uuid(),
 		description: 'Хочу пицу, чтоб прям вкусная с ума сойдешь и вообще еще че нить',
 		durationInSeconds: 0,
-		title: 'Darova',
+		title: 'peredelanoconf',
 		image: '/image/7af2c5b3-3697-41b5-9f36-5151c11a6bb6.png',
 		location: {
 			country: 'Serbia',
@@ -94,40 +99,64 @@ for (let i = 0; i < 1000; i++) {
 		},
 		url: 'vk.com'
 	};
-	if (posterEvents.value) {
-		posterEvents.value.push(event);
+
+	for (let i = 0; i < count; i++) {
+		list.push(event);
 	}
-}
 
-interface viewAndVisible {
-	viewStartIdx: number;
-	viewEndIdx: number;
-	visibleStartIdx: number;
-	visibleEndIdx: number;
-}
+	return list;
+};
 
-const updateParts: Ref<viewAndVisible> = ref({
-	viewStartIdx: 0,
-	viewEndIdx: 0,
-	visibleStartIdx: 0,
-	visibleEndIdx: 0
+const { list, containerProps, wrapperProps } = useVirtualList(posterEvents, {
+	itemHeight: 336,
+	overscan: 20
 });
 
-// const onResize = () => {
-//   console.log('resize')
-// },
+const listItem = ref<HTMLElement | null>(null);
 
-const onUpdate = (
-	viewStartIndex: number,
-	viewEndIndex: number,
-	visibleStartIndex: number,
-	visibleEndIndex: number
-) => {
-	updateParts.value.viewStartIdx = viewStartIndex;
-	updateParts.value.viewEndIdx = viewEndIndex;
-	updateParts.value.visibleStartIdx = visibleStartIndex;
-	updateParts.value.visibleEndIdx = visibleEndIndex;
-};
+useInfiniteScroll(
+	listItem,
+	() => {
+		posterEvents.value.push(...loadEvents(20));
+	},
+	{ distance: 20 }
+);
+
+watch(posterEvents, (events) => {
+	console.log(events);
+
+	// list.value.push(events);
+});
+
+// interface viewAndVisible {
+// 	viewStartIdx: number;
+// 	viewEndIdx: number;
+// 	visibleStartIdx: number;
+// 	visibleEndIdx: number;
+// }
+
+// const updateParts: Ref<viewAndVisible> = ref({
+// 	viewStartIdx: 0,
+// 	viewEndIdx: 0,
+// 	visibleStartIdx: 0,
+// 	visibleEndIdx: 0
+// });
+
+// const onResize = (): void => {
+// 	console.log('resize');
+// };
+
+// const onUpdate = (
+// 	viewStartIndex: number,
+// 	viewEndIndex: number,
+// 	visibleStartIndex: number,
+// 	visibleEndIndex: number
+// ): void => {
+// 	updateParts.value.viewStartIdx = viewStartIndex;
+// 	updateParts.value.viewEndIdx = viewEndIndex;
+// 	updateParts.value.visibleStartIdx = visibleStartIndex;
+// 	updateParts.value.visibleEndIdx = visibleEndIndex;
+// };
 </script>
 
 <template>
@@ -148,32 +177,61 @@ const onUpdate = (
 			class="main-page__filter"
 		/>
 
-		<DynamicScroller
+		<!-- <DynamicScroller
 			:items="posterEvents"
 			:emit-update="true"
-			:min-item-size="54"
+			:min-item-size="280"
 			class="main-page__card-list"
+			@resize="onResize"
 			@update="onUpdate"
 		>
-			<template #default="{ item, index, active }">
+			<template #default="{ item: event, index, active }">
 				<DynamicScrollerItem
-					:item="item"
+					:item="event"
 					:active="active"
 					:data-index="index"
+					:data-active="active"
+					:size-dependencies="[event.description]"
 				>
+					<HomeEventPreviewCard
+						:class="{ expired: event.date < now }"
+						:event-data="event"
+					/>
 				</DynamicScrollerItem>
 			</template>
-		</DynamicScroller>
+		</DynamicScroller> -->
+
+		<ul class="main-page__card-list">
+			<div
+				v-bind="containerProps"
+				style="overflow-y: unset"
+			>
+				<div
+					v-bind="wrapperProps"
+					ref="listItem"
+				>
+					<li
+						v-for="{ data: event } in list"
+						:key="event.id"
+					>
+						<HomeEventPreviewCard
+							:class="{ expired: event.date < now }"
+							:event-data="event"
+						/>
+					</li>
+				</div>
+			</div>
+		</ul>
 
 		<!-- <ul class="main-page__card-list">
 			<li
 				v-for="event in posterEvents"
 				:key="event.id"
 			>
-				<HomeEventPreviewCard
-					:class="{ expired: event.date < now }"
-					:event-data="event"
-				/>
+					<HomeEventPreviewCard
+						:class="{ expired: event.date < now }"
+						:event-data="event"
+					/>
 				<HomeAdCard v-else :ad-data="event" class="ad-block" />
 			</li>
 		</ul> -->

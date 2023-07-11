@@ -91,7 +91,7 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 				:key="item.method"
 				:method="item.method"
 				:icon="key as string"
-				:color="`var(--color-donate-icon-${key as string})`"
+				:color="`var(--color-donate-${key as string})`"
 				:link="item?.link"
 				:copy-data="item?.account"
 			/>

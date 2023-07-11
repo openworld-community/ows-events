@@ -3,7 +3,7 @@ import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
-import type { UserInfo } from '@/../common/types/user';
+import type { TGUserInfo } from '@/../common/types/user';
 import { BASE_URL } from '../../constants/url';
 
 import { trimString } from '../../utils/trimString';
@@ -20,7 +20,7 @@ definePageMeta({ name: RouteNameEnum.EVENT });
 const route = useRoute();
 const id = getFirstParam(route.params.id);
 
-const user = useCookie<UserInfo | null>('user');
+const user = useCookie<TGUserInfo | null>('user');
 
 const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ data: { id } });
 

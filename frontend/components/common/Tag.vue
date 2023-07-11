@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { type PropType } from 'vue';
+  import { SeoItempropPriceEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
 
   const { t } = useI18n();
 
@@ -39,35 +40,35 @@
 
 <template>
 	<span
-    :class="`card__price ${className}`"
-    itemprop="offers"
+    :class="`tag ${className}`"
+    :itemprop="SeoItempropPriceEnum.GROUP_ITEMPROP"
     itemscope
-    itemtype="https://schema.org/Offer"
+    :itemtype="SeoItemTypeEnum.OFFER"
   >
 		{{ priceData }}
     <!--		<span-->
     <!--				v-if="price === '0'"-->
-    <!--				itemprop="isAccessibleForFree"-->
+    <!--				:itemprop="SeoItempropPriceEnum.FREE"-->
     <!--				content="true"-->
     <!--		>-->
     <!--			{{ free }}-->
     <!--		</span>-->
     <!--		<span-->
     <!--				v-else-if="price"-->
-    <!--				itemprop="price"-->
+    <!--				:itemprop="SeoItempropPriceEnum.PRICE"-->
     <!--		>-->
     <!--			<span-->
     <!--					class="event-price"-->
-    <!--					itemprop="price"-->
+    <!--					:itemprop="SeoItempropPriceEnum.PRICE"-->
     <!--					:content="price"-->
     <!--			>-->
     <!--				{{ price }}-->
-    <!--				<span itemprop="priceCurrency">-->
+    <!--				<span :itemprop="SeoItempropPriceEnum.CURRENCY">-->
     <!--					{{ currency }}-->
     <!--				</span>-->
     <!--			</span>-->
     <!--			<meta-->
-    <!--					itemprop="priceCurrency"-->
+    <!--					:itemprop="SeoItempropPriceEnum.CURRENCY"-->
     <!--					:content="currency"-->
     <!--			>-->
     <!--		</span>-->
@@ -79,21 +80,17 @@
 	</span>
 </template>
 <style lang="less" scoped>
-  .card__price {
+  .tag {
     min-width: 50px;
-    position: absolute;
-    left: 16px;
-    top: 12px;
+    max-width: max-content;
 
-    font-size: var(--font-size-XS);
-    line-height: 16px;
+    font-size: var(--font-size-S);
+    line-height: 20px;
     text-align: center;
 
+    border: 1px solid var(--color-accent-green-main);
     border-radius: 16px;
-    color: var(--color-white);
-    background-color: var(--color-accent-green-main);
 
-    padding: 6px 10px;
-    z-index: 1;
+    padding: 3px 10px;
   }
 </style>

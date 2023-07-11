@@ -5,9 +5,14 @@ import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
 import type { UserInfo } from '@/../common/types/user';
 import { BASE_URL } from '../../constants/url';
-import Currency from '../../components/common/Currency.vue';
-import Address from '../../components/common/Address.vue';
+
 import { trimString } from '../../utils/trimString';
+import {
+	SeoItempropEventEnum,
+	SeoItempropGlobalEnum,
+	SeoItemTypeEnum
+} from '../../constants/enums/seo';
+import Tag from '../../components/common/Tag.vue';
 
 const { t } = useI18n();
 
@@ -32,13 +37,21 @@ useSeoMeta({
 	// для реактивных тегов используем () => value
 	ogSiteName: () => t('meta.title'),
 	ogType: 'website',
-	title: () => `${posterEvent.value?.title ?? t('meta.title')} / ${posterEvent.value?.location?.city ?? ''}`,
-	ogTitle: () => `${posterEvent.value?.title ?? t('meta.title')} / ${posterEvent.value?.location?.city ?? ''}`,
-	description: () => trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
-	ogDescription: () => trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
+	title: () =>
+		`${posterEvent.value?.title ?? t('meta.title')} / ${
+			posterEvent.value?.location?.city ?? ''
+		}`,
+	ogTitle: () =>
+		`${posterEvent.value?.title ?? t('meta.title')} / ${
+			posterEvent.value?.location?.city ?? ''
+		}`,
+	description: () =>
+		trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
+	ogDescription: () =>
+		trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
 	ogImage: eventImage,
-	ogUrl: () => BASE_URL + route.path,
-})
+	ogUrl: () => BASE_URL + route.path
+});
 
 const isEditable = computed(() => {
 	return posterEvent.value ? posterEvent.value.date > Date.now() : false;
@@ -107,13 +120,13 @@ patchDeleteEventModal({
 		v-if="posterEvent"
 		class="event"
 		itemscope
-		itemtype="https://schema.org/Event"
+		:itemtype="SeoItemTypeEnum.EVENT"
 	>
 		<div
 			:class="['event-image', 'event-image__container']"
-			itemprop="image"
+			:itemprop="SeoItempropGlobalEnum.IMAGE"
 		>
-			<Currency
+			<Tag
 				:class-name="'event-image__price'"
 				:price="posterEvent.price"
 				:currency="'RSD'"
@@ -123,14 +136,14 @@ patchDeleteEventModal({
 				src="@/assets/img/event-card@2x.png"
 				:alt="$t('event.image.event')"
 				class="event-image__image"
-				itemprop="image"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
 			<img
 				v-else
 				:src="eventImage"
 				:alt="$t('event.image.event')"
 				class="event-image__image"
-				itemprop="image"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
 		</div>
 
@@ -139,13 +152,13 @@ patchDeleteEventModal({
 			<p
 				v-if="posterEvent.title.toLowerCase().includes('peredelanoconf')"
 				class="event-info__author"
-				itemprop="composer"
+				:itemprop="SeoItempropEventEnum.ORGANIZER"
 			>
 				Peredelano
 			</p>
 			<h1
 				class="event-info__title"
-				itemprop="name"
+				:itemprop="SeoItempropEventEnum.NAME"
 			>
 				{{ posterEvent.title }}
 			</h1>
@@ -153,7 +166,7 @@ patchDeleteEventModal({
 			<p class="event-info__datetime">
 				<span
 					v-if="posterEvent.durationInSeconds"
-					itemprop="duration"
+					:itemprop="SeoItempropEventEnum.DURATION"
 				>
 					{{ convertToLocaleString(posterEvent.date) }}
 					-
@@ -165,7 +178,7 @@ patchDeleteEventModal({
 				</span>
 				<span
 					v-else
-					itemprop="duration"
+					:itemprop="SeoItempropEventEnum.DURATION"
 				>
 					{{ convertToLocaleString(posterEvent.date ?? Date.now()) }}
 				</span>
@@ -173,17 +186,14 @@ patchDeleteEventModal({
 				({{ posterEvent.timezone?.timezoneOffset }}
 				{{ posterEvent.timezone?.timezoneName }})
 			</p>
-			<NuxtLink
+			<CommonAddress
+				:location="posterEvent.location"
 				class="event-info__geolink"
-				:to="getLocationLink(posterEvent.location)"
-				target="_blank"
-				itemprop="url"
-			>
-				<Address :location="posterEvent.location" />
-			</NuxtLink>
+				is-link
+			/>
 			<p
 				class="event-info__description"
-				itemprop="description"
+				:itemprop="SeoItempropEventEnum.DESCRIPTION"
 			>
 				{{ posterEvent.description }}
 			</p>
@@ -293,11 +303,7 @@ patchDeleteEventModal({
 		}
 
 		&__geolink {
-			font-size: var(--font-size-XS);
-			line-height: 16px;
-			text-decoration-line: underline;
-			color: #5c9ad2;
-			margin-bottom: var(--space-subsections);
+			margin-bottom: var(--space-unrelated-items);
 		}
 
 		&__description {

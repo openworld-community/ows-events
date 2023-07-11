@@ -30,6 +30,13 @@ const emit = defineEmits(['close']);
 			@click="emit('close')"
 		/>
 
+    <HeaderNavigationNavItem
+      :link-to="{name: RouteNameEnum.DONATION}"
+      :text="$t('header.donation')"
+      icon-name="donate"
+      @click="emit('close')"
+      />
+
 		<HeaderNavigationNavItem
 			:link-to="{ name: RouteNameEnum.LIMITATION_OF_LIABILITY }"
 			:text="$t('header.limitation_of_liability')"

@@ -8,6 +8,8 @@ export const global = {
     share: 'Поделиться',
     cancel: 'Отмена',
     search: 'Поиск',
-    delete: 'Очистить'
+    delete: 'Очистить',
+    follow: 'Перейти',
+    copy: 'Копировать'
   }
 };

@@ -12,11 +12,12 @@ import { paymentInfoApi } from './rest/v1/payment-info/router';
 import { registrationApi } from './rest/v1/registration/router';
 import { timezonesApi } from './rest/v1/timezones/router';
 import { openApiOptions, openApiUiOptions } from './docs';
-import { userController } from './controllers/user-controller';
 import { connectToMongo } from './boot/connectToMongo';
 import { authApi } from './rest/v1/auth/router';
 import { ajvFilePlugin } from './config/ajvPlugins';
 import { manualModerationApi } from './rest/v1/moderation/router';
+import { userApi } from './rest/v1/user/router';
+import { migrate } from './migrations/user-structure-12-06-23';
 
 const server = fastify({
 	logger: true,
@@ -29,6 +30,7 @@ connectToMongo()
 	.then(() => {
 		// eslint-disable-next-line no-console
 		console.log('Connected to mongo');
+		migrate();
 	})
 	.catch((e) => {
 		// eslint-disable-next-line no-console
@@ -66,12 +68,7 @@ server.register(timezonesApi, { prefix: '/api/timezones' });
 server.register(registrationApi, { prefix: '/api/registration' });
 server.register(paymentInfoApi, { prefix: '/api/payment-info' });
 server.register(imageApi, { prefix: '/api/image' });
-
-server.get<{
-	Querystring: {
-		token: string;
-	};
-}>('/api/user/info', async (request) => userController.getUserInfoByToken(request.query.token));
+server.register(userApi, { prefix: '/api/user' });
 
 server.setNotFoundHandler((req, reply) => {
 	reply.sendFile('index.html');

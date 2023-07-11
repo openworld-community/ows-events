@@ -1,8 +1,8 @@
-import type { UserInfo } from '~/../common/types/user';
 import { defineQuery, useBackendFetch } from './utils';
+import type { TGUserInfo } from '../../../common/types/user';
 
 export const auth = {
-	getUser: defineQuery<(input: { userToken: string }) => UserInfo | null>((input) => {
-		return useBackendFetch('user/info', { query: { token: input.userToken } });
+	getUser: defineQuery<(input: { userToken: string }) => TGUserInfo | null>((input) => {
+		return useBackendFetch('user/info/tg', { query: { token: input.userToken } });
 	})
 };

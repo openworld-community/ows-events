@@ -1,5 +1,5 @@
 export const meta = {
-	title: 'Афиша',
+	title: 'Афиша Peredelano',
 	home: {
 		title: 'Главная'
 	},
@@ -8,5 +8,9 @@ export const meta = {
 	},
 	payment_info: {
 		title: 'Оплата'
+	},
+	donate: {
+		title: 'Поддержать проект',
+		description: 'Благодаря вашей помощи мы развиваемся, расширяем возможности проекта и реализуем наши самые смелые идеи'
 	}
 };

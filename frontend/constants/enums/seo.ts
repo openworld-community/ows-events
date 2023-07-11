@@ -5,7 +5,9 @@ export const SEO_SCHEMA_BASE_URL = 'https://schema.org/';
 export enum SeoItemTypeEnum {
 	OFFER = `${SEO_SCHEMA_BASE_URL}Offer`,
 	EVENT = `${SEO_SCHEMA_BASE_URL}Event`,
-	ADDRESS = `${SEO_SCHEMA_BASE_URL}PostalAddress`
+	ADDRESS = `${SEO_SCHEMA_BASE_URL}PostalAddress`,
+	DONATE = `${SEO_SCHEMA_BASE_URL}DonateAction`,
+	DONATE_METHOD = `${SEO_SCHEMA_BASE_URL}MoneyTransfer`
 }
 
 // ITEMPROPS
@@ -13,7 +15,9 @@ export enum SeoItemTypeEnum {
 // Global
 export enum SeoItempropGlobalEnum {
 	URL = 'url',
-	IMAGE = 'image'
+	IMAGE = 'image',
+	TITLE = 'name',
+	DESCRIPTION = 'description'
 }
 
 // Event
@@ -39,4 +43,11 @@ export enum SeoItempropLocationEnum {
 	COUNTRY = 'addressCountry',
 	CITY = 'addressLocality',
 	ADDRESS = 'location'
+}
+
+// Donation
+export enum SeoItempropDonateEnum {
+	GROUP_ITEMPROP = 'potentialAction',
+	METHOD = 'instrument',
+	LINK = 'target'
 }

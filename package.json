@@ -22,9 +22,5 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "prettier": "2.8.8"
-  },
-  "dependencies": {
-    "@esbuild/win32-x64": "^0.18.11",
-    "@types/vue-virtual-scroller": "npm:@earltp/vue-virtual-scroller@^1.0.1"
   }
 }

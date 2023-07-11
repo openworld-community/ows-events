@@ -3,6 +3,7 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
+// TEST
 import { v4 as uuid } from 'uuid';
 
 const { t } = useI18n();
@@ -38,6 +39,16 @@ const eventsQuery = ref({
 // 	data: { query: debouncedEventsRequestQuery }
 // });
 
+const onButtonClick = () => {
+	if (useCookie('token').value) {
+		openEventModal();
+	} else {
+		openNeedAuthorizeModal();
+	}
+};
+const now = Date.now();
+
+// TEST
 type Timezone = {
 	timezoneName: string;
 	timezoneOffset: string;
@@ -87,15 +98,6 @@ for (let i = 0; i < 1000; i++) {
 		posterEvents.value.push(event);
 	}
 }
-
-const onButtonClick = () => {
-	if (useCookie('token').value) {
-		openEventModal();
-	} else {
-		openNeedAuthorizeModal();
-	}
-};
-const now = Date.now();
 
 interface viewAndVisible {
 	viewStartIdx: number;

@@ -201,27 +201,61 @@ watch(posterEvents, (events) => {
 			</template>
 		</DynamicScroller> -->
 
-		<ul class="main-page__card-list">
-			<div
-				v-bind="containerProps"
-				style="overflow-y: unset"
+		<!--		<ul class="main-page__card-list">-->
+		<!--			<div-->
+		<!--				v-bind="containerProps"-->
+		<!--				style="overflow-y: unset"-->
+		<!--			>-->
+		<!--				<div-->
+		<!--					v-bind="wrapperProps"-->
+		<!--					ref="listItem"-->
+		<!--				>-->
+		<!--					<li-->
+		<!--						v-for="{ data: event } in list"-->
+		<!--						:key="event.id"-->
+		<!--					>-->
+		<!--						<HomeEventPreviewCard-->
+		<!--							:class="{ expired: event.date < now }"-->
+		<!--							:event-data="event"-->
+		<!--						/>-->
+		<!--					</li>-->
+		<!--				</div>-->
+		<!--			</div>-->
+		<!--		</ul>-->
+
+		<ul
+			v-bind="containerProps"
+			style="height: 100vh"
+			class="main-page__card-list"
+		>
+			<li
+				v-bind="wrapperProps"
+				ref="listItem"
 			>
 				<div
-					v-bind="wrapperProps"
-					ref="listItem"
+					v-for="{ data: event } in list"
+					:key="event.id"
 				>
-					<li
-						v-for="{ data: event } in list"
-						:key="event.id"
-					>
-						<HomeEventPreviewCard
-							:class="{ expired: event.date < now }"
-							:event-data="event"
-						/>
-					</li>
+					<HomeEventPreviewCard
+						:class="{ expired: event.date < now }"
+						:event-data="event"
+					/>
 				</div>
-			</div>
+			</li>
 		</ul>
+
+		<!-- <ul class="main-page__card-list">
+      <li
+        v-for="event in posterEvents"
+        :key="event.id"
+      >
+          <HomeEventPreviewCard
+            :class="{ expired: event.date < now }"
+            :event-data="event"
+          />
+        <HomeAdCard v-else :ad-data="event" class="ad-block" />
+      </li>
+    </ul> -->
 
 		<!-- <ul class="main-page__card-list">
 			<li

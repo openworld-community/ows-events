@@ -30,10 +30,6 @@ const buttonComponentIs = computed(() => {
 });
 
 const { copy, copied } = useClipboard({ source: props.copyData, legacy: true });
-
-// const copy = async (data: string) => {
-// 	await navigator.clipboard.writeText(data).then(() => alert(t('global.copied')));
-// };
 </script>
 
 <template>
@@ -68,11 +64,8 @@ const { copy, copied } = useClipboard({ source: props.copyData, legacy: true });
 				color="var(--color-text-main)"
 			/>
 			{{
-				link
-					? $t('global.button.follow')
-					: !copied
-					? $t('global.button.copy')
-					: $t('global.button.copied')
+				link ? $t('global.button.follow') :
+          !copied ? $t('global.button.copy') : $t('global.button.copied')
 			}}
 		</component>
 	</li>

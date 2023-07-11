@@ -16,7 +16,6 @@ useSeoMeta({
 	// для реактивных тегов используем () => value
 	ogSiteName: () => t('meta.title'),
 	ogType: 'website',
-	// title: () => `${t('meta.title')} / ${t('meta.donate.title')}`,
 	ogTitle: () => `${t('meta.title')} / ${t('meta.donate.title')}`,
 	description: () => t('meta.donate.description'),
 	ogDescription: () => t('meta.donate.description'),
@@ -65,18 +64,16 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 		>
 			{{ $t('donate.title') }}
 		</h1>
-		<div class="donate__description-wrapper">
 			<p
 				class="donate__description"
 				:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
 			>
 				{{ $t('donate.description') }}
 			</p>
-			<p class="donate__subscription">
+			<p class="donate__description">
 				{{ $t('donate.gratitude') }} <br />
 				{{ $t('donate.subscription') }}
 			</p>
-		</div>
 
 		<h2
 			class="donate__method donate-method__title"
@@ -115,23 +112,10 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 		margin-bottom: var(--space-unrelated-items);
 	}
 
-	&__description-wrapper {
-		display: flex;
-		flex-direction: column;
-		margin-bottom: var(--space-subsections);
-	}
-
 	&__description {
 		font-size: var(--font-size-S);
 		line-height: 20px;
 		margin-bottom: var(--space-subsections);
-	}
-
-	&__subscription {
-		font-size: var(--font-size-S);
-		font-weight: var(--font-weight-regular);
-		line-height: 20px;
-		margin-bottom: var(--space-related-items);
 	}
 }
 

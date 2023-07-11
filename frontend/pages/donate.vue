@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import donateScreen from '../assets/img/donate-screen@2x.jpg';
 import { RouteNameEnum } from '../constants/enums/route';
 import { BASE_URL, DONATE_PATREON_URL } from '../constants/url';
 import { CryptoWalletEnum } from '../constants/enums/crypto-wallets';
-import Button from '../components/common/Button.vue';
 import {
 	SeoItempropDonateEnum,
 	SeoItempropGlobalEnum,
@@ -25,28 +23,33 @@ useSeoMeta({
 	ogUrl: () => BASE_URL + RouteNameEnum.DONATION
 });
 
-const CRYPTO_WALLETS = {
+type DonationMethod = {
+	method: string;
+	link?: string;
+	account?: string;
+};
+
+const DONATE_METHODS: { [key: string]: DonationMethod } = {
+	patreon: {
+		method: t('donate.method.patreon'),
+		link: DONATE_PATREON_URL
+	},
 	bitcoin: {
-		title: t('donate.method.bitcoin'),
+		method: t('donate.method.bitcoin'),
 		account: CryptoWalletEnum.BITCOIN
 	},
 	ethereum: {
-		title: t('donate.method.ethereum'),
+		method: t('donate.method.ethereum'),
 		account: CryptoWalletEnum.ETHEREUM
 	},
 	usdt: {
-		title: t('donate.method.usdt'),
+		method: t('donate.method.usdt'),
 		account: CryptoWalletEnum.USDT
 	},
 	usdc: {
-		title: t('donate.method.usdc'),
+		method: t('donate.method.usdc'),
 		account: CryptoWalletEnum.USDC
 	}
-};
-
-const copy = (text: string) => {
-	alert('Ссылка скопирована в буфер обмена');
-	navigator.clipboard.writeText(text);
 };
 </script>
 
@@ -56,72 +59,45 @@ const copy = (text: string) => {
 		itemscope
 		:itemtype="SeoItemTypeEnum.DONATE"
 	>
-		<h1 class="donate__title">{{ $t('donate.title') }}</h1>
-		<div class="donate__image-wrapper">
-			<img
-				class="donate__img"
-				:src="donateScreen"
-				:alt="$t('donate.alt')"
-				:itemprop="SeoItempropGlobalEnum.IMAGE"
-			/>
-		</div>
+		<h1
+			class="donate__title"
+			:itemprop="SeoItempropGlobalEnum.TITLE"
+		>
+			{{ $t('donate.title') }}
+		</h1>
 		<div class="donate__description-wrapper">
-			<p class="donate__description">
+			<p
+				class="donate__description"
+				:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
+			>
 				{{ $t('donate.description') }}
 			</p>
 			<p class="donate__subscription">
-				{{ $t('donate.gratitude') }}
+				{{ $t('donate.gratitude') }} <br />
+				{{ $t('donate.subscription') }}
 			</p>
-			<p class="donate__subscription">{{ $t('donate.subscription') }}</p>
 		</div>
-		<h2 class="donate__subscription">{{ $t('donate.method.title') }}</h2>
 
+		<h2
+			class="donate__method donate-method__title"
+			:itemprop="SeoItempropGlobalEnum.TITLE"
+		>
+			{{ $t('donate.method.title') }}
+		</h2>
 		<ul
-			class="donate__method donate-method"
 			itemscope
 			:itemtype="SeoItemTypeEnum.DONATE"
-      :itemprop="SeoItempropDonateEnum.GROUP_ITEMPROP"
+			:itemprop="SeoItempropDonateEnum.GROUP_ITEMPROP"
 		>
-			<li
-				class="donate-method__item"
-        itemscope
-        :itemtype="SeoItemTypeEnum.DONATE_METHOD"
-        :itemprop="SeoItempropDonateEnum.METHOD"
-			>
-        <div class="donate-method__icon-wrapper">
-				<CommonIcon
-					name="patreon"
-					class="donate-item__icon"
-					color="var(--color-text-main)"
-				/>
-        </div>
-        <h3>{{ $t('donate.method.patreon') }}</h3>
-				<NuxtLink
-					class="donate__link"
-					:to="DONATE_PATREON_URL"
-					target="_blank"
-          :itemprop="SeoItempropDonateEnum.LINK"
-				>
-					{{ $t('global.button.follow') }}
-				</NuxtLink>
-			</li>
-			<li
-				v-for="wallet in CRYPTO_WALLETS"
-				:key="wallet.title"
-				class="donate-method__item"
-			>
-				<h3 class="wallet__name">{{ wallet.title }}</h3>
-				<button
-					class="wallet__account"
-					@click="copy(wallet.account)"
-				>
-					<CommonIcon
-						class="wallet__button"
-						name="copy"
-						color="var(--color-text-main)"
-					/>
-				</button>
-			</li>
+			<DonateMethodItem
+				v-for="(item, key) in DONATE_METHODS"
+				:key="item.method"
+				:method="item.method"
+				:icon="key as string"
+				:color="`var(--color-donate-icon-${key as string})`"
+				:link="item?.link"
+				:copy-data="item?.account"
+			/>
 		</ul>
 	</div>
 </template>
@@ -136,30 +112,13 @@ const copy = (text: string) => {
 		font-size: var(--font-size-XXL);
 		font-weight: var(--font-weight-bold);
 		line-height: 40px;
-		margin-bottom: var(--space-subsections);
-	}
-
-	&__image-wrapper {
-		display: flex;
-		width: 100%;
-		min-height: 136px;
-		height: 100%;
-		background-color: var(--color-background-secondary);
-		border-radius: 4px;
-		margin-bottom: var(--space-subsections);
-	}
-
-	&__img {
-		width: 100%;
-		min-width: 100%;
-		max-width: 100%;
-		height: 100%;
+		margin-bottom: var(--space-unrelated-items);
 	}
 
 	&__description-wrapper {
 		display: flex;
 		flex-direction: column;
-		margin-bottom: var(--space-unrelated-items);
+		margin-bottom: var(--space-subsections);
 	}
 
 	&__description {
@@ -177,40 +136,10 @@ const copy = (text: string) => {
 }
 
 .donate-method {
-	&__item {
-		display: flex;
-		width: 100%;
-    justify-content: space-between;
-		margin-bottom: var(--space-unrelated-items);
-
-    &:not(:last-child) {
-      border-bottom: 1px solid var(--color-input-field);
-    }
-	}
-
-  &__icon-wrapper {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: #00dc82;
-  }
-
-	&__name {
-		font-size: var(--font-size-S);
-		font-weight: var(--font-weight-regular);
+	&__title {
+		font-size: var(--font-size-L);
+		line-height: 24px;
 		margin-bottom: var(--space-related-items);
-	}
-
-	&__account {
-		display: flex;
-	}
-
-	&__button {
-		margin-right: var(--space-related-items);
-	}
-
-	&__text {
-		font-size: var(--font-size-XS);
 	}
 }
 </style>

@@ -1,15 +1,16 @@
 export const global = {
-  country: 'Страна',
-  city: 'Город',
-  search: 'Поиск',
-  timezone: 'Часовой пояс',
-  button: {
-    back: 'Назад',
-    share: 'Поделиться',
-    cancel: 'Отмена',
-    search: 'Поиск',
-    delete: 'Очистить',
-    follow: 'Перейти',
-    copy: 'Копировать'
-  }
+	country: 'Страна',
+	city: 'Город',
+	search: 'Поиск',
+	timezone: 'Часовой пояс',
+	button: {
+		back: 'Назад',
+		share: 'Поделиться',
+		cancel: 'Отмена',
+		search: 'Поиск',
+		delete: 'Очистить',
+		follow: 'Перейти',
+		copy: 'Копировать',
+		copied: 'Скопировано'
+	}
 };

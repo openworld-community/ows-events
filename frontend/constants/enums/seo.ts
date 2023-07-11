@@ -15,7 +15,9 @@ export enum SeoItemTypeEnum {
 // Global
 export enum SeoItempropGlobalEnum {
 	URL = 'url',
-	IMAGE = 'image'
+	IMAGE = 'image',
+	TITLE = 'name',
+	DESCRIPTION = 'description'
 }
 
 // Event

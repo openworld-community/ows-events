@@ -1,4 +1,4 @@
-import { TGUser } from '@common/types/user';
+import { TGUser, UserInfo } from '@common/types/user';
 import jwt from 'jsonwebtoken';
 import { UserModel } from '../models/user.model';
 import { CommonErrorsEnum } from '../../../common/const';
@@ -11,27 +11,30 @@ export type FindEventParams = {
 };
 
 class UserController {
-	async addTGUser(user: TGUser) {
+	async addTGUser(telegramData: TGUser) {
 		const newToken = jwt.sign(
 			{
-				id: user.id,
-				username: user.username
+				id: telegramData.id,
+				username: telegramData.username
 			},
 			vars.secret
 		);
 		await UserModel.findOneAndUpdate(
-			{ id: user.id },
-			{ $set: { ...user, token: newToken } },
+			{ 'telegram.id': telegramData.id },
+			{ $set: { telegram: { ...telegramData }, token: newToken } },
 			{ upsert: true, new: true }
 		);
 		return newToken;
 	}
 
-	async getUserInfoByToken(token: string) {
-		const userEntity = await UserModel.findOne({ token }, { token: 0, auth_date: 0 });
+	async getUserTGInfoByToken(token: string) {
+		const userEntity = await UserModel.findOne(
+			{ token },
+			{ token: 0, userInfo: 0, 'telegram.auth_date': 0 }
+		);
 		if (!userEntity) throw new Error(CommonErrorsEnum.USER_DOES_NOT_EXIST);
 
-		return userEntity;
+		return userEntity.telegram;
 	}
 
 	async getUserById(tgId: string) {
@@ -39,6 +42,17 @@ class UserController {
 		if (!userEntity) throw new Error(CommonErrorsEnum.USER_DOES_NOT_EXIST);
 
 		return userEntity;
+	}
+
+	async getUserInfoByToken(token: string) {
+		const userEntity = await UserModel.findOne({ token }, { token: 0, telegram: 0 });
+		if (!userEntity) throw new Error(CommonErrorsEnum.USER_DOES_NOT_EXIST);
+
+		return userEntity.userInfo;
+	}
+
+	async changeUserInfo(token: string, userInfo: UserInfo) {
+		await UserModel.findOneAndUpdate({ token }, { $set: { userInfo: { ...userInfo } } });
 	}
 }
 

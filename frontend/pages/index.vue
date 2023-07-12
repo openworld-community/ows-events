@@ -5,8 +5,13 @@ import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
 
 const { t } = useI18n();
-useHead({ titleTemplate: `%s / ${t('meta.home.title')}` });
+
 definePageMeta({ name: RouteNameEnum.HOME });
+
+getMeta({
+	title: t('meta.title'),
+	description: t('meta.home.description')
+});
 
 const {
 	open: openEventModal,

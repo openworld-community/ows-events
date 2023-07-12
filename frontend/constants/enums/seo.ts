@@ -6,6 +6,7 @@ export enum SeoItemTypeEnum {
 	OFFER = `${SEO_SCHEMA_BASE_URL}Offer`,
 	EVENT = `${SEO_SCHEMA_BASE_URL}Event`,
 	ADDRESS = `${SEO_SCHEMA_BASE_URL}PostalAddress`,
+	ABOUT = `${SEO_SCHEMA_BASE_URL}AboutPage`,
 	DONATE = `${SEO_SCHEMA_BASE_URL}DonateAction`,
 	DONATE_METHOD = `${SEO_SCHEMA_BASE_URL}MoneyTransfer`
 }
@@ -50,4 +51,11 @@ export enum SeoItempropDonateEnum {
 	GROUP_ITEMPROP = 'potentialAction',
 	METHOD = 'instrument',
 	LINK = 'target'
+}
+
+// About Page
+export enum SeoItempropAboutEnum {
+	MAIN_CONTENT = 'mainContentOfPage',
+	IMAGE = 'primaryImageOfPage',
+	SIGNIFICANT_LINK = 'significantLink',
 }

@@ -5,7 +5,8 @@ export const SEO_SCHEMA_BASE_URL = 'https://schema.org/';
 export enum SeoItemTypeEnum {
 	OFFER = `${SEO_SCHEMA_BASE_URL}Offer`,
 	EVENT = `${SEO_SCHEMA_BASE_URL}Event`,
-	ADDRESS = `${SEO_SCHEMA_BASE_URL}PostalAddress`
+	ADDRESS = `${SEO_SCHEMA_BASE_URL}PostalAddress`,
+	ABOUT = `${SEO_SCHEMA_BASE_URL}AboutPage`,
 }
 
 // ITEMPROPS
@@ -39,4 +40,11 @@ export enum SeoItempropLocationEnum {
 	COUNTRY = 'addressCountry',
 	CITY = 'addressLocality',
 	ADDRESS = 'location'
+}
+
+// About Page
+export enum SeoItempropAboutEnum {
+	MAIN_CONTENT = 'mainContentOfPage',
+	IMAGE = 'primaryImageOfPage',
+	SIGNIFICANT_LINK = 'significantLink',
 }

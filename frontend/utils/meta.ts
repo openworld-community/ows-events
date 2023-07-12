@@ -17,7 +17,7 @@ export const getMeta = (meta: MetaData) => {
 		ogType: 'website',
 		ogTitle: () => meta.title as string,
 		ogDescription: () => meta.description as string,
-		ogImage: (meta.image as string) ?? undefined,
+		ogImage: (meta.image as string) ?? null,
 		ogUrl: () => BASE_URL + route.path,
 		twitterCard: meta.image ? 'summary_large_image' : 'summary'
 	});

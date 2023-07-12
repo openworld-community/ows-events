@@ -7,6 +7,8 @@ export enum SeoItemTypeEnum {
 	EVENT = `${SEO_SCHEMA_BASE_URL}Event`,
 	ADDRESS = `${SEO_SCHEMA_BASE_URL}PostalAddress`,
 	ABOUT = `${SEO_SCHEMA_BASE_URL}AboutPage`,
+	DONATE = `${SEO_SCHEMA_BASE_URL}DonateAction`,
+	DONATE_METHOD = `${SEO_SCHEMA_BASE_URL}MoneyTransfer`
 }
 
 // ITEMPROPS
@@ -14,7 +16,9 @@ export enum SeoItemTypeEnum {
 // Global
 export enum SeoItempropGlobalEnum {
 	URL = 'url',
-	IMAGE = 'image'
+	IMAGE = 'image',
+	TITLE = 'name',
+	DESCRIPTION = 'description'
 }
 
 // Event
@@ -40,6 +44,13 @@ export enum SeoItempropLocationEnum {
 	COUNTRY = 'addressCountry',
 	CITY = 'addressLocality',
 	ADDRESS = 'location'
+}
+
+// Donation
+export enum SeoItempropDonateEnum {
+	GROUP_ITEMPROP = 'potentialAction',
+	METHOD = 'instrument',
+	LINK = 'target'
 }
 
 // About Page

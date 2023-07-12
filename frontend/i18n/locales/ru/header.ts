@@ -9,6 +9,7 @@ export const header = {
 	},
 	about: 'Oб Афише',
 	support: 'Поддержка',
+	donation: 'Поддержать проект',
 	policy: 'Политика конфиденциальности',
 	limitation_of_liability: 'Ограничение ответственности',
 	authorization: {

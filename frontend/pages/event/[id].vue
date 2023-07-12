@@ -186,7 +186,7 @@ patchDeleteEventModal({
 				({{ posterEvent.timezone?.timezoneOffset }}
 				{{ posterEvent.timezone?.timezoneName }})
 			</p>
-			<Address
+			<CommonAddress
 				:location="posterEvent.location"
 				class="event-info__geolink"
 				is-link

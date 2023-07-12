@@ -35,7 +35,7 @@ const eventImage = computed(() => {
 
 useSeoMeta({
 	// для реактивных тегов используем () => value
-	ogSiteName: () => t('meta.title'),
+	ogSiteName: () => t('meta.site_name'),
 	ogType: 'website',
 	title: () =>
 		`${posterEvent.value?.title ?? t('meta.title')} / ${

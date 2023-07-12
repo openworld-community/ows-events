@@ -14,12 +14,12 @@ definePageMeta({ name: RouteNameEnum.DONATION });
 
 useSeoMeta({
 	// для реактивных тегов используем () => value
-	ogSiteName: () => t('meta.title'),
+	ogSiteName: () => t('meta.site_name'),
 	ogType: 'website',
-	ogTitle: () => `${t('meta.title')} / ${t('meta.donate.title')}`,
+	ogTitle: () => `${t('meta.donate.title')} ${t('meta.site_name')}`,
 	description: () => t('meta.donate.description'),
 	ogDescription: () => t('meta.donate.description'),
-	ogUrl: () => BASE_URL + RouteNameEnum.DONATION
+	ogUrl: () => `${BASE_URL}/${RouteNameEnum.DONATION}`
 });
 
 type DonationMethod = {
@@ -64,16 +64,16 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 		>
 			{{ $t('donate.title') }}
 		</h1>
-			<p
-				class="donate__description"
-				:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
-			>
-				{{ $t('donate.description') }}
-			</p>
-			<p class="donate__description">
-				{{ $t('donate.gratitude') }} <br />
-				{{ $t('donate.subscription') }}
-			</p>
+		<p
+			class="donate__description"
+			:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
+		>
+			{{ $t('donate.description') }}
+		</p>
+		<p class="donate__description">
+			{{ $t('donate.gratitude') }} <br />
+			{{ $t('donate.subscription') }}
+		</p>
 
 		<h2
 			class="donate__method donate-method__title"

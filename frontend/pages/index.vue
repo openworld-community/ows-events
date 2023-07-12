@@ -4,9 +4,13 @@ import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
 
-const { translate } = useTranslation();
-useHead({ titleTemplate: `%s / ${translate('meta.home.title')}` });
+const { t } = useI18n();
+
 definePageMeta({ name: RouteNameEnum.HOME });
+
+getMeta({
+	title: t('meta.title')
+});
 
 const {
 	open: openEventModal,
@@ -57,7 +61,7 @@ const now = Date.now();
 			<HomeUserLocation />
 		</div>
 		<h1 class="main-page__title">
-			{{ translate('home.title') }}
+			{{ $t('home.title') }}
 		</h1>
 		<HomeFilter
 			v-model:country="eventsQuery.country"
@@ -83,7 +87,7 @@ const now = Date.now();
 			button-kind="success"
 			is-round
 			icon-name="plus"
-			:alt="translate('home.button.add_event_aria')"
+			:alt="$t('home.button.add_event_aria')"
 			aria-haspopup="true"
 			@click="onButtonClick"
 		/>

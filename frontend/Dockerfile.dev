@@ -5,4 +5,10 @@ WORKDIR /app
 COPY ./frontend/entrypoint.dev.sh /scripts/
 RUN chmod +x -R /scripts
 
+ENV NUXT_HOST=0.0.0.0
+ENV NUXT_PORT=80
+
+EXPOSE 80
+EXPOSE 24678
+
 ENTRYPOINT ["sh", "/scripts/entrypoint.dev.sh"]

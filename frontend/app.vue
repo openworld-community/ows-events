@@ -6,11 +6,14 @@ import 'virtual:svg-icons-register';
 import { ModalsContainer } from 'vue-final-modal';
 import { isDevelopmentMode } from './constants/common';
 
-const { translate } = useTranslation();
+const { locale, t } = useI18n();
+
 useHead({
-	//TODO доработать метаданные
-	title: translate('meta.title'),
-	meta: [{ name: 'Афиша переделано', content: 'Это площадка для поиска мероприятий' }]
+	title: t('meta.title'),
+	meta: [{ name: 'description', content: t('meta.home.description') }],
+	htmlAttrs: {
+		lang: locale.value
+	}
 });
 
 if (isDevelopmentMode) {

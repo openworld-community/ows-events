@@ -4,7 +4,6 @@ type Props = {
 	removeEvent: () => void;
 };
 
-const { translate } = useTranslation();
 const props = defineProps<Props>();
 </script>
 
@@ -21,18 +20,18 @@ const props = defineProps<Props>();
 		<div class="modal">
 			<div class="modal-card__head">
 				<p class="modal-card__title">
-					{{ translate('component.delete_event_modal.title') }}
+					{{ $t('modal.delete_event_modal.title') }}
 				</p>
 			</div>
 			<div class="modal-card__foot">
 				<CommonButton
 					button-kind="ordinary"
-					:button-text="translate('component.delete_event_modal.button.cancel')"
+					:button-text="$t('modal.delete_event_modal.button.cancel')"
 					@click="props.closeDeleteEventModal"
 				/>
 				<CommonButton
 					button-kind="success"
-					:button-text="translate('component.delete_event_modal.button.submit')"
+					:button-text="$t('modal.delete_event_modal.button.submit')"
 					@click="props.removeEvent"
 				/>
 			</div>

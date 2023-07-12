@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '../constants/enums/route';
-import { BASE_URL, DONATE_PATREON_URL } from '../constants/url';
+import { DONATE_PATREON_URL } from '../constants/url';
 import { CryptoWalletEnum } from '../constants/enums/crypto-wallets';
 import {
 	SeoItempropDonateEnum,
@@ -9,17 +9,12 @@ import {
 } from '../constants/enums/seo';
 
 const { t } = useI18n();
-useHead({ titleTemplate: `%s / ${t('meta.donate.title')}` });
+
 definePageMeta({ name: RouteNameEnum.DONATION });
 
-useSeoMeta({
-	// для реактивных тегов используем () => value
-	ogSiteName: () => t('meta.site_name'),
-	ogType: 'website',
-	ogTitle: () => `${t('meta.donate.title')} ${t('meta.site_name')}`,
-	description: () => t('meta.donate.description'),
-	ogDescription: () => t('meta.donate.description'),
-	ogUrl: () => `${BASE_URL}/${RouteNameEnum.DONATION}`
+getMeta({
+	title: t('meta.donate.title'),
+	description: t('meta.donate.description')
 });
 
 type DonationMethod = {

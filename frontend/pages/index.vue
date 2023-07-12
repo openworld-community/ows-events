@@ -3,22 +3,14 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
-import { BASE_URL } from '../constants/url';
-import eventScreen from '@/assets/img/event-screen@2x.png';
 
 const { t } = useI18n();
 
 definePageMeta({ name: RouteNameEnum.HOME });
 
-useSeoMeta({
-	// для реактивных тегов используем () => value
-	ogSiteName: () => t('meta.site_name'),
-	ogType: 'website',
-	ogTitle: () => t('meta.title'),
-	description: () => t('meta.home.description'),
-	ogDescription: () => t('meta.home.description'),
-	ogImage: eventScreen,
-	ogUrl: () => BASE_URL
+getMeta({
+	title: t('meta.title'),
+	description: t('meta.home.description')
 });
 
 const {

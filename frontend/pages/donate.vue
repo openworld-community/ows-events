@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '../constants/enums/route';
-import { BASE_URL, DONATE_PATREON_URL } from '../constants/url';
+import { DONATE_PATREON_URL } from '../constants/url';
 import { CryptoWalletEnum } from '../constants/enums/crypto-wallets';
 import {
 	SeoItempropDonateEnum,
@@ -9,17 +9,12 @@ import {
 } from '../constants/enums/seo';
 
 const { t } = useI18n();
-useHead({ titleTemplate: `%s / ${t('meta.donate.title')}` });
+
 definePageMeta({ name: RouteNameEnum.DONATION });
 
-useSeoMeta({
-	// для реактивных тегов используем () => value
-	ogSiteName: () => t('meta.title'),
-	ogType: 'website',
-	ogTitle: () => `${t('meta.title')} / ${t('meta.donate.title')}`,
-	description: () => t('meta.donate.description'),
-	ogDescription: () => t('meta.donate.description'),
-	ogUrl: () => BASE_URL + RouteNameEnum.DONATION
+getMeta({
+	title: t('meta.donate.title'),
+	description: t('meta.donate.description')
 });
 
 type DonationMethod = {
@@ -64,16 +59,16 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 		>
 			{{ $t('donate.title') }}
 		</h1>
-			<p
-				class="donate__description"
-				:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
-			>
-				{{ $t('donate.description') }}
-			</p>
-			<p class="donate__description">
-				{{ $t('donate.gratitude') }} <br />
-				{{ $t('donate.subscription') }}
-			</p>
+		<p
+			class="donate__description"
+			:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
+		>
+			{{ $t('donate.description') }}
+		</p>
+		<p class="donate__description">
+			{{ $t('donate.gratitude') }} <br />
+			{{ $t('donate.subscription') }}
+		</p>
 
 		<h2
 			class="donate__method donate-method__title"

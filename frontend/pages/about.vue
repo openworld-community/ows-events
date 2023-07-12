@@ -1,34 +1,22 @@
 <script setup lang="ts">
 import eventScreen from '@/assets/img/event-screen@2x.png';
 import { REPO_URL } from '@/constants/url';
-import {SeoItempropAboutEnum, SeoItemTypeEnum} from '@/constants/enums/seo';
-import {BASE_URL} from '../constants/url';
+import { SeoItempropAboutEnum, SeoItemTypeEnum } from '@/constants/enums/seo';
+import { RouteNameEnum } from '../constants/enums/route';
 
 const { t } = useI18n();
-const route = useRoute();
 
-useHead({
-	titleTemplate: `${t('meta.title')} / ${t('meta.about_us.title')}`,
+definePageMeta({ name: RouteNameEnum.ABOUT });
+getMeta({
+	title: t('meta.about_us.title')
 });
-
-useSeoMeta({
-	ogSiteName: () => t('meta.title'),
-	ogType: 'website',
-	title: () => t('meta.about_us.title'),
-	ogTitle: () => t('meta.about_us.title'),
-	description: () => t('meta.about_us.description'),
-	ogDescription: () => t('meta.about_us.description'),
-	ogImage: () => BASE_URL + '/assets/img/event-preview@2x.png',
-	ogUrl: () => BASE_URL + route.path
-});
-
 </script>
 
 <template>
 	<section
-			class="about"
-			itemscope
-			:itemtype="SeoItemTypeEnum.ABOUT"
+		class="about"
+		itemscope
+		:itemtype="SeoItemTypeEnum.ABOUT"
 	>
 		<h1 class="title">{{ $t('about.title') }}</h1>
 		<img

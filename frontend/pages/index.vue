@@ -113,26 +113,15 @@ const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
 
 loadEvents(posterEvents.value, 20);
 
-const filter = ref<HTMLElement | null>(null);
-const isFilterVisible = ref(true);
-
-const { stop } = useIntersectionObserver(filter, ([{ isIntersecting }]) => {
-	isFilterVisible.value = isIntersecting;
-});
-
 const listSelector = ref<HTMLElement | null>(null);
 
-watch(isFilterVisible, () => {
-	if (!isFilterVisible.value) {
-		useInfiniteScroll(
-			listSelector,
-			() => {
-				loadEvents(posterEvents.value, 20);
-			},
-			{ distance: 20 }
-		);
-	}
-});
+useInfiniteScroll(
+	listSelector,
+	() => {
+		loadEvents(posterEvents.value, 20);
+	},
+	{ distance: 20 }
+);
 
 const updateParts: Ref<{
 	viewStartIdx: number;

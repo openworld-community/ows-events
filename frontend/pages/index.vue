@@ -73,9 +73,49 @@ interface EventOnPoster {
 	url: string;
 }
 
+// !!!!!!! USE VIRTUAL SCROLL & USE INFINITY SCROLL TEST
+
+// const { list, containerProps, wrapperProps } = useVirtualList(posterEvents, {
+// 	itemHeight: 336,
+// 	overscan: 10
+// });
+
+// !!!!! VUE VIRTUAL SCROLL TEST
+
+// interface viewAndVisible {
+// 	viewStartIdx: number;
+// 	viewEndIdx: number;
+// 	visibleStartIdx: number;
+// 	visibleEndIdx: number;
+// }
+
+// const updateParts: Ref<viewAndVisible> = ref({
+// 	viewStartIdx: 0,
+// 	viewEndIdx: 0,
+// 	visibleStartIdx: 0,
+// 	visibleEndIdx: 0
+// });
+
+// const onResize = () => {
+// 	console.log('resize');
+// };
+
+// const onUpdate = (
+// 	viewStartIndex: number,
+// 	viewEndIndex: number,
+// 	visibleStartIndex: number,
+// 	visibleEndIndex: number
+// ): void => {
+// 	updateParts.value.viewStartIdx = viewStartIndex;
+// 	updateParts.value.viewEndIdx = viewEndIndex;
+// 	updateParts.value.visibleStartIdx = visibleStartIndex;
+// 	updateParts.value.visibleEndIdx = visibleEndIndex;
+// };
 const posterEvents: Ref<EventOnPoster[]> = ref([]);
 
-const loadEvents = (list: EventOnPoster[], count: number) => {
+type loadEventsType = (list: EventOnPoster[], count: number) => void;
+
+const loadEvents: loadEventsType = (list: EventOnPoster[], count: number) => {
 	for (let i = 0; i < count; i++) {
 		list.push({
 			date: +new Date(),
@@ -101,52 +141,12 @@ const loadEvents = (list: EventOnPoster[], count: number) => {
 
 loadEvents(posterEvents.value, 20);
 
-// !!!!!!! USE VIRTUAL SCROLL & USE INFINITY SCROLL TEST
-
-// const { list, containerProps, wrapperProps } = useVirtualList(posterEvents, {
-// 	itemHeight: 336,
-// 	overscan: 10
-// });
-
-// !!!!! VUE VIRTUAL SCROLL TEST
-
-interface viewAndVisible {
-	viewStartIdx: number;
-	viewEndIdx: number;
-	visibleStartIdx: number;
-	visibleEndIdx: number;
-}
-
-const updateParts: Ref<viewAndVisible> = ref({
-	viewStartIdx: 0,
-	viewEndIdx: 0,
-	visibleStartIdx: 0,
-	visibleEndIdx: 0
-});
-
-// const onResize = () => {
-// 	console.log('resize');
-// };
-
-const onUpdate = (
-	viewStartIndex: number,
-	viewEndIndex: number,
-	visibleStartIndex: number,
-	visibleEndIndex: number
-): void => {
-	updateParts.value.viewStartIdx = viewStartIndex;
-	updateParts.value.viewEndIdx = viewEndIndex;
-	updateParts.value.visibleStartIdx = visibleStartIndex;
-	updateParts.value.visibleEndIdx = visibleEndIndex;
-};
+const listSelector = ref<HTMLElement | null>(null);
 
 onMounted(() => {
-	const listSelector = ref<HTMLElement | null>(null);
-
 	useInfiniteScroll(
 		listSelector,
 		() => {
-			console.log('sobaka');
 			loadEvents(posterEvents.value, 20);
 		},
 		{ distance: 10 }
@@ -173,27 +173,30 @@ onMounted(() => {
 		/>
 
 		<!-- VUE VIRTUAL SCROLL TEST -->
-		<DynamicScroller
+		<div
 			ref="listSelector"
-			:items="posterEvents"
-			:emit-update="true"
-			:min-item-size="294"
-			class="main-page__card-list"
-			@update="onUpdate"
+			style="height: 100vh; overflow-y: scroll"
 		>
-			<template #default="{ item: event, index, active }">
-				<DynamicScrollerItem
-					:item="event"
-					:active="active"
-					:data-index="index"
-				>
-					<HomeEventPreviewCard
-						:class="{ expired: event.date < now }"
-						:event-data="event"
-					/>
-				</DynamicScrollerItem>
-			</template>
-		</DynamicScroller>
+			<DynamicScroller
+				:items="posterEvents"
+				:emit-update="true"
+				:min-item-size="336"
+				class="main-page__card-list"
+			>
+				<template #default="{ item: event, index, active }">
+					<DynamicScrollerItem
+						:item="event"
+						:active="active"
+						:data-index="index"
+					>
+						<HomeEventPreviewCard
+							:class="{ expired: event.date < now }"
+							:event-data="event"
+						/>
+					</DynamicScrollerItem>
+				</template>
+			</DynamicScroller>
+		</div>
 
 		<!-- USE VIRTUAL SCROLL & USE INFINITY SCROLL TEST -->
 		<!-- <ul
@@ -281,7 +284,6 @@ onMounted(() => {
 		display: flex;
 		flex-direction: column;
 		width: 100%;
-		height: 100vh;
 	}
 }
 

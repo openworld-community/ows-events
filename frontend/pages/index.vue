@@ -252,18 +252,26 @@ const onUpdate: update = (viewStartIndex, viewEndIndex, visibleStartIndex, visib
 
 .list-selector {
 	overflow-y: scroll;
-	height: calc(100vh);
+	height: calc(100vh - var(--header-height));
+	padding-right: 5px;
+
 	&::-webkit-scrollbar {
-		width: 0;
+		width: 7px;
+		background-color: rgba(0, 0, 0, 0.1);
+		border-radius: 15px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		border-radius: 15px;
+		background-color: #48c78e;
 	}
 }
 
 .main-page {
-	padding-top: 16px;
-
 	&__search {
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
+		padding-top: 16px;
 		margin-bottom: 44px;
 	}
 

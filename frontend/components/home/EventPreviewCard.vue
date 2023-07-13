@@ -42,7 +42,6 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 			<p
 				v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
 				class="card-description__author"
-				itemprop="composer"
 				:itemprop="SeoItempropEventEnum.ORGANIZER"
 			>
 				Peredelano

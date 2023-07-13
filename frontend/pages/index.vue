@@ -73,49 +73,13 @@ interface EventOnPoster {
 	url: string;
 }
 
-// !!!!!!! USE VIRTUAL SCROLL & USE INFINITY SCROLL TEST
-
-// const { list, containerProps, wrapperProps } = useVirtualList(posterEvents, {
-// 	itemHeight: 336,
-// 	overscan: 10
-// });
-
 // !!!!! VUE VIRTUAL SCROLL TEST
 
-// interface viewAndVisible {
-// 	viewStartIdx: number;
-// 	viewEndIdx: number;
-// 	visibleStartIdx: number;
-// 	visibleEndIdx: number;
-// }
-
-// const updateParts: Ref<viewAndVisible> = ref({
-// 	viewStartIdx: 0,
-// 	viewEndIdx: 0,
-// 	visibleStartIdx: 0,
-// 	visibleEndIdx: 0
-// });
-
-// const onResize = () => {
-// 	console.log('resize');
-// };
-
-// const onUpdate = (
-// 	viewStartIndex: number,
-// 	viewEndIndex: number,
-// 	visibleStartIndex: number,
-// 	visibleEndIndex: number
-// ): void => {
-// 	updateParts.value.viewStartIdx = viewStartIndex;
-// 	updateParts.value.viewEndIdx = viewEndIndex;
-// 	updateParts.value.visibleStartIdx = visibleStartIndex;
-// 	updateParts.value.visibleEndIdx = visibleEndIndex;
-// };
 const posterEvents: Ref<EventOnPoster[]> = ref([]);
 
-type loadEventsType = (list: EventOnPoster[], count: number) => void;
+type loadEventsCustom = (list: EventOnPoster[], count: number) => void;
 
-const loadEvents: loadEventsType = (list: EventOnPoster[], count: number) => {
+const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
 	for (let i = 0; i < count; i++) {
 		list.push({
 			date: +new Date(),
@@ -143,14 +107,23 @@ loadEvents(posterEvents.value, 20);
 
 const listSelector = ref<HTMLElement | null>(null);
 
-onMounted(() => {
-	useInfiniteScroll(
-		listSelector,
-		() => {
-			loadEvents(posterEvents.value, 20);
-		},
-		{ distance: 10 }
-	);
+const filter = ref<HTMLElement | null>(null);
+const isFilterVisible = ref(true);
+
+const { stop } = useIntersectionObserver(filter, ([{ isIntersecting }]) => {
+	isFilterVisible.value = isIntersecting;
+});
+
+watch(isFilterVisible, () => {
+	if (!isFilterVisible.value) {
+		useInfiniteScroll(
+			listSelector,
+			() => {
+				loadEvents(posterEvents.value, 20);
+			},
+			{ distance: 20 }
+		);
+	}
 });
 </script>
 
@@ -167,6 +140,7 @@ onMounted(() => {
 			{{ $t('home.title') }}
 		</h1>
 		<HomeFilter
+			ref="filter"
 			v-model:country="eventsQuery.country"
 			v-model:city="eventsQuery.city"
 			class="main-page__filter"
@@ -175,19 +149,31 @@ onMounted(() => {
 		<!-- VUE VIRTUAL SCROLL TEST -->
 		<div
 			ref="listSelector"
+			:class="{
+				hideScrollbar: isFilterVisible,
+				showScrollbar: !isFilterVisible
+			}"
 			style="height: 100vh; overflow-y: scroll"
 		>
 			<DynamicScroller
 				:items="posterEvents"
-				:emit-update="true"
 				:min-item-size="336"
+				:buffer="400"
+				:page-mode="true"
 				class="main-page__card-list"
 			>
 				<template #default="{ item: event, index, active }">
 					<DynamicScrollerItem
 						:item="event"
-						:active="active"
 						:data-index="index"
+						:active="active"
+						:size-dependencies="[
+							event.description,
+							event.title,
+							event.location.addres,
+							event.location.city,
+							event.location.country
+						]"
 					>
 						<HomeEventPreviewCard
 							:class="{ expired: event.date < now }"
@@ -197,28 +183,6 @@ onMounted(() => {
 				</template>
 			</DynamicScroller>
 		</div>
-
-		<!-- USE VIRTUAL SCROLL & USE INFINITY SCROLL TEST -->
-		<!-- <ul
-			v-bind="containerProps"
-			style="height: 100vh"
-			class="main-page__card-list"
-		>
-			<li
-				v-bind="wrapperProps"
-				ref="listItem"
-			>
-				<div
-					v-for="{ data: event } in list"
-					:key="event.id"
-				>
-					<HomeEventPreviewCard
-						:class="{ expired: event.date < now }"
-						:event-data="event"
-					/>
-				</div>
-			</li>
-		</ul> -->
 
 		<!-- <ul class="main-page__card-list">
 			<li
@@ -247,8 +211,17 @@ onMounted(() => {
 
 <style lang="less" scoped>
 .vue-recycle-scroller__item-view div:first-child {
-	padding-bottom: 40px;
+	padding-bottom: 44px;
 }
+
+.showScrollbar {
+	overflow-y: scroll;
+}
+
+.hideScrollbar {
+	overflow-y: unset;
+}
+
 .main-page {
 	padding-top: 16px;
 

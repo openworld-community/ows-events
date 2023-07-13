@@ -8,8 +8,12 @@ import { v4 as uuid } from 'uuid';
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 
 const { t } = useI18n();
-useHead({ titleTemplate: `%s / ${t('meta.home.title')}` });
+
 definePageMeta({ name: RouteNameEnum.HOME });
+
+getMeta({
+	title: t('meta.title')
+});
 
 const {
 	open: openEventModal,

@@ -8,18 +8,20 @@ import { event } from './event';
 import { modal } from './modal';
 import { dates } from './dates';
 import { limitation_of_liability } from './limitation-of-liability';
+import {donate} from "./donate";
 
 const ruTranslation = {
-	error: ServerErrors,
-	header,
-	about,
 	meta,
-	limitation_of_liability,
 	global,
+	header,
 	home,
 	event,
+	about,
+	donate,
+	limitation_of_liability,
 	modal,
-	dates
+	dates,
+	error: ServerErrors,
 };
 
 export default ruTranslation;

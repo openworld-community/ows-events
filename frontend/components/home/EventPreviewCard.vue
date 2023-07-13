@@ -42,7 +42,7 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 			<p
 				v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
 				class="card-description__author"
-        itemprop="composer"
+				itemprop="composer"
 			>
 				Peredelano
 			</p>
@@ -79,7 +79,7 @@ const props = defineProps<{ eventData: EventOnPoster }>();
 	display: block;
 	width: 100%;
 	position: relative;
-	margin-bottom: 44px;
+	// margin-bottom: 44px;
 
 	&__image-container {
 		display: flex;

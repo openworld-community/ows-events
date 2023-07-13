@@ -5,9 +5,7 @@ import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
 // TEST
 import { v4 as uuid } from 'uuid';
-// import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
-import { useVirtualList } from '@vueuse/core';
-import console, { dir } from 'console';
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 
 const { t } = useI18n();
 useHead({ titleTemplate: `%s / ${t('meta.home.title')}` });
@@ -51,7 +49,7 @@ const onButtonClick = () => {
 };
 const now = Date.now();
 
-// TEST
+// TEST DATA
 type Timezone = {
 	timezoneName: string;
 	timezoneOffset: string;
@@ -77,86 +75,83 @@ interface EventOnPoster {
 
 const posterEvents: Ref<EventOnPoster[]> = ref([]);
 
-const loadEvents = (count: number) => {
-	const list = [];
-
-	const event: EventOnPoster = {
-		date: +new Date(),
-		id: uuid(),
-		description: 'Хочу пицу, чтоб прям вкусная с ума сойдешь и вообще еще че нить',
-		durationInSeconds: 0,
-		title: 'peredelanoconf',
-		image: '/image/7af2c5b3-3697-41b5-9f36-5151c11a6bb6.png',
-		location: {
-			country: 'Serbia',
-			city: 'Belgrade',
-			address: 'petushovskiy pr-kt'
-		},
-		price: '3000',
-		timezone: {
-			timezoneName: 'Europe/Belgrade',
-			timezoneOffset: '+02:00'
-		},
-		url: 'vk.com'
-	};
-
+const loadEvents = (list: EventOnPoster[], count: number) => {
 	for (let i = 0; i < count; i++) {
-		list.push(event);
+		list.push({
+			date: +new Date(),
+			id: uuid(),
+			description: 'Хочу пицу, чтоб прям вкусная с ума сойдешь и вообще еще че нить',
+			durationInSeconds: 0,
+			title: 'peredelanoconf',
+			image: '/image/7af2c5b3-3697-41b5-9f36-5151c11a6bb6.png',
+			location: {
+				country: 'Serbia',
+				city: 'Belgrade',
+				address: 'petushovskiy pr-kt'
+			},
+			price: '3000',
+			timezone: {
+				timezoneName: 'Europe/Belgrade',
+				timezoneOffset: '+02:00'
+			},
+			url: 'vk.com'
+		});
 	}
-
-	return list;
 };
 
-const { list, containerProps, wrapperProps } = useVirtualList(posterEvents, {
-	itemHeight: 336,
-	overscan: 20
-});
+loadEvents(posterEvents.value, 20);
 
-const listItem = ref<HTMLElement | null>(null);
+// !!!!!!! USE VIRTUAL SCROLL & USE INFINITY SCROLL TEST
 
-useInfiniteScroll(
-	listItem,
-	() => {
-		posterEvents.value.push(...loadEvents(20));
-	},
-	{ distance: 20 }
-);
-
-watch(posterEvents, (events) => {
-	console.log(events);
-
-	// list.value.push(events);
-});
-
-// interface viewAndVisible {
-// 	viewStartIdx: number;
-// 	viewEndIdx: number;
-// 	visibleStartIdx: number;
-// 	visibleEndIdx: number;
-// }
-
-// const updateParts: Ref<viewAndVisible> = ref({
-// 	viewStartIdx: 0,
-// 	viewEndIdx: 0,
-// 	visibleStartIdx: 0,
-// 	visibleEndIdx: 0
+// const { list, containerProps, wrapperProps } = useVirtualList(posterEvents, {
+// 	itemHeight: 336,
+// 	overscan: 10
 // });
 
-// const onResize = (): void => {
+// !!!!! VUE VIRTUAL SCROLL TEST
+
+interface viewAndVisible {
+	viewStartIdx: number;
+	viewEndIdx: number;
+	visibleStartIdx: number;
+	visibleEndIdx: number;
+}
+
+const updateParts: Ref<viewAndVisible> = ref({
+	viewStartIdx: 0,
+	viewEndIdx: 0,
+	visibleStartIdx: 0,
+	visibleEndIdx: 0
+});
+
+// const onResize = () => {
 // 	console.log('resize');
 // };
 
-// const onUpdate = (
-// 	viewStartIndex: number,
-// 	viewEndIndex: number,
-// 	visibleStartIndex: number,
-// 	visibleEndIndex: number
-// ): void => {
-// 	updateParts.value.viewStartIdx = viewStartIndex;
-// 	updateParts.value.viewEndIdx = viewEndIndex;
-// 	updateParts.value.visibleStartIdx = visibleStartIndex;
-// 	updateParts.value.visibleEndIdx = visibleEndIndex;
-// };
+const onUpdate = (
+	viewStartIndex: number,
+	viewEndIndex: number,
+	visibleStartIndex: number,
+	visibleEndIndex: number
+): void => {
+	updateParts.value.viewStartIdx = viewStartIndex;
+	updateParts.value.viewEndIdx = viewEndIndex;
+	updateParts.value.visibleStartIdx = visibleStartIndex;
+	updateParts.value.visibleEndIdx = visibleEndIndex;
+};
+
+onMounted(() => {
+	const listSelector = ref<HTMLElement | null>(null);
+
+	useInfiniteScroll(
+		listSelector,
+		() => {
+			console.log('sobaka');
+			loadEvents(posterEvents.value, 20);
+		},
+		{ distance: 10 }
+	);
+});
 </script>
 
 <template>
@@ -177,12 +172,13 @@ watch(posterEvents, (events) => {
 			class="main-page__filter"
 		/>
 
-		<!-- <DynamicScroller
+		<!-- VUE VIRTUAL SCROLL TEST -->
+		<DynamicScroller
+			ref="listSelector"
 			:items="posterEvents"
 			:emit-update="true"
-			:min-item-size="280"
+			:min-item-size="294"
 			class="main-page__card-list"
-			@resize="onResize"
 			@update="onUpdate"
 		>
 			<template #default="{ item: event, index, active }">
@@ -190,8 +186,6 @@ watch(posterEvents, (events) => {
 					:item="event"
 					:active="active"
 					:data-index="index"
-					:data-active="active"
-					:size-dependencies="[event.description]"
 				>
 					<HomeEventPreviewCard
 						:class="{ expired: event.date < now }"
@@ -199,31 +193,10 @@ watch(posterEvents, (events) => {
 					/>
 				</DynamicScrollerItem>
 			</template>
-		</DynamicScroller> -->
+		</DynamicScroller>
 
-		<!--		<ul class="main-page__card-list">-->
-		<!--			<div-->
-		<!--				v-bind="containerProps"-->
-		<!--				style="overflow-y: unset"-->
-		<!--			>-->
-		<!--				<div-->
-		<!--					v-bind="wrapperProps"-->
-		<!--					ref="listItem"-->
-		<!--				>-->
-		<!--					<li-->
-		<!--						v-for="{ data: event } in list"-->
-		<!--						:key="event.id"-->
-		<!--					>-->
-		<!--						<HomeEventPreviewCard-->
-		<!--							:class="{ expired: event.date < now }"-->
-		<!--							:event-data="event"-->
-		<!--						/>-->
-		<!--					</li>-->
-		<!--				</div>-->
-		<!--			</div>-->
-		<!--		</ul>-->
-
-		<ul
+		<!-- USE VIRTUAL SCROLL & USE INFINITY SCROLL TEST -->
+		<!-- <ul
 			v-bind="containerProps"
 			style="height: 100vh"
 			class="main-page__card-list"
@@ -242,20 +215,7 @@ watch(posterEvents, (events) => {
 					/>
 				</div>
 			</li>
-		</ul>
-
-		<!-- <ul class="main-page__card-list">
-      <li
-        v-for="event in posterEvents"
-        :key="event.id"
-      >
-          <HomeEventPreviewCard
-            :class="{ expired: event.date < now }"
-            :event-data="event"
-          />
-        <HomeAdCard v-else :ad-data="event" class="ad-block" />
-      </li>
-    </ul> -->
+		</ul> -->
 
 		<!-- <ul class="main-page__card-list">
 			<li
@@ -283,13 +243,16 @@ watch(posterEvents, (events) => {
 </template>
 
 <style lang="less" scoped>
+.vue-recycle-scroller__item-view div:first-child {
+	padding-bottom: 40px;
+}
 .main-page {
 	padding-top: 16px;
 
 	&__search {
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
-		margin-bottom: 40px;
+		margin-bottom: 44px;
 	}
 
 	&__location {
@@ -318,6 +281,7 @@ watch(posterEvents, (events) => {
 		display: flex;
 		flex-direction: column;
 		width: 100%;
+		height: 100vh;
 	}
 }
 

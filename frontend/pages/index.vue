@@ -73,6 +73,14 @@ interface EventOnPoster {
 	url: string;
 }
 
+onBeforeMount(() => {
+	document.body.style.overflowY = 'hidden';
+});
+
+onUnmounted(() => {
+	document.body.style.overflowY = 'auto';
+});
+
 // !!!!! VUE VIRTUAL SCROLL TEST
 
 const posterEvents: Ref<EventOnPoster[]> = ref([]);
@@ -105,14 +113,14 @@ const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
 
 loadEvents(posterEvents.value, 20);
 
-const listSelector = ref<HTMLElement | null>(null);
-
 const filter = ref<HTMLElement | null>(null);
 const isFilterVisible = ref(true);
 
 const { stop } = useIntersectionObserver(filter, ([{ isIntersecting }]) => {
 	isFilterVisible.value = isIntersecting;
 });
+
+const listSelector = ref<HTMLElement | null>(null);
 
 watch(isFilterVisible, () => {
 	if (!isFilterVisible.value) {
@@ -125,35 +133,39 @@ watch(isFilterVisible, () => {
 		);
 	}
 });
+
+const updateParts: Ref<{
+	viewStartIdx: number;
+	viewEndIdx: number;
+	visibleStartIdx: number;
+	visibleEndIdx: number;
+}> = ref({
+	viewStartIdx: 0,
+	viewEndIdx: 0,
+	visibleStartIdx: 0,
+	visibleEndIdx: 0
+});
+
+type update = (
+	viewStartIndex: number,
+	viewEndIndex: number,
+	visibleStartIndex: number,
+	visibleEndIndex: number
+) => void;
+
+const onUpdate: update = (viewStartIndex, viewEndIndex, visibleStartIndex, visibleEndIndex) => {
+	updateParts.value.viewStartIdx = viewStartIndex;
+	updateParts.value.viewEndIdx = viewEndIndex;
+	updateParts.value.visibleStartIdx = visibleStartIndex;
+	updateParts.value.visibleEndIdx = visibleEndIndex;
+};
 </script>
 
 <template>
 	<div class="main-page">
-		<HomeSearch
-			v-model:search="eventsQuery.searchLine"
-			class="main-page__search"
-		/>
-		<div class="main-page__location">
-			<HomeUserLocation />
-		</div>
-		<h1 class="main-page__title">
-			{{ $t('home.title') }}
-		</h1>
-		<HomeFilter
-			ref="filter"
-			v-model:country="eventsQuery.country"
-			v-model:city="eventsQuery.city"
-			class="main-page__filter"
-		/>
-
-		<!-- VUE VIRTUAL SCROLL TEST -->
 		<div
 			ref="listSelector"
-			:class="{
-				hideScrollbar: isFilterVisible,
-				showScrollbar: !isFilterVisible
-			}"
-			style="height: 100vh; overflow-y: scroll"
+			class="list-selector"
 		>
 			<DynamicScroller
 				:items="posterEvents"
@@ -161,7 +173,31 @@ watch(isFilterVisible, () => {
 				:buffer="400"
 				:page-mode="true"
 				class="main-page__card-list"
+				@update="onUpdate"
 			>
+				<template #before>
+					<HomeSearch
+						v-model:search="eventsQuery.searchLine"
+						class="main-page__search"
+					/>
+					<div class="main-page__location">
+						<HomeUserLocation />
+					</div>
+
+					<h1 class="main-page__title">
+						{{ $t('home.title') }}
+					</h1>
+
+					<HomeFilter
+						ref="filter"
+						v-model:country="eventsQuery.country"
+						v-model:city="eventsQuery.city"
+						class="main-page__filter"
+					/>
+				</template>
+
+				<!-- VUE VIRTUAL SCROLL TEST -->
+
 				<template #default="{ item: event, index, active }">
 					<DynamicScrollerItem
 						:item="event"
@@ -214,12 +250,12 @@ watch(isFilterVisible, () => {
 	padding-bottom: 44px;
 }
 
-.showScrollbar {
+.list-selector {
 	overflow-y: scroll;
-}
-
-.hideScrollbar {
-	overflow-y: unset;
+	height: calc(100vh);
+	&::-webkit-scrollbar {
+		width: 0;
+	}
 }
 
 .main-page {

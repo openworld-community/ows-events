@@ -39,14 +39,14 @@ const eventsQuery = ref({
 	city: getFirstQuery(route.query.city),
 	country: getFirstQuery(route.query.country)
 });
-const debouncedEventsRequestQuery = refDebounced(
-	computed(() => ({ ...eventsQuery.value })),
-	500,
-	{ maxWait: 5000 }
-);
-const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
-	data: { query: debouncedEventsRequestQuery }
-});
+// const debouncedEventsRequestQuery = refDebounced(
+// 	computed(() => ({ ...eventsQuery.value })),
+// 	500,
+// 	{ maxWait: 5000 }
+// );
+// const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
+// 	data: { query: debouncedEventsRequestQuery }
+// });
 
 const onButtonClick = () => {
 	if (useCookie('token').value) {
@@ -81,7 +81,7 @@ interface EventOnPoster {
 	url: string;
 }
 
-// const posterEvents: Ref<EventOnPoster[]> = ref([]);
+const posterEvents: Ref<EventOnPoster[]> = ref([]);
 
 type loadEventsCustom = (list: EventOnPoster[], count: number) => void;
 
@@ -120,13 +120,13 @@ onUnmounted(() => {
 	listSrore.listSelector = null;
 });
 
-// useInfiniteScroll(
-// 	listSelector,
-// 	() => {
-// 		loadEvents(posterEvents.value, 20);
-// 	},
-// 	{ distance: 20 }
-// );
+useInfiniteScroll(
+	listSelector,
+	() => {
+		loadEvents(posterEvents.value, 20);
+	},
+	{ distance: 20 }
+);
 
 // const updateParts: Ref<{
 // 	viewStartIdx: number;

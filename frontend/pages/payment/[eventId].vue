@@ -4,20 +4,20 @@ import { type PaymentInfo } from '../../../common/types/payment-info';
 import { RouteNameEnum } from '@/constants/enums/route';
 import { ref } from 'vue';
 import Markdown from 'vue3-markdown-it';
-import {BASE_URL} from '../../constants/url';
+import { BASE_URL } from '../../constants/url';
 
 const { t } = useI18n();
 const route = useRoute();
 
 useHead({
 	titleTemplate: `%s / ${t('meta.payment_info.title')}`,
-		meta: [
+	meta: [
 		{ property: 'og:site_name', content: t('meta.title') },
 		{ property: 'og:type', content: 'website' },
 		{ property: 'og:title', content: t('meta.payment_info.title') },
-		{ property: 'og:description', content: t('meta.home.description') },
+		{ property: 'og:description', content: t('meta.default_description') },
 		{ property: 'og:image', content: BASE_URL + '/assets/img/event-preview@2x.png' },
-		{ property: 'og:url', content: BASE_URL + route.path },
+		{ property: 'og:url', content: BASE_URL + route.path }
 	]
 });
 definePageMeta({ name: RouteNameEnum.PAYMENT_INFO });

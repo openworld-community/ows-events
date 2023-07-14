@@ -50,10 +50,13 @@ getMeta({
 
 <style lang="less" scoped>
 .about {
-	padding-left: var(--padding-side);
-	padding-right: var(--padding-side);
-	padding-top: var(--padding-vertical);
-	padding-bottom: var(--padding-vertical);
+  max-width: 480px;
+  padding-left: var(--padding-side);
+  padding-right: var(--padding-side);
+  padding-top: var(--padding-vertical);
+  padding-bottom: var(--padding-vertical);
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .about p {

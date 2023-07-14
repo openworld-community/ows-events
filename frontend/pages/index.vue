@@ -8,6 +8,7 @@ import { v4 as uuid } from 'uuid';
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 
 import { useListStore } from '~/stores/list.store';
+
 const listSrore = useListStore();
 
 const { t } = useI18n();
@@ -154,7 +155,7 @@ useInfiniteScroll(
 	<div class="main-page">
 		<div
 			ref="listSelector"
-			class="main-page__cards"
+			class="main-page__wrapper"
 		>
 			<DynamicScroller
 				:items="posterEvents"
@@ -162,7 +163,7 @@ useInfiniteScroll(
 				:buffer="400"
 				:page-mode="true"
 				:emit-update="true"
-				class="main-page__cards-list"
+				class="main-page__content"
 			>
 				<!-- @update="onUpdate" -->
 				<template #before>
@@ -210,18 +211,18 @@ useInfiniteScroll(
 		</div>
 
 		<!-- <ul class="main-page__card-list">
-			<li
-				v-for="event in posterEvents"
-				:key="event.id"
-			>
-					<HomeEventPreviewCard
-						:class="{ expired: event.date < now }"
-						:event-data="event"
-					/>
-				<HomeAdCard v-else :ad-data="event" class="ad-block" />
-			</li>
-		</ul> -->
-
+      <li
+        v-for="event in posterEvents"
+        :key="event.id"
+      >
+          <HomeEventPreviewCard
+            :class="{ expired: event.date < now }"
+            :event-data="event"
+          />
+        <HomeAdCard v-else :ad-data="event" class="ad-block" />
+      </li>
+    </ul> -->
+    <div class="main-page__add-button-wrapper">
 		<CommonButton
 			class="add-event-button"
 			button-kind="success"
@@ -231,6 +232,7 @@ useInfiniteScroll(
 			aria-haspopup="true"
 			@click="onButtonClick"
 		/>
+    </div>
 	</div>
 </template>
 
@@ -240,6 +242,30 @@ useInfiniteScroll(
 }
 
 .main-page {
+	&__wrapper {
+		width: 100%;
+		overflow-y: scroll;
+		height: calc(100vh - var(--header-height));
+	}
+
+	&__content {
+		max-width: 480px;
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		margin-right: auto;
+		margin-left: auto;
+	}
+
+	&__add-button-wrapper {
+		max-width: 480px;
+		position: sticky;
+		bottom: 20px;
+		right: 0;
+		margin-right: auto;
+		margin-left: auto;
+	}
+
 	&__search {
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
@@ -268,22 +294,9 @@ useInfiniteScroll(
 		padding-right: var(--padding-side);
 		margin-bottom: 24px;
 	}
-
-	&__cards {
-		overflow-y: scroll;
-		height: calc(100vh - var(--header-height));
-		&-list {
-			display: flex;
-			flex-direction: column;
-			width: 100%;
-		}
-	}
 }
 
 .add-event-button {
-	position: sticky;
-	bottom: 20px;
-	right: 0;
 	margin-left: auto;
 	margin-right: 20px;
 	z-index: 1;

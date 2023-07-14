@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-	<div class="privacy">
+	<section class="privacy">
 		<h1 class="privacy__main-title">{{ $t('limitation_of_liability.title') }}</h1>
 		<p class="privacy__paragraph">Дата последнего изменения: 25.06.2023.</p>
 
@@ -72,12 +72,15 @@
 				контентом, размещаемом на Сервисе.
 			</li>
 		</ol>
-	</div>
+	</section>
 </template>
 
 <style scoped lang="less">
 .privacy {
 	padding: 34px var(--padding-side);
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
 
 	&__main-title {
 		font-size: var(--font-size-XXL);

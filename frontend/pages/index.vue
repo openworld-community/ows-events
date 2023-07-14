@@ -93,7 +93,7 @@ const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
 			description: 'Хочу пицу, чтоб прям вкусная с ума сойдешь и вообще еще че нить',
 			durationInSeconds: 0,
 			title: 'peredelanoconf',
-			image: '',
+			image: '/image/7af2c5b3-3697-41b5-9f36-5151c11a6bb6.png',
 			location: {
 				country: 'Serbia',
 				city: 'Belgrade',

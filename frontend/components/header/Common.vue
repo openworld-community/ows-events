@@ -80,8 +80,7 @@ const scrollToTop = () => {
 	position: fixed;
 	top: 0;
 	left: 0;
-	//TODO разобраться с z-индексами
-	z-index: 3;
+	z-index: 1;
 
 	&__container {
 		display: flex;

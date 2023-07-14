@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '../../constants/enums/route';
 
+import { useListStore } from '~/stores/list.store';
+const listSrore = useListStore();
+
 const route = useRoute();
 
 const isNavbarOpen = ref<boolean>(false);
@@ -18,7 +21,13 @@ const logoComponentIs = computed(() => {
 	if (isAtHome.value) return 'button';
 	else return defineNuxtLink({});
 });
-const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+const scrollToTop = () => {
+	// window.scrollTo({ top: 0, behavior: 'smooth' });
+	if (listSrore.listSelector) {
+		listSrore.listSelector.scrollTo({ top: 0, behavior: 'smooth' });
+	}
+};
 </script>
 
 <template>

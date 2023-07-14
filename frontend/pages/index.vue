@@ -7,6 +7,9 @@ import EventModal from '@/components/modal/Event.client.vue';
 import { v4 as uuid } from 'uuid';
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 
+import { useListStore } from '~/stores/list.store';
+const listSrore = useListStore();
+
 const { t } = useI18n();
 
 definePageMeta({ name: RouteNameEnum.HOME });
@@ -53,7 +56,7 @@ const onButtonClick = () => {
 };
 const now = Date.now();
 
-// TEST DATA
+// !!! TEST !!!
 type Timezone = {
 	timezoneName: string;
 	timezoneOffset: string;
@@ -76,16 +79,6 @@ interface EventOnPoster {
 	timezone?: Timezone;
 	url: string;
 }
-
-onBeforeMount(() => {
-	document.body.style.overflowY = 'hidden';
-});
-
-onUnmounted(() => {
-	document.body.style.overflowY = 'auto';
-});
-
-// !!!!! VUE VIRTUAL SCROLL TEST
 
 const posterEvents: Ref<EventOnPoster[]> = ref([]);
 
@@ -115,9 +108,18 @@ const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
 	}
 };
 
-loadEvents(posterEvents.value, 20);
-
 const listSelector = ref<HTMLElement | null>(null);
+
+onMounted(() => {
+	document.body.style.overflowY = 'hidden';
+	if (!listSelector.value) return;
+	listSrore.listSelector = listSelector.value;
+});
+
+onUnmounted(() => {
+	document.body.style.overflowY = 'unset';
+	listSrore.listSelector = null;
+});
 
 useInfiniteScroll(
 	listSelector,
@@ -127,47 +129,42 @@ useInfiniteScroll(
 	{ distance: 20 }
 );
 
-const updateParts: Ref<{
-	viewStartIdx: number;
-	viewEndIdx: number;
-	visibleStartIdx: number;
-	visibleEndIdx: number;
-}> = ref({
-	viewStartIdx: 0,
-	viewEndIdx: 0,
-	visibleStartIdx: 0,
-	visibleEndIdx: 0
-});
+// const updateParts: Ref<{
+// 	viewStartIdx: number;
+// }> = ref({
+// 	viewStartIdx: 0
+// });
 
-type update = (
-	viewStartIndex: number,
-	viewEndIndex: number,
-	visibleStartIndex: number,
-	visibleEndIndex: number
-) => void;
+// type update = (viewStartIndex: number) => void;
 
-const onUpdate: update = (viewStartIndex, viewEndIndex, visibleStartIndex, visibleEndIndex) => {
-	updateParts.value.viewStartIdx = viewStartIndex;
-	updateParts.value.viewEndIdx = viewEndIndex;
-	updateParts.value.visibleStartIdx = visibleStartIndex;
-	updateParts.value.visibleEndIdx = visibleEndIndex;
-};
+// const onUpdate: update = (viewStartIndex) => {
+// 	listSrore.changeViewStartIdx(viewStartIndex, false);
+// 	// updateParts.value.viewStartIdx = viewStartIndex;
+// };
+
+// watch(
+// 	() => updateParts.value.viewStartIdx,
+// 	() => {
+// 		listSrore.changeViewStartIdx(updateParts.value.viewStartIdx);
+// 	}
+// );
 </script>
 
 <template>
 	<div class="main-page">
 		<div
 			ref="listSelector"
-			class="list-selector"
+			class="main-page__cards"
 		>
 			<DynamicScroller
 				:items="posterEvents"
 				:min-item-size="336"
 				:buffer="400"
 				:page-mode="true"
-				class="main-page__card-list"
-				@update="onUpdate"
+				:emit-update="true"
+				class="main-page__cards-list"
 			>
+				<!-- @update="onUpdate" -->
 				<template #before>
 					<HomeSearch
 						v-model:search="eventsQuery.searchLine"
@@ -182,7 +179,6 @@ const onUpdate: update = (viewStartIndex, viewEndIndex, visibleStartIndex, visib
 					</h1>
 
 					<HomeFilter
-						ref="filter"
 						v-model:country="eventsQuery.country"
 						v-model:city="eventsQuery.city"
 						class="main-page__filter"
@@ -243,23 +239,6 @@ const onUpdate: update = (viewStartIndex, viewEndIndex, visibleStartIndex, visib
 	padding-bottom: 44px;
 }
 
-.list-selector {
-	overflow-y: scroll;
-	height: calc(100vh - var(--header-height));
-	padding-right: 5px;
-
-	&::-webkit-scrollbar {
-		width: 7px;
-		background-color: rgba(0, 0, 0, 0.1);
-		border-radius: 15px;
-	}
-
-	&::-webkit-scrollbar-thumb {
-		border-radius: 15px;
-		background-color: #48c78e;
-	}
-}
-
 .main-page {
 	&__search {
 		padding-left: var(--padding-side);
@@ -290,10 +269,14 @@ const onUpdate: update = (viewStartIndex, viewEndIndex, visibleStartIndex, visib
 		margin-bottom: 24px;
 	}
 
-	&__card-list {
-		display: flex;
-		flex-direction: column;
-		width: 100%;
+	&__cards {
+		overflow-y: scroll;
+		height: calc(100vh - var(--header-height));
+		&-list {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+		}
 	}
 }
 

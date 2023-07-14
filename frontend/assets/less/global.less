@@ -1,6 +1,17 @@
 html {
   box-sizing: border-box;
+}
+
+html, body {
+  //overflow: hidden;
+  //position: relative;
   height: 100%;
+  //touch-action: none;
+  //-ms-touch-action: none;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 * {
@@ -17,6 +28,7 @@ html {
 }
 
 body {
+  -webkit-overflow-scrolling: touch;
   width: 100%;
   min-width: var(--width-mobile);
   min-height: 100%;

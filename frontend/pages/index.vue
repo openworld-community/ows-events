@@ -39,14 +39,14 @@ const eventsQuery = ref({
 	city: getFirstQuery(route.query.city),
 	country: getFirstQuery(route.query.country)
 });
-// const debouncedEventsRequestQuery = refDebounced(
-// 	computed(() => ({ ...eventsQuery.value })),
-// 	500,
-// 	{ maxWait: 5000 }
-// );
-// const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
-// 	data: { query: debouncedEventsRequestQuery }
-// });
+const debouncedEventsRequestQuery = refDebounced(
+	computed(() => ({ ...eventsQuery.value })),
+	500,
+	{ maxWait: 5000 }
+);
+const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
+	data: { query: debouncedEventsRequestQuery }
+});
 
 const onButtonClick = () => {
 	if (useCookie('token').value) {
@@ -81,7 +81,7 @@ interface EventOnPoster {
 	url: string;
 }
 
-const posterEvents: Ref<EventOnPoster[]> = ref([]);
+// const posterEvents: Ref<EventOnPoster[]> = ref([]);
 
 type loadEventsCustom = (list: EventOnPoster[], count: number) => void;
 
@@ -93,7 +93,7 @@ const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
 			description: 'Хочу пицу, чтоб прям вкусная с ума сойдешь и вообще еще че нить',
 			durationInSeconds: 0,
 			title: 'peredelanoconf',
-			image: '/image/7af2c5b3-3697-41b5-9f36-5151c11a6bb6.png',
+			image: '',
 			location: {
 				country: 'Serbia',
 				city: 'Belgrade',
@@ -112,23 +112,21 @@ const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
 const listSelector = ref<HTMLElement | null>(null);
 
 onMounted(() => {
-	document.body.style.overflowY = 'hidden';
 	if (!listSelector.value) return;
 	listSrore.listSelector = listSelector.value;
 });
 
 onUnmounted(() => {
-	document.body.style.overflowY = 'unset';
 	listSrore.listSelector = null;
 });
 
-useInfiniteScroll(
-	listSelector,
-	() => {
-		loadEvents(posterEvents.value, 20);
-	},
-	{ distance: 20 }
-);
+// useInfiniteScroll(
+// 	listSelector,
+// 	() => {
+// 		loadEvents(posterEvents.value, 20);
+// 	},
+// 	{ distance: 20 }
+// );
 
 // const updateParts: Ref<{
 // 	viewStartIdx: number;
@@ -237,14 +235,10 @@ useInfiniteScroll(
 </template>
 
 <style lang="less" scoped>
-.vue-recycle-scroller__item-view div:first-child {
-	padding-bottom: 44px;
-}
-
 .main-page {
 	&__wrapper {
 		width: 100%;
-		overflow-y: scroll;
+		overflow-y: auto;
 		height: calc(100vh - var(--header-height));
 	}
 

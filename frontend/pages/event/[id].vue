@@ -10,9 +10,6 @@ import {
 	SeoItempropGlobalEnum,
 	SeoItemTypeEnum
 } from '../../constants/enums/seo';
-import Tag from '../../components/common/Tag.vue';
-
-const { t } = useI18n();
 
 definePageMeta({ name: RouteNameEnum.EVENT });
 const route = useRoute();
@@ -35,7 +32,7 @@ getMeta({
 	title: posterEvent.value?.location ?
     `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}`
 		: posterEvent.value?.title,
-	description: trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
+	description: trimString(posterEvent.value?.description ?? '', 120),
 	image: eventImage.value
 });
 
@@ -112,7 +109,7 @@ patchDeleteEventModal({
 			:class="['event-image', 'event-image__container']"
 			:itemprop="SeoItempropGlobalEnum.IMAGE"
 		>
-			<Tag
+			<CommonTag
 				:class-name="'event-image__price'"
 				:price="posterEvent.price"
 				:currency="'RSD'"

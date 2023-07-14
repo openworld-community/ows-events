@@ -3,6 +3,12 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
+// TEST
+import { v4 as uuid } from 'uuid';
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
+
+import { useListStore } from '~/stores/list.store';
+const listSrore = useListStore();
 
 const { t } = useI18n();
 
@@ -32,14 +38,14 @@ const eventsQuery = ref({
 	city: getFirstQuery(route.query.city),
 	country: getFirstQuery(route.query.country)
 });
-const debouncedEventsRequestQuery = refDebounced(
-	computed(() => ({ ...eventsQuery.value })),
-	500,
-	{ maxWait: 5000 }
-);
-const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
-	data: { query: debouncedEventsRequestQuery }
-});
+// const debouncedEventsRequestQuery = refDebounced(
+// 	computed(() => ({ ...eventsQuery.value })),
+// 	500,
+// 	{ maxWait: 5000 }
+// );
+// const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
+// 	data: { query: debouncedEventsRequestQuery }
+// });
 
 const onButtonClick = () => {
 	if (useCookie('token').value) {
@@ -49,38 +55,172 @@ const onButtonClick = () => {
 	}
 };
 const now = Date.now();
+
+// !!! TEST !!!
+type Timezone = {
+	timezoneName: string;
+	timezoneOffset: string;
+};
+
+interface EventOnPoster {
+	id: string;
+	creatorId?: string;
+	title: string;
+	description: string;
+	date: number;
+	durationInSeconds: number;
+	location: {
+		country: string;
+		city: string;
+		address: string;
+	};
+	image: string;
+	price: string;
+	timezone?: Timezone;
+	url: string;
+}
+
+const posterEvents: Ref<EventOnPoster[]> = ref([]);
+
+type loadEventsCustom = (list: EventOnPoster[], count: number) => void;
+
+const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
+	for (let i = 0; i < count; i++) {
+		list.push({
+			date: +new Date(),
+			id: uuid(),
+			description: 'Хочу пицу, чтоб прям вкусная с ума сойдешь и вообще еще че нить',
+			durationInSeconds: 0,
+			title: 'peredelanoconf',
+			image: '/image/7af2c5b3-3697-41b5-9f36-5151c11a6bb6.png',
+			location: {
+				country: 'Serbia',
+				city: 'Belgrade',
+				address: 'petushovskiy pr-kt'
+			},
+			price: '3000',
+			timezone: {
+				timezoneName: 'Europe/Belgrade',
+				timezoneOffset: '+02:00'
+			},
+			url: 'vk.com'
+		});
+	}
+};
+
+const listSelector = ref<HTMLElement | null>(null);
+
+onMounted(() => {
+	document.body.style.overflowY = 'hidden';
+	if (!listSelector.value) return;
+	listSrore.listSelector = listSelector.value;
+});
+
+onUnmounted(() => {
+	document.body.style.overflowY = 'unset';
+	listSrore.listSelector = null;
+});
+
+useInfiniteScroll(
+	listSelector,
+	() => {
+		loadEvents(posterEvents.value, 20);
+	},
+	{ distance: 20 }
+);
+
+// const updateParts: Ref<{
+// 	viewStartIdx: number;
+// }> = ref({
+// 	viewStartIdx: 0
+// });
+
+// type update = (viewStartIndex: number) => void;
+
+// const onUpdate: update = (viewStartIndex) => {
+// 	listSrore.changeViewStartIdx(viewStartIndex, false);
+// 	// updateParts.value.viewStartIdx = viewStartIndex;
+// };
+
+// watch(
+// 	() => updateParts.value.viewStartIdx,
+// 	() => {
+// 		listSrore.changeViewStartIdx(updateParts.value.viewStartIdx);
+// 	}
+// );
 </script>
 
 <template>
 	<div class="main-page">
-		<HomeSearch
-			v-model:search="eventsQuery.searchLine"
-			class="main-page__search"
-		/>
-		<div class="main-page__location">
-			<HomeUserLocation />
-		</div>
-		<h1 class="main-page__title">
-			{{ $t('home.title') }}
-		</h1>
-		<HomeFilter
-			v-model:country="eventsQuery.country"
-			v-model:city="eventsQuery.city"
-			class="main-page__filter"
-		/>
+		<div
+			ref="listSelector"
+			class="main-page__cards"
+		>
+			<DynamicScroller
+				:items="posterEvents"
+				:min-item-size="336"
+				:buffer="400"
+				:page-mode="true"
+				:emit-update="true"
+				class="main-page__cards-list"
+			>
+				<!-- @update="onUpdate" -->
+				<template #before>
+					<HomeSearch
+						v-model:search="eventsQuery.searchLine"
+						class="main-page__search"
+					/>
+					<div class="main-page__location">
+						<HomeUserLocation />
+					</div>
 
-		<ul class="main-page__card-list">
+					<h1 class="main-page__title">
+						{{ $t('home.title') }}
+					</h1>
+
+					<HomeFilter
+						v-model:country="eventsQuery.country"
+						v-model:city="eventsQuery.city"
+						class="main-page__filter"
+					/>
+				</template>
+
+				<!-- VUE VIRTUAL SCROLL TEST -->
+
+				<template #default="{ item: event, index, active }">
+					<DynamicScrollerItem
+						:item="event"
+						:data-index="index"
+						:active="active"
+						:size-dependencies="[
+							event.description,
+							event.title,
+							event.location.addres,
+							event.location.city,
+							event.location.country
+						]"
+					>
+						<HomeEventPreviewCard
+							:class="{ expired: event.date < now }"
+							:event-data="event"
+						/>
+					</DynamicScrollerItem>
+				</template>
+			</DynamicScroller>
+		</div>
+
+		<!-- <ul class="main-page__card-list">
 			<li
 				v-for="event in posterEvents"
 				:key="event.id"
 			>
-				<HomeEventPreviewCard
-					:class="{ expired: event.date < now }"
-					:event-data="event"
-				/>
-				<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
+					<HomeEventPreviewCard
+						:class="{ expired: event.date < now }"
+						:event-data="event"
+					/>
+				<HomeAdCard v-else :ad-data="event" class="ad-block" />
 			</li>
-		</ul>
+		</ul> -->
 
 		<CommonButton
 			class="add-event-button"
@@ -95,13 +235,16 @@ const now = Date.now();
 </template>
 
 <style lang="less" scoped>
-.main-page {
-	padding-top: 16px;
+.vue-recycle-scroller__item-view div:first-child {
+	padding-bottom: 44px;
+}
 
+.main-page {
 	&__search {
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
-		margin-bottom: 40px;
+		padding-top: 16px;
+		margin-bottom: 44px;
 	}
 
 	&__location {
@@ -126,10 +269,14 @@ const now = Date.now();
 		margin-bottom: 24px;
 	}
 
-	&__card-list {
-		display: flex;
-		flex-direction: column;
-		width: 100%;
+	&__cards {
+		overflow-y: scroll;
+		height: calc(100vh - var(--header-height));
+		&-list {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+		}
 	}
 }
 

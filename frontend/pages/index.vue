@@ -111,13 +111,26 @@ const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
 
 const listSelector = ref<HTMLElement | null>(null);
 
-onMounted(() => {
-	if (!listSelector.value) return;
-	listSrore.listSelector = listSelector.value;
-});
+watch(
+	() => listSrore.needScrollList,
+	() => {
+		if (listSrore.needScrollList === true && listSelector.value) {
+			listSelector.value.scrollTo({ top: 0, behavior: 'smooth' });
+			listSrore.needScrollList = false;
+		}
+	}
+);
+
+// onMounted(() => {
+// 	if (!listSelector.value) return;
+// 	listSrore.listSelector = listSelector.value;
+// });
+
+// try main overflow hidden
 
 onUnmounted(() => {
-	listSrore.listSelector = null;
+	// listSrore.listSelector = null;
+	listSrore.needScrollList = false;
 });
 
 useInfiniteScroll(
@@ -220,17 +233,17 @@ useInfiniteScroll(
         <HomeAdCard v-else :ad-data="event" class="ad-block" />
       </li>
     </ul> -->
-    <div class="main-page__add-button-wrapper">
-		<CommonButton
-			class="add-event-button"
-			button-kind="success"
-			is-round
-			icon-name="plus"
-			:alt="$t('home.button.add_event_aria')"
-			aria-haspopup="true"
-			@click="onButtonClick"
-		/>
-    </div>
+		<div class="main-page__add-button-wrapper">
+			<CommonButton
+				class="add-event-button"
+				button-kind="success"
+				is-round
+				icon-name="plus"
+				:alt="$t('home.button.add_event_aria')"
+				aria-haspopup="true"
+				@click="onButtonClick"
+			/>
+		</div>
 	</div>
 </template>
 

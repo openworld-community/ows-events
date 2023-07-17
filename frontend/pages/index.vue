@@ -104,8 +104,6 @@ const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
 		});
 	}
 };
-
-loadEvents(posterEvents.value, 20);
 </script>
 
 <template>

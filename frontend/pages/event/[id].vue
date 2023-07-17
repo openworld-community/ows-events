@@ -99,7 +99,7 @@ patchDeleteEventModal({
 </script>
 
 <template>
-	<div
+	<section
 		v-if="posterEvent"
 		class="event"
 		itemscope
@@ -228,7 +228,7 @@ patchDeleteEventModal({
 				/>
 			</div>
 		</div>
-	</div>
+	</section>
 	<!-- todo - временная затычка -->
 	<div v-else>Request errored or pending</div>
 </template>
@@ -237,11 +237,14 @@ patchDeleteEventModal({
 .event {
 	display: flex;
 	flex-direction: column;
+	max-width: 480px;
 	width: 100%;
 	height: 100%;
 	max-height: calc(100vh - var(--header-height));
 	padding-left: var(--padding-side);
 	padding-right: var(--padding-side);
+	margin-left: auto;
+	margin-right: auto;
 
 	// Для адаптивной height на iOs
 	@supports (-webkit-touch-callout: none) {

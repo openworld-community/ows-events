@@ -9,8 +9,7 @@ const { t } = useI18n();
 definePageMeta({ name: RouteNameEnum.HOME });
 
 getMeta({
-	title: t('meta.title'),
-	description: t('meta.home.description')
+	title: t('meta.title')
 });
 
 const {

@@ -10,7 +10,7 @@ const { locale, t } = useI18n();
 
 useHead({
 	title: t('meta.title'),
-	meta: [{ name: 'description', content: t('meta.home.description') }],
+	meta: [{ name: 'description', content: t('meta.default_description') }],
 	htmlAttrs: {
 		lang: locale.value
 	}

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '@/constants/enums/route';
 import { SUPPORT_TG_URL } from '../../../constants/url';
+import {SeoItemTypeEnum} from '../../../constants/enums/seo';
 
 const emit = defineEmits(['close']);
 </script>
@@ -9,6 +10,8 @@ const emit = defineEmits(['close']);
 	<nav
 		class="navigation"
 		role="navigation"
+		itemscope
+		:itemtype="SeoItemTypeEnum.NAV"
 	>
 		<HeaderAuthorisation
 			class="navigation__item"

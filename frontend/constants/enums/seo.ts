@@ -8,7 +8,9 @@ export enum SeoItemTypeEnum {
 	ADDRESS = `${SEO_SCHEMA_BASE_URL}PostalAddress`,
 	ABOUT = `${SEO_SCHEMA_BASE_URL}AboutPage`,
 	DONATE = `${SEO_SCHEMA_BASE_URL}DonateAction`,
-	DONATE_METHOD = `${SEO_SCHEMA_BASE_URL}MoneyTransfer`
+	DONATE_METHOD = `${SEO_SCHEMA_BASE_URL}MoneyTransfer`,
+	HEADER = `${SEO_SCHEMA_BASE_URL}WPHeader`,
+	NAV = `${SEO_SCHEMA_BASE_URL}SiteNavigationElement`,
 }
 
 // ITEMPROPS
@@ -58,4 +60,10 @@ export enum SeoItempropAboutEnum {
 	MAIN_CONTENT = 'mainContentOfPage',
 	IMAGE = 'primaryImageOfPage',
 	SIGNIFICANT_LINK = 'significantLink',
+}
+
+// Navigation
+export enum SeoItempropNavEnum {
+	NAME = 'name',
+	URL = 'url',
 }

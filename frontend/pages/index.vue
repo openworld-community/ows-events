@@ -5,11 +5,6 @@ import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
 // TEST
 import { v4 as uuid } from 'uuid';
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
-
-import { useListStore } from '~/stores/list.store';
-
-const listSrore = useListStore();
 
 const { t } = useI18n();
 
@@ -55,7 +50,6 @@ const onButtonClick = () => {
 		openNeedAuthorizeModal();
 	}
 };
-const now = Date.now();
 
 // !!! TEST !!!
 type Timezone = {
@@ -80,6 +74,8 @@ interface EventOnPoster {
 	timezone?: Timezone;
 	url: string;
 }
+
+const now = Date.now();
 
 const posterEvents: Ref<EventOnPoster[]> = ref([]);
 
@@ -109,130 +105,59 @@ const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
 	}
 };
 
-const listSelector = ref<HTMLElement | null>(null);
-
-watch(
-	() => listSrore.needScrollList,
-	() => {
-		if (listSrore.needScrollList === true && listSelector.value) {
-			listSelector.value.scrollTo({ top: 0, behavior: 'smooth' });
-			listSrore.needScrollList = false;
-		}
-	}
-);
-
-// onMounted(() => {
-// 	if (!listSelector.value) return;
-// 	listSrore.listSelector = listSelector.value;
-// });
-
-// try main overflow hidden
-
-onUnmounted(() => {
-	// listSrore.listSelector = null;
-	listSrore.needScrollList = false;
-});
-
-useInfiniteScroll(
-	listSelector,
-	() => {
-		loadEvents(posterEvents.value, 20);
-	},
-	{ distance: 20 }
-);
-
-// const updateParts: Ref<{
-// 	viewStartIdx: number;
-// }> = ref({
-// 	viewStartIdx: 0
-// });
-
-// type update = (viewStartIndex: number) => void;
-
-// const onUpdate: update = (viewStartIndex) => {
-// 	listSrore.changeViewStartIdx(viewStartIndex, false);
-// 	// updateParts.value.viewStartIdx = viewStartIndex;
-// };
-
-// watch(
-// 	() => updateParts.value.viewStartIdx,
-// 	() => {
-// 		listSrore.changeViewStartIdx(updateParts.value.viewStartIdx);
-// 	}
-// );
+loadEvents(posterEvents.value, 20);
 </script>
 
 <template>
 	<div class="main-page">
-		<div
-			ref="listSelector"
-			class="main-page__wrapper"
+		<CommonScrollingPage
+			:items="posterEvents"
+			:min-item-size="336"
+			:is-page-mode="true"
+			:is-emit-update="true"
+			:class-name="'main-page__content'"
+			@load-events="loadEvents(posterEvents, 20)"
 		>
-			<DynamicScroller
-				:items="posterEvents"
-				:min-item-size="336"
-				:buffer="400"
-				:page-mode="true"
-				:emit-update="true"
-				class="main-page__content"
-			>
-				<!-- @update="onUpdate" -->
-				<template #before>
-					<HomeSearch
-						v-model:search="eventsQuery.searchLine"
-						class="main-page__search"
+			<template #stable>
+				<HomeSearch
+					v-model:search="eventsQuery.searchLine"
+					class="main-page__search"
+				/>
+				<div class="main-page__location">
+					<HomeUserLocation />
+				</div>
+
+				<h1 class="main-page__title">
+					{{ $t('home.title') }}
+				</h1>
+
+				<HomeFilter
+					v-model:country="eventsQuery.country"
+					v-model:city="eventsQuery.city"
+					class="main-page__filter"
+				/>
+			</template>
+			<template #dynamic="{ item, index, active }">
+				<DynamicScrollerItem
+					:item="item"
+					:data-index="index"
+					:active="active"
+					:size-dependencies="[
+						item.description,
+						item.title,
+						item.location.addres,
+						item.location.city,
+						item.location.country
+					]"
+				>
+					<HomeEventPreviewCard
+						:class="{ expired: item.date < now }"
+						:event-data="item"
 					/>
-					<div class="main-page__location">
-						<HomeUserLocation />
-					</div>
+				</DynamicScrollerItem>
+			</template>
+		</CommonScrollingPage>
 
-					<h1 class="main-page__title">
-						{{ $t('home.title') }}
-					</h1>
-
-					<HomeFilter
-						v-model:country="eventsQuery.country"
-						v-model:city="eventsQuery.city"
-						class="main-page__filter"
-					/>
-				</template>
-
-				<!-- VUE VIRTUAL SCROLL TEST -->
-
-				<template #default="{ item: event, index, active }">
-					<DynamicScrollerItem
-						:item="event"
-						:data-index="index"
-						:active="active"
-						:size-dependencies="[
-							event.description,
-							event.title,
-							event.location.addres,
-							event.location.city,
-							event.location.country
-						]"
-					>
-						<HomeEventPreviewCard
-							:class="{ expired: event.date < now }"
-							:event-data="event"
-						/>
-					</DynamicScrollerItem>
-				</template>
-			</DynamicScroller>
-		</div>
-
-		<!-- <ul class="main-page__card-list">
-      <li
-        v-for="event in posterEvents"
-        :key="event.id"
-      >
-          <HomeEventPreviewCard
-            :class="{ expired: event.date < now }"
-            :event-data="event"
-          />
-        <HomeAdCard v-else :ad-data="event" class="ad-block" />
-      </li>
-    </ul> -->
 		<div class="main-page__add-button-wrapper">
 			<CommonButton
 				class="add-event-button"
@@ -245,24 +170,37 @@ useInfiniteScroll(
 			/>
 		</div>
 	</div>
+
+	<!-- <ul class="main-page__card-list">
+      <li
+        v-for="event in posterEvents"
+        :key="event.id"
+      >
+          <HomeEventPreviewCard
+            :class="{ expired: event.date < now }"
+            :event-data="event"
+          />
+        <HomeAdCard v-else :ad-data="event" class="ad-block" />
+      </li>
+    </ul> -->
 </template>
 
 <style lang="less" scoped>
 .main-page {
-	&__wrapper {
-		width: 100%;
-		overflow-y: auto;
-		height: calc(100vh - var(--header-height));
-	}
+	// &__wrapper {
+	// 	width: 100%;
+	// 	overflow-y: auto;
+	// 	height: calc(100vh - var(--header-height));
+	// }
 
-	&__content {
-		max-width: 480px;
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-		margin-right: auto;
-		margin-left: auto;
-	}
+	// &__content {
+	// 	max-width: 480px;
+	// 	display: flex;
+	// 	flex-direction: column;
+	// 	width: 100%;
+	// 	margin-right: auto;
+	// 	margin-left: auto;
+	// }
 
 	&__add-button-wrapper {
 		max-width: 480px;

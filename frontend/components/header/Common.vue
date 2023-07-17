@@ -23,10 +23,6 @@ const logoComponentIs = computed(() => {
 });
 
 const scrollToTop = () => {
-	// window.scrollTo({ top: 0, behavior: 'smooth' });
-	// if (listSrore.listSelector) {
-	// 	listSrore.listSelector.scrollTo({ top: 0, behavior: 'smooth' });
-	// }
 	listSrore.needScrollList = true;
 };
 </script>

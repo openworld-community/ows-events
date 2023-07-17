@@ -1,6 +1,7 @@
 export const modal = {
 	new_event_modal: {
-		title: 'Добавьте мероприятие',
+		title_new_event: 'Добавьте мероприятие',
+		title_edit_event: 'Редактирование',
 		cancel: 'Отмена',
 		submit: 'Сохранить',
 		add_image: 'Добавить фото',

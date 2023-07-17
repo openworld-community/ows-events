@@ -101,7 +101,7 @@ const now = Date.now();
 	&__search {
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
-		margin-bottom: 40px;
+		margin-bottom: 25px;
 	}
 
 	&__location {
@@ -123,7 +123,7 @@ const now = Date.now();
 	&__filter {
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
-		margin-bottom: 24px;
+		margin-bottom: 10px;
 	}
 
 	&__card-list {

@@ -14,6 +14,7 @@ export type IconName =
 	| 'login'
 	| 'info'
 	| 'error'
+  | 'error-round'
 	| 'edit'
 	| 'delete'
 	| 'container'

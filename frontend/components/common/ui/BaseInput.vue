@@ -5,10 +5,6 @@ import type { IconName } from '../Icon.vue';
 defineOptions({ inheritAttrs: false });
 
 defineProps({
-	className: {
-		type: String as PropType<string>,
-		default: ''
-	},
 	modelValue: {
 		type: [String, Number] as PropType<string | number>,
 		default: ''
@@ -76,17 +72,15 @@ const onRemove = () => {
 </script>
 
 <template>
-	<div :class="`input input__wrapper ${className}`">
+	<div class="input input__wrapper">
 		<label
-			v-if="label"
-			class="form__label"
 			:for="name"
+			:class="['input__label', { 'visually-hidden': !label }]"
 		>
-			{{ label }}
+			{{ label ? label : placeholder }}
 		</label>
 		<input
-			class="input__field"
-			:class="{ form__error: error }"
+			:class="['input__field', { 'input__field--error': error }]"
 			v-bind="$attrs"
 			:name="name"
 			:type="type"
@@ -102,8 +96,9 @@ const onRemove = () => {
 		/>
 
 		<CommonIcon
-			v-if="iconName && !modelValue"
-			:name="iconName"
+			v-if="(iconName || error) && !modelValue"
+			:name="error ? 'error-round' : iconName"
+			:color="error ? 'var(--color-accent-red)' : 'var(--color-input-icons)'"
 			class="input__button"
 		/>
 
@@ -118,13 +113,13 @@ const onRemove = () => {
 			v-else-if="modelValue && !disabled"
 			class="input__button input__button--clear"
 			is-icon
-			icon-name="delete"
+			icon-name="close"
 			:alt="$t('global.button.delete')"
 			@click="onRemove"
 		/>
 		<span
 			v-if="error"
-			class="form__error"
+			class="input__error-message"
 		>
 			{{ error }}
 		</span>

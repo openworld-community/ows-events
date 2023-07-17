@@ -245,7 +245,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	line-height: 0;
 
 	&::v-deep(svg) {
-		color: var(--color-input-field);
+		color: var(--color-input-icons);
 	}
 
 	& + .icon {

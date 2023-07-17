@@ -26,7 +26,7 @@ const props = defineProps({
 .section {
 	display: flex;
 	flex-direction: column;
-	margin-bottom: 24px;
+	margin-bottom: 15px;
 
 	&__subtitle {
 		font-size: var(--font-size-L);
@@ -40,7 +40,7 @@ const props = defineProps({
 		width: 100%;
 
 		& > :deep(div:not(:last-child)) {
-			margin-bottom: 20px;
+			margin-bottom: 5px;
 		}
 	}
 

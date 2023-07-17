@@ -1,12 +1,8 @@
-<script setup lang="ts">
-import { RouteNameEnum } from '~/constants/enums/route';
-
-const { translate } = useTranslation();
-</script>
+<script setup lang="ts"></script>
 
 <template>
 	<div class="privacy">
-		<h1 class="privacy__main-title">{{ translate('limitation_of_liability.title') }}</h1>
+		<h1 class="privacy__main-title">{{ $t('limitation_of_liability.title') }}</h1>
 		<p class="privacy__paragraph">Дата последнего изменения: 25.06.2023.</p>
 
 		<ol class="privacy__list">

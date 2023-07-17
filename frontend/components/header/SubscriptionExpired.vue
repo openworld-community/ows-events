@@ -3,9 +3,9 @@ import { onBeforeMount, ref, computed } from 'vue';
 
 const subscriptionExpiredDate = ref<null | Date>(null);
 
-const { i18n } = useTranslation();
+const { t } = useI18n();
 const formatedSubscriptionExpiredDate = computed(() => {
-	return `${i18n.t('header.subscription_expired', { count: dateDifference.value })}`;
+	return t('header.subscription_expired', { count: dateDifference.value });
 });
 
 const dateDifference = computed((): number => {

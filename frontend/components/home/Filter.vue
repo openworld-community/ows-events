@@ -2,7 +2,6 @@
 import { useLocationStore, type City, type Country } from '@/stores/location.store';
 
 const route = useRoute();
-const { translate } = useTranslation();
 const props = defineProps<{ city: City; country: Country }>();
 const emit = defineEmits<{
 	'update:city': [city: typeof props.city];
@@ -34,19 +33,21 @@ watch(
 		<CommonUiBaseSelect
 			class="filter__field"
 			name="country"
-			:placeholder="translate('global.country')"
+			:placeholder="$t('global.country')"
 			:list="locationStore.usedCountries"
 			:model-value="country"
+			:aria-label="$t('home.filter.aria_country')"
 			@update:model-value="updateCountry"
 		/>
 		<CommonUiBaseSelect
 			class="filter__field"
 			name="city"
-			:placeholder="translate('global.city')"
+			:placeholder="$t('global.city')"
 			:list="locationStore.getUsedCitiesByCountry(country) ?? []"
 			:disabled="!country"
 			:model-value="city"
 			dropdown-position="right"
+			:aria-label="$t('home.filter.aria_city')"
 			@update:model-value="updateCity"
 		/>
 	</section>

@@ -1,39 +1,50 @@
 <script setup lang="ts">
 import eventScreen from '@/assets/img/event-screen@2x.png';
 import { REPO_URL } from '@/constants/url';
+import { SeoItempropAboutEnum, SeoItemTypeEnum } from '@/constants/enums/seo';
+import { RouteNameEnum } from '../constants/enums/route';
 
-const { translate } = useTranslation();
+const { t } = useI18n();
 
-useHead({
-	title: `${translate('meta.title')} / ${translate('meta.about_us.title')}`
+definePageMeta({ name: RouteNameEnum.ABOUT });
+getMeta({
+	title: t('meta.about_us.title')
 });
 </script>
 
 <template>
-	<section class="about">
-		<h2 class="title">{{ translate('about.title') }}</h2>
+	<section
+		class="about"
+		itemscope
+		:itemtype="SeoItemTypeEnum.ABOUT"
+	>
+		<h1 class="title">{{ $t('about.title') }}</h1>
 		<img
 			:src="eventScreen"
 			class="about__img"
-			:alt="translate('about.alt')"
+			:alt="$t('about.alt')"
+			:itemprop="SeoItempropAboutEnum.IMAGE"
 		/>
-		<p>{{ translate('about.idea') }}</p>
-		<br />
-		<p>{{ translate('about.functionality') }}</p>
-		<br />
-		<p>{{ translate('about.perspectives') }}</p>
-		<br />
-		<p>
-			{{ translate('about.github') }}:
-			<NuxtLink
-				:href="REPO_URL"
-				class="about__link"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				Repo
-			</NuxtLink>
-		</p>
+		<div :itemprop="SeoItempropAboutEnum.MAIN_CONTENT">
+			<p>{{ $t('about.idea') }}</p>
+			<br />
+			<p>{{ $t('about.functionality') }}</p>
+			<br />
+			<p>{{ $t('about.perspectives') }}</p>
+			<br />
+			<p>
+				{{ $t('about.github') }}:
+				<NuxtLink
+					:href="REPO_URL"
+					class="about__link"
+					target="_blank"
+					rel="noopener noreferrer"
+					:itemprop="SeoItempropAboutEnum.SIGNIFICANT_LINK"
+				>
+					Repo
+				</NuxtLink>
+			</p>
+		</div>
 	</section>
 </template>
 

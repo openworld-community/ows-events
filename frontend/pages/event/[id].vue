@@ -4,12 +4,17 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
 import type { UserInfo } from '@/../common/types/user';
+import { trimString } from '../../utils/trimString';
+import {
+	SeoItempropEventEnum,
+	SeoItempropGlobalEnum,
+	SeoItemTypeEnum
+} from '../../constants/enums/seo';
 
 definePageMeta({ name: RouteNameEnum.EVENT });
 const route = useRoute();
 const id = getFirstParam(route.params.id);
 
-const { translate } = useTranslation();
 const user = useCookie<UserInfo | null>('user');
 
 const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ data: { id } });
@@ -19,8 +24,20 @@ const posterEvent = computed(() => {
 	return data.value;
 });
 
-useHead({
-	title: `${translate('meta.title')} / ${posterEvent.value?.title}`
+const eventImage = computed(() => {
+	return getEventImage(posterEvent.value);
+});
+
+getMeta({
+	title: posterEvent.value?.location ?
+    `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}`
+		: posterEvent.value?.title,
+	description: trimString(posterEvent.value?.description ?? '', 120),
+	image: eventImage.value
+});
+
+const isEditable = computed(() => {
+	return posterEvent.value ? posterEvent.value.date > Date.now() : false;
 });
 
 const redirect = () => {
@@ -85,39 +102,55 @@ patchDeleteEventModal({
 	<div
 		v-if="posterEvent"
 		class="event"
+		itemscope
+		:itemtype="SeoItemTypeEnum.EVENT"
 	>
 		<div
-			:class="[
-				'event-image',
-				'event-image__container',
-				{ 'event-image__container--background': !posterEvent.image }
-			]"
+			:class="['event-image', 'event-image__container']"
+			:itemprop="SeoItempropGlobalEnum.IMAGE"
 		>
-			<span class="event-image__price">
-				{{ getPrice(posterEvent) }}
-			</span>
+			<CommonTag
+				:class-name="'event-image__price'"
+				:price="posterEvent.price"
+				:currency="'RSD'"
+			/>
 			<img
-				v-if="posterEvent.image"
-				:src="getEventImage(posterEvent)"
-				:alt="translate('event.image.event')"
+				v-if="!posterEvent?.image"
+				src="@/assets/img/event-card@2x.png"
+				:alt="$t('event.image.event')"
 				class="event-image__image"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
+			/>
+			<img
+				v-else
+				:src="eventImage"
+				:alt="$t('event.image.event')"
+				class="event-image__image"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
 		</div>
 
-		<div class="event event-description">
+		<div class="event event-info">
 			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
 			<p
 				v-if="posterEvent.title.toLowerCase().includes('peredelanoconf')"
-				class="event-description__author"
+				class="event-info__author"
+				:itemprop="SeoItempropEventEnum.ORGANIZER"
 			>
 				Peredelano
 			</p>
-			<h2 class="event-description__title">
+			<h1
+				class="event-info__title"
+				:itemprop="SeoItempropEventEnum.NAME"
+			>
 				{{ posterEvent.title }}
-			</h2>
+			</h1>
 
-			<p class="event-description__datetime">
-				<span v-if="posterEvent.durationInSeconds">
+			<p class="event-info__datetime">
+				<span
+					v-if="posterEvent.durationInSeconds"
+					:itemprop="SeoItempropEventEnum.DURATION"
+				>
 					{{ convertToLocaleString(posterEvent.date) }}
 					-
 					{{
@@ -126,22 +159,25 @@ patchDeleteEventModal({
 						)
 					}}
 				</span>
-				<span v-else>
+				<span
+					v-else
+					:itemprop="SeoItempropEventEnum.DURATION"
+				>
 					{{ convertToLocaleString(posterEvent.date ?? Date.now()) }}
 				</span>
 				<br />
 				({{ posterEvent.timezone?.timezoneOffset }}
 				{{ posterEvent.timezone?.timezoneName }})
 			</p>
-			<!-- TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса -->
-			<NuxtLink
-				class="event-description__geolink"
-				:to="`https://www.google.com/maps/place/${posterEvent.location.city}+${posterEvent.location.country}`"
-				target="_blank"
+			<CommonAddress
+				:location="posterEvent.location"
+				class="event-info__geolink"
+				is-link
+			/>
+			<p
+				class="event-info__description"
+				:itemprop="SeoItempropEventEnum.DESCRIPTION"
 			>
-				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
-			</NuxtLink>
-			<p class="event-description__description">
 				{{ posterEvent.description }}
 			</p>
 		</div>
@@ -152,7 +188,7 @@ patchDeleteEventModal({
 					v-if="posterEvent.url !== 'self'"
 					button-kind="success"
 					class="event-actions__button event-actions__button--connect"
-					:button-text="translate('event.button.contact')"
+					:button-text="$t('event.button.contact')"
 					@click="redirect"
 				/>
 				<!--TODO подключить, когда вернемся к проработке регистрации-->
@@ -160,7 +196,7 @@ patchDeleteEventModal({
 				<!--					v-else-->
 				<!--					button-kind="success"-->
 				<!--					class="event-actions__button"-->
-				<!--					:button-text="translate('event.button.register')"-->
+				<!--					:button-text="$t('event.button.register')"-->
 				<!--					@click="openRegistrationModal"-->
 				<!--				/>-->
 			</template>
@@ -174,16 +210,17 @@ patchDeleteEventModal({
 				<CommonButton
 					class="event-actions__button event-actions__button--admin"
 					button-kind="warning"
-					:button-text="translate('event.button.delete')"
+					:button-text="$t('event.button.delete')"
 					icon-name="trash"
 					icon-width="16"
 					icon-height="16"
 					@click="openDeleteEventModal"
 				/>
 				<CommonButton
+					v-if="isEditable"
 					class="event-actions__button event-actions__button--admin"
 					button-kind="ordinary"
-					:button-text="translate('event.button.edit')"
+					:button-text="$t('event.button.edit')"
 					icon-name="edit"
 					icon-width="16"
 					icon-height="16"
@@ -202,14 +239,19 @@ patchDeleteEventModal({
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
+	max-height: calc(100vh - var(--header-height));
 	padding-left: var(--padding-side);
 	padding-right: var(--padding-side);
-	padding-bottom: 30px;
-	margin-bottom: auto;
 
-	&-description {
+	// Для адаптивной height на iOs
+	@supports (-webkit-touch-callout: none) {
+		max-height: -webkit-fill-available;
+	}
+
+	&-info {
 		display: flex;
 		width: 100%;
+		min-height: 250px;
 		flex-direction: column;
 		padding-inline: 0;
 
@@ -244,17 +286,12 @@ patchDeleteEventModal({
 		}
 
 		&__geolink {
-			font-size: var(--font-size-XS);
-			line-height: 16px;
-			text-decoration-line: underline;
-			color: #5c9ad2;
-			margin-bottom: var(--space-subsections);
+			margin-bottom: var(--space-unrelated-items);
 		}
 
 		&__description {
 			//TODO: пока верстка только мобилки
 			max-width: 480px;
-			max-height: 150px;
 			word-wrap: break-word;
 			overflow-y: auto;
 			font-size: var(--font-size-S);
@@ -267,6 +304,8 @@ patchDeleteEventModal({
 		flex-direction: column;
 		background-color: var(--color-white);
 		margin-top: auto;
+		padding-top: 15px;
+		padding-bottom: 15px;
 
 		&__manage {
 			display: flex;
@@ -279,7 +318,9 @@ patchDeleteEventModal({
 			height: 40px;
 
 			&--connect {
-				margin-bottom: var(--space-unrelated-items);
+				&:not(:last-child) {
+					margin-bottom: var(--space-unrelated-items);
+				}
 			}
 
 			&--admin {
@@ -300,11 +341,6 @@ patchDeleteEventModal({
 		line-height: 0;
 		background-color: var(--color-input-field);
 		margin-bottom: 12px;
-
-		&--background {
-			background: url('@/assets/img/event-card@2x.png') center center no-repeat;
-			background-size: cover;
-		}
 	}
 
 	&__image {

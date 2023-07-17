@@ -3,7 +3,6 @@ import type { UserInfo } from '../../../common/types/user';
 import ModalAuthorisation from '@/components/modal/Authorisation.vue';
 import { useModal } from 'vue-final-modal';
 
-const { translate } = useTranslation();
 const tokenCookie = useCookie<string | null>('token');
 const isAuthorized = computed(() => !!tokenCookie.value);
 
@@ -30,9 +29,7 @@ updateModalData();
 <template>
 	<HeaderNavigationNavItem
 		:text="
-			isAuthorized
-				? translate('component.header.authorization.deauthorize')
-				: translate('component.header.authorization.authorize')
+			$t(isAuthorized ? 'header.authorization.deauthorize' : 'header.authorization.authorize')
 		"
 		:icon-name="isAuthorized ? 'logout' : 'login'"
 		:item-kind="isAuthorized ? 'warning' : ''"

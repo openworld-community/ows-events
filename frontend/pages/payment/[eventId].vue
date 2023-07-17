@@ -4,15 +4,24 @@ import { type PaymentInfo } from '../../../common/types/payment-info';
 import { RouteNameEnum } from '@/constants/enums/route';
 import { ref } from 'vue';
 import Markdown from 'vue3-markdown-it';
+import { BASE_URL } from '../../constants/url';
 
-const { translate } = useTranslation();
+const { t } = useI18n();
+const route = useRoute();
 
 useHead({
-	title: `${translate('meta.title')} / ${translate('meta.payment_info.title')}`
+	titleTemplate: `%s / ${t('meta.payment_info.title')}`,
+	meta: [
+		{ property: 'og:site_name', content: t('meta.title') },
+		{ property: 'og:type', content: 'website' },
+		{ property: 'og:title', content: t('meta.payment_info.title') },
+		{ property: 'og:description', content: t('meta.default_description') },
+		{ property: 'og:image', content: BASE_URL + '/assets/img/event-preview@2x.png' },
+		{ property: 'og:url', content: BASE_URL + route.path }
+	]
 });
 definePageMeta({ name: RouteNameEnum.PAYMENT_INFO });
 
-const route = useRoute();
 const eventId = getFirstParam(route.params.eventId);
 
 const paymentInfo = ref<{ event: EventOnPoster; paymentsInfo: PaymentInfo } | null>(null);

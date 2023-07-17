@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { watch, ref } from 'vue';
-import { supportedLocales } from '@/i18n';
+import { supportedLocales } from '../../i18n';
 
-const { translate, i18n } = useTranslation();
+const { locale, setLocale } = useI18n();
+const language = ref(locale.value);
 
-const language = ref(i18n.language);
-watch(language, (language) => i18n.changeLanguage(language));
+watch(language, (lang) => {
+	setLocale(lang);
+});
 </script>
 
 <template>
 	<label>
-		{{ translate('component.language_selector.label') }}
+		{{ $t('header.language_selector.label') }}
 		<select v-model="language">
 			<option
-				v-for="locale in supportedLocales"
-				:key="`select-locale-${locale}`"
-				:value="locale"
-				:selected="locale === language"
+				v-for="loc in supportedLocales"
+				:key="`select-locale-${loc}`"
+				:value="loc"
 			>
-				{{ locale }}
+				{{ loc }}
 			</option>
 		</select>
 	</label>

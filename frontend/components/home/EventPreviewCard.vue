@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import type { EventOnPoster } from '../../../common/types';
-import Address from '../common/Address.vue';
 import {
 	SeoItempropEventEnum,
 	SeoItempropGlobalEnum,
 	SeoItemTypeEnum
 } from '../../constants/enums/seo';
-import Tag from '../common/Tag.vue';
 
 defineProps<{ eventData: EventOnPoster }>();
 </script>
@@ -46,7 +44,7 @@ defineProps<{ eventData: EventOnPoster }>();
 			>
 				Peredelano
 			</p>
-			<Address
+			<CommonAddress
 				class="card-description__geo"
 				:location="eventData.location"
 				with-pin
@@ -70,7 +68,7 @@ defineProps<{ eventData: EventOnPoster }>();
 					{{ eventData.timezone?.timezoneName }})
 				</span>
 			</p>
-			<Tag
+			<CommonTag
 				:price="eventData.price"
 				:currency="'RSD'"
 			/>

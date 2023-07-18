@@ -42,7 +42,7 @@ const inputValues = ref({
 		address: props.dataForEdit?.location.address ?? ''
 	},
 	image: props.dataForEdit?.image ?? '',
-	price: props.dataForEdit?.price ?? '0',
+	price:  props.dataForEdit?.price?.value ?? 0,
 	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
 	url: props.dataForEdit?.url ?? ''
 });
@@ -57,7 +57,6 @@ const checkFormFilling = computed(() => {
 	return !!(
 		inputValues.value.title &&
 		inputValues.value.description &&
-		inputValues.value.price &&
 		inputValues.value.url &&
 		inputValues.value.startDate &&
 		inputValues.value.startTime &&
@@ -87,7 +86,13 @@ const paramsForSubmit = computed(() => {
 			city: inputValues.value.location.city,
 			address: inputValues.value.location.address
 		},
-		price: inputValues.value.price,
+    //TODO: добавить min/max значения и выбор валюты
+		price: {
+      minValue: null,
+      value: Number(inputValues.value.price) ?? 0,
+      maxValue: null,
+      currency: inputValues.value.price > 0 ? 'RSD' : null
+    },
 		timezone: stringToTimezone(inputValues.value.timezone),
 		url: inputValues.value.url
 	};
@@ -345,7 +350,6 @@ watch(
 							type="number"
 							:min-value="0"
 							:placeholder="$t('modal.new_event_modal.fields.price_placeholder')"
-							required
 						/>
 						<!--						<CommonUiBaseSelect-->
 						<!--								:key="inputValues.currency"-->

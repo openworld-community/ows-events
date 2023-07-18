@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 import { useListStore } from '~/stores/list.store';
+import type { EventOnPoster } from '../../../common/types';
 
 const listSrore = useListStore();
 
@@ -9,7 +10,7 @@ const emit = defineEmits(['loadItems']);
 const props = defineProps({
 	// массив с данными для отрисовки списка
 	items: {
-		type: Array,
+		type: Array as PropType<EventOnPoster[] | null>,
 		required: true
 	},
 	// минимальный размер карточки
@@ -26,7 +27,7 @@ const props = defineProps({
 		type: Boolean as PropType<boolean>,
 		default: true
 	},
-	// если true, можно использовать событие @update на DynamicScroller, чтобы получить viewStartIndex (возможно пригодится для загрузки  карточек в будущем)
+	// если true, можно использовать событие @update на DynamicScroller, чтобы получить viewStartIndex (возможно пригодится для загрузки карточек в будущем)
 	isEmitUpdate: {
 		type: Boolean as PropType<boolean>,
 		default: false
@@ -65,7 +66,11 @@ useInfiniteScroll(
 
 const sizeDependenciesFormatter = (item: Record<string, any>): Array<string> => {
 	return props.sizeDependencies.map((dependency: string) => {
-		return item[dependency];
+		let value;
+		dependency.includes('.')
+			? (value = dependency.split('.').reduce((obj, key) => obj?.[key], item))
+			: (value = item[dependency]);
+		return value;
 	});
 };
 

@@ -48,21 +48,19 @@ const eventsQuery = ref({
 // const updatePosterEvents = (data: typeof posterEvents) => {
 // 	if (posterEvents.value && data.value) {
 // 		posterEvents.value = [...posterEvents.value, ...data.value];
-// 	} else {
-// 		posterEvents.value = data.value;
 // 	}
+// 	posterEvents.value = data.value;
 // 	page.value++;
 // };
 
 // const loadPosterEvents = async () => {
 // 	const { data } = await apiRouter.events.findMany.useQuery({
-// 		data: { query: debouncedEventsRequestQuery }
+// 		data: { query: debouncedEventsRequestQuery },
+// 		paginationOptions: { page: page.value }
 // 	});
 
 // 	updatePosterEvents(data);
 // };
-
-// loadPosterEvents();
 
 // const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 // 	data: { query: debouncedEventsRequestQuery }
@@ -86,6 +84,7 @@ const onButtonClick = () => {
 
 const now = Date.now();
 
+// !!! mock posterEvents
 const posterEvents: Ref<EventOnPoster[]> = ref([]);
 
 type loadEventsCustom = (list: EventOnPoster[], count: number) => void;
@@ -125,7 +124,7 @@ const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
 			:size-dependencies="[
 				'description',
 				'title',
-				'location.addres',
+				'location.address',
 				'location.city',
 				'location.country'
 			]"

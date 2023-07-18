@@ -105,6 +105,17 @@ class EventsStateController {
 
 		return event;
 	}
+
+	async removeTags(data: EventOnPoster) {
+		const event = await EventModel.findOneAndUpdate(
+			{ id: data.id },
+            { 
+                $pull: { tags: { $in: data.tags } }
+            }
+		);
+
+		return event;
+	}
 }
 
 export const eventsStateController = new EventsStateController();

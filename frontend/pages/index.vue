@@ -41,25 +41,29 @@ const debouncedEventsRequestQuery = refDebounced(
 	{ maxWait: 5000 }
 );
 
+const stopInfinity = ref(false);
+
 // const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 // 	data: { query: debouncedEventsRequestQuery }
 // });
 
 const posterEvents: Ref<EventOnPoster[] | null> = ref([]);
 
-const requestPage = ref(1);
+const requestLimit = ref(20);
 
 const updatePosterEvents = (data: typeof posterEvents) => {
-	if (posterEvents.value && data.value) {
-		posterEvents.value = [...posterEvents.value, ...data.value];
-	}
-	posterEvents.value = data.value;
-	requestPage.value++;
+	// if (data.value?.length === requestLimit.value) stopInfinity.value = true;
+	if (posterEvents.value && data.value) posterEvents.value = data.value;
+	requestLimit.value += 20;
 };
 
 const loadPosterEvents = async () => {
 	const { data } = await apiRouter.events.findMany.useQuery({
-		data: { query: debouncedEventsRequestQuery, paginationOptions: { page: requestPage.value } }
+		data: {
+			query: debouncedEventsRequestQuery,
+			paginationOptions: { limit: requestLimit.value }
+		}
+		// data: { query: debouncedEventsRequestQuery }
 	});
 
 	updatePosterEvents(data);
@@ -78,10 +82,16 @@ const now = Date.now();
 // !!! mock posterEvents
 // const posterEvents: Ref<EventOnPoster[]> = ref([]);
 
-// type loadEventsCustom = (list: EventOnPoster[], count: number) => void;
+// type loadEventsCustom = (list: EventOnPoster[]) => void;
 
-// const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
-// 	for (let i = 0; i < count; i++) {
+// const count = ref(3);
+
+// const loadEvents: loadEventsCustom = (list: EventOnPoster[]) => {
+// 	if (count.value === 6) {
+// 		stopInfinity.value = true;
+// 	}
+// 	if (stopInfinity.value) return;
+// 	for (let i = 0; i < count.value; i++) {
 // 		list.push({
 // 			date: +new Date(),
 // 			id: uuid(),
@@ -102,7 +112,10 @@ const now = Date.now();
 // 			url: 'vk.com'
 // 		});
 // 	}
+// 	count.value++;
 // };
+
+// loadPosterEvents();
 </script>
 
 <template>
@@ -112,6 +125,7 @@ const now = Date.now();
 			:min-item-size="336"
 			:is-emit-update="true"
 			:distance="20"
+			:stop-infinity="stopInfinity"
 			:size-dependencies="[
 				'description',
 				'title',

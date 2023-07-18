@@ -41,6 +41,10 @@ const props = defineProps({
 	sizeDependencies: {
 		type: Array as PropType<string[]>,
 		required: true
+	},
+	stopInfinity: {
+		type: Boolean as PropType<boolean>,
+		default: false
 	}
 });
 
@@ -59,6 +63,8 @@ watch(
 useInfiniteScroll(
 	listSelector,
 	() => {
+		if (props.stopInfinity) return;
+		console.log('loadItems');
 		emit('loadItems');
 	},
 	{ distance: props.distance }
@@ -111,7 +117,10 @@ const sizeDependenciesFormatter = (item: Record<string, any>): Array<string> => 
 			<template #before>
 				<slot name="stable"></slot>
 			</template>
-			<template #default="{ item, index, active }">
+			<template
+				v-if="items ? items.length > 0 : null"
+				#default="{ item, index, active }"
+			>
 				<DynamicScrollerItem
 					:item="item"
 					:data-index="index"

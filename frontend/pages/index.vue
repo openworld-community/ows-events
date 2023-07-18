@@ -4,7 +4,7 @@ import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
 // TEST
-import { v4 as uuid } from 'uuid';
+// import { v4 as uuid } from 'uuid';
 import { type EventOnPoster } from '../../common/types';
 
 const { t } = useI18n();
@@ -35,44 +35,35 @@ const eventsQuery = ref({
 	city: getFirstQuery(route.query.city),
 	country: getFirstQuery(route.query.country)
 });
-// const debouncedEventsRequestQuery = refDebounced(
-// 	computed(() => ({ ...eventsQuery.value })),
-// 	500,
-// 	{ maxWait: 5000 }
-// );
-
-// const posterEvents: Ref<EventOnPoster[] | null> = ref([]);
-
-// const page = ref(1);
-
-// const updatePosterEvents = (data: typeof posterEvents) => {
-// 	if (posterEvents.value && data.value) {
-// 		posterEvents.value = [...posterEvents.value, ...data.value];
-// 	}
-// 	posterEvents.value = data.value;
-// 	page.value++;
-// };
-
-// const loadPosterEvents = async () => {
-// 	const { data } = await apiRouter.events.findMany.useQuery({
-// 		data: { query: debouncedEventsRequestQuery },
-// 		paginationOptions: { page: page.value }
-// 	});
-
-// 	updatePosterEvents(data);
-// };
+const debouncedEventsRequestQuery = refDebounced(
+	computed(() => ({ ...eventsQuery.value })),
+	500,
+	{ maxWait: 5000 }
+);
 
 // const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 // 	data: { query: debouncedEventsRequestQuery }
 // });
 
-// const loadPosterEvents = async () => {
-// 	const { data } = await apiRouter.events.findMany.useQuery({
-// 		// data: { query: debouncedEventsRequestQuery, paginationOptions: { limit: 20, page: 1 } }
-// 		data: { query: debouncedEventsRequestQuery }
-// 	});
-// 	posterEvents?.value.push(data.value)
-// };
+const posterEvents: Ref<EventOnPoster[] | null> = ref([]);
+
+const requestPage = ref(1);
+
+const updatePosterEvents = (data: typeof posterEvents) => {
+	if (posterEvents.value && data.value) {
+		posterEvents.value = [...posterEvents.value, ...data.value];
+	}
+	posterEvents.value = data.value;
+	requestPage.value++;
+};
+
+const loadPosterEvents = async () => {
+	const { data } = await apiRouter.events.findMany.useQuery({
+		data: { query: debouncedEventsRequestQuery, paginationOptions: { page: requestPage.value } }
+	});
+
+	updatePosterEvents(data);
+};
 
 const onButtonClick = () => {
 	if (useCookie('token').value) {
@@ -85,33 +76,33 @@ const onButtonClick = () => {
 const now = Date.now();
 
 // !!! mock posterEvents
-const posterEvents: Ref<EventOnPoster[]> = ref([]);
+// const posterEvents: Ref<EventOnPoster[]> = ref([]);
 
-type loadEventsCustom = (list: EventOnPoster[], count: number) => void;
+// type loadEventsCustom = (list: EventOnPoster[], count: number) => void;
 
-const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
-	for (let i = 0; i < count; i++) {
-		list.push({
-			date: +new Date(),
-			id: uuid(),
-			description: 'Хочу пицу, чтоб прям вкусная с ума сойдешь и вообще еще че нить',
-			durationInSeconds: 0,
-			title: 'peredelanoconf',
-			image: '/image/7af2c5b3-3697-41b5-9f36-5151c11a6bb6.png',
-			location: {
-				country: 'Serbia',
-				city: 'Belgrade',
-				address: 'petushovskiy pr-kt'
-			},
-			price: '3000',
-			timezone: {
-				timezoneName: 'Europe/Belgrade',
-				timezoneOffset: '+02:00'
-			},
-			url: 'vk.com'
-		});
-	}
-};
+// const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
+// 	for (let i = 0; i < count; i++) {
+// 		list.push({
+// 			date: +new Date(),
+// 			id: uuid(),
+// 			description: 'Хочу пицу, чтоб прям вкусная с ума сойдешь и вообще еще че нить',
+// 			durationInSeconds: 0,
+// 			title: 'peredelanoconf',
+// 			image: '/image/7af2c5b3-3697-41b5-9f36-5151c11a6bb6.png',
+// 			location: {
+// 				country: 'Serbia',
+// 				city: 'Belgrade',
+// 				address: 'petushovskiy pr-kt'
+// 			},
+// 			price: '3000',
+// 			timezone: {
+// 				timezoneName: 'Europe/Belgrade',
+// 				timezoneOffset: '+02:00'
+// 			},
+// 			url: 'vk.com'
+// 		});
+// 	}
+// };
 </script>
 
 <template>
@@ -129,7 +120,7 @@ const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
 				'location.country'
 			]"
 			:class-name="'main-page__content'"
-			@load-items="loadEvents(posterEvents, 20)"
+			@load-items="loadPosterEvents"
 		>
 			<template #stable>
 				<HomeSearch
@@ -150,29 +141,11 @@ const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
 					class="main-page__filter"
 				/>
 			</template>
-			<!-- <template #dynamic="{ item, index, active }"> -->
 			<template #dynamic="{ item }">
 				<HomeEventPreviewCard
 					:class="{ expired: item.date < now }"
 					:event-data="item"
 				/>
-				<!-- <DynamicScrollerItem
-					:item="item"
-					:data-index="index"
-					:active="active"
-					:size-dependencies="[
-						item.description,
-						item.title,
-						item.location.addres,
-						item.location.city,
-						item.location.country
-					]"
-				>
-					<HomeEventPreviewCard
-						:class="{ expired: item.date < now }"
-						:event-data="item"
-					/>
-				</DynamicScrollerItem> -->
 			</template>
 		</CommonScrollingPage>
 

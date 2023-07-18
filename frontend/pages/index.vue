@@ -51,22 +51,25 @@ const posterEvents: Ref<EventOnPoster[] | null> = ref([]);
 
 const requestLimit = ref(20);
 
-const updatePosterEvents = (data: typeof posterEvents) => {
-	// if (data.value?.length === requestLimit.value) stopInfinity.value = true;
-	if (posterEvents.value && data.value) posterEvents.value = data.value;
-	requestLimit.value += 20;
-};
+// const updatePosterEvents = (data: typeof posterEvents) => {
+// 	// if (data.value?.length === requestLimit.value) stopInfinity.value = true;
+// 	if (posterEvents.value && data.value) posterEvents.value = data.value;
+// 	requestLimit.value += 20;
+// };
 
 const loadPosterEvents = async () => {
+	const query = {
+		...debouncedEventsRequestQuery.value,
+		paginationOptions: { limit: requestLimit.value }
+	};
 	const { data } = await apiRouter.events.findMany.useQuery({
 		data: {
-			query: debouncedEventsRequestQuery,
-			paginationOptions: { limit: requestLimit.value }
+			query: query
 		}
 		// data: { query: debouncedEventsRequestQuery }
 	});
 
-	updatePosterEvents(data);
+	// updatePosterEvents(data);
 };
 
 const onButtonClick = () => {

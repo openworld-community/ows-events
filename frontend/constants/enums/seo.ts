@@ -5,6 +5,7 @@ export const SEO_SCHEMA_BASE_URL = 'https://schema.org/';
 export enum SeoItemTypeEnum {
 	OFFER = `${SEO_SCHEMA_BASE_URL}Offer`,
 	EVENT = `${SEO_SCHEMA_BASE_URL}Event`,
+	LOCATION = `${SEO_SCHEMA_BASE_URL}Place`,
 	ADDRESS = `${SEO_SCHEMA_BASE_URL}PostalAddress`,
 	ABOUT = `${SEO_SCHEMA_BASE_URL}AboutPage`,
 	DONATE = `${SEO_SCHEMA_BASE_URL}DonateAction`,
@@ -27,7 +28,8 @@ export enum SeoItempropEventEnum {
 	DESCRIPTION = 'description',
 	ORGANIZER = 'composer',
 	START_DATE = 'startDate',
-	DURATION = 'duration'
+	DURATION = 'duration',
+	LOCATION = 'location'
 }
 
 // Price
@@ -41,9 +43,10 @@ export enum SeoItempropPriceEnum {
 // Location
 export enum SeoItempropLocationEnum {
 	GROUP_ITEMPROP = 'address',
+	MAP = 'hasMap',
 	COUNTRY = 'addressCountry',
 	CITY = 'addressLocality',
-	ADDRESS = 'location'
+	ADDRESS = 'streetAddress'
 }
 
 // Donation

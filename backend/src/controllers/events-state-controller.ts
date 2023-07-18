@@ -116,6 +116,18 @@ class EventsStateController {
 
 		return event;
 	}
+
+	async findAllTags() {
+		const event = await EventModel.distinct("tags");
+
+		return event;
+	}
+
+	async findTagsByEventId(id: string) {
+		const event = await EventModel.findById(id, {"tags.$": 1 });
+
+		return event;
+	}
 }
 
 export const eventsStateController = new EventsStateController();

@@ -5,6 +5,7 @@ import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
 // TEST
 import { v4 as uuid } from 'uuid';
+import { type EventOnPoster } from '../../common/types';
 
 const { t } = useI18n();
 
@@ -39,9 +40,41 @@ const eventsQuery = ref({
 // 	500,
 // 	{ maxWait: 5000 }
 // );
+
+// const posterEvents: Ref<EventOnPoster[] | null> = ref([]);
+
+// const page = ref(1);
+
+// const updatePosterEvents = (data: typeof posterEvents) => {
+// 	if (posterEvents.value && data.value) {
+// 		posterEvents.value = [...posterEvents.value, ...data.value];
+// 	} else {
+// 		posterEvents.value = data.value;
+// 	}
+// 	page.value++;
+// };
+
+// const loadPosterEvents = async () => {
+// 	const { data } = await apiRouter.events.findMany.useQuery({
+// 		data: { query: debouncedEventsRequestQuery }
+// 	});
+
+// 	updatePosterEvents(data);
+// };
+
+// loadPosterEvents();
+
 // const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 // 	data: { query: debouncedEventsRequestQuery }
 // });
+
+// const loadPosterEvents = async () => {
+// 	const { data } = await apiRouter.events.findMany.useQuery({
+// 		// data: { query: debouncedEventsRequestQuery, paginationOptions: { limit: 20, page: 1 } }
+// 		data: { query: debouncedEventsRequestQuery }
+// 	});
+// 	posterEvents?.value.push(data.value)
+// };
 
 const onButtonClick = () => {
 	if (useCookie('token').value) {
@@ -50,30 +83,6 @@ const onButtonClick = () => {
 		openNeedAuthorizeModal();
 	}
 };
-
-// !!! TEST !!!
-type Timezone = {
-	timezoneName: string;
-	timezoneOffset: string;
-};
-
-interface EventOnPoster {
-	id: string;
-	creatorId?: string;
-	title: string;
-	description: string;
-	date: number;
-	durationInSeconds: number;
-	location: {
-		country: string;
-		city: string;
-		address: string;
-	};
-	image: string;
-	price: string;
-	timezone?: Timezone;
-	url: string;
-}
 
 const now = Date.now();
 
@@ -111,10 +120,17 @@ const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
 		<CommonScrollingPage
 			:items="posterEvents"
 			:min-item-size="336"
-			:is-page-mode="true"
 			:is-emit-update="true"
+			:distance="20"
+			:size-dependencies="[
+				'description',
+				'title',
+				'location.addres',
+				'location.city',
+				'location.country'
+			]"
 			:class-name="'main-page__content'"
-			@load-events="loadEvents(posterEvents, 20)"
+			@load-items="loadEvents(posterEvents, 20)"
 		>
 			<template #stable>
 				<HomeSearch
@@ -135,8 +151,13 @@ const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
 					class="main-page__filter"
 				/>
 			</template>
-			<template #dynamic="{ item, index, active }">
-				<DynamicScrollerItem
+			<!-- <template #dynamic="{ item, index, active }"> -->
+			<template #dynamic="{ item }">
+				<HomeEventPreviewCard
+					:class="{ expired: item.date < now }"
+					:event-data="item"
+				/>
+				<!-- <DynamicScrollerItem
 					:item="item"
 					:data-index="index"
 					:active="active"
@@ -152,7 +173,7 @@ const loadEvents: loadEventsCustom = (list: EventOnPoster[], count: number) => {
 						:class="{ expired: item.date < now }"
 						:event-data="item"
 					/>
-				</DynamicScrollerItem>
+				</DynamicScrollerItem> -->
 			</template>
 		</CommonScrollingPage>
 

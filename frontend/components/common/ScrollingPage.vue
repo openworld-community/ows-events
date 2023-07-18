@@ -4,26 +4,42 @@ import { useListStore } from '~/stores/list.store';
 
 const listSrore = useListStore();
 
-const emit = defineEmits(['loadEvents']);
+const emit = defineEmits(['loadItems']);
 
-defineProps({
+const props = defineProps({
+	// массив с данными для отрисовки списка
 	items: {
 		type: Array,
 		required: true
 	},
+	// минимальный размер карточки
 	minItemSize: {
 		type: Number as PropType<number>,
 		required: true
 	},
+	// буффер для подгрузки карточек. если меньше 400 - не успевает за скроллом
 	buffer: {
 		type: Number as PropType<number>,
 		default: 400
 	},
 	isPageMode: {
-		type: Boolean
+		type: Boolean as PropType<boolean>,
+		default: true
 	},
+	// если true, можно использовать событие @update на DynamicScroller, чтобы получить viewStartIndex (возможно пригодится для загрузки  карточек в будущем)
 	isEmitUpdate: {
-		type: Boolean
+		type: Boolean as PropType<boolean>,
+		default: false
+	},
+	// дистанция, по достижении которой будут подгружаться новые карточки
+	distance: {
+		type: Number as PropType<number>,
+		required: true
+	},
+	// зависимости размера карточки. следит внутри items за переданными параметрами
+	sizeDependencies: {
+		type: Array as PropType<string[]>,
+		required: true
 	}
 });
 
@@ -42,10 +58,16 @@ watch(
 useInfiniteScroll(
 	listSelector,
 	() => {
-		emit('loadEvents');
+		emit('loadItems');
 	},
-	{ distance: 20 }
+	{ distance: props.distance }
 );
+
+const sizeDependenciesFormatter = (item: Record<string, any>): Array<string> => {
+	return props.sizeDependencies.map((dependency: string) => {
+		return item[dependency];
+	});
+};
 
 // const updateParts: Ref<{
 // 	viewStartIdx: number;
@@ -84,14 +106,25 @@ useInfiniteScroll(
 			<template #before>
 				<slot name="stable"></slot>
 			</template>
-
 			<template #default="{ item, index, active }">
-				<slot
+				<DynamicScrollerItem
+					:item="item"
+					:data-index="index"
+					:active="active"
+					:size-dependencies="sizeDependenciesFormatter(item)"
+				>
+					<slot
+						name="dynamic"
+						:item="item"
+					>
+					</slot>
+				</DynamicScrollerItem>
+				<!-- <slot
 					name="dynamic"
 					:item="item"
 					:index="index"
 					:active="active"
-				></slot>
+				></slot> -->
 			</template>
 		</DynamicScroller>
 	</div>

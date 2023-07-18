@@ -94,6 +94,17 @@ class EventsStateController {
 
 		await EventModel.deleteOne({ id });
 	}
+
+	async addTags(data: EventOnPoster) {
+		const event = await EventModel.findOneAndUpdate(
+			{ id: data.id },
+            { 
+                $addToSet: { tags: { $each: data.tags } } 
+            }
+		);
+
+		return event;
+	}
 }
 
 export const eventsStateController = new EventsStateController();

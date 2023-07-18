@@ -68,6 +68,9 @@ const schema = new Schema<IEventDocument>(
 				required: true
 			}
 		},
+        tags: {
+            type: [String]
+        },
 		meta: {
 			moderation: {
 				status: {

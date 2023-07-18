@@ -16,6 +16,7 @@ export type EventOnPoster = {
 	price: string;
 	timezone?: Timezone;
 	url: string;
+    tags?: string[];
 };
 
 export type PostEventPayload = {
@@ -29,6 +30,7 @@ export type PostEventPayload = {
 		location: { country: string; city: string; address: string };
 		title: string;
 		url: string;
+        tags?: string[];
 	};
 };
 

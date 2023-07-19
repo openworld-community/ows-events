@@ -1,10 +1,5 @@
 import { ItemEvent } from "../events/schema"; //TODO this looks strange
 
-export const ItemTagEvent = {
-	type: 'array',
-	items: 'string'
-};
-
 export const addTagSchema = {
 	description: 'Add new tag/s',
 	tags: ['Tags'],

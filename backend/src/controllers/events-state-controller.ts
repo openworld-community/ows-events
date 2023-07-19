@@ -106,25 +106,24 @@ class EventsStateController {
 		return event;
 	}
 
-	async removeTags(data: EventOnPoster) {
-		const event = await EventModel.findOneAndUpdate(
-			{ id: data.id },
-            { 
-                $pull: { tags: { $in: data.tags } }
-            }
-		);
-
-		return event;
-	}
-
 	async findAllTags() {
-		const event = await EventModel.distinct("tags");
+		const tags = await EventModel.distinct("tags");
 
-		return event;
+		return tags;
 	}
 
 	async findTagsByEventId(id: string) {
-		const event = await EventModel.findById(id, {"tags.$": 1 });
+		const event = await EventModel.findOne({id: id}, {_id: 0, tags: 1 });
+		return event?.tags;
+	}
+
+	async removeTags(id: string, tags: string[] ) { 
+		const event = await EventModel.findOneAndUpdate(
+			{ id: id },
+            { 
+                $pull: { tags: { $in: tags } }
+            }
+		);
 
 		return event;
 	}

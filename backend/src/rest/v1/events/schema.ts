@@ -13,10 +13,18 @@ export const ItemEvent = {
 			properties: {
 				country: { type: 'string' },
 				city: { type: 'string' },
-                address: { type: 'string' }
+				address: { type: 'string' }
 			}
 		},
-		price: { type: 'string' },
+		price: {
+			type: 'object',
+			properties: {
+				minValue: { type: 'number' },
+				value: { type: 'number' },
+				maxValue: { type: 'number' },
+				currency: { type: 'string' }
+			}
+		},
 		timezone: {
 			type: 'object',
 			properties: {

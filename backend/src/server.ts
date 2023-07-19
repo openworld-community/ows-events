@@ -17,6 +17,7 @@ import { connectToMongo } from './boot/connectToMongo';
 import { authApi } from './rest/v1/auth/router';
 import { ajvFilePlugin } from './config/ajvPlugins';
 import { manualModerationApi } from './rest/v1/moderation/router';
+import { migrate } from './migrations/price-structure-18-07-23';
 
 const server = fastify({
 	logger: true,
@@ -27,6 +28,8 @@ const server = fastify({
 
 connectToMongo()
 	.then(() => {
+		// TODO: Remove after merge ASAP!
+		migrate().then();
 		// eslint-disable-next-line no-console
 		console.log('Connected to mongo');
 	})

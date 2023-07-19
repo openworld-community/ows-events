@@ -117,11 +117,11 @@ class EventsStateController {
 		return event?.tags;
 	}
 
-	async removeTags(id: string, tags: string[] ) { 
+	async removeTags(data: EventOnPoster ) { 
 		const event = await EventModel.findOneAndUpdate(
-			{ id: id },
+			{ id: data.id },
             { 
-                $pull: { tags: { $in: tags } }
+                $pull: { tags: { $in: data.tags } }
             }
 		);
 

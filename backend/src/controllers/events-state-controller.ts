@@ -113,8 +113,12 @@ class EventsStateController {
 	}
 
 	async findTagsByEventId(id: string) {
-		const event = await EventModel.findOne({id: id}, {_id: 0, tags: 1 });
-		return event?.tags;
+		const event = await EventModel.findOne(
+            { id: id }, 
+            { _id: 0, tags: 1 }
+        );
+		
+        return event?.tags;
 	}
 
 	async removeTags(data: EventOnPoster ) { 

@@ -1,4 +1,4 @@
-import { ItemEvent } from "../events/schema"; //TODO this looks strange
+import { ItemEvent } from "../events/schema";
 
 export const addTagSchema = {
 	description: 'Add new tag/s',

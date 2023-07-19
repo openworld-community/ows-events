@@ -114,7 +114,7 @@ class EventsStateController {
 
 	async findTagsByEventId(id: string) {
 		const event = await EventModel.findOne(
-            { id: id }, 
+            { id }, 
             { _id: 0, tags: 1 }
         );
 		

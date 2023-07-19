@@ -1,6 +1,4 @@
 import { EventOnPoster } from '@common/types';
-import { EventParams } from '@common/types/event';
-import { FindEventParams } from '../../../controllers/events-state-controller';
 import { IRouteHandler } from '../../types';
 
 type IAddTagRoute = {

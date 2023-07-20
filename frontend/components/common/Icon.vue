@@ -32,6 +32,9 @@ export type IconName =
 	| 'donate/usdt'
   | 'social/telegram'
   | 'social/instagram'
+  | 'social/twitter'
+  | 'social/linkedin'
+  | 'social/facebook'
 	// хак, из-за которого ТС не мерджит этот юнион в просто string, из-за чего и работает автокомплит, и можно указать все равно любую строку
 	| (string & {});
 </script>

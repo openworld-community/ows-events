@@ -2,7 +2,7 @@
 import eventScreen from '../assets/img/event-screen@2x.png';
 import { SeoItempropAboutEnum, SeoItemTypeEnum } from '../constants/enums/seo';
 import { RouteNameEnum } from '../constants/enums/route';
-import {REPO_URL, SOCIAL_LINKS, SocialLinks} from '../constants/url';
+import {REPO_URL, SocialLinks} from '../constants/url';
 
 const { t } = useI18n();
 
@@ -65,7 +65,8 @@ getMeta({
 					>
 						<CommonIcon
 							:name="`social/${key}`"
-							color="var(--color-white)"
+							width="40px"
+              height="40px"
 						/>
 					</NuxtLink>
 				</li>

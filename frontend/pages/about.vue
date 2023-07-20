@@ -13,7 +13,7 @@ getMeta({
 </script>
 
 <template>
-	<section
+	<div
 		class="about"
 		itemscope
 		:itemtype="SeoItemTypeEnum.ABOUT"
@@ -72,7 +72,7 @@ getMeta({
 				</li>
 			</ul>
 		</div>
-	</section>
+	</div>
 </template>
 
 <style lang="less" scoped>

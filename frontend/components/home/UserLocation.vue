@@ -95,7 +95,6 @@ onMounted(()=>{
 		>
 			{{ $t('home.user_location.not_found') }}
 		</p>
-
 	</div>
 </template>
 

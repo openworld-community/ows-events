@@ -2,7 +2,7 @@
 import eventScreen from '../assets/img/event-screen@2x.png';
 import { SeoItempropAboutEnum, SeoItemTypeEnum } from '../constants/enums/seo';
 import { RouteNameEnum } from '../constants/enums/route';
-import { REPO_URL, SOCIAL_LINKS } from '../constants/url';
+import {REPO_URL, SOCIAL_LINKS, SocialLinks} from '../constants/url';
 
 const { t } = useI18n();
 
@@ -51,7 +51,7 @@ getMeta({
 			</h2>
 			<ul class="social-links__list">
 				<li
-					v-for="(link, key) in SOCIAL_LINKS"
+					v-for="(link, key) in SocialLinks"
 					:key="link"
 					class="social-links__item"
 				>

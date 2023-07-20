@@ -10,10 +10,10 @@ export type EventOnPoster = {
 	location: {
 		country: string;
 		city: string;
-        address: string;
+		address: string;
 	};
 	image: string;
-	price: EventPrice;
+	price: EventPrice | null;
 	timezone?: Timezone;
 	url: string;
 };
@@ -47,4 +47,11 @@ export type SearchEventPayload = {
 	searchLine?: string;
 	country?: string;
 	city?: string;
+};
+
+export type EventPrice = {
+	maxValue: number | null;
+	value: number | null;
+	minValue: number | null;
+	currency: string | null;
 };

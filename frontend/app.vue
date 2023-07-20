@@ -9,9 +9,8 @@ import { isDevelopmentMode } from './constants/common';
 const { locale, t } = useI18n();
 
 useHead({
-	//TODO доработать метаданные
 	title: t('meta.title'),
-	meta: [{ name: 'description', content: 'Афиша Peredelano' }],
+	meta: [{ name: 'description', content: t('meta.default_description') }],
 	htmlAttrs: {
 		lang: locale.value
 	}

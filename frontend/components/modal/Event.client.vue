@@ -65,7 +65,6 @@ const checkFormFilling = computed(() => {
 		(inputValues.value.endDate ? inputValues.value.endTime : !inputValues.value.endTime) &&
 		inputValues.value.location.country &&
 		inputValues.value.location.city &&
-		inputValues.value.location.address &&
 		inputValues.value.timezone &&
 		allTimezones.includes(inputValues.value.timezone)
 	);

@@ -12,9 +12,6 @@ import {
 	SeoItempropGlobalEnum,
 	SeoItemTypeEnum
 } from '../../constants/enums/seo';
-import Tag from '../../components/common/Tag.vue';
-
-const { t } = useI18n();
 
 definePageMeta({ name: RouteNameEnum.EVENT });
 const route = useRoute();
@@ -33,24 +30,12 @@ const eventImage = computed(() => {
 	return getEventImage(posterEvent.value);
 });
 
-useSeoMeta({
-	// для реактивных тегов используем () => value
-	ogSiteName: () => t('meta.title'),
-	ogType: 'website',
-	title: () =>
-		`${posterEvent.value?.title ?? t('meta.title')} / ${
-			posterEvent.value?.location?.city ?? ''
-		}`,
-	ogTitle: () =>
-		`${posterEvent.value?.title ?? t('meta.title')} / ${
-			posterEvent.value?.location?.city ?? ''
-		}`,
-	description: () =>
-		trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
-	ogDescription: () =>
-		trimString(posterEvent.value?.description ?? '', 120) ?? t('meta.home.description'),
-	ogImage: eventImage,
-	ogUrl: () => BASE_URL + route.path
+getMeta({
+	title: posterEvent.value?.location ?
+    `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}`
+		: posterEvent.value?.title,
+	description: trimString(posterEvent.value?.description ?? '', 120),
+	image: eventImage.value
 });
 
 const isEditable = computed(() => {
@@ -126,7 +111,7 @@ patchDeleteEventModal({
 			:class="['event-image', 'event-image__container']"
 			:itemprop="SeoItempropGlobalEnum.IMAGE"
 		>
-			<Tag
+			<CommonTag
 				:class-name="'event-image__price'"
 				:price="posterEvent.price"
 				:currency="'RSD'"
@@ -186,7 +171,7 @@ patchDeleteEventModal({
 				({{ posterEvent.timezone?.timezoneOffset }}
 				{{ posterEvent.timezone?.timezoneName }})
 			</p>
-			<Address
+			<CommonAddress
 				:location="posterEvent.location"
 				class="event-info__geolink"
 				is-link

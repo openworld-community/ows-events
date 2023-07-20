@@ -2,7 +2,6 @@
 export type IconName =
 	| 'user'
 	| 'trash'
-	| 'telegram'
 	| 'share'
 	| 'search'
 	| 'privacy'
@@ -26,11 +25,13 @@ export type IconName =
 	| 'arrow-right'
 	| 'copy'
 	| 'donate'
-	| 'patreon'
-	| 'bitcoin'
-	| 'ethereum'
-	| 'usdc'
-	| 'usdt'
+	| 'donate/patreon'
+	| 'donate/bitcoin'
+	| 'donate/ethereum'
+	| 'donate/usdc'
+	| 'donate/usdt'
+  | 'social/telegram'
+  | 'social/instagram'
 	// хак, из-за которого ТС не мерджит этот юнион в просто string, из-за чего и работает автокомплит, и можно указать все равно любую строку
 	| (string & {});
 </script>

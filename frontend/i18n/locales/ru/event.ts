@@ -10,6 +10,8 @@ export const event = {
   },
   price: {
     free: 'Бесплатно',
-    not_found: 'Цена не указана'
+    unknown: 'Цена не указана',
+    from: 'От',
+    to: 'До'
   }
 };

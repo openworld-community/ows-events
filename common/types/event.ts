@@ -32,6 +32,13 @@ export type PostEventPayload = {
 	};
 };
 
+export type EventPrice = {
+	maxValue: number | null,
+	value: number | null,
+	minValue: number | null,
+	currency: string | null,
+} | null
+
 export type EventParams = {
 	id: string;
 };

@@ -1,4 +1,5 @@
 export const home = {
+  hidden_title: 'Поиск мероприятий',
   title: 'Мероприятия',
   button: {
     add_event_aria: 'Добавить мероприятие'

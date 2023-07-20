@@ -54,6 +54,7 @@ const now = Date.now();
 
 <template>
 	<div class="main-page">
+		<h1 class="visually-hidden">{{ $t('home.hidden_title') }}</h1>
 		<HomeSearch
 			v-model:search="eventsQuery.searchLine"
 			class="main-page__search"
@@ -61,9 +62,9 @@ const now = Date.now();
 		<div class="main-page__location">
 			<HomeUserLocation />
 		</div>
-		<h1 class="main-page__title">
+		<h2 class="main-page__title">
 			{{ $t('home.title') }}
-		</h1>
+		</h2>
 		<HomeFilter
 			v-model:country="eventsQuery.country"
 			v-model:city="eventsQuery.city"

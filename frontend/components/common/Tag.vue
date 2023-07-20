@@ -17,28 +17,29 @@ defineProps({
 </script>
 
 <template>
-	<p
-		v-if="price"
+	<div
 		:class="`tag ${className}`"
-		:itemprop="SeoItempropPriceEnum.GROUP_ITEMPROP"
-		itemscope
-		:itemtype="SeoItemTypeEnum.OFFER"
 	>
-		<span v-if="!price">
+		<p v-if="!price">
 			{{ $t('event.price.unknown') }}
-		</span>
+		</p>
 
-		<span
+		<p
 			v-else-if="price.value === 0"
 			:itemprop="SeoItempropPriceEnum.FREE"
 			content="true"
 		>
 			{{ $t('event.price.free') }}
-		</span>
+		</p>
 
-		<template v-else>
+		<p
+			v-else
+			class="event-price"
+      :itemprop="SeoItempropPriceEnum.GROUP_ITEMPROP"
+      itemscope
+      :itemtype="SeoItemTypeEnum.OFFER"
+		>
 			<span
-				class="event-price"
 				:itemprop="SeoItempropPriceEnum.PRICE"
 				:content="price.value"
 			>
@@ -50,8 +51,8 @@ defineProps({
 			>
 				{{ price.currency }}
 			</span>
-		</template>
-	</p>
+		</p>
+	</div>
 </template>
 
 <style lang="less" scoped>

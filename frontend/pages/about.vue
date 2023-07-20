@@ -13,7 +13,7 @@ getMeta({
 </script>
 
 <template>
-	<section
+	<div
 		class="about"
 		itemscope
 		:itemtype="SeoItemTypeEnum.ABOUT"
@@ -45,7 +45,7 @@ getMeta({
 				</NuxtLink>
 			</p>
 		</div>
-	</section>
+	</div>
 </template>
 
 <style lang="less" scoped>

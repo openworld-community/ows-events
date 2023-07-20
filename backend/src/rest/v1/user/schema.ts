@@ -12,8 +12,8 @@ const UserSchema = {
 	userInfo: {
 		type: 'object',
 		properties: {
-			family: { type: 'string' },
-			name: { type: 'string' },
+			last_name: { type: 'string' },
+			first_name: { type: 'string' },
 			nickname: { type: 'string' },
 			company: { type: 'string' },
 			email: { type: 'string' },

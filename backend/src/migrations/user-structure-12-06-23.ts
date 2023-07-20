@@ -27,8 +27,8 @@ import { vars } from '../config/vars';
 					auth_date: number;
 				};
 				userInfo: {
-					family: string;
-					name: string;
+					last_name: string;
+					first_name: string;
 					nickname: string;
 					company: string;
 					email: string;

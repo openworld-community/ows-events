@@ -27,11 +27,11 @@ const schema = new Schema<IUserDocument>(
 			}
 		},
 		userInfo: {
-			family: {
+			last_name: {
 				type: String,
 				default: ''
 			},
-			name: {
+			first_name: {
 				type: String,
 				default: ''
 			},

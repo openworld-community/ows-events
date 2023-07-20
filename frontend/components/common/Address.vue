@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import type { Location } from '../../../common/types/address';
 import type { PropType } from 'vue';
-import {SeoItempropGlobalEnum, SeoItempropLocationEnum, SeoItemTypeEnum} from "../../constants/enums/seo";
+import {
+  SeoItempropEventEnum,
+  SeoItempropLocationEnum,
+  SeoItemTypeEnum
+} from "../../constants/enums/seo";
 
 const props = defineProps({
 	location: {
@@ -30,7 +34,9 @@ const component = computed(() => {
 		class="address"
 		:to="isLink ? getLocationLink(location) : null"
 		:target="isLink ? '_blank' : null"
-		:itemprop="isLink ? SeoItempropGlobalEnum.URL : null"
+    :itemprop="SeoItempropEventEnum.LOCATION"
+    :itemtype="SeoItemTypeEnum.LOCATION"
+    itemscope
 	>
 		<CommonIcon
 			v-if="withPin"
@@ -39,9 +45,9 @@ const component = computed(() => {
 		/>
 		<span
 			:class="['address__text', { 'address__text--link': isLink }]"
+      itemscope
+      :itemtype="SeoItemTypeEnum.ADDRESS"
 			:itemprop="SeoItempropLocationEnum.GROUP_ITEMPROP"
-			itemscope
-			:itemtype="SeoItemTypeEnum.ADDRESS"
 		>
 			<span
 				v-if="props.location.country"

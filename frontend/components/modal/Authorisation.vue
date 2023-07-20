@@ -73,6 +73,7 @@ onMounted(() => {
 						<CommonIcon
 							class="modal-card__icon"
 							name="telegram"
+              color="var(--color-white)"
 						/>
 						{{ $t('modal.pre_authorisation_modal.telegram_login') }}
 					</div>

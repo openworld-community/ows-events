@@ -6,7 +6,8 @@ export const formatCurrency = (currency: string) => {
         currencyDisplay: 'narrowSymbol',
         minimumFractionDigits: 0
     });
-
+    // эта стандартная функция работает только если передать в нее число (цену), а нам нужен только значок валюты
+    // поэтому передаем в функцию просто единицу, и далее обрезаем ее
     return formatter.format(1).slice(1);
 };
 

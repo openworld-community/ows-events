@@ -13,7 +13,7 @@ export type EventOnPoster = {
 		address: string;
 	};
 	image: string;
-	price: EventPrice;
+	price: EventPrice | null;
 	timezone?: Timezone;
 	url: string;
 };
@@ -46,5 +46,5 @@ export type EventPrice = {
 	maxValue: number | null;
 	value: number | null;
 	minValue: number | null;
-	currency: number | null;
+	currency: string | null;
 };

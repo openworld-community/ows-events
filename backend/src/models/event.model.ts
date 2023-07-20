@@ -64,6 +64,9 @@ const schema = new Schema<IEventDocument>(
 			},
 			maxValue: {
 				type: Number
+			},
+			currency: {
+				type: String
 			}
 		},
 		timezone: {

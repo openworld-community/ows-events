@@ -18,6 +18,7 @@ export const ItemEvent = {
 		},
 		price: {
 			type: 'object',
+			nullable: true,
 			properties: {
 				minValue: { type: 'number' },
 				value: { type: 'number' },

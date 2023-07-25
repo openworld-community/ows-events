@@ -32,6 +32,7 @@ services:
             - 'traefik.http.middlewares.compressor.compress=true'
             - 'traefik.http.routers.frontend_https.rule=Host(`afisha.peredelano.com`)'
             - 'traefik.http.routers.frontend_https.middlewares=sslheader@docker'
+            - 'traefik.http.routers.frontend_https.middlewares=compressor@docker'
             - 'traefik.http.routers.frontend_https.entrypoints=http, https'
             - 'traefik.http.routers.frontend_https.tls.certresolver=myresolver'
             - 'traefik.http.routers.frontend_http.rule=Host(`afisha.peredelano.com`)'

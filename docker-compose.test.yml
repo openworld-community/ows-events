@@ -29,6 +29,7 @@ services:
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
+            - 'traefik.http.middlewares.compressor.compress=true'
             - 'traefik.http.routers.test_frontend_https.rule=Host(`poster-test-peredelano.orby-tech.space`)'
             - 'traefik.http.routers.test_frontend_https.middlewares=sslheader@docker'
             - 'traefik.http.routers.test_frontend_https.entrypoints=http, https'

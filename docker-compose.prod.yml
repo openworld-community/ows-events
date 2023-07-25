@@ -30,12 +30,14 @@ services:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
             - 'traefik.http.middlewares.compressor.compress=true'
+            - 'traefik.http.middlewares.redirect-https.redirectscheme.scheme=https'
             - 'traefik.http.routers.frontend_https.rule=Host(`afisha.peredelano.com`)'
             - 'traefik.http.routers.frontend_https.middlewares=sslheader@docker'
             - 'traefik.http.routers.frontend_https.middlewares=compressor@docker'
             - 'traefik.http.routers.frontend_https.entrypoints=http, https'
             - 'traefik.http.routers.frontend_https.tls.certresolver=myresolver'
             - 'traefik.http.routers.frontend_http.rule=Host(`afisha.peredelano.com`)'
+            - 'traefik.http.routers.frontend_http.middlewares=redirect-to-https@docker'
             - 'traefik.http.routers.frontend_http.entrypoints=http'
         networks:
             - traefikpublic
@@ -55,11 +57,13 @@ services:
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
+            - 'traefik.http.middlewares.redirect-https.redirectscheme.scheme=https'
             - 'traefik.http.routers.backend_https.rule=Host(`api.afisha.peredelano.com`)'
             - 'traefik.http.routers.backend_https.middlewares=sslheader@docker'
             - 'traefik.http.routers.backend_https.entrypoints=http, https'
             - 'traefik.http.routers.backend_https.tls.certresolver=myresolver'
             - 'traefik.http.routers.backend_http.rule=Host(`api.afisha.peredelano.com`)'
+            - 'traefik.http.routers.backend_http.middlewares=redirect-https@docker'
             - 'traefik.http.routers.backend_http.entrypoints=http'
         environment:
             - MODE=prod

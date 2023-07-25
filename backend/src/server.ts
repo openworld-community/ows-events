@@ -16,9 +16,11 @@ import { connectToMongo } from './boot/connectToMongo';
 import { authApi } from './rest/v1/auth/router';
 import { ajvFilePlugin } from './config/ajvPlugins';
 import { manualModerationApi } from './rest/v1/moderation/router';
+import { tagsApi } from './rest/v1/tags/router';
 import { migrate } from './migrations/price-structure-18-07-23';
 import { userApi } from './rest/v1/user/router';
 import { migrate as migrateUserStructure } from './migrations/user-structure-12-06-23';
+
 
 const server = fastify({
 	logger: true,
@@ -72,6 +74,7 @@ server.register(registrationApi, { prefix: '/api/registration' });
 server.register(paymentInfoApi, { prefix: '/api/payment-info' });
 server.register(imageApi, { prefix: '/api/image' });
 server.register(userApi, { prefix: '/api/user' });
+server.register(tagsApi, { prefix: '/api/tags' });
 
 server.setNotFoundHandler((req, reply) => {
 	reply.sendFile('index.html');

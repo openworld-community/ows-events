@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import { EventOnPoster } from '@common/types/event';
+import { EventTypes } from '@common/const/eventTypes';
 
 export type IEventMeta = {
 	meta: {
@@ -95,7 +96,11 @@ const schema = new Schema<IEventDocument>(
 					}
 				]
 			}
-		}
+		},
+        type: {
+            type: String,
+            enum: [ "parsed", "paid", "user-generated"]
+        }
 	},
 	{
 		versionKey: false,

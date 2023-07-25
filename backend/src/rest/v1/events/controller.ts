@@ -15,6 +15,7 @@ import { eventsValidator } from '../../../validators/event-validator';
 import { manualModerationController } from '../../../controllers/manual-moderation-controller';
 import { vars } from '../../../config/vars';
 import { EventModel } from '../../../models/event.model';
+import { EventTypes } from '@common/const/eventTypes';
 
 export const addEvent: IAddEventHandler = async (request) => {
 	const { event } = request.body;
@@ -29,6 +30,12 @@ export const addEvent: IAddEventHandler = async (request) => {
 	} else {
 		event.creatorId = 'dev-user';
 	}
+
+    if (event.creatorId === 'parser'){
+        event.type = EventTypes.parsed
+    } else {
+        event.type = EventTypes.userGenerated
+    }
 
 	const eventWithThisLink = await EventModel.findOne({
 		url: event.url,

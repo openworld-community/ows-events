@@ -1,3 +1,4 @@
+import { EventTypes } from '../const/eventTypes';
 import type { Timezone } from './location';
 
 export type EventOnPoster = {
@@ -17,6 +18,7 @@ export type EventOnPoster = {
 	timezone?: Timezone;
 	url: string;
     tags?: string[];
+    type: EventTypes;
 };
 
 export type PostEventPayload = {

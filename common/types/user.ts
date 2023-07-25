@@ -1,13 +1,25 @@
 export type UserDbEntity = {
-	id: string;
-	first_name: string;
-	last_name: string;
-	username: string;
-	photo_url: string;
-	auth_date: number;
+	telegram: {
+		id: string;
+		first_name: string;
+		last_name: string;
+		username: string;
+		photo_url: string;
+		auth_date: number;
+	};
+	userInfo: {
+		last_name: string;
+		first_name: string;
+		nickname: string;
+		company: string;
+		email: string;
+		phone: string;
+	};
 	token: string;
 };
 
-export type TGUser = Omit<UserDbEntity, 'token'>;
+export type TGUser = UserDbEntity['telegram'];
 
-export type UserInfo = Omit<UserDbEntity, 'token' | 'auth_date'>;
+export type TGUserInfo = Omit<TGUser, 'auth_date'>;
+
+export type UserInfo = UserDbEntity['userInfo'];

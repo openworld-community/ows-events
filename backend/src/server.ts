@@ -17,7 +17,9 @@ import { connectToMongo } from './boot/connectToMongo';
 import { authApi } from './rest/v1/auth/router';
 import { ajvFilePlugin } from './config/ajvPlugins';
 import { manualModerationApi } from './rest/v1/moderation/router';
+import { tagsApi } from './rest/v1/tags/router';
 import { migrate } from './migrations/price-structure-18-07-23';
+
 
 const server = fastify({
 	logger: true,
@@ -69,6 +71,7 @@ server.register(timezonesApi, { prefix: '/api/timezones' });
 server.register(registrationApi, { prefix: '/api/registration' });
 server.register(paymentInfoApi, { prefix: '/api/payment-info' });
 server.register(imageApi, { prefix: '/api/image' });
+server.register(tagsApi, { prefix: '/api/tags' });
 
 server.get<{
 	Querystring: {

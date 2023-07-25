@@ -34,7 +34,11 @@ export const ItemEvent = {
 			},
 			required: ['timezoneName', 'timezoneOffset']
 		},
-		url: { type: 'string' }
+		url: { type: 'string' },
+        tags: { 
+            type: 'array', 
+            items: { type: 'string' } 
+        },
 	}
 };
 

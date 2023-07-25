@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '../../constants/enums/route';
+import {SeoItempropNavEnum, SeoItemTypeEnum} from '../../constants/enums/seo';
 
 const route = useRoute();
 
@@ -22,9 +23,17 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 </script>
 
 <template>
-	<header class="header">
+	<header
+			class="header"
+			itemscope
+			:itemtype="SeoItemTypeEnum.HEADER"
+	>
 		<div class="header__container">
-			<div class="header__left">
+			<div
+				class="header__left"
+				itemscope
+				:itemtype="SeoItemTypeEnum.NAV"
+			>
 				<component
 					:is="logoComponentIs"
 					class="header__navigation-link"
@@ -32,6 +41,7 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
 					"
 					:to="!isAtHome ? { name: RouteNameEnum.HOME } : undefined"
+					:itemprop="SeoItempropNavEnum.URL"
 					@click="isAtHome && scrollToTop()"
 				>
 					<CommonIcon

@@ -1,5 +1,5 @@
 export enum EventTypes {
-    parsed = "parsed", 
-    paid = "paid", 
-    userGenerated = "user-generated"
+    PARSED = "parsed", 
+    PAID = "paid", 
+    USER_GENERATED = "user-generated"
 }

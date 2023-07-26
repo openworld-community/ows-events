@@ -32,9 +32,9 @@ export const addEvent: IAddEventHandler = async (request) => {
 	}
 
     if (event.creatorId === 'parser'){
-        event.type = EventTypes.parsed
+        event.type = EventTypes.PARSED
     } else {
-        event.type = EventTypes.userGenerated
+        event.type = EventTypes.USER_GENERATED
     }
 
 	const eventWithThisLink = await EventModel.findOne({

@@ -3,7 +3,6 @@ import type { EventOnPoster } from '../../../common/types';
 import {
 	SeoItempropEventEnum,
 	SeoItempropGlobalEnum,
-	SeoItemTypeEnum
 } from '../../constants/enums/seo';
 
 defineProps<{ eventData: EventOnPoster }>();
@@ -11,8 +10,6 @@ defineProps<{ eventData: EventOnPoster }>();
 
 <template>
 	<NuxtLink
-		itemscope
-		:itemtype="SeoItemTypeEnum.EVENT"
 		class="card"
 		:to="`/event/${eventData.id}`"
 		:itemprop="SeoItempropGlobalEnum.URL"
@@ -70,7 +67,6 @@ defineProps<{ eventData: EventOnPoster }>();
 			</p>
 			<CommonTag
 				:price="eventData.price"
-				:currency="'RSD'"
 			/>
 		</div>
 	</NuxtLink>

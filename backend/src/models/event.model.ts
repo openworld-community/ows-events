@@ -58,7 +58,18 @@ const schema = new Schema<IEventDocument>(
 			type: String
 		},
 		price: {
-			type: String
+			minValue: {
+				type: Number
+			},
+			value: {
+				type: Number
+			},
+			maxValue: {
+				type: Number
+			},
+			currency: {
+				type: String
+			}
 		},
 		timezone: {
 			timezoneName: {
@@ -70,6 +81,9 @@ const schema = new Schema<IEventDocument>(
 				required: true
 			}
 		},
+        tags: {
+            type: [String]
+        },
 		meta: {
 			moderation: {
 				status: {

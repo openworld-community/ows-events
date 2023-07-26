@@ -6,6 +6,7 @@ import EventModal from '@/components/modal/Event.client.vue';
 // TEST
 // import { v4 as uuid } from 'uuid';
 import { type EventOnPoster } from '../../common/types';
+import { SeoItemTypeEnum } from '../constants/enums/seo';
 
 const { t } = useI18n();
 
@@ -123,42 +124,27 @@ const now = Date.now();
 
 <template>
 	<div class="main-page">
-		<CommonScrollingPage
-			:items="posterEvents"
-			:min-item-size="336"
-			:is-emit-update="true"
-			:distance="20"
-			:stop-infinity="stopInfinity"
-			:size-dependencies="[
-				'description',
-				'title',
-				'location.address',
-				'location.city',
-				'location.country'
-			]"
-			:class-name="'main-page__content'"
-			@load-items="loadPosterEvents"
-		>
-			<template #stable>
-				<HomeSearch
-					v-model:search="eventsQuery.searchLine"
-					class="main-page__search"
-				/>
-				<div class="main-page__location">
-					<HomeUserLocation />
-				</div>
+		<HomeSearch
+			v-model:search="eventsQuery.searchLine"
+			class="main-page__search"
+		/>
+		<div class="main-page__location">
+			<HomeUserLocation />
+		</div>
+		<h1 class="main-page__title">
+			{{ $t('home.title') }}
+		</h1>
+		<HomeFilter
+			v-model:country="eventsQuery.country"
+			v-model:city="eventsQuery.city"
+			class="main-page__filter"
+		/>
 
-				<h1 class="main-page__title">
-					{{ $t('home.title') }}
-				</h1>
-
-				<HomeFilter
-					v-model:country="eventsQuery.country"
-					v-model:city="eventsQuery.city"
-					class="main-page__filter"
-				/>
-			</template>
-			<template #dynamic="{ item }">
+		<ul class="main-page__card-list">
+			<li
+				v-for="event in posterEvents"
+				:key="event.id"
+			>
 				<HomeEventPreviewCard
 					:class="{ expired: item.date < now }"
 					:event-data="item"

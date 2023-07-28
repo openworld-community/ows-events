@@ -50,11 +50,7 @@ const posterEvents: Ref<EventOnPoster[] | null> = ref([]);
 
 const requestLimit = ref(20);
 
-const updatePosterEvents = (data: typeof posterEvents) => {
-	// if (data.value?.length === requestLimit.value) stopInfinity.value = true;
-	if (posterEvents.value && data.value) posterEvents.value = data.value;
-	requestLimit.value += 20;
-};
+const stopInfinity = ref(true);
 
 const loadPosterEvents = async () => {
 	const query = {
@@ -68,10 +64,13 @@ const loadPosterEvents = async () => {
 		// data: { query: debouncedEventsRequestQuery }
 	});
 
-	updatePosterEvents(data);
+	if (data.value) {
+		const { hasNextPage } = data.value;
+		stopInfinity.value = hasNextPage;
+		posterEvents.value = data.value.docs;
+		requestLimit.value += 20;
+	}
 };
-
-const stopInfinity = ref(false);
 
 const onButtonClick = () => {
 	if (useCookie('token').value) {
@@ -127,9 +126,8 @@ const now = Date.now();
 		<CommonScrollingPage
 			:items="posterEvents"
 			:min-item-size="336"
-			:is-emit-update="true"
 			:distance="20"
-			:stop-infinity="stopInfinity"
+			:has-next-page="stopInfinity"
 			:size-dependencies="[
 				'description',
 				'title',

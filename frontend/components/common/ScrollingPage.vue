@@ -27,11 +27,6 @@ const props = defineProps({
 		type: Boolean as PropType<boolean>,
 		default: true
 	},
-	// если true, можно использовать событие @update на DynamicScroller, чтобы получить viewStartIndex (возможно пригодится для загрузки карточек в будущем)
-	isEmitUpdate: {
-		type: Boolean as PropType<boolean>,
-		default: false
-	},
 	// дистанция, по достижении которой будут подгружаться новые карточки
 	distance: {
 		type: Number as PropType<number>,
@@ -42,9 +37,10 @@ const props = defineProps({
 		type: Array as PropType<string[]>,
 		required: true
 	},
-	stopInfinity: {
+	// если false, то страниц с ивентами в БД нет
+	hasNextPage: {
 		type: Boolean as PropType<boolean>,
-		default: false
+		required: true
 	}
 });
 
@@ -60,12 +56,23 @@ watch(
 	}
 );
 
+const hasNextPage = toRef(props.hasNextPage);
+
+watch(
+	() => props.hasNextPage,
+	() => {
+		hasNextPage.value = props.hasNextPage;
+	}
+);
+
 useInfiniteScroll(
 	listSelector,
 	() => {
-		if (props.stopInfinity) return;
-		console.log('loadItems');
-		emit('loadItems');
+		// посмотри вот этот момент, этот колбэк постоянно работает. это утечка памяти?
+		console.log('callback infinity');
+		if (hasNextPage.value) {
+			emit('loadItems');
+		}
 	},
 	{ distance: props.distance }
 );
@@ -79,26 +86,6 @@ const sizeDependenciesFormatter = (item: Record<string, any>): Array<string> => 
 		return value;
 	});
 };
-
-// const updateParts: Ref<{
-// 	viewStartIdx: number;
-// }> = ref({
-// 	viewStartIdx: 0
-// });
-
-// type update = (viewStartIndex: number) => void;
-
-// const onUpdate: update = (viewStartIndex) => {
-// 	listSrore.changeViewStartIdx(viewStartIndex, false);
-// 	// updateParts.value.viewStartIdx = viewStartIndex;
-// };
-
-// watch(
-// 	() => updateParts.value.viewStartIdx,
-// 	() => {
-// 		listSrore.changeViewStartIdx(updateParts.value.viewStartIdx);
-// 	}
-// );
 </script>
 
 <template>
@@ -110,7 +97,6 @@ const sizeDependenciesFormatter = (item: Record<string, any>): Array<string> => 
 			:items="items"
 			:min-item-size="minItemSize"
 			:buffer="buffer"
-			:emit-update="isEmitUpdate"
 			:page-mode="isPageMode"
 			class="scroll-list__content"
 		>

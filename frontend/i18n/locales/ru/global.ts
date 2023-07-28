@@ -4,13 +4,15 @@ export const global = {
 	search: 'Поиск',
 	timezone: 'Часовой пояс',
 	button: {
+		apply: 'Применить',
 		back: 'Назад',
-		share: 'Поделиться',
 		cancel: 'Отмена',
-		search: 'Поиск',
+		copy: 'Копировать',
+		copied: 'Скопировано',
 		delete: 'Очистить',
 		follow: 'Перейти',
-		copy: 'Копировать',
-		copied: 'Скопировано'
+		reset: 'Сбросить',
+		search: 'Поиск',
+		share: 'Поделиться',
 	}
 };

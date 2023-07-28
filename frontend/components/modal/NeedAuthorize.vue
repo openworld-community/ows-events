@@ -7,15 +7,7 @@ const props = defineProps<Props>();
 </script>
 
 <template>
-	<CommonModalWrapper
-		:hide-overlay="false"
-		overlay-transition="vfm-fade"
-		overlay-transition-duration="2600"
-		content-transition="vfm-fade"
-		:click-to-close="true"
-		:esc-to-close="true"
-		:lock-scroll="false"
-	>
+	<CommonModalWrapper>
 		<div class="modal">
 			<div class="modal-card__head">
 				<p class="modal-card__title">

@@ -18,6 +18,7 @@ export type IconName =
 	| 'container'
 	| 'contact-tg'
 	| 'close'
+  | 'check'
 	| 'clock'
 	| 'calendar'
 	| 'button-plus'

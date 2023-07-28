@@ -11,7 +11,7 @@ type LinkObjectType = {
 	path?: string;
 };
 
-type ButtonKind = 'ordinary' | 'success' | 'warning'; // для задания внешнего вида
+type ButtonKind = 'ordinary' | 'success' | 'warning' | 'filter' | 'filter--content'; // для задания внешнего вида
 
 const props = defineProps({
 	buttonKind: {
@@ -20,8 +20,13 @@ const props = defineProps({
 		default: ''
 	},
 	buttonText: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
+	},
+	// для кнопок-фильтров, обеспечивает заливку при заданном фильтре
+	filled: {
+		type: Boolean,
+		default: false
 	},
 	link: {
 		// если это ссылка
@@ -30,17 +35,17 @@ const props = defineProps({
 	},
 	isExternalLink: {
 		// если необходимо открыть в новом окне
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	isRound: {
 		// если кнопка круглая
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	isIcon: {
 		// если компонент выглядит, как иконка
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	iconName: {
@@ -57,15 +62,15 @@ const props = defineProps({
 		default: IconDefaultParams.HEIGHT
 	},
 	alt: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	isDisabled: {
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	isLoading: {
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	}
 });
@@ -89,7 +94,8 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			isIcon ? 'icon' : `button button__${buttonKind}`,
 			isIcon && buttonKind ? `icon__${buttonKind}` : '',
 			isDisabled ? `button__${buttonKind}--disabled` : '',
-			{ 'button--round': isRound }
+			{ 'button--round': isRound },
+			{ [`button__${buttonKind}--filled`]: filled }
 		]"
 		:aria-label="alt ? alt : null"
 		@click="!link && !isDisabled ? emit('click') : null"
@@ -236,6 +242,46 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 				color: var(--color-input-field);
 			}
 		}
+	}
+
+	&__filter {
+		display: flex;
+		width: 50%;
+		height: 36px;
+		flex-direction: row-reverse;
+		border: 1px solid var(--color-text-main);
+		border-radius: 8px;
+
+		& > span {
+			font-size: var(--font-size-S);
+			line-height: 20px;
+			margin-right: 10px;
+		}
+
+		&::v-deep(svg) {
+			color: var(--color-text-main);
+			width: 20px;
+			height: 20px;
+			margin-right: 0;
+		}
+
+		&--disabled {
+			color: var(--color-input-icons);
+			border-color: var(--color-input-icons);
+
+			&::v-deep(svg) {
+				color: var(--color-input-icons);
+			}
+		}
+
+    &--filled {
+      background-color: var(--color-text-main);
+      color: var(--color-white);
+
+      &::v-deep(svg) {
+        color: var(--color-white);
+      }
+    }
 	}
 }
 

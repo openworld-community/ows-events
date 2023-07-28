@@ -10,14 +10,18 @@ export const migrate = () => {
 	users
 		.updateMany(
             { },
-            [
-              { $set: { type: { $switch: {
-                                        branches: [
-                                            { case: { $eq: [ "$creatorId", 'parser' ] }, then: "parsed" }
-                                        ],
-                                        default: "user-generated"
-              } } } }
-            ]
+            [{ $addFields: {
+                    type: {
+                        $cond: {
+                            if: {
+                                $eq: ['$creatorId', 'parser']
+                            },
+                            then: 'parsed',
+                            else: 'user-generated'
+                        }
+                    }
+                }
+            }]
         )
 		.then((res) => {
 			// eslint-disable-next-line no-console

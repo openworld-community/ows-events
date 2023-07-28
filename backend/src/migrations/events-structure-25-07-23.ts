@@ -6,19 +6,13 @@ import { vars } from '../config/vars';
 export const migrate = () => {
 	const client = new mongoose.mongo.MongoClient(vars.mongo.uri);
 	const db = client.db();
-	const users = db.collection('events');
-	users
+	const events = db.collection('events');
+	events
 		.updateMany(
             { },
             [{ $addFields: {
                     type: {
-                        $cond: {
-                            if: {
-                                $eq: ['$creatorId', 'parser']
-                            },
-                            then: 'parsed',
-                            else: 'user-generated'
-                        }
+                        $cond: [ {$eq: ['$creatorId', 'parser'] }, 'parsed', 'user-generated' ]
                     }
                 }
             }]

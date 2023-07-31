@@ -46,34 +46,27 @@ const props = defineProps({
 
 const listSelector = ref<HTMLElement | null>(null);
 
-watch(
-	() => listSrore.needScrollList,
-	() => {
-		if (listSrore.needScrollList && listSelector.value) {
-			listSelector.value.scrollTo({ top: 0, behavior: 'smooth' });
-			listSrore.needScrollList = false;
-		}
+watch([() => listSrore.needScrollList, () => props.hasNextPage], () => {
+	if (listSrore.needScrollList && listSelector.value) {
+		listSelector.value.scrollTo({ top: 0, behavior: 'smooth' });
+		listSrore.needScrollList = false;
 	}
-);
+	hasNextPage.value = props.hasNextPage;
+});
 
 const hasNextPage = toRef(props.hasNextPage);
 
-watch(
-	() => props.hasNextPage,
-	() => {
-		hasNextPage.value = props.hasNextPage;
-	}
-);
-
-useInfiniteScroll(
-	listSelector,
-	() => {
-		if (hasNextPage.value) {
-			emit('loadItems');
-		}
-	},
-	{ distance: props.distance }
-);
+onMounted(() => {
+	useInfiniteScroll(
+		listSelector,
+		() => {
+			if (hasNextPage.value) {
+				emit('loadItems');
+			}
+		},
+		{ distance: props.distance }
+	);
+});
 
 const sizeDependenciesFormatter = (item: Record<string, any>): Array<string> => {
 	return props.sizeDependencies.map((dependency: string) => {

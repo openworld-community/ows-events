@@ -56,17 +56,15 @@ watch([() => listSrore.needScrollList, () => props.hasNextPage], () => {
 
 const hasNextPage = toRef(props.hasNextPage);
 
-onMounted(() => {
-	useInfiniteScroll(
-		listSelector,
-		() => {
-			if (hasNextPage.value) {
-				emit('loadItems');
-			}
-		},
-		{ distance: props.distance }
-	);
-});
+useInfiniteScroll(
+  listSelector,
+  () => {
+    if (hasNextPage.value) {
+      emit('loadItems');
+    }
+  },
+  { distance: props.distance }
+);
 
 const sizeDependenciesFormatter = (item: Record<string, any>): Array<string> => {
 	return props.sizeDependencies.map((dependency: string) => {

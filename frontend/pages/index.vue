@@ -5,7 +5,6 @@ import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
 // TEST
 import { type EventOnPoster } from '../../common/types';
-import { SeoItemTypeEnum } from '../constants/enums/seo';
 
 const { t } = useI18n();
 
@@ -139,11 +138,12 @@ const now = Date.now();
 .main-page {
 	&__add-button-wrapper {
 		max-width: 480px;
-		position: sticky;
+		width: 100%;
+		position: absolute;
 		bottom: 20px;
 		right: 0;
-		margin-right: auto;
-		margin-left: auto;
+		transform: translateX(-50%);
+		left: 50%;
 	}
 
 	&__search {

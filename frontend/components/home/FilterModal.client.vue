@@ -28,7 +28,10 @@ const model = computed({
 	}
 });
 
-const resetFilter = () => filterStore.$reset([props.filterType])
+const resetFilter = () => {
+	filterStore.$patch({ [props.filterType]: '' });
+  closeModal()
+};
 </script>
 
 <template>
@@ -84,6 +87,7 @@ const resetFilter = () => filterStore.$reset([props.filterType])
 					button-kind="warning"
 					:button-text="$t('global.button.reset')"
 					class="buttons__item"
+					@click="resetFilter"
 				/>
 			</div>
 		</div>

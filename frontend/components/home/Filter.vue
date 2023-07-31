@@ -38,48 +38,62 @@ const filterList = ref<Set<string>>(new Set());
 // provide('updateCountry', updateCountry); // просто провайдим имеющиеся ф-ии внутрь и дергаем их оттуда. Это будет явная передача функционала и обновление данных
 // provide('filterList', filterList)
 
-const openFilterModal = (type: string, list: Set<string>) => {
+const openFilterModal = async (type: string, list: Set<string>) => {
+  filterList.value = await list;
 	filterStore.$patch({ showModal: true });
 	filterType.value = type;
-	filterList.value = list;
 };
+
+watch(() => filterStore.country, () => filterStore.$patch({city: ''}))
 </script>
 
 <template>
 	<section class="filter">
-		<CommonUiBaseSelect
-			class="filter__field"
-			name="country"
-			:placeholder="$t('global.country')"
-			:list="filterStore.usedCountries"
-			:model-value="country"
-			:aria-label="$t('home.filter.aria_country')"
-			@update:model-value="updateCountry"
-		/>
-		<CommonUiBaseSelect
-			class="filter__field"
-			name="city"
-			:placeholder="$t('global.city')"
-			:list="filterStore.getUsedCitiesByCountry(country) ?? []"
-			:disabled="!country"
-			:model-value="city"
-			dropdown-position="right"
-			:aria-label="$t('home.filter.aria_city')"
-			@update:model-value="updateCity"
-		/>
+		<!--		<CommonUiBaseSelect-->
+		<!--			class="filter__field"-->
+		<!--			name="country"-->
+		<!--			:placeholder="$t('global.country')"-->
+		<!--			:list="filterStore.usedCountries"-->
+		<!--			:model-value="country"-->
+		<!--			:aria-label="$t('home.filter.aria_country')"-->
+		<!--			@update:model-value="updateCountry"-->
+		<!--		/>-->
+		<!--		<CommonUiBaseSelect-->
+		<!--			class="filter__field"-->
+		<!--			name="city"-->
+		<!--			:placeholder="$t('global.city')"-->
+		<!--			:list="filterStore.getUsedCitiesByCountry(country) ?? []"-->
+		<!--			:disabled="!country"-->
+		<!--			:model-value="city"-->
+		<!--			dropdown-position="right"-->
+		<!--			:aria-label="$t('home.filter.aria_city')"-->
+		<!--			@update:model-value="updateCity"-->
+		<!--		/>-->
 
 		<CommonButton
+			class="filter__field"
 			button-kind="filter"
-			:button-text="$t('home.filter.country.button')"
+			:filled="!!filterStore.country"
+			:button-text="
+				filterStore.country ? filterStore.country : $t('home.filter.country.button')
+			"
 			icon-name="container"
 			@click="openFilterModal('country', filterStore.usedCountries)"
 		/>
 
 		<CommonButton
+			class="filter__field"
 			button-kind="filter"
-			:button-text="$t('home.filter.city.button')"
+			:filled="!!filterStore.city"
+			:button-text="filterStore.city ? filterStore.city : $t('home.filter.city.button')"
 			icon-name="container"
-			@click="openFilterModal('city', filterStore.getUsedCitiesByCountry(country) ?? [])"
+			:is-disabled="!filterStore.country"
+			@click="
+				openFilterModal(
+					'city',
+					filterStore.getUsedCitiesByCountry(filterStore.country) ?? []
+				)
+			"
 		/>
 
 		<HomeFilterModal

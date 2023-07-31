@@ -37,7 +37,7 @@ const props = defineProps({
 		type: Array as PropType<string[]>,
 		required: true
 	},
-	// если false, то страниц с ивентами в БД нет
+	// приходит из бд. если false, то страниц с ивентами в БД нет
 	hasNextPage: {
 		type: Boolean as PropType<boolean>,
 		required: true
@@ -68,8 +68,6 @@ watch(
 useInfiniteScroll(
 	listSelector,
 	() => {
-		// посмотри вот этот момент, этот колбэк постоянно работает. это утечка памяти?
-		console.log('callback infinity');
 		if (hasNextPage.value) {
 			emit('loadItems');
 		}
@@ -119,12 +117,6 @@ const sizeDependenciesFormatter = (item: Record<string, any>): Array<string> => 
 					>
 					</slot>
 				</DynamicScrollerItem>
-				<!-- <slot
-					name="dynamic"
-					:item="item"
-					:index="index"
-					:active="active"
-				></slot> -->
 			</template>
 		</DynamicScroller>
 	</div>
@@ -134,7 +126,7 @@ const sizeDependenciesFormatter = (item: Record<string, any>): Array<string> => 
 .scroll-list {
 	width: 100%;
 	overflow-y: auto;
-	height: calc(100vh - var(--header-height));
+	height: calc(100dvh - var(--header-height));
 
 	&__content {
 		max-width: 480px;

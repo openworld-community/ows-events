@@ -1,21 +1,8 @@
 import type { EventOnPoster } from '~/../common/types';
+import type { RequestEvent } from '~/../common/types';
 import type { PostEventPayload } from '~/../common/types/event';
 import type { Registration } from '~/../common/types/registration';
 import { defineMutation, defineQuery, useBackendFetch } from './utils';
-
-interface requestData {
-  docs: EventOnPoster[] | null; 
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
-  limit: number;
-  nextPage: number | null; 
-  offset: number;
-  page: number;
-  pagingCounter: number;
-  prevPage: number | null; 
-  totalDocs: number;
-  totalPages: number;
-}
 
 export const events = {
 	findMany: defineQuery<
@@ -26,9 +13,7 @@ export const events = {
 				city?: string;
 				paginationOptions: { limit?: number; page?: number };
 			};
-			// query: { searchLine?: string; country?: string; city?: string; },
-		// }) => EventOnPoster[]
-		}) => requestData
+		}) => RequestEvent
 	>((input) => {
 		return useBackendFetch('events/findPaginate', { body: input?.query ?? {} });
 	}),

@@ -4,7 +4,6 @@ import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
 // TEST
-// import { v4 as uuid } from 'uuid';
 import { type EventOnPoster } from '../../common/types';
 import { SeoItemTypeEnum } from '../constants/enums/seo';
 
@@ -42,10 +41,6 @@ const debouncedEventsRequestQuery = refDebounced(
 	{ maxWait: 5000 }
 );
 
-// const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
-// 	data: { query: debouncedEventsRequestQuery }
-// });
-
 const posterEvents: Ref<EventOnPoster[] | null> = ref([]);
 
 const requestLimit = ref(20);
@@ -61,14 +56,13 @@ const loadPosterEvents = async () => {
 		data: {
 			query: query
 		}
-		// data: { query: debouncedEventsRequestQuery }
 	});
 
 	if (data.value) {
 		const { hasNextPage } = data.value;
 		stopInfinity.value = hasNextPage;
 		posterEvents.value = data.value.docs;
-		requestLimit.value += 20;
+		hasNextPage ? (requestLimit.value += 20) : null;
 	}
 };
 
@@ -81,44 +75,6 @@ const onButtonClick = () => {
 };
 
 const now = Date.now();
-
-// !!! mock posterEvents
-// const posterEvents: Ref<EventOnPoster[]> = ref([]);
-
-// type loadEventsCustom = (list: EventOnPoster[]) => void;
-
-// const count = ref(3);
-
-// const loadEvents: loadEventsCustom = (list: EventOnPoster[]) => {
-// 	if (count.value === 6) {
-// 		stopInfinity.value = true;
-// 	}
-// 	if (stopInfinity.value) return;
-// 	for (let i = 0; i < count.value; i++) {
-// 		list.push({
-// 			date: +new Date(),
-// 			id: uuid(),
-// 			description: 'Хочу пицу, чтоб прям вкусная с ума сойдешь и вообще еще че нить',
-// 			durationInSeconds: 0,
-// 			title: 'peredelanoconf',
-// 			image: '/image/7af2c5b3-3697-41b5-9f36-5151c11a6bb6.png',
-// 			location: {
-// 				country: 'Serbia',
-// 				city: 'Belgrade',
-// 				address: 'petushovskiy pr-kt'
-// 			},
-// 			price: '3000',
-// 			timezone: {
-// 				timezoneName: 'Europe/Belgrade',
-// 				timezoneOffset: '+02:00'
-// 			},
-// 			url: 'vk.com'
-// 		});
-// 	}
-// 	count.value++;
-// };
-
-// loadPosterEvents();
 </script>
 
 <template>
@@ -177,38 +133,10 @@ const now = Date.now();
 			/>
 		</div>
 	</div>
-
-	<!-- <ul class="main-page__card-list">
-      <li
-        v-for="event in posterEvents"
-        :key="event.id"
-      >
-          <HomeEventPreviewCard
-            :class="{ expired: event.date < now }"
-            :event-data="event"
-          />
-        <HomeAdCard v-else :ad-data="event" class="ad-block" />
-      </li>
-    </ul> -->
 </template>
 
 <style lang="less" scoped>
 .main-page {
-	// &__wrapper {
-	// 	width: 100%;
-	// 	overflow-y: auto;
-	// 	height: calc(100vh - var(--header-height));
-	// }
-
-	// &__content {
-	// 	max-width: 480px;
-	// 	display: flex;
-	// 	flex-direction: column;
-	// 	width: 100%;
-	// 	margin-right: auto;
-	// 	margin-left: auto;
-	// }
-
 	&__add-button-wrapper {
 		max-width: 480px;
 		position: sticky;

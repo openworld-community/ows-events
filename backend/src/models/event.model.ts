@@ -1,6 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import { EventOnPoster } from '@common/types/event';
-import { EventTypes } from '@common/const/eventTypes';
 
 export type IEventMeta = {
 	meta: {
@@ -80,9 +79,9 @@ const schema = new Schema<IEventDocument>(
 				required: true
 			}
 		},
-        tags: {
-            type: [String]
-        },
+		tags: {
+			type: [String]
+		},
 		meta: {
 			moderation: {
 				status: {
@@ -97,10 +96,10 @@ const schema = new Schema<IEventDocument>(
 				]
 			}
 		},
-        type: {
-            type: String,
-            enum: [ "parsed", "paid", "user-generated"]
-        }
+		type: {
+			type: String,
+			enum: ['parsed', 'paid', 'user-generated']
+		}
 	},
 	{
 		versionKey: false,

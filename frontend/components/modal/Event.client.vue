@@ -3,6 +3,7 @@ import { getAllTimezones, getTimezone } from '@/services/timezone.services';
 import { useLocationStore, type Country, type City } from '@/stores/location.store';
 import { type EventOnPoster } from '@/../common/types';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
+import { EventTypes } from '../../../common/const/eventTypes';
 
 type Props = {
 	closeEventModal: () => void;
@@ -42,7 +43,7 @@ const inputValues = ref({
 		address: props.dataForEdit?.location.address ?? ''
 	},
 	image: props.dataForEdit?.image ?? '',
-	price:  props.dataForEdit?.price?.value ?? 0,
+	price: props.dataForEdit?.price?.value ?? 0,
 	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
 	url: props.dataForEdit?.url ?? ''
 });
@@ -86,13 +87,13 @@ const paramsForSubmit = computed(() => {
 			city: inputValues.value.location.city,
 			address: inputValues.value.location.address
 		},
-    //TODO: добавить min/max значения и выбор валюты
+		//TODO: добавить min/max значения и выбор валюты
 		price: {
-      minValue: null,
-      value: Number(inputValues.value.price) ?? 0,
-      maxValue: null,
-      currency: inputValues.value.price > 0 ? 'RSD' : null
-    },
+			minValue: null,
+			value: Number(inputValues.value.price) ?? 0,
+			maxValue: null,
+			currency: inputValues.value.price > 0 ? 'RSD' : null
+		},
 		timezone: stringToTimezone(inputValues.value.timezone),
 		url: inputValues.value.url
 	};
@@ -111,7 +112,11 @@ const submitEvent = async () => {
 		}
 		image = (await addImage(newImageFile.value)) ?? image;
 
-		const event = Object.assign(paramsForSubmit.value, { id: inputValues.value.id, image });
+		const event = Object.assign(paramsForSubmit.value, {
+			id: inputValues.value.id,
+			image,
+			type: EventTypes.USER_GENERATED
+		});
 		const { error } = await apiRouter.events.edit.useMutation({ data: { event } });
 
 		if (!error.value) props.refreshEvent?.();

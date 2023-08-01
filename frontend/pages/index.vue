@@ -6,6 +6,9 @@ import EventModal from '@/components/modal/Event.client.vue';
 // TEST
 import { type EventOnPoster } from '../../common/types';
 import { SeoItemTypeEnum } from '../constants/enums/seo';
+import { useListStore } from '~/stores/list.store';
+
+const listSrore = useListStore();
 
 const { t } = useI18n();
 
@@ -43,7 +46,14 @@ const debouncedEventsRequestQuery = refDebounced(
 
 const posterEvents: Ref<EventOnPoster[] | null> = ref([]);
 
-const requestLimit = ref(20);
+const requestLimit = ref(listSrore.eventRequestLimit);
+
+watch(
+	() => listSrore.eventRequestLimit,
+	(eventRequestLimit) => {
+		requestLimit.value = eventRequestLimit;
+	}
+);
 
 const stopInfinity = ref(true);
 
@@ -62,7 +72,7 @@ const loadPosterEvents = async () => {
 		const { hasNextPage } = data.value;
 		stopInfinity.value = hasNextPage;
 		posterEvents.value = data.value.docs;
-		hasNextPage ? (requestLimit.value += 20) : null;
+		hasNextPage ? (listSrore.eventRequestLimit += 20) : null;
 	}
 };
 

@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 
-type listStore = {viewStartIdx: number, needScrollList: boolean}
+type listStore = { needScrollList: boolean, eventRequestLimit: number }
 
 export const useListStore = defineStore('eventList', {
-  state: (): listStore => ({ viewStartIdx: 0, needScrollList: false }),
+  state: (): listStore => ({ needScrollList: false, eventRequestLimit: 20 }),
   // getters: {
   //   getViewStartIdx: (state): listStore['viewStartIdx'] => state.viewStartIdx,
   // },

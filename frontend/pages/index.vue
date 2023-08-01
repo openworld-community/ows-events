@@ -54,7 +54,7 @@ watch(
 	}
 );
 
-const stopInfinity = ref(true);
+const hasMorePages = ref(true);
 
 const loadPosterEvents = async () => {
 	const query = {
@@ -69,7 +69,7 @@ const loadPosterEvents = async () => {
 
 	if (data.value) {
 		const { hasNextPage } = data.value;
-		stopInfinity.value = hasNextPage;
+		hasMorePages.value = hasNextPage;
 		posterEvents.value = data.value.docs;
 		hasNextPage ? (listSrore.eventRequestLimit += 20) : null;
 	}
@@ -92,7 +92,7 @@ const now = Date.now();
 			:items="posterEvents"
 			:min-item-size="336"
 			:distance="20"
-			:has-next-page="stopInfinity"
+			:has-next-page="hasMorePages"
 			:size-dependencies="[
 				'description',
 				'title',

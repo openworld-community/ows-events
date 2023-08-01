@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { EventOnPoster } from '@common/types';
+import { EventTypes } from '@common/const/eventTypes';
 import { CommonErrorsEnum } from '../../../../../common/const';
 import { eventsStateController } from '../../../controllers/events-state-controller';
 import {
@@ -15,7 +16,6 @@ import { eventsValidator } from '../../../validators/event-validator';
 import { manualModerationController } from '../../../controllers/manual-moderation-controller';
 import { vars } from '../../../config/vars';
 import { EventModel } from '../../../models/event.model';
-import { EventTypes } from '@common/const/eventTypes';
 
 export const addEvent: IAddEventHandler = async (request) => {
 	const { event } = request.body;

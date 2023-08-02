@@ -3,7 +3,7 @@ import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 import { useListStore } from '~/stores/list.store';
 import type { EventOnPoster } from '../../../common/types';
 
-const listSrore = useListStore();
+const listStore = useListStore();
 
 const emit = defineEmits(['loadItems']);
 
@@ -46,10 +46,10 @@ const props = defineProps({
 
 const listSelector = ref<HTMLElement | null>(null);
 
-watch([() => listSrore.needScrollList, () => props.hasNextPage], () => {
-	if (listSrore.needScrollList && listSelector.value) {
+watch([() => listStore.needScrollList, () => props.hasNextPage], () => {
+	if (listStore.needScrollList && listSelector.value) {
 		listSelector.value.scrollTo({ top: 0, behavior: 'smooth' });
-		listSrore.$patch({
+		listStore.$patch({
 			needScrollList: false
 		});
 	}

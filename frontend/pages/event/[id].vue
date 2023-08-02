@@ -31,8 +31,8 @@ const eventImage = computed(() => {
 });
 
 getMeta({
-	title: posterEvent.value?.location ?
-    `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}`
+	title: posterEvent.value?.location
+		? `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}`
 		: posterEvent.value?.title,
 	description: trimString(posterEvent.value?.description ?? '', 120),
 	image: eventImage.value
@@ -101,7 +101,7 @@ patchDeleteEventModal({
 </script>
 
 <template>
-	<section
+	<div
 		v-if="posterEvent"
 		class="event"
 		itemscope
@@ -230,7 +230,7 @@ patchDeleteEventModal({
 				/>
 			</div>
 		</div>
-	</section>
+	</div>
 	<!-- todo - временная затычка -->
 	<div v-else>Request errored or pending</div>
 </template>

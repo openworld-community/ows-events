@@ -48,7 +48,7 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 </script>
 
 <template>
-	<section
+	<div
 		class="donate"
 		itemscope
 		:itemtype="SeoItemTypeEnum.DONATE"
@@ -91,7 +91,7 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 				:copy-data="item?.account"
 			/>
 		</ul>
-	</section>
+	</div>
 </template>
 
 <style lang="less" scoped>
@@ -99,9 +99,9 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 	display: flex;
 	flex-direction: column;
 	padding: var(--padding-vertical) var(--padding-side);
-  max-width: 480px;
-  margin-left: auto;
-  margin-right: auto;
+	max-width: 480px;
+	margin-left: auto;
+	margin-right: auto;
 
 	&__title {
 		font-size: var(--font-size-XXL);

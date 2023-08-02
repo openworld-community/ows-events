@@ -52,7 +52,9 @@ const now = Date.now();
 // const lastItemIndex = ref(listStore.eventRequestLimit - 1);
 
 watch(requestLimit, () => {
-	listStore.eventRequestLimit = requestLimit.value;
+	listStore.$patch({
+		eventRequestLimit: requestLimit.value
+	});
 });
 
 // onUpdated(() => {
@@ -94,7 +96,6 @@ const onButtonClick = () => {
 <template>
 	<div class="main-page">
 		<CommonScrollingPage
-			ref="pes"
 			:items="posterEvents"
 			:min-item-size="336"
 			:distance="20"

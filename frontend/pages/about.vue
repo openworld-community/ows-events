@@ -8,7 +8,8 @@ const { t } = useI18n();
 
 definePageMeta({ name: RouteNameEnum.ABOUT });
 getMeta({
-	title: t('meta.about_us.title')
+	title: t('meta.about_us.title'),
+  description: t('meta.about_us.description')
 });
 </script>
 

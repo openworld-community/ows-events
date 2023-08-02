@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { UserInfo } from '../../../common/types/user';
+import type { TGUserInfo } from '../../../common/types/user';
 import { TELEGRAM_AUTH_BOT_NAME, BASE_URL } from '../../constants/url';
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 };
 
 const props = defineProps<Props>();
-const userCookie = useCookie<UserInfo | null>('user');
+const userCookie = useCookie<TGUserInfo | null>('user');
 
 const username =
 	userCookie.value?.username ||

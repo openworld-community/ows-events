@@ -41,10 +41,6 @@ export default defineNuxtConfig({
 	},
 	typescript: { strict: true },
 	nitro: {
-		compressPublicAssets: true,
-		prerender: {
-			crawlLinks: true,
-		},
 		devProxy: {
 			'/api': 'http://backend:7080/api',
 			'/image': 'http://backend:7080/image'

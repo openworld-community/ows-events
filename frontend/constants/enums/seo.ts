@@ -9,7 +9,11 @@ export enum SeoItemTypeEnum {
 	ADDRESS = `${SEO_SCHEMA_BASE_URL}PostalAddress`,
 	ABOUT = `${SEO_SCHEMA_BASE_URL}AboutPage`,
 	DONATE = `${SEO_SCHEMA_BASE_URL}DonateAction`,
-	DONATE_METHOD = `${SEO_SCHEMA_BASE_URL}MoneyTransfer`
+	DONATE_METHOD = `${SEO_SCHEMA_BASE_URL}MoneyTransfer`,
+	HEADER = `${SEO_SCHEMA_BASE_URL}WPHeader`,
+	NAV = `${SEO_SCHEMA_BASE_URL}SiteNavigationElement`,
+	URL = `${SEO_SCHEMA_BASE_URL}/URL`,
+	ORGANIZATION = `${SEO_SCHEMA_BASE_URL}/Organization`,
 }
 
 // ITEMPROPS
@@ -62,4 +66,21 @@ export enum SeoItempropAboutEnum {
 	IMAGE = 'primaryImageOfPage',
 	SIGNIFICANT_LINK = 'significantLink',
 	SOCIAL_LINK = 'sameAs'
+}
+
+// Navigation
+export enum SeoItempropNavEnum {
+	NAME = 'name',
+	URL = 'url',
+}
+
+// URL
+export enum SeoItempropURLEnum {
+	FEEDBACK_POLITY = 'actionableFeedbackPolicy',
+}
+
+// Organization
+export enum SeoItempropOrganizationEnum {
+	BRAND = 'brand',
+	PUBLISHING_PRINCIPLES = 'publishingPrinciples',
 }

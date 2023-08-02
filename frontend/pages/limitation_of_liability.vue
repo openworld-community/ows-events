@@ -1,17 +1,30 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import {
+	SeoItempropOrganizationEnum,
+	SeoItempropURLEnum,
+	SeoItemTypeEnum
+} from '../constants/enums/seo';
+</script>
 
 <template>
 	<section class="privacy">
 		<h1 class="privacy__main-title">{{ $t('limitation_of_liability.title') }}</h1>
 		<p class="privacy__paragraph">Дата последнего изменения: 25.06.2023.</p>
 
-		<ol class="privacy__list">
+		<ol class="privacy__list"
+				itemscope
+				:itemtype="SeoItemTypeEnum.ORGANIZATION"
+				:itemprop="SeoItempropOrganizationEnum.PUBLISHING_PRINCIPLES"
+		>
 			<li>
 				Администрация сайта
 				<NuxtLink
 					to="https://afisha.peredelano.com"
 					class="link"
 					target="_blank"
+					itemscope
+					:itemtype="SeoItemTypeEnum.URL"
+					:itemprop="SeoItempropURLEnum.FEEDBACK_POLITY"
 				>
 					afisha.peredelano.com
 				</NuxtLink>
@@ -21,10 +34,19 @@
 					to="https://afisha.peredelano.com"
 					class="link"
 					target="_blank"
+					itemscope
+					:itemtype="SeoItemTypeEnum.URL"
+					:itemprop="SeoItempropURLEnum.FEEDBACK_POLITY"
 				>
 					afisha.peredelano.com
 				</NuxtLink>
-				или в социальных сетях AfishaPeredelano (Далее — Сервис). Состоится мероприятие или
+				или в социальных сетях
+				<span
+						:itemprop="SeoItempropOrganizationEnum.BRAND"
+				>
+				AfishaPeredelano
+				</span>
+				(Далее — Сервис). Состоится мероприятие или
 				нет, зависит от третьих лиц, за действия которых Афиша не отвечает и не может
 				оказывать на них влияние. В связи с этим Афиша не гарантирует достоверность
 				сведений, размещенных на Сервисе.

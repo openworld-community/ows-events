@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '../../constants/enums/route';
-import {SeoItempropNavEnum, SeoItemTypeEnum} from '../../constants/enums/seo';
+import { SeoItempropNavEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
 
 import { useListStore } from '~/stores/list.store';
 const listSrore = useListStore();
@@ -30,9 +30,9 @@ const scrollToTop = () => {
 
 <template>
 	<header
-			class="header"
-			itemscope
-			:itemtype="SeoItemTypeEnum.HEADER"
+		class="header"
+		itemscope
+		:itemtype="SeoItemTypeEnum.HEADER"
 	>
 		<div class="header__container">
 			<div
@@ -87,7 +87,7 @@ const scrollToTop = () => {
 	position: fixed;
 	top: 0;
 	left: 0;
-	z-index: 1;
+	z-index: 2;
 
 	&__container {
 		display: flex;

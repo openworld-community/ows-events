@@ -1,0 +1,1 @@
+export const maxRequests: number = 1

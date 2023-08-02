@@ -3,11 +3,11 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
-// TEST
+import { maxRequests } from '@/constants/global';
 import { type EventOnPoster } from '../../common/types';
 import { useListStore } from '~/stores/list.store';
 
-const listSrore = useListStore();
+const listStore = useListStore();
 
 const { t } = useI18n();
 
@@ -44,17 +44,24 @@ const debouncedEventsRequestQuery = refDebounced(
 );
 
 const posterEvents: Ref<EventOnPoster[] | null> = ref([]);
-
-const requestLimit = ref(listSrore.eventRequestLimit);
-
-watch(
-	() => listSrore.eventRequestLimit,
-	(eventRequestLimit) => {
-		requestLimit.value = eventRequestLimit;
-	}
-);
-
+const requestLimit = ref(listStore.eventRequestLimit);
 const hasMorePages = ref(true);
+const now = Date.now();
+
+// const lastItem: Ref<HTMLElement | null> = ref(null);
+// const lastItemIndex = ref(listStore.eventRequestLimit - 1);
+
+watch(requestLimit, () => {
+	listStore.eventRequestLimit = requestLimit.value;
+});
+
+// onUpdated(() => {
+// 	lastItem.value = document.querySelector(`[data-index="${lastItemIndex.value}"]`);
+
+// 	if (lastItem.value) {
+// 		lastItem.value.scrollIntoView({ behavior: 'smooth' });
+// 	}
+// });
 
 const loadPosterEvents = async () => {
 	const query = {
@@ -67,11 +74,11 @@ const loadPosterEvents = async () => {
 		}
 	});
 
-	if (data.value) {
+	if (data.value && data.value.docs) {
 		const { hasNextPage } = data.value;
 		hasMorePages.value = hasNextPage;
 		posterEvents.value = data.value.docs;
-		hasNextPage ? (listSrore.eventRequestLimit += 20) : null;
+		hasNextPage ? (requestLimit.value += maxRequests) : null;
 	}
 };
 
@@ -82,13 +89,12 @@ const onButtonClick = () => {
 		openNeedAuthorizeModal();
 	}
 };
-
-const now = Date.now();
 </script>
 
 <template>
 	<div class="main-page">
 		<CommonScrollingPage
+			ref="pes"
 			:items="posterEvents"
 			:min-item-size="336"
 			:distance="20"

@@ -7,7 +7,7 @@ type FilterStore = {
     showModal: boolean;
     country: string;
     city: string;
-    search: string;
+    searchLine: string;
 };
 
 export const useFilterStore = defineStore('filter',
@@ -18,7 +18,7 @@ export const useFilterStore = defineStore('filter',
                 _usedCitiesByCountry: new Map(),
                 country: '',
                 city: '',
-                search: '',
+                searchLine: '',
                 showModal: false
             };
         },

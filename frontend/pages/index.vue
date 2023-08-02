@@ -55,22 +55,19 @@ const now = Date.now();
 <template>
 	<div class="main-page">
 		<h1 class="visually-hidden">{{ $t('home.hidden_title') }}</h1>
-		<HomeSearch
-			v-model:search="eventsQuery.searchLine"
-			class="main-page__search"
-		/>
-		<div class="main-page__location">
-			<HomeUserLocation />
-		</div>
-		<h2 class="main-page__title">
-			{{ $t('home.title') }}
-		</h2>
+<!--		<HomeSearch-->
+<!--			v-model:search="eventsQuery.searchLine"-->
+<!--			class="main-page__search"-->
+<!--		/>-->
+
 		<HomeFilter
 			v-model:country="eventsQuery.country"
 			v-model:city="eventsQuery.city"
 			class="main-page__filter"
 		/>
-
+    <h2 class="main-page__title">
+      {{ $t('home.title') }}
+    </h2>
 		<ul class="main-page__card-list">
 			<li
 				v-for="event in posterEvents"
@@ -102,20 +99,6 @@ const now = Date.now();
 .main-page {
 	padding-top: 16px;
 
-	&__search {
-		padding-left: var(--padding-side);
-		padding-right: var(--padding-side);
-		margin-bottom: 40px;
-	}
-
-	&__location {
-		display: flex;
-		width: 100%;
-		padding-left: var(--padding-side);
-		padding-right: var(--padding-side);
-		margin-bottom: 16px;
-	}
-
 	&__title {
 		font-size: var(--font-size-XXL);
 		line-height: 40px;
@@ -127,7 +110,7 @@ const now = Date.now();
 	&__filter {
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
-		margin-bottom: 24px;
+		margin-bottom: var(--space-sections);
 	}
 
 	&__card-list {

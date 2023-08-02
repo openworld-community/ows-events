@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, PropType, ref } from 'vue';
 import { VueFinalModal } from 'vue-final-modal';
 import { useFilterStore } from '../../stores/filter.store';
 
@@ -11,7 +11,7 @@ const props = defineProps({
 		required: true
 	},
 	filterList: {
-		type: Array,
+		type: [Array, Set] as PropType<Set<string[]> | string[]>,
 		required: true
 	}
 });
@@ -19,18 +19,17 @@ const props = defineProps({
 const showModal = computed(() => filterStore.showModal);
 const closeModal = () => filterStore.$patch({ showModal: false });
 
-const model = computed({
-	get() {
-		return filterStore[props.filterType] ? filterStore[props.filterType] : '';
-	},
-	set(value) {
-		return filterStore.$patch({ [props.filterType]: value });
-	}
-});
+const model = ref(filterStore[props.filterType] ?? '');
+
+const updateFilter = () => {
+	filterStore.$patch({ [props.filterType]: model.value });
+	closeModal();
+};
 
 const resetFilter = () => {
 	filterStore.$patch({ [props.filterType]: '' });
-  closeModal()
+	model.value = '';
+	closeModal();
 };
 </script>
 
@@ -82,6 +81,7 @@ const resetFilter = () => {
 					button-kind="success"
 					:button-text="$t('global.button.apply')"
 					class="buttons__item"
+					@click="updateFilter"
 				/>
 				<CommonButton
 					button-kind="warning"

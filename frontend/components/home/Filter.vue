@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { useFilterStore } from '../../stores/filter.store';
+import UserLocation from './UserLocation.vue';
 
 const route = useRoute();
 const filterStore = useFilterStore();
+
 const props = defineProps<{ city: City; country: Country }>();
 const emit = defineEmits<{
 	'update:city': [city: typeof props.city];
@@ -17,34 +19,34 @@ const updateCity = (city: typeof props.city) => {
 	emit('update:city', city);
 };
 
-watch(
-	() => [props.country, props.city] as const,
-	([country, city]) => {
-		return navigateTo({
-			query: { ...route.query, country: country || undefined, city: city || undefined }
-		});
-	}
-);
-
-// const showModal = ref(false); // это для примера, а актуальные данные есть в пропсах, так и продолжай все значения данных кидать через них
-const filterType = ref(''); // это для примера, а актуальные данные есть в пропсах, так и продолжай все значения данных кидать через них
+const filterType = ref('');
 const filterList = ref<Set<string>>(new Set());
 
-// provide('city', props.city);
-// provide('country', props.country);
-// provide('showModal', showModal);
-// provide('filterType', filterType);
-// provide('updateCity', updateCity); // просто провайдим имеющиеся ф-ии внутрь и дергаем их оттуда. Это будет явная передача функционала и обновление данных
-// provide('updateCountry', updateCountry); // просто провайдим имеющиеся ф-ии внутрь и дергаем их оттуда. Это будет явная передача функционала и обновление данных
-// provide('filterList', filterList)
+const updateSearchLine = (value: string) => {
+  filterStore.$patch({searchLine: value})
+}
 
 const openFilterModal = async (type: string, list: Set<string>) => {
-  filterList.value = await list;
+	filterList.value = await list;
 	filterStore.$patch({ showModal: true });
 	filterType.value = type;
 };
 
-watch(() => filterStore.country, () => filterStore.$patch({city: ''}))
+// запись данных фильтров в query параметры
+watch(
+  () => [filterStore.country, filterStore.city, filterStore.searchLine] as const,
+  ([country, city, search]) => {
+    return navigateTo({
+      query: { ...route.query, country: country || undefined, city: city || undefined, search: search || undefined  }
+    });
+  }
+);
+
+// очистка city при изменении country
+watch(
+	() => filterStore.country,
+	() => filterStore.$patch({ city: '' })
+);
 </script>
 
 <template>
@@ -69,33 +71,45 @@ watch(() => filterStore.country, () => filterStore.$patch({city: ''}))
 		<!--			:aria-label="$t('home.filter.aria_city')"-->
 		<!--			@update:model-value="updateCity"-->
 		<!--		/>-->
+    <CommonUiBaseInput
+      class-name="filter__search"
+      name="search"
+      type="text"
+      icon-name="search"
+      :model-value="filterStore.searchLine"
+      :placeholder="$t('global.search')"
+      @update:model-value="updateSearchLine"
+    />
 
-		<CommonButton
-			class="filter__field"
-			button-kind="filter"
-			:filled="!!filterStore.country"
-			:button-text="
-				filterStore.country ? filterStore.country : $t('home.filter.country.button')
-			"
-			icon-name="container"
-			@click="openFilterModal('country', filterStore.usedCountries)"
-		/>
+		<UserLocation class="filter__location" />
 
-		<CommonButton
-			class="filter__field"
-			button-kind="filter"
-			:filled="!!filterStore.city"
-			:button-text="filterStore.city ? filterStore.city : $t('home.filter.city.button')"
-			icon-name="container"
-			:is-disabled="!filterStore.country"
-			@click="
-				openFilterModal(
-					'city',
-					filterStore.getUsedCitiesByCountry(filterStore.country) ?? []
-				)
-			"
-		/>
+		<div class="filter__fields">
+			<CommonButton
+				class="filter__field"
+				button-kind="filter"
+				:filled="!!filterStore.country"
+				:button-text="
+					filterStore.country ? filterStore.country : $t('home.filter.country.button')
+				"
+				icon-name="container"
+				@click="openFilterModal('country', filterStore.usedCountries)"
+			/>
 
+			<CommonButton
+				class="filter__field"
+				button-kind="filter"
+				:filled="!!filterStore.city"
+				:button-text="filterStore.city ? filterStore.city : $t('home.filter.city.button')"
+				icon-name="container"
+				:is-disabled="!filterStore.country"
+				@click="
+					openFilterModal(
+						'city',
+						filterStore.getUsedCitiesByCountry(filterStore.country) ?? []
+					)
+				"
+			/>
+		</div>
 		<HomeFilterModal
 			:filter-list="filterList"
 			:filter-type="filterType"
@@ -106,6 +120,23 @@ watch(() => filterStore.country, () => filterStore.$patch({city: ''}))
 <style scoped lang="less">
 .filter {
 	display: flex;
+	flex-direction: column;
+
+  &__search {
+    display: flex;
+    width: 100%;
+    margin-bottom: 36px;
+  }
+
+  &__location {
+    display: flex;
+    width: 100%;
+    margin-bottom: var(--space-subsections);
+  }
+
+  &__fields {
+    display: flex;
+  }
 
 	&__field {
 		&:not(:last-child) {

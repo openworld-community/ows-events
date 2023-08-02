@@ -69,12 +69,12 @@ useInfiniteScroll(
 );
 
 interface NestedEventOnPoster {
-	[key: string]: string | NestedEventOnPoster;
+	[key: string]: string;
 }
 
 const sizeDependenciesFormatter = (item: NestedEventOnPoster): Array<string> => {
 	return props.sizeDependencies.map((dependency: string) => {
-		let value: string | NestedEventOnPoster;
+		let value: string;
 		dependency.includes('.')
 			? (value = dependency.split('.').reduce((obj: any, key: string) => obj[key], item))
 			: (value = item[dependency]);

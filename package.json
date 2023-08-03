@@ -1,4 +1,5 @@
 {
+  "name":"ows-events",
   "scripts": {
     "dev": "concurrently -n \"frontend,backend\" -c \"red,blue\" \"npm run dev:frontend\" \"npm run dev:backend\"",
     "dev:frontend": "cd frontend && npm run dev:local",

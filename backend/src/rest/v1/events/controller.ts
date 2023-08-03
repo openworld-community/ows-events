@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { EventOnPoster } from '@common/types';
-import { CommonErrorsEnum } from '../../../../../common/const';
+import { CommonErrorsEnum } from '@common/const';
 import { eventsStateController } from '../../../controllers/events-state-controller';
 import {
 	IAddEventHandler,

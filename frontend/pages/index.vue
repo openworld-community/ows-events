@@ -4,8 +4,10 @@ import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
 import { SeoItemTypeEnum } from '../constants/enums/seo';
+import {useFilterStore} from "../stores/filter.store";
 
 const { t } = useI18n();
+const filterStore = useFilterStore()
 
 definePageMeta({ name: RouteNameEnum.HOME });
 
@@ -26,15 +28,8 @@ const {
 } = useModal({ component: NeedAuthorize });
 needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
 
-const route = useRoute();
-// todo - move this to the components?
-const eventsQuery = ref({
-	searchLine: getFirstQuery(route.query.search),
-	city: getFirstQuery(route.query.city),
-	country: getFirstQuery(route.query.country)
-});
 const debouncedEventsRequestQuery = refDebounced(
-	computed(() => ({ ...eventsQuery.value })),
+	computed(() => ({ searchLine:  filterStore.searchLine, country: filterStore.country, city: filterStore.city})),
 	500,
 	{ maxWait: 5000 }
 );
@@ -60,11 +55,7 @@ const now = Date.now();
 <!--			class="main-page__search"-->
 <!--		/>-->
 
-		<HomeFilter
-			v-model:country="eventsQuery.country"
-			v-model:city="eventsQuery.city"
-			class="main-page__filter"
-		/>
+		<HomeFilter class="main-page__filter" />
     <h2 class="main-page__title">
       {{ $t('home.title') }}
     </h2>

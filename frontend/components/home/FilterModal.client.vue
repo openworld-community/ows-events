@@ -11,7 +11,7 @@ const props = defineProps({
 		required: true
 	},
 	filterList: {
-		type: [Array, Set] as PropType<Set<string[]> | string[]>,
+		type: [Array, Set, String] as PropType<Set<string[]> | string[] | string>,
 		required: true
 	}
 });
@@ -67,7 +67,7 @@ const resetFilter = () => {
 							:value="item"
 						/>
 						<CommonIcon
-							v-if="model && model === item"
+							v-if="(model && model === item) || filterStore[filterType] === item"
 							class="list__icon"
 							name="check"
 							color="var(--color-accent-green-main)"

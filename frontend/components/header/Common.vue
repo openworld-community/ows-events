@@ -3,7 +3,7 @@ import { RouteNameEnum } from '../../constants/enums/route';
 import { SeoItempropNavEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
 
 import { useListStore } from '~/stores/list.store';
-const listSrore = useListStore();
+const listStore = useListStore();
 
 const route = useRoute();
 
@@ -24,7 +24,10 @@ const logoComponentIs = computed(() => {
 });
 
 const scrollToTop = () => {
-	listSrore.needScrollList = true;
+	listStore.$patch({
+		needScrollList: true,
+		lastAction: 'HEADER'
+	});
 };
 </script>
 

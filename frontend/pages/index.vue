@@ -43,27 +43,29 @@ const debouncedEventsRequestQuery = refDebounced(
 	{ maxWait: 5000 }
 );
 
-const posterEvents: Ref<EventOnPoster[] | null> = ref([]);
+const posterEvents: Ref<EventOnPoster[] | null> = ref(listStore.events);
 const requestLimit = ref(listStore.eventRequestLimit);
-const hasMorePages = ref(true);
+const hasMorePages = ref(listStore.hasMorePages);
 const now = Date.now();
 
-// const lastItem: Ref<HTMLElement | null> = ref(null);
-// const lastItemIndex = ref(listStore.eventRequestLimit - 1);
+watch(
+	[() => listStore.eventRequestLimit, () => listStore.events, () => listStore.hasMorePages],
+	() => {
+		requestLimit.value = listStore.eventRequestLimit;
+		posterEvents.value = listStore.events;
+		hasMorePages.value = listStore.hasMorePages;
+	}
+);
 
-watch(requestLimit, () => {
-	listStore.$patch({
-		eventRequestLimit: requestLimit.value
-	});
+onMounted(async () => {
+	await nextTick();
+	if (listStore.scrollTop > 0) {
+		listStore.$patch({
+			needScrollList: true,
+			lastAction: 'INDEX'
+		});
+	}
 });
-
-// onUpdated(() => {
-// 	lastItem.value = document.querySelector(`[data-index="${lastItemIndex.value}"]`);
-
-// 	if (lastItem.value) {
-// 		lastItem.value.scrollIntoView({ behavior: 'smooth' });
-// 	}
-// });
 
 const loadPosterEvents = async () => {
 	const query = {
@@ -79,8 +81,11 @@ const loadPosterEvents = async () => {
 	if (data.value && data.value.docs) {
 		const { hasNextPage } = data.value;
 		hasMorePages.value = hasNextPage;
-		posterEvents.value = data.value.docs;
-		hasNextPage ? (requestLimit.value += maxRequests) : null;
+		listStore.$patch({
+			hasMorePages: hasNextPage,
+			events: data.value.docs
+		});
+		hasNextPage ? listStore.incrementRequestLimit(maxRequests) : null;
 	}
 };
 
@@ -107,7 +112,6 @@ const onButtonClick = () => {
 				'location.city',
 				'location.country'
 			]"
-			:class-name="'main-page__content'"
 			@load-items="loadPosterEvents"
 		>
 			<template #stable>

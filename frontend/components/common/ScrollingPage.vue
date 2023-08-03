@@ -44,26 +44,60 @@ const props = defineProps({
 	}
 });
 
-const listSelector = ref<HTMLElement | null>(null);
+interface ScrollerHTMLElement extends HTMLElement {
+	scrollToItem: (index: number) => void;
+}
 
-watch([() => listStore.needScrollList, () => props.hasNextPage], () => {
-	if (listStore.needScrollList && listSelector.value) {
-		listSelector.value.scrollTo({ top: 0, behavior: 'smooth' });
+const listSelector = ref<HTMLElement | null>(null);
+const scroller: Ref<ScrollerHTMLElement | null> = ref(null);
+const hasNextPage = ref(props.hasNextPage);
+
+watch(
+	() => props.hasNextPage,
+	() => {
+		hasNextPage.value = props.hasNextPage;
+	}
+);
+
+watch(
+	() => listStore.needScrollList,
+	async () => {
+		if (listStore.needScrollList) {
+			await nextTick();
+
+			const actions = {
+				NONE: () => {},
+				HEADER: () => listSelector.value?.scrollTo({ top: 0, behavior: 'smooth' }),
+				// INDEX: () => scroller.value?.scrollToItem(listStore.eventRequestLimit)
+				INDEX: () => listSelector.value?.scrollTo({ top: listStore.scrollTop })
+			};
+
+			const action = actions[listStore.lastAction];
+
+			if (action) {
+				action();
+			}
+
+			listStore.$patch({
+				needScrollList: false,
+				lastAction: 'NONE'
+			});
+		}
+	}
+);
+
+const scrollEnd = () => {
+	if (listSelector.value && listSelector.value.scrollTop > 0) {
 		listStore.$patch({
-			needScrollList: false
+			scrollTop: listSelector.value.scrollHeight
 		});
 	}
-	hasNextPage.value = props.hasNextPage;
-});
-
-const hasNextPage = ref(props.hasNextPage);
+};
 
 useInfiniteScroll(
 	listSelector,
 	() => {
-		if (hasNextPage.value) {
-			emit('loadItems');
-		}
+		if (hasNextPage.value) emit('loadItems');
 	},
 	{ distance: props.distance }
 );
@@ -74,14 +108,14 @@ interface NestedEventOnPoster {
 
 const sizeDependenciesFormatter = (item: NestedEventOnPoster): Array<string> => {
 	return props.sizeDependencies.map((dependency: string) => {
-		let value: string;
+		let arr: string;
 		dependency.includes('.')
-			? (value = dependency.split('.').reduce((obj: any, key: string) => obj[key], item))
-			: (value = item[dependency]);
-		if (typeof value === 'object') {
+			? (arr = dependency.split('.').reduce((obj: any, key: string) => obj[key], item))
+			: (arr = item[dependency]);
+		if (typeof arr === 'object') {
 			throw new Error(`Property ${dependency} is an object and can't be converted to string`);
 		}
-		return value;
+		return arr;
 	});
 };
 </script>
@@ -92,11 +126,13 @@ const sizeDependenciesFormatter = (item: NestedEventOnPoster): Array<string> => 
 		class="scroll-list"
 	>
 		<DynamicScroller
+			ref="scroller"
 			:items="items"
 			:min-item-size="minItemSize"
 			:buffer="buffer"
 			:page-mode="isPageMode"
 			class="scroll-list__content"
+			@scroll-end="scrollEnd"
 		>
 			<template #before>
 				<slot name="stable"></slot>

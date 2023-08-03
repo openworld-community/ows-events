@@ -11,7 +11,7 @@ type LinkObjectType = {
 	path?: string;
 };
 
-type ButtonKind = 'ordinary' | 'success' | 'warning' | 'filter' | 'filter--content'; // для задания внешнего вида
+type ButtonKind = 'ordinary' | 'success' | 'warning' | 'filter'; // для задания внешнего вида
 
 const props = defineProps({
 	buttonKind: {

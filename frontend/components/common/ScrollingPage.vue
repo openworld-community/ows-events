@@ -44,12 +44,12 @@ const props = defineProps({
 	}
 });
 
-interface ScrollerHTMLElement extends HTMLElement {
-	scrollToItem: (index: number) => void;
-}
+// interface ScrollerHTMLElement extends HTMLElement {
+// 	scrollToItem: (index: number) => void;
+// }
 
 const listSelector = ref<HTMLElement | null>(null);
-const scroller: Ref<ScrollerHTMLElement | null> = ref(null);
+// const scroller: Ref<ScrollerHTMLElement | null> = ref(null);
 const hasNextPage = ref(props.hasNextPage);
 
 watch(
@@ -61,15 +61,16 @@ watch(
 
 watch(
 	() => listStore.needScrollList,
-	async () => {
+	() => {
 		if (listStore.needScrollList) {
-			await nextTick();
-
 			const actions = {
 				NONE: () => {},
 				HEADER: () => listSelector.value?.scrollTo({ top: 0, behavior: 'smooth' }),
-				// INDEX: () => scroller.value?.scrollToItem(listStore.eventRequestLimit)
-				INDEX: () => listSelector.value?.scrollTo({ top: listStore.scrollTop })
+				INDEX: async () => {
+					await nextTick();
+					listSelector.value?.scrollTo({ top: listStore.scrollTop });
+					console.log(listStore.scrollTop);
+				}
 			};
 
 			const action = actions[listStore.lastAction];
@@ -86,13 +87,11 @@ watch(
 	}
 );
 
-const scrollEnd = () => {
-	if (listSelector.value && listSelector.value.scrollTop > 0) {
-		listStore.$patch({
-			scrollTop: listSelector.value.scrollHeight
-		});
-	}
-};
+const debouncedScrollUpdate = useDebounceFn((e) => {
+	listStore.$patch({
+		scrollTop: e.target?.scrollTop
+	});
+}, 200);
 
 useInfiniteScroll(
 	listSelector,
@@ -124,15 +123,14 @@ const sizeDependenciesFormatter = (item: NestedEventOnPoster): Array<string> => 
 	<div
 		ref="listSelector"
 		class="scroll-list"
+		@scroll="debouncedScrollUpdate"
 	>
 		<DynamicScroller
-			ref="scroller"
 			:items="items"
 			:min-item-size="minItemSize"
 			:buffer="buffer"
 			:page-mode="isPageMode"
 			class="scroll-list__content"
-			@scroll-end="scrollEnd"
 		>
 			<template #before>
 				<slot name="stable"></slot>

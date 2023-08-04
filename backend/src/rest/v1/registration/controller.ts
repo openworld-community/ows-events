@@ -1,6 +1,6 @@
 import fs from 'fs';
+import { CommonErrorsEnum } from '@common/const';
 import { IAddRegistrationHandler } from './type';
-import { CommonErrorsEnum } from '../../../../../common/const';
 
 // eslint-disable-next-line consistent-return
 export const addRegistration: IAddRegistrationHandler = async (request) => {

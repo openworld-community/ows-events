@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
-import { type Timezone } from '@common/types/location';
 import { ITimezonesHandlerProps } from './type';
+import { type Timezone } from '../../../../../common/types/location';
 
 const allTimezones: Timezone[] = moment.tz.names().map((name) => ({
 	timezoneName: name,

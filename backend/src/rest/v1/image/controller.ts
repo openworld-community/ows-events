@@ -1,4 +1,4 @@
-import { CommonErrorsEnum } from '@common/const';
+import { CommonErrorsEnum } from '../../../../../common/const';
 import { imageController } from '../../../controllers/image-controller';
 import { IAddImageHandlerProps, IDeleteImageHandlerProps } from './types';
 

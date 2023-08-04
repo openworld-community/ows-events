@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import { CommonErrorsEnum } from '@common/const';
+import { CommonErrorsEnum } from '../../../../../common/const';
 
 import { IChangeUserInfoHandler, IGetTGInfoHandler, IGetUserInfoHandler } from './type';
 import { userController } from '../../../controllers/user-controller';

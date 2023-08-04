@@ -1,12 +1,12 @@
 import cityTimezones from 'city-timezones';
 import moment from 'moment-timezone';
-import { CommonErrorsEnum } from '@common/const';
 import { countriesAndCitiesController } from '../../../controllers/countries-and-cities.controller';
 import {
 	IGetCitiesByCountryHandlerProps,
 	IGetCountriesHandlerProps,
 	IGetMetaHandlerProps
 } from './type';
+import { CommonErrorsEnum } from '../../../../../common/const';
 
 export const getMeta: IGetMetaHandlerProps = async (request) => {
 	const countryString = request.params.country;

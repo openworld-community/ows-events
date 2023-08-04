@@ -103,7 +103,7 @@ const onButtonClick = () => {
 		<CommonScrollingPage
 			:items="posterEvents"
 			:min-item-size="336"
-			:distance="20"
+			:distance="10"
 			:has-next-page="hasMorePages"
 			:size-dependencies="[
 				'description',

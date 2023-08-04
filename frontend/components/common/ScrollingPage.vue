@@ -69,7 +69,7 @@ watch(
 				INDEX: async () => {
 					await nextTick();
 					listSelector.value?.scrollTo({ top: listStore.scrollTop });
-					console.log(listStore.scrollTop);
+					// console.log(listStore.scrollTop);
 				}
 			};
 
@@ -91,7 +91,7 @@ const debouncedScrollUpdate = useDebounceFn((e) => {
 	listStore.$patch({
 		scrollTop: e.target?.scrollTop
 	});
-}, 200);
+}, 300);
 
 useInfiniteScroll(
 	listSelector,

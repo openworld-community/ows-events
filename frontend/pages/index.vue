@@ -58,9 +58,7 @@ watch(
 );
 
 onMounted(async () => {
-	await nextTick();
-	await nextTick();
-	await nextTick();
+	await new Promise((resolve) => setTimeout(resolve, 0));
 	if (listStore.scrollTop > 0) {
 		listStore.$patch({
 			needScrollList: true,

@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import Multipart from '@fastify/multipart';
-import { CommonErrorsEnum } from '@common/const';
+import { CommonErrorsEnum } from '../../../../../common/const';
 import { addImage, deleteImage } from './controller';
 import { IAddImageRouteProps, IDeleteImageRouteProps } from './types';
 import { addImageSchema, deleteImageSchema } from './schema';

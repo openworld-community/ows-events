@@ -1,7 +1,7 @@
 import fs from 'fs';
 import fsP from 'fs/promises';
 import { PaymentInfo } from '@common/types/payment-info';
-import { CommonErrorsEnum } from '@common/const';
+import { CommonErrorsEnum } from '../../../../../common/const';
 import { eventsStateController } from '../../../controllers/events-state-controller';
 import { IGetJSONPaymentInfoHandlerProps, IGetPaymentInfoHandlerProps } from './type';
 

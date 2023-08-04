@@ -1,7 +1,7 @@
 import { TGUser, UserInfo } from '@common/types/user';
-import { CommonErrorsEnum } from '@common/const';
 import jwt from 'jsonwebtoken';
 import { UserModel } from '../models/user.model';
+import { CommonErrorsEnum } from '../../../common/const';
 import { vars } from '../config/vars';
 
 export type FindEventParams = {

@@ -25,7 +25,7 @@ class EventsStateController {
 	async getEvents(query?: FindEventParams | undefined): Promise<EventOnPoster[]> {
 		const queryObject: FilterQuery<EventOnPoster> = {};
 		if (query?.searchLine) {
-			queryObject.$text = { $search: query.searchLine };
+			queryObject.$text = { $search: `/${query.searchLine}/i` };
 		}
 		if (query?.country) {
 			queryObject['location.country'] = query?.country;

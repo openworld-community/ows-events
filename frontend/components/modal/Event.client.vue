@@ -37,7 +37,7 @@ const inputValues = ref({
 		  )
 		: null,
 	location: {
-		country: (props.dataForEdit?.location.country ?? 'Serbia') satisfies Country, // Временно фиксируем страну для добавления события
+		country: (props.dataForEdit?.location.country ?? '') satisfies Country,
 		city: (props.dataForEdit?.location.city ?? '') satisfies City,
 		address: props.dataForEdit?.location.address ?? ''
 	},
@@ -86,7 +86,7 @@ const paramsForSubmit = computed(() => {
 			city: inputValues.value.location.city,
 			address: inputValues.value.location.address
 		},
-    //TODO: добавить min/max значения и выбор валюты
+    //TODO: добавить выбор валюты
 		price: {
       minValue: null,
       value: Number(inputValues.value.price) ?? 0,
@@ -139,10 +139,11 @@ async function addImage(image: ImageLoaderFile) {
 	return data.value.path;
 }
 
-// #region country & string input relationship logic
+// #region country, city, timezone string input relationship logic
 watch(
 	() => inputValues.value.location.country,
 	() => {
+    if (!inputValues.value.location.country) inputValues.value.timezone = ''
 		inputValues.value.location.city = '';
 	}
 );
@@ -211,7 +212,6 @@ watch(
 							name="country"
 							:placeholder="$t('global.country')"
 							:list="locationStore.countries"
-							:disabled="true"
 							required
 						/>
 
@@ -221,7 +221,7 @@ watch(
 							:disabled="!inputValues.location.country"
 							:placeholder="$t('global.city')"
 							:list="
-								locationStore.getCitiesByCountry(inputValues.location.country) ?? []
+								locationStore.getCitiesByCountry(inputValues.location.country)
 							"
 							required
 						/>

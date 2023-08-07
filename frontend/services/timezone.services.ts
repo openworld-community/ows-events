@@ -1,5 +1,4 @@
-import type { Timezone } from '~/../common/types/location';
-import type { City, Country } from '~/stores/location.store';
+import type { City, Country, Timezone } from "../../common/types/location";
 import { timezoneToString } from '~/utils/timezones';
 
 export const getAllTimezones = async (): Promise<Timezone[]> => {

@@ -2,12 +2,14 @@ import { defineStore } from 'pinia';
 import type { Country, City } from '../../common/types/location';
 
 type FilterStore = {
-	_usedCountries: Set<Country[]>;
+	_usedCountries: Set<Country>;
 	_usedCitiesByCountry: Map<Country, City[]>;
 	showModal: boolean;
-	country: string;
-	city: string;
-	searchLine: string;
+	filters: {
+		country: string;
+		city: string;
+		searchLine: string;
+	};
 };
 
 export const useFilterStore = defineStore('filter', {
@@ -15,9 +17,11 @@ export const useFilterStore = defineStore('filter', {
 		return {
 			_usedCountries: new Set(),
 			_usedCitiesByCountry: new Map(),
-			country: '',
-			city: '',
-			searchLine: '',
+			filters: {
+				country: '',
+				city: '',
+				searchLine: ''
+			},
 			showModal: false
 		};
 	},

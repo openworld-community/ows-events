@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, PropType, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { VueFinalModal } from 'vue-final-modal';
 import { useFilterStore } from '../../stores/filter.store';
 
@@ -11,23 +11,31 @@ const props = defineProps({
 		required: true
 	},
 	filterList: {
-		type: [Array, Set, String] as PropType<Set<string[]> | string[] | string>,
+		type: [Array, Set] as PropType<string[] | Set<string>>,
 		required: true
 	}
 });
 
-const showModal = computed(() => filterStore.showModal);
 const closeModal = () => filterStore.$patch({ showModal: false });
 
-const model = ref(filterStore[props.filterType] ?? '');
+const showModal = computed({
+	get() {
+		return filterStore.showModal;
+	},
+	set() {
+		closeModal();
+	}
+});
+
+const model = ref<string>(filterStore?.filters[props.filterType as keyof typeof filterStore['filters']] ?? '');
 
 const updateFilter = () => {
-	filterStore.$patch({ [props.filterType]: model.value });
+	filterStore.$patch({ filters: { [props.filterType]: model.value } });
 	closeModal();
 };
 
 const resetFilter = () => {
-	filterStore.$patch({ [props.filterType]: '' });
+	filterStore.$patch({ filters: { [props.filterType]: '' } });
 	model.value = '';
 	closeModal();
 };
@@ -67,7 +75,10 @@ const resetFilter = () => {
 							:value="item"
 						/>
 						<CommonIcon
-							v-if="(model && model === item) || filterStore[filterType] === item"
+							v-if="
+								(model && model === item) ||
+								filterStore.filters[filterType as keyof typeof filterStore['filters']] === item
+							"
 							class="list__icon"
 							name="check"
 							color="var(--color-accent-green-main)"

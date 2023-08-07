@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
-import type { UserLocation } from '../../common/types/location';
-import type {City, Country} from "./filter.store";
+import type {Country, City, UserLocation} from "../../common/types/location";
 
 type LocationStore = {
 	_countries: Set<Country>;

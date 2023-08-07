@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { getAllTimezones, getTimezone } from '@/services/timezone.services';
-import { useLocationStore, type Country, type City } from '@/stores/location.store';
+import { useLocationStore } from '@/stores/location.store';
+import type {City, Country} from "../../../common/types/location";
 import { type EventOnPoster } from '@/../common/types';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
 

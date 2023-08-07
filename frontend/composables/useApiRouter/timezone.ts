@@ -1,6 +1,6 @@
 import { defineQuery, useBackendFetch } from './utils';
 import type { Timezone } from '~/../common/types/location';
-import type { City, Country } from '~/stores/location.store';
+import type {City, Country} from "../../../common/types/location";
 
 export const timezone = {
 	getAll: defineQuery<() => Timezone[]>(() => useBackendFetch('timezones')),

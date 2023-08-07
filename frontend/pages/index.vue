@@ -29,7 +29,7 @@ const {
 needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
 
 const debouncedEventsRequestQuery = refDebounced(
-	computed(() => ({ searchLine:  filterStore.searchLine, country: filterStore.country, city: filterStore.city})),
+	computed(() => ({ searchLine:  filterStore.filters.searchLine, country: filterStore.filters.country, city: filterStore.filters.city})),
 	500,
 	{ maxWait: 5000 }
 );

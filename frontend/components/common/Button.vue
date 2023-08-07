@@ -75,11 +75,11 @@ const props = defineProps({
 	}
 });
 
-const loaderColorDict = {
+const loaderColorDict: {[key: string]: string} = {
 	ordinary: 'var(--color-text-main)',
 	success: 'var(--color-white)',
-	warning: 'var(--color-accent-red)'
-} satisfies Record<ButtonKind, string>;
+	warning: 'var(--color-accent-red)',
+};
 const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 </script>
 

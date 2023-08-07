@@ -4,7 +4,6 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
 import type { TGUserInfo } from '@/../common/types/user';
-import { BASE_URL } from '../../constants/url';
 
 import { trimString } from '../../utils/trimString';
 import {

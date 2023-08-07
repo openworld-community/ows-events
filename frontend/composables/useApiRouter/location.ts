@@ -1,5 +1,5 @@
-import type { City, Country } from '~/stores/location.store';
 import { defineQuery, useBackendFetch } from './utils';
+import type {City, Country} from "../../../common/types/location";
 
 export const location = {
 	country: {

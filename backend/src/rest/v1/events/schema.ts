@@ -13,10 +13,19 @@ export const ItemEvent = {
 			properties: {
 				country: { type: 'string' },
 				city: { type: 'string' },
-                address: { type: 'string' }
+				address: { type: 'string' }
 			}
 		},
-		price: { type: 'string' },
+		price: {
+			type: 'object',
+			nullable: true,
+			properties: {
+				minValue: { type: 'number' },
+				value: { type: 'number' },
+				maxValue: { type: 'number' },
+				currency: { type: 'string' }
+			}
+		},
 		timezone: {
 			type: 'object',
 			properties: {
@@ -25,7 +34,11 @@ export const ItemEvent = {
 			},
 			required: ['timezoneName', 'timezoneOffset']
 		},
-		url: { type: 'string' }
+		url: { type: 'string' },
+        tags: { 
+            type: 'array', 
+            items: { type: 'string' } 
+        },
 	}
 };
 

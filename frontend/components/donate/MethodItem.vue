@@ -42,7 +42,7 @@ const { copy, copied } = useClipboard({ source: props.copyData, legacy: true });
 		<div class="method__name-wrapper">
 			<div class="method__icon-wrapper">
 				<CommonIcon
-					:name="icon"
+					:name="`donate/${icon}`"
 					class="method__icon"
 					color="var(--color-white)"
 				/>

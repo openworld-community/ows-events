@@ -5,10 +5,15 @@ export const SEO_SCHEMA_BASE_URL = 'https://schema.org/';
 export enum SeoItemTypeEnum {
 	OFFER = `${SEO_SCHEMA_BASE_URL}Offer`,
 	EVENT = `${SEO_SCHEMA_BASE_URL}Event`,
+	LOCATION = `${SEO_SCHEMA_BASE_URL}Place`,
 	ADDRESS = `${SEO_SCHEMA_BASE_URL}PostalAddress`,
 	ABOUT = `${SEO_SCHEMA_BASE_URL}AboutPage`,
 	DONATE = `${SEO_SCHEMA_BASE_URL}DonateAction`,
-	DONATE_METHOD = `${SEO_SCHEMA_BASE_URL}MoneyTransfer`
+	DONATE_METHOD = `${SEO_SCHEMA_BASE_URL}MoneyTransfer`,
+	HEADER = `${SEO_SCHEMA_BASE_URL}WPHeader`,
+	NAV = `${SEO_SCHEMA_BASE_URL}SiteNavigationElement`,
+	URL = `${SEO_SCHEMA_BASE_URL}/URL`,
+	ORGANIZATION = `${SEO_SCHEMA_BASE_URL}/Organization`,
 }
 
 // ITEMPROPS
@@ -27,7 +32,8 @@ export enum SeoItempropEventEnum {
 	DESCRIPTION = 'description',
 	ORGANIZER = 'composer',
 	START_DATE = 'startDate',
-	DURATION = 'duration'
+	DURATION = 'duration',
+	LOCATION = 'location'
 }
 
 // Price
@@ -41,9 +47,10 @@ export enum SeoItempropPriceEnum {
 // Location
 export enum SeoItempropLocationEnum {
 	GROUP_ITEMPROP = 'address',
+	MAP = 'hasMap',
 	COUNTRY = 'addressCountry',
 	CITY = 'addressLocality',
-	ADDRESS = 'location'
+	ADDRESS = 'streetAddress'
 }
 
 // Donation
@@ -58,4 +65,22 @@ export enum SeoItempropAboutEnum {
 	MAIN_CONTENT = 'mainContentOfPage',
 	IMAGE = 'primaryImageOfPage',
 	SIGNIFICANT_LINK = 'significantLink',
+	SOCIAL_LINK = 'sameAs'
+}
+
+// Navigation
+export enum SeoItempropNavEnum {
+	NAME = 'name',
+	URL = 'url',
+}
+
+// URL
+export enum SeoItempropURLEnum {
+	FEEDBACK_POLITY = 'actionableFeedbackPolicy',
+}
+
+// Organization
+export enum SeoItempropOrganizationEnum {
+	BRAND = 'brand',
+	PUBLISHING_PRINCIPLES = 'publishingPrinciples',
 }

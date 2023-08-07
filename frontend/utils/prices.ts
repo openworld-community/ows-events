@@ -1,5 +1,7 @@
 // Получает аббривеатуру валюты (если существует)
-export const formatCurrency = (currency: string) => {
+import type {EventPrice} from "../../common/types/event";
+
+export const formatCurrency = (currency: EventPrice[currency]) => {
     const formatter = new Intl.NumberFormat('ru', {
         style: 'currency',
         currency: currency,
@@ -12,14 +14,21 @@ export const formatCurrency = (currency: string) => {
 };
 
 // Форматирует значение цены в зависимости от значения или интервала:
-export const formatPrice = (price: any) => {
+export const formatPrice = (price: EventPrice) => {
     const {t} = useI18n()
     // если фиксированная цена, возвращает price currency:
-    if(price.value) return `${price.value} ${formatCurrency(price.currency)}`
+    if(price?.value) return `${price.value} ${formatCurrency(price.currency)}`
     // если интервал, возвращает min-max currency:
-    if (price.minValue && price.maxValue) return `${price.minValue}-${price.maxValue} ${formatCurrency(price.currency)}`
+    if (price?.minValue && price?.maxValue) return `${price.minValue}-${price.maxValue} ${formatCurrency(price.currency)}`
     // если интервал от, возвращает "От price currency"
-    if (price.minValue) return `${t('event.price.from')} ${price.minValue} ${formatCurrency(price.currency)}`
+    if (price?.minValue) return `${t('event.price.from')} ${price.minValue} ${formatCurrency(price.currency)}`
     // если интервал до, возвращает "До price currency"
-    if (price.maxValue) return `${t('event.price.to')} ${price.maxValue} ${formatCurrency(price.currency)}`
+    if (price?.maxValue) return `${t('event.price.to')} ${price.maxValue} ${formatCurrency(price.currency)}`
 };
+
+//TODO: пока валюты прибиты на фронте
+export const getCurrencyByCountry = (country: string) => {
+    if (country === 'Montenegro') return 'EUR'
+    if (country === 'Serbia') return 'RSD'
+    if (country === 'Kyrgyzstan') return 'KGS'
+}

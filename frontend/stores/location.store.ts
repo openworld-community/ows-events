@@ -3,11 +3,14 @@ import type { UserLocation } from '../../common/types/location';
 
 export type City = string;
 export type Country = string;
+export type Currency = string
+
 type LocationStore = {
 	_countries: Set<Country>;
 	_usedCountries: Set<Country>;
 	_citiesByCountry: Map<Country, City[]>;
 	_usedСitiesByCountry: Map<Country, City[]>;
+	_currencies: Set<Currency>;
 	userLocation: UserLocation;
 };
 
@@ -20,6 +23,7 @@ export const useLocationStore = defineStore('location', {
 			_usedCountries: new Set(),
 			_citiesByCountry: new Map(),
 			_usedСitiesByCountry: new Map(),
+			_currencies: new Set(),
 			userLocation: {}
 		};
 	},
@@ -59,6 +63,11 @@ export const useLocationStore = defineStore('location', {
 
 			state._countries = new Set(countries)
 			return state._countries
+		},
+		currencies (state): LocationStore['_currencies'] {
+			const currencies = ['USD', 'EUR', 'RSD', 'KGS', 'BTC', 'USDT', 'USDC', 'ETH']
+			state._currencies = new Set(currencies)
+			return state._currencies
 		},
 		usedCountries(state): LocationStore['_usedCountries'] {
 			(async function () {

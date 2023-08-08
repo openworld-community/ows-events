@@ -6,10 +6,6 @@ import type { PropType } from 'vue';
 import type { Time } from '../../../utils/dates';
 
 const props = defineProps({
-	className: {
-		type: String as PropType<string>,
-		default: ''
-	},
 	modelValue: {
 		type: [Date, null, Object] as PropType<Date | Time | null>,
 		required: true
@@ -75,13 +71,10 @@ const onRemove = () => {
 </script>
 
 <template>
-	<div
-		class="input__wrapper"
-		:class="{ [className ?? '']: className }"
-	>
+	<div class="input input__wrapper">
 		<label
 			v-if="label"
-			class="form__label"
+			class="input__label"
 			:for="name"
 		>
 			{{ label }}
@@ -91,9 +84,10 @@ const onRemove = () => {
 			:model-value="modelValue"
 			:name="name"
 			:placeholder="required ? `${placeholder} *` : placeholder"
-			:input-class-name="`input input__field ${error ? 'form__error' : ''}`"
+			:input-class-name="`input input__field ${error ? 'input__field--error' : ''}`"
 			:menu-class-name="`${!isDateType ? 'time_picker' : ''}`"
 			mode-height="80"
+			hide-input-icon
 			prevent-min-max-navigation
 			auto-apply
 			:close-on-auto-apply="!isDateType"
@@ -115,21 +109,22 @@ const onRemove = () => {
 		/>
 		<CommonIcon
 			v-if="!modelValue"
-			:name="isDateType ? 'calendar' : 'clock'"
+			:name="error ? 'error-round' : isDateType ? 'calendar' : 'clock'"
+			:color="error ? 'var(--color-accent-red)' : 'var(--color-input-icons)'"
 			class="input__button"
 			:alt="$t('dates.clock')"
 		/>
 		<CommonButton
 			v-else
 			is-icon
-			icon-name="delete"
+			icon-name="close"
 			class="input__button"
 			@click="onRemove"
 		/>
 
 		<span
 			v-if="error"
-			class="form__error"
+			class="input__error-message"
 		>
 			{{ error }}
 		</span>
@@ -187,10 +182,6 @@ const onRemove = () => {
 			font-family: var(--font-family-main);
 			font-size: var(--font-size-M);
 			color: var(--color-input-icons);
-		}
-
-		&_icon {
-			display: none;
 		}
 	}
 
@@ -266,7 +257,8 @@ const onRemove = () => {
 		border-color: var(--color-accent-green-main);
 	}
 
-	&__active_date {
+	&__active_date,
+	&__overlay_cell_active {
 		padding: 3px;
 		background-color: var(--color-accent-green-main);
 		color: var(--color-white);
@@ -292,14 +284,22 @@ const onRemove = () => {
 .dp__inner_nav_disabled,
 .dp__overlay_cell_disabled {
 	background: none;
-	&:hover {
+	color: var(--color-input-field);
+
+	&:hover,
+	&:active,
+	&:focus {
 		cursor: unset;
+		background: none;
+		color: var(--color-input-field);
 	}
+
 	svg {
 		color: var(--color-input-field);
 	}
 }
+
 .dp__btn:focus {
-	background: var(--dp-hover-color);
+	background: var(--color-input-field);
 }
 </style>

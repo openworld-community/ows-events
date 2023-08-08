@@ -196,7 +196,7 @@ watch(
 		<div class="modal-card">
 			<header class="modal-card__head">
 				<h2 class="modal-card__title">
-					{{ $t('modal.new_event_modal.title') }}
+					{{ dataForEdit ? $t('modal.new_event_modal.title_edit_event') : $t('modal.new_event_modal.title_new_event') }}
 				</h2>
 			</header>
 

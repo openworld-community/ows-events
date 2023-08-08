@@ -1,11 +1,27 @@
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 .input {
   width: 100%;
   display: flex;
   align-items: center;
 
   &__wrapper {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     width: 100%;
+    position: relative;
+    padding-bottom: 15px;
   }
 
   &__label {
@@ -62,28 +78,14 @@
       z-index: 1;
     }
 
-    &--textarea {
-      appearance: none;
-      width: 100%;
-      min-width: 100%;
-      min-height: 80px;
-      display: flex;
-      justify-content: space-between;
-      min-height: 80px;
-      border: 1px solid #dbdbdb;
-      border-radius: 24px;
-      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-      background-color: #ffffff;
-      color: #4e4e4e;
-      font-size: 16px;
-      padding: 8px 35px 8px 12px;
-      overflow: visible;
-      resize: vertical;
+    &--error {
+      border-color: var(--color-accent-red) !important;  // перебивает родные стили vue-datepicker
 
-      &::-webkit-resizer {
-        display: none;
+      &:active, &:focus {
+        border-color: var(--color-accent-red) !important; // перебивает родные стили vue-datepicker
       }
     }
+
   }
 
   &__button {
@@ -109,5 +111,24 @@
     &--clear {
       z-index: 1;
     }
+  }
+
+  &__error-message {
+    position: absolute;
+    bottom: 0;
+    left: 13px;
+    font-size: var(--font-size-XXS);
+    line-height: 12px;
+    color: var(--color-accent-red);
+  }
+}
+
+.textarea {
+  min-height: 80px;
+  overflow: visible;
+  resize: none;
+
+  &::-webkit-resizer {
+    display: none;
   }
 }

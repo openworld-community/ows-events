@@ -45,7 +45,8 @@ const debouncedEventsRequestQuery = refDebounced(
 
 const posterEvents: Ref<EventOnPoster[] | null> = ref(listStore.events);
 const requestLimit = ref(listStore.eventRequestLimit);
-const hasMorePages = ref(listStore.hasMorePages);
+// const hasMorePages = ref(listStore.hasMorePages);
+const hasMorePages = ref(true);
 const now = Date.now();
 
 watch(
@@ -53,7 +54,7 @@ watch(
 	() => {
 		requestLimit.value = listStore.eventRequestLimit;
 		posterEvents.value = listStore.events;
-		hasMorePages.value = listStore.hasMorePages;
+		// hasMorePages.value = listStore.hasMorePages;
 	}
 );
 
@@ -80,8 +81,9 @@ const loadPosterEvents = async () => {
 
 	if (data.value && data.value.docs) {
 		const { hasNextPage } = data.value;
+		hasMorePages.value = hasNextPage;
 		listStore.$patch({
-			hasMorePages: hasNextPage,
+			// hasMorePages: hasNextPage,
 			events: data.value.docs
 		});
 		hasNextPage ? listStore.incrementRequestLimit(maxRequests) : null;

@@ -77,7 +77,7 @@ defineProps<{ eventData: EventOnPoster }>();
 	display: block;
 	width: 100%;
 	position: relative;
-	padding-bottom: 44px;
+	 padding-bottom: 44px;
 
 	&__image-container {
 		display: flex;

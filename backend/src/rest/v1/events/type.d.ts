@@ -1,5 +1,7 @@
+import { AggregatePaginateResult } from 'mongoose';
 import { EventOnPoster } from '@common/types';
 import { EventParams } from '@common/types/event';
+import { PaginationOptions } from '@common/types/utils';
 import { FindEventParams } from '../../../controllers/events-state-controller';
 import { IRouteHandler } from '../../types';
 
@@ -15,6 +17,12 @@ type IGetEventRoute = {
 	Params: EventParams;
 };
 type IGetEventHandler = IRouteHandler<IGetEventRoute>;
+
+type IFindPaginateEventRoute = {
+	Body: FindEventParams & { paginationOptions: PaginationOptions };
+	Reply: AggregatePaginateResult<EventOnPoster>;
+};
+type IFindPaginateEventHandler = IRouteHandler<IFindPaginateEventRoute>;
 
 type IDeleteEventRoute = {
 	Body: { id: string };

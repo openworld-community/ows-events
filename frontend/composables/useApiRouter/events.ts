@@ -1,4 +1,5 @@
 import type { EventOnPoster } from '~/../common/types';
+import type { RequestEvent } from '~/../common/types';
 import type { PostEventPayload } from '~/../common/types/event';
 import type { Registration } from '~/../common/types/registration';
 import { defineMutation, defineQuery, useBackendFetch } from './utils';
@@ -6,10 +7,15 @@ import { defineMutation, defineQuery, useBackendFetch } from './utils';
 export const events = {
 	findMany: defineQuery<
 		(input?: {
-			query: { searchLine?: string; country?: string; city?: string };
-		}) => EventOnPoster[]
+			query: {
+				searchLine?: string;
+				country?: string;
+				city?: string;
+				paginationOptions: { limit?: number; page?: number };
+			};
+		}) => RequestEvent
 	>((input) => {
-		return useBackendFetch('events/find', { body: input?.query ?? {} });
+		return useBackendFetch('events/findPaginate', { body: input?.query ?? {} });
 	}),
 	get: defineQuery<(input: { id: string }) => EventOnPoster>((input) => {
 		return useBackendFetch(`events/${input.id}`);

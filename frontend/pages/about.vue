@@ -2,14 +2,14 @@
 import eventScreen from '../assets/img/event-screen@2x.png';
 import { SeoItempropAboutEnum, SeoItemTypeEnum } from '../constants/enums/seo';
 import { RouteNameEnum } from '../constants/enums/route';
-import {REPO_URL, SocialLinks} from '../constants/url';
+import { REPO_URL, SocialLinks } from '../constants/url';
 
 const { t } = useI18n();
 
 definePageMeta({ name: RouteNameEnum.ABOUT });
 getMeta({
 	title: t('meta.about_us.title'),
-  description: t('meta.about_us.description')
+	description: t('meta.about_us.description')
 });
 </script>
 
@@ -67,7 +67,7 @@ getMeta({
 						<CommonIcon
 							:name="`social/${key}`"
 							width="40px"
-              height="40px"
+							height="40px"
 						/>
 					</NuxtLink>
 				</li>

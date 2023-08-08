@@ -31,8 +31,8 @@ const eventImage = computed(() => {
 });
 
 getMeta({
-	title: posterEvent.value?.location ?
-    `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}`
+	title: posterEvent.value?.location
+		? `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}`
 		: posterEvent.value?.title,
 	description: trimString(posterEvent.value?.description ?? '', 120),
 	image: eventImage.value
@@ -354,7 +354,7 @@ patchDeleteEventModal({
 		top: 0;
 		left: 0;
 		object-fit: cover;
-		border-radius: 4px;
+		border-radius: 8px;
 	}
 
 	&__price {
@@ -367,7 +367,7 @@ patchDeleteEventModal({
 		line-height: 16px;
 		text-align: center;
 
-		border-radius: 16px;
+		border-radius: 8px;
 		color: var(--color-white);
 		background-color: var(--color-accent-green-main);
 

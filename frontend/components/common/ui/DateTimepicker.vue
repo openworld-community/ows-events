@@ -158,7 +158,7 @@ const onRemove = () => {
 
 	&__menu_transitioned,
 	&__input {
-		border-radius: 24px;
+		border-radius: 8px;
 	}
 
 	&__input {

@@ -44,12 +44,7 @@ const props = defineProps({
 	}
 });
 
-// interface ScrollerHTMLElement extends HTMLElement {
-// 	scrollToItem: (index: number) => void;
-// }
-
 const listSelector = ref<HTMLElement | null>(null);
-// const scroller: Ref<ScrollerHTMLElement | null> = ref(null);
 const hasNextPage = ref(props.hasNextPage);
 
 watch(
@@ -69,7 +64,6 @@ watch(
 				INDEX: async () => {
 					await nextTick();
 					listSelector.value?.scrollTo({ top: listStore.scrollTop });
-					// console.log(listStore.scrollTop);
 				}
 			};
 

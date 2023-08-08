@@ -11,11 +11,10 @@ import {
 		<h1 class="privacy__main-title">{{ $t('limitation_of_liability.title') }}</h1>
 		<p class="privacy__paragraph">Дата последнего изменения: 25.06.2023.</p>
 
-		<ol
-			class="privacy__list"
-			itemscope
-			:itemtype="SeoItemTypeEnum.ORGANIZATION"
-			:itemprop="SeoItempropOrganizationEnum.PUBLISHING_PRINCIPLES"
+		<ol class="privacy__list"
+				itemscope
+				:itemtype="SeoItemTypeEnum.ORGANIZATION"
+				:itemprop="SeoItempropOrganizationEnum.PUBLISHING_PRINCIPLES"
 		>
 			<li>
 				Администрация сайта
@@ -42,10 +41,15 @@ import {
 					afisha.peredelano.com
 				</NuxtLink>
 				или в социальных сетях
-				<span :itemprop="SeoItempropOrganizationEnum.BRAND"> AfishaPeredelano </span>
-				(Далее — Сервис). Состоится мероприятие или нет, зависит от третьих лиц, за действия
-				которых Афиша не отвечает и не может оказывать на них влияние. В связи с этим Афиша
-				не гарантирует достоверность сведений, размещенных на Сервисе.
+				<span
+						:itemprop="SeoItempropOrganizationEnum.BRAND"
+				>
+				AfishaPeredelano
+				</span>
+				(Далее — Сервис). Состоится мероприятие или
+				нет, зависит от третьих лиц, за действия которых Афиша не отвечает и не может
+				оказывать на них влияние. В связи с этим Афиша не гарантирует достоверность
+				сведений, размещенных на Сервисе.
 			</li>
 			<li>
 				Афиша не гарантирует корректную работу сайтов, ссылки на которые размещены на
@@ -96,9 +100,6 @@ import {
 <style scoped lang="less">
 .privacy {
 	padding: 34px var(--padding-side);
-	max-width: 480px;
-	margin-left: auto;
-	margin-right: auto;
 
 	&__main-title {
 		font-size: var(--font-size-XXL);

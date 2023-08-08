@@ -1,24 +1,15 @@
 import { FastifyInstance } from 'fastify';
-import {
-	addEvent,
-	getEvents,
-	getEvent,
-	findEvents,
-	updateEvent,
-	deleteEvent,
-	findPaginatedEvents
-} from './controller';
+import { addEvent, getEvents, getEvent, findEvents, updateEvent, deleteEvent } from './controller';
 import {
 	IAddEventRoute,
 	IDeleteEventRoute,
 	IFindEventRoute,
-	IFindPaginateEventRoute,
 	IGetEventRoute,
 	IGetEventsRoute,
 	IUpdateEventRoute
 } from './type';
-import {
-	getEventSchema,
+import { 
+	getEventSchema, 
 	getEventsSchema,
 	addEventSchema,
 	deleteEventSchema,
@@ -26,8 +17,9 @@ import {
 	findEventsSchema
 } from './schema';
 
+
 export const eventsApi = async (fastify: FastifyInstance) => {
-	fastify.get<IGetEventsRoute>('/', { schema: getEventsSchema, handler: getEvents });
+	fastify.get<IGetEventsRoute>('/', { schema: getEventsSchema, handler: getEvents }) 
 
 	fastify.get<IGetEventRoute>('/:id', { schema: getEventSchema, handler: getEvent });
 
@@ -38,6 +30,4 @@ export const eventsApi = async (fastify: FastifyInstance) => {
 	fastify.post<IUpdateEventRoute>('/update', { schema: updateEventSchema, handler: updateEvent });
 
 	fastify.post<IFindEventRoute>('/find', { schema: findEventsSchema, handler: findEvents });
-
-	fastify.post<IFindPaginateEventRoute>('/findPaginate', { handler: findPaginatedEvents });
 };

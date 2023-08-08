@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '../../constants/enums/route';
-import { SeoItempropNavEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
-
-import { useListStore } from '~/stores/list.store';
-const listStore = useListStore();
+import {SeoItempropNavEnum, SeoItemTypeEnum} from '../../constants/enums/seo';
 
 const route = useRoute();
 
@@ -22,20 +19,14 @@ const logoComponentIs = computed(() => {
 	if (isAtHome.value) return 'button';
 	else return defineNuxtLink({});
 });
-
-const scrollToTop = () => {
-	listStore.$patch({
-		needScrollList: true,
-		lastAction: 'HEADER'
-	});
-};
+const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 </script>
 
 <template>
 	<header
-		class="header"
-		itemscope
-		:itemtype="SeoItemTypeEnum.HEADER"
+			class="header"
+			itemscope
+			:itemtype="SeoItemTypeEnum.HEADER"
 	>
 		<div class="header__container">
 			<div
@@ -90,7 +81,8 @@ const scrollToTop = () => {
 	position: fixed;
 	top: 0;
 	left: 0;
-	z-index: 2;
+	//TODO разобраться с z-индексами
+	z-index: 3;
 
 	&__container {
 		display: flex;

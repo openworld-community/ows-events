@@ -358,10 +358,20 @@ watch(
 				</ModalUiModalSection>
 
 				<ModalUiModalSection
-					type="row"
+          type="column-row"
 					:label="$t('modal.new_event_modal.fields.price')"
 				>
 					<template #child>
+            <div>
+              <CommonUiBaseSelect
+                v-model="inputValues.price.currency"
+                name="currency"
+                :placeholder="$t('modal.new_event_modal.fields.currency_placeholder')"
+                :list="locationStore.currencies"
+                :disabled="isFree"
+                :required="!isFree"
+                style="width: 68%"
+              />
 						<CommonUiBaseInput
 							v-model="inputValues.price.value"
 							name="price"
@@ -371,24 +381,16 @@ watch(
 							:required="!isFree"
 							:placeholder="$t('modal.new_event_modal.fields.price_placeholder')"
 						/>
-						<CommonUiBaseSelect
-							v-model="inputValues.price.currency"
-							name="currency"
-							:placeholder="$t('modal.new_event_modal.fields.currency_placeholder')"
-							:list="locationStore.currencies"
-							:disabled="isFree"
-							:required="!isFree"
-							dropdown-position="right"
-						/>
+            </div>
+            <CommonUiBaseCheckbox
+              value="free"
+              label="Бесплатно"
+              is-reversed
+              :model-value="isFree"
+              @update:model-value="toggleFree"
+            />
 					</template>
 				</ModalUiModalSection>
-				<CommonUiBaseCheckbox
-					value="free"
-					label="Бесплатно"
-					is-reversed
-					:model-value="isFree"
-					@update:model-value="toggleFree"
-				/>
 
 				<ModalUiModalSection
 					:label="$t('modal.new_event_modal.fields.url_to_registration')"

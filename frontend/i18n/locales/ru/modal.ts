@@ -21,7 +21,7 @@ export const modal = {
 			start: 'Начало',
 			end: 'Окончание',
 			price: 'Стоимость',
-			price_placeholder: 'Укажите стоимость',
+			price_placeholder: 'Цена',
 			currency_placeholder: 'Валюта',
 			url_to_registration: 'Ссылка на регистрацию',
 			url_placeholder: 'https://example.com'

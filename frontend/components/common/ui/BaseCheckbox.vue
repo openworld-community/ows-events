@@ -36,6 +36,7 @@ const isChecked = computed(() => model.value)
 </script>
 
 <template>
+  <div class="checkbox__wrapper">
 		<label :class="['checkbox', { 'checkbox--reversed': isReversed }]">
 			<div :class="['checkbox__box', { 'checkbox__box--checked': isChecked }]">
 				<CommonIcon
@@ -58,13 +59,20 @@ const isChecked = computed(() => model.value)
 				checked
 			/>
 		</label>
+  </div>
 </template>
 
 <style scoped lang="less">
 .checkbox {
   display: flex;
+  width: max-content;
   align-items: center;
   cursor: pointer;
+
+  &__wrapper {
+    display: flex;
+    width: 100%;
+  }
 
   &--reversed {
     flex-direction: row-reverse;

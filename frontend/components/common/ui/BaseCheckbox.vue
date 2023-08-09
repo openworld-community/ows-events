@@ -1,82 +1,80 @@
 <script setup lang="ts">
-import type { PropType } from 'vue';
-
-defineProps({
+const props = defineProps({
 	label: {
 		type: String,
 		default: ''
 	},
-	items: {
-		type: [String, Array] as PropType<string | string[]>,
+	value: {
+		type: String,
 		required: true
 	},
 	//сначала текст, потом чекбокс
 	isReversed: {
 		type: Boolean,
 		default: false
+	},
+	modelValue: {
+		type: Boolean,
+		required: true
 	}
 });
 
-const isChecked = ref(false)
+const emit = defineEmits(['update:model-value']);
 
-const checkItem = () => {
 
-}
+const model = computed({
+	get() {
+		return props.modelValue;
+	},
+	set(value) {
+		emit('update:model-value', value);
+	}
+});
+
+const isChecked = computed(() => model.value)
+
 </script>
 
 <template>
-	<fieldset class="checkbox">
-		<legend
-			v-if="label"
-			class="checkbox__legend"
-		>
-			{{ label }}}
-		</legend>
-
-		<div
-			v-for="item in items"
-			:key="item"
-			:class="['checkbox__item', {'checkbox__item--reversed': isReversed}]"
-		>
-			<div class="checkbox__box" @click="checkItem(item)"></div>
-			<label
-				:for="item"
-				class="checkbox__text"
-			>
-				{{ item }}
-			</label>
+		<label :class="['checkbox', { 'checkbox--reversed': isReversed }]">
+			<div :class="['checkbox__box', { 'checkbox__box--checked': isChecked }]">
+				<CommonIcon
+					v-if="isChecked"
+					name="check"
+					class="checkbox__icon"
+					color="var(--color-white)"
+					width="16px"
+					height="16px"
+				/>
+			</div>
+			<span class="checkbox__text">
+				{{ label }}
+			</span>
 			<input
-				:id="item"
+				v-model="model"
 				type="checkbox"
 				class="checkbox__input"
-				:name="item"
+				:name="value"
 				checked
 			/>
-		</div>
-	</fieldset>
+		</label>
 </template>
 
 <style scoped lang="less">
 .checkbox {
-	border: none;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 
-	&__legend {
-	}
-
-	&__item {
-		display: flex;
-		align-items: center;
-
-    &--reversed {
-      flex-direction: row-reverse;
-      justify-content: flex-end;
-    }
-	}
+  &--reversed {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+  }
 
 	&__text {
 		font-size: var(--font-size-M);
 		line-height: 24px;
-    margin-right: var(--space-unrelated-items);
+		margin-right: var(--space-unrelated-items);
 	}
 
 	&__input {
@@ -84,11 +82,24 @@ const checkItem = () => {
 	}
 
 	&__box {
+		position: relative;
 		width: 18px;
 		height: 18px;
 		border: 1px solid var(--color-input-field);
 		border-radius: 4px;
-    margin-right: var(--space-unrelated-items);
+		margin-right: var(--space-unrelated-items);
+
+		&--checked {
+			background-color: var(--color-accent-green-main);
+			border-color: var(--color-accent-green-main);
+			color: var(--color-white);
+		}
+	}
+
+	&__icon {
+		position: absolute;
+		top: 0;
+		left: 0;
 	}
 }
 </style>

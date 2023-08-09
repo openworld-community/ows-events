@@ -15,6 +15,7 @@ export type IconName =
 	| 'error'
 	| 'edit'
 	| 'delete'
+  | 'check'
 	| 'container'
 	| 'contact-tg'
 	| 'close'

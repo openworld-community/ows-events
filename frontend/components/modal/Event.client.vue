@@ -25,6 +25,8 @@ const allTimezones = (await getAllTimezones()).map((timezone) =>
 ) as string[];
 const minDate = new Date();
 
+const isFree = ref(props.dataForEdit?.price?.value === 0);
+
 const inputValues = ref({
 	id: props.dataForEdit?.id ?? '',
 	title: props.dataForEdit?.title ?? '',
@@ -48,7 +50,7 @@ const inputValues = ref({
 	},
 	image: props.dataForEdit?.image ?? '',
 	price: {
-		value: props.dataForEdit?.price?.value ?? '',
+		value: props.dataForEdit?.price?.value !== 0 ? props.dataForEdit?.price?.value : '',
 		currency: props.dataForEdit?.price?.currency ?? ''
 	},
 	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
@@ -60,6 +62,15 @@ const eventStartEpoch = computed(() =>
 const eventEndEpoch = computed(() =>
 	combineDateTime(inputValues.value.endDate, inputValues.value.endTime).getTime()
 );
+
+const toggleFree = (value: boolean) => {
+	isFree.value = value;
+	//убираем значение из инпута, в paramsForSubmit подставляется 0
+	if (value === true) {
+		inputValues.value.price.value = '';
+		inputValues.value.price.currency = '';
+	}
+};
 
 const checkFormFilling = computed(() => {
 	return !!(
@@ -73,7 +84,8 @@ const checkFormFilling = computed(() => {
 		inputValues.value.location.country &&
 		inputValues.value.location.city &&
 		inputValues.value.timezone &&
-		allTimezones.includes(inputValues.value.timezone)
+		allTimezones.includes(inputValues.value.timezone) &&
+		(isFree.value || (inputValues.value.price.value && inputValues.value.price.currency))
 	);
 });
 
@@ -93,9 +105,9 @@ const paramsForSubmit = computed(() => {
 		//TODO: добавить выбор валюты
 		price: {
 			minValue: null,
-			value: Number(inputValues.value.price.value) ?? 0,
+			value: isFree ? 0 : Number(inputValues.value.price.value),
 			maxValue: null,
-			currency: inputValues.value.price.currency
+			currency: isFree ? null : inputValues.value.price.currency
 		},
 		timezone: stringToTimezone(inputValues.value.timezone),
 		url: inputValues.value.url
@@ -355,6 +367,8 @@ watch(
 							name="price"
 							type="number"
 							:min-value="0"
+							:disabled="isFree"
+							:required="!isFree"
 							:placeholder="$t('modal.new_event_modal.fields.price_placeholder')"
 						/>
 						<CommonUiBaseSelect
@@ -362,14 +376,18 @@ watch(
 							name="currency"
 							:placeholder="$t('modal.new_event_modal.fields.currency_placeholder')"
 							:list="locationStore.currencies"
-							required
+							:disabled="isFree"
+							:required="!isFree"
 							dropdown-position="right"
 						/>
 					</template>
 				</ModalUiModalSection>
 				<CommonUiBaseCheckbox
-					:items="['Бесплатно']"
+					value="free"
+					label="Бесплатно"
 					is-reversed
+					:model-value="isFree"
+					@update:model-value="toggleFree"
 				/>
 
 				<ModalUiModalSection

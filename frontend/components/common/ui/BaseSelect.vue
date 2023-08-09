@@ -8,7 +8,7 @@ const props = defineProps({
 		default: ''
 	},
 	modelValue: {
-		type: String as PropType<string>,
+		type: String as PropType<string | null>,
 		required: true
 	},
 	list: {

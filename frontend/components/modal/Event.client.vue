@@ -50,7 +50,7 @@ const inputValues = ref({
 	},
 	image: props.dataForEdit?.image ?? '',
 	price: {
-		value: props.dataForEdit?.price?.value !== 0 ? props.dataForEdit?.price?.value : '',
+		value: !isFree ? props.dataForEdit?.price?.value : '',
 		currency: props.dataForEdit?.price?.currency ?? ''
 	},
 	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
@@ -66,7 +66,7 @@ const eventEndEpoch = computed(() =>
 const toggleFree = (value: boolean) => {
 	isFree.value = value;
 	//убираем значение из инпута, в paramsForSubmit подставляется 0
-	if (value === true) {
+	if (value) {
 		inputValues.value.price.value = '';
 		inputValues.value.price.currency = '';
 	}
@@ -102,7 +102,6 @@ const paramsForSubmit = computed(() => {
 			city: inputValues.value.location.city,
 			address: inputValues.value.location.address
 		},
-		//TODO: добавить выбор валюты
 		price: {
 			minValue: null,
 			value: isFree ? 0 : Number(inputValues.value.price.value),
@@ -161,7 +160,17 @@ watch(
 	(country) => {
 		if (!inputValues.value.location.country) inputValues.value.timezone = '';
 		inputValues.value.location.city = '';
-		inputValues.value.price.currency = getCurrencyByCountry(country);
+		if (!isFree.value) inputValues.value.price.currency = getCurrencyByCountry(country);
+	}
+);
+
+watch(
+	() => isFree.value,
+	() => {
+		if (!isFree.value)
+			inputValues.value.price.currency = getCurrencyByCountry(
+				inputValues.value.location.country
+			);
 	}
 );
 
@@ -229,6 +238,7 @@ watch(
 							name="country"
 							:placeholder="$t('global.country')"
 							:list="locationStore.countries"
+							input-readonly
 							required
 						/>
 
@@ -358,37 +368,40 @@ watch(
 				</ModalUiModalSection>
 
 				<ModalUiModalSection
-          type="column-row"
+					type="column-row"
 					:label="$t('modal.new_event_modal.fields.price')"
 				>
 					<template #child>
-            <div>
-              <CommonUiBaseSelect
-                v-model="inputValues.price.currency"
-                name="currency"
-                :placeholder="$t('modal.new_event_modal.fields.currency_placeholder')"
-                :list="locationStore.currencies"
-                :disabled="isFree"
-                :required="!isFree"
-                style="width: 68%"
-              />
-						<CommonUiBaseInput
-							v-model="inputValues.price.value"
-							name="price"
-							type="number"
-							:min-value="0"
-							:disabled="isFree"
-							:required="!isFree"
-							:placeholder="$t('modal.new_event_modal.fields.price_placeholder')"
+						<div>
+							<CommonUiBaseSelect
+								v-model="inputValues.price.currency"
+								name="currency"
+								:placeholder="
+									$t('modal.new_event_modal.fields.currency_placeholder')
+								"
+								:list="locationStore.currencies"
+								has-icon-items
+								input-readonly
+								:disabled="isFree"
+								:required="!isFree"
+							/>
+							<CommonUiBaseInput
+								v-model="inputValues.price.value"
+								name="price"
+								type="number"
+								:min-value="0"
+								:disabled="isFree"
+								:required="!isFree"
+								:placeholder="$t('modal.new_event_modal.fields.price_placeholder')"
+							/>
+						</div>
+						<CommonUiBaseCheckbox
+							value="free"
+							label="Бесплатно"
+							is-reversed
+							:model-value="isFree"
+							@update:model-value="toggleFree"
 						/>
-            </div>
-            <CommonUiBaseCheckbox
-              value="free"
-              label="Бесплатно"
-              is-reversed
-              :model-value="isFree"
-              @update:model-value="toggleFree"
-            />
 					</template>
 				</ModalUiModalSection>
 

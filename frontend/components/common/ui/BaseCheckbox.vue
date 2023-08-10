@@ -21,7 +21,6 @@ const props = defineProps({
 
 const emit = defineEmits(['update:model-value']);
 
-
 const model = computed({
 	get() {
 		return props.modelValue;
@@ -31,12 +30,11 @@ const model = computed({
 	}
 });
 
-const isChecked = computed(() => model.value)
-
+const isChecked = computed(() => model.value);
 </script>
 
 <template>
-  <div class="checkbox__wrapper">
+	<div class="checkbox__wrapper">
 		<label :class="['checkbox', { 'checkbox--reversed': isReversed }]">
 			<div :class="['checkbox__box', { 'checkbox__box--checked': isChecked }]">
 				<CommonIcon
@@ -59,25 +57,25 @@ const isChecked = computed(() => model.value)
 				checked
 			/>
 		</label>
-  </div>
+	</div>
 </template>
 
 <style scoped lang="less">
 .checkbox {
-  display: flex;
-  width: max-content;
-  align-items: center;
-  cursor: pointer;
+	display: flex;
+	width: max-content;
+	align-items: center;
+	cursor: pointer;
 
-  &__wrapper {
-    display: flex;
-    width: 100%;
-  }
+	&__wrapper {
+		display: flex;
+		width: 100%;
+	}
 
-  &--reversed {
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-  }
+	&--reversed {
+		flex-direction: row-reverse;
+		justify-content: flex-end;
+	}
 
 	&__text {
 		font-size: var(--font-size-M);
@@ -95,6 +93,7 @@ const isChecked = computed(() => model.value)
 		height: 18px;
 		border: 1px solid var(--color-input-field);
 		border-radius: 4px;
+		background-color: var(--color-background-secondary);
 		margin-right: var(--space-unrelated-items);
 
 		&--checked {

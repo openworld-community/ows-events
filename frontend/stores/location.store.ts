@@ -3,7 +3,7 @@ import type { UserLocation } from '../../common/types/location';
 
 export type City = string;
 export type Country = string;
-export type Currency = string
+export type Currency = string;
 
 type LocationStore = {
 	_countries: Set<Country>;
@@ -29,7 +29,6 @@ export const useLocationStore = defineStore('location', {
 	},
 	getters: {
 		countries(state): LocationStore['_countries'] {
-
 			// Список всех стран:
 
 			// (async function () {
@@ -59,15 +58,15 @@ export const useLocationStore = defineStore('location', {
 			// return state._countries;
 
 			// Сейчас добавляем страны вручную
-			const countries = ['Montenegro', 'Kyrgyzstan', 'Serbia']
+			const countries = ['Montenegro', 'Kyrgyzstan', 'Serbia'];
 
-			state._countries = new Set(countries)
-			return state._countries
+			state._countries = new Set(countries);
+			return state._countries;
 		},
-		currencies (state): LocationStore['_currencies'] {
-			const currencies = ['USD', 'EUR', 'RSD', 'KGS', 'BTC', 'USDT', 'USDC', 'ETH']
-			state._currencies = new Set(currencies)
-			return state._currencies
+		currencies(state): LocationStore['_currencies'] {
+			const currencies = ['USD', 'EUR', 'RSD', 'KGS', 'BTC', 'USDT', 'USDC', 'ETH'];
+			state._currencies = new Set(currencies);
+			return state._currencies;
 		},
 		usedCountries(state): LocationStore['_usedCountries'] {
 			(async function () {

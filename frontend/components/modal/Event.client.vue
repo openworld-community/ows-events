@@ -50,7 +50,7 @@ const inputValues = ref({
 	},
 	image: props.dataForEdit?.image ?? '',
 	price: {
-		value: !isFree ? props.dataForEdit?.price?.value : '',
+		value: !isFree.value ? props.dataForEdit?.price?.value ?? '' : '',
 		currency: props.dataForEdit?.price?.currency ?? ''
 	},
 	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
@@ -104,9 +104,9 @@ const paramsForSubmit = computed(() => {
 		},
 		price: {
 			minValue: null,
-			value: isFree ? 0 : Number(inputValues.value.price.value),
+			value: isFree.value ? 0 : Number(inputValues.value.price.value),
 			maxValue: null,
-			currency: isFree ? null : inputValues.value.price.currency
+			currency: isFree.value ? null : inputValues.value.price.currency
 		},
 		timezone: stringToTimezone(inputValues.value.timezone),
 		url: inputValues.value.url
@@ -167,10 +167,7 @@ watch(
 watch(
 	() => isFree.value,
 	() => {
-		if (!isFree.value)
-			inputValues.value.price.currency = getCurrencyByCountry(
-				inputValues.value.location.country
-			);
+		if (!isFree.value) inputValues.value.price.currency = getCurrencyByCountry(inputValues.value.location.country);
 	}
 );
 

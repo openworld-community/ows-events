@@ -6,7 +6,7 @@ import { formatPrice } from '../../utils/prices';
 
 defineProps({
 	price: {
-		type: Object as PropType<EventPrice>,
+		type: [Object, null] as PropType<EventPrice | null>,
 		required: true
 	},
 	className: {

@@ -129,7 +129,7 @@ const filteredList = computed(() =>
 		background-color: var(--color-white);
 		max-height: 200px;
 		z-index: 99;
-		border-radius: 16px;
+		border-radius: 8px;
 		border: 1px solid #ccc;
 
 		&--left {

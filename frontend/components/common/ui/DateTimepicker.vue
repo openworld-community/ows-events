@@ -122,7 +122,7 @@ const onRemove = () => {
 		<CommonButton
 			v-else
 			is-icon
-			icon-name="delete"
+			icon-name="close"
 			class="input__button"
 			@click="onRemove"
 		/>

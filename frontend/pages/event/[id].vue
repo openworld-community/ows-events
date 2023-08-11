@@ -4,7 +4,6 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
 import type { TGUserInfo } from '@/../common/types/user';
-import { BASE_URL } from '../../constants/url';
 
 import { trimString } from '../../utils/trimString';
 import {
@@ -32,7 +31,7 @@ const eventImage = computed(() => {
 
 getMeta({
 	title: posterEvent.value?.location ?
-    `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}`
+    `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}, ${posterEvent.value?.location.country}`
 		: posterEvent.value?.title,
 	description: trimString(posterEvent.value?.description ?? '', 120),
 	image: eventImage.value

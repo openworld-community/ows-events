@@ -4,7 +4,6 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
 import type { TGUserInfo } from '@/../common/types/user';
-import { BASE_URL } from '../../constants/url';
 
 import { trimString } from '../../utils/trimString';
 import {
@@ -108,23 +107,11 @@ patchDeleteEventModal({
 		:itemtype="SeoItemTypeEnum.EVENT"
 	>
 		<div
-			:class="['event-image', 'event-image__container']"
+			:class="['event-image', 'event-image__container',{ 'event-image__container--background': !posterEvent.image }]"
 			:itemprop="SeoItempropGlobalEnum.IMAGE"
 		>
-			<CommonTag
-				:class-name="'event-image__price'"
-				:price="posterEvent.price"
-				:currency="'RSD'"
-			/>
 			<img
-				v-if="!posterEvent?.image"
-				src="@/assets/img/event-card@2x.png"
-				:alt="$t('event.image.event')"
-				class="event-image__image"
-				:itemprop="SeoItempropGlobalEnum.IMAGE"
-			/>
-			<img
-				v-else
+				v-if="posterEvent.image"
 				:src="eventImage"
 				:alt="$t('event.image.event')"
 				class="event-image__image"
@@ -133,6 +120,10 @@ patchDeleteEventModal({
 		</div>
 
 		<div class="event event-info">
+			<CommonTag
+				:class-name="'event-info__price'"
+				:price="posterEvent.price"
+			/>
 			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
 			<p
 				v-if="posterEvent.title.toLowerCase().includes('peredelanoconf')"
@@ -241,14 +232,14 @@ patchDeleteEventModal({
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
-	max-height: calc(100vh - var(--header-height));
+	//max-height: calc(100vh - var(--header-height));
 	padding-left: var(--padding-side);
 	padding-right: var(--padding-side);
 
-	// Для адаптивной height на iOs
-	@supports (-webkit-touch-callout: none) {
-		max-height: -webkit-fill-available;
-	}
+	//// Для адаптивной height на iOs
+	//@supports (-webkit-touch-callout: none) {
+	//	max-height: -webkit-fill-available;
+	//}
 
 	&-info {
 		display: flex;
@@ -256,6 +247,10 @@ patchDeleteEventModal({
 		min-height: 250px;
 		flex-direction: column;
 		padding-inline: 0;
+
+		&__price {
+			margin-bottom: 12px;
+		}
 
 		&__author {
 			//TODO: пока верстка только мобилки
@@ -338,41 +333,29 @@ patchDeleteEventModal({
 	&__container {
 		display: flex;
 		width: 100%;
-		min-height: 232px;
+		min-height: 250px;
 		position: relative;
 		line-height: 0;
 		background-color: var(--color-input-field);
 		margin-bottom: 12px;
+		border-radius: 8px;
+
+		&--background {
+			background: url('@/assets/img/event-preview@2x.png') center center no-repeat;
+			background-size: cover;
+		}
 	}
 
 	&__image {
 		width: 100%;
 		min-width: 100%;
 		max-width: 100%;
-		height: 232px;
+		height: 250px;
 		position: absolute;
 		top: 0;
 		left: 0;
 		object-fit: cover;
 		border-radius: 8px;
-	}
-
-	&__price {
-		min-width: 50px;
-		position: absolute;
-		left: 12px;
-		top: 12px;
-
-		font-size: var(--font-size-XS);
-		line-height: 16px;
-		text-align: center;
-
-		border-radius: 8px;
-		color: var(--color-white);
-		background-color: var(--color-accent-green-main);
-
-		padding: 6px 10px;
-		z-index: 1;
 	}
 }
 </style>

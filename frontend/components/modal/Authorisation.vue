@@ -73,7 +73,7 @@ onMounted(() => {
 						<CommonIcon
 							class="modal-card__icon"
 							name="telegram"
-              color="var(--color-white)"
+							color="var(--color-white)"
 						/>
 						{{ $t('modal.pre_authorisation_modal.telegram_login') }}
 					</div>
@@ -92,7 +92,7 @@ onMounted(() => {
 	//TODO: пока верстка только мобилки
 	max-width: 350px;
 	overflow: hidden;
-	border-radius: 10px;
+	border-radius: 6px;
 	margin: 40vh auto auto;
 }
 

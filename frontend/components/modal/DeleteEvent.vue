@@ -44,7 +44,7 @@ const props = defineProps<Props>();
 	//TODO: пока верстка только мобилки
 	max-width: 350px;
 	overflow: hidden;
-	border-radius: 10px;
+	border-radius: 6px;
 	margin: 40vh auto auto;
 }
 

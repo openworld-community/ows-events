@@ -1,244 +1,27 @@
-import { defineTranslation } from '..';
-import { type ErrorCodes } from '@/../common/const';
+import { ServerErrors } from './errors';
+import { header } from './header';
+import { about } from './about';
+import { meta } from './meta';
+import { global } from './global';
+import { home } from './home';
+import { event } from './event';
+import { modal } from './modal';
+import { dates } from './dates';
+import { limitation_of_liability } from './limitation-of-liability';
+import {donate} from "./donate";
 
-export const ServerErrors: {
-	[key in ErrorCodes]: string;
-} = {
-	EVENT_IS_NOT_DEFINED: 'Мероприятие не определено',
-	TITLE_IS_NOT_DEFINED: 'Заголовок не определен',
-	TITLE_IS_TOO_SHORT: 'Заголовок слишком короткий',
-	TITLE_IS_TOO_LONG: 'Заголовок слишком длинный',
-	DESCRIPTION_IS_NOT_DEFINED: 'Описание не определено',
-	DESCRIPTION_IS_TOO_SHORT: 'Описание слишком короткое',
-	DESCRIPTION_IS_TOO_LONG: 'Описание слишком длинное',
-	START_DATE_IS_NOT_DEFINED: 'Дата начала не определена',
-	START_DATE_IS_IN_THE_PAST: 'Дата начала в прошлом',
-	DURATION_IS_NEGATIVE: 'Длительность отрицательная',
-	LOCATION_IS_NOT_DEFINED: 'Место проведения не определено',
-	COUNTRY_IS_NOT_DEFINED: 'Страна не определена',
-	CITY_IS_NOT_DEFINED: 'Город не определен',
-	IMAGE_LINK_IS_TOO_SHORT: 'Ссылка на изображение слишком короткая',
-	IMAGE_LINK_IS_TOO_LONG: 'Ссылка на изображение слишком длинная',
-	URL_IS_NOT_DEFINED: 'Ссылка на мероприятие не определена',
-	URL_IS_TOO_SHORT: 'Ссылка на мероприятие слишком короткая',
-	URL_IS_TOO_LONG: 'Ссылка на мероприятие слишком длинная',
-	TITLE_IS_NOT_CLEAN: 'В заголовоке ненормативная лексика',
-	DESCRIPTION_IS_NOT_CLEAN: 'В описании ненормативная лексика',
-	'event-not-found': 'Мероприятие не найдено',
-	'image-addition-error': 'Ошибка при добавлении изображения',
-	'image-deletion-error': 'Ошибка при удалении изображения',
-	'image-encoding-problem': 'Ошибка формата изображения',
-	'image-too-large': 'Файл изображения слишком большой',
-	'no-image-to-add': 'Файл изображения не найден',
-	'no-image-to-delete': 'Файл изображения не найден',
-	'paymant-info-file-parse-error': 'Ошибка при ',
-	'payment-info-file-not-exist': 'Метод оплаты не задан',
-	'payment-info-not-found': 'Метод оплаты не найден',
-	'unknown-image-route-error': 'Непредвиденная ошибка при обработке изображения',
-	'wrong-token': 'Ваш токен авторизации поврежден',
-	forbidden: 'Ошибка допуска',
-	unauthorized: 'У вас нет доступа к данному ресурсу',
-	'event-already-exists': 'Данное мероприятие	уже существует',
-	'event-sent-on-moderation': 'Мероприятие отправлено на модерацию',
-	'no-payload-provided': 'ОТправлен пустой запрос',
-	'timezone-city-not-found': 'Не удалось найти часовой пояс по указанным параметрам',
-	'user-does-not-exist': 'Пользователь не найден'
+const ruTranslation = {
+	meta,
+	global,
+	header,
+	home,
+	event,
+	about,
+	donate,
+	limitation_of_liability,
+	modal,
+	dates,
+	error: ServerErrors,
 };
 
-export const defaultTranslation = {
-	meta: {
-		title: 'Афиша',
-		home: {
-			title: 'Главная'
-		},
-		about_us: {
-			title: 'О нас'
-		},
-		payment_info: {
-			title: 'Оплата'
-		}
-	},
-	global: {
-		country: 'Страна',
-		city: 'Город',
-		search: 'Поиск',
-		timezone: 'Часовой пояс',
-		button: {
-			back: 'Назад',
-			share: 'Поделиться',
-			cancel: 'Отмена',
-			search: 'Поиск',
-			delete: 'Очистить'
-		}
-	},
-	about: {
-		title: 'О нас',
-		idea: 'Проект AfishaPeredelano создан для облегчения поиска мероприятий, которые проходят в регионе, интересующем пользователя (пока доступен обзор мероприятий Сербии, но в ближайшее время география расширится).',
-		functionality:
-			'Благодаря нашей платформе вы можете ознакомиться с основной информацией о мероприятии: дате начала и окончания, локации, описании и цене. Организатор мероприятия уже сейчас может добавлять информацию о нем на площадку.',
-		perspectives:
-			'В будущем на платформе пользователь сможет записаться на мероприятие и добавить его в избранное, а также  появится возможность оплачивать билеты, не выходя из Афиши.',
-		github: 'Ссылка на GitHub проекта',
-		alt: 'О проекте Переделано: Афиша'
-	},
-	home: {
-		title: 'Мероприятия',
-		button: {
-			add_event_aria: 'Добавить мероприятие',
-			afisha_logo_aria: 'Вернуться к началу страницы'
-		},
-		events: {
-			image_alt: 'Фото мероприятия',
-			ad: 'Реклама',
-			anchor_chat: 'Перейти в чат'
-		},
-		location: {
-			aria: 'Вы находитесь в'
-		},
-		filter: {
-			aria_country: 'Фильтр по стране',
-			aria_city: 'Фильтр по городу'
-		},
-		peredelano: {
-			description:
-				'Тут мы объединяемся, чтобы вместе сделать проекты. Рынок и мир сейчас сложные, с работой туго, со смыслами тоже — поэтому мы решили делать и то и другое сами.'
-		}
-	},
-	event: {
-		button: {
-			delete: 'Удалить',
-			edit: 'Редактировать',
-			contact: 'Связаться',
-			register: 'Зарегистрироваться'
-		},
-		image: {
-			event: 'изображение мероприятия'
-		},
-		price: {
-			free: 'Бесплатно',
-			not_found: 'Цена не указана'
-		}
-	},
-	limitation_of_liability: {
-		title: 'Оговорка об ограничении ответственности'
-	},
-	user: {
-		title_unauthorized: 'Авторизация',
-		title_profile: 'Профиль',
-		title_contacts: 'контакты',
-		login: 'Логин',
-		name: 'Имя',
-		surname: 'Фамилия',
-		affiliation: 'Компания',
-		email: 'E-mail',
-		phone: 'Номер телефона',
-		buttons: {
-			edit: 'Редактировать',
-			logout: 'Выйти из аккаунта',
-			login: 'Войти с помощью Telegram'
-		}
-	},
-	component: {
-		user_location: {
-			not_found: 'Мы не смогли найти вас('
-		},
-		new_event_modal: {
-			title: 'Добавьте мероприятие',
-			cancel: 'Отмена',
-			submit: 'Сохранить',
-			add_image: 'Добавить фото',
-			remove_image: 'Удалить фото',
-			fields: {
-				location: 'Локация',
-				country: 'Страна',
-				city: 'Город',
-				timezone: 'Часовой пояс',
-				main_info: 'Общая информация',
-				title: 'Название',
-				description: 'Описание',
-				start: 'Начало',
-				end: 'Окончание',
-				price: 'Стоимость, RSD',
-				price_placeholder: 'Укажите стоимость в RSD',
-				url_to_rigistration: 'Ссылка на регистрацию',
-				url_placeholder: 'https://example.com'
-			}
-		},
-		need_authorize_modal: {
-			title: 'Для создания мероприятия необходимо авторизоваться',
-			button: {
-				close: 'Закрыть'
-			}
-		},
-		delete_event_modal: {
-			title: 'Удаление мероприятия',
-			button: {
-				cancel: 'Отмена',
-				submit: 'Подтвердить'
-			}
-		},
-		pre_authorisation_modal: {
-			title: 'Войдите в аккаунт',
-			telegram_login: 'Войти через Telegram',
-			button: {
-				cancel: 'Отмена',
-				login: 'Войти',
-				logout: 'Выйти'
-			}
-		},
-		edit_profile_modal: {
-			title: 'Редактирование',
-			button: {
-				cancel: 'Отмена',
-				submit: 'Сохранить'
-			},
-			fields: {
-				name: 'Имя',
-				surname: 'Фамилия',
-				organizer: 'Организатор',
-				email: 'E-mail',
-				phone: 'Номер телефона',
-				name_placeholder: 'Как к вам обращаться?',
-				surname_placeholder: 'Введите вашу фамилию',
-				organizer_placeholder: 'Компания-организатор события'
-			}
-		},
-		language_selector: {
-			label: 'Язык'
-		},
-		header: {
-			button: {
-				open: 'Открыть меню навигации',
-				close: 'Скрыть меню навигации',
-				home: 'Вернуться на домашнюю страницу'
-			},
-			about: 'Oб Афише',
-			support: 'Поддержка',
-			policy: 'Политика конфиденциальности',
-			limitation_of_liability: 'Оговорка об ограничении ответственности',
-			user_page: 'Пользователь',
-			event: {
-				manage: 'Управление событием'
-			},
-			authorization: {
-				authorize: 'Авторизоваться',
-				deauthorize: 'Выйти из аккаунта'
-			}
-		}
-	},
-	dates: {
-		day: {
-			key_zero: '{{count}} дней',
-			key_one: '{{count}} день',
-			key_few: '{{count}} дня',
-			key_many: '{{count}} дней'
-		},
-		clock: 'часы'
-	},
-	header: {
-		subscription_expired: '$t(dates.day.key) до конца подписки'
-	},
-	error: ServerErrors
-};
-
-export default defineTranslation(defaultTranslation);
+export default ruTranslation;

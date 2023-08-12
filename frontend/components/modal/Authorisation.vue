@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { UserInfo } from '../../../common/types/user';
+import type { TGUserInfo } from '../../../common/types/user';
 import { TELEGRAM_AUTH_BOT_NAME, BASE_URL } from '../../constants/url';
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 };
 
 const props = defineProps<Props>();
-const userCookie = useCookie<UserInfo | null>('user');
+const userCookie = useCookie<TGUserInfo | null>('user');
 
 const username =
 	userCookie.value?.username ||
@@ -48,20 +48,20 @@ onMounted(() => {
 		<div class="modal">
 			<div class="modal-card__head">
 				<p class="modal-card__title">
-					{{ isAuthorized ? username : $t('component.pre_authorisation_modal.title') }}
+					{{ isAuthorized ? username : $t('modal.pre_authorisation_modal.title') }}
 				</p>
 			</div>
 			<div class="modal-card__foot">
 				<CommonButton
 					class="modal-card__cancel-button"
 					button-kind="ordinary"
-					:button-text="$t('component.pre_authorisation_modal.button.cancel')"
+					:button-text="$t('modal.pre_authorisation_modal.button.cancel')"
 					@click="props.close()"
 				/>
 				<CommonButton
 					v-if="isAuthorized"
 					button-kind="success"
-					:button-text="$t('component.pre_authorisation_modal.button.logout')"
+					:button-text="$t('modal.pre_authorisation_modal.button.logout')"
 					class="modal-card__logout-button"
 					@click="props.deauthorize()"
 				/>
@@ -73,8 +73,9 @@ onMounted(() => {
 						<CommonIcon
 							class="modal-card__icon"
 							name="telegram"
+							color="var(--color-white)"
 						/>
-						{{ $t('component.pre_authorisation_modal.telegram_login') }}
+						{{ $t('modal.pre_authorisation_modal.telegram_login') }}
 					</div>
 					<div
 						ref="telegram"
@@ -91,7 +92,7 @@ onMounted(() => {
 	//TODO: пока верстка только мобилки
 	max-width: 350px;
 	overflow: hidden;
-	border-radius: 10px;
+	border-radius: 6px;
 	margin: 40vh auto auto;
 }
 

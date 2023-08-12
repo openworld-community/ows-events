@@ -1,75 +1,88 @@
 <script setup lang="ts">
 import type { EventOnPoster } from '../../../common/types';
+import {
+	SeoItempropEventEnum,
+	SeoItempropGlobalEnum,
+} from '../../constants/enums/seo';
 
-const props = defineProps<{ eventData: EventOnPoster }>();
-
-//TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса
-const templateURL = `https://www.google.com/maps/place/${props.eventData?.location.city}+${props.eventData?.location.country}`;
+defineProps<{ eventData: EventOnPoster }>();
 </script>
 
 <template>
-	<div class="card">
-		<NuxtLink :to="`/event/${props.eventData.id}`">
-			<div
-				:class="[
-					'card__image-container',
-					{ 'card__image-container--background': !eventData.image }
-				]"
-			>
-				<span class="card__price">
-					{{ getPrice(eventData) }}
-				</span>
-				<img
-					v-if="eventData.image"
-					:alt="$t('home.events.image_alt')"
-					class="card__image"
-					:src="getEventImage(props.eventData)"
-					width="375"
-					height="176"
-				/>
-			</div>
-
-			<div class="card-description">
-				<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
-				<p
-					v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
-					class="card-description__author"
-				>
-					Peredelano
-				</p>
-				<h2 class="card-description__title">
-					{{ props.eventData.title }}
-				</h2>
-				<p class="card-description__datetime">
-					{{ convertToLocaleString(props.eventData.date) }}
-					({{ props.eventData.timezone?.timezoneOffset }}
-					{{ props.eventData.timezone?.timezoneName }})
-				</p>
-			</div>
-		</NuxtLink>
-
-		<!--    отдельный линк, т.к. нельзя ссылку класть в ссылку, а если делать другим типом контейнера и переходить по @click.prevent, отрабатывает некорректно и местами багует-->
-		<NuxtLink
-			:to="templateURL"
-			target="_blank"
-			class="card-link card-link__geolink"
+	<NuxtLink
+		class="card"
+		:to="`/event/${eventData.id}`"
+		:itemprop="SeoItempropGlobalEnum.URL"
+	>
+		<div
+			:class="[
+				'card__image-container',
+				{ 'card__image-container--background': !eventData.image }
+			]"
+			:itemprop="SeoItempropGlobalEnum.IMAGE"
 		>
-			{{ props.eventData.location.country }}, {{ props.eventData.location.city }}
-		</NuxtLink>
-	</div>
+			<img
+				v-if="eventData.image"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
+				:alt="$t('home.events.image_alt')"
+				class="card__image"
+				:src="getEventImage(eventData)"
+				width="375"
+				height="176"
+			/>
+		</div>
+
+		<div class="card-description">
+			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
+			<p
+				v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
+				class="card-description__author"
+				:itemprop="SeoItempropEventEnum.ORGANIZER"
+			>
+				Peredelano
+			</p>
+			<CommonAddress
+				class="card-description__geo"
+				:location="eventData.location"
+				with-pin
+			/>
+			<h2
+				class="card-description__title"
+				:itemprop="SeoItempropEventEnum.NAME"
+			>
+				{{ eventData.title }}
+			</h2>
+			<p
+				class="card-description__datetime"
+				:itemprop="SeoItempropEventEnum.START_DATE"
+			>
+				{{ convertToLocaleString(eventData.date) }}
+				<span
+					v-if="eventData.timezone"
+					class="card-description__datetime--timezone"
+				>
+					({{ eventData.timezone?.timezoneOffset }},
+					{{ eventData.timezone?.timezoneName }})
+				</span>
+			</p>
+			<CommonTag
+				:price="eventData.price"
+			/>
+		</div>
+	</NuxtLink>
 </template>
 
 <style scoped lang="less">
 .card {
+	display: block;
 	width: 100%;
-	min-height: 287px;
 	position: relative;
-	margin-bottom: 44px;
+	padding-bottom: 44px;
 
 	&__image-container {
 		display: flex;
 		width: 100%;
-		height: 176px;
+		height: 250px;
 		background-color: var(--color-input-field);
 		background-size: cover;
 		margin-bottom: 12px;
@@ -87,24 +100,6 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 		max-width: 100%;
 		height: 100%;
 		object-fit: cover;
-	}
-
-	&__price {
-		min-width: 50px;
-		position: absolute;
-		left: 16px;
-		top: 12px;
-
-		font-size: var(--font-size-XS);
-		line-height: 16px;
-		text-align: center;
-
-		border-radius: 16px;
-		color: var(--color-white);
-		background-color: var(--color-accent-green-main);
-
-		padding: 6px 10px;
-		z-index: 1;
 	}
 
 	.card-description {
@@ -133,30 +128,24 @@ const templateURL = `https://www.google.com/maps/place/${props.eventData?.locati
 			font-size: var(--font-size-L);
 			font-weight: var(--font-weight-bold);
 			line-height: 24px;
-			margin-bottom: var(--space-related-items);
+			margin-bottom: 12px;
 		}
 
 		&__datetime {
-			font-size: var(--font-size-XS);
 			font-weight: var(--font-weight-bold);
-			line-height: 16px;
-			color: var(--color-text-secondary);
-			margin-bottom: var(--space-related-items);
+			font-size: var(--font-size-S);
+			line-height: 20px;
+			margin-bottom: 11px;
+
+			&--timezone {
+				font-size: var(--font-size-XS);
+				line-height: 16px;
+				color: var(--color-text-secondary);
+			}
 		}
-	}
 
-	.card-link {
-		display: block;
-		width: max-content;
-		padding-left: 16px;
-		padding-right: 16px;
-
-		&__geolink {
-			width: max-content;
-			font-size: var(--font-size-XS);
-			line-height: 16px;
-			text-decoration-line: underline;
-			color: #5c9ad2;
+		&__geo {
+			margin-bottom: 12px;
 		}
 	}
 }

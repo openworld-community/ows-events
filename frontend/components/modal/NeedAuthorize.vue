@@ -19,13 +19,13 @@ const props = defineProps<Props>();
 		<div class="modal">
 			<div class="modal-card__head">
 				<p class="modal-card__title">
-					{{ $t('component.need_authorize_modal.title') }}
+					{{ $t('modal.need_authorize_modal.title') }}
 				</p>
 			</div>
 			<div class="modal-card__foot">
 				<CommonButton
 					button-kind="success"
-					:button-text="$t('component.need_authorize_modal.button.close')"
+					:button-text="$t('modal.need_authorize_modal.button.close')"
 					@click="props.closeNeedAuthorizeModal"
 				/>
 			</div>
@@ -38,7 +38,7 @@ const props = defineProps<Props>();
 	//TODO: пока верстка только мобилки
 	max-width: 350px;
 	overflow: hidden;
-	border-radius: 10px;
+	border-radius: 6px;
 	margin: 40vh auto auto;
 }
 

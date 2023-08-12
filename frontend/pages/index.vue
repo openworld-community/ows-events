@@ -3,10 +3,15 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
+import { SeoItemTypeEnum } from '../constants/enums/seo';
 
-const { $i18n } = useNuxtApp();
-useHead({ titleTemplate: `%s / ${$i18n.t('meta.home.title')}` });
+const { t } = useI18n();
+
 definePageMeta({ name: RouteNameEnum.HOME });
+
+getMeta({
+	title: t('meta.title')
+});
 
 const {
 	open: openEventModal,
@@ -49,6 +54,7 @@ const now = Date.now();
 
 <template>
 	<div class="main-page">
+		<h1 class="visually-hidden">{{ $t('home.hidden_title') }}</h1>
 		<HomeSearch
 			v-model:search="eventsQuery.searchLine"
 			class="main-page__search"
@@ -56,9 +62,9 @@ const now = Date.now();
 		<div class="main-page__location">
 			<HomeUserLocation />
 		</div>
-		<h1 class="main-page__title">
+		<h2 class="main-page__title">
 			{{ $t('home.title') }}
-		</h1>
+		</h2>
 		<HomeFilter
 			v-model:country="eventsQuery.country"
 			v-model:city="eventsQuery.city"
@@ -69,6 +75,8 @@ const now = Date.now();
 			<li
 				v-for="event in posterEvents"
 				:key="event.id"
+				itemscope
+				:itemtype="SeoItemTypeEnum.EVENT"
 			>
 				<HomeEventPreviewCard
 					:class="{ expired: event.date < now }"

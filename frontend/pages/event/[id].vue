@@ -3,13 +3,20 @@ import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RouteNameEnum } from '@/constants/enums/route';
 import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
-import type { UserInfo } from '@/../common/types/user';
+import type { TGUserInfo } from '@/../common/types/user';
+
+import { trimString } from '../../utils/trimString';
+import {
+	SeoItempropEventEnum,
+	SeoItempropGlobalEnum,
+	SeoItemTypeEnum
+} from '../../constants/enums/seo';
 
 definePageMeta({ name: RouteNameEnum.EVENT });
 const route = useRoute();
 const id = getFirstParam(route.params.id);
 
-const user = useCookie<UserInfo | null>('user');
+const user = useCookie<TGUserInfo | null>('user');
 
 const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ data: { id } });
 
@@ -18,11 +25,21 @@ const posterEvent = computed(() => {
 	return data.value;
 });
 
+const eventImage = computed(() => {
+	return getEventImage(posterEvent.value);
+});
+
+getMeta({
+	title: posterEvent.value?.location
+		? `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}`
+		: posterEvent.value?.title,
+	description: trimString(posterEvent.value?.description ?? '', 120),
+	image: eventImage.value
+});
+
 const isEditable = computed(() => {
 	return posterEvent.value ? posterEvent.value.date > Date.now() : false;
 });
-
-useHead({ titleTemplate: `%s / ${posterEvent.value?.title}` });
 
 const redirect = () => {
 	useTrackEvent('redirect');
@@ -86,39 +103,47 @@ patchDeleteEventModal({
 	<div
 		v-if="posterEvent"
 		class="event"
+		itemscope
+		:itemtype="SeoItemTypeEnum.EVENT"
 	>
 		<div
-			:class="[
-				'event-image',
-				'event-image__container',
-				{ 'event-image__container--background': !posterEvent.image }
-			]"
+			:class="['event-image', 'event-image__container',{ 'event-image__container--background': !posterEvent.image }]"
+			:itemprop="SeoItempropGlobalEnum.IMAGE"
 		>
-			<span class="event-image__price">
-				{{ getPrice(posterEvent) }}
-			</span>
 			<img
 				v-if="posterEvent.image"
-				:src="getEventImage(posterEvent)"
+				:src="eventImage"
 				:alt="$t('event.image.event')"
 				class="event-image__image"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
 		</div>
 
 		<div class="event event-info">
+			<CommonTag
+				:class-name="'event-info__price'"
+				:price="posterEvent.price"
+			/>
 			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
 			<p
 				v-if="posterEvent.title.toLowerCase().includes('peredelanoconf')"
 				class="event-info__author"
+				:itemprop="SeoItempropEventEnum.ORGANIZER"
 			>
 				Peredelano
 			</p>
-			<h2 class="event-info__title">
+			<h1
+				class="event-info__title"
+				:itemprop="SeoItempropEventEnum.NAME"
+			>
 				{{ posterEvent.title }}
-			</h2>
+			</h1>
 
 			<p class="event-info__datetime">
-				<span v-if="posterEvent.durationInSeconds">
+				<span
+					v-if="posterEvent.durationInSeconds"
+					:itemprop="SeoItempropEventEnum.DURATION"
+				>
 					{{ convertToLocaleString(posterEvent.date) }}
 					-
 					{{
@@ -127,22 +152,25 @@ patchDeleteEventModal({
 						)
 					}}
 				</span>
-				<span v-else>
+				<span
+					v-else
+					:itemprop="SeoItempropEventEnum.DURATION"
+				>
 					{{ convertToLocaleString(posterEvent.date ?? Date.now()) }}
 				</span>
 				<br />
 				({{ posterEvent.timezone?.timezoneOffset }}
 				{{ posterEvent.timezone?.timezoneName }})
 			</p>
-			<!-- TODO пока заглушка, ведущая на указанный город в гуглокарты, потом нужно будет продумать добавление точного адреса -->
-			<NuxtLink
+			<CommonAddress
+				:location="posterEvent.location"
 				class="event-info__geolink"
-				:to="`https://www.google.com/maps/place/${posterEvent.location.city}+${posterEvent.location.country}`"
-				target="_blank"
+				is-link
+			/>
+			<p
+				class="event-info__description"
+				:itemprop="SeoItempropEventEnum.DESCRIPTION"
 			>
-				{{ posterEvent.location.country }}, {{ posterEvent.location.city }}
-			</NuxtLink>
-			<p class="event-info__description">
 				{{ posterEvent.description }}
 			</p>
 		</div>
@@ -204,14 +232,14 @@ patchDeleteEventModal({
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
-	max-height: calc(100vh - var(--header-height));
+	//max-height: calc(100vh - var(--header-height));
 	padding-left: var(--padding-side);
 	padding-right: var(--padding-side);
 
-	// Для адаптивной height на iOs
-	@supports (-webkit-touch-callout: none) {
-		max-height: -webkit-fill-available;
-	}
+	//// Для адаптивной height на iOs
+	//@supports (-webkit-touch-callout: none) {
+	//	max-height: -webkit-fill-available;
+	//}
 
 	&-info {
 		display: flex;
@@ -219,6 +247,10 @@ patchDeleteEventModal({
 		min-height: 250px;
 		flex-direction: column;
 		padding-inline: 0;
+
+		&__price {
+			margin-bottom: 12px;
+		}
 
 		&__author {
 			//TODO: пока верстка только мобилки
@@ -251,11 +283,7 @@ patchDeleteEventModal({
 		}
 
 		&__geolink {
-			font-size: var(--font-size-XS);
-			line-height: 16px;
-			text-decoration-line: underline;
-			color: #5c9ad2;
-			margin-bottom: var(--space-subsections);
+			margin-bottom: var(--space-unrelated-items);
 		}
 
 		&__description {
@@ -305,14 +333,15 @@ patchDeleteEventModal({
 	&__container {
 		display: flex;
 		width: 100%;
-		min-height: 232px;
+		min-height: 250px;
 		position: relative;
 		line-height: 0;
 		background-color: var(--color-input-field);
 		margin-bottom: 12px;
+		border-radius: 8px;
 
 		&--background {
-			background: url('@/assets/img/event-card@2x.png') center center no-repeat;
+			background: url('@/assets/img/event-preview@2x.png') center center no-repeat;
 			background-size: cover;
 		}
 	}
@@ -321,30 +350,12 @@ patchDeleteEventModal({
 		width: 100%;
 		min-width: 100%;
 		max-width: 100%;
-		height: 232px;
+		height: 250px;
 		position: absolute;
 		top: 0;
 		left: 0;
 		object-fit: cover;
-		border-radius: 4px;
-	}
-
-	&__price {
-		min-width: 50px;
-		position: absolute;
-		left: 12px;
-		top: 12px;
-
-		font-size: var(--font-size-XS);
-		line-height: 16px;
-		text-align: center;
-
-		border-radius: 16px;
-		color: var(--color-white);
-		background-color: var(--color-accent-green-main);
-
-		padding: 6px 10px;
-		z-index: 1;
+		border-radius: 8px;
 	}
 }
 </style>

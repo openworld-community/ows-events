@@ -98,7 +98,6 @@ const onRemove = () => {
 			:required="required"
 			:min="type === 'number' || type === 'date' || type === 'time' ? minValue : undefined"
 			@input="updateValue"
-			@change="updateValue"
 		/>
 
 		<CommonIcon
@@ -115,10 +114,10 @@ const onRemove = () => {
 		/>
 
 		<CommonButton
-			v-else-if="modelValue && !disabled"
+			v-else-if="(modelValue || modelValue === 0) && !disabled"
 			class="input__button input__button--clear"
 			is-icon
-			icon-name="delete"
+			icon-name="close"
 			:alt="$t('global.button.delete')"
 			@click="onRemove"
 		/>

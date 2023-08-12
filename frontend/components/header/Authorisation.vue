@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { UserInfo } from '../../../common/types/user';
+import type { TGUserInfo } from '../../../common/types/user';
 import ModalAuthorisation from '@/components/modal/Authorisation.vue';
 import { useModal } from 'vue-final-modal';
 
@@ -7,7 +7,7 @@ const tokenCookie = useCookie<string | null>('token');
 const isAuthorized = computed(() => !!tokenCookie.value);
 
 const deauthorize = () => {
-	useCookie<UserInfo | null>('user').value = null;
+	useCookie<TGUserInfo | null>('user').value = null;
 	useCookie('token').value = null;
 	setTimeout(() => close(), 300);
 	updateModalData();
@@ -29,11 +29,7 @@ updateModalData();
 <template>
 	<HeaderNavigationNavItem
 		:text="
-			$t(
-				isAuthorized
-					? 'component.header.authorization.deauthorize'
-					: 'component.header.authorization.authorize'
-			)
+			$t(isAuthorized ? 'header.authorization.deauthorize' : 'header.authorization.authorize')
 		"
 		:icon-name="isAuthorized ? 'logout' : 'login'"
 		:item-kind="isAuthorized ? 'warning' : ''"

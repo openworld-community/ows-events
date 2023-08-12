@@ -1,16 +1,25 @@
-import type { EventOnPoster } from '../../common/types';
+// Получает аббривеатуру валюты (если существует)
+export const formatCurrency = (currency: string) => {
+    const formatter = new Intl.NumberFormat('ru', {
+        style: 'currency',
+        currency: currency,
+        currencyDisplay: 'narrowSymbol',
+        minimumFractionDigits: 0
+    });
+    // эта стандартная функция работает только если передать в нее число (цену), а нам нужен только значок валюты
+    // поэтому передаем в функцию просто единицу, и далее обрезаем ее
+    return formatter.format(1).slice(1);
+};
 
-export const getPrice = (event: EventOnPoster) => {
-	const { $i18n } = useNuxtApp();
-	if (event.price) {
-		//TODO: временное решение для MVP, далее обсудить с командой парсинга финальный формат
-		if (event.price.includes('RSD') || event.price.includes('EUR') || event.price.includes('€'))
-			return event.price;
-		else if (event.price === '0') {
-			return $i18n.t('event.price.free');
-		}
-		return `${event.price} RSD`;
-	}
-	//not found - только если при парсинге не была определена цена
-	return $i18n.t('event.price.not_found');
+// Форматирует значение цены в зависимости от значения или интервала:
+export const formatPrice = (price: any) => {
+    const {t} = useI18n()
+    // если фиксированная цена, возвращает price currency:
+    if(price.value) return `${price.value} ${formatCurrency(price.currency)}`
+    // если интервал, возвращает min-max currency:
+    if (price.minValue && price.maxValue) return `${price.minValue}-${price.maxValue} ${formatCurrency(price.currency)}`
+    // если интервал от, возвращает "От price currency"
+    if (price.minValue) return `${t('event.price.from')} ${price.minValue} ${formatCurrency(price.currency)}`
+    // если интервал до, возвращает "До price currency"
+    if (price.maxValue) return `${t('event.price.to')} ${price.maxValue} ${formatCurrency(price.currency)}`
 };

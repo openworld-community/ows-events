@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import type { UserLocation } from '../../common/types/location';
+import { LOCATION_API_URL } from '../constants/url';
 
 export type City = string;
 export type Country = string;
@@ -9,7 +10,7 @@ type LocationStore = {
 	_countries: Set<Country>;
 	_usedCountries: Set<Country>;
 	_citiesByCountry: Map<Country, City[]>;
-	_usedСitiesByCountry: Map<Country, City[]>;
+	_usedCitiesByCountry: Map<Country, City[]>;
 	_currencies: Set<Currency>;
 	userLocation: UserLocation;
 };
@@ -22,7 +23,7 @@ export const useLocationStore = defineStore('location', {
 			_countries: new Set(),
 			_usedCountries: new Set(),
 			_citiesByCountry: new Map(),
-			_usedСitiesByCountry: new Map(),
+			_usedCitiesByCountry: new Map(),
 			_currencies: new Set(),
 			userLocation: {}
 		};
@@ -86,7 +87,7 @@ export const useLocationStore = defineStore('location', {
 		}
 	},
 	actions: {
-		async getUserLocation(): LocationStore['userLocation'] {
+		async getUserLocation() {
 			await (async () => {
 				if (process.server) return;
 				navigator.geolocation.getCurrentPosition(
@@ -185,7 +186,7 @@ export const useLocationStore = defineStore('location', {
 		getUsedCitiesByCountry(country: Country) {
 			(async () => {
 				if (process.server) return;
-				if (!country || this._usedСitiesByCountry.get(country)) return;
+				if (!country || this._usedCitiesByCountry.get(country)) return;
 
 				// forces Nuxt to await function calls if there are multiple of them(avoid duplication of requests)
 				await new Promise((r) => r(0));
@@ -195,10 +196,10 @@ export const useLocationStore = defineStore('location', {
 				});
 
 				if (!data.value) return;
-				this._usedСitiesByCountry.set(country, data.value);
+				this._usedCitiesByCountry.set(country, data.value);
 			})();
 
-			return this._usedСitiesByCountry.get(country) ?? [];
+			return this._usedCitiesByCountry.get(country) ?? [];
 		}
 	}
 });

@@ -3,7 +3,6 @@ import { useLocationStore } from '@/stores/location.store';
 
 const locationStore = useLocationStore();
 locationStore.getUserLocation();
-,
 </script>
 
 <template>

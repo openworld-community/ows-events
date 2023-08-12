@@ -95,10 +95,7 @@ export const useLocationStore = defineStore('location', {
 					async (position) => {
 						try {
 							const { data } = await useFetch(
-								'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=' +
-									position.coords.latitude +
-									'&longitude=' +
-									position.coords.longitude,
+								`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}`,
 								{
 									lazy: true,
 									server: false,

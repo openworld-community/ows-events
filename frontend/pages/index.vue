@@ -13,6 +13,8 @@ getMeta({
 	title: t('meta.title')
 });
 
+const isAuthorized = inject<Ref<boolean>>('isAuthorized')
+
 const {
 	open: openEventModal,
 	close: closeEventModal,
@@ -43,7 +45,7 @@ const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 });
 
 const onButtonClick = () => {
-	if (useCookie('token').value) {
+	if (isAuthorized?.value) {
 		openEventModal();
 	} else {
 		openNeedAuthorizeModal();

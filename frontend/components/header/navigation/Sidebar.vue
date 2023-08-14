@@ -4,6 +4,8 @@ import { SUPPORT_TG_URL } from '../../../constants/url';
 import {SeoItemTypeEnum} from '../../../constants/enums/seo';
 
 const emit = defineEmits(['close']);
+
+const isAuthorized = inject<Ref<boolean>>('isAuthorized')
 </script>
 
 <template>
@@ -13,14 +15,9 @@ const emit = defineEmits(['close']);
 		itemscope
 		:itemtype="SeoItemTypeEnum.NAV"
 	>
-		<HeaderAuthorisation
-			class="navigation__item"
-			@click.capture="emit('close')"
-		/>
-
 		<HeaderNavigationNavItem
 			:link-to="{ name: RouteNameEnum.USER_PAGE }"
-			:text="$t('component.header.user_page')"
+			:text="isAuthorized ? $t('header.user') : $t('header.authorize')"
 			icon-name="user"
 			@click="emit('close')"
 		/>

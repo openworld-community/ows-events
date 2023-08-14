@@ -47,5 +47,18 @@ export const modal = {
 			login: 'Войти',
 			logout: 'Выйти'
 		}
+	},
+	edit_profile: {
+		title: 'Редактирование',
+		fields: {
+			name: 'Имя',
+			surname: 'Фамилия',
+			organizer: 'Организатор',
+			email: 'E-mail',
+			phone: 'Номер телефона',
+			name_placeholder: 'Как к Вам обращаться?',
+			surname_placeholder: 'Введите вашу фамилию',
+			organizer_placeholder: 'Имя организатора мероприятия'
+		}
 	}
 };

@@ -16,10 +16,14 @@ useHead({
 	}
 });
 
+const tokenCookie = useCookie('token');
+
 if (isDevelopmentMode) {
-	const tokenCookie = useCookie<string>('token');
 	tokenCookie.value ??= 'blablabla';
 }
+
+const isAuthorized = computed(() => !!tokenCookie.value);
+provide('isAuthorized', isAuthorized);
 </script>
 <template>
 	<HeaderCommon />

@@ -2,9 +2,10 @@
 import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import EditProfile from '@/components/modal/EditProfile.vue';
 import { TELEGRAM_AUTH_BOT_NAME, BASE_URL } from '../../frontend/constants/url';
+import type { TGUserInfo } from '../../common/types/user';
 
 const tokenCookie = useCookie<string | null>('token');
-const isAuthorized = computed(() => !!tokenCookie.value);
+const isAuthorized = inject<Ref<boolean>>('isAuthorized');
 
 export type ProfileInfo = {
 	nickname: string;
@@ -12,7 +13,7 @@ export type ProfileInfo = {
 	company: string;
 };
 
-const userData = ref({
+const userData = ref<ProfileInfo>({
 	nickname: '@Gosha',
 	name: 'Гоша',
 	company: 'EverParty'
@@ -34,71 +35,90 @@ patchEditProfileModal({
 
 const telegram = ref<HTMLElement | null>(null);
 
+const script = ref<HTMLScriptElement | null>(null);
+
+const addTGButton = () => {
+	telegram.value?.appendChild(script.value as Node);
+};
+
+const initTGButton = () => {
+	script.value = document.createElement('script');
+	script.value.async = true;
+	script.value.src = 'https://telegram.org/js/telegram-widget.js?22';
+
+	script.value.setAttribute('data-size', 'large');
+	script.value.setAttribute('data-userpic', 'false');
+	script.value.setAttribute('data-telegram-login', TELEGRAM_AUTH_BOT_NAME);
+	script.value.setAttribute('data-request-access', 'write');
+	script.value.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
+
+	addTGButton();
+};
+
+watch(() => isAuthorized?.value, (e) => {
+	if (!e) {
+		nextTick(() => {
+			addTGButton();
+		});
+	}
+});
+
 onMounted(() => {
-	const script = document.createElement('script');
-	script.async = true;
-	script.src = 'https://telegram.org/js/telegram-widget.js?22';
-
-	script.setAttribute('data-size', 'large');
-	script.setAttribute('data-userpic', 'false');
-	script.setAttribute('data-telegram-login', TELEGRAM_AUTH_BOT_NAME);
-	script.setAttribute('data-request-access', 'write');
-
-	script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
-	telegram.value?.appendChild(script);
+	initTGButton();
 });
 
 const logout = () => {
-	useCookie<ProfileInfo | null>('user').value = null;
-	useCookie('token').value = null;
-	setTimeout(() => close(), 300);
+	useCookie<TGUserInfo | null>('user').value = null;
+	tokenCookie.value = null;
 };
 </script>
 
 <template>
-	<section class="user-page">
-		<h2 class="user-page__title">
-			{{ isAuthorized ? $t('user.title_profile') : $t('user.title_unauthorized') }}
-		</h2>
+	<div class="user-page">
 		<template v-if="isAuthorized">
-			<div class="user-page__fieldset">
-				<div class="user-page__field">
-					<p class="user-page__field-name">{{ $t('user.login') }}</p>
-					<p class="user-page__field-value">{{ userData.nickname }}</p>
-				</div>
-				<div class="user-page__field">
-					<p class="user-page__field-name">{{ $t('user.name') }}</p>
-					<p class="user-page__field-value">{{ userData.name }}</p>
-				</div>
-				<div class="user-page__field">
-					<p class="user-page__field-name">{{ $t('user.affiliation') }}</p>
-					<p class="user-page__field-value">{{ userData.company }}</p>
-				</div>
-			</div>
-			<div class="user-page__actions">
+			<div class="user-page__info user-info">
+				<p
+					v-if="userData.name"
+					class="user-info__name"
+				>
+					{{ userData.name ? userData.name : $t('user.user') }}
+				</p>
+				<p class="user-info__nickname">{{ userData.nickname }}</p>
+				<p
+					v-if="userData.company"
+					class="user-info__organizer"
+				>
+					{{ userData.company }}
+				</p>
 				<CommonButton
-					class="user-page__form-button user-page__form-button--edit"
+					class="info__edit-button"
 					button-kind="ordinary"
-					:button-text="$t('user.buttons.edit')"
+					:button-text="$t('global.button.edit')"
 					icon-name="edit"
 					@click="openEditProfileModal"
 				/>
+			</div>
+			<div class="user-page__actions">
 				<CommonButton
 					class="user-page__form-button"
 					button-kind="warning"
-					:button-text="$t('user.buttons.logout')"
+					:button-text="$t('global.button.logout')"
 					icon-name="logout"
 					@click="logout()"
 				/>
 			</div>
 		</template>
-		<div
-			v-else
-			ref="telegram"
-			:class="'user-page__telegram-button'"
-			:aria-label="$t('user.buttons.login')"
-		/>
-	</section>
+		<template v-else>
+			<h2 class="user-page__title">
+				{{ $t('user.title_unauthorized') }}
+			</h2>
+			<div
+				ref="telegram"
+				:class="'user-page__telegram-button'"
+				:aria-label="$t('user.login')"
+			/>
+		</template>
+	</div>
 </template>
 
 <style scoped lang="less">
@@ -118,46 +138,10 @@ const logout = () => {
 		max-height: -webkit-fill-available;
 	}
 
-	&__fieldset {
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-		padding-inline: 0;
-		margin-bottom: var(--space-sections);
-		overflow-y: auto;
-	}
-
-	&__field {
-		width: 100%;
-		min-height: 60px;
-		border-color: var(--color-input-field);
-		border-radius: 12px;
-		box-shadow: var(--shadow-sidebar);
-		padding: 8px 12px;
-		border: solid 0.5px;
-		border-color: var(--color-input-field);
-		//box-shadow: 0px 1px 6px 0px rgba(78, 78, 78, 0.15);
-	}
-
 	&__title {
 		font-size: var(--font-size-L);
 		font-weight: var(--font-weight-regular);
 		margin-bottom: var(--space-unrelated-items);
-	}
-
-	&__field p {
-		margin: 0;
-		padding: 0;
-	}
-
-	&__field:not(:last-child) {
-		margin-bottom: var(--space-related-items);
-	}
-
-	&__field-name {
-		color: var(--color-text-secondary);
-		font-size: var(--font-size-XS);
-		margin-bottom: var(--space-related-items);
 	}
 
 	&__actions {
@@ -182,6 +166,19 @@ const logout = () => {
 		justify-content: center;
 		align-items: center;
 		padding-top: 50%;
+	}
+}
+
+.user-info {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	padding-inline: 0;
+	margin-bottom: var(--space-sections);
+	overflow-y: auto;
+
+	&__name {
+		font-size: var(--font-size-ML);
 	}
 }
 </style>

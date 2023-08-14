@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { RouteNameEnum } from '../../constants/enums/route';
+
 type Props = {
 	closeNeedAuthorizeModal: () => void;
 };
@@ -24,9 +26,14 @@ const props = defineProps<Props>();
 			</div>
 			<div class="modal-card__foot">
 				<CommonButton
-					button-kind="success"
-					:button-text="$t('modal.need_authorize_modal.button.close')"
+					button-kind="ordinary"
+					:button-text="$t('global.button.close')"
 					@click="props.closeNeedAuthorizeModal"
+				/>
+				<CommonButton
+					button-kind="success"
+					:link="RouteNameEnum.USER_PAGE"
+					:button-text="$t('global.button.authorize')"
 				/>
 			</div>
 		</div>
@@ -54,6 +61,10 @@ const props = defineProps<Props>();
 
 	&__foot {
 		justify-content: center;
+
+		& > button {
+			margin-right: var(--space-unrelated-items);
+		}
 	}
 }
 </style>

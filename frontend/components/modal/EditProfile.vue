@@ -36,7 +36,7 @@ const updateUserData = () => {
 		<div class="modal">
 			<header class="modal-card__head">
 				<h2 class="modal-card__title">
-					{{ $t('component.edit_profile_modal.title') }}
+					{{ $t('modal.edit_profile.title') }}
 				</h2>
 				<CommonButton
 					class="modal-card__button"
@@ -50,25 +50,21 @@ const updateUserData = () => {
 				class="modal-card__body body"
 				@submit.prevent="() => void 0"
 			>
-				<ModalUiModalSection :label="$t('component.edit_profile_modal.fields.name')">
+				<ModalUiModalSection :label="$t('modal.edit_profile.fields.name')">
 					<template #child>
 						<CommonUiBaseInput
 							v-model="userData.name"
 							name="username"
-							:placeholder="
-								$t('component.edit_profile_modal.fields.name_placeholder')
-							"
+							:placeholder="$t('modal.edit_profile.fields.name_placeholder')"
 						/>
 					</template>
 				</ModalUiModalSection>
-				<ModalUiModalSection :label="$t('component.edit_profile_modal.fields.organizer')">
+				<ModalUiModalSection :label="$t('modal.edit_profile.fields.organizer')">
 					<template #child>
 						<CommonUiBaseInput
 							v-model="userData.company"
 							name="organizer"
-							:placeholder="
-								$t('component.edit_profile_modal.fields.organizer_placeholder')
-							"
+							:placeholder="$t('modal.edit_profile.fields.organizer_placeholder')"
 						/>
 					</template>
 				</ModalUiModalSection>
@@ -77,13 +73,13 @@ const updateUserData = () => {
 				<CommonButton
 					class="modal-card__button modal-card__button--edit"
 					button-kind="ordinary"
-					:button-text="$t('component.edit_profile_modal.button.cancel')"
+					:button-text="$t('global.button.cancel')"
 					@click="props.closeEditProfileModal"
 				/>
 				<CommonButton
 					class="modal-card__button modal-card__button--save"
 					button-kind="success"
-					:button-text="$t('component.edit_profile_modal.button.submit')"
+					:button-text="$t('global.button.save')"
 					:is-disabled="!checkProfileFilling"
 					@click="updateUserData"
 				/>

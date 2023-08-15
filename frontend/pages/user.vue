@@ -3,6 +3,7 @@ import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import EditProfile from '@/components/modal/EditProfile.vue';
 import { TELEGRAM_AUTH_BOT_NAME, BASE_URL } from '../../frontend/constants/url';
 import type { TGUserInfo } from '../../common/types/user';
+import { apiRouter } from '../composables/useApiRouter';
 
 const tokenCookie = useCookie<string | null>('token');
 const isAuthorized = inject<Ref<boolean>>('isAuthorized');
@@ -13,11 +14,17 @@ export type ProfileInfo = {
 	company: string;
 };
 
-const userData = ref<ProfileInfo>({
-	nickname: '@Gosha',
-	name: 'Гоша',
-	company: 'EverParty'
-});
+const userData = ref({});
+
+if (tokenCookie.value) {
+	userData.value = await apiRouter.user.getUserInfo.useQuery({ data: tokenCookie.value });
+}
+//
+// 	ref<ProfileInfo>({
+// 	nickname: '@Gosha',
+// 	name: 'Гоша',
+// 	company: 'EverParty'
+// });
 
 const {
 	open: openEditProfileModal,
@@ -55,13 +62,16 @@ const initTGButton = () => {
 	addTGButton();
 };
 
-watch(() => isAuthorized?.value, (e) => {
-	if (!e) {
-		nextTick(() => {
-			addTGButton();
-		});
+watch(
+	() => isAuthorized?.value,
+	(e) => {
+		if (!e) {
+			nextTick(() => {
+				addTGButton();
+			});
+		}
 	}
-});
+);
 
 onMounted(() => {
 	initTGButton();
@@ -77,19 +87,21 @@ const logout = () => {
 	<div class="user-page">
 		<template v-if="isAuthorized">
 			<div class="user-page__info user-info">
-				<p
-					v-if="userData.name"
-					class="user-info__name"
-				>
-					{{ userData.name ? userData.name : $t('user.user') }}
-				</p>
-				<p class="user-info__nickname">{{ userData.nickname }}</p>
-				<p
-					v-if="userData.company"
-					class="user-info__organizer"
-				>
-					{{ userData.company }}
-				</p>
+				<div class="user-info__wrapper">
+					<p
+						v-if="userData.name"
+						class="user-info__name"
+					>
+						{{ userData.name ? userData.name : $t('user.user') }}
+					</p>
+					<p class="user-info__nickname">{{ userData.nickname }}</p>
+					<p
+						v-if="userData.company"
+						class="user-info__organizer"
+					>
+						{{ userData.company }}
+					</p>
+				</div>
 				<CommonButton
 					class="info__edit-button"
 					button-kind="ordinary"
@@ -171,14 +183,35 @@ const logout = () => {
 
 .user-info {
 	display: flex;
-	flex-direction: column;
 	width: 100%;
+	flex-direction: column;
+	align-items: center;
 	padding-inline: 0;
 	margin-bottom: var(--space-sections);
 	overflow-y: auto;
 
+	&__wrapper {
+		display: flex;
+		width: 100%;
+		flex-direction: column;
+		align-items: center;
+	}
+
 	&__name {
 		font-size: var(--font-size-ML);
+		margin-bottom: var(--space-inner);
+	}
+
+	&__nickname {
+		font-size: var(--font-size-S);
+		line-height: 20px;
+		color: var(--color-text-secondary);
+		margin-bottom: var(--space-inner);
+	}
+
+	&__organizer {
+		font-size: var(--font-size-S);
+		line-height: 20px;
 	}
 }
 </style>

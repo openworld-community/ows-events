@@ -92,7 +92,7 @@ const updateUserData = () => {
 .modal {
 	max-width: 350px;
 	overflow: hidden;
-	border-radius: 10px;
+	border-radius: 6px;
 	margin: 20vh auto auto;
 }
 

@@ -18,9 +18,9 @@ useHead({
 
 const tokenCookie = useCookie('token');
 
-if (isDevelopmentMode) {
-	tokenCookie.value ??= 'blablabla';
-}
+// if (isDevelopmentMode) {
+// 	tokenCookie.value ??= 'blablabla';
+// }
 
 const isAuthorized = computed(() => !!tokenCookie.value);
 provide('isAuthorized', isAuthorized);

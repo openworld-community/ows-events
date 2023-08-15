@@ -51,7 +51,6 @@ watch(
 	() => props.hasNextPage,
 	() => {
 		hasNextPage.value = props.hasNextPage;
-		console.log(hasNextPage.value);
 	}
 );
 

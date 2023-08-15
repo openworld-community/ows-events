@@ -1,4 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
+import mongooseAggregatePaginate from 'mongoose-aggregate-paginate-v2';
 import { EventOnPoster } from '@common/types/event';
 
 export type IEventMeta = {
@@ -110,4 +112,10 @@ schema.index({
 	'location.country': 'text'
 });
 
-export const EventModel = mongoose.model<IEventDocument>('Event', schema);
+schema.plugin(mongoosePaginate);
+schema.plugin(mongooseAggregatePaginate);
+
+export const EventModel = mongoose.model<
+	IEventDocument,
+	mongoose.AggregatePaginateModel<IEventDocument>
+>('Event', schema);

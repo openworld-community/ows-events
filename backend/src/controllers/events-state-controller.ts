@@ -1,7 +1,8 @@
 import { v4 as uuid } from 'uuid';
-import { FilterQuery } from 'mongoose';
+import mongoose, { FilterQuery } from 'mongoose';
 import { EventOnPoster } from '@common/types/event';
-import { EventModel } from '../models/event.model';
+import { PaginationOptions } from '@common/types/utils';
+import { EventModel, IEventDocument } from '../models/event.model';
 import { imageController } from './image-controller';
 
 export type FindEventParams = {
@@ -130,6 +131,99 @@ class EventsStateController {
 		);
 
 		return event;
+	}
+
+	async getPaginatedEvents(
+		paginationOptions: PaginationOptions,
+		query?: FindEventParams | undefined
+	) {
+		const queryObject: FilterQuery<EventOnPoster> = {};
+		if (query?.searchLine) {
+			queryObject.$text = { $search: query.searchLine };
+		}
+		if (query?.country) {
+			queryObject['location.country'] = query?.country;
+		}
+		if (query?.city) {
+			queryObject['location.city'] = query?.city;
+		}
+		queryObject['meta.moderation.status'] = { $nin: ['declined', 'in-progress'] };
+
+		const aggregationPipeline = [
+			{
+				$match: queryObject
+			},
+			{
+				$group: {
+					_id: null,
+					future: {
+						$push: {
+							$cond: [
+								{
+									$gt: ['$date', Date.now()]
+								},
+								'$$ROOT',
+								'$$REMOVE'
+							]
+						}
+					},
+					past: {
+						$push: {
+							$cond: [
+								{
+									$lte: ['$date', Date.now()]
+								},
+								'$$ROOT',
+								'$$REMOVE'
+							]
+						}
+					}
+				}
+			},
+			{
+				$project: {
+					future: {
+						$sortArray: {
+							input: '$future',
+							sortBy: {
+								date: 1
+							}
+						}
+					},
+					past: {
+						$sortArray: {
+							input: '$past',
+							sortBy: {
+								date: -1
+							}
+						}
+					}
+				}
+			},
+			{
+				$project: {
+					data: {
+						$concatArrays: ['$future', '$past']
+					}
+				}
+			},
+			{
+				$unwind: {
+					path: '$data'
+				}
+			},
+			{
+				$replaceRoot: {
+					newRoot: '$data'
+				}
+			}
+		];
+
+		const eventsAggregation = EventModel.aggregate(aggregationPipeline);
+		const events: mongoose.AggregatePaginateResult<IEventDocument> =
+			await EventModel.aggregatePaginate(eventsAggregation, paginationOptions);
+
+		return events;
 	}
 }
 

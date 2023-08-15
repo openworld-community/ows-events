@@ -51,6 +51,7 @@ watch(
 	() => props.hasNextPage,
 	() => {
 		hasNextPage.value = props.hasNextPage;
+		console.log(hasNextPage.value);
 	}
 );
 
@@ -101,14 +102,14 @@ interface NestedEventOnPoster {
 
 const sizeDependenciesFormatter = (item: NestedEventOnPoster): Array<string> => {
 	return props.sizeDependencies.map((dependency: string) => {
-		let arr: string;
+		let str: string;
 		dependency.includes('.')
-			? (arr = dependency.split('.').reduce((obj: any, key: string) => obj[key], item))
-			: (arr = item[dependency]);
-		if (typeof arr === 'object') {
+			? (str = dependency.split('.').reduce((obj: any, key: string) => obj[key], item))
+			: (str = item[dependency]);
+		if (typeof str === 'object') {
 			throw new Error(`Property ${dependency} is an object and can't be converted to string`);
 		}
-		return arr;
+		return str;
 	});
 };
 </script>

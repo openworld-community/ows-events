@@ -3,7 +3,7 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
-import { maxRequests } from '@/constants/global';
+import { maxRequests, minItemCardSize, distanceToLoadEvents } from '@/constants/global';
 import { type EventOnPoster } from '../../common/types';
 import { useListStore } from '~/stores/list.store';
 
@@ -45,16 +45,14 @@ const debouncedEventsRequestQuery = refDebounced(
 
 const posterEvents: Ref<EventOnPoster[] | null> = ref(listStore.events);
 const requestLimit = ref(listStore.eventRequestLimit);
-// const hasMorePages = ref(listStore.hasMorePages);
 const hasMorePages = ref(true);
 const now = Date.now();
 
 watch(
-	[() => listStore.eventRequestLimit, () => listStore.events, () => listStore.hasMorePages],
+	[() => listStore.eventRequestLimit, () => listStore.events],
 	() => {
 		requestLimit.value = listStore.eventRequestLimit;
 		posterEvents.value = listStore.events;
-		// hasMorePages.value = listStore.hasMorePages;
 	}
 );
 
@@ -81,9 +79,8 @@ const loadPosterEvents = async () => {
 
 	if (data.value && data.value.docs) {
 		const { hasNextPage } = data.value;
-		hasMorePages.value = hasNextPage;
+		hasMorePages.value = hasNextPage
 		listStore.$patch({
-			// hasMorePages: hasNextPage,
 			events: data.value.docs
 		});
 		hasNextPage ? listStore.incrementRequestLimit(maxRequests) : null;
@@ -103,8 +100,8 @@ const onButtonClick = () => {
 	<div class="main-page">
 		<CommonScrollingPage
 			:items="posterEvents"
-			:min-item-size="336"
-			:distance="10"
+			:min-item-size="minItemCardSize"
+			:distance="distanceToLoadEvents"
 			:has-next-page="hasMorePages"
 			:size-dependencies="[
 				'description',

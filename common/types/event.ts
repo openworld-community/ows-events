@@ -19,6 +19,20 @@ export type EventOnPoster = {
     tags?: string[];
 };
 
+export type RequestEvent = {
+  docs: EventOnPoster[] | null; 
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  limit: number;
+  nextPage: number | null; 
+  offset: number;
+  page: number;
+  pagingCounter: number;
+  prevPage: number | null; 
+  totalDocs: number;
+  totalPages: number;
+}
+
 export type PostEventPayload = {
 	event: {
 		date: number;

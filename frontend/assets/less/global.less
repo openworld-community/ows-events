@@ -17,11 +17,12 @@ html {
 }
 
 body {
+  -webkit-overflow-scrolling: touch;
   width: 100%;
   min-width: var(--width-mobile);
   min-height: 100%;
-  //TODO: пока верстка только мобилки
-  max-width: 480px;
+  height: 100%;
+  max-width: 100%;
   display: flex;
   font-family: var(--font-family-main);
   font-size: var(--font-size-M);
@@ -29,8 +30,6 @@ body {
   font-weight: var(--font-weight-regular);
   color: var(--color-text);
   background-color: var(--background-color);
-  margin-left: auto;
-  margin-right: auto;
 }
 
 #__nuxt {

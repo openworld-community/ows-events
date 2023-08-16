@@ -41,6 +41,10 @@ const props = defineProps({
 	hasNextPage: {
 		type: Boolean as PropType<boolean>,
 		required: true
+	},
+	prerender: {
+		type: Number as PropType<number>,
+		required: true 
 	}
 });
 
@@ -124,6 +128,7 @@ const sizeDependenciesFormatter = (item: NestedEventOnPoster): Array<string> => 
 			:min-item-size="minItemSize"
 			:buffer="buffer"
 			:page-mode="isPageMode"
+			:prerender="prerender"
 			class="scroll-list__content"
 		>
 			<template #before>

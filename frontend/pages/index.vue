@@ -103,6 +103,7 @@ const onButtonClick = () => {
 			:min-item-size="minItemCardSize"
 			:distance="distanceToLoadEvents"
 			:has-next-page="hasMorePages"
+			:prerender="maxRequests"
 			:size-dependencies="[
 				'description',
 				'title',

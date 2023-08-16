@@ -1,6 +1,7 @@
 import type { UseFetchOptions } from 'nuxt/app';
 import { API_URL } from '~/constants/url';
 import type { ServerErrors } from '~/i18n/locales/ru/errors';
+import { SupportedLanguages } from '../../../common/const';
 
 type ApiRouter = {
 	[K in string]: ApiRouter | ReturnType<typeof defineQuery> | ReturnType<typeof defineMutation>;
@@ -144,6 +145,9 @@ export function useBackendFetch<T>(
 			? Object.assign(opts.headers, { Authorization: token })
 			: (opts.headers = { Authorization: token });
 	}
+	opts.headers
+		? Object.assign(opts.headers, { 'Accept-Language': SupportedLanguages.RUSSIAN })
+		: (opts.headers = { 'Accept-Language': SupportedLanguages.RUSSIAN });
 
 	if (opts.body) {
 		opts.method ??= 'POST';

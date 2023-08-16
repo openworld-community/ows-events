@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { EventOnPoster } from '@common/types';
-import { CommonErrorsEnum } from '../../../../../common/const';
+import { EventDbEntity } from '@common/types/event';
+import { CommonErrorsEnum, SupportedLanguages } from '../../../../../common/const';
 import { eventsStateController } from '../../../controllers/events-state-controller';
 import {
 	IAddEventHandler,
@@ -15,6 +16,7 @@ import { eventsValidator } from '../../../validators/event-validator';
 import { manualModerationController } from '../../../controllers/manual-moderation-controller';
 import { vars } from '../../../config/vars';
 import { EventModel } from '../../../models/event.model';
+import { delocalizeObject } from '../../../utils/localization/delocalizeObject';
 
 export const addEvent: IAddEventHandler = async (request) => {
 	const { event } = request.body;
@@ -48,15 +50,22 @@ export const addEvent: IAddEventHandler = async (request) => {
 	return { id: newPostId };
 };
 
-export const getEvents: IGetEventsHandler = async (): Promise<EventOnPoster[]> =>
-	(await eventsStateController.getEvents()).slice(0, 100);
+export const getEvents: IGetEventsHandler = async (request): Promise<EventOnPoster[]> => {
+	const language =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.RUSSIAN;
+	return (await eventsStateController.getEvents())
+		.slice(0, 100)
+		.map((event) => delocalizeObject(event, language));
+};
 
 export const getEvent: IGetEventHandler = async (request) => {
 	const eventId = request.params.id;
+	const language =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.RUSSIAN;
 	const event = await eventsStateController.getEvent(eventId);
 	if (!event) throw new Error(CommonErrorsEnum.EVENT_NOT_FOUND);
 
-	return event;
+	return delocalizeObject(event, language);
 };
 
 export const deleteEvent: IDeleteEventHandler = async (request) => {
@@ -97,6 +106,10 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 
 export const findEvents: IFindEventHandler = async (request) => {
 	const { searchLine, country, city } = request.body;
+	const language =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.RUSSIAN;
 
-	return (await eventsStateController.getEvents({ searchLine, country, city })).slice(0, 100);
+	const events = await eventsStateController.getEvents({ searchLine, country, city });
+	const localizedEvents = events.map((event) => delocalizeObject<EventDbEntity>(event, language));
+	return localizedEvents;
 };

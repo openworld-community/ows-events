@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import type { EventOnPoster } from '../../../common/types';
-import {
-	SeoItempropEventEnum,
-	SeoItempropGlobalEnum,
-} from '../../constants/enums/seo';
+import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
 
 defineProps<{ eventData: EventOnPoster }>();
 </script>
@@ -65,9 +62,7 @@ defineProps<{ eventData: EventOnPoster }>();
 					{{ eventData.timezone?.timezoneName }})
 				</span>
 			</p>
-			<CommonTag
-				:price="eventData.price"
-			/>
+			<CommonTag :price="eventData?.price" />
 		</div>
 	</NuxtLink>
 </template>

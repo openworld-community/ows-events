@@ -62,11 +62,13 @@ const closeSelect = () => {
 };
 
 const filteredList = computed(() =>
-	(Array.isArray(props.list) ? props.list : [...props.list]).filter(
-		(item) =>
+	(Array.isArray(props.list) ? props.list : [...props.list]).filter((item) => {
+		console.log(item);
+		return (
 			item.toLowerCase().startsWith(props.modelValue.toLowerCase()) &&
 			item !== props.modelValue
-	)
+		);
+	})
 );
 </script>
 

@@ -3,7 +3,7 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
-import { maxRequests, minItemCardSize, distanceToLoadEvents } from '@/constants/global';
+import { maxRequests, minItemCardSize, distanceToLoadEvents, pagesToLoad } from '@/constants/global';
 import { type EventOnPoster } from '../../common/types';
 import { useListStore } from '~/stores/list.store';
 
@@ -44,14 +44,14 @@ const debouncedEventsRequestQuery = refDebounced(
 );
 
 const posterEvents: Ref<EventOnPoster[] | null> = ref(listStore.events);
-const requestLimit = ref(listStore.eventRequestLimit);
+const requestPages = ref(listStore.eventRequestPages);
 const hasMorePages = ref(true);
 const now = Date.now();
 
 watch(
-	[() => listStore.eventRequestLimit, () => listStore.events],
+	[() => listStore.eventRequestPages, () => listStore.events],
 	() => {
-		requestLimit.value = listStore.eventRequestLimit;
+		requestPages.value = listStore.eventRequestPages;
 		posterEvents.value = listStore.events;
 	}
 );
@@ -69,7 +69,7 @@ onMounted(async () => {
 const loadPosterEvents = async () => {
 	const query = {
 		...debouncedEventsRequestQuery.value,
-		paginationOptions: { limit: requestLimit.value }
+		paginationOptions: { limit: maxRequests, page: requestPages }
 	};
 	const { data } = await apiRouter.events.findMany.useQuery({
 		data: {
@@ -83,7 +83,7 @@ const loadPosterEvents = async () => {
 		listStore.$patch({
 			events: data.value.docs
 		});
-		hasNextPage ? listStore.incrementRequestLimit(maxRequests) : null;
+		hasNextPage ? listStore.incrementRequestPages(pagesToLoad) : null;
 	}
 };
 

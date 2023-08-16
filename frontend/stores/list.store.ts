@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
-import { maxRequests } from '@/constants/global'
+import { pagesToLoad } from '@/constants/global'
 import type { EventOnPoster } from '../../common/types'
 
 type lastAction = 'NONE' | 'INDEX' | 'HEADER'
 
 type listStore = { 
   needScrollList: boolean,
-  eventRequestLimit: number,
+  eventRequestPages: number,
   events: EventOnPoster[] | null,
   scrollTop: number,
   lastAction: lastAction
@@ -15,14 +15,14 @@ type listStore = {
 export const useListStore = defineStore('eventList', {
   state: (): listStore => ({ 
     needScrollList: false,
-    eventRequestLimit: maxRequests,
+    eventRequestPages: pagesToLoad,
     events: [],
     scrollTop: 0,
     lastAction: 'NONE'
   }),
   actions: {
-    incrementRequestLimit(maxRequests: number) {
-      this.eventRequestLimit += maxRequests
+    incrementRequestPages(pagesToLoad: number) {
+      this.eventRequestPages += pagesToLoad
     }
   }
 })

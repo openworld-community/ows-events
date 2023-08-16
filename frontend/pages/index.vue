@@ -3,11 +3,7 @@ import { RouteNameEnum } from '@/constants/enums/route';
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
-import { maxRequests, minItemCardSize, distanceToLoadEvents } from '@/constants/global';
-import { type EventOnPoster } from '../../common/types';
-import { useListStore } from '~/stores/list.store';
-
-const listStore = useListStore();
+import { SeoItemTypeEnum } from '../constants/enums/seo';
 
 const { t } = useI18n();
 
@@ -42,50 +38,9 @@ const debouncedEventsRequestQuery = refDebounced(
 	500,
 	{ maxWait: 5000 }
 );
-
-const posterEvents: Ref<EventOnPoster[] | null> = ref(listStore.events);
-const requestLimit = ref(listStore.eventRequestLimit);
-const hasMorePages = ref(true);
-const now = Date.now();
-
-watch(
-	[() => listStore.eventRequestLimit, () => listStore.events],
-	() => {
-		requestLimit.value = listStore.eventRequestLimit;
-		posterEvents.value = listStore.events;
-	}
-);
-
-onMounted(async () => {
-	await new Promise((resolve) => setTimeout(resolve, 0));
-	if (listStore.scrollTop > 0) {
-		listStore.$patch({
-			needScrollList: true,
-			lastAction: 'INDEX'
-		});
-	}
+const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
+	data: { query: debouncedEventsRequestQuery }
 });
-
-const loadPosterEvents = async () => {
-	const query = {
-		...debouncedEventsRequestQuery.value,
-		paginationOptions: { limit: requestLimit.value }
-	};
-	const { data } = await apiRouter.events.findMany.useQuery({
-		data: {
-			query: query
-		}
-	});
-
-	if (data.value && data.value.docs) {
-		const { hasNextPage } = data.value;
-		hasMorePages.value = hasNextPage
-		listStore.$patch({
-			events: data.value.docs
-		});
-		hasNextPage ? listStore.incrementRequestLimit(maxRequests) : null;
-	}
-};
 
 const onButtonClick = () => {
 	if (useCookie('token').value) {
@@ -94,82 +49,63 @@ const onButtonClick = () => {
 		openNeedAuthorizeModal();
 	}
 };
+const now = Date.now();
 </script>
 
 <template>
 	<div class="main-page">
-		<CommonScrollingPage
-			:items="posterEvents"
-			:min-item-size="minItemCardSize"
-			:distance="distanceToLoadEvents"
-			:has-next-page="hasMorePages"
-			:size-dependencies="[
-				'description',
-				'title',
-				'location.address',
-				'location.city',
-				'location.country'
-			]"
-			@load-items="loadPosterEvents"
-		>
-			<template #stable>
-				<HomeSearch
-					v-model:search="eventsQuery.searchLine"
-					class="main-page__search"
-				/>
-				<div class="main-page__location">
-					<HomeUserLocation />
-				</div>
-
-				<h1 class="main-page__title">
-					{{ $t('home.title') }}
-				</h1>
-
-				<HomeFilter
-					v-model:country="eventsQuery.country"
-					v-model:city="eventsQuery.city"
-					class="main-page__filter"
-				/>
-			</template>
-			<template #dynamic="{ item }">
-				<HomeEventPreviewCard
-					:class="{ expired: item.date < now }"
-					:event-data="item"
-				/>
-			</template>
-		</CommonScrollingPage>
-
-		<div class="main-page__add-button-wrapper">
-			<CommonButton
-				class="add-event-button"
-				button-kind="success"
-				is-round
-				icon-name="plus"
-				:alt="$t('home.button.add_event_aria')"
-				aria-haspopup="true"
-				@click="onButtonClick"
-			/>
+		<h1 class="visually-hidden">{{ $t('home.hidden_title') }}</h1>
+		<HomeSearch
+			v-model:search="eventsQuery.searchLine"
+			class="main-page__search"
+		/>
+		<div class="main-page__location">
+			<HomeUserLocation />
 		</div>
+		<h2 class="main-page__title">
+			{{ $t('home.title') }}
+		</h2>
+		<HomeFilter
+			v-model:country="eventsQuery.country"
+			v-model:city="eventsQuery.city"
+			class="main-page__filter"
+		/>
+
+		<ul class="main-page__card-list">
+			<li
+				v-for="event in posterEvents"
+				:key="event.id"
+				itemscope
+				:itemtype="SeoItemTypeEnum.EVENT"
+			>
+				<HomeEventPreviewCard
+					:class="{ expired: event.date < now }"
+					:event-data="event"
+				/>
+				<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
+			</li>
+		</ul>
+
+		<CommonButton
+			class="add-event-button"
+			button-kind="success"
+			is-round
+			icon-name="plus"
+			:alt="$t('home.button.add_event_aria')"
+			aria-haspopup="true"
+			@click="onButtonClick"
+		/>
 	</div>
 </template>
 
 <style lang="less" scoped>
 .main-page {
-	&__add-button-wrapper {
-		max-width: 480px;
-		width: 100%;
-		position: absolute;
-		bottom: 20px;
-		right: 0;
-		transform: translateX(-50%);
-		left: 50%;
-	}
+	padding-top: 16px;
 
 	&__search {
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
-		padding-top: 16px;
-		margin-bottom: 44px;
+		margin-bottom: 40px;
 	}
 
 	&__location {
@@ -193,9 +129,18 @@ const onButtonClick = () => {
 		padding-right: var(--padding-side);
 		margin-bottom: 24px;
 	}
+
+	&__card-list {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+	}
 }
 
 .add-event-button {
+	position: sticky;
+	bottom: 20px;
+	right: 0;
 	margin-left: auto;
 	margin-right: 20px;
 	z-index: 1;

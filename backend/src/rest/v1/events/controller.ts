@@ -6,7 +6,6 @@ import {
 	IAddEventHandler,
 	IDeleteEventHandler,
 	IFindEventHandler,
-	IFindPaginateEventHandler,
 	IGetEventHandler,
 	IGetEventsHandler,
 	IUpdateEventHandler
@@ -60,14 +59,6 @@ export const getEvent: IGetEventHandler = async (request) => {
 	return event;
 };
 
-export const getPaginatedEvent: IGetEventHandler = async (request) => {
-	const eventId = request.params.id;
-	const event = await eventsStateController.getEvent(eventId);
-	if (!event) throw new Error(CommonErrorsEnum.EVENT_NOT_FOUND);
-
-	return event;
-};
-
 export const deleteEvent: IDeleteEventHandler = async (request) => {
 	if (vars.env !== 'dev') {
 		const token = request.headers.authorization;
@@ -108,14 +99,4 @@ export const findEvents: IFindEventHandler = async (request) => {
 	const { searchLine, country, city } = request.body;
 
 	return (await eventsStateController.getEvents({ searchLine, country, city })).slice(0, 100);
-};
-
-export const findPaginatedEvents: IFindPaginateEventHandler = async (request) => {
-	const { searchLine, country, city, paginationOptions } = request.body;
-
-	return eventsStateController.getPaginatedEvents(paginationOptions, {
-		searchLine,
-		country,
-		city
-	});
 };

@@ -6,7 +6,7 @@ export type EventDbEntity = {
 	id: string;
 	creatorId?: string;
 	title: string;
-	originDescriptionLanguage: SupportedLanguages | 'undefined';
+	originDescriptionLanguage?: SupportedLanguages | 'undefined';
 	description: ILocalizedObject;
 	date: number;
 	durationInSeconds: number;

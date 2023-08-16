@@ -33,6 +33,5 @@ if (isDevelopmentMode) {
 .main {
 	height: 100%;
 	padding-top: var(--header-height);
-  overflow-y: auto;
 }
 </style>

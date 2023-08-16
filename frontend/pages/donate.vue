@@ -99,9 +99,6 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 	display: flex;
 	flex-direction: column;
 	padding: var(--padding-vertical) var(--padding-side);
-	max-width: 480px;
-	margin-left: auto;
-	margin-right: auto;
 
 	&__title {
 		font-size: var(--font-size-XXL);

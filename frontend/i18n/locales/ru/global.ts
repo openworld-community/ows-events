@@ -12,6 +12,7 @@ export const global = {
 		copied: 'Скопировано',
 		delete: 'Очистить',
 		edit: 'Редактировать',
+		edit_profile: 'Редактировать профиль',
 		follow: 'Перейти',
 		logout: 'Выйти из аккаунта',
 		save: 'Сохранить',

@@ -4,7 +4,8 @@ import 'vue-final-modal/style.css';
 import 'vue-toastification/dist/index.css';
 import 'virtual:svg-icons-register';
 import { ModalsContainer } from 'vue-final-modal';
-import { isDevelopmentMode } from './constants/common';
+// import { isDevelopmentMode } from './constants/common';
+import { useUserStore } from './stores/user.store';
 
 const { locale, t } = useI18n();
 
@@ -16,14 +17,15 @@ useHead({
 	}
 });
 
-const tokenCookie = useCookie('token');
+const userStore = useUserStore();
+
+onBeforeMount(async () => {
+	await userStore.getUserInfo();
+})
 
 // if (isDevelopmentMode) {
 // 	tokenCookie.value ??= 'blablabla';
 // }
-
-const isAuthorized = computed(() => !!tokenCookie.value);
-provide('isAuthorized', isAuthorized);
 </script>
 <template>
 	<HeaderCommon />

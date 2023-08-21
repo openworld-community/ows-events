@@ -1,12 +1,12 @@
 export const user = {
-	title_unauthorized: 'Авторизация',
-	title_profile: 'Профиль',
+	title_unauthorized: 'Авторизуйтесь, чтобы получить доступ к дополнительным возможностям',
+	greeting: 'Привет',
 	user: 'Пользователь',
-	title_contacts: 'контакты',
-	login: 'Логин',
+	links: {
+		my_events: 'Мои мероприятия',
+		favourites: 'Избранное'
+	},
 	name: 'Имя',
 	surname: 'Фамилия',
-	affiliation: 'Компания',
-	email: 'E-mail',
-	phone: 'Номер телефона'
+	affiliation: 'Компания'
 }

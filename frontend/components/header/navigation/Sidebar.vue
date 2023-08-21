@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '@/constants/enums/route';
 import { SUPPORT_TG_URL } from '../../../constants/url';
-import {SeoItemTypeEnum} from '../../../constants/enums/seo';
+import { SeoItemTypeEnum } from '../../../constants/enums/seo';
+import { useUserStore } from '../../../stores/user.store';
 
 const emit = defineEmits(['close']);
-
-const isAuthorized = inject<Ref<boolean>>('isAuthorized')
+const userStore = useUserStore();
 </script>
 
 <template>
@@ -17,7 +17,7 @@ const isAuthorized = inject<Ref<boolean>>('isAuthorized')
 	>
 		<HeaderNavigationNavItem
 			:link-to="{ name: RouteNameEnum.USER_PAGE }"
-			:text="isAuthorized ? $t('header.user') : $t('header.authorize')"
+			:text="userStore.isAuthorized ? $t('header.user') : $t('header.authorize')"
 			icon-name="user"
 			@click="emit('close')"
 		/>
@@ -37,12 +37,12 @@ const isAuthorized = inject<Ref<boolean>>('isAuthorized')
 			@click="emit('close')"
 		/>
 
-    <HeaderNavigationNavItem
-      :link-to="{name: RouteNameEnum.DONATION}"
-      :text="$t('header.donation')"
-      icon-name="donate"
-      @click="emit('close')"
-      />
+		<HeaderNavigationNavItem
+			:link-to="{ name: RouteNameEnum.DONATION }"
+			:text="$t('header.donation')"
+			icon-name="donate"
+			@click="emit('close')"
+		/>
 
 		<HeaderNavigationNavItem
 			:link-to="{ name: RouteNameEnum.LIMITATION_OF_LIABILITY }"

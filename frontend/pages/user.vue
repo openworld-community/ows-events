@@ -8,24 +8,7 @@ import { getUserName } from '../utils/user';
 const userStore = useUserStore();
 const tokenCookie = useCookie<string | null>('token');
 
-export type ProfileInfo = {
-	nickname: string;
-	name: string;
-	company: string;
-};
-
 const userData = computed(() => userStore.userInfo);
-
-// if (tokenCookie.value && !userStore.userInfo) {
-// 	const { data } = await apiRouter.user.getUserInfo.useQuery({ data: { userToken: tokenCookie.value } })
-// 	userData.value = data.value
-// }
-//
-// 	ref<ProfileInfo>({
-// 	nickname: '@Gosha',
-// 	name: 'Гоша',
-// 	company: 'EverParty'
-// });
 
 const {
 	open: openEditProfileModal,
@@ -62,18 +45,22 @@ watch(
 	async (e) => {
 		if (!e) {
 			await nextTick();
-			initTGButton()
+			initTGButton();
 		}
 	}
 );
 
-onMounted(() => {
-	initTGButton();
+onMounted(async () => {
+	await userStore.getUserInfo();
+
+	if (!userStore.isAuthorized) {
+		initTGButton();
+	}
 });
 
 const logout = () => {
 	tokenCookie.value = null;
-	userStore.$patch({userInfo: null})
+	userStore.$patch({ userInfo: null });
 };
 </script>
 
@@ -83,9 +70,9 @@ const logout = () => {
 			<div class="user-page__info user-info">
 				<div class="user-info__wrapper">
 					<p class="user-info__name">
-						{{ getUserName() }}
+						{{ `${$t('user.greeting')}, ${getUserName()}!` }}
 					</p>
-					<p class="user-info__nickname">{{ userData?.nickname }}</p>
+					<p class="user-info__nickname">{{ `@${userData?.nickname}` }}</p>
 					<p
 						v-if="userData?.company"
 						class="user-info__organizer"
@@ -94,22 +81,47 @@ const logout = () => {
 					</p>
 				</div>
 				<CommonButton
-					class="info__edit-button"
+					class="user-info__edit-button"
 					button-kind="ordinary"
-					:button-text="$t('global.button.edit')"
+					:button-text="$t('global.button.edit_profile')"
 					icon-name="edit"
 					@click="openEditProfileModal"
 				/>
 			</div>
-			<div class="user-page__actions">
-				<CommonButton
-					class="user-page__form-button"
-					button-kind="warning"
-					:button-text="$t('global.button.logout')"
-					icon-name="logout"
-					@click="logout()"
-				/>
+			<div class="user-page__link link">
+				<NuxtLink
+					to="#"
+					class="link__item"
+				>
+					<CommonIcon
+						name="notebook"
+						width="32"
+						height="32"
+						color="var(--color-accent-green-main)"
+					/>
+					<span>{{ $t('user.links.my_events') }}</span>
+				</NuxtLink>
+				<NuxtLink
+					to="#"
+					class="link__item"
+				>
+					<CommonIcon
+						class="link__icon"
+						name="heart"
+						width="32"
+						height="32"
+						color="var(--color-accent-green-main)"
+					/>
+					<span class="link__text">{{ $t('user.links.favourites') }}</span>
+				</NuxtLink>
 			</div>
+			<CommonButton
+				class="user-page__button"
+				button-kind="warning"
+				:button-text="$t('global.button.logout')"
+				icon-name="logout"
+				@click="logout()"
+			/>
 		</template>
 		<template v-else>
 			<h2 class="user-page__title">
@@ -130,37 +142,13 @@ const logout = () => {
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
-	margin-top: var(--space-related-items);
-	padding-left: var(--padding-side);
-	padding-right: var(--padding-side);
-	padding-bottom: 30px;
+	padding: var(--space-sections) var(--padding-side) 30px;
 	margin-bottom: auto;
-	max-height: calc(100vh - var(--header-height));
-
-	@supports (-webkit-touch-callout: none) {
-		max-height: -webkit-fill-available;
-	}
 
 	&__title {
+		padding-top: 100px;
 		font-size: var(--font-size-L);
 		font-weight: var(--font-weight-regular);
-		margin-bottom: var(--space-unrelated-items);
-	}
-
-	&__actions {
-		display: flex;
-		flex-direction: column;
-		background-color: var(--color-white);
-		margin-top: auto;
-	}
-
-	&__form-button {
-		width: 100%;
-		height: 40px;
-
-		&--edit {
-			margin-bottom: var(--space-unrelated-items);
-		}
 	}
 
 	&__telegram-button {
@@ -170,6 +158,10 @@ const logout = () => {
 		align-items: center;
 		padding-top: 50%;
 	}
+
+	&__button {
+		margin-top: auto;
+	}
 }
 
 .user-info {
@@ -177,7 +169,6 @@ const logout = () => {
 	width: 100%;
 	flex-direction: column;
 	align-items: center;
-	padding-inline: 0;
 	margin-bottom: var(--space-sections);
 	overflow-y: auto;
 
@@ -185,24 +176,57 @@ const logout = () => {
 		display: flex;
 		width: 100%;
 		flex-direction: column;
-		align-items: center;
+		margin-bottom: var(--space-subsections);
 	}
 
 	&__name {
 		font-size: var(--font-size-ML);
-		margin-bottom: var(--space-inner);
+		line-height: 24px;
+		margin-bottom: var(--space-related-items);
 	}
 
 	&__nickname {
 		font-size: var(--font-size-S);
 		line-height: 20px;
 		color: var(--color-text-secondary);
-		margin-bottom: var(--space-inner);
+
+		&:not(:last-child) {
+			margin-bottom: var(--space-inner);
+		}
 	}
 
 	&__organizer {
 		font-size: var(--font-size-S);
 		line-height: 20px;
+	}
+
+	&__edit-button {
+		width: 100%;
+	}
+}
+
+.link {
+	display: flex;
+	width: 100%;
+	margin-bottom: var(--space-sections);
+
+	&__item {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		height: 108px;
+		background-color: var(--color-background-secondary);
+		border-radius: 8px;
+
+		&:not(:last-child) {
+			margin-right: var(--padding-side);
+		}
+	}
+
+	&__icon {
+		margin-bottom: var(--space-related-items);
 	}
 }
 </style>

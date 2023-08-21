@@ -35,10 +35,26 @@ export const ItemEvent = {
 			required: ['timezoneName', 'timezoneOffset']
 		},
 		url: { type: 'string' },
-        tags: { 
-            type: 'array', 
-            items: { type: 'string' } 
-        },
+		tags: {
+			type: 'array',
+			items: { type: 'string' }
+		}
+	}
+};
+
+export const ItemSearchEventQuery = {
+	type: 'object',
+	properties: {
+		searchLine: { type: 'string' },
+		city: { type: 'string' },
+		country: { type: 'string' },
+		date: {
+			type: 'object',
+			properties: {
+				from: { type: 'number' },
+				to: { type: 'number' }
+			}
+		}
 	}
 };
 
@@ -129,13 +145,6 @@ export const findEventsSchema = {
 			items: ItemEvent
 		}
 	},
-	body: {
-		type: 'object',
-		properties: {
-			searchLine: { type: 'string' },
-			city: { type: 'string' },
-			country: { type: 'string' }
-		}
-	},
+	body: ItemSearchEventQuery,
 	security: [{ authJWT: [] }]
 };

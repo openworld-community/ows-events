@@ -1,6 +1,5 @@
 import { EventOnPoster } from '@common/types';
-import { EventParams } from '@common/types/event';
-import { FindEventParams } from '../../../controllers/events-state-controller';
+import { EventParams, SearchEventPayload } from '@common/types/event';
 import { IRouteHandler } from '../../types';
 
 type IAddEventRoute = {
@@ -36,7 +35,7 @@ type IGetEventsRoute = {
 type IGetEventsHandler = IRouteHandler<IGetEventsRoute>;
 
 type IFindEventRoute = {
-	Body: FindEventParams;
+	Body: SearchEventPayload;
 	Reply: EventOnPoster[];
 };
 type IFindEventHandler = IRouteHandler<IFindEventRoute>;

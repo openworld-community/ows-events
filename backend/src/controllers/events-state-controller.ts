@@ -1,14 +1,8 @@
 import { v4 as uuid } from 'uuid';
 import { FilterQuery } from 'mongoose';
-import { EventOnPoster } from '@common/types/event';
+import { EventOnPoster, SearchEventPayload } from '@common/types/event';
 import { EventModel } from '../models/event.model';
 import { imageController } from './image-controller';
-
-export type FindEventParams = {
-	searchLine?: string;
-	city?: string;
-	country?: string;
-};
 
 class EventsStateController {
 	async addEvent(event: EventOnPoster) {
@@ -22,7 +16,7 @@ class EventsStateController {
 		return id;
 	}
 
-	async getEvents(query?: FindEventParams | undefined): Promise<EventOnPoster[]> {
+	async getEvents(query?: SearchEventPayload | undefined): Promise<EventOnPoster[]> {
 		const queryObject: FilterQuery<EventOnPoster> = {};
 		if (query?.searchLine) {
 			queryObject.$text = { $search: query.searchLine };
@@ -32,6 +26,12 @@ class EventsStateController {
 		}
 		if (query?.city) {
 			queryObject['location.city'] = query?.city;
+		}
+		if (query?.date) {
+			queryObject.$and = [
+				{ date: { $gte: query.date?.from || 0 } },
+				{ date: { $lt: query.date?.to || Number.MAX_SAFE_INTEGER } }
+			];
 		}
 		queryObject['meta.moderation.status'] = { $nin: ['declined', 'in-progress'] };
 
@@ -98,35 +98,32 @@ class EventsStateController {
 	async addTags(data: EventOnPoster) {
 		const event = await EventModel.findOneAndUpdate(
 			{ id: data.id },
-            { 
-                $addToSet: { tags: { $each: data.tags } } 
-            }
+			{
+				$addToSet: { tags: { $each: data.tags } }
+			}
 		);
 
 		return event;
 	}
 
 	async findAllTags() {
-		const tags = await EventModel.distinct("tags");
+		const tags = await EventModel.distinct('tags');
 
 		return tags;
 	}
 
 	async findTagsByEventId(id: string) {
-		const event = await EventModel.findOne(
-            { id }, 
-            { _id: 0, tags: 1 }
-        );
-		
-        return event?.tags;
+		const event = await EventModel.findOne({ id }, { _id: 0, tags: 1 });
+
+		return event?.tags;
 	}
 
-	async removeTags(data: EventOnPoster ) { 
+	async removeTags(data: EventOnPoster) {
 		const event = await EventModel.findOneAndUpdate(
 			{ id: data.id },
-            { 
-                $pull: { tags: { $in: data.tags } }
-            }
+			{
+				$pull: { tags: { $in: data.tags } }
+			}
 		);
 
 		return event;

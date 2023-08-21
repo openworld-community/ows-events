@@ -42,6 +42,10 @@ export type SearchEventPayload = {
 	searchLine?: string;
 	country?: string;
 	city?: string;
+	date?: {
+		from?: number;
+		to?: number;
+	};
 };
 
 export type EventPrice = {

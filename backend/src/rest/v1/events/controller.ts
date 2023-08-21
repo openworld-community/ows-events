@@ -95,8 +95,5 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 	return undefined;
 };
 
-export const findEvents: IFindEventHandler = async (request) => {
-	const { searchLine, country, city } = request.body;
-
-	return (await eventsStateController.getEvents({ searchLine, country, city })).slice(0, 100);
-};
+export const findEvents: IFindEventHandler = async (request) =>
+	(await eventsStateController.getEvents(request.body)).slice(0, 100);

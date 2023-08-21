@@ -2,11 +2,11 @@
 import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import EditProfile from '@/components/modal/EditProfile.vue';
 import { TELEGRAM_AUTH_BOT_NAME, BASE_URL } from '../../frontend/constants/url';
-import type { TGUserInfo } from '../../common/types/user';
-import { apiRouter } from '../composables/useApiRouter';
+import { useUserStore } from '../stores/user.store';
+import { getUserName } from '../utils/user';
 
+const userStore = useUserStore();
 const tokenCookie = useCookie<string | null>('token');
-const isAuthorized = inject<Ref<boolean>>('isAuthorized');
 
 export type ProfileInfo = {
 	nickname: string;
@@ -14,11 +14,12 @@ export type ProfileInfo = {
 	company: string;
 };
 
-const userData = ref({});
+const userData = computed(() => userStore.userInfo);
 
-if (tokenCookie.value) {
-	userData.value = await apiRouter.user.getUserInfo.useQuery({ data: tokenCookie.value });
-}
+// if (tokenCookie.value && !userStore.userInfo) {
+// 	const { data } = await apiRouter.user.getUserInfo.useQuery({ data: { userToken: tokenCookie.value } })
+// 	userData.value = data.value
+// }
 //
 // 	ref<ProfileInfo>({
 // 	nickname: '@Gosha',
@@ -42,33 +43,26 @@ patchEditProfileModal({
 
 const telegram = ref<HTMLElement | null>(null);
 
-const script = ref<HTMLScriptElement | null>(null);
-
-const addTGButton = () => {
-	telegram.value?.appendChild(script.value as Node);
-};
-
 const initTGButton = () => {
-	script.value = document.createElement('script');
-	script.value.async = true;
-	script.value.src = 'https://telegram.org/js/telegram-widget.js?22';
+	const script = document.createElement('script');
+	script.async = true;
+	script.src = 'https://telegram.org/js/telegram-widget.js?22';
 
-	script.value.setAttribute('data-size', 'large');
-	script.value.setAttribute('data-userpic', 'false');
-	script.value.setAttribute('data-telegram-login', TELEGRAM_AUTH_BOT_NAME);
-	script.value.setAttribute('data-request-access', 'write');
-	script.value.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
+	script.setAttribute('data-size', 'large');
+	script.setAttribute('data-userpic', 'false');
+	script.setAttribute('data-telegram-login', TELEGRAM_AUTH_BOT_NAME);
+	script.setAttribute('data-request-access', 'write');
+	script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
 
-	addTGButton();
+	telegram.value?.appendChild(script);
 };
 
 watch(
-	() => isAuthorized?.value,
-	(e) => {
+	() => userStore.isAuthorized,
+	async (e) => {
 		if (!e) {
-			nextTick(() => {
-				addTGButton();
-			});
+			await nextTick();
+			initTGButton()
 		}
 	}
 );
@@ -78,28 +72,25 @@ onMounted(() => {
 });
 
 const logout = () => {
-	useCookie<TGUserInfo | null>('user').value = null;
 	tokenCookie.value = null;
+	userStore.$patch({userInfo: null})
 };
 </script>
 
 <template>
 	<div class="user-page">
-		<template v-if="isAuthorized">
+		<template v-if="userStore.isAuthorized">
 			<div class="user-page__info user-info">
 				<div class="user-info__wrapper">
-					<p
-						v-if="userData.name"
-						class="user-info__name"
-					>
-						{{ userData.name ? userData.name : $t('user.user') }}
+					<p class="user-info__name">
+						{{ getUserName() }}
 					</p>
-					<p class="user-info__nickname">{{ userData.nickname }}</p>
+					<p class="user-info__nickname">{{ userData?.nickname }}</p>
 					<p
-						v-if="userData.company"
+						v-if="userData?.company"
 						class="user-info__organizer"
 					>
-						{{ userData.company }}
+						{{ userData?.company }}
 					</p>
 				</div>
 				<CommonButton

@@ -4,7 +4,8 @@ import { apiRouter } from '../composables/useApiRouter';
 
 type UserStore = {
 	userInfo: UserInfo | null;
-	isLoading: boolean
+	isLoading: boolean;
+	showEditModal: boolean
 };
 
 export const useUserStore = defineStore('user', {
@@ -12,6 +13,7 @@ export const useUserStore = defineStore('user', {
 		return {
 			userInfo: null,
 			isLoading: false,
+			showEditModal: false
 		};
 	},
 	getters: {

@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import EditProfile from '@/components/modal/EditProfile.vue';
-import { TELEGRAM_AUTH_BOT_NAME, BASE_URL } from '../../frontend/constants/url';
+import { TELEGRAM_AUTH_BOT_NAME, BASE_URL } from '../constants/url';
 import { useUserStore } from '../stores/user.store';
 import { getUserName } from '../utils/user';
 
@@ -9,20 +8,6 @@ const userStore = useUserStore();
 const tokenCookie = useCookie<string | null>('token');
 
 const userData = computed(() => userStore.userInfo);
-
-const {
-	open: openEditProfileModal,
-	close: closeEditProfileModal,
-	patchOptions: patchEditProfileModal
-} = useModal({ component: EditProfile } as UseModalOptions<
-	InstanceType<typeof VueFinalModal>['$props']
->);
-patchEditProfileModal({
-	attrs: {
-		closeEditProfileModal,
-		dataForEdit: userData.value
-	}
-});
 
 const telegram = ref<HTMLElement | null>(null);
 
@@ -57,6 +42,10 @@ onMounted(async () => {
 		initTGButton();
 	}
 });
+
+const openEditProfileModal = () => {
+	userStore.$patch({ showEditModal: true });
+};
 
 const logout = () => {
 	tokenCookie.value = null;
@@ -130,9 +119,13 @@ const logout = () => {
 			<div
 				ref="telegram"
 				:class="'user-page__telegram-button'"
-				:aria-label="$t('user.login')"
 			/>
 		</template>
+
+		<EditProfile
+			v-if="userStore.showEditModal"
+			:data-for-edit="userData"
+		/>
 	</div>
 </template>
 

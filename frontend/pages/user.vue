@@ -21,27 +21,24 @@ const initTGButton = () => {
 	script.setAttribute('data-telegram-login', TELEGRAM_AUTH_BOT_NAME);
 	script.setAttribute('data-request-access', 'write');
 	script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
-
 	telegram.value?.appendChild(script);
 };
 
+onMounted(() => {
+	if (!userStore.isAuthorized) {
+		initTGButton();
+	}
+});
+
 watch(
-	() => userStore.isAuthorized,
-	async (e) => {
-		if (!e) {
+	() => [userStore.isAuthorized, tokenCookie.value],
+	async ([auth, token]) => {
+		if (!auth || !token) {
 			await nextTick();
 			initTGButton();
 		}
 	}
 );
-
-onMounted(async () => {
-	await userStore.getUserInfo();
-
-	if (!userStore.isAuthorized) {
-		initTGButton();
-	}
-});
 
 const openEditProfileModal = () => {
 	userStore.$patch({ showEditModal: true });
@@ -55,13 +52,18 @@ const logout = () => {
 
 <template>
 	<div class="user-page">
-		<template v-if="userStore.isAuthorized">
+		<template v-if="tokenCookie">
 			<div class="user-page__info user-info">
 				<div class="user-info__wrapper">
 					<p class="user-info__name">
 						{{ `${$t('user.greeting')}, ${getUserName()}!` }}
 					</p>
-					<p class="user-info__nickname">{{ `@${userData?.nickname}` }}</p>
+					<p
+						v-if="userData?.nickname"
+						class="user-info__nickname"
+					>
+						{{ `@${userData?.nickname}` }}
+					</p>
 					<p
 						v-if="userData?.company"
 						class="user-info__organizer"
@@ -70,6 +72,7 @@ const logout = () => {
 					</p>
 				</div>
 				<CommonButton
+					v-if="userData"
 					class="user-info__edit-button"
 					button-kind="ordinary"
 					:button-text="$t('global.button.edit_profile')"
@@ -77,7 +80,10 @@ const logout = () => {
 					@click="openEditProfileModal"
 				/>
 			</div>
-			<div class="user-page__link link">
+			<div
+				v-if="userData"
+				class="user-page__link link"
+			>
 				<NuxtLink
 					to="#"
 					class="link__item"
@@ -112,11 +118,12 @@ const logout = () => {
 				@click="logout()"
 			/>
 		</template>
-		<template v-else>
+		<template v-else-if="!userStore.isAuthorized">
 			<h2 class="user-page__title">
 				{{ $t('user.title_unauthorized') }}
 			</h2>
 			<div
+				v-if="!userStore.isAuthorized"
 				ref="telegram"
 				:class="'user-page__telegram-button'"
 			/>

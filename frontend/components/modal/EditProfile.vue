@@ -1,19 +1,22 @@
 <script setup lang="ts">
 import type { UserInfo } from '../../../common/types/user';
 import { useUserStore } from '../../stores/user.store';
+import { apiRouter } from '../../composables/useApiRouter';
 
 type Props = {
-	dataForEdit?: UserInfo | null;
+	dataForEdit?: UserInfo | null | undefined;
 };
 
 const userStore = useUserStore();
 const props = defineProps<Props>();
 
 const userData = ref({
-	name: props.dataForEdit?.first_name ?? '',
-	surname: props.dataForEdit?.last_name ?? '',
+	first_name: props.dataForEdit?.first_name ?? '',
+	last_name: props.dataForEdit?.last_name ?? '',
 	nickname: props.dataForEdit?.nickname ?? '',
-	company: props.dataForEdit?.company ?? ''
+	company: props.dataForEdit?.company ?? '',
+	email: '',
+	phone: ''
 });
 
 const closeEditProfileModal = () => {
@@ -21,11 +24,26 @@ const closeEditProfileModal = () => {
 };
 
 const checkFormFilling = computed(() => {
-	return !!(userData.value.name || userData.value.company);
+	return !!(
+		userData.value?.first_name !== props.dataForEdit?.first_name ||
+		userData.value?.last_name !== props.dataForEdit?.last_name ||
+		userData.value?.nickname !== props.dataForEdit?.nickname ||
+		userData.value?.company !== props.dataForEdit?.company
+	);
 });
 
-const updateUserData = () => {
-	closeEditProfileModal();
+const isLoading = ref(false);
+
+const updateUserData = async () => {
+	isLoading.value = true;
+	const { error } = await apiRouter.user.update.useMutation({
+		data: { userInfo: userData.value }
+	});
+	if (!error.value) {
+		userStore.$patch({ userInfo: userData.value });
+		closeEditProfileModal();
+	}
+	isLoading.value = false;
 };
 </script>
 
@@ -40,12 +58,12 @@ const updateUserData = () => {
 			<ModalUiModalSection :label="$t('modal.edit_profile.fields.name')">
 				<template #child>
 					<CommonUiBaseInput
-						v-model="userData.name"
+						v-model="userData.first_name"
 						name="name"
 						:placeholder="$t('modal.edit_profile.fields.name_placeholder')"
 					/>
 					<CommonUiBaseInput
-						v-model="userData.surname"
+						v-model="userData.last_name"
 						name="surname"
 						:placeholder="$t('modal.edit_profile.fields.surname_placeholder')"
 					/>
@@ -82,11 +100,11 @@ const updateUserData = () => {
 				button-kind="success"
 				:button-text="$t('global.button.save')"
 				:is-disabled="!checkFormFilling"
+				:is-loading="isLoading"
 				@click="updateUserData"
 			/>
 		</template>
 	</CommonModalWrapper>
 </template>
 
-<style scoped lang="less">
-</style>
+<style scoped lang="less"></style>

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import type { UserInfo } from '../../common/types/user';
 import { apiRouter } from '../composables/useApiRouter';
+import { RouteNameEnum } from '../constants/enums/route';
 
 type UserStore = {
 	userInfo: UserInfo | null;
@@ -17,23 +18,21 @@ export const useUserStore = defineStore('user', {
 		};
 	},
 	getters: {
-		getUserInfo(state): UserStore['userInfo'] {
-			(async () => {
-				const tokenCookie = useCookie('token');
-				if (state.userInfo || !tokenCookie.value) return;
-				const { data} = await apiRouter.user.get.useQuery({
+		isAuthorized(state) {
+				return !!state.userInfo;
+		}
+	},
+	actions: {
+		async getUserInfo() {
+			const tokenCookie = useCookie('token');
+			if (tokenCookie.value) {
+				const { data } = await apiRouter.user.get.useQuery({
 					data: { userToken: tokenCookie.value }
 				});
-				if (!data.value) {
-					tokenCookie.value = '';
-					return;
+				if (data.value) {
+					this.userInfo = data.value;
 				}
-				state.userInfo = data.value;
-			})();
-			return state.userInfo;
-		},
-		isAuthorized(state) {
-			return !!state.userInfo;
+			}
 		}
 	}
 });

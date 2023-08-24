@@ -23,25 +23,15 @@ export const useUserStore = defineStore('user', {
 		}
 	},
 	actions: {
-		async getUserInfo(params: { pagesWithAuth?: string[], routeName?: string } = {}) {
-			let userData = null;
+		async getUserInfo() {
 			const tokenCookie = useCookie('token');
 			if (tokenCookie.value) {
 				const { data } = await apiRouter.user.get.useQuery({
 					data: { userToken: tokenCookie.value }
 				});
-				userData = data.value;
-			}
-
-			if (!userData) {
-				if (tokenCookie.value) {
-					tokenCookie.value = '';
+				if (data.value) {
+					this.userInfo = data.value;
 				}
-				if (params.pagesWithAuth?.length && params.routeName && params.pagesWithAuth.includes(params.routeName)) {
-					return navigateTo({ name: RouteNameEnum.USER_PAGE });
-				}
-			} else {
-				this.userInfo = userData;
 			}
 		}
 	}

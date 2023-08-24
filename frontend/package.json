@@ -65,7 +65,7 @@
     "eslint-plugin-vue": "^9.11.0",
     "jsdom": "^22.0.0",
     "npm-run-all": "^4.1.5",
-    "nuxt": "^3.5.1",
+    "nuxt": "^3.6.5",
     "prettier": "^2.8.8",
     "typescript": "~5.0.4",
     "vite": "^4.3.5",

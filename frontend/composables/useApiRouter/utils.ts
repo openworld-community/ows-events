@@ -1,6 +1,7 @@
 import type { UseFetchOptions } from 'nuxt/app';
 import { API_URL } from '~/constants/url';
 import type { ServerErrors } from '~/i18n/locales/ru/errors';
+import { useUserStore } from '../../stores/user.store';
 
 type ApiRouter = {
 	[K in string]: ApiRouter | ReturnType<typeof defineQuery> | ReturnType<typeof defineMutation>;
@@ -136,9 +137,13 @@ export function useBackendFetch<T>(
 	opts.baseURL ??= API_URL;
 
 	if (modifiers.auth) {
+		const userStore = useUserStore()
+		if (!userStore.isAuthorized) {
+			throw new Error('You are not authorized');
+		}
 		const token = useCookie('token').value;
 		if (!token) {
-			throw new Error('You are not authorized');
+			throw new Error('Token not found');
 		}
 		opts.headers
 			? Object.assign(opts.headers, { Authorization: token })

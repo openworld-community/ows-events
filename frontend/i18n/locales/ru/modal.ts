@@ -1,6 +1,7 @@
 export const modal = {
 	new_event_modal: {
 		title: 'Добавьте мероприятие',
+		title_edit: 'Редактирование мероприятия',
 		cancel: 'Отмена',
 		submit: 'Сохранить',
 		add_image: 'Добавить фото',
@@ -47,6 +48,21 @@ export const modal = {
 			cancel: 'Отмена',
 			login: 'Войти',
 			logout: 'Выйти'
+		}
+	},
+	edit_profile: {
+		title: 'Редактирование профиля',
+		fields: {
+			name: 'Как к Вам обращаться?',
+			name_placeholder: 'Имя',
+			surname_placeholder: 'Фамилия',
+			nickname: 'Никнейм',
+			nickname_placeholder: 'Введите никнейм',
+			organizer: 'Организатор',
+			email: 'E-mail',
+			phone: 'Номер телефона',
+
+			organizer_placeholder: 'Имя организатора мероприятия'
 		}
 	}
 };

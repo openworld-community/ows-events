@@ -23,3 +23,12 @@ export type TGUser = UserDbEntity['telegram'];
 export type TGUserInfo = Omit<TGUser, 'auth_date'>;
 
 export type UserInfo = UserDbEntity['userInfo'];
+
+export type PostUserInfo = {
+	last_name: string;
+	first_name: string;
+	nickname: string;
+	company: string;
+	email: string;
+	phone: string;
+};

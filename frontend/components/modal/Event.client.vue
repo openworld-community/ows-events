@@ -167,7 +167,10 @@ watch(
 watch(
 	() => isFree.value,
 	() => {
-		if (!isFree.value) inputValues.value.price.currency = getCurrencyByCountry(inputValues.value.location.country);
+		if (!isFree.value)
+			inputValues.value.price.currency = getCurrencyByCountry(
+				inputValues.value.location.country
+			);
 	}
 );
 
@@ -238,17 +241,9 @@ watch(
 						name="city"
 						:disabled="!inputValues.location.country"
 						:placeholder="$t('global.city')"
-						:list="locationStore.getCitiesByCountry(inputValues.location.country) ?? []"
+						:list="locationStore.getCitiesByCountry(inputValues.location.country)"
 						required
 					/>
-						<CommonUiBaseSelect
-							v-model="inputValues.location.city"
-							name="city"
-							:disabled="!inputValues.location.country"
-							:placeholder="$t('global.city')"
-							:list="locationStore.getCitiesByCountry(inputValues.location.country)"
-							required
-						/>
 
 					<CommonUiBaseSelect
 						v-model="inputValues.timezone"
@@ -366,56 +361,43 @@ watch(
 				</template>
 			</ModalUiModalSection>
 
-			<ModalUiModalSection :label="$t('modal.new_event_modal.fields.price')">
+			<ModalUiModalSection
+				type="column-row"
+				:label="$t('modal.new_event_modal.fields.price')"
+			>
 				<template #child>
-					<CommonUiBaseInput
-						v-model="inputValues.price"
-						name="price"
-						type="number"
-						:min-value="0"
-						:placeholder="$t('modal.new_event_modal.fields.price_placeholder')"
+					<div>
+						<CommonUiBaseSelect
+							v-model="inputValues.price.currency"
+							name="currency"
+							:placeholder="$t('modal.new_event_modal.fields.currency_placeholder')"
+							:list="locationStore.currencies"
+							has-icon-items
+							input-readonly
+							:disabled="isFree"
+							:required="!isFree"
+						/>
+						<CommonUiBaseInput
+							v-model="inputValues.price.value"
+							name="price"
+							type="number"
+							:min-value="0"
+							:disabled="isFree"
+							:required="!isFree"
+							:placeholder="$t('modal.new_event_modal.fields.price_placeholder')"
+						/>
+					</div>
+					<CommonUiBaseCheckbox
+						value="free"
+						label="Бесплатно"
+						is-reversed
+						:model-value="isFree"
+						@update:model-value="toggleFree"
 					/>
 				</template>
 			</ModalUiModalSection>
-				<ModalUiModalSection
-					type="column-row"
-					:label="$t('modal.new_event_modal.fields.price')"
-				>
-					<template #child>
-						<div>
-							<CommonUiBaseSelect
-								v-model="inputValues.price.currency"
-								name="currency"
-								:placeholder="
-									$t('modal.new_event_modal.fields.currency_placeholder')
-								"
-								:list="locationStore.currencies"
-								has-icon-items
-								input-readonly
-								:disabled="isFree"
-								:required="!isFree"
-							/>
-							<CommonUiBaseInput
-								v-model="inputValues.price.value"
-								name="price"
-								type="number"
-								:min-value="0"
-								:disabled="isFree"
-								:required="!isFree"
-								:placeholder="$t('modal.new_event_modal.fields.price_placeholder')"
-							/>
-						</div>
-						<CommonUiBaseCheckbox
-							value="free"
-							label="Бесплатно"
-							is-reversed
-							:model-value="isFree"
-							@update:model-value="toggleFree"
-						/>
-					</template>
-				</ModalUiModalSection>
 
-			<ModalUiModalSection :label="$t('modal.new_event_modal.fields.url_to_rigistration')">
+			<ModalUiModalSection :label="$t('modal.new_event_modal.fields.url_to_registration')">
 				<template #child>
 					<CommonUiBaseInput
 						v-model="inputValues.url"
@@ -425,18 +407,6 @@ watch(
 					/>
 				</template>
 			</ModalUiModalSection>
-				<ModalUiModalSection
-					:label="$t('modal.new_event_modal.fields.url_to_registration')"
-				>
-					<template #child>
-						<CommonUiBaseInput
-							v-model="inputValues.url"
-							name="url"
-							:placeholder="$t('modal.new_event_modal.fields.url_placeholder')"
-							required
-						/>
-					</template>
-				</ModalUiModalSection>
 
 			<CommonImageLoader
 				v-model="newImageFile"

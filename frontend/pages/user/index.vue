@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import EditProfile from '@/components/modal/EditProfile.vue';
-import { TELEGRAM_AUTH_BOT_NAME, BASE_URL } from '../constants/url';
-import { useUserStore } from '../stores/user.store';
-import { getUserName } from '../utils/user';
+import { useUserStore } from '../../stores/user.store';
+import { getUserName } from '../../utils/user';
+import { RouteNameEnum } from '../../constants/enums/route';
+definePageMeta({ name: 'user'});
 
 const userStore = useUserStore();
 const tokenCookie = useCookie<string | null>('token');
@@ -85,7 +85,7 @@ const logout = () => {
 				class="user-page__link link"
 			>
 				<NuxtLink
-					to="#"
+					:to="`${RouteNameEnum.USER_PAGE}/${RouteNameEnum.USER_MY_EVENTS}`"
 					class="link__item"
 				>
 					<CommonIcon
@@ -97,7 +97,7 @@ const logout = () => {
 					<span>{{ $t('user.links.my_events') }}</span>
 				</NuxtLink>
 				<NuxtLink
-					to="#"
+					:to="`${RouteNameEnum.USER_PAGE}/${RouteNameEnum.USER_FAVOURITES}`"
 					class="link__item"
 				>
 					<CommonIcon
@@ -129,7 +129,7 @@ const logout = () => {
 			/>
 		</template>
 
-		<EditProfile
+		<ModalEditProfile
 			v-if="userStore.showEditModal"
 			:data-for-edit="userData"
 		/>

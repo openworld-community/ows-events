@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '../../constants/enums/route';
-import {SeoItempropNavEnum, SeoItemTypeEnum} from '../../constants/enums/seo';
+import { SeoItempropNavEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
 
 const route = useRoute();
+const router = useRouter();
 
 const isNavbarOpen = ref<boolean>(false);
 const navbarToggle = () => {
@@ -24,9 +25,9 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
 <template>
 	<header
-			class="header"
-			itemscope
-			:itemtype="SeoItemTypeEnum.HEADER"
+		class="header"
+		itemscope
+		:itemtype="SeoItemTypeEnum.HEADER"
 	>
 		<div class="header__container">
 			<div
@@ -34,8 +35,20 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 				itemscope
 				:itemtype="SeoItemTypeEnum.NAV"
 			>
+				<CommonButton
+					v-if="
+						route.name === RouteNameEnum.USER_FAVOURITES ||
+						route.name === RouteNameEnum.USER_MY_EVENTS ||
+						route.name === RouteNameEnum.EVENT
+					"
+					is-icon
+					icon-name="back"
+					button-kind="ordinary"
+					@click="router.back()"
+				/>
 				<component
 					:is="logoComponentIs"
+					v-else
 					class="header__navigation-link"
 					:aria-label="
 						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')

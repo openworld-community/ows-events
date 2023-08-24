@@ -6,7 +6,7 @@ defineOptions({ inheritAttrs: false });
 
 defineProps({
 	className: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	modelValue: {
@@ -14,7 +14,7 @@ defineProps({
 		default: ''
 	},
 	name: {
-		type: String as PropType<string>,
+		type: String,
 		required: true
 	},
 	type: {
@@ -22,35 +22,39 @@ defineProps({
 		default: 'text'
 	},
 	required: {
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	placeholder: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	label: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	maxLength: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	disabled: {
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	error: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	autocomplete: {
-		type: String as PropType<string>,
+		type: String,
 		default: 'off'
 	},
+	inputReadonly: {
+		type: Boolean,
+		default: false
+	},
 	minValue: {
-		type: Number as PropType<number>,
+		type: Number,
 		default: null
 	},
 	// Если нужна иконка в правом углу
@@ -62,6 +66,11 @@ defineProps({
 	buttonName: {
 		type: String as PropType<IconName>,
 		default: ''
+	},
+	// Для селектов, название иконки должно быть идентично значению селекта
+	hasValueIcon: {
+		type: Boolean,
+		default: false
 	}
 });
 
@@ -85,8 +94,13 @@ const onRemove = () => {
 			{{ label }}
 		</label>
 		<input
-			class="input__field"
-			:class="{ form__error: error }"
+			:class="[
+				'input__field',
+				{ 'input__field--cursor-pointer': inputReadonly && !modelValue },
+				{ 'input__field--without-cursor': inputReadonly && modelValue },
+				{ 'input__field--shifted': hasValueIcon && modelValue },
+				{ form__error: error }
+			]"
 			v-bind="$attrs"
 			:name="name"
 			:type="type"
@@ -95,17 +109,20 @@ const onRemove = () => {
 			:disabled="disabled"
 			:placeholder="required ? `${placeholder} *` : placeholder"
 			:autocomplete="autocomplete"
+			:readonly="inputReadonly"
 			:required="required"
 			:min="type === 'number' || type === 'date' || type === 'time' ? minValue : undefined"
 			@input="updateValue"
 		/>
 
+		<!--    иконка справа-->
 		<CommonIcon
 			v-if="iconName && !modelValue"
 			:name="iconName"
 			class="input__button"
 		/>
 
+		<!--    кнопка справа-->
 		<CommonButton
 			v-if="buttonName && !modelValue"
 			is-icon
@@ -113,6 +130,7 @@ const onRemove = () => {
 			class="input__button"
 		/>
 
+		<!-- кнопка очистки инпута-->
 		<CommonButton
 			v-else-if="(modelValue || modelValue === 0) && !disabled"
 			class="input__button input__button--clear"
@@ -121,6 +139,14 @@ const onRemove = () => {
 			:alt="$t('global.button.delete')"
 			@click="onRemove"
 		/>
+
+		<!--    иконка слева (для селектов) -->
+		<CommonIcon
+			v-if="hasValueIcon"
+			class="input__value-icon"
+			:name="`${name}/${modelValue}`"
+		/>
+
 		<span
 			v-if="error"
 			class="form__error"

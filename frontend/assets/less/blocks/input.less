@@ -28,6 +28,18 @@
     color: var(--color-text-main);
     padding: 8px 35px 8px 12px;
 
+    &--cursor-pointer {
+      cursor: pointer;
+    }
+
+    &--without-cursor {
+      pointer-events: none;
+    }
+
+    &--shifted {
+      padding-left: 38px;
+    }
+
     &::placeholder {
       font-family: var(--font-family-main);
       font-size: var(--font-size-M);
@@ -98,5 +110,12 @@
     &--clear {
       z-index: 1;
     }
+  }
+
+  &__value-icon {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
   }
 }

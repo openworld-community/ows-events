@@ -258,6 +258,7 @@ watch(
 						v-model="inputValues.location.address"
 						name="address"
 						:placeholder="$t('modal.new_event_modal.fields.address_placeholder')"
+						:disabled="!(inputValues.location.country && inputValues.location.city)"
 					/>
 
 					<div

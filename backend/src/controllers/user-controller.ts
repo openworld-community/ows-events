@@ -21,7 +21,17 @@ class UserController {
 		);
 		await UserModel.findOneAndUpdate(
 			{ 'telegram.id': telegramData.id },
-			{ $set: { telegram: { ...telegramData }, token: newToken } },
+			{
+				$set: {
+					telegram: { ...telegramData },
+					token: newToken
+				},
+				$setOnInsert: {
+					'userInfo.nickname': telegramData.username,
+					'userInfo.first_name': telegramData.first_name,
+					'userInfo.last_name': telegramData.last_name
+				}
+			},
 			{ upsert: true, new: true }
 		);
 		return newToken;

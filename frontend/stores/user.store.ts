@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import type { UserInfo } from '../../common/types/user';
 import { apiRouter } from '../composables/useApiRouter';
+import { RouteNameEnum } from '../constants/enums/route';
 
 type UserStore = {
 	userInfo: UserInfo | null;
@@ -17,23 +18,31 @@ export const useUserStore = defineStore('user', {
 		};
 	},
 	getters: {
-		getUserInfo(state): UserStore['userInfo'] {
-			(async () => {
-				const tokenCookie = useCookie('token');
-				if (state.userInfo || !tokenCookie.value) return;
-				const { data} = await apiRouter.user.get.useQuery({
+		isAuthorized(state) {
+				return !!state.userInfo;
+		}
+	},
+	actions: {
+		async getUserInfo(params: { pagesWithAuth?: string[], routeName?: string } = {}) {
+			let userData = null;
+			const tokenCookie = useCookie('token');
+			if (tokenCookie.value) {
+				const { data } = await apiRouter.user.get.useQuery({
 					data: { userToken: tokenCookie.value }
 				});
-				if (!data.value) {
+				userData = data.value;
+			}
+
+			if (!userData) {
+				if (tokenCookie.value) {
 					tokenCookie.value = '';
-					return;
 				}
-				state.userInfo = data.value;
-			})();
-			return state.userInfo;
-		},
-		isAuthorized(state) {
-			return !!state.userInfo;
+				if (params.pagesWithAuth?.length && params.routeName && params.pagesWithAuth.includes(params.routeName)) {
+					return navigateTo({ name: RouteNameEnum.USER_PAGE });
+				}
+			} else {
+				this.userInfo = userData;
+			}
 		}
 	}
 });

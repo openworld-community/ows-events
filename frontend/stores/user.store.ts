@@ -20,7 +20,7 @@ export const useUserStore = defineStore('user', {
 		getUserInfo(state): UserStore['userInfo'] {
 			(async () => {
 				const tokenCookie = useCookie('token');
-				if (process.server || state.userInfo || !tokenCookie.value) return;
+				if (state.userInfo || !tokenCookie.value) return;
 				const { data} = await apiRouter.user.get.useQuery({
 					data: { userToken: tokenCookie.value }
 				});

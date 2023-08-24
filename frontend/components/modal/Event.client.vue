@@ -3,6 +3,7 @@ import { getAllTimezones, getTimezone } from '@/services/timezone.services';
 import { useLocationStore, type Country, type City } from '@/stores/location.store';
 import { type EventOnPoster } from '@/../common/types';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
+import { getCurrencyByCountry } from '../../utils/prices';
 
 type Props = {
 	closeEventModal: () => void;
@@ -12,6 +13,10 @@ type Props = {
 const props = defineProps<Props>();
 const locationStore = useLocationStore();
 
+const closeModal = () => {
+	setTimeout(() => props.closeEventModal(), 300);
+};
+
 const isLoading = ref(false);
 const newImageFile = ref<ImageLoaderFile>(null);
 
@@ -19,6 +24,8 @@ const allTimezones = (await getAllTimezones()).map((timezone) =>
 	timezoneToString(timezone)
 ) as string[];
 const minDate = new Date();
+
+const isFree = ref(props.dataForEdit?.price?.value === 0);
 
 const inputValues = ref({
 	id: props.dataForEdit?.id ?? '',
@@ -37,12 +44,15 @@ const inputValues = ref({
 		  )
 		: null,
 	location: {
-		country: (props.dataForEdit?.location.country ?? 'Serbia') satisfies Country, // Временно фиксируем страну для добавления события
+		country: (props.dataForEdit?.location.country ?? '') satisfies Country,
 		city: (props.dataForEdit?.location.city ?? '') satisfies City,
 		address: props.dataForEdit?.location.address ?? ''
 	},
 	image: props.dataForEdit?.image ?? '',
-	price:  props.dataForEdit?.price?.value ?? 0,
+	price: {
+		value: !isFree.value ? props.dataForEdit?.price?.value ?? '' : '',
+		currency: props.dataForEdit?.price?.currency ?? ''
+	},
 	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
 	url: props.dataForEdit?.url ?? ''
 });
@@ -52,6 +62,15 @@ const eventStartEpoch = computed(() =>
 const eventEndEpoch = computed(() =>
 	combineDateTime(inputValues.value.endDate, inputValues.value.endTime).getTime()
 );
+
+const toggleFree = (value: boolean) => {
+	isFree.value = value;
+	//убираем значение из инпута, в paramsForSubmit подставляется 0
+	if (value) {
+		inputValues.value.price.value = '';
+		inputValues.value.price.currency = '';
+	}
+};
 
 const checkFormFilling = computed(() => {
 	return !!(
@@ -65,13 +84,10 @@ const checkFormFilling = computed(() => {
 		inputValues.value.location.country &&
 		inputValues.value.location.city &&
 		inputValues.value.timezone &&
-		allTimezones.includes(inputValues.value.timezone)
+		allTimezones.includes(inputValues.value.timezone) &&
+		(isFree.value || (inputValues.value.price.value && inputValues.value.price.currency))
 	);
 });
-
-const closeModal = () => {
-	setTimeout(() => props.closeEventModal(), 300);
-};
 
 const paramsForSubmit = computed(() => {
 	return {
@@ -86,13 +102,12 @@ const paramsForSubmit = computed(() => {
 			city: inputValues.value.location.city,
 			address: inputValues.value.location.address
 		},
-    //TODO: добавить min/max значения и выбор валюты
 		price: {
-      minValue: null,
-      value: Number(inputValues.value.price) ?? 0,
-      maxValue: null,
-      currency: inputValues.value.price > 0 ? 'RSD' : null
-    },
+			minValue: null,
+			value: isFree.value ? 0 : Number(inputValues.value.price.value),
+			maxValue: null,
+			currency: isFree.value ? null : inputValues.value.price.currency
+		},
 		timezone: stringToTimezone(inputValues.value.timezone),
 		url: inputValues.value.url
 	};
@@ -139,11 +154,20 @@ async function addImage(image: ImageLoaderFile) {
 	return data.value.path;
 }
 
-// #region country & string input relationship logic
+// #region country, city, timezone string input relationship logic
 watch(
 	() => inputValues.value.location.country,
-	() => {
+	(country) => {
+		if (!inputValues.value.location.country) inputValues.value.timezone = '';
 		inputValues.value.location.city = '';
+		if (!isFree.value) inputValues.value.price.currency = getCurrencyByCountry(country);
+	}
+);
+
+watch(
+	() => isFree.value,
+	() => {
+		if (!isFree.value) inputValues.value.price.currency = getCurrencyByCountry(inputValues.value.location.country);
 	}
 );
 
@@ -211,7 +235,7 @@ watch(
 							name="country"
 							:placeholder="$t('global.country')"
 							:list="locationStore.countries"
-							:disabled="true"
+							input-readonly
 							required
 						/>
 
@@ -220,9 +244,7 @@ watch(
 							name="city"
 							:disabled="!inputValues.location.country"
 							:placeholder="$t('global.city')"
-							:list="
-								locationStore.getCitiesByCountry(inputValues.location.country) ?? []
-							"
+							:list="locationStore.getCitiesByCountry(inputValues.location.country)"
 							required
 						/>
 
@@ -342,28 +364,46 @@ watch(
 					</template>
 				</ModalUiModalSection>
 
-				<ModalUiModalSection :label="$t('modal.new_event_modal.fields.price')">
+				<ModalUiModalSection
+					type="column-row"
+					:label="$t('modal.new_event_modal.fields.price')"
+				>
 					<template #child>
-						<CommonUiBaseInput
-							v-model="inputValues.price"
-							name="price"
-							type="number"
-							:min-value="0"
-							:placeholder="$t('modal.new_event_modal.fields.price_placeholder')"
+						<div>
+							<CommonUiBaseSelect
+								v-model="inputValues.price.currency"
+								name="currency"
+								:placeholder="
+									$t('modal.new_event_modal.fields.currency_placeholder')
+								"
+								:list="locationStore.currencies"
+								has-icon-items
+								input-readonly
+								:disabled="isFree"
+								:required="!isFree"
+							/>
+							<CommonUiBaseInput
+								v-model="inputValues.price.value"
+								name="price"
+								type="number"
+								:min-value="0"
+								:disabled="isFree"
+								:required="!isFree"
+								:placeholder="$t('modal.new_event_modal.fields.price_placeholder')"
+							/>
+						</div>
+						<CommonUiBaseCheckbox
+							value="free"
+							label="Бесплатно"
+							is-reversed
+							:model-value="isFree"
+							@update:model-value="toggleFree"
 						/>
-						<!--						<CommonUiBaseSelect-->
-						<!--								:key="inputValues.currency"-->
-						<!--								v-model="inputValues.currency"-->
-						<!--								:input-disabled="!inputValues.currency"-->
-						<!--								name="current"-->
-						<!--								:placeholder="$t('global.city')"-->
-						<!--								:list="cities"-->
-						<!--						/>-->
 					</template>
 				</ModalUiModalSection>
 
 				<ModalUiModalSection
-					:label="$t('modal.new_event_modal.fields.url_to_rigistration')"
+					:label="$t('modal.new_event_modal.fields.url_to_registration')"
 				>
 					<template #child>
 						<CommonUiBaseInput

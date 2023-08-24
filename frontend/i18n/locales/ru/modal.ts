@@ -20,9 +20,10 @@ export const modal = {
 			description: 'Описание',
 			start: 'Начало',
 			end: 'Окончание',
-			price: 'Стоимость, RSD',
-			price_placeholder: 'Укажите стоимость в RSD',
-			url_to_rigistration: 'Ссылка на регистрацию',
+			price: 'Стоимость',
+			price_placeholder: 'Цена',
+			currency_placeholder: 'Валюта',
+			url_to_registration: 'Ссылка на регистрацию',
 			url_placeholder: 'https://example.com'
 		}
 	},

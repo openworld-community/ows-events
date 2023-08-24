@@ -1,13 +1,18 @@
 <script lang="ts" setup>
+
+  import type {PropType} from "vue";
+
+  type Type = 'column' | 'row' | 'column-row'
 const props = defineProps({
+  //для типа "column-row" необходимо обернуть в div айтемы, которые идут в строку
 	type: {
-		type: String,
+		type: String as PropType<Type>,
 		default: 'column'
 	},
 	label: {
 		type: String,
 		default: ''
-	}
+	},
 });
 </script>
 
@@ -16,7 +21,7 @@ const props = defineProps({
 		<h3 class="section__subtitle">
 			{{ props.label }}
 		</h3>
-		<div :class="type === 'column' ? 'section__column' : 'section__row'">
+		<div :class="`section__${type}`">
 			<slot name="child"></slot>
 		</div>
 	</div>
@@ -24,33 +29,44 @@ const props = defineProps({
 
 <style lang="less" scoped>
 .section {
-	display: flex;
-	flex-direction: column;
-	margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
 
-	&__subtitle {
-		font-size: var(--font-size-L);
-		font-weight: var(--font-weight-regular);
-		margin-bottom: 12px;
-	}
+  &__subtitle {
+    font-size: var(--font-size-L);
+    font-weight: var(--font-weight-regular);
+    margin-bottom: 12px;
+  }
 
-	&__column {
-		display: flex;
-		flex-direction: column;
-		width: 100%;
+  &__column {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 
-		& > :deep(div:not(:last-child)) {
-			margin-bottom: 20px;
-		}
-	}
+    & > :deep(div:not(:last-child)) {
+      margin-bottom: 20px;
+    }
+  }
 
-	&__row {
-		display: flex;
-		width: 100%;
+  &__row {
+    display: flex;
+    width: 100%;
 
-		& > :deep(div:not(:last-child)) {
-			margin-right: 16px;
-		}
-	}
+    & > :deep(div:not(:last-child)) {
+      margin-right: 16px;
+    }
+  }
+
+  &__column-row {
+    display: flex;
+    flex-direction: column;
+
+    & > :deep(div:not(:last-child)) {
+      display: flex;
+      gap: var(--space-unrelated-items);
+      margin-bottom: var(--space-unrelated-items);
+    }
+  }
 }
 </style>

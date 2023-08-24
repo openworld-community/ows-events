@@ -29,11 +29,15 @@ services:
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
+            - 'traefik.http.middlewares.compressor.compress=true'
+            - 'traefik.http.middlewares.redirect-https.redirectscheme.scheme=https'
             - 'traefik.http.routers.demo_frontend_https.rule=Host(`poster-demo-peredelano.orby-tech.space`)'
             - 'traefik.http.routers.demo_frontend_https.middlewares=sslheader@docker'
+            - 'traefik.http.routers.demo_frontend_https.middlewares=compressor@docker'
             - 'traefik.http.routers.demo_frontend_https.entrypoints=http, https'
             - 'traefik.http.routers.demo_frontend_https.tls.certresolver=myresolver'
             - 'traefik.http.routers.demo_frontend_http.rule=Host(`poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_frontend_http.middlewares=redirect-to-https@docker'
             - 'traefik.http.routers.demo_frontend_http.entrypoints=http'
         networks:
             - traefikpublic
@@ -53,11 +57,13 @@ services:
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
+            - 'traefik.http.middlewares.redirect-https.redirectscheme.scheme=https'
             - 'traefik.http.routers.demo_backend_https.rule=Host(`api.poster-demo-peredelano.orby-tech.space`)'
             - 'traefik.http.routers.demo_backend_https.middlewares=sslheader@docker'
             - 'traefik.http.routers.demo_backend_https.entrypoints=http, https'
             - 'traefik.http.routers.demo_backend_https.tls.certresolver=myresolver'
             - 'traefik.http.routers.demo_backend_http.rule=Host(`api.poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_backend_http.middlewares=redirect-https@docker'
             - 'traefik.http.routers.demo_backend_http.entrypoints=http'
         environment:
             - MODE=prod

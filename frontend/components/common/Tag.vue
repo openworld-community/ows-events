@@ -18,16 +18,12 @@ defineProps({
 
 <template>
 	<div :class="`tag ${className}`">
-		<p
-			v-if="!price"
-			class="tag__text"
-		>
+		<p v-if="!price">
 			{{ $t('event.price.unknown') }}
 		</p>
 
 		<p
 			v-else-if="price.value === 0"
-			class="tag__text"
 			:itemprop="SeoItempropPriceEnum.FREE"
 			content="true"
 		>
@@ -36,7 +32,6 @@ defineProps({
 
 		<p
 			v-else
-			class="tag__text"
 			:itemprop="SeoItempropPriceEnum.GROUP_ITEMPROP"
 			itemscope
 			:itemtype="SeoItemTypeEnum.OFFER"

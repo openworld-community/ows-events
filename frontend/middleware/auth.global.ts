@@ -3,6 +3,7 @@ import { RouteNameEnum } from '../constants/enums/route';
 import { apiRouter } from '../composables/useApiRouter';
 
 const pagesWithAuth: string[] = [RouteNameEnum.USER_FAVOURITES, RouteNameEnum.USER_MY_EVENTS];
+
 export default defineNuxtRouteMiddleware(async (to, from) => {
 	if (process.server) return;
 	const userStore = useUserStore();
@@ -22,7 +23,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 				return navigateTo({ name: RouteNameEnum.USER_PAGE });
 			}
 		} else {
-			userStore.userInfo = userData;
+			userStore.$patch({userInfo: userData});
 		}
 	}
 });

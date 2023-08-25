@@ -5,6 +5,12 @@ import { SeoItempropNavEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
 const route = useRoute();
 const router = useRouter();
 
+const pagesHasBackButton: string[] = [
+	RouteNameEnum.EVENT,
+	RouteNameEnum.USER_MY_EVENTS,
+	RouteNameEnum.USER_FAVOURITES
+];
+
 const isNavbarOpen = ref<boolean>(false);
 const navbarToggle = () => {
 	isNavbarOpen.value = !isNavbarOpen.value;
@@ -21,6 +27,17 @@ const logoComponentIs = computed(() => {
 	else return defineNuxtLink({});
 });
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+const goBack = () => {
+	if (router.options.history.state.back) {
+		router.back();
+	} else if (
+		route.name === RouteNameEnum.USER_FAVOURITES ||
+		route.name === RouteNameEnum.USER_MY_EVENTS
+	) {
+		navigateTo({ name: RouteNameEnum.USER_PAGE });
+	} else navigateTo({ name: RouteNameEnum.HOME });
+};
 </script>
 
 <template>
@@ -36,15 +53,12 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 				:itemtype="SeoItemTypeEnum.NAV"
 			>
 				<CommonButton
-					v-if="
-						route.name === RouteNameEnum.USER_FAVOURITES ||
-						route.name === RouteNameEnum.USER_MY_EVENTS ||
-						route.name === RouteNameEnum.EVENT
-					"
+					v-if="route.name && pagesHasBackButton.includes(route.name as string)"
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"
-					@click="router.back()"
+					:alt="$t('global.button.back')"
+					@click="goBack"
 				/>
 				<component
 					:is="logoComponentIs"

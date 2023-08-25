@@ -54,13 +54,13 @@ const isInFavourites = computed(() => {
 	return !!(userStore.favourites && userStore.favourites.includes(id));
 });
 
-const addToFavourites = async () => {
-	await apiRouter.user.favourites.add.useMutation({ data: { event: id } });
+const toggleFavourites = async () => {
+	if (isInFavourites.value) {
+		await apiRouter.user.favourites.remove.useMutation({ data: { event: id } });
+	} else {
+		await apiRouter.user.favourites.add.useMutation({ data: { event: id } });
+	}
 };
-
-const removeFromFavourites = async () => {
- await apiRouter.user.favourites.remove.useMutation({ data: { event: id } })
-}
 
 const deleteCard = async () => {
 	// если запрос проходит, то ничего не приходит, т.е. может придти только error
@@ -149,8 +149,12 @@ patchDeleteEventModal({
 					<CommonButton
 						is-icon
 						:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
-						:alt="isInFavourites ? $t('global.button.add_to_favourites') : $t('global.button.add_to_favourites')"
-						@click="isInFavourites ? removeFromFavourites : addToFavourites"
+						:alt="
+							isInFavourites
+								? $t('global.button.add_to_favourites')
+								: $t('global.button.add_to_favourites')
+						"
+						@click="toggleFavourites"
 					/>
 				</div>
 			</div>

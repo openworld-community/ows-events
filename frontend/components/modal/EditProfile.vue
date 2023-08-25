@@ -40,7 +40,7 @@ const updateUserData = async () => {
 		data: { userInfo: userData.value }
 	});
 	if (!error.value) {
-		userStore.$patch({ userInfo: userData.value });
+		await userStore.getUserInfo();
 		closeEditProfileModal();
 	}
 	isLoading.value = false;

@@ -14,6 +14,9 @@ export const user = {
 		}),
 		add: defineMutation<(input: { event: string }) => void>((input) => {
 			return useBackendFetch('user/favorites/add', { body: { event: input.event } }, { auth: true });
-		})
+		}),
+		remove:  defineMutation<(input: { event: string }) => void>((input) => {
+			return useBackendFetch('user/favorites/remove', { body: { event: input.event } }, { auth: true });
+		}),
 	}
 };

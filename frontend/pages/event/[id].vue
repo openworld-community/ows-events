@@ -58,6 +58,10 @@ const addToFavourites = async () => {
 	await apiRouter.user.favourites.add.useMutation({ data: { event: id } });
 };
 
+const removeFromFavourites = async () => {
+ await apiRouter.user.favourites.remove.useMutation({ data: { event: id } })
+}
+
 const deleteCard = async () => {
 	// если запрос проходит, то ничего не приходит, т.е. может придти только error
 	const { error } = await apiRouter.events.delete.useMutation({ data: { id } });
@@ -145,7 +149,8 @@ patchDeleteEventModal({
 					<CommonButton
 						is-icon
 						:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
-						@click="addToFavourites"
+						:alt="isInFavourites ? $t('global.button.add_to_favourites') : $t('global.button.add_to_favourites')"
+						@click="isInFavourites ? removeFromFavourites : addToFavourites"
 					/>
 				</div>
 			</div>

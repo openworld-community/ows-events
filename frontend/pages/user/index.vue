@@ -2,7 +2,17 @@
 import { useUserStore } from '../../stores/user.store';
 import { getUserName } from '../../utils/user';
 import { RouteNameEnum } from '../../constants/enums/route';
-definePageMeta({ name: 'user'});
+import { BASE_URL, TELEGRAM_AUTH_BOT_NAME } from '../../constants/url';
+import { SeoItempropUserEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
+
+definePageMeta({ name: RouteNameEnum.USER_PAGE });
+
+const { t } = useI18n();
+
+getMeta({
+	title: t('meta.user.info.title'),
+	description: t('meta.user.info.description')
+});
 
 const userStore = useUserStore();
 const tokenCookie = useCookie<string | null>('token');
@@ -51,22 +61,29 @@ const logout = () => {
 </script>
 
 <template>
-	<div class="user-page">
+	<div
+		class="user-page"
+		itemscope
+		:itemtype="SeoItemTypeEnum.USER"
+	>
 		<template v-if="tokenCookie">
 			<div class="user-page__info user-info">
 				<div class="user-info__wrapper">
-					<p class="user-info__name">
-						{{ `${$t('user.greeting')}, ${getUserName()}!` }}
-					</p>
+					<h1 class="user-info__name">
+						{{ $t('user.greeting') }},
+						<span :itemprop="SeoItempropUserEnum.name">{{ `${getUserName()}!` }}</span>
+					</h1>
 					<p
 						v-if="userData?.nickname"
 						class="user-info__nickname"
+						:itemprop="SeoItempropUserEnum.nickname"
 					>
 						{{ `@${userData?.nickname}` }}
 					</p>
 					<p
 						v-if="userData?.company"
 						class="user-info__organizer"
+						:itemprop="SeoItempropUserEnum.company"
 					>
 						{{ userData?.company }}
 					</p>
@@ -181,6 +198,7 @@ const logout = () => {
 
 	&__name {
 		font-size: var(--font-size-ML);
+		font-weight: var(--font-weight-regular);
 		line-height: 24px;
 		margin-bottom: var(--space-related-items);
 	}

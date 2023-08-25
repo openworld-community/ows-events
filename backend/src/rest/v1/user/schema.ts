@@ -52,3 +52,45 @@ export const changeUserInfoSchema = {
 		required: ['userInfo']
 	}
 };
+
+export const addFavoriteEventSchema = {
+	description: 'Add event to favorite events',
+	tags: ['User'],
+	summary: 'Add event to favorite events',
+	body: {
+		type: 'object',
+		properties: {
+			event: {
+				type: 'string'
+			}
+		},
+		required: ['event']
+	}
+};
+
+export const removeFavoriteEventSchema = {
+	description: 'Remove event from favorite events',
+	tags: ['User'],
+	summary: 'Remove event from favorite events',
+	body: {
+		type: 'object',
+		properties: {
+			event: {
+				type: 'string'
+			}
+		},
+		required: ['event']
+	}
+};
+
+export const getFavoriteEventsSchema = {
+	description: 'Get favorite events',
+	tags: ['User'],
+	summary: 'Get favorite events',
+	response: {
+		200: {
+			type: 'array',
+			items: { type: 'string' }
+		}
+	}
+};

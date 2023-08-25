@@ -16,6 +16,8 @@ export type UserDbEntity = {
 		phone: string;
 	};
 	token: string;
+
+	favorites: string[];
 };
 
 export type TGUser = UserDbEntity['telegram'];

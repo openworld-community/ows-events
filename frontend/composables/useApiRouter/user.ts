@@ -9,7 +9,7 @@ export const user = {
 		return useBackendFetch('user/info', { body: input }, { auth: true });
 	}),
 	favourites: {
-		get: defineQuery<() => UserInfo>(() => {
+		get: defineQuery<() => string[]>(() => {
 			return useBackendFetch(`user/favorites/get`, {}, {auth: true});
 		}),
 		add: defineMutation<(input: { event: string }) => void>((input) => {

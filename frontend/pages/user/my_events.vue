@@ -3,7 +3,7 @@ import { RouteNameEnum } from '../../constants/enums/route';
 
 definePageMeta({ name: RouteNameEnum.USER_FAVOURITES });
 
-const myEvents = [];
+const myEvents: string[] = [];
 </script>
 
 <template>

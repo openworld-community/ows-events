@@ -9,21 +9,28 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 	const userStore = useUserStore();
 	if (!userStore.isAuthorized) {
 		let userData = null;
-		const tokenCookie = useCookie('token');
-		if (tokenCookie.value) {
+		const token = useCookie('token');
+		const userCookie = useCookie('user');
+		if (token.value) {
 			const { data } = await apiRouter.user.get.useQuery({
-				data: { userToken: tokenCookie.value }
+				data: { userToken: token.value }
 			});
 			userData = data.value;
+			userStore.$patch({ id: userCookie.value.id });
 		}
 
 		if (!userData) {
-			tokenCookie.value = '';
+			token.value = null;
+			userCookie.value = null;
 			if (to.name && pagesWithAuth.includes(to.name as string)) {
 				return navigateTo({ name: RouteNameEnum.USER_PAGE });
 			}
 		} else {
-			userStore.$patch({userInfo: userData});
+			userStore.$patch({ userInfo: userData });
+			const {data} = await apiRouter.user.favourites.get.useQuery({})
+			if (data.value) {
+				userStore.$patch({ favourites: data.value})
+			}
 		}
 	}
 });

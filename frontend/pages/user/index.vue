@@ -16,6 +16,7 @@ getMeta({
 
 const userStore = useUserStore();
 const tokenCookie = useCookie<string | null>('token');
+const userCookie = useCookie('user');
 
 const userData = computed(() => userStore.userInfo);
 
@@ -56,6 +57,7 @@ const openEditProfileModal = () => {
 
 const logout = () => {
 	tokenCookie.value = null;
+	userCookie.value = null;
 	userStore.$patch({ userInfo: null });
 };
 </script>
@@ -111,7 +113,7 @@ const logout = () => {
 						height="32"
 						color="var(--color-accent-green-main)"
 					/>
-					<span>{{ $t('user.links.my_events') }}</span>
+					<span>{{ $t('user.my_events') }}</span>
 				</NuxtLink>
 				<NuxtLink
 					:to="`${RouteNameEnum.USER_PAGE}/${RouteNameEnum.USER_FAVOURITES}`"
@@ -124,7 +126,7 @@ const logout = () => {
 						height="32"
 						color="var(--color-accent-green-main)"
 					/>
-					<span class="link__text">{{ $t('user.links.favourites') }}</span>
+					<span class="link__text">{{ $t('user.favourites') }}</span>
 				</NuxtLink>
 			</div>
 			<CommonButton

@@ -3,6 +3,7 @@ import { getAllTimezones, getTimezone } from '@/services/timezone.services';
 import { useLocationStore, type Country, type City } from '@/stores/location.store';
 import { type EventOnPoster } from '@/../common/types';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
+import { EventTypes } from '../../../common/const/eventTypes';
 import { getCurrencyByCountry } from '../../utils/prices';
 
 type Props = {
@@ -126,7 +127,11 @@ const submitEvent = async () => {
 		}
 		image = (await addImage(newImageFile.value)) ?? image;
 
-		const event = Object.assign(paramsForSubmit.value, { id: inputValues.value.id, image });
+		const event = Object.assign(paramsForSubmit.value, {
+			id: inputValues.value.id,
+			image,
+			type: EventTypes.USER_GENERATED
+		});
 		const { error } = await apiRouter.events.edit.useMutation({ data: { event } });
 
 		if (!error.value) props.refreshEvent?.();

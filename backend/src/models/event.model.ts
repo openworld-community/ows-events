@@ -79,9 +79,9 @@ const schema = new Schema<IEventDocument>(
 				required: true
 			}
 		},
-        tags: {
-            type: [String]
-        },
+		tags: {
+			type: [String]
+		},
 		meta: {
 			moderation: {
 				status: {
@@ -95,6 +95,10 @@ const schema = new Schema<IEventDocument>(
 					}
 				]
 			}
+		},
+		type: {
+			type: String,
+			enum: ['parsed', 'paid', 'user-generated']
 		}
 	},
 	{

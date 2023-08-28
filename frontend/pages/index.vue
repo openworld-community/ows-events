@@ -4,6 +4,7 @@ import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
 import { SeoItemTypeEnum } from '../constants/enums/seo';
+import { useUserStore } from '../stores/user.store';
 
 const { t } = useI18n();
 
@@ -12,6 +13,7 @@ definePageMeta({ name: RouteNameEnum.HOME });
 getMeta({
 	title: t('meta.title')
 });
+const userStore = useUserStore()
 
 const {
 	open: openEventModal,
@@ -43,7 +45,7 @@ const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 });
 
 const onButtonClick = () => {
-	if (useCookie('token').value) {
+	if (userStore.isAuthorized) {
 		openEventModal();
 	} else {
 		openNeedAuthorizeModal();

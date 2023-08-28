@@ -6,7 +6,7 @@ import { formatPrice } from '../../utils/prices';
 
 defineProps({
 	price: {
-		type: Object as PropType<EventPrice>,
+		type: [Object, null] as PropType<EventPrice | null>,
 		required: true
 	},
 	className: {
@@ -17,9 +17,7 @@ defineProps({
 </script>
 
 <template>
-	<div
-		:class="`tag ${className}`"
-	>
+	<div :class="`tag ${className}`">
 		<p v-if="!price">
 			{{ $t('event.price.unknown') }}
 		</p>
@@ -35,9 +33,9 @@ defineProps({
 		<p
 			v-else
 			class="event-price"
-      :itemprop="SeoItempropPriceEnum.GROUP_ITEMPROP"
-      itemscope
-      :itemtype="SeoItemTypeEnum.OFFER"
+			:itemprop="SeoItempropPriceEnum.GROUP_ITEMPROP"
+			itemscope
+			:itemtype="SeoItemTypeEnum.OFFER"
 		>
 			<span
 				:itemprop="SeoItempropPriceEnum.PRICE"
@@ -65,7 +63,7 @@ defineProps({
 	text-align: center;
 
 	border: 1px solid var(--color-accent-green-main);
-	border-radius: 16px;
+	border-radius: 8px;
 
 	padding: 3px 10px;
 }

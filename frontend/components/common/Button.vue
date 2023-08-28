@@ -121,7 +121,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	display: flex;
 	justify-content: center;
 	height: 40px;
-	border-radius: 24px;
+	border-radius: 8px;
 	padding: 7px 14px;
 	align-items: center;
 	transition: background-color 0.3s ease;

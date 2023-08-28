@@ -5,6 +5,7 @@ import 'vue-toastification/dist/index.css';
 import 'virtual:svg-icons-register';
 import { ModalsContainer } from 'vue-final-modal';
 import { isDevelopmentMode } from './constants/common';
+import { useUserStore } from './stores/user.store';
 
 const { locale, t } = useI18n();
 
@@ -16,8 +17,11 @@ useHead({
 	}
 });
 
+useUserStore();
+
+const tokenCookie = useCookie('token');
+
 if (isDevelopmentMode) {
-	const tokenCookie = useCookie<string>('token');
 	tokenCookie.value ??= 'blablabla';
 }
 </script>

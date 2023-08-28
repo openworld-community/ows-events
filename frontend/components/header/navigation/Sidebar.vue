@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '@/constants/enums/route';
 import { SUPPORT_TG_URL } from '../../../constants/url';
-import {SeoItemTypeEnum} from '../../../constants/enums/seo';
+import { SeoItemTypeEnum } from '../../../constants/enums/seo';
+import { useUserStore } from '../../../stores/user.store';
 
 const emit = defineEmits(['close']);
+const userStore = useUserStore();
 </script>
 
 <template>
@@ -13,9 +15,11 @@ const emit = defineEmits(['close']);
 		itemscope
 		:itemtype="SeoItemTypeEnum.NAV"
 	>
-		<HeaderAuthorisation
-			class="navigation__item"
-			@click.capture="emit('close')"
+		<HeaderNavigationNavItem
+			:link-to="{ name: RouteNameEnum.USER_PAGE }"
+			:text="userStore.isAuthorized ? $t('header.user') : $t('header.authorize')"
+			icon-name="user"
+			@click="emit('close')"
 		/>
 
 		<HeaderNavigationNavItem
@@ -33,12 +37,12 @@ const emit = defineEmits(['close']);
 			@click="emit('close')"
 		/>
 
-    <HeaderNavigationNavItem
-      :link-to="{name: RouteNameEnum.DONATION}"
-      :text="$t('header.donation')"
-      icon-name="donate"
-      @click="emit('close')"
-      />
+		<HeaderNavigationNavItem
+			:link-to="{ name: RouteNameEnum.DONATION }"
+			:text="$t('header.donation')"
+			icon-name="donate"
+			@click="emit('close')"
+		/>
 
 		<HeaderNavigationNavItem
 			:link-to="{ name: RouteNameEnum.LIMITATION_OF_LIABILITY }"

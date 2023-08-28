@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { RouteNameEnum } from '../../constants/enums/route';
+
 type Props = {
 	closeNeedAuthorizeModal: () => void;
 };
@@ -8,52 +10,22 @@ const props = defineProps<Props>();
 
 <template>
 	<CommonModalWrapper
-		:hide-overlay="false"
-		overlay-transition="vfm-fade"
-		overlay-transition-duration="2600"
-		content-transition="vfm-fade"
-		:click-to-close="true"
-		:esc-to-close="true"
-		:lock-scroll="false"
+		modal-type="info"
+		:title="$t('modal.need_authorize_modal.title')"
 	>
-		<div class="modal">
-			<div class="modal-card__head">
-				<p class="modal-card__title">
-					{{ $t('modal.need_authorize_modal.title') }}
-				</p>
-			</div>
-			<div class="modal-card__foot">
-				<CommonButton
-					button-kind="success"
-					:button-text="$t('modal.need_authorize_modal.button.close')"
-					@click="props.closeNeedAuthorizeModal"
-				/>
-			</div>
-		</div>
+		<template #footer>
+			<CommonButton
+				button-kind="ordinary"
+				:button-text="$t('global.button.close')"
+				@click="props.closeNeedAuthorizeModal"
+			/>
+			<CommonButton
+				button-kind="success"
+				:link="RouteNameEnum.USER_PAGE"
+				:button-text="$t('global.button.authorize')"
+			/>
+		</template>
 	</CommonModalWrapper>
 </template>
 
-<style scoped lang="less">
-.modal {
-	//TODO: пока верстка только мобилки
-	max-width: 350px;
-	overflow: hidden;
-	border-radius: 10px;
-	margin: 40vh auto auto;
-}
-
-.modal-card {
-	&__head {
-		height: max-content;
-	}
-
-	&__title {
-		font-size: var(--font-size-L);
-		text-align: center;
-	}
-
-	&__foot {
-		justify-content: center;
-	}
-}
-</style>
+<style scoped lang="less"></style>

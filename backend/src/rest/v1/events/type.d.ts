@@ -35,6 +35,12 @@ type IGetEventsRoute = {
 };
 type IGetEventsHandler = IRouteHandler<IGetEventsRoute>;
 
+type IGetMyEventsRoute = {
+	Header: { Authorization: string };
+	Reply: EventOnPoster[];
+};
+type IGetMyEventsHandler = IRouteHandler<IGetMyEventsRoute>;
+
 type IFindEventRoute = {
 	Body: FindEventParams;
 	Reply: EventOnPoster[];

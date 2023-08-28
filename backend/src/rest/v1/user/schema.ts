@@ -1,3 +1,5 @@
+import { ItemEvent } from '../events/schema';
+
 const UserSchema = {
 	telegram: {
 		type: 'object',
@@ -83,6 +85,18 @@ export const removeFavoriteEventSchema = {
 	}
 };
 
+export const getFavoriteEventsIdSchema = {
+	description: 'Get id of favorite events',
+	tags: ['User'],
+	summary: 'Get id of favorite events',
+	response: {
+		200: {
+			type: 'array',
+			items: { type: 'string' }
+		}
+	}
+};
+
 export const getFavoriteEventsSchema = {
 	description: 'Get favorite events',
 	tags: ['User'],
@@ -90,7 +104,7 @@ export const getFavoriteEventsSchema = {
 	response: {
 		200: {
 			type: 'array',
-			items: { type: 'string' }
+			items: ItemEvent
 		}
 	}
 };

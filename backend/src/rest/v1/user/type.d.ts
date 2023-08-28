@@ -1,4 +1,5 @@
 import { UserInfo } from '@common/types/user';
+import { EventOnPoster } from '@common/types';
 import { IRouteHandler } from '../../types';
 
 type IGetTGInfoRoute = {
@@ -33,8 +34,14 @@ type IRemoveFavoriteEventRoute = {
 };
 type IRemoveFavoriteEventHandler = IRouteHandler<IRemoveFavoriteEventRoute>;
 
-type IGetFavoriteEventsRoute = {
+type IGetFavoriteEventsIdRoute = {
 	Header: { Authorization: string };
 	Reply: string[];
+};
+type IGetFavoriteEventsIdHandler = IRouteHandler<IGetFavoriteEventsIdRoute>;
+
+type IGetFavoriteEventsRoute = {
+	Header: { Authorization: string };
+	Reply: EventOnPoster[];
 };
 type IGetFavoriteEventsHandler = IRouteHandler<IGetFavoriteEventsRoute>;

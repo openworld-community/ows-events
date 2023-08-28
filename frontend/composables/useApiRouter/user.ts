@@ -10,13 +10,21 @@ export const user = {
 	}),
 	favourites: {
 		get: defineQuery<() => string[]>(() => {
-			return useBackendFetch(`user/favorites/get`, {}, {auth: true});
+			return useBackendFetch(`user/favorites/get`, {}, { auth: true });
 		}),
 		add: defineMutation<(input: { event: string }) => void>((input) => {
-			return useBackendFetch('user/favorites/add', { body: { event: input.event } }, { auth: true });
+			return useBackendFetch(
+				'user/favorites/add',
+				{ body: { eventId: input.event } },
+				{ auth: true }
+			);
 		}),
-		remove:  defineMutation<(input: { event: string }) => void>((input) => {
-			return useBackendFetch('user/favorites/remove', { body: { event: input.event } }, { auth: true });
-		}),
+		remove: defineMutation<(input: { event: string }) => void>((input) => {
+			return useBackendFetch(
+				'user/favorites/remove',
+				{ body: { eventId: input.event } },
+				{ auth: true }
+			);
+		})
 	}
 };

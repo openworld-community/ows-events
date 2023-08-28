@@ -62,5 +62,6 @@ export const getFavoriteEvents: IGetFavoriteEventsHandler = async (request) => {
 	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
 	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
-	await userController.getFavorites(token);
+	const favoriteEvents = await userController.getFavorites(token);
+	return favoriteEvents;
 };

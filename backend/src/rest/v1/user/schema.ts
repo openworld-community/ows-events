@@ -60,11 +60,11 @@ export const addFavoriteEventSchema = {
 	body: {
 		type: 'object',
 		properties: {
-			event: {
+			eventId: {
 				type: 'string'
 			}
 		},
-		required: ['event']
+		required: ['eventId']
 	}
 };
 
@@ -75,11 +75,11 @@ export const removeFavoriteEventSchema = {
 	body: {
 		type: 'object',
 		properties: {
-			event: {
+			eventId: {
 				type: 'string'
 			}
 		},
-		required: ['event']
+		required: ['eventId']
 	}
 };
 

@@ -32,7 +32,6 @@ defineProps({
 
 		<p
 			v-else
-			class="event-price"
 			:itemprop="SeoItempropPriceEnum.GROUP_ITEMPROP"
 			itemscope
 			:itemtype="SeoItemTypeEnum.OFFER"
@@ -62,7 +61,7 @@ defineProps({
 	line-height: 20px;
 	text-align: center;
 
-	border: 1px solid var(--color-accent-green-main);
+	background-color: var(--color-accent-green-semitransparent);
 	border-radius: 8px;
 
 	padding: 3px 10px;

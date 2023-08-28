@@ -36,6 +36,7 @@ const isLoading = ref(false);
 
 const updateUserData = async () => {
 	isLoading.value = true;
+	// если запрос проходит, то ничего не приходит, т.е. может придти только error
 	const { error } = await apiRouter.user.update.useMutation({
 		data: { userInfo: userData.value }
 	});

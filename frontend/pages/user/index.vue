@@ -1,11 +1,22 @@
 <script setup lang="ts">
-import EditProfile from '@/components/modal/EditProfile.vue';
-import { TELEGRAM_AUTH_BOT_NAME, BASE_URL } from '../constants/url';
-import { useUserStore } from '../stores/user.store';
-import { getUserName } from '../utils/user';
+import { useUserStore } from '../../stores/user.store';
+import { getUserName } from '../../utils/user';
+import { RouteNameEnum } from '../../constants/enums/route';
+import { BASE_URL, TELEGRAM_AUTH_BOT_NAME } from '../../constants/url';
+import { SeoItempropUserEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
+
+definePageMeta({ name: RouteNameEnum.USER_PAGE });
+
+const { t } = useI18n();
+
+getMeta({
+	title: t('meta.user.info.title'),
+	description: t('meta.user.info.description')
+});
 
 const userStore = useUserStore();
 const tokenCookie = useCookie<string | null>('token');
+const userCookie = useCookie('user');
 
 const userData = computed(() => userStore.userInfo);
 
@@ -46,27 +57,35 @@ const openEditProfileModal = () => {
 
 const logout = () => {
 	tokenCookie.value = null;
+	userCookie.value = null;
 	userStore.$patch({ userInfo: null });
 };
 </script>
 
 <template>
-	<div class="user-page">
+	<div
+		class="user-page"
+		itemscope
+		:itemtype="SeoItemTypeEnum.USER"
+	>
 		<template v-if="tokenCookie">
 			<div class="user-page__info user-info">
 				<div class="user-info__wrapper">
-					<p class="user-info__name">
-						{{ `${$t('user.greeting')}, ${getUserName()}!` }}
-					</p>
+					<h1 class="user-info__name">
+						{{ $t('user.greeting') }},
+						<span :itemprop="SeoItempropUserEnum.name">{{ `${getUserName()}!` }}</span>
+					</h1>
 					<p
 						v-if="userData?.nickname"
 						class="user-info__nickname"
+						:itemprop="SeoItempropUserEnum.nickname"
 					>
 						{{ `@${userData?.nickname}` }}
 					</p>
 					<p
 						v-if="userData?.company"
 						class="user-info__organizer"
+						:itemprop="SeoItempropUserEnum.company"
 					>
 						{{ userData?.company }}
 					</p>
@@ -85,7 +104,7 @@ const logout = () => {
 				class="user-page__link link"
 			>
 				<NuxtLink
-					to="#"
+					:to="`${RouteNameEnum.USER_PAGE}/${RouteNameEnum.USER_MY_EVENTS}`"
 					class="link__item"
 				>
 					<CommonIcon
@@ -94,10 +113,10 @@ const logout = () => {
 						height="32"
 						color="var(--color-accent-green-main)"
 					/>
-					<span>{{ $t('user.links.my_events') }}</span>
+					<span>{{ $t('user.my_events') }}</span>
 				</NuxtLink>
 				<NuxtLink
-					to="#"
+					:to="`${RouteNameEnum.USER_PAGE}/${RouteNameEnum.USER_FAVOURITES}`"
 					class="link__item"
 				>
 					<CommonIcon
@@ -107,7 +126,7 @@ const logout = () => {
 						height="32"
 						color="var(--color-accent-green-main)"
 					/>
-					<span class="link__text">{{ $t('user.links.favourites') }}</span>
+					<span class="link__text">{{ $t('user.favourites') }}</span>
 				</NuxtLink>
 			</div>
 			<CommonButton
@@ -129,7 +148,7 @@ const logout = () => {
 			/>
 		</template>
 
-		<EditProfile
+		<ModalEditProfile
 			v-if="userStore.showEditModal"
 			:data-for-edit="userData"
 		/>
@@ -181,6 +200,7 @@ const logout = () => {
 
 	&__name {
 		font-size: var(--font-size-ML);
+		font-weight: var(--font-weight-regular);
 		line-height: 24px;
 		margin-bottom: var(--space-related-items);
 	}

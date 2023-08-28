@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { EventOnPoster } from '@common/types';
-import { EventTypes } from '@common/const/eventTypes';
+import { EventTypes } from '../../../../../common/const/eventTypes';
 import { CommonErrorsEnum } from '../../../../../common/const';
 import { eventsStateController } from '../../../controllers/events-state-controller';
 import {
@@ -31,11 +31,11 @@ export const addEvent: IAddEventHandler = async (request) => {
 		event.creatorId = 'dev-user';
 	}
 
-    if (event.creatorId === 'parser'){
-        event.type = EventTypes.PARSED
-    } else {
-        event.type = EventTypes.USER_GENERATED
-    }
+	if (event.creatorId === 'parser') {
+		event.type = EventTypes.PARSED;
+	} else {
+		event.type = EventTypes.USER_GENERATED;
+	}
 
 	const eventWithThisLink = await EventModel.findOne({
 		url: event.url,

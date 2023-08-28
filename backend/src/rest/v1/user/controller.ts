@@ -6,6 +6,7 @@ import {
 	IAddFavoriteEventHandler,
 	IChangeUserInfoHandler,
 	IGetFavoriteEventsHandler,
+	IGetFavoriteEventsIdHandler,
 	IGetTGInfoHandler,
 	IGetUserInfoHandler,
 	IRemoveFavoriteEventHandler
@@ -62,6 +63,17 @@ export const getFavoriteEvents: IGetFavoriteEventsHandler = async (request) => {
 	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
 	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
-	const favoriteEvents = await userController.getFavorites(token);
+  const favoriteEvents = await userController.getFavorites(token);
 	return favoriteEvents;
+};
+
+export const getFavoriteEventsId: IGetFavoriteEventsIdHandler = async (request) => {
+	const token = request.headers.authorization;
+	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
+
+	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
+	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+
+	const events = await userController.getFavoritesId(token);
+	return events;
 };

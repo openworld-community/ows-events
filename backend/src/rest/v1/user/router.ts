@@ -3,6 +3,7 @@ import {
 	addFavoriteEvent,
 	changeUserInfo,
 	getFavoriteEvents,
+	getFavoriteEventsId,
 	getTGInfoByToken,
 	getUserInfoByToken,
 	removeFavoriteEvent
@@ -10,6 +11,7 @@ import {
 import {
 	IAddFavoriteEventRoute,
 	IChangeUserInfoRoute,
+	IGetFavoriteEventsIdRoute,
 	IGetFavoriteEventsRoute,
 	IGetTGInfoRoute,
 	IGetUserInfoRoute,
@@ -18,6 +20,7 @@ import {
 import {
 	addFavoriteEventSchema,
 	changeUserInfoSchema,
+	getFavoriteEventsIdSchema,
 	getFavoriteEventsSchema,
 	getTGInfoByTokenSchema,
 	getUserInfoByTokenSchema,
@@ -53,5 +56,10 @@ export const userApi = async (fastify: FastifyInstance) => {
 	fastify.get<IGetFavoriteEventsRoute>('/favorites/get', {
 		schema: getFavoriteEventsSchema,
 		handler: getFavoriteEvents
+	});
+
+	fastify.get<IGetFavoriteEventsIdRoute>('/favorites/get/id', {
+		schema: getFavoriteEventsIdSchema,
+		handler: getFavoriteEventsId
 	});
 };

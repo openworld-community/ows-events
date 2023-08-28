@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { UserModel } from '../models/user.model';
 import { CommonErrorsEnum } from '../../../common/const';
 import { vars } from '../config/vars';
+import { EventModel } from '../models/event.model';
 
 export type FindEventParams = {
 	searchLine?: string;
@@ -73,10 +74,18 @@ class UserController {
 		await UserModel.findOneAndUpdate({ token }, { $pull: { favorites: event } });
 	}
 
-	async getFavorites(token: string) {
+	async getFavoritesId(token: string) {
 		const user = await UserModel.findOne({ token });
 		if (!user) throw new Error(CommonErrorsEnum.USER_DOES_NOT_EXIST);
 		return user.favorites;
+	}
+
+	async getFavorites(token: string) {
+		const user = await UserModel.findOne({ token });
+		if (!user) throw new Error(CommonErrorsEnum.USER_DOES_NOT_EXIST);
+		const favoriteEventsId = user.favorites;
+		const favoriteEvents = await EventModel.find({ id: { $in: [favoriteEventsId] } });
+		return favoriteEvents;
 	}
 }
 

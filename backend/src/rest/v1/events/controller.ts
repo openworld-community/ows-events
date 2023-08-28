@@ -9,6 +9,7 @@ import {
 	IFindEventHandler,
 	IGetEventHandler,
 	IGetEventsHandler,
+	IGetMyEventsHandler,
 	IUpdateEventHandler
 } from './type';
 import { ITokenData } from '../../types';
@@ -31,11 +32,11 @@ export const addEvent: IAddEventHandler = async (request) => {
 		event.creatorId = 'dev-user';
 	}
 
-    if (event.creatorId === 'parser'){
-        event.type = EventTypes.PARSED
-    } else {
-        event.type = EventTypes.USER_GENERATED
-    }
+	if (event.creatorId === 'parser') {
+		event.type = EventTypes.PARSED;
+	} else {
+		event.type = EventTypes.USER_GENERATED;
+	}
 
 	const eventWithThisLink = await EventModel.findOne({
 		url: event.url,
@@ -57,6 +58,17 @@ export const addEvent: IAddEventHandler = async (request) => {
 
 export const getEvents: IGetEventsHandler = async (): Promise<EventOnPoster[]> =>
 	(await eventsStateController.getEvents()).slice(0, 100);
+
+export const getMyEvents: IGetMyEventsHandler = async (request) => {
+	const token = request.headers.authorization;
+	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
+
+	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
+	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+
+	const events = await eventsStateController.getUserEvents(jwtData.id);
+	return events;
+};
 
 export const getEvent: IGetEventHandler = async (request) => {
 	const eventId = request.params.id;

@@ -98,38 +98,49 @@ class EventsStateController {
 	async addTags(data: EventOnPoster) {
 		const event = await EventModel.findOneAndUpdate(
 			{ id: data.id },
-            { 
-                $addToSet: { tags: { $each: data.tags } } 
-            }
+			{
+				$addToSet: { tags: { $each: data.tags } }
+			}
 		);
 
 		return event;
 	}
 
 	async findAllTags() {
-		const tags = await EventModel.distinct("tags");
+		const tags = await EventModel.distinct('tags');
 
 		return tags;
 	}
 
 	async findTagsByEventId(id: string) {
-		const event = await EventModel.findOne(
-            { id }, 
-            { _id: 0, tags: 1 }
-        );
-		
-        return event?.tags;
+		const event = await EventModel.findOne({ id }, { _id: 0, tags: 1 });
+
+		return event?.tags;
 	}
 
-	async removeTags(data: EventOnPoster ) { 
+	async removeTags(data: EventOnPoster) {
 		const event = await EventModel.findOneAndUpdate(
 			{ id: data.id },
-            { 
-                $pull: { tags: { $in: data.tags } }
-            }
+			{
+				$pull: { tags: { $in: data.tags } }
+			}
 		);
 
 		return event;
+	}
+
+	async getUserEvents(userId: string) {
+		const events = await EventModel.find(
+			{ creatorId: userId },
+			{},
+			{
+				sort: {
+					date: 'descending'
+				}
+			}
+		);
+
+		return events;
 	}
 }
 

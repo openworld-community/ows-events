@@ -2,6 +2,7 @@
 import { RouteNameEnum } from '../../constants/enums/route';
 import { apiRouter } from '../../composables/useApiRouter';
 import type { EventOnPoster } from '../../../common/types';
+import { SeoItemTypeEnum } from '../../constants/enums/seo';
 
 definePageMeta({ name: RouteNameEnum.USER_MY_EVENTS });
 
@@ -21,6 +22,8 @@ if (process.client) {
 			<li
 				v-for="event in favourites"
 				:key="event.id"
+				itemscope
+				:itemtype="SeoItemTypeEnum.EVENT"
 			>
 				<UserEventCard :event-data="event" />
 			</li>

@@ -104,7 +104,7 @@ const logout = () => {
 				class="user-page__link link"
 			>
 				<NuxtLink
-					:to="`${RouteNameEnum.USER_PAGE}/${RouteNameEnum.USER_MY_EVENTS}`"
+					:to="{ name: RouteNameEnum.USER_FAVOURITES }"
 					class="link__item"
 				>
 					<CommonIcon
@@ -116,7 +116,7 @@ const logout = () => {
 					<span>{{ $t('user.my_events') }}</span>
 				</NuxtLink>
 				<NuxtLink
-					:to="`${RouteNameEnum.USER_PAGE}/${RouteNameEnum.USER_FAVOURITES}`"
+					:to="{ name: RouteNameEnum.USER_MY_EVENTS }"
 					class="link__item"
 				>
 					<CommonIcon

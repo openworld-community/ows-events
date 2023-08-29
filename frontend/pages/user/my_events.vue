@@ -4,32 +4,31 @@ import type { EventOnPoster } from '../../../common/types';
 
 definePageMeta({ name: RouteNameEnum.USER_FAVOURITES });
 
-const myEvents = ref<EventOnPoster[] | []>([])
+const myEvents = ref<EventOnPoster[] | []>([]);
 
-onMounted(async () => {
+if (process.client) {
 	const { data } = await apiRouter.events.createdEvents.get.useQuery({});
-	if (data.value) myEvents.value = data.value
-})
-
+	if (data.value) myEvents.value = data.value;
+}
 </script>
 
 <template>
 	<div class="my-events">
 		<h1 class="my-events__title">{{ $t('user.my_events') }}</h1>
-		<p
-			v-if="!myEvents.length"
-			class="my-events__empty"
-		>
-			{{ $t('user.no_my_events') }}
-		</p>
-		<ul v-else>
+		<ul v-if="myEvents.length">
 			<li
 				v-for="event in myEvents"
 				:key="event.id"
 			>
-				{{ event.title }}
+				<UserEventCard :event-data="event" />
 			</li>
 		</ul>
+		<p
+			v-else
+			class="my-events__empty"
+		>
+			{{ $t('user.no_my_events') }}
+		</p>
 	</div>
 </template>
 

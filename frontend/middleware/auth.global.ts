@@ -30,7 +30,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 			}
 		} else {
 			userStore.$patch({ userInfo: userData });
-			await userStore.getFavouritesId()
+			await userStore.getFavouriteIDs();
 		}
 	}
 });

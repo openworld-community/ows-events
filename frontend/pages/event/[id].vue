@@ -52,18 +52,14 @@ const redirect = () => {
 };
 
 const isInFavourites = computed(() => {
-	return !!(userStore.favouritesId && userStore.favouritesId.includes(id));
+	return userStore.favouriteIDs.includes(id);
 });
 
 const toggleFavourites = async () => {
-	if (isInFavourites.value) {
-		const {error} = await apiRouter.user.favourites.remove.useMutation({ data: { eventId: id } });
-		if (!error.value) await userStore.getFavouritesId()
-
-	} else {
-		const {error} = await apiRouter.user.favourites.add.useMutation({ data: { eventId: id } });
-		if (!error.value) await userStore.getFavouritesId()
-	}
+	const { error } = await apiRouter.user.favourites[
+		isInFavourites.value ? 'remove' : 'add'
+	].useMutation({ data: { eventId: id } });
+	if (!error.value) await userStore.getFavouriteIDs();
 };
 
 const deleteCard = async () => {

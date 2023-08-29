@@ -11,6 +11,7 @@ import {
 	SeoItemTypeEnum
 } from '../../constants/enums/seo';
 import { useUserStore } from '../../stores/user.store';
+import { apiRouter } from '../../composables/useApiRouter';
 
 definePageMeta({ name: RouteNameEnum.EVENT });
 const route = useRoute();
@@ -51,14 +52,17 @@ const redirect = () => {
 };
 
 const isInFavourites = computed(() => {
-	return !!(userStore.favourites && userStore.favourites.includes(id));
+	return !!(userStore.favouritesId && userStore.favouritesId.includes(id));
 });
 
 const toggleFavourites = async () => {
 	if (isInFavourites.value) {
-		await apiRouter.user.favourites.remove.useMutation({ data: { event: id } });
+		const {error} = await apiRouter.user.favourites.remove.useMutation({ data: { eventId: id } });
+		if (!error.value) await userStore.getFavouritesId()
+
 	} else {
-		await apiRouter.user.favourites.add.useMutation({ data: { event: id } });
+		const {error} = await apiRouter.user.favourites.add.useMutation({ data: { eventId: id } });
+		if (!error.value) await userStore.getFavouritesId()
 	}
 };
 

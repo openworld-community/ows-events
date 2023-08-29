@@ -1,5 +1,6 @@
 import { defineMutation, defineQuery, useBackendFetch } from './utils';
 import type { PostUserInfo, UserInfo } from '~/../common/types/user';
+import type { EventOnPoster } from '../../../common/types';
 
 export const user = {
 	get: defineQuery<(input: { userToken: string }) => UserInfo>((input) => {
@@ -9,22 +10,25 @@ export const user = {
 		return useBackendFetch('user/info', { body: input }, { auth: true });
 	}),
 	favourites: {
-		get: defineQuery<() => string[]>(() => {
+		get: defineQuery<() => EventOnPoster[]>(() => {
 			return useBackendFetch(`user/favorites/get`, {}, { auth: true });
 		}),
-		add: defineMutation<(input: { event: string }) => void>((input) => {
+		getId: defineQuery<() => string[]>(() => {
+			return useBackendFetch(`user/favorites/get/id`, {}, { auth: true });
+		}),
+		add: defineMutation<(input: { eventId: string }) => void>((input) => {
 			return useBackendFetch(
 				'user/favorites/add',
-				{ body: { eventId: input.event } },
+				{ body: { eventId: input.eventId } },
 				{ auth: true }
 			);
 		}),
-		remove: defineMutation<(input: { event: string }) => void>((input) => {
+		remove: defineMutation<(input: { eventId: string }) => void>((input) => {
 			return useBackendFetch(
 				'user/favorites/remove',
-				{ body: { eventId: input.event } },
+				{ body: { eventId: input.eventId } },
 				{ auth: true }
 			);
 		})
-	}
+	},
 };

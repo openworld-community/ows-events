@@ -30,10 +30,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 			}
 		} else {
 			userStore.$patch({ userInfo: userData });
-			const {data} = await apiRouter.user.favourites.get.useQuery({})
-			if (data.value) {
-				userStore.$patch({ favourites: data.value})
-			}
+			await userStore.getFavouritesId()
 		}
 	}
 });

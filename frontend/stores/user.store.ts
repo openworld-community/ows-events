@@ -5,7 +5,7 @@ import { apiRouter } from '../composables/useApiRouter';
 type UserStore = {
 	id: string | null;
 	userInfo: UserInfo | null;
-	favourites: string[] | null;
+	favouritesId: string[] | null;
 	isLoading: boolean;
 	showEditModal: boolean;
 };
@@ -15,7 +15,7 @@ export const useUserStore = defineStore('user', {
 		return {
 			id: null,
 			userInfo: null,
-			favourites: null,
+			favouritesId: null,
 			isLoading: false,
 			showEditModal: false
 		};
@@ -28,7 +28,7 @@ export const useUserStore = defineStore('user', {
 			if (!state.userInfo) return state.id = null
 		},
 		clearFavourites(state) {
-			if (!state.userInfo) return state.favourites = null
+			if (!state.userInfo) return state.favouritesId = null
 		}
 	},
 	actions: {
@@ -41,6 +41,12 @@ export const useUserStore = defineStore('user', {
 				if (data.value) {
 					this.userInfo = data.value;
 				}
+			}
+		},
+		async getFavouritesId() {
+			const {data} = await apiRouter.user.favourites.getId.useQuery({})
+			if (data.value) {
+				this.favouritesId = data.value
 			}
 		}
 	}

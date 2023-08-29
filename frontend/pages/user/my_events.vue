@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import { RouteNameEnum } from '../../constants/enums/route';
+import type { EventOnPoster } from '../../../common/types';
 
 definePageMeta({ name: RouteNameEnum.USER_FAVOURITES });
 
-const myEvents: string[] = [];
+const myEvents = ref<EventOnPoster[] | []>([])
+
+onMounted(async () => {
+	const { data } = await apiRouter.events.createdEvents.get.useQuery({});
+	if (data.value) myEvents.value = data.value
+})
+
 </script>
 
 <template>
@@ -15,6 +22,14 @@ const myEvents: string[] = [];
 		>
 			{{ $t('user.no_my_events') }}
 		</p>
+		<ul v-else>
+			<li
+				v-for="event in myEvents"
+				:key="event.id"
+			>
+				{{ event.title }}
+			</li>
+		</ul>
 	</div>
 </template>
 

@@ -6,7 +6,6 @@ import type { TGUserInfo } from '../../common/types/user';
 const pagesWithAuth: string[] = [RouteNameEnum.USER_FAVOURITES, RouteNameEnum.USER_MY_EVENTS];
 
 export default defineNuxtRouteMiddleware(async (to) => {
-	if (process.server) return;
 	const userStore = useUserStore();
 	if (!userStore.isAuthorized) {
 		let userData = null;

@@ -7,10 +7,8 @@ definePageMeta({ name: RouteNameEnum.USER_FAVOURITES });
 
 const myEvents = ref<EventOnPoster[] | []>([]);
 
-if (process.client) {
-	const { data } = await apiRouter.events.createdEvents.get.useQuery({});
-	if (data.value) myEvents.value = data.value;
-}
+const { data } = await apiRouter.events.createdEvents.get.useQuery({});
+if (data.value) myEvents.value = data.value;
 </script>
 
 <template>

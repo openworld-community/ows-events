@@ -16,7 +16,7 @@ defineProps<{ eventData: EventOnPoster }>();
 				'card__image-container',
 				{ 'card__image-container--background': !eventData.image }
 			]"
-			:itemprop="SeoItempropGlobalEnum.IMAGE"
+			:itemprop="eventData.image ? undefined : SeoItempropGlobalEnum.IMAGE"
 		>
 			<img
 				v-if="eventData.image"

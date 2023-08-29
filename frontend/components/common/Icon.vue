@@ -15,6 +15,7 @@ export type IconName =
 	| 'edit'
 	| 'error'
 	| 'heart'
+	| 'heart-filled'
 	| 'info'
 	| 'login'
 	| 'logout'
@@ -60,7 +61,7 @@ const props = defineProps({
 	},
 	color: {
 		type: String as PropType<string>,
-		default: 'var(--color-input-field)'
+		default: 'var(--color-input-icons)'
 	},
 	width: {
 		type: [String, Number] as PropType<string | number>,

@@ -5,6 +5,7 @@ export const global = {
 	timezone: 'Часовой пояс',
 	button: {
 		authorize: 'Авторизоваться',
+		add_to_favourites: 'Добавить в Избранное',
 		back: 'Назад',
 		cancel: 'Отмена',
 		close: 'Закрыть',
@@ -15,6 +16,7 @@ export const global = {
 		edit_profile: 'Редактировать профиль',
 		follow: 'Перейти',
 		logout: 'Выйти из аккаунта',
+		remove_from_favourites: 'Удалить из Избранного',
 		save: 'Сохранить',
 		search: 'Поиск',
 		share: 'Поделиться',

@@ -12,8 +12,9 @@ export enum SeoItemTypeEnum {
 	DONATE_METHOD = `${SEO_SCHEMA_BASE_URL}MoneyTransfer`,
 	HEADER = `${SEO_SCHEMA_BASE_URL}WPHeader`,
 	NAV = `${SEO_SCHEMA_BASE_URL}SiteNavigationElement`,
-	URL = `${SEO_SCHEMA_BASE_URL}/URL`,
-	ORGANIZATION = `${SEO_SCHEMA_BASE_URL}/Organization`,
+	URL = `${SEO_SCHEMA_BASE_URL}URL`,
+	ORGANIZATION = `${SEO_SCHEMA_BASE_URL}Organization`,
+	USER = `${SEO_SCHEMA_BASE_URL}Person`
 }
 
 // ITEMPROPS
@@ -71,16 +72,23 @@ export enum SeoItempropAboutEnum {
 // Navigation
 export enum SeoItempropNavEnum {
 	NAME = 'name',
-	URL = 'url',
+	URL = 'url'
 }
 
 // URL
 export enum SeoItempropURLEnum {
-	FEEDBACK_POLITY = 'actionableFeedbackPolicy',
+	FEEDBACK_POLITY = 'actionableFeedbackPolicy'
 }
 
 // Organization
 export enum SeoItempropOrganizationEnum {
 	BRAND = 'brand',
-	PUBLISHING_PRINCIPLES = 'publishingPrinciples',
+	PUBLISHING_PRINCIPLES = 'publishingPrinciples'
+}
+
+// User
+export enum SeoItempropUserEnum {
+	name = 'name',
+	nickname = 'alternateName',
+	company = 'affiliation'
 }

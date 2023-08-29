@@ -4,20 +4,22 @@ import { SeoItempropPriceEnum, SeoItemTypeEnum } from '../../constants/enums/seo
 import type { EventPrice } from '../../../common/types/event';
 import { formatPrice } from '../../utils/prices';
 
+type TagSize = 'standard' | 'small';
+
 defineProps({
 	price: {
 		type: [Object, null] as PropType<EventPrice | null>,
 		required: true
 	},
-	className: {
-		type: String as PropType<string>,
-		default: ''
+	size: {
+		type: String as PropType<TagSize>,
+		default: 'standard'
 	}
 });
 </script>
 
 <template>
-	<div :class="`tag ${className}`">
+	<div :class="['tag', { 'tag--small': size === 'small' }]">
 		<p v-if="!price">
 			{{ $t('event.price.unknown') }}
 		</p>
@@ -32,7 +34,6 @@ defineProps({
 
 		<p
 			v-else
-			class="event-price"
 			:itemprop="SeoItempropPriceEnum.GROUP_ITEMPROP"
 			itemscope
 			:itemtype="SeoItemTypeEnum.OFFER"
@@ -62,9 +63,14 @@ defineProps({
 	line-height: 20px;
 	text-align: center;
 
-	border: 1px solid var(--color-accent-green-main);
+	background-color: var(--color-accent-green-semitransparent);
 	border-radius: 8px;
 
 	padding: 3px 10px;
+
+	&--small {
+		font-size: var(--font-size-XS);
+		line-height: 16px;
+	}
 }
 </style>

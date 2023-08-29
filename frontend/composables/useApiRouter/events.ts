@@ -37,5 +37,10 @@ export const events = {
 		add: defineMutation<(input: { registration: Registration }) => void>((input) => {
 			return useBackendFetch<void>('registration/add', { body: input.registration });
 		})
+	},
+	createdEvents: {
+		get: defineQuery<() => EventOnPoster[]>(() => {
+			return useBackendFetch(`events/my`, {}, { auth: true });
+		})
 	}
 };

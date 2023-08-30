@@ -16,6 +16,10 @@ export const header = {
 	authorize: 'Авторизоваться',
 	subscription_expired: '$t(dates.day.key) до конца подписки',
 	language_selector: {
-		label: 'Язык'
+		label: 'Выберите язык',
+		language: {
+			ru: 'Русский',
+			en: 'Английский'
+		}
 	}
 };

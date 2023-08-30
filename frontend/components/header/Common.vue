@@ -80,11 +80,7 @@ const goBack = () => {
 				</component>
 			</div>
 			<div class="header__right">
-				<!--        TODO: вернуться при доработке подписки-->
-				<!--				<HeaderSubscriptionExpired-->
-				<!--					v-if="route.name === RouteNameEnum.HOME"-->
-				<!--					class="header__subscription"-->
-				<!--				/>-->
+				<HeaderLanguageSelector class="header__language-selector" />
 				<HeaderNavigationBurger
 					ref="navigationBurger"
 					:is-cross="isNavbarOpen"
@@ -142,18 +138,16 @@ const goBack = () => {
 		justify-content: flex-end;
 		text-align: center;
 		position: relative;
-		margin-left: 12px;
-	}
-
-	&__subscription {
-		display: flex;
-		max-width: max-content;
 	}
 
 	&__navigation-link {
 		height: 100%;
 		align-items: center;
 		display: flex;
+	}
+
+	&__language-selector {
+		margin-right: var(--space-inner);
 	}
 }
 </style>

@@ -17,6 +17,8 @@ export type IconName =
 	| 'heart'
 	| 'heart-filled'
 	| 'info'
+	| 'language/en-USA'
+	| 'language/ru-RU'
 	| 'login'
 	| 'logout'
 	| 'map-pin'

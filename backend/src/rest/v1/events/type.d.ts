@@ -43,7 +43,10 @@ type IGetEventsRoute = {
 type IGetEventsHandler = IRouteHandler<IGetEventsRoute>;
 
 type IGetMyEventsRoute = {
-	Header: { Authorization: string };
+	Header: {
+		Authorization: string;
+		'accept-language': SupportedLanguages;
+	};
 	Reply: EventOnPoster[];
 };
 type IGetMyEventsHandler = IRouteHandler<IGetMyEventsRoute>;

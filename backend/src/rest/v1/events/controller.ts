@@ -73,8 +73,12 @@ export const getMyEvents: IGetMyEventsHandler = async (request) => {
 	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
 	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
+	const language =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.RUSSIAN;
+
 	const events = await eventsStateController.getUserEvents(jwtData.id);
-	return events;
+	const localizedEvents = events.map((event) => delocalizeObject(event, language));
+	return localizedEvents;
 };
 
 export const getEvent: IGetEventHandler = async (request) => {

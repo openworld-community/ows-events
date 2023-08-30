@@ -1,6 +1,7 @@
 import type { IDelocalizedObject, ILocalizedObject } from './localization';
 import type { Timezone } from './location';
 import { SupportedLanguages } from '../const';
+import { EventTypes } from '../const/eventTypes';
 
 export type EventDbEntity = {
 	id: string;
@@ -16,10 +17,11 @@ export type EventDbEntity = {
 		address: string;
 	};
 	image: string;
-	price: EventPrice;
+	price: EventPrice | null;
 	timezone?: Timezone;
 	url: string;
 	tags?: string[];
+	type: EventTypes;
 };
 
 export type EventOnPoster = IDelocalizedObject<EventDbEntity>;
@@ -54,7 +56,7 @@ export type EventPrice = {
 	value: number | null;
 	minValue: number | null;
 	currency: string | null;
-} | null;
+};
 
 export type IEventMeta = {
 	meta: {

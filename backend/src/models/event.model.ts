@@ -88,6 +88,10 @@ const schema = new Schema<IEventDocument>(
 					}
 				]
 			}
+		},
+		type: {
+			type: String,
+			enum: ['parsed', 'paid', 'user-generated']
 		}
 	},
 	{

@@ -144,6 +144,20 @@ class EventsStateController {
 
 		return event;
 	}
+
+	async getUserEvents(userId: string) {
+		const events = await EventModel.find(
+			{ creatorId: userId },
+			{},
+			{
+				sort: {
+					date: 'descending'
+				}
+			}
+		);
+
+		return events;
+	}
 }
 
 export const eventsStateController = new EventsStateController();

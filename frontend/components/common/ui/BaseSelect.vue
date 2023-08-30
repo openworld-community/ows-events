@@ -4,11 +4,11 @@ import type { PropType } from 'vue';
 
 const props = defineProps({
 	className: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	modelValue: {
-		type: String as PropType<string>,
+		type: String,
 		required: true
 	},
 	list: {
@@ -16,19 +16,23 @@ const props = defineProps({
 		default: ''
 	},
 	name: {
-		type: String as PropType<string>,
+		type: String,
 		required: true
 	},
 	placeholder: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	label: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	disabled: {
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
+		default: false
+	},
+	inputReadonly: {
+		type: Boolean,
 		default: false
 	},
 	dropdownPosition: {
@@ -36,12 +40,17 @@ const props = defineProps({
 		type: String as PropType<'left' | 'right'>,
 		default: 'left'
 	},
+	// добавление иконок в список (иконки должны быть сохранены в отдельной папке с названием, идентичным props.name, и называться соответственно айтему)
+	hasIconItems: {
+		type: Boolean,
+		default: false
+	},
 	error: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	required: {
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	}
 });
@@ -86,7 +95,9 @@ const filteredList = computed(() =>
 			:error="error"
 			:model-value="modelValue"
 			:required="required"
+			:input-readonly="inputReadonly"
 			icon-name="container"
+			:has-value-icon="hasIconItems && Array.from(list).includes(modelValue)"
 			:aria-expanded="isOpen"
 			@update:model-value="emit('update:model-value', $event)"
 			@click="openSelect"
@@ -96,14 +107,19 @@ const filteredList = computed(() =>
 			v-if="isOpen && filteredList.length"
 			:class="['select__list-box', `select__list-box--${dropdownPosition}`]"
 		>
-			<ul class="select__list benefits">
+			<ul class="select__list">
 				<li
 					v-for="item in filteredList"
 					:key="item"
-					class="select__list-item"
+					class="select__list-item list-item"
 					@click="emit('update:model-value', item)"
 				>
-					{{ item }}
+					<CommonIcon
+						v-if="hasIconItems"
+						class="list-item__icon"
+						:name="`${name}/${item}`"
+					/>
+					<span>{{ item }}</span>
 				</li>
 			</ul>
 		</div>
@@ -177,9 +193,15 @@ const filteredList = computed(() =>
 	&__list::-webkit-scrollbar-track {
 		background-color: var(--color-white);
 	}
+}
 
-	&__list-item {
-		padding: 5px;
+.list-item {
+	display: flex;
+	align-items: center;
+	padding: 5px;
+
+	&__icon {
+		margin-right: 4px;
 	}
 }
 </style>

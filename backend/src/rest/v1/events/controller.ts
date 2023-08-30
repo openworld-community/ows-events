@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import { EventOnPoster } from '@common/types';
 import { EventDbEntity } from '@common/types/event';
 import { CommonErrorsEnum, SupportedLanguages } from '../../../../../common/const';
+import { EventTypes } from '../../../../../common/const/eventTypes';
 import { eventsStateController } from '../../../controllers/events-state-controller';
 import {
 	IAddEventHandler,
@@ -9,6 +10,7 @@ import {
 	IFindEventHandler,
 	IGetEventHandler,
 	IGetEventsHandler,
+	IGetMyEventsHandler,
 	IUpdateEventHandler
 } from './type';
 import { ITokenData } from '../../types';
@@ -30,6 +32,12 @@ export const addEvent: IAddEventHandler = async (request) => {
 		event.creatorId = jwtData.id;
 	} else {
 		event.creatorId = 'dev-user';
+	}
+
+	if (event.creatorId === 'parser') {
+		event.type = EventTypes.PARSED;
+	} else {
+		event.type = EventTypes.USER_GENERATED;
 	}
 
 	const eventWithThisLink = await EventModel.findOne({
@@ -56,6 +64,17 @@ export const getEvents: IGetEventsHandler = async (request): Promise<EventOnPost
 	return (await eventsStateController.getEvents())
 		.slice(0, 100)
 		.map((event) => delocalizeObject(event, language));
+};
+
+export const getMyEvents: IGetMyEventsHandler = async (request) => {
+	const token = request.headers.authorization;
+	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
+
+	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
+	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+
+	const events = await eventsStateController.getUserEvents(jwtData.id);
+	return events;
 };
 
 export const getEvent: IGetEventHandler = async (request) => {

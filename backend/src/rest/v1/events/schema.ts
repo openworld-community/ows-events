@@ -38,6 +38,10 @@ export const ItemEvent = {
 		tags: {
 			type: 'array',
 			items: { type: 'string' }
+		},
+		type: {
+			type: 'string',
+			enum: ['parsed', 'paid', 'user-generated']
 		}
 	}
 };
@@ -54,6 +58,18 @@ export const getEventsSchema = {
 	}
 };
 
+export const getMyEventsSchema = {
+	description: 'get events, created by user',
+	tags: ['Events'],
+	summary: 'Get all events',
+	response: {
+		200: {
+			type: 'array',
+			items: ItemEvent
+		}
+	},
+	security: [{ authJWT: [] }]
+};
 export const getEventSchema = {
 	description: 'get event by id',
 	tags: ['Events'],

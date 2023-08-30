@@ -1,7 +1,31 @@
 import { FastifyInstance } from 'fastify';
-import { changeUserInfo, getTGInfoByToken, getUserInfoByToken } from './controller';
-import { IChangeUserInfoRoute, IGetTGInfoRoute, IGetUserInfoRoute } from './type';
-import { changeUserInfoSchema, getTGInfoByTokenSchema, getUserInfoByTokenSchema } from './schema';
+import {
+	addFavoriteEvent,
+	changeUserInfo,
+	getFavoriteEvents,
+	getFavoriteEventsId,
+	getTGInfoByToken,
+	getUserInfoByToken,
+	removeFavoriteEvent
+} from './controller';
+import {
+	IAddFavoriteEventRoute,
+	IChangeUserInfoRoute,
+	IGetFavoriteEventsIdRoute,
+	IGetFavoriteEventsRoute,
+	IGetTGInfoRoute,
+	IGetUserInfoRoute,
+	IRemoveFavoriteEventRoute
+} from './type';
+import {
+	addFavoriteEventSchema,
+	changeUserInfoSchema,
+	getFavoriteEventsIdSchema,
+	getFavoriteEventsSchema,
+	getTGInfoByTokenSchema,
+	getUserInfoByTokenSchema,
+	removeFavoriteEventSchema
+} from './schema';
 
 export const userApi = async (fastify: FastifyInstance) => {
 	fastify.get<IGetTGInfoRoute>('/info/tg', {
@@ -17,5 +41,25 @@ export const userApi = async (fastify: FastifyInstance) => {
 	fastify.post<IChangeUserInfoRoute>('/info', {
 		schema: changeUserInfoSchema,
 		handler: changeUserInfo
+	});
+
+	fastify.post<IAddFavoriteEventRoute>('/favorites/add', {
+		schema: addFavoriteEventSchema,
+		handler: addFavoriteEvent
+	});
+
+	fastify.post<IRemoveFavoriteEventRoute>('/favorites/remove', {
+		schema: removeFavoriteEventSchema,
+		handler: removeFavoriteEvent
+	});
+
+	fastify.get<IGetFavoriteEventsRoute>('/favorites/get', {
+		schema: getFavoriteEventsSchema,
+		handler: getFavoriteEvents
+	});
+
+	fastify.get<IGetFavoriteEventsIdRoute>('/favorites/get/id', {
+		schema: getFavoriteEventsIdSchema,
+		handler: getFavoriteEventsId
 	});
 };

@@ -78,10 +78,7 @@ getMeta({
 
 <style lang="less" scoped>
 .about {
-	padding-left: var(--padding-side);
-	padding-right: var(--padding-side);
-	padding-top: var(--padding-vertical);
-	padding-bottom: var(--padding-vertical);
+	padding: var(--padding-vertical) var(--padding-side);
 
 	&__title {
 		font-size: var(--font-size-XXL);

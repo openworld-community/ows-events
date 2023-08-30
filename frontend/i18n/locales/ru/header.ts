@@ -12,10 +12,8 @@ export const header = {
 	donation: 'Поддержать проект',
 	policy: 'Политика конфиденциальности',
 	limitation_of_liability: 'Ограничение ответственности',
-	authorization: {
-		authorize: 'Авторизоваться',
-		deauthorize: 'Выйти из аккаунта'
-	},
+	user: 'Пользователь',
+	authorize: 'Авторизоваться',
 	subscription_expired: '$t(dates.day.key) до конца подписки',
 	language_selector: {
 		label: 'Язык'

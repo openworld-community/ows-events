@@ -1,6 +1,7 @@
 export const modal = {
 	new_event_modal: {
 		title: 'Добавьте мероприятие',
+		title_edit: 'Редактирование мероприятия',
 		cancel: 'Отмена',
 		submit: 'Сохранить',
 		add_image: 'Добавить фото',
@@ -20,9 +21,10 @@ export const modal = {
 			description: 'Описание',
 			start: 'Начало',
 			end: 'Окончание',
-			price: 'Стоимость, RSD',
-			price_placeholder: 'Укажите стоимость в RSD',
-			url_to_rigistration: 'Ссылка на регистрацию',
+			price: 'Стоимость',
+			price_placeholder: 'Цена',
+			currency_placeholder: 'Валюта',
+			url_to_registration: 'Ссылка на регистрацию',
 			url_placeholder: 'https://example.com'
 		}
 	},
@@ -46,6 +48,21 @@ export const modal = {
 			cancel: 'Отмена',
 			login: 'Войти',
 			logout: 'Выйти'
+		}
+	},
+	edit_profile: {
+		title: 'Редактирование профиля',
+		fields: {
+			name: 'Как к Вам обращаться?',
+			name_placeholder: 'Имя',
+			surname_placeholder: 'Фамилия',
+			nickname: 'Никнейм',
+			nickname_placeholder: 'Введите никнейм',
+			organizer: 'Организатор',
+			email: 'E-mail',
+			phone: 'Номер телефона',
+
+			organizer_placeholder: 'Имя организатора мероприятия'
 		}
 	}
 };

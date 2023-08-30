@@ -9,6 +9,7 @@ import { modal } from './modal';
 import { dates } from './dates';
 import { limitation_of_liability } from './limitation-of-liability';
 import {donate} from "./donate";
+import {user} from './user';
 
 const ruTranslation = {
 	meta,
@@ -18,6 +19,7 @@ const ruTranslation = {
 	event,
 	about,
 	donate,
+	user,
 	limitation_of_liability,
 	modal,
 	dates,

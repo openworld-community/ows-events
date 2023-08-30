@@ -1,6 +1,7 @@
 import { UserInfo } from '@common/types/user';
 import { EventOnPoster } from '@common/types';
 import { IRouteHandler } from '../../types';
+import { SupportedLanguages } from '../../../../../common/const';
 
 type IGetTGInfoRoute = {
 	Querystring: {
@@ -41,7 +42,10 @@ type IGetFavoriteEventsIdRoute = {
 type IGetFavoriteEventsIdHandler = IRouteHandler<IGetFavoriteEventsIdRoute>;
 
 type IGetFavoriteEventsRoute = {
-	Header: { Authorization: string };
+	Header: {
+		Authorization: string;
+		'accept-language': SupportedLanguages;
+	};
 	Reply: EventOnPoster[];
 };
 type IGetFavoriteEventsHandler = IRouteHandler<IGetFavoriteEventsRoute>;

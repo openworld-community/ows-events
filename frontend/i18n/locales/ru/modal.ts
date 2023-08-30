@@ -41,15 +41,6 @@ export const modal = {
 			submit: 'Подтвердить'
 		}
 	},
-	pre_authorisation_modal: {
-		title: 'Войдите в аккаунт',
-		telegram_login: 'Войти через Telegram',
-		button: {
-			cancel: 'Отмена',
-			login: 'Войти',
-			logout: 'Выйти'
-		}
-	},
 	edit_profile: {
 		title: 'Редактирование профиля',
 		fields: {

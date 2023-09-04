@@ -1,46 +1,6 @@
-import { type ErrorCodes } from '@/../common/const';
-import { CommonErrorsEnum, EventValidatorErrorTypes } from '@/../common/const';
+// import { type ErrorCodes } from '@/../common/const';
+// import { CommonErrorsEnum, EventValidatorErrorTypes } from '@/../common/const';
 
-export const ServerErrors: {
-	[key in ErrorCodes]: string;
-} = {
-	[EventValidatorErrorTypes.EVENT_IS_NOT_DEFINED]: 'Event is not defined',
-	TITLE_IS_NOT_DEFINED: 'Title is not defined',
-	TITLE_IS_TOO_SHORT: 'Title is too short',
-	TITLE_IS_TOO_LONG: 'Title is too long',
-	DESCRIPTION_IS_NOT_DEFINED: 'Description is not defined',
-	DESCRIPTION_IS_TOO_SHORT: 'Description is too short',
-	DESCRIPTION_IS_TOO_LONG: 'Description is too long',
-	START_DATE_IS_NOT_DEFINED: 'Start date is not defined',
-	START_DATE_IS_IN_THE_PAST: 'Start date is in the past',
-	DURATION_IS_NEGATIVE: 'Duration is negative',
-	LOCATION_IS_NOT_DEFINED: 'Location is not defined',
-	COUNTRY_IS_NOT_DEFINED: 'Country is not defined',
-	CITY_IS_NOT_DEFINED: 'City is not defined',
-	IMAGE_LINK_IS_TOO_SHORT: 'Image link is too short',
-	IMAGE_LINK_IS_TOO_LONG: 'Image link is too long',
-	URL_IS_NOT_DEFINED: 'Event URL is not defined',
-	URL_IS_TOO_SHORT: 'Event URL is too short',
-	URL_IS_TOO_LONG: 'Event URL is too long',
-	TITLE_IS_NOT_CLEAN: 'Inappropriate language in the title',
-	DESCRIPTION_IS_NOT_CLEAN: 'Inappropriate language in the description',
-	[CommonErrorsEnum.EVENT_NOT_FOUND]: 'Event not found',
-	'image-addition-error': 'Error while adding an image',
-	'image-deletion-error': 'Error while deleting an image',
-	'image-encoding-problem': 'Image format error',
-	'image-too-large': 'Image file is too large',
-	'no-image-to-add': 'Image file not found',
-	'no-image-to-delete': 'Image file not found',
-	'paymant-info-file-parse-error': 'Error in',
-	'payment-info-file-not-exist': 'Payment method not specified',
-	'payment-info-not-found': 'Payment method not found',
-	'unknown-image-route-error': 'Unexpected error processing image',
-	'wrong-token': 'Your authorization token is invalid',
-	forbidden: 'Access denied error',
-	unauthorized: 'You do not have access to this resource',
-	'event-already-exists': 'This event already exists',
-	'event-sent-on-moderation': 'Event sent for moderation',
-	'no-payload-provided': 'Empty request sent',
-	'timezone-city-not-found': 'Could not find timezone for the specified parameters',
-	'user-does-not-exist': 'User not found'
-};
+// export default {
+//
+// }

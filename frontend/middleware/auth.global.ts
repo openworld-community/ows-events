@@ -1,9 +1,9 @@
 import { useUserStore } from '../stores/user.store';
-import { RouteNameEnum } from '../constants/enums/route';
+import { RoutePathEnum } from '../constants/enums/route';
 import { apiRouter } from '../composables/useApiRouter';
 import type { TGUserInfo } from '../../common/types/user';
 
-const pagesWithAuth: string[] = [RouteNameEnum.USER_FAVOURITES, RouteNameEnum.USER_MY_EVENTS];
+const pagesWithAuth: string[] = [RoutePathEnum.USER_FAVOURITES, RoutePathEnum.USER_MY_EVENTS];
 
 export default defineNuxtRouteMiddleware(async (to) => {
 	const userStore = useUserStore();
@@ -24,8 +24,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
 		if (!userData) {
 			token.value = null;
 			userCookie.value = null;
-			if (to.name && pagesWithAuth.includes(to.name as string)) {
-				return navigateTo({ name: RouteNameEnum.USER_PAGE });
+			if (to.path && pagesWithAuth.includes(to.name as string)) {
+				return navigateTo({ path: RoutePathEnum.USER_PAGE });
 			}
 		} else {
 			userStore.$patch({ userInfo: userData });

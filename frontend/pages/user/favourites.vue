@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { RouteNameEnum } from '../../constants/enums/route';
 import { apiRouter } from '../../composables/useApiRouter';
 import type { EventOnPoster } from '../../../common/types';
 import { SeoItemTypeEnum } from '../../constants/enums/seo';
-
-definePageMeta({ name: RouteNameEnum.USER_MY_EVENTS });
 
 const favourites = ref<EventOnPoster[] | []>([]);
 

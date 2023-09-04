@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import { RouteNameEnum } from '../../constants/enums/route';
 import { SeoItempropNavEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
+import { RoutePathEnum } from '../../constants/enums/route';
 
 const route = useRoute();
 const router = useRouter();
+const localePath = useLocalePath();
 
 const pagesHasBackButton: string[] = [
-	RouteNameEnum.EVENT,
-	RouteNameEnum.USER_MY_EVENTS,
-	RouteNameEnum.USER_FAVOURITES
+	'event-id',
+	'user-favourites',
+	'user-my_events'
+	// RoutePathEnum.EVENT,
+	// RoutePathEnum.USER_MY_EVENTS,
+	// RoutePathEnum.USER_FAVOURITES
 ];
 
 const isNavbarOpen = ref<boolean>(false);
@@ -21,7 +25,7 @@ const navigationBurger = ref(null);
 
 onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 
-const isAtHome = computed(() => route.name === RouteNameEnum.HOME);
+const isAtHome = computed(() => route.path === RoutePathEnum.HOME);
 const logoComponentIs = computed(() => {
 	if (isAtHome.value) return 'button';
 	else return defineNuxtLink({});
@@ -32,12 +36,18 @@ const goBack = () => {
 	if (router.options.history.state.back) {
 		router.back();
 	} else if (
-		route.name === RouteNameEnum.USER_FAVOURITES ||
-		route.name === RouteNameEnum.USER_MY_EVENTS
+		route.path.includes(RoutePathEnum.USER_FAVOURITES) ||
+		route.path.includes(RoutePathEnum.USER_MY_EVENTS)
 	) {
-		navigateTo({ name: RouteNameEnum.USER_PAGE });
-	} else navigateTo({ name: RouteNameEnum.HOME });
+		navigateTo({ path: RoutePathEnum.USER_PAGE });
+	} else navigateTo({ path: RoutePathEnum.HOME });
 };
+
+const showBackButton = computed(() => {
+	return pagesHasBackButton.findIndex((pageName:string) => {
+		return pageName === (route.name as string).split('___')[0]
+	}) > -1
+});
 </script>
 
 <template>
@@ -53,7 +63,7 @@ const goBack = () => {
 				:itemtype="SeoItemTypeEnum.NAV"
 			>
 				<CommonButton
-					v-if="route.name && pagesHasBackButton.includes(route.name as string)"
+					v-if="showBackButton"
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"
@@ -67,7 +77,7 @@ const goBack = () => {
 					:aria-label="
 						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
 					"
-					:to="!isAtHome ? { name: RouteNameEnum.HOME } : undefined"
+					:to="!isAtHome ? localePath(RoutePathEnum.HOME) : undefined"
 					:itemprop="SeoItempropNavEnum.URL"
 					@click="isAtHome && scrollToTop()"
 				>
@@ -84,7 +94,7 @@ const goBack = () => {
 				<HeaderNavigationBurger
 					ref="navigationBurger"
 					:is-cross="isNavbarOpen"
-					:aria-label="$t(isNavbarOpen ? 'header.button.close' : 'header.button.open')"
+					:aria-label="$t(isNavbarOpen ? 'header.burger.close' : 'header.burger.open')"
 					@click="navbarToggle"
 				/>
 				<HeaderNavigationSidebar

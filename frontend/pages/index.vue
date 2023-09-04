@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { RouteNameEnum } from '@/constants/enums/route';
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
@@ -8,11 +7,10 @@ import { useUserStore } from '../stores/user.store';
 
 const { t } = useI18n();
 
-definePageMeta({ name: RouteNameEnum.HOME });
-
 getMeta({
-	title: t('meta.title')
+	title: t('meta.default_title')
 });
+
 const userStore = useUserStore()
 
 const {

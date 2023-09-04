@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { RouteNameEnum } from '~/constants/enums/route';
+import { RoutePathEnum } from '~/constants/enums/route';
 import { TOKEN_MAX_AGE_SECONDS } from '../../constants/defaultValues/time';
 import type { TGUserInfo } from '../../../common/types/user';
-
+const localePath = useLocalePath()
 definePageMeta({
 	middleware: async () => {
 		const route = useRoute();
@@ -16,5 +16,5 @@ definePageMeta({
 		useCookie<TGUserInfo | null>('user', { maxAge: TOKEN_MAX_AGE_SECONDS }).value = user.value;
 	}
 });
-await navigateTo({ name: RouteNameEnum.USER_PAGE });
+await navigateTo(localePath(RoutePathEnum.USER_PAGE));
 </script>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
-import { RouteNameEnum } from '@/constants/enums/route';
+import { RoutePathEnum } from '@/constants/enums/route';
 import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
 
@@ -13,8 +13,8 @@ import {
 import { useUserStore } from '../../stores/user.store';
 import { apiRouter } from '../../composables/useApiRouter';
 
-definePageMeta({ name: RouteNameEnum.EVENT });
 const route = useRoute();
+const localePath = useLocalePath()
 const id = getFirstParam(route.params.id);
 
 const userStore = useUserStore();
@@ -22,7 +22,7 @@ const userStore = useUserStore();
 const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ data: { id } });
 
 const posterEvent = computed(() => {
-	if (!data.value) return void navigateTo({ name: RouteNameEnum.HOME });
+	if (!data.value) return void navigateTo(localePath(RoutePathEnum.HOME));
 	return data.value;
 });
 
@@ -68,7 +68,7 @@ const deleteCard = async () => {
 	if (error.value) return;
 
 	await closeDeleteEventModal();
-	navigateTo({ name: RouteNameEnum.HOME });
+	navigateTo({ path: RoutePathEnum.HOME });
 };
 
 // TODO подключить, когда вернемся к проработке регистрации
@@ -216,7 +216,7 @@ patchDeleteEventModal({
 					v-if="posterEvent.url !== 'self'"
 					button-kind="success"
 					class="event-actions__button event-actions__button--connect"
-					:button-text="$t('event.button.contact')"
+					:button-text="$t('global.button.contact')"
 					@click="redirect"
 				/>
 				<!--TODO подключить, когда вернемся к проработке регистрации-->
@@ -239,7 +239,7 @@ patchDeleteEventModal({
 				<CommonButton
 					class="event-actions__button event-actions__button--admin"
 					button-kind="warning"
-					:button-text="$t('event.button.delete')"
+					:button-text="$t('global.button.delete')"
 					icon-name="trash"
 					icon-width="16"
 					icon-height="16"
@@ -249,7 +249,7 @@ patchDeleteEventModal({
 					v-if="isEditable"
 					class="event-actions__button event-actions__button--admin"
 					button-kind="ordinary"
-					:button-text="$t('event.button.edit')"
+					:button-text="$t('global.button.edit')"
 					icon-name="edit"
 					icon-width="16"
 					icon-height="16"

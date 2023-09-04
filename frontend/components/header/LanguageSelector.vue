@@ -1,9 +1,23 @@
 <script setup lang="ts">
 // import { supportedLocales } from '../../i18n';
 
-const { locale, setLocale } = useI18n();
-const language = ref(locale.value);
+import { useSwitchLocalePath } from '../../.nuxt/imports';
 
+const { locale, setLocale } = useI18n();
+
+const switchLocalePath = useSwitchLocalePath()
+
+const language = computed(() => locale.value);
+
+
+// onMounted(async () => {
+// 	const storeLang = await $mainStoreForage.getItem('LANG')
+// 	if (storeLang) language.value = storeLang
+// 	else language.value = locale.value
+// })
+
+
+// $localStoreForage.getItem('LANG') as string ??
 watch(language, (lang) => {
 	setLocale(lang);
 });
@@ -17,10 +31,6 @@ const toggleSelector = () => {
 };
 
 onClickOutside(sidebar, () => toggleSelector(), { ignore: [selectorButton] });
-
-const selectLanguage = () => {
-	toggleSelector();
-};
 </script>
 
 <template>
@@ -28,7 +38,7 @@ const selectLanguage = () => {
 		<CommonButton
 			ref="selectorButton"
 			is-icon
-			icon-name="language/ru-RU"
+			:icon-name="`language/${language}`"
 			:alt="$t('header.language_selector.label')"
 			@click="toggleSelector"
 		/>
@@ -38,16 +48,16 @@ const selectLanguage = () => {
 			class="language-selector__sidebar"
 		>
 			<HeaderSidebarItem
-				component-type="radio"
+				:link-to="switchLocalePath('ru')"
 				:text="$t('header.language_selector.language.ru')"
-				icon-name="language/ru-RU"
-				@click="selectLanguage"
+				icon-name="language/ru"
+				@click="toggleSelector"
 			/>
 			<HeaderSidebarItem
-				component-type="radio"
+				:link-to="switchLocalePath('en')"
 				:text="$t('header.language_selector.language.en')"
-				icon-name="language/en-USA"
-				@click="selectLanguage"
+				icon-name="language/en"
+				@click="toggleSelector"
 			/>
 		</ul>
 	</div>

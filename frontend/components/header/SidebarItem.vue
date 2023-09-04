@@ -30,8 +30,6 @@ const props = defineProps({
 	}
 });
 
-const emit = defineEmits(['click']);
-
 const component = computed(() => {
 	if (props.linkTo) return defineNuxtLink({});
 	else return 'button';
@@ -46,7 +44,6 @@ const component = computed(() => {
 			:target="isExternalLink ? '_blank' : null"
 			:class="['navigation__item', itemKind ? `navigation__item--${itemKind}` : '']"
 			:itemprop="SeoItempropNavEnum.URL"
-			@click="component === 'button' ? emit('click') : null"
 		>
 			<span
 				class="navigation__text"

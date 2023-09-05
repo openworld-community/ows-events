@@ -5,6 +5,7 @@ import { RoutePathEnum } from '../../constants/enums/route';
 const route = useRoute();
 const router = useRouter();
 const localePath = useLocalePath();
+const previousPage = router.options.history.state.back;
 
 const pagesHasBackButton: string[] = [
 	'event-id',
@@ -33,20 +34,23 @@ const logoComponentIs = computed(() => {
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
 const goBack = () => {
-	if (router.options.history.state.back) {
-		router.back();
+	if (previousPage) {
+		console.log(previousPage.slice(3));
+		navigateTo(localePath({ path: previousPage.slice(3) }));
 	} else if (
-		route.path.includes(RoutePathEnum.USER_FAVOURITES) ||
-		route.path.includes(RoutePathEnum.USER_MY_EVENTS)
+		route.path.slice(3).includes(RoutePathEnum.USER_FAVOURITES) ||
+		route.path.slice(3).includes(RoutePathEnum.USER_MY_EVENTS)
 	) {
-		navigateTo({ path: RoutePathEnum.USER_PAGE });
-	} else navigateTo({ path: RoutePathEnum.HOME });
+		navigateTo(localePath({ path: RoutePathEnum.USER_PAGE }));
+	} else navigateTo(localePath({ path: RoutePathEnum.HOME }));
 };
 
 const showBackButton = computed(() => {
-	return pagesHasBackButton.findIndex((pageName:string) => {
-		return pageName === (route.name as string).split('___')[0]
-	}) > -1
+	return (
+		pagesHasBackButton.findIndex((pageName: string) => {
+			return pageName === (route.name as string).split('___')[0];
+		}) > -1
+	);
 });
 </script>
 

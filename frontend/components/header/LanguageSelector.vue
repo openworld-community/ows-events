@@ -1,25 +1,16 @@
 <script setup lang="ts">
-// import { supportedLocales } from '../../i18n';
-
 import { useSwitchLocalePath } from '../../.nuxt/imports';
+import { TOKEN_MAX_AGE_SECONDS } from '../../constants/defaultValues/time';
+import { CookieNameEnum } from '../../constants/enums/common';
 
-const { locale, setLocale } = useI18n();
+const { locale } = useI18n();
 
 const switchLocalePath = useSwitchLocalePath()
 
 const language = computed(() => locale.value);
 
-
-// onMounted(async () => {
-// 	const storeLang = await $mainStoreForage.getItem('LANG')
-// 	if (storeLang) language.value = storeLang
-// 	else language.value = locale.value
-// })
-
-
-// $localStoreForage.getItem('LANG') as string ??
-watch(language, (lang) => {
-	setLocale(lang);
+watch(locale, (loc) => {
+	useCookie(CookieNameEnum.LOCALE, {maxAge: TOKEN_MAX_AGE_SECONDS}).value = loc
 });
 
 const sidebar = ref(null);

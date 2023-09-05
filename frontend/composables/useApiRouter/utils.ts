@@ -2,6 +2,7 @@ import type { UseFetchOptions } from 'nuxt/app';
 import { API_URL } from '~/constants/url';
 import type { ServerErrors } from '~/i18n/locales/ru/errors';
 import { useUserStore } from '../../stores/user.store';
+import { CookieNameEnum } from '../../constants/enums/common';
 
 type ApiRouter = {
 	[K in string]: ApiRouter | ReturnType<typeof defineQuery> | ReturnType<typeof defineMutation>;
@@ -141,7 +142,7 @@ export function useBackendFetch<T>(
 		if (!userStore.isAuthorized) {
 			throw new Error('You are not authorized');
 		}
-		const token = useCookie('token').value;
+		const token = useCookie(CookieNameEnum.TOKEN).value;
 		if (!token) {
 			throw new Error('Token not found');
 		}

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import type { UserInfo } from '../../common/types/user';
 import { apiRouter } from '../composables/useApiRouter';
+import { CookieNameEnum } from '../constants/enums/common';
 
 type UserStore = {
 	id: string | null;
@@ -33,7 +34,7 @@ export const useUserStore = defineStore('user', {
 	},
 	actions: {
 		async getUserInfo() {
-			const token = useCookie('token');
+			const token = useCookie(CookieNameEnum.TOKEN);
 			if (token.value) {
 				const { data } = await apiRouter.user.get.useQuery({
 					data: { userToken: token.value }

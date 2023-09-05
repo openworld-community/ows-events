@@ -1,19 +1,16 @@
 <script setup lang="ts">
 import { SeoItempropNavEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
-import { RoutePathEnum } from '../../constants/enums/route';
+import { RouteNameEnum, RoutePathEnum } from '../../constants/enums/route';
+import { getRouteName } from '../../utils';
 
 const route = useRoute();
 const router = useRouter();
 const localePath = useLocalePath();
-const previousPage = router.options.history.state.back;
 
 const pagesHasBackButton: string[] = [
-	'event-id',
-	'user-favourites',
-	'user-my_events'
-	// RoutePathEnum.EVENT,
-	// RoutePathEnum.USER_MY_EVENTS,
-	// RoutePathEnum.USER_FAVOURITES
+	RouteNameEnum.EVENT,
+	RouteNameEnum.USER_FAVOURITES,
+	RouteNameEnum.USER_MY_EVENTS
 ];
 
 const isNavbarOpen = ref<boolean>(false);
@@ -34,24 +31,21 @@ const logoComponentIs = computed(() => {
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
 const goBack = () => {
-	if (previousPage) {
-		console.log(previousPage.slice(3));
-		navigateTo(localePath({ path: previousPage.slice(3) }));
+	if (router.options.history.state.back) {
+		router.back();
 	} else if (
-		route.path.slice(3).includes(RoutePathEnum.USER_FAVOURITES) ||
-		route.path.slice(3).includes(RoutePathEnum.USER_MY_EVENTS)
+		getRouteName(route.name as string).includes(RouteNameEnum.USER_FAVOURITES) ||
+		getRouteName(route.name as string).includes(RouteNameEnum.USER_MY_EVENTS)
 	) {
 		navigateTo(localePath({ path: RoutePathEnum.USER_PAGE }));
-	} else navigateTo(localePath({ path: RoutePathEnum.HOME }));
+	} else {
+		navigateTo(localePath({ path: RoutePathEnum.HOME }));
+	}
 };
 
-const showBackButton = computed(() => {
-	return (
-		pagesHasBackButton.findIndex((pageName: string) => {
-			return pageName === (route.name as string).split('___')[0];
-		}) > -1
-	);
-});
+const showBackButton = computed(() =>
+	pagesHasBackButton.includes(getRouteName(route.name as string))
+);
 </script>
 
 <template>
@@ -94,7 +88,10 @@ const showBackButton = computed(() => {
 				</component>
 			</div>
 			<div class="header__right">
-				<HeaderLanguageSelector class="header__language-selector" />
+				<HeaderLanguageSelector
+					v-if="!showBackButton"
+					class="header__language-selector"
+				/>
 				<HeaderNavigationBurger
 					ref="navigationBurger"
 					:is-cross="isNavbarOpen"

@@ -5,6 +5,9 @@ import {
 	SeoItemTypeEnum
 } from '../constants/enums/seo';
 import { BASE_URL } from '../constants/url';
+import { RoutePathEnum } from '../constants/enums/route';
+
+const localePath = useLocalePath()
 </script>
 
 <template>
@@ -23,7 +26,7 @@ import { BASE_URL } from '../constants/url';
 			<li>
 				{{ $t('limitation_of_liability.p_1_1') }}
 				<NuxtLink
-					:to="BASE_URL"
+					:to="localePath(RoutePathEnum.HOME)"
 					class="link"
 					target="_blank"
 					itemscope
@@ -34,7 +37,7 @@ import { BASE_URL } from '../constants/url';
 				</NuxtLink>
 				{{ $t('limitation_of_liability.p_1_2') }}
 				<NuxtLink
-					:to="BASE_URL"
+					:to="localePath(RoutePathEnum.HOME)"
 					class="link"
 					target="_blank"
 					itemscope

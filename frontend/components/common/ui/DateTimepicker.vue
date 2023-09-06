@@ -117,7 +117,6 @@ const onRemove = () => {
 			v-if="!modelValue"
 			:name="isDateType ? 'calendar' : 'clock'"
 			class="input__button"
-			:alt="$t('dates.clock')"
 		/>
 		<CommonButton
 			v-else

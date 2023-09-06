@@ -1,8 +1,7 @@
 import type { UseFetchOptions } from 'nuxt/app';
 import { API_URL } from '~/constants/url';
-import type { ServerErrors } from '~/i18n/locales/ru/errors';
-import { SupportedLanguages } from '../../../common/const';
 import { useUserStore } from '../../stores/user.store';
+import { CookieNameEnum } from '../../constants/enums/common';
 
 type ApiRouter = {
 	[K in string]: ApiRouter | ReturnType<typeof defineQuery> | ReturnType<typeof defineMutation>;
@@ -142,7 +141,7 @@ export function useBackendFetch<T>(
 		if (!userStore.isAuthorized) {
 			throw new Error('You are not authorized');
 		}
-		const token = useCookie('token').value;
+		const token = useCookie(CookieNameEnum.TOKEN).value;
 		if (!token) {
 			throw new Error('Token not found');
 		}
@@ -165,7 +164,7 @@ export function useBackendFetch<T>(
 		if (data.error.value) {
 			// todo - переделать эту проверку когда бэк уже стандартизирует вывод своих ошибок везде
 			if (data.error.value?.data?.message) {
-				const errorMessage: keyof typeof ServerErrors = data.error.value.data.message;
+				const errorMessage = data.error.value.data.message;
 
 				const { $errorToast, $i18n } = useNuxtApp();
 				$errorToast($i18n.t(`error.${errorMessage}`));

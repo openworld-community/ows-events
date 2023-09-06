@@ -1,15 +1,19 @@
 import { useUserStore } from '../stores/user.store';
-import { RouteNameEnum } from '../constants/enums/route';
+import { RoutePathEnum } from '~/constants/enums/route';
 import { apiRouter } from '../composables/useApiRouter';
 import type { TGUserInfo } from '../../common/types/user';
+import { CookieNameEnum } from '../constants/enums/common';
+import { RouteNameEnum } from '../constants/enums/route';
+import { getRouteName } from '../utils';
 
 const pagesWithAuth: string[] = [RouteNameEnum.USER_FAVOURITES, RouteNameEnum.USER_MY_EVENTS];
 
 export default defineNuxtRouteMiddleware(async (to) => {
+	const localePath = useNuxtApp().$localePath
 	const userStore = useUserStore();
 	if (!userStore.isAuthorized) {
 		let userData = null;
-		const token = useCookie('token');
+		const token = useCookie(CookieNameEnum.TOKEN);
 		const userCookie = useCookie<TGUserInfo | null>('user');
 		if (token.value) {
 			const { data } = await apiRouter.user.get.useQuery({
@@ -24,8 +28,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
 		if (!userData) {
 			token.value = null;
 			userCookie.value = null;
-			if (to.name && pagesWithAuth.includes(to.name as string)) {
-				return navigateTo({ name: RouteNameEnum.USER_PAGE });
+			if (to.name && pagesWithAuth.includes(getRouteName(to.name as string))) {
+				return navigateTo(localePath({ path: RoutePathEnum.USER_PAGE }));
 			}
 		} else {
 			userStore.$patch({ userInfo: userData });

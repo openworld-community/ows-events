@@ -33,7 +33,12 @@ export function combineDateTime(date: Date | null, time: Time | null): Date {
 }
 
 export function convertToLocaleString(epoch: number) {
-	return new Date(epoch).toLocaleString('ru', {
+	const {locale, locales} = useI18n()
+	const locIndex = locales.value.findIndex((el: any) => el.code === locale.value)
+
+	console.log(locales.value)
+
+	return new Date(epoch).toLocaleString(locales.value[locIndex].iso as string, {
 		timeZone: 'UTC',
 		month: 'long',
 		day: 'numeric',

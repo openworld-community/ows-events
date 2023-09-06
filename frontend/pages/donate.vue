@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { RouteNameEnum } from '../constants/enums/route';
 import { DONATE_PATREON_URL } from '../constants/url';
 import { CryptoWalletEnum } from '../constants/enums/crypto-wallets';
 import {
@@ -9,8 +8,6 @@ import {
 } from '../constants/enums/seo';
 
 const { t } = useI18n();
-
-definePageMeta({ name: RouteNameEnum.DONATION });
 
 getMeta({
 	title: t('meta.donate.title'),

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
 import type { IconName } from '~/components/common/Icon.vue';
-import {SeoItempropNavEnum} from '../../../constants/enums/seo';
+import { SeoItempropNavEnum } from '../../constants/enums/seo';
 
-type NavItemKind = 'warning';
+type NavItemKind = 'success';
 
 const props = defineProps({
 	linkTo: {
@@ -37,25 +37,27 @@ const component = computed(() => {
 </script>
 
 <template>
-	<component
-		:is="component"
-		:to="linkTo ?? null"
-		:target="isExternalLink ? '_blank' : null"
-		:class="['navigation__item', itemKind ? `navigation__item--${itemKind}` : '']"
-		:itemprop="SeoItempropNavEnum.URL"
-	>
-		<span
+	<li class="sidebar-item">
+		<component
+			:is="component"
+			:to="linkTo ?? null"
+			:target="isExternalLink ? '_blank' : null"
+			:class="['navigation__item', itemKind ? `navigation__item--${itemKind}` : '']"
+			:itemprop="SeoItempropNavEnum.URL"
+		>
+			<span
 				class="navigation__text"
 				:itemprop="SeoItempropNavEnum.NAME"
-		>
-			{{ text }}
-		</span>
-		<CommonIcon
-			class="navigation__icon"
-			:name="iconName"
-			:alt="text"
-		/>
-	</component>
+			>
+				{{ text }}
+			</span>
+			<CommonIcon
+				class="navigation__icon"
+				:name="iconName"
+				:alt="text"
+			/>
+		</component>
+	</li>
 </template>
 
 <style scoped lang="less">
@@ -69,11 +71,9 @@ const component = computed(() => {
 		text-align: end;
 		padding: 8px 18px 8px 16px;
 
-		&--warning {
-			color: var(--color-accent-red);
-
+		&--success {
 			&::v-deep(svg) {
-				color: var(--color-accent-red);
+				color: var(--color-accent-green-main);
 			}
 		}
 	}

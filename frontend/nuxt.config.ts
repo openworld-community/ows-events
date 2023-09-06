@@ -5,20 +5,27 @@ import { fileURLToPath, URL } from 'node:url';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	modules: [
-		[
-			'@nuxtjs/i18n',
-			{
-				// debug: true,
-				experimental: {
-					jsTsFormatResource: true
-				}
-			}
+	modules: ['@nuxtjs/i18n', '@pinia/nuxt', '@vueuse/nuxt', '@nuxtjs/plausible'],
+	routeRules: {
+		'/': {redirect: '/ru'}
+	},
+	i18n: {
+		// debug: true,
+		experimental: {
+			jsTsFormatResource: true
+		},
+		locales: [
+			{ code: 'ru', name: 'Russian', iso: 'ru-RU', dir: 'ltr', file: 'ru-RU.ts' },
+			{ code: 'en', name: 'English', iso: 'en-US', dir: 'ltr', file: 'en-GB.ts' }
 		],
-		'@pinia/nuxt',
-		'@vueuse/nuxt',
-		'@nuxtjs/plausible'
-	],
+		lazy: true,
+		langDir: 'i18n',
+		strategy: 'prefix',
+		//
+		defaultLocale: 'ru',
+		detectBrowserLanguage: false,
+		vueI18n: './i18n.config.ts'
+	},
 	// На случай добавления скриптов:
 	// app: {
 	// 	head: {

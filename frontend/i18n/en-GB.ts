@@ -16,7 +16,6 @@ import { EventValidatorErrorTypes } from '../../common/const/event-validation-er
 export default {
 	about: {
 		title: 'About Us',
-		alt: 'About the Peredelano Afisha Project',
 		idea: 'At AfishaPeredelano, we aim to make cultural and social life more accessible.',
 		mission: 'Our mission is to bring people together based on their interests, enabling them to easily discover and create unique events, from exhibitions and concerts to weekly yoga sessions in the park.',
 		functionality: 'Now, information about events of all scales is gathered in one place. Thanks to convenient search and filtering functions, you can organize your leisure activities in just a few minutes.',
@@ -223,6 +222,9 @@ export default {
 		}
 	},
 	modal: {
+		global: {
+			required: '* required fields'
+		},
 		new_event_modal: {
 			title: 'Add new Event',
 			title_edit: 'Edit Event',
@@ -271,13 +273,24 @@ export default {
 		}
 	},
 	user: {
-		title_unauthorized: 'Please log in to access additional features',
+		unauthorized: {
+			title: 'Please log in to access additional features',
+			continue: 'Continue without authorization',
+		},
 		greeting: 'Hello',
 		user: 'User',
-		my_events: 'My events',
-		no_my_events: 'You haven\'t created any events yet',
-		favourites: 'Favourites',
-		no_favourites: 'You haven\'t added anything to your "Favourites" yet',
+		my_events: {
+			title: 'My events',
+			no_my_events: 'You haven\'t created any events yet',
+		},
+		favourites: {
+			title:'Favourites',
+			no_favourites: 'You haven\'t added anything to your "Favourites" yet',
+		},
+		donate: {
+			text: 'Become a part of our project!',
+			button: 'Make a contribution'
+		}
 	}
 
 

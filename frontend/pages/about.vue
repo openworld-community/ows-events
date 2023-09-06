@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import eventScreen from '../assets/img/event-screen@2x.png';
-import { SeoItempropAboutEnum, SeoItemTypeEnum } from '../constants/enums/seo';
-import { REPO_URL, SocialLinks } from '../constants/url';
+import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
+import { REPO_URL, SocialLinks } from '~/constants/url';
 
 const { t } = useI18n();
 
@@ -18,12 +17,17 @@ getMeta({
 		:itemtype="SeoItemTypeEnum.ABOUT"
 	>
 		<h1 class="about__title">{{ $t('about.title') }}</h1>
-		<img
-			:src="eventScreen"
-			class="about__img"
-			:alt="$t('about.alt')"
-			:itemprop="SeoItempropAboutEnum.IMAGE"
-		/>
+		<div class="about__image-container">
+			<img
+				srcset="@/assets/img/about/about-screen@2x.png 2x"
+				src="@/assets/img/about/about-screen@1x.png"
+				width="351"
+				height="232"
+				class="about__img"
+				alt=""
+				:itemprop="SeoItempropAboutEnum.IMAGE"
+			/>
+		</div>
 		<div
 			class="about__description"
 			:itemprop="SeoItempropAboutEnum.MAIN_CONTENT"
@@ -105,13 +109,22 @@ getMeta({
 		font-weight: var(--font-weight-bold);
 	}
 
+	&__image-container {
+		display: flex;
+		width: 100%;
+		min-height: 232px;
+		line-height: 0;
+		background-color: var(--color-input-field);
+		border-radius: 4px;
+		margin-top: var(--space-unrelated-items);
+		margin-bottom: var(--space-related-items);
+	}
+
 	&__img {
 		width: 100%;
 		min-width: 100%;
 		max-width: 100%;
 		height: 100%;
-		margin-top: var(--space-unrelated-items);
-		margin-bottom: var(--space-related-items);
 		border-radius: 4px;
 	}
 

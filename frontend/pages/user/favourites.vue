@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { apiRouter } from '../../composables/useApiRouter';
-import type { EventOnPoster } from '../../../common/types';
-import { SeoItemTypeEnum } from '../../constants/enums/seo';
+import { apiRouter } from '~/composables/useApiRouter';
+import type { EventOnPoster } from '~/common/types';
+import { SeoItempropGlobalEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 
 const favourites = ref<EventOnPoster[] | []>([]);
 
@@ -11,7 +11,7 @@ if (data.value) favourites.value = data.value;
 
 <template>
 	<div class="favourites">
-		<h1 class="favourites__title">{{ $t('user.favourites') }}</h1>
+		<h1 class="favourites__title">{{ $t('user.favourites.title') }}</h1>
 
 		<ul v-if="favourites.length">
 			<li
@@ -23,17 +23,29 @@ if (data.value) favourites.value = data.value;
 				<UserEventCard :event-data="event" />
 			</li>
 		</ul>
-		<p
+		<div
 			v-else
-			class="favourites__empty"
+			class="favourites__empty empty"
 		>
-			{{ $t('user.no_favourites') }}
-		</p>
+			<img
+				src="~/assets/img/user/favourites-screen.svg"
+				width="260"
+				height="202"
+				alt=""
+				class="empty__image"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
+			/>
+			<p class="empty__text">
+				{{ $t('user.favourites.no_favourites') }}
+			</p>
+		</div>
 	</div>
 </template>
 
 <style scoped lang="less">
 .favourites {
+	width: 100%;
+	height: 100%;
 	padding: var(--padding-vertical) var(--padding-side);
 
 	&__title {
@@ -42,8 +54,20 @@ if (data.value) favourites.value = data.value;
 		margin-bottom: var(--space-subsections);
 		text-align: center;
 	}
+}
 
-	&__empty {
+.empty {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	margin-top: 40%;
+	align-items: center;
+
+	&__image {
+		margin-bottom: var(--space-subsections);
+	}
+
+	&__text {
 		text-align: center;
 		font-size: var(--font-size-S);
 		color: var(--color-text-secondary);

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { EventOnPoster } from '../../../common/types';
-import { SeoItemTypeEnum } from '../../constants/enums/seo';
+import type { EventOnPoster } from '~/common/types';
+import { SeoItempropGlobalEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 
 const myEvents = ref<EventOnPoster[] | []>([]);
 
@@ -10,7 +10,7 @@ if (data.value) myEvents.value = data.value;
 
 <template>
 	<div class="my-events">
-		<h1 class="my-events__title">{{ $t('user.my_events') }}</h1>
+		<h1 class="my-events__title">{{ $t('user.my_events.title') }}</h1>
 		<ul v-if="myEvents.length">
 			<li
 				v-for="event in myEvents"
@@ -21,12 +21,22 @@ if (data.value) myEvents.value = data.value;
 				<UserEventCard :event-data="event" />
 			</li>
 		</ul>
-		<p
+		<div
 			v-else
-			class="my-events__empty"
+			class="my-events__empty empty"
 		>
-			{{ $t('user.no_my_events') }}
-		</p>
+			<img
+				src="~/assets/img/user/my-events-screen.svg"
+				width="202"
+				height="203"
+				alt=""
+				class="empty__image"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
+			/>
+			<p class="empty__text">
+				{{ $t('user.my_events.no_my_events') }}
+			</p>
+		</div>
 	</div>
 </template>
 
@@ -40,8 +50,20 @@ if (data.value) myEvents.value = data.value;
 		margin-bottom: var(--space-subsections);
 		text-align: center;
 	}
+}
 
-	&__empty {
+.empty {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	margin-top: 40%;
+	align-items: center;
+
+	&__image {
+		margin-bottom: var(--space-subsections);
+	}
+
+	&__text {
 		text-align: center;
 		font-size: var(--font-size-S);
 		color: var(--color-text-secondary);

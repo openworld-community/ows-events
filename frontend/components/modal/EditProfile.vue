@@ -25,10 +25,11 @@ const closeEditProfileModal = () => {
 
 const checkFormFilling = computed(() => {
 	return !!(
-		userData.value?.first_name !== props.dataForEdit?.first_name ||
-		userData.value?.last_name !== props.dataForEdit?.last_name ||
-		userData.value?.nickname !== props.dataForEdit?.nickname ||
-		userData.value?.company !== props.dataForEdit?.company
+		userData.value?.nickname &&
+		(userData.value?.first_name !== props.dataForEdit?.first_name ||
+			userData.value?.last_name !== props.dataForEdit?.last_name ||
+			userData.value?.nickname !== props.dataForEdit?.nickname ||
+			userData.value?.company !== props.dataForEdit?.company)
 	);
 });
 
@@ -76,6 +77,7 @@ const updateUserData = async () => {
 						v-model="userData.nickname"
 						name="nickname"
 						:placeholder="$t('modal.edit_profile.fields.nickname_placeholder')"
+						required
 					/>
 				</template>
 			</ModalUiModalSection>

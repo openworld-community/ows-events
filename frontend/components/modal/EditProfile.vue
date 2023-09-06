@@ -24,13 +24,7 @@ const closeEditProfileModal = () => {
 };
 
 const checkFormFilling = computed(() => {
-	return !!(
-		userData.value?.nickname &&
-		(userData.value?.first_name !== props.dataForEdit?.first_name ||
-			userData.value?.last_name !== props.dataForEdit?.last_name ||
-			userData.value?.nickname !== props.dataForEdit?.nickname ||
-			userData.value?.company !== props.dataForEdit?.company)
-	);
+	return !!userData.value?.nickname;
 });
 
 const isLoading = ref(false);

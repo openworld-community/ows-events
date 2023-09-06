@@ -56,10 +56,11 @@ const emit = defineEmits(['closeModal']);
 			</header>
 			<form
 				v-if="modalType === 'form'"
-				class="modal-card__body"
+				class="modal-card__body body"
 				@submit.prevent="() => void 0"
 			>
 				<slot name="form" />
+				<p class="body__required">{{ $t('modal.global.required') }}</p>
 			</form>
 			<footer
 				:class="['modal-card__foot', { 'modal-card__foot--center': modalType === 'info' }]"
@@ -140,6 +141,15 @@ const emit = defineEmits(['closeModal']);
 		&--center {
 			justify-content: center;
 		}
+	}
+}
+
+.body {
+	&__required {
+		font-size: var(--font-size-XS);
+		line-height: 18px;
+		color: var(--color-text-secondary);
+		margin-top: var(--space-unrelated-items);
 	}
 }
 </style>

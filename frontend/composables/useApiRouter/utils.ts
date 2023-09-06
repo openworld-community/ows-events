@@ -1,6 +1,5 @@
 import type { UseFetchOptions } from 'nuxt/app';
 import { API_URL } from '~/constants/url';
-import type { ServerErrors } from '~/i18n/locales/ru/errors';
 import { useUserStore } from '../../stores/user.store';
 import { CookieNameEnum } from '../../constants/enums/common';
 
@@ -162,7 +161,7 @@ export function useBackendFetch<T>(
 		if (data.error.value) {
 			// todo - переделать эту проверку когда бэк уже стандартизирует вывод своих ошибок везде
 			if (data.error.value?.data?.message) {
-				const errorMessage: keyof typeof ServerErrors = data.error.value.data.message;
+				const errorMessage = data.error.value.data.message;
 
 				const { $errorToast, $i18n } = useNuxtApp();
 				$errorToast($i18n.t(`error.${errorMessage}`));

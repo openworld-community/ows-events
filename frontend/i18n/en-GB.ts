@@ -10,6 +10,8 @@
 // import meta from '/locales/en/meta';
 // import modal from '/locales/en/modal';
 // import user from '/locales/en/user';
+import { CommonErrorsEnum } from '../../common/const/common-errors';
+import { EventValidatorErrorTypes } from '../../common/const/event-validation-error'
 
 export default {
 	about: {

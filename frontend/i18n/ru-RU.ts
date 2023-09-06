@@ -11,7 +11,8 @@
 // import modal from '/locales/ru/modal';
 // import user from '/locales/ru/user';
 // import { type ErrorCodes } from '@/../common/const';
-import { CommonErrorsEnum, EventValidatorErrorTypes } from '@/../common/const';
+import { CommonErrorsEnum } from '../../common/const/common-errors';
+import { EventValidatorErrorTypes } from '../../common/const/event-validation-error'
 
 // TODO: сейчас в либе nuxtjs i18n не работает разбивка по файлам при lazy load по локалям, необходимо отслеживать issue
 // https://github.com/nuxt-modules/i18n/issues/2215 и вернуть разбивку, когда проблема решится

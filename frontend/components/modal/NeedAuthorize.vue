@@ -4,8 +4,9 @@ import { RoutePathEnum } from '../../constants/enums/route';
 type Props = {
 	closeNeedAuthorizeModal: () => void;
 };
-
 const props = defineProps<Props>();
+
+const localePath = useLocalePath()
 </script>
 
 <template>
@@ -21,7 +22,7 @@ const props = defineProps<Props>();
 			/>
 			<CommonButton
 				button-kind="success"
-				:link="RoutePathEnum.USER_PAGE"
+				:link="localePath(RoutePathEnum.USER_PAGE)"
 				:button-text="$t('global.button.authorize')"
 			/>
 		</template>

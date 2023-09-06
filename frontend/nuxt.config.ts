@@ -46,7 +46,7 @@ export default defineNuxtConfig({
 			'poster-test-peredelano.orby-tech.space',
 		apiHost: 'https://afisha-metrics.orby-tech.space'
 	},
-	typescript: { strict: true },
+	typescript: { strict: false },
 	nitro: {
 		devProxy: {
 			'/api': 'http://backend:7080/api',

@@ -49,9 +49,8 @@ export const combineDateTime = (date: Date | null, time: Time | null): Date => {
 };
 
 export const convertToLocaleString = (epoch: number) => {
-	const { locale, locales} = useI18n();
-	const locIndex = locales.value.findIndex((el: typeof locales.value[number]) => el.code as string === locale.value);
-	return new Date(epoch).toLocaleString(locales.value[locIndex].iso as string, {
+	const { locale} = useI18n();
+	return new Date(epoch).toLocaleString(locale.value, {
 		timeZone: 'UTC',
 		month: 'long',
 		day: 'numeric',

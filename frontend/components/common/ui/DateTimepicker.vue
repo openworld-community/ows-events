@@ -52,6 +52,8 @@ const props = defineProps({
 	}
 });
 
+const {locale} = useI18n()
+
 const emit = defineEmits<{ 'update:model-value': [modelValue: typeof props.modelValue] }>();
 const isDateType = computed(() => props.type === 'date');
 const datepicker = ref<DatePickerInstance>(null);
@@ -89,6 +91,7 @@ const onRemove = () => {
 		<VueDatePicker
 			ref="datepicker"
 			:model-value="modelValue"
+			:locale="locale"
 			:name="name"
 			:placeholder="required ? `${placeholder} *` : placeholder"
 			:input-class-name="`input input__field ${error ? 'form__error' : ''}`"
@@ -117,7 +120,6 @@ const onRemove = () => {
 			v-if="!modelValue"
 			:name="isDateType ? 'calendar' : 'clock'"
 			class="input__button"
-			:alt="$t('dates.clock')"
 		/>
 		<CommonButton
 			v-else

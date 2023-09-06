@@ -15,12 +15,12 @@ const props = defineProps<Props>();
 		<template #footer>
 			<CommonButton
 				button-kind="ordinary"
-				:button-text="$t('modal.delete_event_modal.button.cancel')"
+				:button-text="$t('global.button.cancel')"
 				@click="props.closeDeleteEventModal"
 			/>
 			<CommonButton
 				button-kind="success"
-				:button-text="$t('modal.delete_event_modal.button.submit')"
+				:button-text="$t('global.button.confirm')"
 				@click="props.removeEvent"
 			/>
 		</template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouteNameEnum } from '../../constants/enums/route';
+import { RoutePathEnum } from '../../constants/enums/route';
 
 type Props = {
 	closeNeedAuthorizeModal: () => void;
@@ -21,7 +21,7 @@ const props = defineProps<Props>();
 			/>
 			<CommonButton
 				button-kind="success"
-				:link="RouteNameEnum.USER_PAGE"
+				:link="RoutePathEnum.USER_PAGE"
 				:button-text="$t('global.button.authorize')"
 			/>
 		</template>

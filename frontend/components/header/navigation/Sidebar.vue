@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { RouteNameEnum } from '@/constants/enums/route';
+import { RoutePathEnum } from '@/constants/enums/route';
 import { SUPPORT_TG_URL } from '../../../constants/url';
 import { SeoItemTypeEnum } from '../../../constants/enums/seo';
 import { useUserStore } from '../../../stores/user.store';
 
 const emit = defineEmits(['close']);
 const userStore = useUserStore();
+const localePath = useLocalePath()
 </script>
 
 <template>
@@ -15,41 +16,49 @@ const userStore = useUserStore();
 		itemscope
 		:itemtype="SeoItemTypeEnum.NAV"
 	>
-		<HeaderNavigationNavItem
-			:link-to="{ name: RouteNameEnum.USER_PAGE }"
-			:text="userStore.isAuthorized ? $t('header.user') : $t('header.authorize')"
-			icon-name="user"
-			@click="emit('close')"
-		/>
+		<ul>
+			<HeaderSidebarItem
+				component-type="link"
+				:link-to="localePath(RoutePathEnum.USER_PAGE)"
+				:text="userStore.isAuthorized ? $t('header.navigation.user') : $t('header.navigation.authorize')"
+				:item-kind="userStore.isAuthorized ? 'success' : ''"
+				icon-name="user"
+				@click="emit('close')"
+			/>
 
-		<HeaderNavigationNavItem
-			:link-to="{ name: RouteNameEnum.ABOUT }"
-			:text="$t('header.about')"
-			icon-name="info"
-			@click="emit('close')"
-		/>
+			<HeaderSidebarItem
+				component-type="link"
+				:link-to="localePath(RoutePathEnum.ABOUT)"
+				:text="$t('header.navigation.about')"
+				icon-name="info"
+				@click="emit('close')"
+			/>
 
-		<HeaderNavigationNavItem
-			:link-to="SUPPORT_TG_URL"
-			:text="$t('header.support')"
-			is-external-link
-			icon-name="contact-tg"
-			@click="emit('close')"
-		/>
+			<HeaderSidebarItem
+				component-type="link"
+				:link-to="SUPPORT_TG_URL"
+				:text="$t('header.navigation.support')"
+				is-external-link
+				icon-name="contact-tg"
+				@click="emit('close')"
+			/>
 
-		<HeaderNavigationNavItem
-			:link-to="{ name: RouteNameEnum.DONATION }"
-			:text="$t('header.donation')"
-			icon-name="donate"
-			@click="emit('close')"
-		/>
+			<HeaderSidebarItem
+				component-type="link"
+				:link-to="localePath(RoutePathEnum.DONATION)"
+				:text="$t('header.navigation.donation')"
+				icon-name="donate"
+				@click="emit('close')"
+			/>
 
-		<HeaderNavigationNavItem
-			:link-to="{ name: RouteNameEnum.LIMITATION_OF_LIABILITY }"
-			:text="$t('header.limitation_of_liability')"
-			icon-name="privacy"
-			@click="emit('close')"
-		/>
+			<HeaderSidebarItem
+				component-type="link"
+				:link-to="localePath(RoutePathEnum.LIMITATION_OF_LIABILITY)"
+				:text="$t('header.navigation.limitation_of_liability')"
+				icon-name="privacy"
+				@click="emit('close')"
+			/>
+		</ul>
 
 		<!--          <div-->
 		<!--            v-if="route.name === 'event'"-->
@@ -78,7 +87,7 @@ const userStore = useUserStore();
 	flex-direction: column;
 	align-items: flex-end;
 	position: absolute;
-	top: 0;
+	top: -9px;
 	right: 0;
 	background-color: var(--color-white);
 	box-shadow: var(--shadow-sidebar);

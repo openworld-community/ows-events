@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useUserStore } from '../../stores/user.store';
 import { getUserName } from '../../utils/user';
-import { RouteNameEnum } from '../../constants/enums/route';
+import { RoutePathEnum } from '../../constants/enums/route';
 import { BASE_URL, TELEGRAM_AUTH_BOT_NAME } from '../../constants/url';
 import { SeoItempropUserEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
-
-definePageMeta({ name: RouteNameEnum.USER_PAGE });
+import { CookieNameEnum } from '../../constants/enums/common';
 
 const { t } = useI18n();
+const localePath = useLocalePath()
 
 getMeta({
 	title: t('meta.user.info.title'),
@@ -15,7 +15,7 @@ getMeta({
 });
 
 const userStore = useUserStore();
-const tokenCookie = useCookie<string | null>('token');
+const tokenCookie = useCookie<string | null>(CookieNameEnum.TOKEN);
 const userCookie = useCookie('user');
 
 const userData = computed(() => userStore.userInfo);
@@ -104,7 +104,7 @@ const logout = () => {
 				class="user-page__link link"
 			>
 				<NuxtLink
-					:to="{ name: RouteNameEnum.USER_FAVOURITES }"
+					:to="localePath(RoutePathEnum.USER_MY_EVENTS)"
 					class="link__item"
 				>
 					<CommonIcon
@@ -116,7 +116,7 @@ const logout = () => {
 					<span>{{ $t('user.my_events') }}</span>
 				</NuxtLink>
 				<NuxtLink
-					:to="{ name: RouteNameEnum.USER_MY_EVENTS }"
+					:to="localePath(RoutePathEnum.USER_FAVOURITES)"
 					class="link__item"
 				>
 					<CommonIcon

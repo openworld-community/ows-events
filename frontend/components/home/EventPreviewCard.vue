@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import type { EventOnPoster } from '../../../common/types';
 import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
+import { RoutePathEnum } from '../../constants/enums/route';
 
 defineProps<{ eventData: EventOnPoster }>();
+const localePath = useLocalePath()
 </script>
 
 <template>
 	<NuxtLink
 		class="card"
-		:to="`/event/${eventData.id}`"
+		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
 		:itemprop="SeoItempropGlobalEnum.URL"
 	>
 		<div

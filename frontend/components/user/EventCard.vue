@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
 import type { EventOnPoster } from '../../../common/types';
-import { RouteNameEnum } from '../../constants/enums/route';
+import { RoutePathEnum } from '../../constants/enums/route';
 import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
 
 defineProps({
@@ -10,11 +10,13 @@ defineProps({
 		required: true
 	}
 });
+
+const localePath = useLocalePath()
 </script>
 
 <template>
 	<NuxtLink
-		:to="{ path: `/${RouteNameEnum.EVENT}/${eventData.id}` }"
+		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
 		class="card"
 		:itemprop="SeoItempropGlobalEnum.URL"
 	>

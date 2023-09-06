@@ -395,7 +395,7 @@ watch(
 					</div>
 					<CommonUiBaseCheckbox
 						value="free"
-						label="Бесплатно"
+						:label="$t('modal.new_event_modal.fields.price_free')"
 						is-reversed
 						:model-value="isFree"
 						@update:model-value="toggleFree"
@@ -423,14 +423,14 @@ watch(
 			<CommonButton
 				class="modal-card__button"
 				button-kind="ordinary"
-				:button-text="$t('modal.new_event_modal.cancel')"
+				:button-text="$t('global.button.cancel')"
 				:is-active="!isLoading"
 				@click="closeModal()"
 			/>
 			<CommonButton
 				class="modal-card__button"
 				button-kind="success"
-				:button-text="$t('modal.new_event_modal.submit')"
+				:button-text="$t('global.button.save')"
 				:is-loading="isLoading"
 				:is-disabled="!checkFormFilling || isLoading"
 				@click="isLoading ? null : submitEvent()"

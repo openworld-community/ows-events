@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { EventOnPoster } from '~/common/types';
 import { SeoItempropGlobalEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
+import type { EventOnPoster } from '../../../common/types';
 
 const myEvents = ref<EventOnPoster[] | []>([]);
 

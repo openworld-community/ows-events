@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { apiRouter } from '~/composables/useApiRouter';
-import type { EventOnPoster } from '~/common/types';
 import { SeoItempropGlobalEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
+import type { EventOnPoster } from '../../../common/types';
 
 const favourites = ref<EventOnPoster[] | []>([]);
 

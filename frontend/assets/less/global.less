@@ -22,7 +22,6 @@ body {
   min-height: 100%;
   //TODO: пока верстка только мобилки
   max-width: 480px;
-  max-height: 100vh;
   display: flex;
   font-family: var(--font-family-main);
   font-size: var(--font-size-M);
@@ -32,10 +31,6 @@ body {
   background-color: var(--background-color);
   margin-left: auto;
   margin-right: auto;
-
-  @supports (-webkit-touch-callout: none) {
-    max-height: -webkit-fill-available;
-  }
 }
 
 #__nuxt {

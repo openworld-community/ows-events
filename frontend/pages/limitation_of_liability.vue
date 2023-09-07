@@ -4,7 +4,6 @@ import {
 	SeoItempropURLEnum,
 	SeoItemTypeEnum
 } from '../constants/enums/seo';
-import { BASE_URL } from '../constants/url';
 import { RoutePathEnum } from '../constants/enums/route';
 
 const localePath = useLocalePath()

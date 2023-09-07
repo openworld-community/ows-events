@@ -23,7 +23,7 @@ const navigationBurger = ref(null);
 
 onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 
-const isAtHome = computed(() => route.path === RoutePathEnum.HOME);
+const isAtHome = computed(() => getRouteName(route.name as string) === RouteNameEnum.HOME);
 const logoComponentIs = computed(() => {
 	if (isAtHome.value) return 'button';
 	else return defineNuxtLink({});

@@ -332,6 +332,7 @@ const logout = () => {
 		font-weight: var(--font-weight-regular);
 		line-height: 20px;
 		text-align: center;
+		margin-bottom: var(--space-sections);
 	}
 
 	&__buttons {

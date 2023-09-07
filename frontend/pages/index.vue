@@ -49,7 +49,6 @@ const onButtonClick = () => {
 		openNeedAuthorizeModal();
 	}
 };
-const now = Date.now();
 </script>
 
 <template>
@@ -79,7 +78,6 @@ const now = Date.now();
 				:itemtype="SeoItemTypeEnum.EVENT"
 			>
 				<HomeEventPreviewCard
-					:class="{ expired: event.date < now }"
 					:event-data="event"
 				/>
 				<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
@@ -144,9 +142,5 @@ const now = Date.now();
 	margin-left: auto;
 	margin-right: 20px;
 	z-index: 1;
-}
-
-.expired {
-	opacity: 0.5;
 }
 </style>

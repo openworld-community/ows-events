@@ -4,15 +4,8 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
 export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
-// type LocaleObject = {
-// 	code: string;
-// 	name: string;
-// 	iso: string;
-// 	dir: string;
-// 	files: string[];
-// 	hashes: string[];
-// 	types: string[];
-// };
+
+export const dateNow = Date.now()
 
 export const getDateFromEpochInMs = (epoch: number | undefined, keepTimezone = false) => {
 	if (!epoch) return null;

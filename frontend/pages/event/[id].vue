@@ -14,7 +14,7 @@ import { useUserStore } from '../../stores/user.store';
 import { apiRouter } from '../../composables/useApiRouter';
 
 const route = useRoute();
-const localePath = useLocalePath()
+const localePath = useLocalePath();
 const id = getFirstParam(route.params.id);
 
 const userStore = useUserStore();
@@ -36,10 +36,6 @@ getMeta({
 		: posterEvent.value?.title,
 	description: trimString(posterEvent.value?.description ?? '', 120),
 	image: eventImage.value
-});
-
-const isEditable = computed(() => {
-	return posterEvent.value ? posterEvent.value.date > Date.now() : false;
 });
 
 const redirect = () => {
@@ -246,7 +242,6 @@ patchDeleteEventModal({
 					@click="openDeleteEventModal"
 				/>
 				<CommonButton
-					v-if="isEditable"
 					class="event-actions__button event-actions__button--admin"
 					button-kind="ordinary"
 					:button-text="$t('global.button.edit')"

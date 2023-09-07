@@ -3,6 +3,7 @@ import type { PropType } from 'vue';
 import type { EventOnPoster } from '../../../common/types';
 import { RoutePathEnum } from '../../constants/enums/route';
 import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
+import { dateNow } from '~/utils/dates';
 
 defineProps({
 	eventData: {
@@ -11,13 +12,13 @@ defineProps({
 	}
 });
 
-const localePath = useLocalePath()
+const localePath = useLocalePath();
 </script>
 
 <template>
 	<NuxtLink
 		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
-		class="card"
+		:class="['card', {'card--expired': eventData.date < dateNow}]"
 		:itemprop="SeoItempropGlobalEnum.URL"
 	>
 		<div
@@ -67,9 +68,14 @@ const localePath = useLocalePath()
 	padding: var(--space-related-items);
 	margin-bottom: var(--padding-side);
 
+	&--expired {
+		opacity: 0.5;
+	}
+
 	&__image-container {
 		display: flex;
 		width: 94px;
+		min-width: 94px;
 		height: 74px;
 		background-color: var(--color-input-field);
 		background-size: cover;

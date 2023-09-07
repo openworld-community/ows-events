@@ -9,19 +9,19 @@ import { getRouteName } from '../utils';
 const pagesWithAuth: string[] = [RouteNameEnum.USER_FAVOURITES, RouteNameEnum.USER_MY_EVENTS];
 
 export default defineNuxtRouteMiddleware(async (to) => {
-	const localePath = useNuxtApp().$localePath
+	const localePath = useNuxtApp().$localePath;
 	const userStore = useUserStore();
 	if (!userStore.isAuthorized) {
 		let userData = null;
 		const token = useCookie(CookieNameEnum.TOKEN);
-		const userCookie = useCookie<TGUserInfo | null>('user');
+		const userCookie = useCookie<TGUserInfo | null>(CookieNameEnum.TG_USER);
 		if (token.value) {
 			const { data } = await apiRouter.user.get.useQuery({
 				data: { userToken: token.value }
 			});
 			userData = data.value;
 			if (userCookie.value?.id) {
-				userStore.$patch({ id: userCookie.value.id });
+				userStore.getUserId();
 			}
 		}
 

@@ -30,7 +30,7 @@ const emit = defineEmits(['closeModal']);
 		swipe-to-close="down"
 		:click-to-close="true"
 		:esc-to-close="true"
-		:lock-scroll="true"
+		:lock-scroll="false"
 		content-class="overlay"
 	>
 		<div class="modal-card">

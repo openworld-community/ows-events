@@ -21,32 +21,33 @@ defineProps({
 
 const emit = defineEmits(['closeModal']);
 
-
 // В safari на iphone при открытии клавиатуры происходит скролл страницы и не возвращается обратно при закрытии
 // код ниже возвращает скролл в исходное положение
 
 let windowOffsetTop = 0;
 const isIPhoneMobileAgent = /iPhone/i.test(navigator.userAgent);
 
-const body = document.querySelector('body');
-
 const scrollLockOnBeforeOpenModal = () => {
 	if (isIPhoneMobileAgent) {
+		const body = document.querySelector('body');
 		if (body) {
 			windowOffsetTop = window.scrollY;
+			body.classList.add('no-scroll');
 			body.style.top = `${-windowOffsetTop}px`;
 		}
 	}
-}
+};
 
 const scrollUnlockOnBeforeCloseModal = () => {
 	if (isIPhoneMobileAgent) {
+		const body = document.querySelector('body');
 		if (body) {
+			body.classList.remove('no-scroll');
 			window.scrollTo({ top: windowOffsetTop });
-			setTimeout(() => body.style.top = 'unset');
+			setTimeout(() => (body.style.top = 'unset'));
 		}
 	}
-}
+};
 </script>
 <template>
 	<VueFinalModal
@@ -150,7 +151,7 @@ const scrollUnlockOnBeforeCloseModal = () => {
 	&__body {
 		width: 100%;
 		overflow-y: auto;
-		-webkit-overflow-scrolling:touch;
+		-webkit-overflow-scrolling: touch;
 		background-color: var(--color-white);
 		padding: 20px;
 	}

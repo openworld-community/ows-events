@@ -336,6 +336,7 @@ patchDeleteEventModal({
 			max-width: 480px;
 			word-wrap: break-word;
 			overflow-y: auto;
+			-webkit-overflow-scrolling: touch;
 			font-size: var(--font-size-S);
 			line-height: 20px;
 		}

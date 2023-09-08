@@ -160,6 +160,7 @@ const filteredList = computed(() =>
 	&__list {
 		height: 100%;
 		overflow-y: scroll;
+		-webkit-overflow-scrolling: touch;
 		overflow-x: hidden;
 
 		& li {

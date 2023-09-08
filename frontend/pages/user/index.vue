@@ -222,7 +222,6 @@ const logout = () => {
 	flex-direction: column;
 	align-items: center;
 	margin-bottom: var(--space-sections);
-	overflow-y: auto;
 
 	&__wrapper {
 		display: flex;

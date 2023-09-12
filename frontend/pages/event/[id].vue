@@ -263,14 +263,14 @@ patchDeleteEventModal({
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
-	//max-height: calc(100vh - var(--header-height));
+	min-height: calc(100vh - var(--header-height));
 	padding-left: var(--padding-side);
 	padding-right: var(--padding-side);
 
-	//// Для адаптивной height на iOs
-	//@supports (-webkit-touch-callout: none) {
-	//	max-height: -webkit-fill-available;
-	//}
+	// Для адаптивной height на iOs
+	@supports (-webkit-touch-callout: none) {
+		min-height: -webkit-fill-available;
+	}
 
 	&-info {
 		display: flex;

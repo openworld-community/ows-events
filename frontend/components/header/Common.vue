@@ -80,7 +80,7 @@ const showBackButton = computed(() =>
 					@click="isAtHome && scrollToTop()"
 				>
 					<CommonIcon
-						name="peredelano-afisha"
+						name="afisha-logo-light"
 						width="86"
 						height="40"
 						alt="Peredelano Афиша"

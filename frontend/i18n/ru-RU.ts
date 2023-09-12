@@ -114,6 +114,14 @@ export default {
 			to: 'До'
 		}
 	},
+	footer: {
+		navigation: {
+			about: 'Об Афише',
+			support: 'Поддержка',
+			donate: 'Поддержать проект',
+			limitation_of_liability: 'Ограничение ответственности'
+		}
+	},
 	global: {
 		country: 'Страна',
 		city: 'Город',

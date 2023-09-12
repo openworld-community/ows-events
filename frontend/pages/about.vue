@@ -88,7 +88,7 @@ getMeta({
 						:itemprop="SeoItempropAboutEnum.SOCIAL_LINK"
 					>
 						<CommonIcon
-							:name="`social/${key}`"
+							:name="`social/${key}-round`"
 							width="40px"
 							height="40px"
 						/>

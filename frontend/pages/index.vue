@@ -141,6 +141,7 @@ const onButtonClick = () => {
 	right: 0;
 	margin-left: auto;
 	margin-right: 20px;
+	margin-bottom: var(--space-related-items);
 	z-index: 1;
 }
 </style>

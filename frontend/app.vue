@@ -4,11 +4,17 @@ import 'vue-final-modal/style.css';
 import 'vue-toastification/dist/index.css';
 import 'virtual:svg-icons-register';
 import { ModalsContainer } from 'vue-final-modal';
+import { RouteNameEnum } from './constants/enums/route';
+import useAdaptiveBreakpoints from './composables/useBreakpoints';
 import { CookieNameEnum } from './constants/enums/common';
 import { TOKEN_MAX_AGE_SECONDS } from './constants/defaultValues/time';
 import { isDevelopmentMode } from './constants/common';
 
 const { locale, t } = useI18n();
+
+const route = useRoute();
+
+const {mobile} = useAdaptiveBreakpoints()
 
 useHead({
 	title: t('meta.default_title'),
@@ -30,11 +36,11 @@ if (isDevelopmentMode) {
 		<ModalsContainer />
 		<NuxtPage />
 	</main>
+	<FooterCommon v-if="getRouteName(route.name) === RouteNameEnum.HOME || !mobile" />
 </template>
 
 <style lang="less" scoped>
 .main {
-	height: 100%;
 	padding-top: var(--header-height);
 }
 </style>

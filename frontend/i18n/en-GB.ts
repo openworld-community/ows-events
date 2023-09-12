@@ -108,6 +108,14 @@ export default {
 			to: 'To'
 		}
 	},
+	footer: {
+		navigation: {
+			about: 'About Us',
+			support: 'Support',
+			donate: 'Support the Project',
+			limitation_of_liability: 'Limitation of Liability'
+		}
+	},
 	global: {
 		country: 'Country',
 		city: 'City',

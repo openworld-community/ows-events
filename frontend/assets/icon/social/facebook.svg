@@ -1,11 +1,3 @@
-<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_14_177)">
-<circle cx="20" cy="20" r="20" fill="#3B5998"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M25.315 12.9578C24.6917 12.8331 23.8498 12.74 23.3204 12.74C21.8867 12.74 21.7936 13.3633 21.7936 14.3607V16.1361H25.3774L25.065 19.8137H21.7936V31H17.3063V19.8137H15V16.1361H17.3063V13.8613C17.3063 10.7453 18.7708 9 22.4477 9C23.7252 9 24.6602 9.187 25.8753 9.43633L25.315 12.9578Z" fill="white"/>
-</g>
-<defs>
-<clipPath id="clip0_14_177">
-<rect width="40" height="40" fill="white"/>
-</clipPath>
-</defs>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M17.315 4.9578C16.6917 4.83314 15.8498 4.74 15.3204 4.74C13.8867 4.74 13.7936 5.36333 13.7936 6.36066V8.13607H17.3774L17.065 11.8137H13.7936V23H9.30632V11.8137H7V8.13607H9.30632V5.86127C9.30632 2.74533 10.7708 1 14.4477 1C15.7252 1 16.6602 1.187 17.8753 1.43633L17.315 4.9578Z" fill="currentColor"/>
 </svg>

@@ -4,7 +4,7 @@ import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enu
 import { RoutePathEnum } from '../../constants/enums/route';
 
 defineProps<{ eventData: EventOnPoster }>();
-const localePath = useLocalePath()
+const localePath = useLocalePath();
 </script>
 
 <template>
@@ -32,6 +32,7 @@ const localePath = useLocalePath()
 		</div>
 
 		<div class="card-description">
+			<div class="card-description__top">
 			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
 			<p
 				v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
@@ -40,10 +41,9 @@ const localePath = useLocalePath()
 			>
 				Peredelano
 			</p>
-			<CommonAddress
-				class="card-description__geo"
-				:location="eventData.location"
-				with-pin
+			<CommonTag
+				:price="eventData?.price"
+				class="card-description__tag"
 			/>
 			<h2
 				class="card-description__title"
@@ -51,43 +51,67 @@ const localePath = useLocalePath()
 			>
 				{{ eventData.title }}
 			</h2>
-			<p
-				class="card-description__datetime"
-				:itemprop="SeoItempropEventEnum.START_DATE"
-			>
-				{{ convertToLocaleString(eventData.date) }}
-				<span
-					v-if="eventData.timezone"
-					class="card-description__datetime--timezone"
+			</div>
+			<div class="card-description__bottom">
+				<p
+					class="card-description__datetime"
+					:itemprop="SeoItempropEventEnum.START_DATE"
 				>
-					({{ eventData.timezone?.timezoneOffset }},
-					{{ eventData.timezone?.timezoneName }})
-				</span>
-			</p>
-			<CommonTag :price="eventData?.price" />
+					<CommonIcon
+						name="calendar"
+						color="var(--color-accent-green-main)"
+						class="card-description__datetime-icon"
+					/>
+					<span>{{ convertToLocaleString(eventData.date) }}</span>
+				</p>
+				<CommonAddress
+					class="card-description__geo"
+					:location="eventData.location"
+					with-pin
+				/>
+			</div>
 		</div>
 	</NuxtLink>
 </template>
 
 <style scoped lang="less">
 .card {
-	display: block;
+	display: flex;
+	flex-direction: column;
 	width: 100%;
-	position: relative;
-	padding-bottom: 44px;
+
+	@media (min-width: 768px) {
+		width: 100%;
+		height: 100%;
+		border: 1px solid var(--color-input-field);
+		border-radius: 8px;
+	}
+
+	@media (min-width: 1440px) {
+		width: 100%;
+	}
 
 	&__image-container {
 		display: flex;
-		width: 100%;
+		width: calc(100% + 2px);
 		height: 250px;
 		background-color: var(--color-input-field);
 		background-size: cover;
-		margin-bottom: 12px;
 		line-height: 0;
+		margin-top: -1px;
+		margin-left: -1px;
+		margin-right: -1px;
 
 		&--background {
 			background: url('@/assets/img/event-preview@2x.png') center center no-repeat;
 			background-size: cover;
+		}
+
+		@media (min-width: 768px) {
+			min-height: 250px;
+			max-height: 250px;
+			border-top-left-radius: 8px;
+			border-top-right-radius: 8px;
 		}
 	}
 
@@ -97,14 +121,33 @@ const localePath = useLocalePath()
 		max-width: 100%;
 		height: 100%;
 		object-fit: cover;
+
+		@media (min-width: 768px) {
+			border-top-left-radius: 8px;
+			border-top-right-radius: 8px;
+		}
 	}
 
 	.card-description {
 		display: flex;
 		width: 100%;
 		flex-direction: column;
-		padding-left: 16px;
-		padding-right: 16px;
+		padding: 12px 16px 44px;
+
+		@media (min-width: 768px) {
+			height: inherit;
+			justify-content: space-between;
+			padding: 12px;
+			border-bottom-left-radius: 8px;
+			border-bottom-right-radius: 8px;
+		}
+
+		&__bottom {
+
+			@media(min-width: 786px) {
+				margin-top: auto;
+			}
+		}
 
 		&__author {
 			//TODO: пока верстка только мобилки
@@ -115,6 +158,10 @@ const localePath = useLocalePath()
 			line-height: 16px;
 			text-align: left;
 			color: var(--color-text-secondary);
+			margin-bottom: 12px;
+		}
+
+		&__tag {
 			margin-bottom: 12px;
 		}
 
@@ -129,20 +176,16 @@ const localePath = useLocalePath()
 		}
 
 		&__datetime {
-			font-weight: var(--font-weight-bold);
+			display: flex;
+			max-height: max-content;
+			align-items: center;
 			font-size: var(--font-size-S);
 			line-height: 20px;
-			margin-bottom: 11px;
-
-			&--timezone {
-				font-size: var(--font-size-XS);
-				line-height: 16px;
-				color: var(--color-text-secondary);
-			}
+			margin-bottom: 8px;
 		}
 
-		&__geo {
-			margin-bottom: 12px;
+		&__datetime-icon {
+			margin-right: var(--space-related-items);
 		}
 	}
 }

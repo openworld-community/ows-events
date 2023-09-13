@@ -74,6 +74,7 @@ const onButtonClick = () => {
 			<li
 				v-for="event in posterEvents"
 				:key="event.id"
+				class="main-page__card-item"
 				itemscope
 				:itemtype="SeoItemTypeEnum.EVENT"
 			>
@@ -99,6 +100,11 @@ const onButtonClick = () => {
 <style lang="less" scoped>
 .main-page {
 	padding-top: 16px;
+
+	@media(min-width: 768px) {
+		padding-left: var(--padding-side);
+		padding-right: var(--padding-side);
+	}
 
 	&__search {
 		padding-left: var(--padding-side);
@@ -132,6 +138,36 @@ const onButtonClick = () => {
 		display: flex;
 		flex-direction: column;
 		width: 100%;
+
+		@media(min-width: 768px) {
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
+	}
+
+	&__card-item {
+		@media(min-width: 768px) {
+			display: flex;
+			width: 49.2%;
+			height: auto;
+			margin-bottom: 1.5%;
+			margin-right: 1.5%;
+
+			&:nth-child(2n) {
+				margin-right: 0;
+			}
+		}
+
+		@media(min-width: 1440px) {
+			display: flex;
+			width: 32.3%;
+			min-height: 100%;
+			margin-right: 0;
+
+			&:not(:nth-child(3n)) {
+				margin-right: 1.5%;
+			}
+		}
 	}
 }
 

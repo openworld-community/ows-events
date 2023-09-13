@@ -42,6 +42,7 @@ const component = computed(() => {
 			v-if="withPin"
 			name="map-pin"
 			class="address__icon"
+			color="var(--color-accent-green-main)"
 		/>
 		<span
 			:class="['address__text', { 'address__text--link': isLink }]"
@@ -76,7 +77,6 @@ const component = computed(() => {
 	max-height: max-content;
 
 	&__icon {
-		color: var(--color-accent-green-main);
 		margin-right: var(--space-related-items);
 	}
 

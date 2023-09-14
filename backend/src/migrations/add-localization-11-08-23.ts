@@ -7,14 +7,14 @@ import { localize } from '../utils/localization/localize';
 import { sleep } from '../utils/sleep';
 
 /*  Title: Migration to localized description
-	Reason: Need to translate descrition to user language;
+	Reason: Need to translate description to user language;
 
 	Changes:
-		Previous event type and mongoose schema:
+		Previous description type and mongoose schema:
 			{
-				desctiption: string
+				description: string
 			}
-		New user type and mongoose schema:
+		New description type and mongoose schema:
 			{
 				description: {
 					[Key in SupportedLanguages]: string

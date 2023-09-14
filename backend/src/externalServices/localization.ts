@@ -1,21 +1,28 @@
 import axios from 'axios';
 import { SupportedLanguages, SupportedLanguagesArray } from '../../../common/const';
 import { vars } from '../config/vars';
+import { sleep } from '../utils/sleep';
 
-export const translate = async (string: string, lang: string) => {
+export const translate = async (string: string, lang: string): Promise<string> => {
 	const queryParams = new URLSearchParams({
 		text: string.trim(),
 		tl: lang
 	});
-	const req = await axios({
-		method: 'GET',
-		url: `https://localisation.orby-tech.space/translated_text`,
-		params: queryParams,
-		headers: {
-			Authorization: vars.apiKeys.localization
-		}
-	});
-	return req.data;
+	try {
+		const req = await axios({
+			method: 'GET',
+			url: `https://localisation.orby-tech.space/translated_text`,
+			params: queryParams,
+			headers: {
+				Authorization: vars.apiKeys.localization
+			}
+		});
+		return req.data;
+	} catch (e) {
+		console.error(e);
+		await sleep(100);
+		return await translate(string, lang);
+	}
 };
 
 export const getLanguage = async (string: string): Promise<SupportedLanguages | 'undefined'> => {

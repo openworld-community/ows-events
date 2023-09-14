@@ -137,7 +137,7 @@ export function useBackendFetch<T>(
 	opts.baseURL ??= API_URL;
 
 	if (modifiers.auth) {
-		const userStore = useUserStore()
+		const userStore = useUserStore();
 		if (!userStore.isAuthorized) {
 			throw new Error('You are not authorized');
 		}
@@ -149,9 +149,10 @@ export function useBackendFetch<T>(
 			? Object.assign(opts.headers, { Authorization: token })
 			: (opts.headers = { Authorization: token });
 	}
+	const { $i18n } = useNuxtApp();
 	opts.headers
-		? Object.assign(opts.headers, { 'Accept-Language': SupportedLanguages.RUSSIAN })
-		: (opts.headers = { 'Accept-Language': SupportedLanguages.RUSSIAN });
+		? Object.assign(opts.headers, { 'Accept-Language': $i18n.locale.value })
+		: (opts.headers = { 'Accept-Language': $i18n.locale.value });
 
 	if (opts.body) {
 		opts.method ??= 'POST';

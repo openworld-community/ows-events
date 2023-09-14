@@ -4,6 +4,7 @@ import { vars } from '../config/vars';
 import { SupportedLanguages, SupportedLanguagesArray } from '../../../common/const';
 import { compareArrays } from '../utils/compareArrays';
 import { localize } from '../utils/localization/localize';
+import { sleep } from '../utils/sleep';
 
 /*  Title: Migration to localized description
 	Reason: Need to translate descrition to user language;
@@ -34,6 +35,7 @@ export const migrate = async () => {
 		if (!compareArrays(existingLanguages, SupportedLanguagesArray)) {
 			const eventDescription =
 				event.description !== '' ? event.description : 'No description';
+			await sleep(100);
 			const localizedDescription = await localize(eventDescription);
 			await events.findOneAndUpdate(event, {
 				$set: {

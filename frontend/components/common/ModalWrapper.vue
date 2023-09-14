@@ -20,6 +20,34 @@ defineProps({
 });
 
 const emit = defineEmits(['closeModal']);
+
+// В safari на iphone при открытии клавиатуры происходит скролл страницы и не возвращается обратно при закрытии
+// код ниже возвращает скролл в исходное положение
+
+let windowOffsetTop = 0;
+const isIPhoneMobileAgent = /iPhone/i.test(navigator.userAgent);
+
+const scrollLockOnBeforeOpenModal = () => {
+	if (isIPhoneMobileAgent) {
+		const body = document.querySelector('body');
+		if (body) {
+			windowOffsetTop = window.scrollY;
+			body.classList.add('no-scroll');
+			body.style.top = `${-windowOffsetTop}px`;
+		}
+	}
+};
+
+const scrollUnlockOnBeforeCloseModal = () => {
+	if (isIPhoneMobileAgent) {
+		const body = document.querySelector('body');
+		if (body) {
+			body.classList.remove('no-scroll');
+			window.scrollTo({ top: windowOffsetTop });
+			setTimeout(() => (body.style.top = 'unset'));
+		}
+	}
+};
 </script>
 <template>
 	<VueFinalModal
@@ -30,8 +58,10 @@ const emit = defineEmits(['closeModal']);
 		swipe-to-close="down"
 		:click-to-close="true"
 		:esc-to-close="true"
-		:lock-scroll="true"
+		:lock-scroll="false"
 		content-class="overlay"
+		@before-open="scrollLockOnBeforeOpenModal"
+		@before-close="scrollUnlockOnBeforeCloseModal"
 	>
 		<div class="modal-card">
 			<header
@@ -56,10 +86,11 @@ const emit = defineEmits(['closeModal']);
 			</header>
 			<form
 				v-if="modalType === 'form'"
-				class="modal-card__body"
+				class="modal-card__body body"
 				@submit.prevent="() => void 0"
 			>
 				<slot name="form" />
+				<p class="body__required">{{ $t('modal.global.required') }}</p>
 			</form>
 			<footer
 				:class="['modal-card__foot', { 'modal-card__foot--center': modalType === 'info' }]"
@@ -81,7 +112,7 @@ const emit = defineEmits(['closeModal']);
 	overflow: hidden;
 	border-radius: 6px;
 	margin: var(--padding-side) auto;
-	position: absolute;
+	position: fixed;
 	left: 50%;
 	top: 50%;
 
@@ -120,6 +151,7 @@ const emit = defineEmits(['closeModal']);
 	&__body {
 		width: 100%;
 		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
 		background-color: var(--color-white);
 		padding: 20px;
 	}
@@ -140,6 +172,15 @@ const emit = defineEmits(['closeModal']);
 		&--center {
 			justify-content: center;
 		}
+	}
+}
+
+.body {
+	&__required {
+		font-size: var(--font-size-XS);
+		line-height: 18px;
+		color: var(--color-text-secondary);
+		margin-top: var(--space-unrelated-items);
 	}
 }
 </style>

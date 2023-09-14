@@ -1,4 +1,5 @@
 export enum CookieNameEnum {
 	TOKEN = 'token',
-	LOCALE = 'lang'
+	LOCALE = 'lang',
+	TG_USER = 'user'
 }

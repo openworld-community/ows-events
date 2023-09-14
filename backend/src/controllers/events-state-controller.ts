@@ -44,15 +44,6 @@ class EventsStateController {
 		}
 		queryObject['meta.moderation.status'] = { $nin: ['declined', 'in-progress'] };
 
-		const pastEvents = await EventModel.find(
-			{ ...queryObject, date: { $lte: Date.now() } },
-			{},
-			{
-				sort: {
-					date: 'descending'
-				}
-			}
-		).exec();
 		const futureEvents = await EventModel.find(
 			{ ...queryObject, date: { $gt: Date.now() } },
 			{},
@@ -63,8 +54,7 @@ class EventsStateController {
 			}
 		).exec();
 
-		const events = futureEvents.concat(pastEvents);
-		return events.map((event) => event.toObject());
+		return futureEvents.map((event) => event.toObject());
 	}
 
 	async getEvent(id: string) {

@@ -46,7 +46,7 @@ export default defineNuxtConfig({
 			'poster-test-peredelano.orby-tech.space',
 		apiHost: 'https://afisha-metrics.orby-tech.space'
 	},
-	typescript: { strict: true },
+	typescript: { strict: false },
 	nitro: {
 		devProxy: {
 			'/api': 'http://backend:7080/api',
@@ -56,8 +56,12 @@ export default defineNuxtConfig({
 	vite: {
 		server: {
 			watch: {
-				usePolling: true
-			}
+				usePolling: true},
+			// hmr: {
+			// 	// нужно пока комментить, если фронт не через докер
+			// 	protocol: 'ws',
+			// 	clientPort: 24678
+			// }
 		},
 		plugins: [
 			// плагин выдает ошибку из-за компонента /node_modules/nuxt/dist/app/components/nuxt-root.vue
@@ -65,7 +69,7 @@ export default defineNuxtConfig({
 			// vue(),
 			vueJsx(),
 			createSvgIconsPlugin({
-				iconDirs: [path.resolve(process.cwd(), 'assets/img/icon')],
+				iconDirs: [path.resolve(process.cwd(), 'assets/icon')],
 				symbolId: '[name]',
 				inject: 'body-first'
 			})

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useUserStore } from '../../stores/user.store';
-import { getUserName } from '../../utils/user';
-import { RoutePathEnum } from '../../constants/enums/route';
-import { BASE_URL, TELEGRAM_AUTH_BOT_NAME } from '../../constants/url';
-import { SeoItempropUserEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
-import { CookieNameEnum } from '../../constants/enums/common';
+import { useUserStore } from '~/stores/user.store';
+import { getUserName } from '~/utils/user';
+import { RoutePathEnum } from '~/constants/enums/route';
+import { BASE_URL, TELEGRAM_AUTH_BOT_NAME } from '~/constants/url';
+import { SeoItempropGlobalEnum, SeoItempropUserEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
+import { CookieNameEnum } from '~/constants/enums/common';
 
 const { t } = useI18n();
-const localePath = useLocalePath()
+const localePath = useLocalePath();
 
 getMeta({
 	title: t('meta.user.info.title'),
@@ -108,12 +108,13 @@ const logout = () => {
 					class="link__item"
 				>
 					<CommonIcon
+						class="link__icon"
 						name="notebook"
 						width="32"
 						height="32"
 						color="var(--color-accent-green-main)"
 					/>
-					<span>{{ $t('user.my_events') }}</span>
+					<span>{{ $t('user.my_events.title') }}</span>
 				</NuxtLink>
 				<NuxtLink
 					:to="localePath(RoutePathEnum.USER_FAVOURITES)"
@@ -126,8 +127,29 @@ const logout = () => {
 						height="32"
 						color="var(--color-accent-green-main)"
 					/>
-					<span class="link__text">{{ $t('user.favourites') }}</span>
+					<span class="link__text">{{ $t('user.favourites.title') }}</span>
 				</NuxtLink>
+			</div>
+			<div
+				v-if="userData"
+				class="my-events__donate donate"
+			>
+				<img
+					srcset="@/assets/img/user/donate-screen@2x.jpg 2x"
+					src="@/assets/img/user/donate-screen@1x.jpg"
+					width="351"
+					height="116"
+					alt=""
+					class="donate__image"
+					:itemprop="SeoItempropGlobalEnum.IMAGE"
+				/>
+				<p class="donate__text">{{ $t('user.donate.text') }}</p>
+				<CommonButton
+					button-kind="success"
+					:button-text="$t('user.donate.button')"
+					icon-name="donate"
+					:link="localePath(RoutePathEnum.DONATION)"
+				/>
 			</div>
 			<CommonButton
 				class="user-page__button"
@@ -138,14 +160,33 @@ const logout = () => {
 			/>
 		</template>
 		<template v-else-if="!userStore.isAuthorized">
-			<h2 class="user-page__title">
-				{{ $t('user.title_unauthorized') }}
-			</h2>
-			<div
-				v-if="!userStore.isAuthorized"
-				ref="telegram"
-				:class="'user-page__telegram-button'"
-			/>
+			<div class="unauthorized__image-container">
+				<img
+					srcset="@/assets/img/user/unauthorized-screen@2x.jpg 2x"
+					src="@/assets/img/user/unauthorized-screen@1x.jpg"
+					width="351"
+					height="264"
+					alt=""
+					class="unauthorized__image"
+					:itemprop="SeoItempropGlobalEnum.IMAGE"
+				/>
+			</div>
+			<h1 class="unauthorized__title">
+				{{ $t('user.unauthorized.title') }}
+			</h1>
+			<div class="unauthorized__buttons">
+				<div
+					v-if="!userStore.isAuthorized"
+					ref="telegram"
+					class="unauthorized__telegram-button"
+				/>
+				<NuxtLink
+					:to="localePath(RoutePathEnum.HOME)"
+					class="unauthorized__continue"
+				>
+					{{ $t('user.unauthorized.continue') }}
+				</NuxtLink>
+			</div>
 		</template>
 
 		<ModalEditProfile
@@ -170,14 +211,6 @@ const logout = () => {
 		font-weight: var(--font-weight-regular);
 	}
 
-	&__telegram-button {
-		width: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		padding-top: 50%;
-	}
-
 	&__button {
 		margin-top: auto;
 	}
@@ -189,7 +222,6 @@ const logout = () => {
 	flex-direction: column;
 	align-items: center;
 	margin-bottom: var(--space-sections);
-	overflow-y: auto;
 
 	&__wrapper {
 		display: flex;
@@ -247,6 +279,84 @@ const logout = () => {
 
 	&__icon {
 		margin-bottom: var(--space-related-items);
+	}
+}
+
+.donate {
+	display: flex;
+	width: 100%;
+	min-height: 232px;
+	flex-direction: column;
+	align-items: center;
+	background-color: var(--color-background-secondary);
+	border-radius: 8px;
+	padding-bottom: 20px;
+	margin-bottom: var(--space-sections);
+
+	&__image {
+		width: 100%;
+		min-width: 100%;
+		max-width: 100%;
+		height: 100%;
+		margin-bottom: var(--space-unrelated-items);
+	}
+
+	&__text {
+		font-size: var(--font-size-L);
+		line-height: 24px;
+		margin-bottom: var(--space-unrelated-items);
+	}
+}
+
+.unauthorized {
+	&__image-container {
+		display: flex;
+		width: 100%;
+		min-height: 264px;
+		line-height: 0;
+		background-color: var(--color-input-field);
+		margin-top: 34px;
+		margin-bottom: 64px;
+	}
+
+	&__image {
+		width: 100%;
+		min-width: 100%;
+		max-width: 100%;
+		height: 100%;
+	}
+
+	&__title {
+		font-size: var(--font-size-S);
+		font-weight: var(--font-weight-regular);
+		line-height: 20px;
+		text-align: center;
+		margin-bottom: var(--space-sections);
+	}
+
+	&__buttons {
+		display: flex;
+		width: 100%;
+		flex-direction: column;
+		margin-top: auto;
+	}
+
+	&__telegram-button {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-bottom: var(--space-subsections);
+	}
+
+	&__continue {
+		text-align: center;
+		font-size: var(--font-size-M);
+		font-weight: var(--font-weight-bold);
+		line-height: 24px;
+		color: var(--color-text-secondary);
+		padding: var(--space-inner) var(--space-related-items);
+		margin: 0 auto;
 	}
 }
 </style>

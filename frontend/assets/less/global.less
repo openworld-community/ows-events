@@ -31,6 +31,20 @@ body {
   background-color: var(--background-color);
   margin-left: auto;
   margin-right: auto;
+
+  -webkit-overflow-scrolling:touch;
+}
+
+//Для фиксации body при открытии модалки на iphone
+.no-scroll {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  position: fixed;
+
+  @supports (-webkit-touch-callout: none) {
+  	max-height: -webkit-fill-available;
+  }
 }
 
 #__nuxt {

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
-import type { UserInfo } from '../../common/types/user';
-import { apiRouter } from '../composables/useApiRouter';
-import { CookieNameEnum } from '../constants/enums/common';
+import type { TGUserInfo, UserInfo } from '../../common/types/user';
+import { apiRouter } from '~/composables/useApiRouter';
+import { CookieNameEnum } from '~/constants/enums/common';
 
 type UserStore = {
 	id: string | null;
@@ -48,6 +48,12 @@ export const useUserStore = defineStore('user', {
 			const { data } = await apiRouter.user.favourites.getId.useQuery({});
 			if (data.value) {
 				this.favouriteIDs = data.value;
+			}
+		},
+		getUserId() {
+			const userCookie = useCookie<TGUserInfo | null>(CookieNameEnum.TG_USER);
+			if (userCookie.value && userCookie.value.id) {
+				this.id = userCookie.value.id;
 			}
 		}
 	}

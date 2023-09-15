@@ -83,6 +83,7 @@ const showBackButton = computed(() =>
 						name="peredelano-afisha"
 						width="86"
 						height="40"
+						color="var(--color-accent-green-main)"
 						alt="Peredelano Афиша"
 					/>
 				</component>
@@ -152,9 +153,22 @@ const showBackButton = computed(() =>
 	}
 
 	&__navigation-link {
+		display: flex;
 		height: 100%;
 		align-items: center;
-		display: flex;
+		border-radius: 6px;
+
+		&:deep(svg) {
+			transition: color 0.3s ease;
+		}
+
+		&:hover,
+		&:focus,
+		&:active {
+			&:deep(svg) {
+				color: var(--color-accent-green-dark);
+			}
+		}
 	}
 
 	&__language-selector {

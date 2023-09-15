@@ -138,21 +138,18 @@ patchDeleteEventModal({
 					:class-name="'event-info__price'"
 					:price="posterEvent.price"
 				/>
-				<div
+				<CommonButton
 					v-if="userStore.isAuthorized"
-					class="event-info__favourite"
-				>
-					<CommonButton
-						is-icon
-						:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
-						:alt="
-							isInFavourites
-								? $t('global.button.add_to_favourites')
-								: $t('global.button.add_to_favourites')
-						"
-						@click="toggleFavourites"
-					/>
-				</div>
+					is-icon
+					is-round
+					:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
+					:alt="
+						isInFavourites
+							? $t('global.button.add_to_favourites')
+							: $t('global.button.add_to_favourites')
+					"
+					@click="toggleFavourites"
+				/>
 			</div>
 
 			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
@@ -287,16 +284,6 @@ patchDeleteEventModal({
 			margin-bottom: 12px;
 		}
 
-		&__favourite {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			width: 36px;
-			height: 36px;
-			background-color: var(--color-background-secondary);
-			border-radius: 50%;
-		}
-
 		&__author {
 			//TODO: пока верстка только мобилки
 			max-width: 480px;
@@ -335,6 +322,7 @@ patchDeleteEventModal({
 			//TODO: пока верстка только мобилки
 			max-width: 480px;
 			word-wrap: break-word;
+			white-space: pre-line;
 			overflow-y: auto;
 			-webkit-overflow-scrolling: touch;
 			font-size: var(--font-size-S);

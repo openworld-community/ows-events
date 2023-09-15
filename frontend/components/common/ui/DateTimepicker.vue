@@ -119,11 +119,12 @@ const onRemove = () => {
 		<CommonIcon
 			v-if="!modelValue"
 			:name="isDateType ? 'calendar' : 'clock'"
-			class="input__button"
+			:class="['input__button', {'input__button--disabled' : disabled}]"
 		/>
 		<CommonButton
 			v-else
 			is-icon
+			:has-states="false"
 			icon-name="close"
 			class="input__button"
 			@click="onRemove"
@@ -140,6 +141,11 @@ const onRemove = () => {
 
 <style lang="less">
 .dp {
+
+	&__disabled {
+		background-color: transparent;
+	}
+
 	&__menu {
 		left: unset !important;
 		transform: unset !important;
@@ -182,7 +188,7 @@ const onRemove = () => {
 		}
 
 		&:disabled {
-			background-color: var(--color-background-secondary);
+			opacity: 0.4;
 		}
 
 		&::placeholder {
@@ -268,6 +274,7 @@ const onRemove = () => {
 		border-color: var(--color-accent-green-main);
 	}
 
+	&__overlay_cell_active,
 	&__active_date {
 		padding: 3px;
 		background-color: var(--color-accent-green-main);
@@ -295,6 +302,11 @@ const onRemove = () => {
 .dp__overlay_cell_disabled {
 	background: none;
 	&:hover {
+		background: none;
+		cursor: default;
+	}
+	&:active, &:focus {
+		background: none;
 		cursor: unset;
 	}
 	svg {
@@ -302,6 +314,6 @@ const onRemove = () => {
 	}
 }
 .dp__btn:focus {
-	background: var(--dp-hover-color);
+	background: transparent;
 }
 </style>

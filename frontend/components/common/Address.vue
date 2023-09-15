@@ -73,7 +73,7 @@ const component = computed(() => {
 <style scoped lang="less">
 .address {
 	display: flex;
-	max-height: max-content;
+	max-width: max-content;
 
 	&__icon {
 		color: var(--color-accent-green-main);

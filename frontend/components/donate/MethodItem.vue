@@ -24,11 +24,6 @@ const props = defineProps({
 	}
 });
 
-const buttonComponentIs = computed(() => {
-	if (props.link) return defineNuxtLink({});
-	else return 'button';
-});
-
 const { copy, copied } = useClipboard({ source: props.copyData, legacy: true });
 </script>
 
@@ -49,25 +44,21 @@ const { copy, copied } = useClipboard({ source: props.copyData, legacy: true });
 			</div>
 			<h3 class="method__name">{{ method }}</h3>
 		</div>
-
-		<component
-			:is="buttonComponentIs"
-			class="method__button"
-			:to="link ? link : null"
-			:target="link ? '_blank' : null"
+		<CommonButton
+			button-kind="text"
+			:link="link ? link : null"
+			:is-external-link="link ? true : null"
+			:button-text="
+				link
+					? $t('global.button.follow')
+					: !copied
+					? $t('global.button.copy')
+					: $t('global.button.copied')
+			"
+			:icon-name="link ? 'arrow-right' : 'copy'"
 			:itemprop="SeoItempropDonateEnum.LINK"
 			@click="link ? null : copy(copyData)"
-		>
-			<CommonIcon
-				class="method__button-icon"
-				:name="link ? 'arrow-right' : 'copy'"
-				color="var(--color-text-main)"
-			/>
-			{{
-				link ? $t('global.button.follow') :
-          !copied ? $t('global.button.copy') : $t('global.button.copied')
-			}}
-		</component>
+		/>
 	</li>
 </template>
 
@@ -76,6 +67,7 @@ const { copy, copied } = useClipboard({ source: props.copyData, legacy: true });
 	display: flex;
 	height: 45px;
 	justify-content: space-between;
+	align-items: center;
 
 	&:not(:last-child) {
 		border-bottom: 1px solid var(--color-input-field);

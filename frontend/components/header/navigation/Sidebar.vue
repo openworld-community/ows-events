@@ -29,7 +29,7 @@ const localePath = useLocalePath();
 				"
 				:item-kind="userStore.isAuthorized ? 'success' : ''"
 				icon-name="user"
-				:current="getRouteName(route.name) === RouteNameEnum.USER_PAGE"
+				:current="getRouteName(route.name as string) === RouteNameEnum.USER_PAGE"
 				@click="emit('close')"
 			/>
 
@@ -38,7 +38,7 @@ const localePath = useLocalePath();
 				:link-to="localePath(RoutePathEnum.ABOUT)"
 				:text="$t('header.navigation.about')"
 				icon-name="info"
-				:current="getRouteName(route.name) === RouteNameEnum.ABOUT"
+				:current="getRouteName(route.name as string) === RouteNameEnum.ABOUT"
 				@click="emit('close')"
 			/>
 
@@ -56,7 +56,7 @@ const localePath = useLocalePath();
 				:link-to="localePath(RoutePathEnum.DONATION)"
 				:text="$t('header.navigation.donation')"
 				icon-name="donate"
-				:current="getRouteName(route.name) === RouteNameEnum.DONATION"
+				:current="getRouteName(route.name as string) === RouteNameEnum.DONATION"
 				@click="emit('close')"
 			/>
 
@@ -65,7 +65,7 @@ const localePath = useLocalePath();
 				:link-to="localePath(RoutePathEnum.LIMITATION_OF_LIABILITY)"
 				:text="$t('header.navigation.limitation_of_liability')"
 				icon-name="privacy"
-				:current="getRouteName(route.name) === RouteNameEnum.LIMITATION_OF_LIABILITY"
+				:current="getRouteName(route.name as string) === RouteNameEnum.LIMITATION_OF_LIABILITY"
 				@click="emit('close')"
 			/>
 		</ul>

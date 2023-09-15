@@ -12,7 +12,7 @@ COPY ./backend/ ./
 
 RUN npm run build
 
-FROM node:16.15.1-alpine
+FROM node:18-alpine
 
 WORKDIR /app
 

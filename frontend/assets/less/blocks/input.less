@@ -28,6 +28,8 @@
     color: var(--color-text-main);
     padding: 8px 35px 8px 12px;
 
+    transition: border-color 0.3s ease;
+
     &--cursor-pointer {
       cursor: pointer;
     }
@@ -49,11 +51,12 @@
     &:active,
     &:focus {
       outline: none;
-      border: 1px solid #48c78e;
+      border-color: var(--color-accent-green-main);
     }
 
     &:disabled {
-      background-color: var(--color-background-secondary);
+      border-color: var(--color-input-field);
+      opacity: 0.4;
     }
 
     &:-webkit-autofill,
@@ -109,6 +112,10 @@
 
     &--clear {
       z-index: 1;
+    }
+
+    &--disabled {
+      opacity: 0.4;
     }
   }
 

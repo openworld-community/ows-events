@@ -11,13 +11,18 @@ type LinkObjectType = {
 	path?: string;
 };
 
-type ButtonKind = 'ordinary' | 'success' | 'warning'; // для задания внешнего вида
+type ButtonKind = 'ordinary' | 'success' | 'warning' | 'text'; // для задания внешнего вида
 
 const props = defineProps({
 	buttonKind: {
 		// для обычных кнопок задает внешний вид согласно стайл-гайду, для кнопок-инонок раскрашивает в соответствующие цвета
 		type: String as PropType<ButtonKind>,
 		default: ''
+	},
+	hasStates: {
+		//  необходимость подсветки hover, focus, active
+		type: Boolean,
+		default: true
 	},
 	buttonText: {
 		type: String as PropType<string>,
@@ -73,7 +78,8 @@ const props = defineProps({
 const loaderColorDict = {
 	ordinary: 'var(--color-text-main)',
 	success: 'var(--color-white)',
-	warning: 'var(--color-accent-red)'
+	warning: 'var(--color-accent-red)',
+	text: 'var(--color-text-main)'
 } satisfies Record<ButtonKind, string>;
 const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 </script>
@@ -89,7 +95,9 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			isIcon ? 'icon' : `button button__${buttonKind}`,
 			isIcon && buttonKind ? `icon__${buttonKind}` : '',
 			isDisabled ? `button__${buttonKind}--disabled` : '',
-			{ 'button--round': isRound }
+			{ 'button--round': isRound && !isIcon },
+			{'icon--round' : isIcon && isRound},
+			{'no-states' : !hasStates}
 		]"
 		:aria-label="alt ? alt : null"
 		@click="!link && !isDisabled ? emit('click') : null"
@@ -109,7 +117,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		/>
 		<span
 			v-if="!isIcon"
-			class="button__text"
+			class="button__content"
 		>
 			{{ buttonText }}
 		</span>
@@ -124,7 +132,9 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	border-radius: 8px;
 	padding: 7px 14px;
 	align-items: center;
-	transition: background-color 0.3s ease;
+	transition-property: background-color, color, border-color;
+	transition-duration: 0.3s;
+	transition-timing-function: ease;
 
 	&--round {
 		width: 56px;
@@ -132,11 +142,12 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		border-radius: 50%;
 	}
 
-	&__text {
+	&__content {
 		font-size: var(--font-size-M);
 	}
 
 	&__icon {
+		transition: color 0.3s ease;
 		margin-right: 5px;
 		color: var(--color-input-field);
 	}
@@ -167,6 +178,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 		&--disabled {
 			opacity: 0.4;
+			cursor: default;
 		}
 	}
 
@@ -196,9 +208,41 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 		&--disabled {
 			color: var(--color-input-field);
+			cursor: default;
 
 			&::v-deep(svg) {
 				color: var(--color-input-field);
+			}
+		}
+	}
+
+	&__text {
+		color: var(--color-text-main);
+		background-color: transparent;
+		border: 1px solid transparent;
+
+		&::v-deep(svg) {
+			color: var(--color-text-main);
+		}
+
+		&:hover,
+		&:focus {
+			background-color: var(--color-accent-green-main-30);
+		}
+
+		&:active {
+			background-color: var(--color-accent-green-main-50);
+		}
+
+		&--disabled {
+			opacity: 0.4;
+			cursor: default;
+
+			&:hover,
+			&:focus,
+			&:active {
+				background-color: transparent;
+				border-color: transparent;
 			}
 		}
 	}
@@ -231,6 +275,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			color: var(--color-input-field);
 			background-color: var(--color-white);
 			border-color: var(--color-input-field);
+			cursor: default;
 
 			&::v-deep(svg) {
 				color: var(--color-input-field);
@@ -242,14 +287,42 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 .icon {
 	display: block;
 	width: max-content;
+	border-radius: 4px;
 	line-height: 0;
+	transition-property: background-color, border-color, color;
+	transition-duration: 0.3s;
+	transition-timing-function: ease;
+
+	&:hover,
+	&:focus {
+		background-color: var(--color-background-secondary);
+	}
+
+	&:active {
+		background-color: var(--color-accent-green-main-10);
+	}
 
 	&::v-deep(svg) {
 		color: var(--color-input-icons);
+		transition: color 0.3s ease;
 	}
 
 	& + .icon {
 		margin-left: 20px;
+	}
+
+	&--round {
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		background-color: var(--color-background-secondary);
+		border: 1px solid var(--color-background-secondary);
+
+		&:hover, &:focus {
+			&::v-deep(svg) {
+				color: var(--color-accent-green-main-30);
+			}
+		}
 	}
 
 	&__ordinary {
@@ -268,6 +341,15 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		&::v-deep(svg) {
 			color: var(--color-accent-red);
 		}
+	}
+}
+
+.no-states {
+
+	&:hover, &:focus, &:active {
+		border-color: unset;
+		background-color: unset;
+		color: unset;
 	}
 }
 </style>

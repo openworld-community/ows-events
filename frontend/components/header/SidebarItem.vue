@@ -27,6 +27,10 @@ const props = defineProps({
 	itemKind: {
 		type: String as PropType<NavItemKind | ''>,
 		default: ''
+	},
+	current: {
+		type: Boolean,
+		default: false
 	}
 });
 
@@ -37,22 +41,22 @@ const component = computed(() => {
 </script>
 
 <template>
-	<li class="sidebar-item">
+	<li :class="['sidebar-item', {'sidebar-item--current': current}]">
 		<component
 			:is="component"
 			:to="linkTo ?? null"
 			:target="isExternalLink ? '_blank' : null"
-			:class="['navigation__item', itemKind ? `navigation__item--${itemKind}` : '']"
+			:class="['sidebar-item__item', itemKind ? `sidebar-item__item--${itemKind}` : '']"
 			:itemprop="SeoItempropNavEnum.URL"
 		>
 			<span
-				class="navigation__text"
+				class="sidebar-item__text"
 				:itemprop="SeoItempropNavEnum.NAME"
 			>
 				{{ text }}
 			</span>
 			<CommonIcon
-				class="navigation__icon"
+				class="sidebar-item__icon"
 				:name="iconName"
 				:alt="text"
 			/>
@@ -61,7 +65,40 @@ const component = computed(() => {
 </template>
 
 <style scoped lang="less">
-.navigation {
+.sidebar-item {
+	display: flex;
+	width: 100%;
+
+	transition: background-color 0.3s ease;
+
+	&:first-child {
+		border-top-right-radius: 6px;
+		border-top-left-radius: 6px;
+	}
+
+	&:last-child {
+		border-bottom-right-radius: 6px;
+		border-bottom-left-radius: 6px;
+	}
+
+	&:hover, &focus {
+		background-color: var(--color-background-secondary);
+	}
+
+	&:active {
+		background-color: var(--color-accent-green-main-10);
+	}
+
+	&--current {
+		opacity: 0.7;
+		cursor: default;
+		pointer-events: none;
+
+		& > a > span, & > button > span {
+			text-decoration: underline;
+		}
+	}
+
 	&__item {
 		display: flex;
 		max-width: 240px;
@@ -70,6 +107,8 @@ const component = computed(() => {
 		align-items: center;
 		text-align: end;
 		padding: 8px 18px 8px 16px;
+
+		transition: background-color 0.3s ease;
 
 		&--success {
 			&::v-deep(svg) {

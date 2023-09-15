@@ -84,7 +84,15 @@ class UserController {
 		const user = await UserModel.findOne({ token });
 		if (!user) throw new Error(CommonErrorsEnum.USER_DOES_NOT_EXIST);
 		const favoriteEventsId = user.favorites;
-		const favoriteEvents = await EventModel.find({ id: { $in: favoriteEventsId } });
+		const favoriteEvents = await EventModel.find(
+			{ id: { $in: favoriteEventsId } },
+			{},
+			{
+				sort: {
+					date: 'descending'
+				}
+			}
+		);
 		return favoriteEvents;
 	}
 }

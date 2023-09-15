@@ -3,10 +3,12 @@ import { RoutePathEnum } from '@/constants/enums/route';
 import { SUPPORT_TG_URL } from '../../../constants/url';
 import { SeoItemTypeEnum } from '../../../constants/enums/seo';
 import { useUserStore } from '../../../stores/user.store';
+import { RouteNameEnum } from '../../../constants/enums/route';
 
 const emit = defineEmits(['close']);
+const route = useRoute();
 const userStore = useUserStore();
-const localePath = useLocalePath()
+const localePath = useLocalePath();
 </script>
 
 <template>
@@ -20,9 +22,14 @@ const localePath = useLocalePath()
 			<HeaderSidebarItem
 				component-type="link"
 				:link-to="localePath(RoutePathEnum.USER_PAGE)"
-				:text="userStore.isAuthorized ? $t('header.navigation.user') : $t('header.navigation.authorize')"
+				:text="
+					userStore.isAuthorized
+						? $t('header.navigation.user')
+						: $t('header.navigation.authorize')
+				"
 				:item-kind="userStore.isAuthorized ? 'success' : ''"
 				icon-name="user"
+				:current="getRouteName(route.name as string) === RouteNameEnum.USER_PAGE"
 				@click="emit('close')"
 			/>
 
@@ -31,6 +38,7 @@ const localePath = useLocalePath()
 				:link-to="localePath(RoutePathEnum.ABOUT)"
 				:text="$t('header.navigation.about')"
 				icon-name="info"
+				:current="getRouteName(route.name as string) === RouteNameEnum.ABOUT"
 				@click="emit('close')"
 			/>
 
@@ -48,6 +56,7 @@ const localePath = useLocalePath()
 				:link-to="localePath(RoutePathEnum.DONATION)"
 				:text="$t('header.navigation.donation')"
 				icon-name="donate"
+				:current="getRouteName(route.name as string) === RouteNameEnum.DONATION"
 				@click="emit('close')"
 			/>
 
@@ -56,6 +65,7 @@ const localePath = useLocalePath()
 				:link-to="localePath(RoutePathEnum.LIMITATION_OF_LIABILITY)"
 				:text="$t('header.navigation.limitation_of_liability')"
 				icon-name="privacy"
+				:current="getRouteName(route.name as string) === RouteNameEnum.LIMITATION_OF_LIABILITY"
 				@click="emit('close')"
 			/>
 		</ul>

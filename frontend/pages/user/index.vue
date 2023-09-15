@@ -276,10 +276,24 @@ const logout = () => {
 		width: 100%;
 		height: 108px;
 		background-color: var(--color-background-secondary);
+		border: 1px solid var(--color-background-secondary);
 		border-radius: 8px;
+
+		transition-property: background-color, border-color;
+		transition-duration: 0.3s;
+		transition-timing-function: ease;
 
 		&:not(:last-child) {
 			margin-right: var(--padding-side);
+		}
+
+		&:hover, &:focus {
+			border-color: var(--color-accent-green-main-30);
+		}
+
+		&:active {
+			background-color: var(--color-accent-green-main-10);
+			border-color: var(--color-accent-green-main-10);
 		}
 	}
 
@@ -358,11 +372,20 @@ const logout = () => {
 	&__continue {
 		text-align: center;
 		font-size: var(--font-size-M);
-		font-weight: var(--font-weight-bold);
 		line-height: 24px;
-		color: var(--color-text-secondary);
+		color: var(--color-input-icons);
 		padding: var(--space-inner) var(--space-related-items);
 		margin: 0 auto;
+
+		transition: color 0.3s ease;
+
+		&:hover, &:focus {
+			color: var(--color-text-secondary);
+		}
+
+		&:active {
+			color: var(--color-text);
+		}
 	}
 }
 </style>

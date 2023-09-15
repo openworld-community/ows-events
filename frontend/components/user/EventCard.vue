@@ -64,9 +64,23 @@ const localePath = useLocalePath();
 	display: flex;
 	width: 100%;
 	background-color: var(--color-background-secondary);
+	border: 1px solid var(--color-background-secondary);
 	border-radius: 8px;
 	padding: var(--space-related-items);
 	margin-bottom: var(--padding-side);
+
+	transition-property: background-color, border-color;
+	transition-duration: 0.3s;
+	transition-timing-function: ease;
+
+	&:hover, &:focus {
+		border-color: var(--color-accent-green-main-30);
+	}
+
+	&:active {
+		background-color: var(--color-accent-green-main-10);
+		border-color: var(--color-accent-green-main-10);
+	}
 
 	&--expired {
 		opacity: 0.5;

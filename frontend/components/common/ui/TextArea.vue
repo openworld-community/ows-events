@@ -61,6 +61,7 @@ const onRemove = () => {
 			v-if="modelValue"
 			class="input__button input__button--clear"
 			is-icon
+			:has-states="false"
 			icon-name="close"
 			:alt="$t('global.button.delete')"
 			@click="onRemove"

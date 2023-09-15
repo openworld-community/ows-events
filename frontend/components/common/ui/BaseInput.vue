@@ -119,15 +119,16 @@ const onRemove = () => {
 		<CommonIcon
 			v-if="iconName && !modelValue"
 			:name="iconName"
-			class="input__button"
+			:class="['input__button', {'input__button--disabled': disabled}]"
 		/>
 
 		<!--    кнопка справа-->
 		<CommonButton
 			v-if="buttonName && !modelValue"
 			is-icon
+			:has-states="false"
 			:icon-name="buttonName"
-			class="input__button"
+			:class="['input__button', {'input__button--disabled': disabled}]"
 		/>
 
 		<!-- кнопка очистки инпута-->
@@ -135,6 +136,7 @@ const onRemove = () => {
 			v-else-if="(modelValue || modelValue === 0) && !disabled"
 			class="input__button input__button--clear"
 			is-icon
+			:has-states="false"
 			icon-name="close"
 			:alt="$t('global.button.delete')"
 			@click="onRemove"

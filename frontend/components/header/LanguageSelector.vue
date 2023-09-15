@@ -40,14 +40,16 @@ onClickOutside(sidebar, () => toggleSelector(), { ignore: [selectorButton] });
 		>
 			<HeaderSidebarItem
 				:link-to="switchLocalePath('ru')"
-				:text="$t('header.language_selector.language.ru')"
+				text="Русский"
 				icon-name="language/ru"
+				:current="language === 'ru'"
 				@click="toggleSelector"
 			/>
 			<HeaderSidebarItem
 				:link-to="switchLocalePath('en')"
-				:text="$t('header.language_selector.language.en')"
+				text="English"
 				icon-name="language/en"
+				:current="language === 'en'"
 				@click="toggleSelector"
 			/>
 		</ul>
@@ -64,6 +66,7 @@ onClickOutside(sidebar, () => toggleSelector(), { ignore: [selectorButton] });
 	&__sidebar {
 		display: flex;
 		width: max-content;
+		min-width: 150px;
 		flex-direction: column;
 		align-items: flex-end;
 		position: absolute;

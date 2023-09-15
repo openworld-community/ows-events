@@ -63,7 +63,7 @@ defineProps({
 	line-height: 20px;
 	text-align: center;
 
-	background-color: var(--color-accent-green-semitransparent);
+	background-color: var(--color-accent-green-main-40);
 	border-radius: 8px;
 
 	padding: 3px 10px;

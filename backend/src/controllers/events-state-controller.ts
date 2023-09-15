@@ -1,14 +1,23 @@
 import { v4 as uuid } from 'uuid';
 import { FilterQuery } from 'mongoose';
-import { EventOnPoster, SearchEventPayload } from '@common/types/event';
+import { EventDbEntity, EventOnPoster, SearchEventPayload } from '@common/types/event';
 import { EventModel } from '../models/event.model';
 import { imageController } from './image-controller';
+import { localize } from '../utils/localization/localize';
 
 class EventsStateController {
 	async addEvent(event: EventOnPoster) {
 		const id = uuid();
-		const eventWithId = { ...event, id };
-		const newEvent = new EventModel(eventWithId);
+		const { originLanguage, localizationObject } = await localize(event.description);
+		const localizedEvent = {
+			...event,
+			id,
+			...{
+				description: localizationObject,
+				originDescriptionLanguage: originLanguage
+			}
+		};
+		const newEvent = new EventModel(localizedEvent);
 		await newEvent.save().catch((e) => {
 			// eslint-disable-next-line no-console
 			console.error(e);
@@ -16,7 +25,7 @@ class EventsStateController {
 		return id;
 	}
 
-	async getEvents(query?: SearchEventPayload | undefined): Promise<EventOnPoster[]> {
+	async getEvents(query?: SearchEventPayload | undefined): Promise<EventDbEntity[]> {
 		const queryObject: FilterQuery<EventOnPoster> = {};
 		if (query?.searchLine) {
 			queryObject.$text = { $search: query.searchLine };
@@ -35,15 +44,6 @@ class EventsStateController {
 		}
 		queryObject['meta.moderation.status'] = { $nin: ['declined', 'in-progress'] };
 
-		const pastEvents = await EventModel.find(
-			{ ...queryObject, date: { $lte: Date.now() } },
-			{},
-			{
-				sort: {
-					date: 'descending'
-				}
-			}
-		);
 		const futureEvents = await EventModel.find(
 			{ ...queryObject, date: { $gt: Date.now() } },
 			{},
@@ -52,11 +52,9 @@ class EventsStateController {
 					date: 'ascending'
 				}
 			}
-		);
+		).exec();
 
-		const events = futureEvents.concat(pastEvents);
-
-		return events;
+		return futureEvents.map((event) => event.toObject());
 	}
 
 	async getEvent(id: string) {
@@ -65,19 +63,27 @@ class EventsStateController {
 				id
 			},
 			{ meta: 0 }
-		);
-		return event;
+		).exec();
+		return event?.toObject();
 	}
 
-	async updateEvent(data: EventOnPoster) {
-		const event = await EventModel.findOneAndUpdate(
-			{ id: data.id },
+	async updateEvent(event: EventOnPoster) {
+		const { originLanguage, localizationObject } = await localize(event.description);
+		const localizedEvent = {
+			...event,
+			...{
+				description: localizationObject,
+				originDescriptionLanguage: originLanguage
+			}
+		};
+		const updatedEvent = await EventModel.findOneAndUpdate(
+			{ id: localizedEvent.id },
 			{
-				$set: data
+				$set: localizedEvent
 			}
 		);
 
-		return event;
+		return updatedEvent;
 	}
 
 	async deleteEvent(id: string) {
@@ -127,6 +133,20 @@ class EventsStateController {
 		);
 
 		return event;
+	}
+
+	async getUserEvents(userId: string) {
+		const events = await EventModel.find(
+			{ creatorId: userId },
+			{},
+			{
+				sort: {
+					date: 'descending'
+				}
+			}
+		);
+
+		return events;
 	}
 }
 

@@ -1,18 +1,20 @@
 import fs from 'fs';
 import fsP from 'fs/promises';
 import { PaymentInfo } from '@common/types/payment-info';
-import { CommonErrorsEnum } from '../../../../../common/const';
+import { CommonErrorsEnum, SupportedLanguages } from '../../../../../common/const';
 import { eventsStateController } from '../../../controllers/events-state-controller';
 import { IGetJSONPaymentInfoHandlerProps, IGetPaymentInfoHandlerProps } from './type';
+import { delocalizeObject } from '../../../utils/localization/delocalizeObject';
 
 export const getPaymentInfo: IGetPaymentInfoHandlerProps = async (request) => {
 	const event = await eventsStateController.getEvent(request.params.id);
 	if (!event) throw new Error(CommonErrorsEnum.EVENT_NOT_FOUND);
 
+	const delocalizedEvent = delocalizeObject(event, SupportedLanguages.ENGLISH);
 	const paymentsFileMd = `assets/presets/${request.params.id}.md`;
 	if (fs.existsSync(paymentsFileMd)) {
 		return {
-			event,
+			event: delocalizedEvent,
 			paymentsInfo: {
 				id: event.id,
 				type: 'markdown',
@@ -33,7 +35,7 @@ export const getPaymentInfo: IGetPaymentInfoHandlerProps = async (request) => {
 	const eventPaymentsInfo =
 		paymentsInfo.find((p) => p.id === request.params.id) ?? paymentsInfo[0];
 	return {
-		event,
+		event: delocalizedEvent,
 		paymentsInfo: eventPaymentsInfo
 	};
 };

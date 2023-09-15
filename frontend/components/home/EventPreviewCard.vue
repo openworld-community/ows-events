@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import type { EventOnPoster } from '../../../common/types';
-import {
-	SeoItempropEventEnum,
-	SeoItempropGlobalEnum,
-} from '../../constants/enums/seo';
+import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
+import { RoutePathEnum } from '../../constants/enums/route';
 
 defineProps<{ eventData: EventOnPoster }>();
+const localePath = useLocalePath()
 </script>
 
 <template>
 	<NuxtLink
 		class="card"
-		:to="`/event/${eventData.id}`"
+		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
 		:itemprop="SeoItempropGlobalEnum.URL"
 	>
 		<div
@@ -19,7 +18,7 @@ defineProps<{ eventData: EventOnPoster }>();
 				'card__image-container',
 				{ 'card__image-container--background': !eventData.image }
 			]"
-			:itemprop="SeoItempropGlobalEnum.IMAGE"
+			:itemprop="eventData.image ? undefined : SeoItempropGlobalEnum.IMAGE"
 		>
 			<img
 				v-if="eventData.image"
@@ -65,9 +64,7 @@ defineProps<{ eventData: EventOnPoster }>();
 					{{ eventData.timezone?.timezoneName }})
 				</span>
 			</p>
-			<CommonTag
-				:price="eventData.price"
-			/>
+			<CommonTag :price="eventData?.price" />
 		</div>
 	</NuxtLink>
 </template>

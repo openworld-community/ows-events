@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { type EventOnPoster } from '../../../common/types';
 import { type PaymentInfo } from '../../../common/types/payment-info';
-import { RouteNameEnum } from '@/constants/enums/route';
 import { ref } from 'vue';
 import Markdown from 'vue3-markdown-it';
 import { BASE_URL } from '../../constants/url';
@@ -12,7 +11,7 @@ const route = useRoute();
 useHead({
 	titleTemplate: `%s / ${t('meta.payment_info.title')}`,
 	meta: [
-		{ property: 'og:site_name', content: t('meta.title') },
+		{ property: 'og:site_name', content: t('meta.default_title') },
 		{ property: 'og:type', content: 'website' },
 		{ property: 'og:title', content: t('meta.payment_info.title') },
 		{ property: 'og:description', content: t('meta.default_description') },
@@ -20,7 +19,6 @@ useHead({
 		{ property: 'og:url', content: BASE_URL + route.path }
 	]
 });
-definePageMeta({ name: RouteNameEnum.PAYMENT_INFO });
 
 const eventId = getFirstParam(route.params.eventId);
 

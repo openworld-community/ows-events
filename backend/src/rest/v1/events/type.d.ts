@@ -1,5 +1,6 @@
 import { EventOnPoster } from '@common/types';
 import { EventParams, SearchEventPayload } from '@common/types/event';
+import { SupportedLanguages } from '../../../../../common/const';
 import { IRouteHandler } from '../../types';
 
 type IAddEventRoute = {
@@ -10,6 +11,9 @@ type IAddEventRoute = {
 type IAddEventHandler = IRouteHandler<IAddEventRoute>;
 
 type IGetEventRoute = {
+	Header: {
+		'Accept-Language': SupportedLanguages;
+	};
 	Reply: EventOnPoster;
 	Params: EventParams;
 };
@@ -30,11 +34,26 @@ type IUpdateEventRoute = {
 type IUpdateEventHandler = IRouteHandler<IUpdateEventRoute>;
 
 type IGetEventsRoute = {
+	Header: {
+		'accept-language': SupportedLanguages;
+	};
 	Reply: EventOnPoster[];
 };
 type IGetEventsHandler = IRouteHandler<IGetEventsRoute>;
 
+type IGetMyEventsRoute = {
+	Header: {
+		Authorization: string;
+		'accept-language': SupportedLanguages;
+	};
+	Reply: EventOnPoster[];
+};
+type IGetMyEventsHandler = IRouteHandler<IGetMyEventsRoute>;
+
 type IFindEventRoute = {
+	Header: {
+		'accept-language': SupportedLanguages;
+	};
 	Body: SearchEventPayload;
 	Reply: EventOnPoster[];
 };

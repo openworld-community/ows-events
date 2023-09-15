@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import eventScreen from '../assets/img/event-screen@2x.png';
-import { SeoItempropAboutEnum, SeoItemTypeEnum } from '../constants/enums/seo';
-import { RouteNameEnum } from '../constants/enums/route';
-import {REPO_URL, SocialLinks} from '../constants/url';
+import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
+import { REPO_URL, SocialLinks } from '~/constants/url';
 
 const { t } = useI18n();
 
-definePageMeta({ name: RouteNameEnum.ABOUT });
 getMeta({
 	title: t('meta.about_us.title'),
-  description: t('meta.about_us.description')
+	description: t('meta.about_us.description')
 });
 </script>
 
@@ -20,19 +17,45 @@ getMeta({
 		:itemtype="SeoItemTypeEnum.ABOUT"
 	>
 		<h1 class="about__title">{{ $t('about.title') }}</h1>
-		<img
-			:src="eventScreen"
-			class="about__img"
-			:alt="$t('about.alt')"
-			:itemprop="SeoItempropAboutEnum.IMAGE"
-		/>
+		<div class="about__image-container">
+			<img
+				srcset="@/assets/img/about/about-screen@2x.png 2x"
+				src="@/assets/img/about/about-screen@1x.png"
+				width="351"
+				height="232"
+				class="about__img"
+				alt=""
+				:itemprop="SeoItempropAboutEnum.IMAGE"
+			/>
+		</div>
 		<div
 			class="about__description"
 			:itemprop="SeoItempropAboutEnum.MAIN_CONTENT"
 		>
-			<p class="about__paragraph">{{ $t('about.idea') }}</p>
-			<p class="about__paragraph">{{ $t('about.functionality') }}</p>
-			<p class="about__paragraph">{{ $t('about.perspectives') }}</p>
+			<p class="about__paragraph about__paragraph--separated">{{ $t('about.idea') }}</p>
+			<p class="about__paragraph">{{ $t('about.mission') }}</p>
+			<p class="about__paragraph about__paragraph--separated">
+				{{ $t('about.functionality') }}
+			</p>
+			<p class="about__paragraph about__paragraph--separated">{{ $t('about.team') }}</p>
+			<h2 class="about__list-title">{{ $t('about.values.title') }}</h2>
+			<ul class="about__list">
+				<li class="about__list-item">
+					{{ $t('about.values.openness') }}
+				</li>
+				<li class="about__list-item">
+					{{ $t('about.values.innovation') }}
+				</li>
+				<li class="about__list-item">
+					{{ $t('about.values.community') }}
+				</li>
+				<li class="about__list-item">
+					{{ $t('about.values.accessibility') }}
+				</li>
+				<li class="about__list-item">
+					{{ $t('about.values.quality') }}
+				</li>
+			</ul>
 			<p class="about__paragraph">
 				{{ $t('about.github') }}:
 				<NuxtLink
@@ -67,7 +90,7 @@ getMeta({
 						<CommonIcon
 							:name="`social/${key}`"
 							width="40px"
-              height="40px"
+							height="40px"
 						/>
 					</NuxtLink>
 				</li>
@@ -78,10 +101,7 @@ getMeta({
 
 <style lang="less" scoped>
 .about {
-	padding-left: var(--padding-side);
-	padding-right: var(--padding-side);
-	padding-top: var(--padding-vertical);
-	padding-bottom: var(--padding-vertical);
+	padding: var(--padding-vertical) var(--padding-side);
 
 	&__title {
 		font-size: var(--font-size-XXL);
@@ -89,13 +109,22 @@ getMeta({
 		font-weight: var(--font-weight-bold);
 	}
 
+	&__image-container {
+		display: flex;
+		width: 100%;
+		min-height: 232px;
+		line-height: 0;
+		background-color: var(--color-input-field);
+		border-radius: 4px;
+		margin-top: var(--space-unrelated-items);
+		margin-bottom: var(--space-related-items);
+	}
+
 	&__img {
 		width: 100%;
 		min-width: 100%;
 		max-width: 100%;
 		height: 100%;
-		margin-top: var(--space-unrelated-items);
-		margin-bottom: var(--space-related-items);
 		border-radius: 4px;
 	}
 
@@ -103,10 +132,30 @@ getMeta({
 		margin-bottom: var(--space-subsections);
 	}
 
+	&__list-title {
+		font-size: var(--font-size-S);
+		line-height: 20px;
+		margin-bottom: var(--space-related-items);
+	}
+
+	&__list {
+		margin-bottom: var(--space-unrelated-items);
+	}
+
+	&__list-item {
+		list-style-type: disc;
+		list-style-position: inside;
+		font-size: var(--font-size-S);
+		line-height: 20px;
+	}
+
 	&__paragraph {
 		font-size: var(--font-size-S);
 		line-height: 20px;
-		margin-bottom: var(--space-unrelated-items);
+
+		&--separated {
+			margin-bottom: var(--space-unrelated-items);
+		}
 	}
 
 	&__link {

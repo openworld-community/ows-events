@@ -19,13 +19,16 @@ class CountriesAndCitiesController {
 	}
 
 	async getUsedCountries() {
-		const countries: string[] = await EventModel.distinct('location.country');
+		const countries: string[] = await EventModel.distinct('location.country', {
+			date: { $gt: Date.now() }
+		});
 		return countries;
 	}
 
 	async getUsedCities(country: string) {
 		const cities: string[] = await EventModel.distinct('location.city', {
-			'location.country': country
+			'location.country': country,
+			date: { $gt: Date.now() }
 		});
 		return cities;
 	}

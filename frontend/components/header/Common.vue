@@ -1,8 +1,17 @@
 <script setup lang="ts">
-import { RouteNameEnum } from '../../constants/enums/route';
-import {SeoItempropNavEnum, SeoItemTypeEnum} from '../../constants/enums/seo';
+import { SeoItempropNavEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
+import { RouteNameEnum, RoutePathEnum } from '../../constants/enums/route';
+import { getRouteName } from '../../utils';
 
 const route = useRoute();
+const router = useRouter();
+const localePath = useLocalePath();
+
+const pagesHasBackButton: string[] = [
+	RouteNameEnum.EVENT,
+	RouteNameEnum.USER_FAVOURITES,
+	RouteNameEnum.USER_MY_EVENTS
+];
 
 const isNavbarOpen = ref<boolean>(false);
 const navbarToggle = () => {
@@ -14,19 +23,36 @@ const navigationBurger = ref(null);
 
 onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 
-const isAtHome = computed(() => route.name === RouteNameEnum.HOME);
+const isAtHome = computed(() => getRouteName(route.name as string) === RouteNameEnum.HOME);
 const logoComponentIs = computed(() => {
 	if (isAtHome.value) return 'button';
 	else return defineNuxtLink({});
 });
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+const goBack = () => {
+	if (router.options.history.state.back) {
+		router.back();
+	} else if (
+		getRouteName(route.name as string).includes(RouteNameEnum.USER_FAVOURITES) ||
+		getRouteName(route.name as string).includes(RouteNameEnum.USER_MY_EVENTS)
+	) {
+		navigateTo(localePath({ path: RoutePathEnum.USER_PAGE }));
+	} else {
+		navigateTo(localePath({ path: RoutePathEnum.HOME }));
+	}
+};
+
+const showBackButton = computed(() =>
+	pagesHasBackButton.includes(getRouteName(route.name as string))
+);
 </script>
 
 <template>
 	<header
-			class="header"
-			itemscope
-			:itemtype="SeoItemTypeEnum.HEADER"
+		class="header"
+		itemscope
+		:itemtype="SeoItemTypeEnum.HEADER"
 	>
 		<div class="header__container">
 			<div
@@ -34,13 +60,22 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 				itemscope
 				:itemtype="SeoItemTypeEnum.NAV"
 			>
+				<CommonButton
+					v-if="showBackButton"
+					is-icon
+					icon-name="back"
+					button-kind="ordinary"
+					:alt="$t('global.button.back')"
+					@click="goBack"
+				/>
 				<component
 					:is="logoComponentIs"
+					v-else
 					class="header__navigation-link"
 					:aria-label="
 						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
 					"
-					:to="!isAtHome ? { name: RouteNameEnum.HOME } : undefined"
+					:to="!isAtHome ? localePath(RoutePathEnum.HOME) : undefined"
 					:itemprop="SeoItempropNavEnum.URL"
 					@click="isAtHome && scrollToTop()"
 				>
@@ -48,20 +83,20 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 						name="peredelano-afisha"
 						width="86"
 						height="40"
+						color="var(--color-accent-green-main)"
 						alt="Peredelano Афиша"
 					/>
 				</component>
 			</div>
 			<div class="header__right">
-				<!--        TODO: вернуться при доработке подписки-->
-				<!--				<HeaderSubscriptionExpired-->
-				<!--					v-if="route.name === RouteNameEnum.HOME"-->
-				<!--					class="header__subscription"-->
-				<!--				/>-->
+				<HeaderLanguageSelector
+					v-if="!showBackButton"
+					class="header__language-selector"
+				/>
 				<HeaderNavigationBurger
 					ref="navigationBurger"
 					:is-cross="isNavbarOpen"
-					:aria-label="$t(isNavbarOpen ? 'header.button.close' : 'header.button.open')"
+					:aria-label="$t(isNavbarOpen ? 'header.burger.close' : 'header.burger.open')"
 					@click="navbarToggle"
 				/>
 				<HeaderNavigationSidebar
@@ -115,18 +150,29 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 		justify-content: flex-end;
 		text-align: center;
 		position: relative;
-		margin-left: 12px;
-	}
-
-	&__subscription {
-		display: flex;
-		max-width: max-content;
 	}
 
 	&__navigation-link {
+		display: flex;
 		height: 100%;
 		align-items: center;
-		display: flex;
+		border-radius: 6px;
+
+		&:deep(svg) {
+			transition: color 0.3s ease;
+		}
+
+		&:hover,
+		&:focus,
+		&:active {
+			&:deep(svg) {
+				color: var(--color-accent-green-dark);
+			}
+		}
+	}
+
+	&__language-selector {
+		margin-right: var(--space-inner);
 	}
 }
 </style>

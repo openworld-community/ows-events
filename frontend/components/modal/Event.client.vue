@@ -3,6 +3,8 @@ import { getAllTimezones, getTimezone } from '@/services/timezone.services';
 import { useLocationStore, type Country, type City } from '@/stores/location.store';
 import { type EventOnPoster } from '@/../common/types';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
+import { EventTypes } from '../../../common/const/eventTypes';
+import { getCurrencyByCountry } from '../../utils/prices';
 
 type Props = {
 	closeEventModal: () => void;
@@ -12,6 +14,10 @@ type Props = {
 const props = defineProps<Props>();
 const locationStore = useLocationStore();
 
+const closeModal = () => {
+	setTimeout(() => props.closeEventModal(), 300);
+};
+
 const isLoading = ref(false);
 const newImageFile = ref<ImageLoaderFile>(null);
 
@@ -19,6 +25,8 @@ const allTimezones = (await getAllTimezones()).map((timezone) =>
 	timezoneToString(timezone)
 ) as string[];
 const minDate = new Date();
+
+const isFree = ref(props.dataForEdit?.price?.value === 0);
 
 const inputValues = ref({
 	id: props.dataForEdit?.id ?? '',
@@ -37,12 +45,15 @@ const inputValues = ref({
 		  )
 		: null,
 	location: {
-		country: (props.dataForEdit?.location.country ?? 'Serbia') satisfies Country, // Временно фиксируем страну для добавления события
+		country: (props.dataForEdit?.location.country ?? '') satisfies Country,
 		city: (props.dataForEdit?.location.city ?? '') satisfies City,
 		address: props.dataForEdit?.location.address ?? ''
 	},
 	image: props.dataForEdit?.image ?? '',
-	price:  props.dataForEdit?.price?.value ?? 0,
+	price: {
+		value: !isFree.value ? props.dataForEdit?.price?.value ?? '' : '',
+		currency: props.dataForEdit?.price?.currency ?? ''
+	},
 	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
 	url: props.dataForEdit?.url ?? ''
 });
@@ -52,6 +63,15 @@ const eventStartEpoch = computed(() =>
 const eventEndEpoch = computed(() =>
 	combineDateTime(inputValues.value.endDate, inputValues.value.endTime).getTime()
 );
+
+const toggleFree = (value: boolean) => {
+	isFree.value = value;
+	//убираем значение из инпута, в paramsForSubmit подставляется 0
+	if (value) {
+		inputValues.value.price.value = '';
+		inputValues.value.price.currency = '';
+	}
+};
 
 const checkFormFilling = computed(() => {
 	return !!(
@@ -65,13 +85,10 @@ const checkFormFilling = computed(() => {
 		inputValues.value.location.country &&
 		inputValues.value.location.city &&
 		inputValues.value.timezone &&
-		allTimezones.includes(inputValues.value.timezone)
+		allTimezones.includes(inputValues.value.timezone) &&
+		(isFree.value || (inputValues.value.price.value && inputValues.value.price.currency))
 	);
 });
-
-const closeModal = () => {
-	setTimeout(() => props.closeEventModal(), 300);
-};
 
 const paramsForSubmit = computed(() => {
 	return {
@@ -86,13 +103,12 @@ const paramsForSubmit = computed(() => {
 			city: inputValues.value.location.city,
 			address: inputValues.value.location.address
 		},
-    //TODO: добавить min/max значения и выбор валюты
 		price: {
-      minValue: null,
-      value: Number(inputValues.value.price) ?? 0,
-      maxValue: null,
-      currency: inputValues.value.price > 0 ? 'RSD' : null
-    },
+			minValue: null,
+			value: isFree.value ? 0 : Number(inputValues.value.price.value),
+			maxValue: null,
+			currency: isFree.value ? null : inputValues.value.price.currency
+		},
 		timezone: stringToTimezone(inputValues.value.timezone),
 		url: inputValues.value.url
 	};
@@ -111,7 +127,11 @@ const submitEvent = async () => {
 		}
 		image = (await addImage(newImageFile.value)) ?? image;
 
-		const event = Object.assign(paramsForSubmit.value, { id: inputValues.value.id, image });
+		const event = Object.assign(paramsForSubmit.value, {
+			id: inputValues.value.id,
+			image,
+			type: EventTypes.USER_GENERATED
+		});
 		const { error } = await apiRouter.events.edit.useMutation({ data: { event } });
 
 		if (!error.value) props.refreshEvent?.();
@@ -139,11 +159,23 @@ async function addImage(image: ImageLoaderFile) {
 	return data.value.path;
 }
 
-// #region country & string input relationship logic
+// #region country, city, timezone string input relationship logic
 watch(
 	() => inputValues.value.location.country,
-	() => {
+	(country) => {
+		if (!inputValues.value.location.country) inputValues.value.timezone = '';
 		inputValues.value.location.city = '';
+		if (!isFree.value) inputValues.value.price.currency = getCurrencyByCountry(country);
+	}
+);
+
+watch(
+	() => isFree.value,
+	() => {
+		if (!isFree.value)
+			inputValues.value.price.currency = getCurrencyByCountry(
+				inputValues.value.location.country
+			);
 	}
 );
 
@@ -192,212 +224,218 @@ watch(
 </script>
 
 <template>
-	<CommonModalWrapper>
-		<div class="modal-card">
-			<header class="modal-card__head">
-				<h2 class="modal-card__title">
-					{{ $t('modal.new_event_modal.title') }}
-				</h2>
-			</header>
+	<CommonModalWrapper
+		:title="
+			dataForEdit ? $t('modal.new_event_modal.title_edit') : $t('modal.new_event_modal.title')
+		"
+	>
+		<template #form>
+			<ModalUiModalSection :label="$t('modal.new_event_modal.fields.location')">
+				<template #child>
+					<CommonUiBaseSelect
+						v-model="inputValues.location.country"
+						name="country"
+						:placeholder="$t('global.country')"
+						:list="locationStore.countries"
+						input-readonly
+						required
+					/>
 
-			<form
-				class="modal-card__body body"
-				@submit.prevent="() => void 0"
+					<CommonUiBaseSelect
+						v-model="inputValues.location.city"
+						name="city"
+						:disabled="!inputValues.location.country"
+						:placeholder="$t('global.city')"
+						:list="locationStore.getCitiesByCountry(inputValues.location.country)"
+						required
+					/>
+
+					<CommonUiBaseSelect
+						v-model="inputValues.timezone"
+						name="timezone"
+						:disabled="!inputValues.location.country"
+						:placeholder="$t('global.timezone')"
+						:list="allTimezones"
+						required
+					/>
+
+					<CommonUiBaseInput
+						v-model="inputValues.location.address"
+						name="address"
+						:placeholder="$t('modal.new_event_modal.fields.address_placeholder')"
+						:disabled="!(inputValues.location.country && inputValues.location.city)"
+					/>
+
+					<div
+						v-if="inputValues.location.city && inputValues.location.address"
+						class="modal-card__check-location check-location"
+					>
+						<CommonIcon
+							class="check-location__icon"
+							name="error"
+							width="26"
+							height="26"
+							color="var(--color-accent-red)"
+						/>
+						<p class="check-location__text">
+							<span>
+								{{ $t('modal.new_event_modal.fields.check_address') }}
+							</span>
+							<NuxtLink
+								:to="getLocationLink(inputValues.location)"
+								target="_blank"
+								class="check-location__link"
+							>
+								{{ $t('modal.new_event_modal.fields.address_link') }}
+							</NuxtLink>
+						</p>
+					</div>
+				</template>
+			</ModalUiModalSection>
+
+			<ModalUiModalSection :label="$t('modal.new_event_modal.fields.main_info')">
+				<template #child>
+					<CommonUiBaseInput
+						v-model="inputValues.title"
+						name="title"
+						:placeholder="$t('modal.new_event_modal.fields.title')"
+						required
+					/>
+					<CommonUiTextArea
+						v-model="inputValues.description"
+						name="description"
+						:placeholder="$t('modal.new_event_modal.fields.description')"
+						required
+					/>
+				</template>
+			</ModalUiModalSection>
+
+			<ModalUiModalSection
+				type="row"
+				:label="$t('modal.new_event_modal.fields.start')"
 			>
-				<ModalUiModalSection :label="$t('modal.new_event_modal.fields.location')">
-					<template #child>
+				<template #child>
+					<CommonUiDateTimepicker
+						v-model="inputValues.startDate"
+						type="date"
+						name="startDate"
+						:min-date="minDate"
+						required
+					/>
+					<CommonUiDateTimepicker
+						v-model="inputValues.startTime"
+						type="time"
+						name="startTime"
+						placeholder="--:--"
+						:disabled="!inputValues.startDate"
+						:min-time="
+							inputValues.startDate?.toDateString() === new Date().toDateString()
+								? getTimeFromEpochInMs(Date.now(), true)
+								: undefined
+						"
+						required
+					/>
+				</template>
+			</ModalUiModalSection>
+
+			<ModalUiModalSection
+				type="row"
+				:label="$t('modal.new_event_modal.fields.end')"
+			>
+				<template #child>
+					<CommonUiDateTimepicker
+						v-model="inputValues.endDate"
+						type="date"
+						name="endDate"
+						:min-date="inputValues.startDate ?? minDate"
+						:disabled="!inputValues.startDate"
+					/>
+					<CommonUiDateTimepicker
+						v-model="inputValues.endTime"
+						type="time"
+						name="endTime"
+						:min-time="
+							inputValues.startDate?.toDateString() ===
+							inputValues.endDate?.toDateString()
+								? inputValues.startTime
+								: undefined
+						"
+						placeholder="--:--"
+						:disabled="!inputValues.endDate"
+						:required="!!inputValues.endDate"
+					/>
+				</template>
+			</ModalUiModalSection>
+
+			<ModalUiModalSection
+				type="column-row"
+				:label="$t('modal.new_event_modal.fields.price')"
+			>
+				<template #child>
+					<div>
 						<CommonUiBaseSelect
-							v-model="inputValues.location.country"
-							name="country"
-							:placeholder="$t('global.country')"
-							:list="locationStore.countries"
-							:disabled="true"
-							required
+							v-model="inputValues.price.currency"
+							name="currency"
+							:placeholder="$t('modal.new_event_modal.fields.currency_placeholder')"
+							:list="locationStore.currencies"
+							has-icon-items
+							input-readonly
+							:disabled="isFree"
+							:required="!isFree"
 						/>
-
-						<CommonUiBaseSelect
-							v-model="inputValues.location.city"
-							name="city"
-							:disabled="!inputValues.location.country"
-							:placeholder="$t('global.city')"
-							:list="
-								locationStore.getCitiesByCountry(inputValues.location.country) ?? []
-							"
-							required
-						/>
-
-						<CommonUiBaseSelect
-							v-model="inputValues.timezone"
-							name="timezone"
-							:disabled="!inputValues.location.country"
-							:placeholder="$t('global.timezone')"
-							:list="allTimezones"
-							required
-						/>
-
 						<CommonUiBaseInput
-							v-model="inputValues.location.address"
-							name="address"
-							:placeholder="$t('modal.new_event_modal.fields.address_placeholder')"
-						/>
-
-						<div
-							v-if="inputValues.location.city && inputValues.location.address"
-							class="modal-card__check-location check-location"
-						>
-							<CommonIcon
-								class="check-location__icon"
-								name="error"
-								width="26"
-								height="26"
-								color="var(--color-accent-red)"
-							/>
-							<p class="check-location__text">
-								<span>
-									{{ $t('modal.new_event_modal.fields.check_address') }}
-								</span>
-								<NuxtLink
-									:to="getLocationLink(inputValues.location)"
-									target="_blank"
-									class="check-location__link"
-								>
-									{{ $t('modal.new_event_modal.fields.address_link') }}
-								</NuxtLink>
-							</p>
-						</div>
-					</template>
-				</ModalUiModalSection>
-
-				<ModalUiModalSection :label="$t('modal.new_event_modal.fields.main_info')">
-					<template #child>
-						<CommonUiBaseInput
-							v-model="inputValues.title"
-							name="title"
-							:placeholder="$t('modal.new_event_modal.fields.title')"
-							required
-						/>
-						<CommonUiTextArea
-							v-model="inputValues.description"
-							name="description"
-							:placeholder="$t('modal.new_event_modal.fields.description')"
-							required
-						/>
-					</template>
-				</ModalUiModalSection>
-
-				<ModalUiModalSection
-					type="row"
-					:label="$t('modal.new_event_modal.fields.start')"
-				>
-					<template #child>
-						<CommonUiDateTimepicker
-							v-model="inputValues.startDate"
-							type="date"
-							name="startDate"
-							:min-date="minDate"
-							required
-						/>
-						<CommonUiDateTimepicker
-							v-model="inputValues.startTime"
-							type="time"
-							name="startTime"
-							placeholder="--:--"
-							:disabled="!inputValues.startDate"
-							:min-time="
-								inputValues.startDate?.toDateString() === new Date().toDateString()
-									? getTimeFromEpochInMs(Date.now(), true)
-									: undefined
-							"
-							required
-						/>
-					</template>
-				</ModalUiModalSection>
-
-				<ModalUiModalSection
-					type="row"
-					:label="$t('modal.new_event_modal.fields.end')"
-				>
-					<template #child>
-						<CommonUiDateTimepicker
-							v-model="inputValues.endDate"
-							type="date"
-							name="endDate"
-							:min-date="inputValues.startDate ?? minDate"
-							:disabled="!inputValues.startDate"
-						/>
-						<CommonUiDateTimepicker
-							v-model="inputValues.endTime"
-							type="time"
-							name="endTime"
-							:min-time="
-								inputValues.startDate?.toDateString() ===
-								inputValues.endDate?.toDateString()
-									? inputValues.startTime
-									: undefined
-							"
-							placeholder="--:--"
-							:disabled="!inputValues.endDate"
-							:required="!!inputValues.endDate"
-						/>
-					</template>
-				</ModalUiModalSection>
-
-				<ModalUiModalSection :label="$t('modal.new_event_modal.fields.price')">
-					<template #child>
-						<CommonUiBaseInput
-							v-model="inputValues.price"
+							v-model="inputValues.price.value"
 							name="price"
 							type="number"
 							:min-value="0"
+							:disabled="isFree"
+							:required="!isFree"
 							:placeholder="$t('modal.new_event_modal.fields.price_placeholder')"
 						/>
-						<!--						<CommonUiBaseSelect-->
-						<!--								:key="inputValues.currency"-->
-						<!--								v-model="inputValues.currency"-->
-						<!--								:input-disabled="!inputValues.currency"-->
-						<!--								name="current"-->
-						<!--								:placeholder="$t('global.city')"-->
-						<!--								:list="cities"-->
-						<!--						/>-->
-					</template>
-				</ModalUiModalSection>
+					</div>
+					<CommonUiBaseCheckbox
+						value="free"
+						:label="$t('modal.new_event_modal.fields.price_free')"
+						is-reversed
+						:model-value="isFree"
+						@update:model-value="toggleFree"
+					/>
+				</template>
+			</ModalUiModalSection>
 
-				<ModalUiModalSection
-					:label="$t('modal.new_event_modal.fields.url_to_rigistration')"
-				>
-					<template #child>
-						<CommonUiBaseInput
-							v-model="inputValues.url"
-							name="url"
-							:placeholder="$t('modal.new_event_modal.fields.url_placeholder')"
-							required
-						/>
-					</template>
-				</ModalUiModalSection>
+			<ModalUiModalSection :label="$t('modal.new_event_modal.fields.url_to_registration')">
+				<template #child>
+					<CommonUiBaseInput
+						v-model="inputValues.url"
+						name="url"
+						:placeholder="$t('modal.new_event_modal.fields.url_placeholder')"
+						required
+					/>
+				</template>
+			</ModalUiModalSection>
 
-				<CommonImageLoader
-					v-model="newImageFile"
-					:external-image="inputValues.image"
-				/>
-			</form>
-			<div class="modal-card__foot">
-				<CommonButton
-					class="modal-card__button"
-					button-kind="ordinary"
-					:button-text="$t('modal.new_event_modal.cancel')"
-					:is-active="!isLoading"
-					@click="closeModal()"
-				/>
-				<CommonButton
-					class="modal-card__button"
-					button-kind="success"
-					:button-text="$t('modal.new_event_modal.submit')"
-					:is-loading="isLoading"
-					:is-disabled="!checkFormFilling || isLoading"
-					@click="isLoading ? null : submitEvent()"
-				/>
-			</div>
-		</div>
+			<CommonImageLoader
+				v-model="newImageFile"
+				:external-image="inputValues.image"
+			/>
+		</template>
+		<template #footer>
+			<CommonButton
+				class="modal-card__button"
+				button-kind="ordinary"
+				:button-text="$t('global.button.cancel')"
+				:is-active="!isLoading"
+				@click="closeModal()"
+			/>
+			<CommonButton
+				class="modal-card__button"
+				button-kind="success"
+				:button-text="$t('global.button.save')"
+				:is-loading="isLoading"
+				:is-disabled="!checkFormFilling || isLoading"
+				@click="isLoading ? null : submitEvent()"
+			/>
+		</template>
 	</CommonModalWrapper>
 </template>
 

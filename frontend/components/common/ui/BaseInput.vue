@@ -120,6 +120,7 @@ const onRemove = () => {
 			v-if="iconName && !modelValue"
 			:name="iconName"
 			:class="['input__button', {'input__button--disabled': disabled}]"
+			color="var(--color-input-icons)"
 		/>
 
 		<!--    кнопка справа-->

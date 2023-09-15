@@ -158,7 +158,9 @@ const showBackButton = computed(() =>
 		align-items: center;
 		border-radius: 6px;
 
-		transition: background-color 0.3s ease;
+		&:deep(svg) {
+			transition: color 0.3s ease;
+		}
 
 		&:hover,
 		&:focus,

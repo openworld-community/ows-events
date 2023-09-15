@@ -132,7 +132,9 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	border-radius: 8px;
 	padding: 7px 14px;
 	align-items: center;
-	transition: background-color 0.3s ease;
+	transition-property: background-color, color, border-color;
+	transition-duration: 0.3s;
+	transition-timing-function: ease;
 
 	&--round {
 		width: 56px;
@@ -145,6 +147,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	}
 
 	&__icon {
+		transition: color 0.3s ease;
 		margin-right: 5px;
 		color: var(--color-input-field);
 	}
@@ -286,7 +289,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	width: max-content;
 	border-radius: 4px;
 	line-height: 0;
-	transition-property: background-color, border-color;
+	transition-property: background-color, border-color, color;
 	transition-duration: 0.3s;
 	transition-timing-function: ease;
 
@@ -301,6 +304,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 	&::v-deep(svg) {
 		color: var(--color-input-icons);
+		transition: color 0.3s ease;
 	}
 
 	& + .icon {
@@ -343,9 +347,9 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 .no-states {
 
 	&:hover, &:focus, &:active {
-		border-color: inherit;
-		background-color: inherit;
-		color: inherit;
+		border-color: unset;
+		background-color: unset;
+		color: unset;
 	}
 }
 </style>

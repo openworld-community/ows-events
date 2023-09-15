@@ -20,6 +20,7 @@ import { tagsApi } from './rest/v1/tags/router';
 import { migrate } from './migrations/price-structure-18-07-23';
 import { userApi } from './rest/v1/user/router';
 import { migrate as migrateUserStructure } from './migrations/user-structure-12-06-23';
+import { migrate as migrateLocalization } from './migrations/add-localization-11-08-23';
 import { migrate as migrateEventsStructure } from './migrations/events-structure-25-07-23';
 
 
@@ -35,6 +36,7 @@ connectToMongo()
 		// TODO: Remove after merge ASAP!
 		migrate().then();
 		migrateUserStructure();
+		migrateLocalization();
         migrateEventsStructure();
 		// eslint-disable-next-line no-console
 		console.log('Connected to mongo');

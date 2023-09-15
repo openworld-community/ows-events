@@ -1,15 +1,8 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { EventOnPoster } from '@common/types/event';
+import { EventDbEntity, IEventMeta } from '@common/types/event';
+import { localizedData } from './localizedData.schema';
 
-export type IEventMeta = {
-	meta: {
-		moderation: {
-			status: string;
-			problems: string[];
-		};
-	};
-};
-export type IEventDocument = EventOnPoster & IEventMeta & Document;
+export type IEventDocument = EventDbEntity & IEventMeta & Document;
 
 const schema = new Schema<IEventDocument>(
 	{
@@ -25,10 +18,10 @@ const schema = new Schema<IEventDocument>(
 			type: String,
 			required: true
 		},
-		description: {
-			type: String,
-			required: false
+		originDescriptionLanguage: {
+			type: String
 		},
+		description: localizedData,
 		date: {
 			type: Number,
 			required: true
@@ -109,7 +102,8 @@ const schema = new Schema<IEventDocument>(
 
 schema.index({
 	title: 'text',
-	description: 'text',
+	'description.ru': 'text',
+	'description.en': 'text',
 	'location.city': 'text',
 	'location.country': 'text'
 });

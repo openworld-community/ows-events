@@ -70,6 +70,7 @@ services:
             - MONGO_URI=mongodb://mongo:27017/prod
             - FRONTEND_URL=https://afisha.peredelano.com
             - SECRET_KEY
+            - LOCALIZATION_API_KEY
         networks:
             - traefikpublic
         ports:

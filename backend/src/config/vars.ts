@@ -9,5 +9,8 @@ export const vars = {
 	mongo: {
 		uri: process.env.MONGO_URI || 'mongodb://mongo:27020/dev'
 	},
-	secret: process.env.SECRET_KEY || 'secret'
+	secret: process.env.SECRET_KEY || 'secret',
+	apiKeys: {
+		localization: process.env.LOCALIZATION_API_KEY || '123'
+	}
 };

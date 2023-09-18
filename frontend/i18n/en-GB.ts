@@ -163,7 +163,7 @@ export default {
 		navigation: {
 			user: 'User',
 			authorize: 'Authorize',
-			about: 'About Afisha',
+			about: 'About us',
 			support: 'Support',
 			donation: 'Support the Project',
 			limitation_of_liability: 'Limitation of Liability',

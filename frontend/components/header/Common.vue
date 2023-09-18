@@ -2,10 +2,15 @@
 import { SeoItempropNavEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
 import { RouteNameEnum, RoutePathEnum } from '../../constants/enums/route';
 import { getRouteName } from '../../utils';
+import useAdaptiveBreakpoints from '../../composables/useBreakpoints';
+import { SUPPORT_TG_URL } from '../../constants/url';
+import { useUserStore } from '../../stores/user.store';
 
 const route = useRoute();
 const router = useRouter();
 const localePath = useLocalePath();
+const userStore = useUserStore();
+const { mobile } = useAdaptiveBreakpoints();
 
 const pagesHasBackButton: string[] = [
 	RouteNameEnum.EVENT,
@@ -54,14 +59,14 @@ const showBackButton = computed(() =>
 		itemscope
 		:itemtype="SeoItemTypeEnum.HEADER"
 	>
-		<div class="header__container">
-			<div
-				class="header__left"
-				itemscope
-				:itemtype="SeoItemTypeEnum.NAV"
-			>
+		<nav
+			class="header__container"
+			itemscope
+			:itemtype="SeoItemTypeEnum.NAV"
+		>
+			<div class="header__left">
 				<CommonButton
-					v-if="showBackButton"
+					v-if="mobile && showBackButton"
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"
@@ -71,7 +76,7 @@ const showBackButton = computed(() =>
 				<component
 					:is="logoComponentIs"
 					v-else
-					class="header__navigation-link"
+					class="header__logo"
 					:aria-label="
 						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
 					"
@@ -88,24 +93,73 @@ const showBackButton = computed(() =>
 					/>
 				</component>
 			</div>
+			<ul
+				v-if="!mobile"
+				class="header__center"
+			>
+				<li class="header__nav-item">
+					<NuxtLink
+						:to="localePath(RoutePathEnum.ABOUT)"
+						class="header__nav-link"
+					>
+						{{ $t('header.navigation.about') }}
+					</NuxtLink>
+				</li>
+				<li
+					class="header__point"
+					aria-hidden="true"
+				/>
+				<li class="header__nav-item">
+					<NuxtLink
+						:to="SUPPORT_TG_URL"
+						class="header__nav-link"
+					>
+						{{ $t('header.navigation.support') }}
+					</NuxtLink>
+				</li>
+				<li
+					class="header__point"
+					aria-hidden="true"
+				/>
+				<li class="header__nav-item">
+					<NuxtLink
+						:to="localePath(RoutePathEnum.DONATION)"
+						class="header__nav-link"
+					>
+						{{ $t('header.navigation.donation') }}
+					</NuxtLink>
+				</li>
+			</ul>
 			<div class="header__right">
 				<HeaderLanguageSelector
 					v-if="!showBackButton"
 					class="header__language-selector"
 				/>
 				<HeaderNavigationBurger
+					v-if="mobile"
 					ref="navigationBurger"
 					:is-cross="isNavbarOpen"
 					:aria-label="$t(isNavbarOpen ? 'header.burger.close' : 'header.burger.open')"
 					@click="navbarToggle"
 				/>
 				<HeaderNavigationSidebar
-					v-if="isNavbarOpen"
+					v-if="mobile && isNavbarOpen"
 					ref="sidebar"
 					@close="navbarToggle"
 				/>
+				<CommonButton
+					v-if="!mobile"
+					:link="RoutePathEnum.USER_PAGE"
+					button-kind="success"
+					icon-name="user"
+					:button-text="
+						userStore.isAuthorized
+							? $t('header.navigation.user')
+							: $t('header.navigation.authorize')
+					"
+				/>
 			</div>
-		</div>
+		</nav>
 	</header>
 </template>
 
@@ -119,22 +173,24 @@ const showBackButton = computed(() =>
 	//TODO разобраться с z-индексами
 	z-index: 3;
 
+	@media (min-width: 768px) {
+		position: static;
+	}
+
 	&__container {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		min-width: var(--width-mobile);
 		height: var(--header-height);
-		//TODO: пока верстка только мобилки
-		max-width: 480px;
 		background-color: var(--color-white);
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
 		margin-left: auto;
 		margin-right: auto;
 
-		@media (min-width: 1440px) {
-			max-width: 600px;
+		@media (min-width: 768px) {
+			padding-top: 32px;
 		}
 	}
 
@@ -142,7 +198,6 @@ const showBackButton = computed(() =>
 		display: flex;
 		height: 100%;
 		align-items: center;
-		margin-right: auto;
 	}
 
 	&__right {
@@ -152,7 +207,19 @@ const showBackButton = computed(() =>
 		position: relative;
 	}
 
-	&__navigation-link {
+	&__center {
+		@media (min-width: 768px) {
+			display: flex;
+			width: 100%;
+			max-width: 450px;
+			justify-content: space-between;
+			align-items: center;
+			margin-left: 5%;
+			margin-right: 5%;
+		}
+	}
+
+	&__logo {
 		display: flex;
 		height: 100%;
 		align-items: center;
@@ -171,8 +238,40 @@ const showBackButton = computed(() =>
 		}
 	}
 
+	&__nav-item {
+		@media (min-width: 768px) {
+			display: flex;
+			align-items: center;
+			position: relative;
+		}
+	}
+
+	&__nav-link {
+		@media (min-width: 768px) {
+			font-size: var(--font-size-S);
+		}
+	}
+
+	&__point {
+		@media (min-width: 768px) {
+			width: 4px;
+			height: 4px;
+			background-color: var(--color-text-main);
+			border-radius: 50%;
+		}
+
+		@media (min-width: 1440px) {
+			width: 6px;
+			height: 6px;
+		}
+	}
+
 	&__language-selector {
 		margin-right: var(--space-inner);
+
+		@media (min-width: 1440px) {
+			margin-right: 32px;
+		}
 	}
 }
 </style>

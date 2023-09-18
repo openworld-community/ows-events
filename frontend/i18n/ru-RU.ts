@@ -169,7 +169,7 @@ export default {
 		navigation: {
 			user: 'Пользователь',
 			authorize: 'Авторизоваться',
-			about: 'Oб Афише',
+			about: 'O проекте',
 			support: 'Поддержка',
 			donation: 'Поддержать проект',
 			limitation_of_liability: 'Ограничение ответственности',

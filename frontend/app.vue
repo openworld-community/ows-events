@@ -14,7 +14,7 @@ const { locale, t } = useI18n();
 
 const route = useRoute();
 
-const {mobile} = useAdaptiveBreakpoints()
+const { mobile } = useAdaptiveBreakpoints();
 
 useHead({
 	title: t('meta.default_title'),
@@ -24,7 +24,7 @@ useHead({
 	}
 });
 
-useCookie(CookieNameEnum.LOCALE, {maxAge: TOKEN_MAX_AGE_SECONDS}).value = locale.value
+useCookie(CookieNameEnum.LOCALE, { maxAge: TOKEN_MAX_AGE_SECONDS }).value = locale.value;
 
 if (isDevelopmentMode) {
 	useCookie(CookieNameEnum.TOKEN).value ??= 'blablabla';
@@ -42,5 +42,13 @@ if (isDevelopmentMode) {
 <style lang="less" scoped>
 .main {
 	padding-top: var(--header-height);
+
+	@media (min-width: 768px) {
+		padding-top: 30px;
+	}
+
+	@media (min-width: 1440px) {
+		padding-top: 60px;
+	}
 }
 </style>

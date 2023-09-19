@@ -92,8 +92,8 @@ class UserController {
 					date: 'descending'
 				}
 			}
-		);
-		return favoriteEvents;
+		).exec();
+		return favoriteEvents.map((event) => event.toObject());
 	}
 }
 

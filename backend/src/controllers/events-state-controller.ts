@@ -144,9 +144,9 @@ class EventsStateController {
 					date: 'descending'
 				}
 			}
-		);
+		).exec();
 
-		return events;
+		return events.map((event) => event.toObject());
 	}
 }
 

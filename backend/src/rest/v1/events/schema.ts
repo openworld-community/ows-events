@@ -90,6 +90,17 @@ export const addEventSchema = {
 	description: 'Add new event',
 	tags: ['Events'],
 	summary: 'Add new event',
+	parameters: [
+		{
+			name: 'lang',
+			in: 'header',
+			description: 'Language from supported languages',
+			schema: {
+				type: 'string'
+			},
+			required: true
+		}
+	],
 	response: {
 		201: {
 			type: 'object',

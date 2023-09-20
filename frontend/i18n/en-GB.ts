@@ -101,6 +101,7 @@ export default {
 		image: {
 			event: 'Event image'
 		},
+		description_title: 'Event description',
 		price: {
 			free: 'Free',
 			unknown: 'Price not specified',
@@ -136,6 +137,7 @@ export default {
 			edit: 'Edit',
 			edit_profile: 'Edit profile',
 			follow: 'Follow',
+			in_favourites: 'In Favourites',
 			logout: 'Logout',
 			register: 'Register',
 			remove_from_favourites: 'Remove from Favorites',

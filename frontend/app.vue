@@ -5,7 +5,6 @@ import 'vue-toastification/dist/index.css';
 import 'virtual:svg-icons-register';
 import { ModalsContainer } from 'vue-final-modal';
 import { RouteNameEnum } from './constants/enums/route';
-import useAdaptiveBreakpoints from './composables/useBreakpoints';
 import { CookieNameEnum } from './constants/enums/common';
 import { TOKEN_MAX_AGE_SECONDS } from './constants/defaultValues/time';
 import { isDevelopmentMode } from './constants/common';
@@ -14,11 +13,25 @@ const { locale, t } = useI18n();
 
 const route = useRoute();
 
-const { mobile } = useAdaptiveBreakpoints();
+const viewport = useViewport();
+
+const mobile = computed(() => viewport.isLessThan('tablet'));
+const tablet = computed(
+	() => viewport.isGreaterOrEquals('tablet') || viewport.isLessThan('desktop')
+);
+const desktop = computed(() => viewport.isGreaterOrEquals('desktop'));
+
+provide('mobile', mobile);
+provide('tablet', tablet);
+provide('desktop', desktop);
 
 useHead({
 	title: t('meta.default_title'),
-	meta: [{ name: 'description', content: t('meta.default_description') }],
+	meta: [
+		{ name: 'description', content: t('meta.default_description') },
+		// viewport-fit=cover - фикс для IPhone - убирает рамки при горизонтальном просмотре
+		{ name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' }
+	],
 	htmlAttrs: {
 		lang: () => locale.value
 	}
@@ -31,12 +44,14 @@ if (isDevelopmentMode) {
 }
 </script>
 <template>
-	<HeaderCommon />
-	<main class="main">
-		<ModalsContainer />
-		<NuxtPage />
-	</main>
-	<FooterCommon v-if="getRouteName(route.name) === RouteNameEnum.HOME || !mobile" />
+	<div class="root">
+		<HeaderCommon />
+		<main class="main">
+			<ModalsContainer />
+			<NuxtPage />
+		</main>
+		<FooterCommon v-if="getRouteName(route.name) === RouteNameEnum.HOME || !mobile" />
+	</div>
 </template>
 
 <style lang="less" scoped>

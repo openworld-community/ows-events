@@ -33,38 +33,32 @@ const localePath = useLocalePath();
 
 		<div class="card-description">
 			<div class="card-description__top">
-			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
-			<p
-				v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
-				class="card-description__author"
-				:itemprop="SeoItempropEventEnum.ORGANIZER"
-			>
-				Peredelano
-			</p>
-			<CommonTag
-				:price="eventData?.price"
-				class="card-description__tag"
-			/>
-			<h2
-				class="card-description__title"
-				:itemprop="SeoItempropEventEnum.NAME"
-			>
-				{{ eventData.title }}
-			</h2>
+				<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
+				<p
+					v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
+					class="card-description__author"
+					:itemprop="SeoItempropEventEnum.ORGANIZER"
+				>
+					Peredelano
+				</p>
+				<CommonTag
+					:price="eventData?.price"
+					class="card-description__tag"
+				/>
+				<h2
+					class="card-description__title"
+					:itemprop="SeoItempropEventEnum.NAME"
+				>
+					{{ eventData.title }}
+				</h2>
 			</div>
 			<div class="card-description__bottom">
-				<p
+				<CommonEventDetails
 					class="card-description__datetime"
-					:itemprop="SeoItempropEventEnum.START_DATE"
-				>
-					<CommonIcon
-						name="calendar"
-						color="var(--color-accent-green-main)"
-						class="card-description__datetime-icon"
-					/>
-					<span>{{ convertToLocaleString(eventData.date) }}</span>
-				</p>
-				<CommonAddress
+					:start-date="convertToLocaleString(eventData.date)"
+					with-pin
+				/>
+				<CommonEventDetails
 					class="card-description__geo"
 					:location="eventData.location"
 					with-pin
@@ -143,8 +137,7 @@ const localePath = useLocalePath();
 		}
 
 		&__bottom {
-
-			@media(min-width: 786px) {
+			@media (min-width: 786px) {
 				margin-top: auto;
 			}
 		}
@@ -176,16 +169,7 @@ const localePath = useLocalePath();
 		}
 
 		&__datetime {
-			display: flex;
-			max-height: max-content;
-			align-items: center;
-			font-size: var(--font-size-S);
-			line-height: 20px;
 			margin-bottom: 8px;
-		}
-
-		&__datetime-icon {
-			margin-right: var(--space-related-items);
 		}
 	}
 }

@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { RoutePathEnum } from '../../constants/enums/route';
 import { SocialLinks, SUPPORT_TG_URL } from '../../constants/url';
-import useAdaptiveBreakpoints from '../../composables/useBreakpoints';
 
 const localePath = useLocalePath();
 
-const { mobile } = useAdaptiveBreakpoints();
+const mobile = inject('mobile');
 </script>
 
 <template>

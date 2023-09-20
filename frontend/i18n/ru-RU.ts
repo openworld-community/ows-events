@@ -107,6 +107,7 @@ export default {
 		image: {
 			event: 'Изображение мероприятия'
 		},
+		description_title: 'Описание мероприятия',
 		price: {
 			free: 'Бесплатно',
 			unknown: 'Цена не указана',
@@ -129,7 +130,7 @@ export default {
 		timezone: 'Часовой пояс',
 		button: {
 			authorize: 'Авторизоваться',
-			add_to_favourites: 'Добавить в Избранное',
+			add_to_favourites: 'Добавить в избранное',
 			back: 'Назад',
 			cancel: 'Отмена',
 			close: 'Закрыть',
@@ -142,9 +143,10 @@ export default {
 			edit: 'Редактировать',
 			edit_profile: 'Редактировать профиль',
 			follow: 'Перейти',
+			in_favourites: 'В избранном',
 			logout: 'Выйти из аккаунта',
 			register: 'Зарегистрироваться',
-			remove_from_favourites: 'Удалить из Избранного',
+			remove_from_favourites: 'Удалить из избранного',
 			save: 'Сохранить',
 			search: 'Поиск',
 			share: 'Поделиться',

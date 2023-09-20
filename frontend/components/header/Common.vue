@@ -2,7 +2,6 @@
 import { SeoItempropNavEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
 import { RouteNameEnum, RoutePathEnum } from '../../constants/enums/route';
 import { getRouteName } from '../../utils';
-import useAdaptiveBreakpoints from '../../composables/useBreakpoints';
 import { SUPPORT_TG_URL } from '../../constants/url';
 import { useUserStore } from '../../stores/user.store';
 
@@ -10,7 +9,8 @@ const route = useRoute();
 const router = useRouter();
 const localePath = useLocalePath();
 const userStore = useUserStore();
-const { mobile } = useAdaptiveBreakpoints();
+
+const mobile = inject('mobile');
 
 const pagesHasBackButton: string[] = [
 	RouteNameEnum.EVENT,
@@ -132,7 +132,7 @@ const showBackButton = computed(() =>
 			</ul>
 			<div class="header__right">
 				<HeaderLanguageSelector
-					v-if="!showBackButton"
+					v-if="!showBackButton || !mobile"
 					class="header__language-selector"
 				/>
 				<HeaderNavigationBurger
@@ -149,7 +149,7 @@ const showBackButton = computed(() =>
 				/>
 				<CommonButton
 					v-if="!mobile"
-					:link="RoutePathEnum.USER_PAGE"
+					:link="localePath(RoutePathEnum.USER_PAGE)"
 					button-kind="success"
 					icon-name="user"
 					:button-text="

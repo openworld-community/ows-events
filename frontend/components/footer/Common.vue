@@ -48,7 +48,6 @@ const { mobile } = useAdaptiveBreakpoints();
 					<li class="navigation__item">
 						<NuxtLink
 							:to="localePath(RoutePathEnum.DONATION)"
-							target="_blank"
 							class="navigation__link"
 						>
 							{{ $t('footer.navigation.donate') }}
@@ -57,7 +56,6 @@ const { mobile } = useAdaptiveBreakpoints();
 					<li class="navigation__item">
 						<NuxtLink
 							:to="localePath(RoutePathEnum.LIMITATION_OF_LIABILITY)"
-							target="_blank"
 							class="navigation__link"
 						>
 							{{ $t('footer.navigation.limitation_of_liability') }}

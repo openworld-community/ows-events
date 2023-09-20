@@ -5,7 +5,7 @@ import { sleep } from '../utils/sleep';
 
 export const translate = async (string: string, lang: string): Promise<string> => {
 	const queryParams = new URLSearchParams({
-		text: string.trim(),
+		text: string,
 		tl: lang
 	});
 	try {

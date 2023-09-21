@@ -154,11 +154,11 @@ patchDeleteEventModal({
 
 			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
 			<p
-				v-if="posterEvent.title.toLowerCase().includes('peredelanoconf')"
+				v-if="posterEvent.organizer"
 				class="event-info__author"
 				:itemprop="SeoItempropEventEnum.ORGANIZER"
 			>
-				Peredelano
+				{{ posterEvent?.organizer }}
 			</p>
 			<h1
 				class="event-info__title"

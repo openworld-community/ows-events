@@ -4,7 +4,7 @@ import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enu
 import { RoutePathEnum } from '../../constants/enums/route';
 
 defineProps<{ eventData: EventOnPoster }>();
-const localePath = useLocalePath()
+const localePath = useLocalePath();
 </script>
 
 <template>
@@ -34,11 +34,11 @@ const localePath = useLocalePath()
 		<div class="card-description">
 			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
 			<p
-				v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
+				v-if="eventData.organizer"
 				class="card-description__author"
 				:itemprop="SeoItempropEventEnum.ORGANIZER"
 			>
-				Peredelano
+				{{ eventData.organizer }}
 			</p>
 			<CommonAddress
 				class="card-description__geo"

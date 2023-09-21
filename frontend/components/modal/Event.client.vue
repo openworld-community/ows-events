@@ -15,6 +15,7 @@ type Props = {
 const props = defineProps<Props>();
 const locationStore = useLocationStore();
 const userStore = useUserStore();
+const { locale } = useI18n();
 
 const closeModal = () => {
 	setTimeout(() => props.closeEventModal(), 300);
@@ -145,7 +146,7 @@ const submitEvent = async () => {
 		const { data } = await apiRouter.events.add.useMutation({ data: { event } });
 
 		if (data.value) {
-			await navigateTo(`/event/${data.value.id}`);
+			await navigateTo(`${locale.value}/event/${data.value.id}`);
 		} else {
 			isLoading.value = false;
 			return;

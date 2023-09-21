@@ -108,18 +108,25 @@ patchDeleteEventModal({
 		:itemtype="SeoItemTypeEnum.EVENT"
 	>
 		<div
-			:class="[
-				'event-image',
-				'event-image__container',
-				{ 'event-image__container--background': !posterEvent.image }
-			]"
+			class="event-image event-image__container"
 			:itemprop="SeoItempropGlobalEnum.IMAGE"
 		>
 			<img
 				v-if="posterEvent.image"
-				:src="eventImage"
-				:alt="$t('event.image.event')"
 				class="event-image__image"
+				:src="eventImage"
+				width="350"
+				height="250"
+				:alt="$t('event.image.event')"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
+			/>
+			<img
+				v-else
+				class="event-image__image"
+				src="@/assets/img/event-preview@2x.png"
+				width="350"
+				height="250"
+				:alt="$t('event.image.event')"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
 		</div>
@@ -220,7 +227,7 @@ patchDeleteEventModal({
 				<div
 					v-if="
 						userStore.id === posterEvent.creatorId ||
-						posterEvent.creatorId !== 'dev-user'
+						posterEvent.creatorId === 'dev-user'
 					"
 					class="event-info__manage"
 				>
@@ -247,7 +254,7 @@ patchDeleteEventModal({
 					v-if="
 						!mobile &&
 						posterEvent.id !== userStore.id &&
-						posterEvent.creatorId === 'dev-user'
+						posterEvent.creatorId !== 'dev-user'
 					"
 					button-kind="ordinary"
 					:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
@@ -281,6 +288,8 @@ patchDeleteEventModal({
 
 	@media (min-width: 768px) {
 		padding-bottom: 30px;
+		min-height: unset;
+		height: unset;
 	}
 }
 
@@ -303,19 +312,7 @@ patchDeleteEventModal({
 		}
 
 		@media (min-width: 1440px) {
-			aspect-ratio: 2 / 1;
 			max-height: 580px;
-		}
-
-		&--background {
-			aspect-ratio: 2 / 2.2;
-			height: auto;
-			background: url('@/assets/img/event-preview@2x.png') center center no-repeat;
-			background-size: cover;
-
-			@media (min-width: 768px) {
-				aspect-ratio: 2 / 1.6;
-			}
 		}
 	}
 

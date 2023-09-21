@@ -14,33 +14,27 @@ const localePath = useLocalePath();
 		:itemprop="SeoItempropGlobalEnum.URL"
 	>
 		<div
-			:class="[
-				'card__image-container',
-				{ 'card__image-container--background': !eventData.image }
-			]"
+			class="card__image-container"
 			:itemprop="eventData.image ? undefined : SeoItempropGlobalEnum.IMAGE"
 		>
 			<img
 				v-if="eventData.image"
-				:itemprop="SeoItempropGlobalEnum.IMAGE"
-				:alt="$t('home.events.image_alt')"
 				class="card__image"
 				:src="getEventImage(eventData)"
-				width="375"
-				height="176"
+				:alt="$t('home.events.image_alt')"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
+			/>
+			<img
+				v-else
+				class="card__image"
+				src="@/assets/img/event-preview@2x.png"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
+				:alt="$t('home.events.image_alt')"
 			/>
 		</div>
 
 		<div class="card-description">
 			<div class="card-description__top">
-				<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
-				<p
-					v-if="eventData.organizer"
-					class="card-description__author"
-					:itemprop="SeoItempropEventEnum.ORGANIZER"
-				>
-					{{ eventData.organizer }}
-				</p>
 				<CommonTag
 					:price="eventData?.price"
 					class="card-description__tag"
@@ -51,6 +45,13 @@ const localePath = useLocalePath();
 				>
 					{{ eventData.title }}
 				</h2>
+				<p
+					v-if="eventData.organizer"
+					class="card-description__author"
+					:itemprop="SeoItempropEventEnum.ORGANIZER"
+				>
+					{{ eventData.organizer }}
+				</p>
 			</div>
 			<div class="card-description__bottom">
 				<CommonEventDetails
@@ -88,7 +89,9 @@ const localePath = useLocalePath();
 	&__image-container {
 		display: flex;
 		width: calc(100% + 2px);
-		height: 250px;
+		aspect-ratio: 2 / 1.33;
+		height: auto;
+		max-height: 400px;
 		background-color: var(--color-input-field);
 		background-size: cover;
 		line-height: 0;
@@ -96,14 +99,10 @@ const localePath = useLocalePath();
 		margin-left: -1px;
 		margin-right: -1px;
 
-		&--background {
-			background: url('@/assets/img/event-preview@2x.png') center center no-repeat;
-			background-size: cover;
-		}
-
 		@media (min-width: 768px) {
-			min-height: 250px;
-			max-height: 250px;
+			aspect-ratio: 2 / 1.25;
+			height: auto;
+			max-height: unset;
 			border-top-left-radius: 8px;
 			border-top-right-radius: 8px;
 		}
@@ -113,10 +112,13 @@ const localePath = useLocalePath();
 		width: 100%;
 		min-width: 100%;
 		max-width: 100%;
-		height: 100%;
+		aspect-ratio: 2 / 1.33;
+		height: auto;
 		object-fit: cover;
 
 		@media (min-width: 768px) {
+			aspect-ratio: 2 / 1.25;
+			height: auto;
 			border-top-left-radius: 8px;
 			border-top-right-radius: 8px;
 		}

@@ -6,7 +6,7 @@ import {
 } from '../constants/enums/seo';
 import { RoutePathEnum } from '../constants/enums/route';
 
-const localePath = useLocalePath()
+const localePath = useLocalePath();
 </script>
 
 <template>
@@ -78,11 +78,19 @@ const localePath = useLocalePath()
 .privacy {
 	padding: 34px var(--padding-side);
 
+	@media (min-width: 1440px) {
+		padding-top: 0;
+	}
+
 	&__main-title {
 		font-size: var(--font-size-XXL);
 		line-height: 40px;
 		font-weight: var(--font-weight-bold);
 		margin-bottom: 15px;
+
+		@media (min-width: 1440px) {
+			margin-bottom: 30px;
+		}
 	}
 
 	&__title {
@@ -96,6 +104,10 @@ const localePath = useLocalePath()
 		font-size: var(--font-size-S);
 		line-height: 20px;
 		margin-bottom: 15px;
+
+		@media (min-width: 768px) {
+			margin-bottom: 20px;
+		}
 	}
 
 	&__list > li {

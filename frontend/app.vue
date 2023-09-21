@@ -50,7 +50,7 @@ if (isDevelopmentMode) {
 			<ModalsContainer />
 			<NuxtPage />
 		</main>
-		<FooterCommon v-if="getRouteName(route.name) === RouteNameEnum.HOME || !mobile" />
+		<FooterCommon v-if="getRouteName(route.name as string) === RouteNameEnum.HOME || !mobile" />
 	</div>
 </template>
 

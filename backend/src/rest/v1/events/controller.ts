@@ -128,11 +128,10 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 };
 
 export const findEvents: IFindEventHandler = async (request) => {
-	const { searchLine, country, city } = request.body;
 	const language =
 		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.RUSSIAN;
 
-	const events = await eventsStateController.getEvents({ searchLine, country, city });
+	const events = await eventsStateController.getEvents(request.body);
 	const localizedEvents = events.map((event) => delocalizeObject<EventDbEntity>(event, language));
 	return localizedEvents;
 };

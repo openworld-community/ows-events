@@ -49,6 +49,22 @@ export const ItemEvent = {
 	}
 };
 
+export const ItemSearchEventQuery = {
+	type: 'object',
+	properties: {
+		searchLine: { type: 'string' },
+		city: { type: 'string' },
+		country: { type: 'string' },
+		date: {
+			type: 'object',
+			properties: {
+				from: { type: 'number' },
+				to: { type: 'number' }
+			}
+		}
+	}
+};
+
 export const getEventsSchema = {
 	description: 'get all events',
 	tags: ['Events'],
@@ -159,13 +175,6 @@ export const findEventsSchema = {
 			items: ItemEvent
 		}
 	},
-	body: {
-		type: 'object',
-		properties: {
-			searchLine: { type: 'string' },
-			city: { type: 'string' },
-			country: { type: 'string' }
-		}
-	},
+	body: ItemSearchEventQuery,
 	security: [{ authJWT: [] }]
 };

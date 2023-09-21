@@ -91,7 +91,7 @@ const component = computed(() => {
 		<span
 			v-if="endDate"
 			class="details__text"
-			>&nbsp-&nbsp
+			> &nbsp;-&nbsp;
 		</span>
 		<span
 			v-if="endDate"

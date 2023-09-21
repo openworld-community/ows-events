@@ -242,6 +242,7 @@ export default {
 				timezone: 'Timezone',
 				main_info: 'General information',
 				title: 'Title',
+				organizer: 'Organizer',
 				description: 'Description',
 				start: 'Start',
 				end: 'End',

@@ -5,6 +5,7 @@ import { type EventOnPoster } from '@/../common/types';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
 import { EventTypes } from '../../../common/const/eventTypes';
 import { getCurrencyByCountry } from '../../utils/prices';
+import { useUserStore } from '../../stores/user.store';
 
 type Props = {
 	closeEventModal: () => void;
@@ -13,6 +14,7 @@ type Props = {
 };
 const props = defineProps<Props>();
 const locationStore = useLocationStore();
+const userStore = useUserStore();
 
 const closeModal = () => {
 	setTimeout(() => props.closeEventModal(), 300);
@@ -31,6 +33,7 @@ const isFree = ref(props.dataForEdit?.price?.value === 0);
 const inputValues = ref({
 	id: props.dataForEdit?.id ?? '',
 	title: props.dataForEdit?.title ?? '',
+	organizer: props.dataForEdit?.organizer ?? userStore.userInfo.company ?? '',
 	description: props.dataForEdit?.description ?? '',
 	startDate: getDateFromEpochInMs(props.dataForEdit?.date),
 	startTime: getTimeFromEpochInMs(props.dataForEdit?.date),
@@ -93,6 +96,7 @@ const checkFormFilling = computed(() => {
 const paramsForSubmit = computed(() => {
 	return {
 		title: inputValues.value.title,
+		organizer: inputValues.value.organizer,
 		description: inputValues.value.description,
 		date: eventStartEpoch.value,
 		durationInSeconds: Math.floor(
@@ -300,6 +304,11 @@ watch(
 						name="title"
 						:placeholder="$t('modal.new_event_modal.fields.title')"
 						required
+					/>
+					<CommonUiBaseInput
+						v-model="inputValues.organizer"
+						name="organizer"
+						:placeholder="$t('modal.new_event_modal.fields.organizer')"
 					/>
 					<CommonUiTextArea
 						v-model="inputValues.description"

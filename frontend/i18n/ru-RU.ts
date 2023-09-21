@@ -259,6 +259,7 @@ export default {
 				timezone: 'Часовой пояс',
 				main_info: 'Общая информация',
 				title: 'Название',
+				organizer: 'Организатор',
 				description: 'Описание',
 				start: 'Начало',
 				end: 'Окончание',

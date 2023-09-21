@@ -20,6 +20,7 @@ export type EventDbEntity = {
 	price: EventPrice | null;
 	timezone?: Timezone;
 	url: string;
+	organizer?: string;
 	tags?: string[];
 	type: EventTypes;
 };
@@ -34,6 +35,7 @@ export type PostEventPayload = {
 		price: EventPrice;
 		timezone: Timezone;
 		description: string;
+		organizer: string;
 		location: { country: string; city: string; address: string };
 		title: string;
 		url: string;

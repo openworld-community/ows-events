@@ -39,6 +39,9 @@ export const ItemEvent = {
 			type: 'array',
 			items: { type: 'string' }
 		},
+		organizer: {
+			type: 'string'
+		},
 		type: {
 			type: 'string',
 			enum: ['parsed', 'paid', 'user-generated']

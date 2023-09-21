@@ -35,11 +35,11 @@ const localePath = useLocalePath();
 			<div class="card-description__top">
 				<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
 				<p
-					v-if="eventData.title.toLowerCase().includes('peredelanoconf')"
+					v-if="eventData.organizer"
 					class="card-description__author"
 					:itemprop="SeoItempropEventEnum.ORGANIZER"
 				>
-					Peredelano
+					{{ eventData.organizer }}
 				</p>
 				<CommonTag
 					:price="eventData?.price"

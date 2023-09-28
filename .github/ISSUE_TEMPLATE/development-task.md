@@ -1,6 +1,6 @@
 ---
-name: D
-about: Create task for our team
+name: Development task
+about: Create task for our development team
 title: ''
 labels: ''
 assignees: ''

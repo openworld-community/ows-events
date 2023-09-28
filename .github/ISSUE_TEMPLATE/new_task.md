@@ -1,5 +1,5 @@
 ---
-name: Task for backlog
+name: Common task
 about: Create backlog task
 title: ''
 labels: ''

@@ -9,14 +9,14 @@ const route = useRoute();
 const router = useRouter();
 const localePath = useLocalePath();
 const userStore = useUserStore();
-
 const mobile = inject('mobile');
 
-const pagesHasBackButton: string[] = [
-	RouteNameEnum.EVENT,
-	RouteNameEnum.USER_FAVOURITES,
-	RouteNameEnum.USER_MY_EVENTS
-];
+defineProps({
+	hasBackButton: {
+		type: Boolean,
+		default: false
+	}
+});
 
 const isNavbarOpen = ref<boolean>(false);
 const navbarToggle = () => {
@@ -47,10 +47,6 @@ const goBack = () => {
 		navigateTo(localePath({ path: RoutePathEnum.HOME }));
 	}
 };
-
-const showBackButton = computed(() =>
-	pagesHasBackButton.includes(getRouteName(route.name as string))
-);
 </script>
 
 <template>
@@ -66,7 +62,7 @@ const showBackButton = computed(() =>
 		>
 			<div class="header__left">
 				<CommonButton
-					v-if="mobile && showBackButton"
+					v-if="hasBackButton"
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"
@@ -112,6 +108,7 @@ const showBackButton = computed(() =>
 				<li class="header__nav-item">
 					<NuxtLink
 						:to="SUPPORT_TG_URL"
+						target="_blank"
 						class="header__nav-link"
 					>
 						{{ $t('header.navigation.support') }}
@@ -132,7 +129,7 @@ const showBackButton = computed(() =>
 			</ul>
 			<div class="header__right">
 				<HeaderLanguageSelector
-					v-if="!showBackButton || !mobile"
+					v-if="!hasBackButton"
 					class="header__language-selector"
 				/>
 				<HeaderNavigationBurger
@@ -175,6 +172,7 @@ const showBackButton = computed(() =>
 
 	@media (min-width: 768px) {
 		position: static;
+		background-color: transparent;
 	}
 
 	&__container {
@@ -191,6 +189,7 @@ const showBackButton = computed(() =>
 
 		@media (min-width: 768px) {
 			padding-top: 32px;
+			background-color: transparent;
 		}
 	}
 

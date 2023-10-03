@@ -11,7 +11,7 @@ getMeta({
 	title: t('meta.default_title')
 });
 
-const userStore = useUserStore()
+const userStore = useUserStore();
 
 const {
 	open: openEventModal,
@@ -52,56 +52,56 @@ const onButtonClick = () => {
 </script>
 
 <template>
-	<div class="main-page">
-		<h1 class="visually-hidden">{{ $t('home.hidden_title') }}</h1>
-		<HomeSearch
-			v-model:search="eventsQuery.searchLine"
-			class="main-page__search"
-		/>
-		<div class="main-page__location">
-			<HomeUserLocation />
-		</div>
-		<h2 class="main-page__title">
-			{{ $t('home.title') }}
-		</h2>
-		<HomeFilter
-			v-model:country="eventsQuery.country"
-			v-model:city="eventsQuery.city"
-			class="main-page__filter"
-		/>
+	<div class="root">
+		<HeaderCommon />
+		<main class="main-page">
+			<h1 class="visually-hidden">{{ $t('home.hidden_title') }}</h1>
+			<HomeSearch
+				v-model:search="eventsQuery.searchLine"
+				class="main-page__search"
+			/>
+			<div class="main-page__location">
+				<HomeUserLocation />
+			</div>
+			<h2 class="main-page__title">
+				{{ $t('home.title') }}
+			</h2>
+			<HomeFilter
+				v-model:country="eventsQuery.country"
+				v-model:city="eventsQuery.city"
+				class="main-page__filter"
+			/>
 
-		<ul class="main-page__card-list">
-			<li
-				v-for="event in posterEvents"
-				:key="event.id"
-				class="main-page__card-item"
-				itemscope
-				:itemtype="SeoItemTypeEnum.EVENT"
-			>
-				<HomeEventPreviewCard
-					:event-data="event"
-				/>
-				<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
-			</li>
-		</ul>
+			<ul class="main-page__card-list">
+				<li
+					v-for="event in posterEvents"
+					:key="event.id"
+					class="main-page__card-item"
+					itemscope
+					:itemtype="SeoItemTypeEnum.EVENT"
+				>
+					<HomeEventPreviewCard :event-data="event" />
+					<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
+				</li>
+			</ul>
 
-		<CommonButton
-			class="add-event-button"
-			button-kind="success"
-			is-round
-			icon-name="plus"
-			:alt="$t('home.button.add_event_aria')"
-			aria-haspopup="true"
-			@click="onButtonClick"
-		/>
+			<CommonButton
+				class="add-event-button"
+				button-kind="success"
+				is-round
+				icon-name="plus"
+				:alt="$t('home.button.add_event_aria')"
+				aria-haspopup="true"
+				@click="onButtonClick"
+			/>
+		</main>
+		<FooterCommon />
 	</div>
 </template>
 
 <style lang="less" scoped>
 .main-page {
-	padding-top: 16px;
-
-	@media(min-width: 768px) {
+	@media (min-width: 768px) {
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
 	}
@@ -109,6 +109,7 @@ const onButtonClick = () => {
 	&__search {
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
+		margin-top: 16px;
 		margin-bottom: 40px;
 	}
 
@@ -139,14 +140,14 @@ const onButtonClick = () => {
 		flex-direction: column;
 		width: 100%;
 
-		@media(min-width: 768px) {
+		@media (min-width: 768px) {
 			flex-direction: row;
 			flex-wrap: wrap;
 		}
 	}
 
 	&__card-item {
-		@media(min-width: 768px) {
+		@media (min-width: 768px) {
 			display: flex;
 			width: 49.2%;
 			height: auto;
@@ -158,7 +159,7 @@ const onButtonClick = () => {
 			}
 		}
 
-		@media(min-width: 1440px) {
+		@media (min-width: 1440px) {
 			display: flex;
 			width: 32.3%;
 			min-height: 100%;

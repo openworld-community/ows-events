@@ -3,6 +3,7 @@ import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 import { REPO_URL, SocialLinks } from '~/constants/url';
 
 const { t } = useI18n();
+const mobile = inject('mobile');
 
 getMeta({
 	title: t('meta.about_us.title'),
@@ -11,99 +12,106 @@ getMeta({
 </script>
 
 <template>
-	<div
-		class="about"
-		itemscope
-		:itemtype="SeoItemTypeEnum.ABOUT"
-	>
-		<h1 class="about__title">{{ $t('about.title') }}</h1>
-		<div class="about__image-container">
-			<img
-				srcset="@/assets/img/about/about-screen@2x.png 2x"
-				src="@/assets/img/about/about-screen@1x.png"
-				width="351"
-				height="232"
-				class="about__img"
-				alt=""
-				:itemprop="SeoItempropAboutEnum.IMAGE"
-			/>
-		</div>
-		<div
-			class="about__description"
-			:itemprop="SeoItempropAboutEnum.MAIN_CONTENT"
+	<div class="root">
+		<HeaderCommon />
+		<main
+			class="about"
+			itemscope
+			:itemtype="SeoItemTypeEnum.ABOUT"
 		>
-			<p class="about__paragraph about__paragraph--separated">{{ $t('about.idea') }}</p>
-			<p class="about__paragraph">{{ $t('about.mission') }}</p>
-			<p class="about__paragraph about__paragraph--separated">
-				{{ $t('about.functionality') }}
-			</p>
-			<p class="about__paragraph about__paragraph--separated">{{ $t('about.team') }}</p>
-			<h2 class="about__list-title">{{ $t('about.values.title') }}</h2>
-			<ul class="about__list">
-				<li class="about__list-item">
-					{{ $t('about.values.openness') }}
-				</li>
-				<li class="about__list-item">
-					{{ $t('about.values.innovation') }}
-				</li>
-				<li class="about__list-item">
-					{{ $t('about.values.community') }}
-				</li>
-				<li class="about__list-item">
-					{{ $t('about.values.accessibility') }}
-				</li>
-				<li class="about__list-item">
-					{{ $t('about.values.quality') }}
-				</li>
-			</ul>
-			<p class="about__paragraph">
-				{{ $t('about.github') }}:
-				<NuxtLink
-					:href="REPO_URL"
-					class="about__link"
-					target="_blank"
-					rel="noopener noreferrer"
-					:itemprop="SeoItempropAboutEnum.SIGNIFICANT_LINK"
-				>
-					Repo
-				</NuxtLink>
-			</p>
-		</div>
-		<div class="about__social-links social-links">
-			<h2 class="social-links__title">
-				{{ $t('about.social.title') }}
-			</h2>
-			<ul class="social-links__list">
-				<li
-					v-for="(link, key) in SocialLinks"
-					:key="link"
-					class="social-links__item"
-				>
+			<h1 class="about__title">{{ $t('about.title') }}</h1>
+			<div class="about__image-container">
+				<img
+					srcset="@/assets/img/about/about-screen@2x.png 2x"
+					src="@/assets/img/about/about-screen@1x.png"
+					width="351"
+					height="232"
+					class="about__img"
+					alt=""
+					:itemprop="SeoItempropAboutEnum.IMAGE"
+				/>
+			</div>
+			<div
+				class="about__description"
+				:itemprop="SeoItempropAboutEnum.MAIN_CONTENT"
+			>
+				<p class="about__paragraph about__paragraph--separated">{{ $t('about.idea') }}</p>
+				<p class="about__paragraph">{{ $t('about.mission') }}</p>
+				<p class="about__paragraph about__paragraph--separated">
+					{{ $t('about.functionality') }}
+				</p>
+				<p class="about__paragraph about__paragraph--separated">{{ $t('about.team') }}</p>
+				<h2 class="about__list-title">{{ $t('about.values.title') }}</h2>
+				<ul class="about__list">
+					<li class="about__list-item">
+						{{ $t('about.values.openness') }}
+					</li>
+					<li class="about__list-item">
+						{{ $t('about.values.innovation') }}
+					</li>
+					<li class="about__list-item">
+						{{ $t('about.values.community') }}
+					</li>
+					<li class="about__list-item">
+						{{ $t('about.values.accessibility') }}
+					</li>
+					<li class="about__list-item">
+						{{ $t('about.values.quality') }}
+					</li>
+				</ul>
+				<p class="about__paragraph">
+					{{ $t('about.github') }}:
 					<NuxtLink
-						:to="link"
+						:href="REPO_URL"
+						class="about__link"
 						target="_blank"
-						class="social-links__link"
-						:style="`backgroundColor: var(--color-social-${key})`"
-						:aria-label="`${$t('about.social.alt')} ${key}`"
-						:itemprop="SeoItempropAboutEnum.SOCIAL_LINK"
+						rel="noopener noreferrer"
+						:itemprop="SeoItempropAboutEnum.SIGNIFICANT_LINK"
 					>
-						<CommonIcon
-							:name="`social/${key}-round`"
-							width="40px"
-							height="40px"
-						/>
+						Repo
 					</NuxtLink>
-				</li>
-			</ul>
-		</div>
+				</p>
+			</div>
+			<div class="about__social-links social-links">
+				<h2 class="social-links__title">
+					{{ $t('about.social.title') }}
+				</h2>
+				<ul class="social-links__list">
+					<li
+						v-for="(link, key) in SocialLinks"
+						:key="link"
+						class="social-links__item"
+					>
+						<NuxtLink
+							:to="link"
+							target="_blank"
+							class="social-links__link"
+							:style="`backgroundColor: var(--color-social-${key})`"
+							:aria-label="`${$t('about.social.alt')} ${key}`"
+							:itemprop="SeoItempropAboutEnum.SOCIAL_LINK"
+						>
+							<CommonIcon
+								:name="`social/${key}-round`"
+								width="40px"
+								height="40px"
+							/>
+						</NuxtLink>
+					</li>
+				</ul>
+			</div>
+		</main>
+		<FooterCommon v-if="!mobile" />
 	</div>
 </template>
 
 <style lang="less" scoped>
 .about {
-	padding: var(--padding-vertical) var(--padding-side);
+	padding-left: var(--padding-side);
+	padding-right: var(--padding-side);
+	padding-bottom: var(--padding-vertical);
 
 	&__title {
+		margin-top: var(--padding-vertical);
 		font-size: var(--font-size-XXL);
 		line-height: var(--line-height-XXL);
 		font-weight: var(--font-weight-bold);

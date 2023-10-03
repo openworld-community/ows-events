@@ -285,7 +285,8 @@ export default {
 	},
 	user: {
 		unauthorized: {
-			title: 'Please log in to access additional features',
+			title: 'Log into your account',
+			text: 'Please log in to access additional features',
 			continue: 'Continue without authorization',
 		},
 		greeting: 'Hello',

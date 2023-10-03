@@ -6,8 +6,12 @@ import {
 	SeoItempropGlobalEnum,
 	SeoItemTypeEnum
 } from '../constants/enums/seo';
+import { RoutePathEnum } from '../constants/enums/route';
 
 const { t } = useI18n();
+const mobile = inject<boolean>('mobile');
+const router = useRouter();
+const previousPage = router.options.history.state.back;
 
 getMeta({
 	title: t('meta.donate.title'),
@@ -45,49 +49,53 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 </script>
 
 <template>
-	<div
-		class="donate"
-		itemscope
-		:itemtype="SeoItemTypeEnum.DONATE"
-	>
-		<h1
-			class="donate__title"
-			:itemprop="SeoItempropGlobalEnum.TITLE"
-		>
-			{{ $t('donate.title') }}
-		</h1>
-		<p
-			class="donate__description"
-			:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
-		>
-			{{ $t('donate.description') }}
-		</p>
-		<p class="donate__description">
-			{{ $t('donate.gratitude') }} <br />
-			{{ $t('donate.subscription') }}
-		</p>
-
-		<h2
-			class="donate__method donate-method__title"
-			:itemprop="SeoItempropGlobalEnum.TITLE"
-		>
-			{{ $t('donate.method.title') }}
-		</h2>
-		<ul
+	<div class="root">
+		<HeaderCommon :has-back-button="mobile && previousPage.includes(RoutePathEnum.USER_PAGE)" />
+		<main
+			class="donate"
 			itemscope
 			:itemtype="SeoItemTypeEnum.DONATE"
-			:itemprop="SeoItempropDonateEnum.GROUP_ITEMPROP"
 		>
-			<DonateMethodItem
-				v-for="(item, key) in DONATE_METHODS"
-				:key="item.method"
-				:method="item.method"
-				:icon="key as string"
-				:color="`var(--color-donate-${key as string})`"
-				:link="item?.link"
-				:copy-data="item?.account"
-			/>
-		</ul>
+			<h1
+				class="donate__title"
+				:itemprop="SeoItempropGlobalEnum.TITLE"
+			>
+				{{ $t('donate.title') }}
+			</h1>
+			<p
+				class="donate__description"
+				:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
+			>
+				{{ $t('donate.description') }}
+			</p>
+			<p class="donate__description">
+				{{ $t('donate.gratitude') }} <br />
+				{{ $t('donate.subscription') }}
+			</p>
+
+			<h2
+				class="donate__method donate-method__title"
+				:itemprop="SeoItempropGlobalEnum.TITLE"
+			>
+				{{ $t('donate.method.title') }}
+			</h2>
+			<ul
+				itemscope
+				:itemtype="SeoItemTypeEnum.DONATE"
+				:itemprop="SeoItempropDonateEnum.GROUP_ITEMPROP"
+			>
+				<DonateMethodItem
+					v-for="(item, key) in DONATE_METHODS"
+					:key="item.method"
+					:method="item.method"
+					:icon="key as string"
+					:color="`var(--color-donate-${key as string})`"
+					:link="item?.link"
+					:copy-data="item?.account"
+				/>
+			</ul>
+		</main>
+		<FooterCommon v-if="!mobile" />
 	</div>
 </template>
 
@@ -95,12 +103,15 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 .donate {
 	display: flex;
 	flex-direction: column;
-	padding: var(--padding-vertical) var(--padding-side);
+	padding-left: var(--padding-side);
+	padding-right: var(--padding-side);
+	padding-bottom: var(--padding-vertical);
 
 	&__title {
 		font-size: var(--font-size-XXL);
 		font-weight: var(--font-weight-bold);
 		line-height: 40px;
+		margin-top: var(--padding-vertical);
 		margin-bottom: var(--space-unrelated-items);
 	}
 

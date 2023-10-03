@@ -55,6 +55,20 @@ body {
   min-height: 100%;
 }
 
+main {
+  padding-top: var(--header-height);
+
+  @media (min-width: 768px) {
+    height: 100%;
+    padding-top: 30px;
+  }
+
+  @media (min-width: 1440px) {
+    padding-top: 60px;
+  }
+}
+
+
 a {
   cursor: pointer;
   text-decoration: none;

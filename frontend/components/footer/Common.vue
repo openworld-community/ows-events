@@ -132,6 +132,10 @@ const mobile = inject('mobile');
 		padding-bottom: var(--space-subsections);
 	}
 
+	@media (min-width: 1440px) {
+		width: 27%;
+	}
+
 	&__link {
 		margin-bottom: var(--space-related-items);
 
@@ -158,6 +162,12 @@ const mobile = inject('mobile');
 		border-right: 1px solid var(--color-white-semitransparent);
 		padding: var(--space-subsections) var(--space-related-items);
 		margin-bottom: 0;
+	}
+
+	@media (min-width: 1440px) {
+		width: 46%;
+		justify-content: space-between;
+		padding-right: 72px;
 	}
 
 	&__item-container {
@@ -205,6 +215,10 @@ const mobile = inject('mobile');
 		padding: var(--space-subsections) var(--padding-side) var(--space-subsections)
 			var(--space-related-items);
 		margin-bottom: 0;
+	}
+
+	@media (min-width: 1440px) {
+		width: 27%;
 	}
 
 	&__list {

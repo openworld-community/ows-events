@@ -112,6 +112,7 @@ const localePath = useLocalePath();
 
 		@media (min-width: 768px) {
 			margin-bottom: 20px;
+			line-height: 24px;
 		}
 	}
 

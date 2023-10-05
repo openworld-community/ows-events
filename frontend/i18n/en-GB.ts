@@ -300,7 +300,8 @@ export default {
 			no_favourites: 'You haven\'t added anything to your "Favourites" yet',
 		},
 		donate: {
-			text: 'Become a part of our project!',
+			title: 'Become a part of our project!',
+			text: 'We invite you to join our creative family and create something special together',
 			button: 'Make a contribution'
 		}
 	}

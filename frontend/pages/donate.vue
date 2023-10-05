@@ -11,7 +11,7 @@ import { RoutePathEnum } from '../constants/enums/route';
 const { t } = useI18n();
 const mobile = inject<boolean>('mobile');
 const router = useRouter();
-const previousPage = router.options.history.state.back;
+const previousPage = router.options.history.state.back as string;
 
 getMeta({
 	title: t('meta.donate.title'),
@@ -50,7 +50,7 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 
 <template>
 	<div class="root">
-		<HeaderCommon :has-back-button="mobile && previousPage.includes(RoutePathEnum.USER_PAGE)" />
+		<HeaderCommon :has-back-button="mobile && previousPage && previousPage.includes(RoutePathEnum.USER_PAGE)" />
 		<main
 			class="donate"
 			itemscope

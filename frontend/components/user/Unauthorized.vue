@@ -91,6 +91,12 @@ watch(
 				</NuxtLink>
 			</div>
 		</div>
+		<p
+			v-if="!mobile"
+			class="unauthorized__copyright"
+		>
+			© Peredelano Startups 2023
+		</p>
 	</main>
 </template>
 
@@ -108,6 +114,13 @@ watch(
 
 	@media (min-width: 768px) {
 		padding: 0;
+		position: relative;
+		background: url(@/assets/img/user/unauthorized-background@1x.png) 0 0 no-repeat;
+		background-size: cover;
+
+		@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+			background-image: url(@/assets/img/user/unauthorized-background@2x.png);
+		}
 	}
 
 	&__image-container {
@@ -142,6 +155,8 @@ watch(
 			background-color: var(--color-white);
 			border-radius: 8px;
 			padding: 40px;
+			margin-top: 80px;
+			margin-bottom: 80px;
 		}
 
 		@media (min-width: 1440px) {
@@ -209,6 +224,15 @@ watch(
 		&:active {
 			color: var(--color-text);
 		}
+	}
+
+	&__copyright {
+		position: absolute;
+		bottom: 20px;
+		right: var(--padding-side);
+		font-size: var(--font-size-S);
+		color: var(--color-white);
+		opacity: 0.5;
 	}
 }
 </style>

@@ -41,6 +41,7 @@ defineProps<{ error: string }>();
 	&__text {
 		font-family: var(--font-family-main);
 		font-size: var(--font-size-XS);
+		color: var(--color-white);
 		line-height: 18px;
 	}
 }
@@ -54,6 +55,7 @@ defineProps<{ error: string }>();
 .Vue-Toastification__toast--default.errorToast {
 	padding: 0;
 	box-shadow: hsla(0, 0%, 0%, 0.4) 0 2px 3px, hsla(0, 0%, 0%, 0.25) 0 4px 8px 3px;
+	border-radius: 6px;
 	align-self: center;
 	max-width: fit-content;
 }

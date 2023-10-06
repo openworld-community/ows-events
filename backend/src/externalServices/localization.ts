@@ -11,7 +11,7 @@ export const translate = async (string: string, lang: string): Promise<string> =
 	try {
 		const req = await axios({
 			method: 'GET',
-			url: `https://localisation.orby-tech.space/translated_text`,
+			url: `http://94.241.173.117:5000/translated_text`,
 			params: queryParams,
 			headers: {
 				Authorization: vars.apiKeys.localization
@@ -19,7 +19,6 @@ export const translate = async (string: string, lang: string): Promise<string> =
 		});
 		return req.data;
 	} catch (e) {
-		console.error(e);
 		await sleep(100);
 		return await translate(string, lang);
 	}
@@ -31,7 +30,7 @@ export const getLanguage = async (string: string): Promise<SupportedLanguages | 
 	formData.append('text', string);
 	const req = await axios({
 		method: 'POST',
-		url: `https://localisation.orby-tech.space/get_language`,
+		url: `http://94.241.173.117:5000/get_language`,
 		headers: {
 			Authorization: vars.apiKeys.localization
 		},

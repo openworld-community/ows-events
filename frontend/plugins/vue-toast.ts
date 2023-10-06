@@ -8,17 +8,25 @@ export default defineNuxtPlugin((nuxtApp) => {
 	nuxtApp.vueApp.use(Toast, options);
 
 	const useErrorToast = useToast();
-	const errorToast = (errorMessage: string) => {
+	const errorToast = (
+		errorMessage: string,
+		position?: 'top' | 'top-left' | 'top-right' | 'bottom' | 'bottom-left' | 'bottom-right',
+		timeout?: number
+	) => {
 		return useErrorToast.update(
 			errorMessage,
 			{
-				content: { component: ErrorToastVue, props: { error: errorMessage } },
+				content: {
+					component: ErrorToastVue,
+					props: { error: errorMessage }
+				},
 				options: {
 					toastClassName: 'errorToast',
+					position: position ?? 'top-right',
 					icon: false,
 					closeButton: false,
 					id: errorMessage,
-					timeout: 5000
+					timeout: timeout ?? 5000
 				}
 			},
 			true

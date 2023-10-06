@@ -20,6 +20,12 @@ useHead({
 
 useCookie(CookieNameEnum.LOCALE, {maxAge: TOKEN_MAX_AGE_SECONDS}).value = locale.value
 
+const {$errorToast} = useNuxtApp()
+
+onMounted(() => {
+	$errorToast('Всвязи с техническими работами в период с 9 по 15 октября могут возникать неполадки в работе сайта. Команда приносит извинения за возможные неудобства', 'bottom-right', 12000)
+})
+
 if (isDevelopmentMode) {
 	useCookie(CookieNameEnum.TOKEN).value ??= 'blablabla';
 }

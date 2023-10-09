@@ -197,7 +197,7 @@ export default {
 		p_5: 'Afisha does not guarantee the accuracy of information posted by users on the Service. Afisha does not guarantee that events, information about which is posted by users, will take place, and that websites linked by users will operate properly, comply with legal requirements, and ensure the confidentiality of user data.',
 		p_6: 'Users who post content on the Service are individually responsible to third parties and state authorities for their actions. By using the Service, the user undertakes not to violate anyone\'s copyright, rights to trademarks, means of individualization, and/or rights to other objects of intellectual property. The user undertakes to independently and at their own expense resolve conflicts with third parties related to the user\'s actions on the Service.',
 	p_7: 'The user and third parties undertake to resolve conflicts with Afisha out of court by sending claims through any available communication channels. In case of impossibility to resolve the conflict through pretrial procedures, it shall be settled in accordance with applicable law.',
-	p_8: 'The absence of guarantees means that Afisha does not assume any obligations and does not bear responsibility to users of the Service or third parties in connection with the content posted on the Service.'
+	p_8: 'The absence of guarantees means that the Afisha and/or any persons directly or indirectly involved in it do not assume any obligations and do not bear any responsibility to the users of the Service and/or any other third parties in connection with the content posted on the Service.'
 },
 	meta: {
 		site_name: 'Afisha Peredelano',

@@ -2,6 +2,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import path from 'path';
 import { fileURLToPath, URL } from 'node:url';
+import { searchForWorkspaceRoot } from 'vite'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -57,11 +58,17 @@ export default defineNuxtConfig({
 		server: {
 			watch: {
 				usePolling: true},
-			// hmr: {
-			// 	// нужно пока комментить, если фронт не через докер
-			// 	protocol: 'ws',
-			// 	clientPort: 24678
-			// }
+			hmr: {
+				// нужно пока комментить, если фронт не через докер
+				protocol: 'ws',
+				clientPort: 24678
+			},
+			fs: {
+				allow: [
+					searchForWorkspaceRoot(process.cwd()),
+					'/app/common'
+				]
+			}
 		},
 		plugins: [
 			// плагин выдает ошибку из-за компонента /node_modules/nuxt/dist/app/components/nuxt-root.vue

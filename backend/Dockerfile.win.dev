@@ -1,0 +1,12 @@
+FROM node:18-alpine
+
+WORKDIR /app/backend
+COPY ./backend/entrypoint.dev.win.sh /scripts/
+COPY ./backend /app/backend
+COPY ./common /app/common
+RUN chmod +x -R /scripts
+RUN npm install
+
+EXPOSE 7080
+
+ENTRYPOINT ["sh", "/scripts/entrypoint.dev.win.sh"]

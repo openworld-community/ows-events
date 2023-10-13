@@ -7,6 +7,8 @@ type Props = {
 	dataForEdit?: UserInfo | null | undefined;
 };
 
+const mobile = inject('mobile');
+
 const userStore = useUserStore();
 const props = defineProps<Props>();
 
@@ -51,7 +53,10 @@ const updateUserData = async () => {
 		@close-modal="closeEditProfileModal"
 	>
 		<template #form>
-			<ModalUiModalSection :label="$t('modal.edit_profile.fields.name')">
+			<ModalUiModalSection
+				:label="$t('modal.edit_profile.fields.name')"
+				:type="mobile ? 'column' : 'row'"
+			>
 				<template #child>
 					<CommonUiBaseInput
 						v-model="userData.first_name"

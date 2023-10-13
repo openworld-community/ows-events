@@ -151,7 +151,7 @@ const onButtonClick = () => {
 			display: flex;
 			width: 49.2%;
 			height: auto;
-			margin-bottom: 1.5%;
+			margin-bottom: 5%;
 			margin-right: 1.5%;
 
 			&:nth-child(2n) {

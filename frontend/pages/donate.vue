@@ -50,7 +50,11 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 
 <template>
 	<div class="root">
-		<HeaderCommon :has-back-button="mobile && previousPage && previousPage.includes(RoutePathEnum.USER_PAGE)" />
+		<HeaderCommon
+			:has-back-button="
+				mobile && previousPage && previousPage.includes(RoutePathEnum.USER_PAGE)
+			"
+		/>
 		<main
 			class="donate"
 			itemscope
@@ -80,6 +84,7 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 				{{ $t('donate.method.title') }}
 			</h2>
 			<ul
+				class="donate-method__list"
 				itemscope
 				:itemtype="SeoItemTypeEnum.DONATE"
 				:itemprop="SeoItempropDonateEnum.GROUP_ITEMPROP"
@@ -113,6 +118,10 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 		line-height: 40px;
 		margin-top: var(--padding-vertical);
 		margin-bottom: var(--space-unrelated-items);
+
+		@media (min-width: 768px) {
+			margin-top: 20px;
+		}
 	}
 
 	&__description {
@@ -127,6 +136,12 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 		font-size: var(--font-size-L);
 		line-height: 24px;
 		margin-bottom: var(--space-related-items);
+	}
+
+	&__list {
+		@media (min-width: 768px) {
+			max-width: 500px;
+		}
 	}
 }
 </style>

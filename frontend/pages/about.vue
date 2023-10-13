@@ -20,7 +20,10 @@ getMeta({
 			:itemtype="SeoItemTypeEnum.ABOUT"
 		>
 			<h1 class="about__title">{{ $t('about.title') }}</h1>
-			<div class="about__image-container">
+			<div
+				v-if="mobile"
+				class="about__image-container"
+			>
 				<img
 					srcset="@/assets/img/about/about-screen@2x.png 2x"
 					src="@/assets/img/about/about-screen@1x.png"
@@ -115,6 +118,11 @@ getMeta({
 		font-size: var(--font-size-XXL);
 		line-height: var(--line-height-XXL);
 		font-weight: var(--font-weight-bold);
+
+		@media (min-width: 768px) {
+			margin-top: 20px;
+			margin-bottom: 20px;
+		}
 	}
 
 	&__image-container {

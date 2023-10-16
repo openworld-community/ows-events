@@ -167,9 +167,13 @@ async function addImage(image: ImageLoaderFile) {
 watch(
 	() => inputValues.value.location.country,
 	(country) => {
-		if (!inputValues.value.location.country) inputValues.value.timezone = '';
-		inputValues.value.location.city = '';
-		if (!isFree.value) inputValues.value.price.currency = getCurrencyByCountry(country);
+		if (!isFree.value && country) inputValues.value.price.currency = getCurrencyByCountry(country);
+		if (!country) {
+			inputValues.value.timezone = '';
+			inputValues.value.location.city = '';
+			inputValues.value.price.currency = ''
+		}
+
 	}
 );
 
@@ -251,6 +255,7 @@ watch(
 						:disabled="!inputValues.location.country"
 						:placeholder="$t('global.city')"
 						:list="locationStore.getCitiesByCountry(inputValues.location.country)"
+						input-readonly
 						required
 					/>
 

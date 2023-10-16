@@ -255,6 +255,7 @@ watch(
 						:disabled="!inputValues.location.country"
 						:placeholder="$t('global.city')"
 						:list="locationStore.getCitiesByCountry(inputValues.location.country)"
+						input-readonly
 						required
 					/>
 

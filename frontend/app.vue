@@ -6,7 +6,6 @@ import 'virtual:svg-icons-register';
 import { ModalsContainer } from 'vue-final-modal';
 import { CookieNameEnum } from './constants/enums/common';
 import { TOKEN_MAX_AGE_SECONDS } from './constants/defaultValues/time';
-import { isDevelopmentMode } from './constants/common';
 
 const { locale, t } = useI18n();
 
@@ -20,9 +19,6 @@ useHead({
 
 useCookie(CookieNameEnum.LOCALE, {maxAge: TOKEN_MAX_AGE_SECONDS}).value = locale.value
 
-if (isDevelopmentMode) {
-	useCookie(CookieNameEnum.TOKEN).value ??= 'blablabla';
-}
 </script>
 <template>
 	<HeaderCommon />

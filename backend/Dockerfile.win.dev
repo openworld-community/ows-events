@@ -5,7 +5,7 @@ COPY ./backend/entrypoint.dev.win.sh /scripts/
 COPY ./backend /app/backend
 COPY ./common /app/common
 RUN chmod +x -R /scripts
-RUN npm install
+RUN npm ci
 
 EXPOSE 7080
 

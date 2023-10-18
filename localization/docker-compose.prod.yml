@@ -1,0 +1,31 @@
+services:
+  pgdatabase:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=data
+    ports:
+      - 5433:5432
+    volumes:
+        - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=root@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - "8082:80"
+  localisation-app:
+    build: .
+    container_name: ows-events-localisation
+    command: python /app/start.py
+    restart: always
+    ports:
+      - 5000:5000
+    env_file:
+      - .env
+    volumes:
+      - ./root/:/app/root/
+      - ./start.py:/app/start.py
+      - ./store/:/app/store/

@@ -43,6 +43,7 @@ services:
         logging: *default-logging
         depends_on:
             - mongo
+            - localisation-app
         links:
             - mongo
         environment:
@@ -71,3 +72,37 @@ services:
             start_period: 30s
         ports:
             - '27020:27017'
+
+    pgdatabase:
+        image: postgres:13
+        environment:
+            - POSTGRES_USER=root
+            - POSTGRES_PASSWORD=root
+            - POSTGRES_DB=data
+        ports:
+            - 5433:5432
+        volumes:
+            - ./localization/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+
+    localization:
+        build:
+            context: .
+            dockerfile: ./localization/Dockerfile
+        container_name: ows-events-localisation
+        command: python /app/start.py
+        restart: always
+        ports:
+            - 5000:5000
+        env_file:
+            - ./localization/.env
+        develop:
+            watch:
+                - path: ./localization/root
+                  action: rebuild
+                  target: /app/root
+                - path: ./localization/start.py
+                  action: rebuild
+                  target: /app/start.py
+                - path: ./localization/store
+                  action: rebuild
+                  target: /app/store

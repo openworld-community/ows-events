@@ -26,13 +26,13 @@ services:
             - VITE_MODE=development
             - VITE_TELEGRAM_AUTH_BOT_NAME=afisha_oauth_local_bot
         develop:
-            watch: 
+            watch:
                 # sync static content
                 - path: ./frontend
                   action: sync
                   target: /app/frontend
                   ignore:
-                    - node_modules/
+                      - node_modules/
                 - path: ./frontend/package.json
                   action: rebuild
 
@@ -51,13 +51,13 @@ services:
         ports:
             - '7080:7080'
         develop:
-            watch: 
+            watch:
                 # sync static content
                 - path: ./backend
                   action: sync
                   target: /app/backend
                   ignore:
-                    - node_modules/
+                      - node_modules/
                 - path: ./backend/package.json
                   action: rebuild
 
@@ -71,3 +71,37 @@ services:
             start_period: 30s
         ports:
             - '27020:27017'
+
+    pgdatabase:
+        image: postgres:13
+        environment:
+            - POSTGRES_USER=root
+            - POSTGRES_PASSWORD=root
+            - POSTGRES_DB=data
+        ports:
+            - 5433:5432
+        volumes:
+            - ./localization/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+
+    localization:
+        build:
+            context: .
+            dockerfile: ./localization/Dockerfile
+        container_name: ows-events-localisation
+        command: python /app/start.py
+        restart: always
+        ports:
+            - 5000:5000
+        env_file:
+            - ./localization/.env
+        develop:
+            watch:
+                - path: ./localization/root
+                  action: rebuild
+                  target: /app/root
+                - path: ./localization/start.py
+                  action: rebuild
+                  target: /app/start.py
+                - path: ./localization/store
+                  action: rebuild
+                  target: /app/store

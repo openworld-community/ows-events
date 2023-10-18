@@ -92,3 +92,32 @@ services:
             start_period: 30s
         volumes:
             - /root/db/prod:/data/db
+
+    pgdatabase:
+        image: postgres:13
+        environment:
+            - POSTGRES_USER=${LOCALIZATION_DB_USER}
+            - POSTGRES_PASSWORD=${LOCALIZATION_DB_PASSWORD}
+            - POSTGRES_DB=data
+        networks:
+            - traefikpublic
+        volumes:
+            - ./localization/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+
+    localization:
+        build:
+            context: .
+            dockerfile: ./localization/Dockerfile
+        command: python /app/start.py
+        restart: always
+        networks:
+            - traefikpublic
+        environment:
+            - USER=${LOCALIZATION_DB_USER}
+            - PASSWORD=${LOCALIZATION_DB_PASSWORD}
+            - HOST=pgdatabase
+            - PORT=5432
+            - DB=data
+            - AUTH=${LOCALIZATION_API_KEY}
+            - OPENAI_API_KEY=qwe
+            - SECRET_KEY=${LOCALIZATION_API_KEY}

@@ -10,7 +10,7 @@ services:
             context: .
             dockerfile: ./frontend/Dockerfile.win.dev
         logging: *default-logging
-        command: npm run dev
+        command: rm -rf /tmp/nitro/worker-* & npm run dev
         ports:
             - '80:80'
             - '24678:24678'

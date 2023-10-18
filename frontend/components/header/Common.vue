@@ -147,7 +147,7 @@ const goBack = () => {
 				<CommonButton
 					v-if="!mobile"
 					:link="localePath(RoutePathEnum.USER_PAGE)"
-					button-kind="success"
+					:button-kind="userStore.isAuthorized ? 'success' : 'ordinary'"
 					icon-name="user"
 					:button-text="
 						userStore.isAuthorized
@@ -172,6 +172,7 @@ const goBack = () => {
 
 	@media (min-width: 768px) {
 		position: static;
+		height: unset;
 		background-color: transparent;
 	}
 
@@ -188,7 +189,9 @@ const goBack = () => {
 		margin-right: auto;
 
 		@media (min-width: 768px) {
+			height: unset;
 			padding-top: 32px;
+			padding-bottom: 20px;
 			background-color: transparent;
 		}
 	}
@@ -215,7 +218,6 @@ const goBack = () => {
 			align-items: center;
 			margin-left: 5%;
 			margin-right: 5%;
-			margin-top: 8px;
 		}
 	}
 

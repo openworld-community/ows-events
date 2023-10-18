@@ -319,6 +319,7 @@ patchDeleteEventModal({
 
 		@media (min-width: 1440px) {
 			max-height: 580px;
+			margin-top: 10px;
 		}
 	}
 

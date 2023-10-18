@@ -114,13 +114,14 @@ getMeta({
 	padding-bottom: var(--padding-vertical);
 
 	&__title {
-		margin-top: var(--padding-vertical);
+		padding-top: var(--padding-vertical);
 		font-size: var(--font-size-XXL);
 		line-height: var(--line-height-XXL);
 		font-weight: var(--font-weight-bold);
+		margin-bottom: var(--space-unrelated-items);
 
 		@media (min-width: 768px) {
-			margin-top: 20px;
+			padding-top: 0;
 			margin-bottom: 20px;
 		}
 	}
@@ -132,7 +133,6 @@ getMeta({
 		line-height: 0;
 		background-color: var(--color-input-field);
 		border-radius: 4px;
-		margin-top: var(--space-unrelated-items);
 		margin-bottom: var(--space-related-items);
 	}
 

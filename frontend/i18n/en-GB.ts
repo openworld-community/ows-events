@@ -120,7 +120,6 @@ export default {
 	global: {
 		country: 'Country',
 		city: 'City',
-		search: 'Search',
 		timezone: 'Timezone',
 		button: {
 			authorize: 'Authorize',
@@ -173,8 +172,7 @@ export default {
 		subscription_expired: '$t(dates.day.key) until the end of subscription',
 	},
 	home: {
-		hidden_title: 'Search for Events',
-		title: 'Events',
+		title: 'Bringing people together around events',
 		button: {
 			add_event_aria: 'Add an event'
 		},
@@ -188,7 +186,8 @@ export default {
 		},
 		filter: {
 			aria_country: 'Filter by country',
-			aria_city: 'Filter by city'
+			aria_city: 'Filter by city',
+			search: 'What are you interested in?',
 		},
 		user_location: {
 			not_found: 'We couldn\'t find your location'

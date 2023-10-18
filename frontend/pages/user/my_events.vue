@@ -55,7 +55,7 @@ if (data.value) myEvents.value = data.value;
 	@media (min-width: 768px) {
 		justify-content: center;
 		height: unset;
-		padding-top: 60px;
+		padding-top: 40px;
 	}
 
 	&__title {

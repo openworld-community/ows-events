@@ -126,7 +126,6 @@ export default {
 	global: {
 		country: 'Страна',
 		city: 'Город',
-		search: 'Поиск',
 		timezone: 'Часовой пояс',
 		button: {
 			authorize: 'Авторизоваться',
@@ -180,8 +179,7 @@ export default {
 		subscription_expired: '$t(dates.day.key) до конца подписки',
 	},
 	home: {
-		hidden_title: 'Поиск мероприятий',
-		title: 'Мероприятия',
+		title: 'Объединяем людей вокруг событий',
 		button: {
 			add_event_aria: 'Добавить мероприятие'
 		},
@@ -195,7 +193,8 @@ export default {
 		},
 		filter: {
 			aria_country: 'Фильтр по стране',
-			aria_city: 'Фильтр по городу'
+			aria_city: 'Фильтр по городу',
+			search: 'Что вас интересует?',
 		},
 		user_location: {
 			not_found: 'Мы не смогли найти вас'

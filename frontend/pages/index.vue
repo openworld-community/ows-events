@@ -12,6 +12,7 @@ getMeta({
 });
 
 const userStore = useUserStore();
+const mobile = inject('mobile');
 
 const {
 	open: openEventModal,
@@ -55,23 +56,19 @@ const onButtonClick = () => {
 	<div class="root">
 		<HeaderCommon />
 		<main class="main-page">
-			<h1 class="visually-hidden">{{ $t('home.hidden_title') }}</h1>
-			<HomeSearch
-				v-model:search="eventsQuery.searchLine"
-				class="main-page__search"
-			/>
-			<div class="main-page__location">
-				<HomeUserLocation />
+			<div class="main-page__top">
+				<h1 class="main-page__title">{{ $t('home.title') }}</h1>
+				<HomeUserLocation
+					v-if="mobile"
+					class="main-page__location"
+				/>
+				<HomeFilter
+					v-model:search="eventsQuery.searchLine"
+					v-model:country="eventsQuery.country"
+					v-model:city="eventsQuery.city"
+					class="main-page__filter"
+				/>
 			</div>
-			<h2 class="main-page__title">
-				{{ $t('home.title') }}
-			</h2>
-			<HomeFilter
-				v-model:country="eventsQuery.country"
-				v-model:city="eventsQuery.city"
-				class="main-page__filter"
-			/>
-
 			<ul class="main-page__card-list">
 				<li
 					v-for="event in posterEvents"
@@ -102,37 +99,80 @@ const onButtonClick = () => {
 <style lang="less" scoped>
 .main-page {
 	@media (min-width: 768px) {
-		padding-left: var(--padding-side);
-		padding-right: var(--padding-side);
+		padding-top: 0;
 	}
 
-	&__search {
+	&__top {
+		display: flex;
+		width: 100%;
+		align-items: center;
+		flex-direction: column;
+		background: linear-gradient(
+			90deg,
+			var(--color-accent-background) 0%,
+			var(--color-accent-green-main) 100%
+		);
+		margin-top: 12px;
+		margin-bottom: 32px;
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
-		margin-top: 16px;
-		margin-bottom: 40px;
+
+		@media (min-width: 768px) {
+			border-radius: 10px;
+			padding-top: 65px;
+			margin-top: 0;
+			margin-bottom: 80px;
+		}
+
+		@media (min-width: 1440px) {
+			position: relative;
+			border-radius: 16px;
+			padding-top: 99px;
+			margin-bottom: 100px;
+		}
+	}
+
+	&__title {
+		max-width: 400px;
+		font-size: var(--font-size-XXL);
+		line-height: 40px;
+		text-align: center;
+		word-wrap: break-word;
+		color: var(--color-white);
+		padding-top: 28px;
+		margin-bottom: 24px;
+
+		@media (min-width: 768px) {
+			max-width: 600px;
+			font-size: 50px;
+			line-height: 60px;
+			padding-top: 0;
+			margin-bottom: 40px;
+		}
+
+		@media (min-width: 1440px) {
+			max-width: 900px;
+			font-size: 70px;
+			line-height: 80px;
+			margin-bottom: 120px;
+		}
 	}
 
 	&__location {
 		display: flex;
 		width: 100%;
-		padding-left: var(--padding-side);
-		padding-right: var(--padding-side);
-		margin-bottom: 16px;
-	}
-
-	&__title {
-		font-size: var(--font-size-XXL);
-		line-height: 40px;
-		padding-left: var(--padding-side);
-		padding-right: var(--padding-side);
+		justify-content: center;
 		margin-bottom: 24px;
 	}
 
 	&__filter {
-		padding-left: var(--padding-side);
-		padding-right: var(--padding-side);
+		width: 100%;
 		margin-bottom: 24px;
+
+		@media (min-width: 1440px) {
+			position: absolute;
+			bottom: -60px;
+		}
 	}
 
 	&__card-list {
@@ -143,6 +183,8 @@ const onButtonClick = () => {
 		@media (min-width: 768px) {
 			flex-direction: row;
 			flex-wrap: wrap;
+			padding-left: var(--padding-side);
+			padding-right: var(--padding-side);
 		}
 	}
 

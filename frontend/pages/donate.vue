@@ -116,11 +116,11 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 		font-size: var(--font-size-XXL);
 		font-weight: var(--font-weight-bold);
 		line-height: 40px;
-		margin-top: var(--padding-vertical);
+		padding-top: var(--padding-vertical);
 		margin-bottom: var(--space-unrelated-items);
 
 		@media (min-width: 768px) {
-			margin-top: 20px;
+			padding-top: 0;
 		}
 	}
 

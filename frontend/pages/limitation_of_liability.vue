@@ -90,11 +90,15 @@ const localePath = useLocalePath();
 		line-height: 40px;
 		font-weight: var(--font-weight-bold);
 		margin-bottom: 15px;
-		margin-top: var(--padding-vertical);
+		padding-top: var(--padding-vertical);
+
+		@media (min-width: 768px) {
+			padding-top: 0;
+		}
 
 		@media (min-width: 1440px) {
+			padding-top: 30px;
 			margin-bottom: 30px;
-			margin-top: 0;
 		}
 	}
 

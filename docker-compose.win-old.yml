@@ -62,7 +62,7 @@ services:
                   action: rebuild
 
     mongo:
-        image: nertworkweb/mongo-no-avx
+        image: mongo:4.4.6
         restart: unless-stopped
         command: ['--bind_ip_all']
         healthcheck:

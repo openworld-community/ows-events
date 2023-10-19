@@ -1,0 +1,64 @@
+version: '3.7'
+
+x-logging: &default-logging
+    driver: json-file
+    options:
+        max-size: '10m'
+        max-file: '5'
+
+services:
+    frontend:
+        build:
+            context: .
+            dockerfile: ./frontend/Dockerfile.dev
+        logging: *default-logging
+        ports:
+            - '80:80'
+            - '24678:24678'
+        volumes:
+            - ./:/app
+        depends_on:
+            - backend
+        links:
+            - backend
+        environment:
+            - NODE_ENV=dev
+            - VITE_API_URL=http://127.0.0.1/api
+            - VITE_BASE_URL=http://127.0.0.1
+            - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
+            - VITE_MODE=development
+            - VITE_TELEGRAM_AUTH_BOT_NAME=afisha_oauth_local_bot
+
+    backend:
+        build:
+            context: .
+            dockerfile: ./backend/Dockerfile.dev
+        logging: *default-logging
+        depends_on:
+            - mongo
+            - localization
+        links:
+            - mongo
+            - localization
+        environment:
+            - MODE=dev
+            - FRONTEND_URL=http://127.0.0.1
+            - MONGO_URI=mongodb://mongo:27017/dev
+            - LOCALIZATION_URL=http://94.241.173.117:5000
+        ports:
+            - '7080:7080'
+        volumes:
+            - ./:/app
+
+    mongo:
+        image: mongo:6.0
+        restart: unless-stopped
+        command: ['--bind_ip_all']
+        healthcheck:
+            test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo --quiet) -eq 1
+            interval: 10s
+            start_period: 30s
+        ports:
+            - '27020:27017'
+        volumes:
+            - /tmp/ows-events/db:/data/db

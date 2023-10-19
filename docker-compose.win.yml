@@ -92,8 +92,15 @@ services:
         restart: always
         ports:
             - 5000:5000
-        env_file:
-            - ./localization/.env
+        environment:
+            - USER=root
+            - PASSWORD=root
+            - HOST=pgdatabase
+            - PORT=5432
+            - DB=data
+            - AUTH=123
+            - OPENAI_API_KEY=qwe
+            - SECRET_KEY=123
         develop:
             watch:
                 - path: ./localization/root

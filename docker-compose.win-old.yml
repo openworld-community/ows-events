@@ -43,9 +43,10 @@ services:
         logging: *default-logging
         depends_on:
             - mongo
-            - localisation-app
+            - localization
         links:
             - mongo
+            - localization
         environment:
             - FRONTEND_URL=http://127.0.0.1
             - MONGO_URI=mongodb://mongo:27017/dev

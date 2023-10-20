@@ -87,8 +87,7 @@ services:
 
     localization:
         build:
-            context: .
-            dockerfile: ./localization/Dockerfile
+            context: ./localization
         container_name: ows-events-localisation
         command: python /app/start.py
         restart: always

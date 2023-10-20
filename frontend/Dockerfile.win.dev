@@ -7,7 +7,7 @@ COPY ./common /app/common
 COPY ./frontend/entrypoint.dev.win.sh /scripts/
 RUN chmod +x -R /scripts
 
-RUN npm install
+RUN npm ci
 
 ENV NUXT_HOST=0.0.0.0
 ENV NUXT_PORT=80

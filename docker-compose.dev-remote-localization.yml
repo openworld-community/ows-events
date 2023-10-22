@@ -36,10 +36,8 @@ services:
         logging: *default-logging
         depends_on:
             - mongo
-            - localization
         links:
             - mongo
-            - localization
         environment:
             - MODE=dev
             - FRONTEND_URL=http://127.0.0.1

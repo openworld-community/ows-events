@@ -4,6 +4,7 @@ import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import EventModal from '@/components/modal/Event.client.vue';
 import { SeoItemTypeEnum } from '../constants/enums/seo';
 import { useUserStore } from '../stores/user.store';
+import { RoutePathEnum } from '../constants/enums/route';
 
 const { t } = useI18n();
 
@@ -12,6 +13,7 @@ getMeta({
 });
 
 const userStore = useUserStore()
+const localePath = useLocalePath()
 
 const {
 	open: openEventModal,
@@ -44,7 +46,8 @@ const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 
 const onButtonClick = () => {
 	if (userStore.isAuthorized) {
-		openEventModal();
+		navigateTo(localePath({ path: RoutePathEnum.EVENT_FORM }));
+		// openEventModal();
 	} else {
 		openNeedAuthorizeModal();
 	}

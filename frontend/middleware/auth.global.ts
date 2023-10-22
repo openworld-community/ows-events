@@ -6,7 +6,7 @@ import { CookieNameEnum } from '../constants/enums/common';
 import { RouteNameEnum } from '../constants/enums/route';
 import { getRouteName } from '../utils';
 
-const pagesWithAuth: string[] = [RouteNameEnum.USER_FAVOURITES, RouteNameEnum.USER_MY_EVENTS];
+const pagesWithAuth: string[] = [RouteNameEnum.USER_FAVOURITES, RouteNameEnum.USER_MY_EVENTS, RouteNameEnum.EVENT_FORM];
 
 export default defineNuxtRouteMiddleware(async (to) => {
 	const localePath = useNuxtApp().$localePath;

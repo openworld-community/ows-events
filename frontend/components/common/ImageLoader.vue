@@ -67,7 +67,7 @@ const removeImage = () => {
 			/>
 			<button
 				class="delete-button"
-				:aria-label="$t('modal.new_event_modal.remove_image')"
+				:aria-label="$t('form.event.remove_image')"
 				@click="removeImage"
 			>
 				<CommonIcon
@@ -80,7 +80,7 @@ const removeImage = () => {
 			v-else
 			class="add-button"
 			button-kind="ordinary"
-			:button-text="$t('modal.new_event_modal.add_image')"
+			:button-text="$t('form.event.add_image')"
 			icon-name="picture"
 			@click="input?.click()"
 		/>

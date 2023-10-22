@@ -12,6 +12,7 @@ import {
 } from '../../constants/enums/seo';
 import { useUserStore } from '../../stores/user.store';
 import { apiRouter } from '../../composables/useApiRouter';
+import { useEventStore } from '../../stores/event.store';
 
 const route = useRoute();
 const localePath = useLocalePath();
@@ -38,15 +39,6 @@ getMeta({
 	image: eventImage.value
 });
 
-const redirect = () => {
-	useTrackEvent('redirect');
-	const tmpEl = document.createElement('a');
-	if (!posterEvent.value?.url) return 0;
-	tmpEl.href = posterEvent.value?.url;
-	tmpEl.target = '_blank';
-	tmpEl.click();
-};
-
 const isInFavourites = computed(() => {
 	return userStore.favouriteIDs.includes(id);
 });
@@ -65,6 +57,12 @@ const deleteCard = async () => {
 
 	await closeDeleteEventModal();
 	navigateTo({ path: RoutePathEnum.HOME });
+};
+
+const onEditButtonClick = async () => {
+	const eventStore = useEventStore();
+	eventStore.setEventData(posterEvent.value);
+	await navigateTo(localePath({ path: RoutePathEnum.EVENT_FORM }));
 };
 
 // TODO подключить, когда вернемся к проработке регистрации
@@ -210,7 +208,8 @@ patchDeleteEventModal({
 					button-kind="success"
 					class="event-actions__button event-actions__button--connect"
 					:button-text="$t('global.button.contact')"
-					@click="redirect"
+					:link="posterEvent.url"
+					is-external-link
 				/>
 				<!--TODO подключить, когда вернемся к проработке регистрации-->
 				<!--				<CommonButton-->
@@ -245,7 +244,7 @@ patchDeleteEventModal({
 					icon-name="edit"
 					icon-width="16"
 					icon-height="16"
-					@click="openEventModal"
+					@click="onEditButtonClick"
 				/>
 			</div>
 		</div>

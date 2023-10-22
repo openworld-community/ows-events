@@ -3,6 +3,7 @@ import type { City, Country } from '~/stores/location.store';
 import { timezoneToString } from '~/utils/timezones';
 
 export const getAllTimezones = async (): Promise<Timezone[]> => {
+	if (process.server) return [];
 	const local = localStorage.getItem('ALL_TIMEZONES');
 	if (local) return parseJSON(local);
 

@@ -8,6 +8,5 @@ type IDeleteImageHandlerProps = IRouteHandler<IDeleteImageRouteProps>;
 
 type IAddImageRouteProps = {
 	Body: { image: string };
-	Reply: { path: string };
 };
 type IAddImageHandlerProps = IRouteHandler<IAddImageRouteProps>;

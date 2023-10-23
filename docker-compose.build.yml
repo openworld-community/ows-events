@@ -1,0 +1,67 @@
+version: '3.7'
+
+x-logging: &default-logging
+    driver: json-file
+    options:
+        max-size: '10m'
+        max-file: '5'
+
+networks:
+    build_ows_events:
+
+services:
+    frontend:
+        build:
+            context: .
+            dockerfile: ./frontend/Dockerfile
+            args:
+                - NODE_ENV=production
+                - VITE_API_URL=https://127.0.0.1/api
+                - VITE_BASE_URL=https://127.0.0.1
+                - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
+                - VITE_TELEGRAM_AUTH_BOT_NAME
+                - VITE_MODE=production
+                - VITE_DOMAIN=127.0.0.1
+        logging: *default-logging
+        restart: always
+        networks:
+            - build_ows_events
+        ports:
+            - '80:3000'
+
+    backend:
+        build:
+            context: .
+            dockerfile: ./backend/Dockerfile
+        logging: *default-logging
+        restart: always
+        depends_on:
+            - mongo
+        links:
+            - mongo
+        environment:
+            - MODE=prod
+            - MONGO_URI=mongodb://mongo:27017/dev
+            - FRONTEND_URL=https://127.0.0.1
+            - SECRET_KEY
+        networks:
+            - build_ows_events
+        ports:
+            - '7080:7080'
+        volumes:
+            - /root/ows-events/assets/img:/app/assets/img
+
+    mongo:
+        image: mongo:6.0
+        restart: unless-stopped
+        command: ['--bind_ip_all']
+        ports:
+            - '27020:27017'
+        networks:
+            - build_ows_events
+        healthcheck:
+            test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo --quiet) -eq 1
+            interval: 10s
+            start_period: 30s
+        volumes:
+            - /root/db/prod:/data/db

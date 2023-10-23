@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
-import { RouteNameEnum } from '@/constants/enums/route';
+import { RoutePathEnum } from '@/constants/enums/route';
 import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
-import type { TGUserInfo } from '@/../common/types/user';
 
 import { trimString } from '../../utils/trimString';
 import {
@@ -11,17 +10,19 @@ import {
 	SeoItempropGlobalEnum,
 	SeoItemTypeEnum
 } from '../../constants/enums/seo';
+import { useUserStore } from '../../stores/user.store';
+import { apiRouter } from '../../composables/useApiRouter';
 
-definePageMeta({ name: RouteNameEnum.EVENT });
 const route = useRoute();
+const localePath = useLocalePath();
 const id = getFirstParam(route.params.id);
 
-const user = useCookie<TGUserInfo | null>('user');
+const userStore = useUserStore();
 
 const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ data: { id } });
 
 const posterEvent = computed(() => {
-	if (!data.value) return void navigateTo({ name: RouteNameEnum.HOME });
+	if (!data.value) return void navigateTo(localePath(RoutePathEnum.HOME));
 	return data.value;
 });
 
@@ -31,14 +32,10 @@ const eventImage = computed(() => {
 
 getMeta({
 	title: posterEvent.value?.location
-		? `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}`
+		? `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}, ${posterEvent.value?.location.country}`
 		: posterEvent.value?.title,
 	description: trimString(posterEvent.value?.description ?? '', 120),
 	image: eventImage.value
-});
-
-const isEditable = computed(() => {
-	return posterEvent.value ? posterEvent.value.date > Date.now() : false;
 });
 
 const redirect = () => {
@@ -50,12 +47,24 @@ const redirect = () => {
 	tmpEl.click();
 };
 
+const isInFavourites = computed(() => {
+	return userStore.favouriteIDs.includes(id);
+});
+
+const toggleFavourites = async () => {
+	const { error } = await apiRouter.user.favourites[
+		isInFavourites.value ? 'remove' : 'add'
+	].useMutation({ data: { eventId: id } });
+	if (!error.value) await userStore.getFavouriteIDs();
+};
+
 const deleteCard = async () => {
+	// если запрос проходит, то ничего не приходит, т.е. может придти только error
 	const { error } = await apiRouter.events.delete.useMutation({ data: { id } });
 	if (error.value) return;
 
 	await closeDeleteEventModal();
-	navigateTo({ name: RouteNameEnum.HOME });
+	navigateTo({ path: RoutePathEnum.HOME });
 };
 
 // TODO подключить, когда вернемся к проработке регистрации
@@ -107,7 +116,11 @@ patchDeleteEventModal({
 		:itemtype="SeoItemTypeEnum.EVENT"
 	>
 		<div
-			:class="['event-image', 'event-image__container',{ 'event-image__container--background': !posterEvent.image }]"
+			:class="[
+				'event-image',
+				'event-image__container',
+				{ 'event-image__container--background': !posterEvent.image }
+			]"
 			:itemprop="SeoItempropGlobalEnum.IMAGE"
 		>
 			<img
@@ -120,17 +133,32 @@ patchDeleteEventModal({
 		</div>
 
 		<div class="event event-info">
-			<CommonTag
-				:class-name="'event-info__price'"
-				:price="posterEvent.price"
-			/>
+			<div class="event-info__tag-wrapper">
+				<CommonTag
+					:class-name="'event-info__price'"
+					:price="posterEvent.price"
+				/>
+				<CommonButton
+					v-if="userStore.isAuthorized"
+					is-icon
+					is-round
+					:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
+					:alt="
+						isInFavourites
+							? $t('global.button.add_to_favourites')
+							: $t('global.button.add_to_favourites')
+					"
+					@click="toggleFavourites"
+				/>
+			</div>
+
 			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
 			<p
-				v-if="posterEvent.title.toLowerCase().includes('peredelanoconf')"
+				v-if="posterEvent.organizer"
 				class="event-info__author"
 				:itemprop="SeoItempropEventEnum.ORGANIZER"
 			>
-				Peredelano
+				{{ posterEvent?.organizer }}
 			</p>
 			<h1
 				class="event-info__title"
@@ -181,7 +209,7 @@ patchDeleteEventModal({
 					v-if="posterEvent.url !== 'self'"
 					button-kind="success"
 					class="event-actions__button event-actions__button--connect"
-					:button-text="$t('event.button.contact')"
+					:button-text="$t('global.button.contact')"
 					@click="redirect"
 				/>
 				<!--TODO подключить, когда вернемся к проработке регистрации-->
@@ -196,24 +224,24 @@ patchDeleteEventModal({
 			<div
 				v-if="
 					posterEvent.creatorId &&
-					(user?.id === posterEvent.creatorId || posterEvent.creatorId === 'dev-user')
+					((userStore.isAuthorized && userStore.id === posterEvent.creatorId) ||
+						posterEvent.creatorId === 'dev-user')
 				"
 				class="event-actions__manage"
 			>
 				<CommonButton
 					class="event-actions__button event-actions__button--admin"
 					button-kind="warning"
-					:button-text="$t('event.button.delete')"
+					:button-text="$t('global.button.delete')"
 					icon-name="trash"
 					icon-width="16"
 					icon-height="16"
 					@click="openDeleteEventModal"
 				/>
 				<CommonButton
-					v-if="isEditable"
 					class="event-actions__button event-actions__button--admin"
 					button-kind="ordinary"
-					:button-text="$t('event.button.edit')"
+					:button-text="$t('global.button.edit')"
 					icon-name="edit"
 					icon-width="16"
 					icon-height="16"
@@ -248,7 +276,11 @@ patchDeleteEventModal({
 		flex-direction: column;
 		padding-inline: 0;
 
-		&__price {
+		&__tag-wrapper {
+			display: flex;
+			width: 100%;
+			justify-content: space-between;
+			align-items: center;
 			margin-bottom: 12px;
 		}
 
@@ -290,7 +322,9 @@ patchDeleteEventModal({
 			//TODO: пока верстка только мобилки
 			max-width: 480px;
 			word-wrap: break-word;
+			white-space: pre-line;
 			overflow-y: auto;
+			-webkit-overflow-scrolling: touch;
 			font-size: var(--font-size-S);
 			line-height: 20px;
 		}

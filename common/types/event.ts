@@ -1,10 +1,14 @@
+import type { IDelocalizedObject, ILocalizedObject } from './localization';
 import type { Timezone } from './location';
+import { SupportedLanguages } from '../const';
+import { EventTypes } from '../const/eventTypes';
 
-export type EventOnPoster = {
+export type EventDbEntity = {
 	id: string;
 	creatorId?: string;
 	title: string;
-	description: string;
+	originDescriptionLanguage?: SupportedLanguages | 'undefined';
+	description: ILocalizedObject;
 	date: number;
 	durationInSeconds: number;
 	location: {
@@ -13,11 +17,15 @@ export type EventOnPoster = {
 		address: string;
 	};
 	image: string;
-	price: EventPrice;
+	price: EventPrice | null;
 	timezone?: Timezone;
 	url: string;
-    tags?: string[];
+	organizer?: string;
+	tags?: string[];
+	type: EventTypes;
 };
+
+export type EventOnPoster = IDelocalizedObject<EventDbEntity>;
 
 export type PostEventPayload = {
 	event: {
@@ -27,10 +35,11 @@ export type PostEventPayload = {
 		price: EventPrice;
 		timezone: Timezone;
 		description: string;
+		organizer: string;
 		location: { country: string; city: string; address: string };
 		title: string;
 		url: string;
-        tags?: string[];
+		tags?: string[];
 	};
 };
 
@@ -49,4 +58,13 @@ export type EventPrice = {
 	value: number | null;
 	minValue: number | null;
 	currency: string | null;
-} | null;
+};
+
+export type IEventMeta = {
+	meta: {
+		moderation: {
+			status: string;
+			problems: string[];
+		};
+	};
+};

@@ -2,23 +2,31 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import path from 'path';
 import { fileURLToPath, URL } from 'node:url';
+import { searchForWorkspaceRoot } from 'vite'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	modules: [
-		[
-			'@nuxtjs/i18n',
-			{
-				// debug: true,
-				experimental: {
-					jsTsFormatResource: true
-				}
-			}
+	modules: ['@nuxtjs/i18n', '@pinia/nuxt', '@vueuse/nuxt', '@nuxtjs/plausible'],
+	routeRules: {
+		'/': {redirect: '/ru'}
+	},
+	i18n: {
+		// debug: true,
+		experimental: {
+			jsTsFormatResource: true
+		},
+		locales: [
+			{ code: 'ru', name: 'Russian', iso: 'ru-RU', dir: 'ltr', file: 'ru-RU.ts' },
+			{ code: 'en', name: 'English', iso: 'en-US', dir: 'ltr', file: 'en-GB.ts' }
 		],
-		'@pinia/nuxt',
-		'@vueuse/nuxt',
-		'@nuxtjs/plausible'
-	],
+		lazy: true,
+		langDir: 'i18n',
+		strategy: 'prefix',
+		//
+		defaultLocale: 'ru',
+		detectBrowserLanguage: false,
+		vueI18n: './i18n.config.ts'
+	},
 	// На случай добавления скриптов:
 	// app: {
 	// 	head: {
@@ -39,7 +47,7 @@ export default defineNuxtConfig({
 			'poster-test-peredelano.orby-tech.space',
 		apiHost: 'https://afisha-metrics.orby-tech.space'
 	},
-	typescript: { strict: true },
+	typescript: { strict: false },
 	nitro: {
 		devProxy: {
 			'/api': 'http://backend:7080/api',
@@ -49,7 +57,17 @@ export default defineNuxtConfig({
 	vite: {
 		server: {
 			watch: {
-				usePolling: true
+				usePolling: true},
+			hmr: {
+				// нужно пока комментить, если фронт не через докер
+				protocol: 'ws',
+				clientPort: 24678
+			},
+			fs: {
+				allow: [
+					searchForWorkspaceRoot(process.cwd()),
+					'/app/common'
+				]
 			}
 		},
 		plugins: [
@@ -58,7 +76,7 @@ export default defineNuxtConfig({
 			// vue(),
 			vueJsx(),
 			createSvgIconsPlugin({
-				iconDirs: [path.resolve(process.cwd(), 'assets/img/icon')],
+				iconDirs: [path.resolve(process.cwd(), 'assets/icon')],
 				symbolId: '[name]',
 				inject: 'body-first'
 			})

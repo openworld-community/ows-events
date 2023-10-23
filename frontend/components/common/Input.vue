@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { IconName } from './Icon.vue';
+import type {PropType} from "vue";
 function defineIconDictionary<T extends Record<string, IconName>>(
 	dictionary: T
 ): { [K in keyof T | (string & {})]: IconName } {

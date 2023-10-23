@@ -4,22 +4,21 @@ import 'vue-final-modal/style.css';
 import 'vue-toastification/dist/index.css';
 import 'virtual:svg-icons-register';
 import { ModalsContainer } from 'vue-final-modal';
-import { isDevelopmentMode } from './constants/common';
+import { CookieNameEnum } from './constants/enums/common';
+import { TOKEN_MAX_AGE_SECONDS } from './constants/defaultValues/time';
 
 const { locale, t } = useI18n();
 
 useHead({
-	title: t('meta.title'),
+	title: t('meta.default_title'),
 	meta: [{ name: 'description', content: t('meta.default_description') }],
 	htmlAttrs: {
-		lang: locale.value
+		lang: () => locale.value
 	}
 });
 
-if (isDevelopmentMode) {
-	const tokenCookie = useCookie<string>('token');
-	tokenCookie.value ??= 'blablabla';
-}
+useCookie(CookieNameEnum.LOCALE, {maxAge: TOKEN_MAX_AGE_SECONDS}).value = locale.value
+
 </script>
 <template>
 	<HeaderCommon />

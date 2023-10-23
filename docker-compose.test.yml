@@ -106,8 +106,7 @@ services:
 
     localization:
         build:
-            context: .
-            dockerfile: ./localization/Dockerfile
+            context: ./localization
         command: python /app/start.py
         labels:
             - 'traefik.enable=true'
@@ -134,3 +133,7 @@ services:
             - AUTH=${LOCALIZATION_API_KEY}
             - OPENAI_API_KEY=qwe
             - SECRET_KEY=${LOCALIZATION_API_KEY}
+        volumes:
+            - ./root/:/app/root/
+            - ./start.py:/app/start.py
+            - ./store/:/app/store/

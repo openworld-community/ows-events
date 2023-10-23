@@ -42,7 +42,7 @@ services:
             - MODE=dev
             - FRONTEND_URL=http://127.0.0.1
             - MONGO_URI=mongodb://mongo:27017/dev
-            - LOCALIZATION_URL=http://94.241.173.117:5000
+            - LOCALIZATION_URL=https://localization-test.afisha.peredelano.com
         ports:
             - '7080:7080'
         volumes:

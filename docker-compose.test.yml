@@ -121,7 +121,7 @@ services:
             - 'traefik.http.routers.test_localization_http.entrypoints=http'
         restart: always
         ports:
-            - 7081:5000
+            - 7091:5000
         networks:
             - traefikpublic
         environment:

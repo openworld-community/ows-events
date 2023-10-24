@@ -121,6 +121,6 @@ services:
             - OPENAI_API_KEY=qwe
             - SECRET_KEY=${LOCALIZATION_API_KEY}
         volumes:
-            - ./root/:/app/root/
-            - ./start.py:/app/start.py
-            - ./store/:/app/store/
+            - ./localization/root/:/app/root/
+            - ./localization/start.py:/app/start.py
+            - ./localization/store/:/app/store/

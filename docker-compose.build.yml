@@ -22,6 +22,7 @@ services:
                 - VITE_TELEGRAM_AUTH_BOT_NAME
                 - VITE_MODE=production
                 - VITE_DOMAIN=127.0.0.1
+        image: 'ows-events_build_frontend'
         logging: *default-logging
         restart: always
         networks:
@@ -33,6 +34,7 @@ services:
         build:
             context: .
             dockerfile: ./backend/Dockerfile
+        image: 'ows-events_build_backend'
         logging: *default-logging
         restart: always
         depends_on:

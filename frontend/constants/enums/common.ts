@@ -5,5 +5,6 @@ export enum CookieNameEnum {
 }
 
 export enum LocalStorageEnum {
-	EVENT_DATA = 'lastEvent'
+	EVENT_DATA = 'lastEvent',
+	TIMEZONES = 'ALL_TIMEZONES'
 }

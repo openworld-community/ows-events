@@ -64,6 +64,7 @@ const inputValues = ref({
 	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
 	url: props.dataForEdit?.url ?? ''
 });
+
 const eventStartEpoch = computed(() =>
 	combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime()
 );
@@ -167,36 +168,36 @@ async function addImage(image: ImageLoaderFile) {
 }
 
 // #region country, city, timezone string input relationship logic
-watch(
-	() => inputValues.value.location.country,
-	(country) => {
-		if (!isFree.value && country)
-			inputValues.value.price.currency = getCurrencyByCountry(country);
-		if (!country) {
-			inputValues.value.timezone = '';
-			inputValues.value.location.city = '';
-			inputValues.value.price.currency = '';
-		}
-	}
-);
+// watch(
+// 	() => inputValues.value.location.country,
+// 	(country) => {
+// 		if (!isFree.value && country)
+// 			inputValues.value.price.currency = getCurrencyByCountry(country);
+// 		if (!country) {
+// 			inputValues.value.timezone = '';
+// 			inputValues.value.location.city = '';
+// 			inputValues.value.price.currency = '';
+// 		}
+// 	}
+// );
 
-watch(
-	() => isFree.value,
-	() => {
-		if (!isFree.value)
-			inputValues.value.price.currency = getCurrencyByCountry(
-				inputValues.value.location.country
-			);
-	}
-);
+// watch(
+// 	() => isFree.value,
+// 	() => {
+// 		if (!isFree.value)
+// 			inputValues.value.price.currency = getCurrencyByCountry(
+// 				inputValues.value.location.country
+// 			);
+// 	}
+// );
 
-watch(
-	() => [inputValues.value.location.country, inputValues.value.location.city],
-	async ([country, city]) => {
-		if (!country) return;
-		inputValues.value.timezone = await getTimezone(country, city);
-	}
-);
+// watch(
+// 	() => [inputValues.value.location.country, inputValues.value.location.city],
+// 	async ([country, city]) => {
+// 		if (!country) return;
+// 		inputValues.value.timezone = await getTimezone(country, city);
+// 	}
+// );
 // #endregion
 
 // #region datetime input relationship logic
@@ -256,7 +257,7 @@ watch(
 						name="city"
 						:disabled="!eventStore.eventData.location.country"
 						:placeholder="$t('global.city')"
-						:list="locationStore.getCitiesByCountry(inputValues.location.country)"
+						:list="locationStore.getCitiesByCountry(eventStore.eventData.location.country)"
 						input-readonly
 						required
 					/>
@@ -343,14 +344,15 @@ watch(
 						type="time"
 						name="startTime"
 						placeholder="--:--"
+
 						:disabled="!eventStore.eventData.startDate"
-						:min-time="
+						required
+					/>
+<!--		:min-time="
 							eventStore.eventData.startDate?.toDateString() === new Date().toDateString()
 								? getTimeFromEpochInMs(Date.now(), true)
 								: undefined
-						"
-						required
-					/>
+						"			-->
 				</template>
 			</ModalUiModalSection>
 
@@ -370,16 +372,17 @@ watch(
 						v-model="eventStore.eventData.endTime"
 						type="time"
 						name="endTime"
-						:min-time="
-							eventStore.eventData.startDate?.toDateString() ===
-							eventStore.eventData.endDate?.toDateString()
-								? inputValues.startTime
-								: undefined
-						"
 						placeholder="--:--"
+
 						:disabled="!eventStore.eventData.endDate"
 						:required="!!eventStore.eventData.endDate"
 					/>
+<!--			:min-time="
+							eventStore.eventData.startDate?.toDateString() ===
+							eventStore.eventData.endDate?.toDateString()
+								? eventStore.eventData.startTime
+								: undefined
+						"		-->
 				</template>
 			</ModalUiModalSection>
 
@@ -396,16 +399,16 @@ watch(
 							:list="locationStore.currencies"
 							has-icon-items
 							input-readonly
-							:disabled="isFree"
-							:required="!isFree"
+							:disabled="eventStore.isFree"
+							:required="!eventStore.isFree"
 						/>
 						<CommonUiBaseInput
 							v-model="eventStore.eventData.price.value"
 							name="price"
 							type="number"
 							:min-value="0"
-							:disabled="isFree"
-							:required="!isFree"
+							:disabled="eventStore.isFree"
+							:required="!eventStore.isFree"
 							:placeholder="$t('form.event.fields.price_placeholder')"
 						/>
 					</div>
@@ -413,8 +416,8 @@ watch(
 						value="free"
 						:label="$t('form.event.fields.price_free')"
 						is-reversed
-						:model-value="isFree"
-						@update:model-value="toggleFree"
+						:model-value="eventStore.isFree"
+						@update:model-value="eventStore.isFree = !eventStore.isFree"
 					/>
 				</template>
 			</ModalUiModalSection>

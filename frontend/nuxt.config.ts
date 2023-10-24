@@ -70,7 +70,7 @@ export default defineNuxtConfig({
 			hmr: {
 				// нужно пока комментить, если фронт не через докер
 				protocol: 'ws',
-				clientPort: 24678
+				clientPort: 80
 			},
 			fs: {
 				allow: [

@@ -5,12 +5,12 @@ import { CookieNameEnum } from '../../constants/enums/common';
 
 const { locale } = useI18n();
 
-const switchLocalePath = useSwitchLocalePath()
+const switchLocalePath = useSwitchLocalePath();
 
 const language = computed(() => locale.value);
 
 watch(locale, (loc) => {
-	useCookie(CookieNameEnum.LOCALE, {maxAge: TOKEN_MAX_AGE_SECONDS}).value = loc
+	useCookie(CookieNameEnum.LOCALE, { maxAge: TOKEN_MAX_AGE_SECONDS }).value = loc;
 });
 
 const sidebar = ref(null);
@@ -70,7 +70,7 @@ onClickOutside(sidebar, () => toggleSelector(), { ignore: [selectorButton] });
 		flex-direction: column;
 		align-items: flex-end;
 		position: absolute;
-		top: -9px;
+		top: -10px;
 		right: 0;
 		background-color: var(--color-white);
 		box-shadow: var(--shadow-sidebar);

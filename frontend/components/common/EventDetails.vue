@@ -2,15 +2,23 @@
 import type { Location } from '../../../common/types/address';
 import type { PropType } from 'vue';
 import {
-  SeoItempropEventEnum,
-  SeoItempropLocationEnum,
-  SeoItemTypeEnum
-} from "../../constants/enums/seo";
+	SeoItempropEventEnum,
+	SeoItempropLocationEnum,
+	SeoItemTypeEnum
+} from '../../constants/enums/seo';
 
 const props = defineProps({
 	location: {
-		type: Object as PropType<Location>,
-		required: true
+		type: Object as PropType<Location | null>,
+		default: null
+	},
+	startDate: {
+		type: String,
+		default: ''
+	},
+	endDate: {
+		type: String,
+		default: ''
 	},
 	isLink: {
 		type: Boolean,
@@ -31,22 +39,26 @@ const component = computed(() => {
 <template>
 	<component
 		:is="component"
-		class="address"
+		class="details"
 		:to="isLink ? getLocationLink(location) : null"
 		:target="isLink ? '_blank' : null"
-    :itemprop="SeoItempropEventEnum.LOCATION"
-    :itemtype="SeoItemTypeEnum.LOCATION"
-    itemscope
+		:itemprop="location ? SeoItempropEventEnum.LOCATION : null"
+		:itemtype="location ? SeoItemTypeEnum.LOCATION : SeoItemTypeEnum.DATE"
+		itemscope
 	>
 		<CommonIcon
 			v-if="withPin"
-			name="map-pin"
-			class="address__icon"
+			:name="location ? 'map-pin' : 'calendar'"
+			class="details__icon"
+			color="var(--color-accent-green-main)"
 		/>
+
+		<!--	Локация		-->
 		<span
-			:class="['address__text', { 'address__text--link': isLink }]"
-      itemscope
-      :itemtype="SeoItemTypeEnum.ADDRESS"
+			v-if="location"
+			:class="['details__text', { 'details__text--link': isLink }]"
+			itemscope
+			:itemtype="SeoItemTypeEnum.ADDRESS"
 			:itemprop="SeoItempropLocationEnum.GROUP_ITEMPROP"
 		>
 			<span
@@ -67,26 +79,43 @@ const component = computed(() => {
 				>, {{ location.address }}
 			</span>
 		</span>
+
+		<!--	Дата	-->
+		<span
+			v-if="startDate"
+			class="details__text"
+			:itemprop="SeoItempropEventEnum.START_DATE"
+		>
+			{{ startDate }}
+		</span>
+		<span
+			v-if="endDate"
+			class="details__text"
+			> &nbsp;-&nbsp;
+		</span>
+		<span
+			v-if="endDate"
+			class="details__text"
+			:itemprop="SeoItempropEventEnum.END_DATE"
+		>
+			{{ endDate }}
+		</span>
 	</component>
 </template>
 
 <style scoped lang="less">
-.address {
+.details {
 	display: flex;
 	max-width: max-content;
 
 	&__icon {
-		color: var(--color-accent-green-main);
-		margin-right: var(--space-related-items);
+		margin-right: 8px;
 	}
 
 	&__text {
 		font-size: var(--font-size-S);
 
 		&--link {
-			font-size: var(--font-size-XS);
-			line-height: 14px;
-			color: var(--color-link);
 			text-decoration: underline;
 		}
 	}

@@ -13,6 +13,7 @@ import {
 import { useUserStore } from '../../stores/user.store';
 import { apiRouter } from '../../composables/useApiRouter';
 
+const mobile = inject<boolean>('mobile');
 const route = useRoute();
 const localePath = useLocalePath();
 const id = getFirstParam(route.params.id);
@@ -37,15 +38,6 @@ getMeta({
 	description: trimString(posterEvent.value?.description ?? '', 120),
 	image: eventImage.value
 });
-
-const redirect = () => {
-	useTrackEvent('redirect');
-	const tmpEl = document.createElement('a');
-	if (!posterEvent.value?.url) return 0;
-	tmpEl.href = posterEvent.value?.url;
-	tmpEl.target = '_blank';
-	tmpEl.click();
-};
 
 const isInFavourites = computed(() => {
 	return userStore.favouriteIDs.includes(id);
@@ -109,109 +101,120 @@ patchDeleteEventModal({
 </script>
 
 <template>
-	<div
-		v-if="posterEvent"
-		class="event"
-		itemscope
-		:itemtype="SeoItemTypeEnum.EVENT"
-	>
-		<div
-			:class="[
-				'event-image',
-				'event-image__container',
-				{ 'event-image__container--background': !posterEvent.image }
-			]"
-			:itemprop="SeoItempropGlobalEnum.IMAGE"
+	<div class="root">
+		<HeaderCommon :has-back-button="mobile" />
+		<main
+			v-if="posterEvent"
+			class="event"
+			itemscope
+			:itemtype="SeoItemTypeEnum.EVENT"
 		>
-			<img
-				v-if="posterEvent.image"
-				:src="eventImage"
-				:alt="$t('event.image.event')"
-				class="event-image__image"
+			<div
+				class="event-image event-image__container"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
-			/>
-		</div>
-
-		<div class="event event-info">
-			<div class="event-info__tag-wrapper">
-				<CommonTag
-					:class-name="'event-info__price'"
-					:price="posterEvent.price"
+			>
+				<img
+					v-if="posterEvent.image"
+					class="event-image__image"
+					:src="eventImage"
+					width="350"
+					height="250"
+					:alt="$t('event.image.event')"
+					:itemprop="SeoItempropGlobalEnum.IMAGE"
 				/>
-				<CommonButton
-					v-if="userStore.isAuthorized"
-					is-icon
-					is-round
-					:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
-					:alt="
-						isInFavourites
-							? $t('global.button.add_to_favourites')
-							: $t('global.button.add_to_favourites')
-					"
-					@click="toggleFavourites"
+				<img
+					v-else
+					class="event-image__image"
+					src="@/assets/img/event-preview@2x.png"
+					width="350"
+					height="250"
+					:alt="$t('event.image.event')"
+					:itemprop="SeoItempropGlobalEnum.IMAGE"
 				/>
 			</div>
 
-			<!--      TODO когда будет user info, нужно будет подставлять имя создавшего-->
-			<p
-				v-if="posterEvent.organizer"
-				class="event-info__author"
-				:itemprop="SeoItempropEventEnum.ORGANIZER"
-			>
-				{{ posterEvent?.organizer }}
-			</p>
-			<h1
-				class="event-info__title"
-				:itemprop="SeoItempropEventEnum.NAME"
-			>
-				{{ posterEvent.title }}
-			</h1>
+			<div class="event-info">
+				<div class="event-info__summary">
+					<div class="event-info__tag-wrapper">
+						<CommonTag
+							class-name="event-info__price"
+							:price="posterEvent.price"
+						/>
+						<CommonButton
+							v-if="
+								mobile && userStore.isAuthorized && userStore.id !== posterEvent.id
+							"
+							is-icon
+							is-round
+							:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
+							:alt="
+								isInFavourites
+									? $t('global.button.remove_from_favourites')
+									: $t('global.button.add_to_favourites')
+							"
+							@click="toggleFavourites"
+						/>
+					</div>
+					<div class="event-info__title-wrapper">
+						<!--      TODO когда будет user info, нужно будет подставлять имя создавшего -->
+						<p
+							v-if="posterEvent.organizer"
+							class="event-info__author"
+							:itemprop="SeoItempropEventEnum.ORGANIZER"
+						>
+							{{ posterEvent?.organizer }}
+						</p>
+						<h1
+							class="event-info__title"
+							:itemprop="SeoItempropEventEnum.NAME"
+						>
+							{{ posterEvent.title }}
+						</h1>
+					</div>
+					<div class="event-info__details">
+						<CommonEventDetails
+							class="event-info__datetime"
+							:start-date="convertToLocaleString(posterEvent.date)"
+							:end-date="
+								posterEvent.durationInSeconds
+									? convertToLocaleString(
+											posterEvent.date + posterEvent.durationInSeconds * 1000
+									  )
+									: null
+							"
+							with-pin
+						/>
+						<CommonEventDetails
+							:location="posterEvent.location"
+							class="event-info__geolink"
+							is-link
+							with-pin
+						/>
+					</div>
+					<p
+						v-if="!mobile"
+						class="event-info__description-title"
+					>
+						{{ $t('event.description_title') }}
+					</p>
+					<p
+						class="event-info__description"
+						:itemprop="SeoItempropEventEnum.DESCRIPTION"
+					>
+						{{ posterEvent.description }}
+					</p>
+					<CommonButton
+						v-if="posterEvent.url"
+						class="event-info__button-contact"
+						button-kind="success"
+						:button-text="$t('global.button.contact')"
+						:link="posterEvent.url"
+						is-external-link
+					/>
+				</div>
 
-			<p class="event-info__datetime">
-				<span
-					v-if="posterEvent.durationInSeconds"
-					:itemprop="SeoItempropEventEnum.DURATION"
-				>
-					{{ convertToLocaleString(posterEvent.date) }}
-					-
-					{{
-						convertToLocaleString(
-							posterEvent.date + posterEvent.durationInSeconds * 1000
-						)
-					}}
-				</span>
-				<span
-					v-else
-					:itemprop="SeoItempropEventEnum.DURATION"
-				>
-					{{ convertToLocaleString(posterEvent.date ?? Date.now()) }}
-				</span>
-				<br />
-				({{ posterEvent.timezone?.timezoneOffset }}
-				{{ posterEvent.timezone?.timezoneName }})
-			</p>
-			<CommonAddress
-				:location="posterEvent.location"
-				class="event-info__geolink"
-				is-link
-			/>
-			<p
-				class="event-info__description"
-				:itemprop="SeoItempropEventEnum.DESCRIPTION"
-			>
-				{{ posterEvent.description }}
-			</p>
-		</div>
+				<!--			<template v-if="posterEvent.url">-->
 
-		<div class="event-actions">
-			<template v-if="posterEvent.url">
-				<CommonButton
-					v-if="posterEvent.url !== 'self'"
-					button-kind="success"
-					class="event-actions__button event-actions__button--connect"
-					:button-text="$t('global.button.contact')"
-					@click="redirect"
-				/>
 				<!--TODO подключить, когда вернемся к проработке регистрации-->
 				<!--				<CommonButton-->
 				<!--					v-else-->
@@ -220,38 +223,57 @@ patchDeleteEventModal({
 				<!--					:button-text="$t('event.button.register')"-->
 				<!--					@click="openRegistrationModal"-->
 				<!--				/>-->
-			</template>
-			<div
-				v-if="
-					posterEvent.creatorId &&
-					((userStore.isAuthorized && userStore.id === posterEvent.creatorId) ||
-						posterEvent.creatorId === 'dev-user')
-				"
-				class="event-actions__manage"
-			>
-				<CommonButton
-					class="event-actions__button event-actions__button--admin"
-					button-kind="warning"
-					:button-text="$t('global.button.delete')"
-					icon-name="trash"
-					icon-width="16"
-					icon-height="16"
-					@click="openDeleteEventModal"
-				/>
-				<CommonButton
-					class="event-actions__button event-actions__button--admin"
-					button-kind="ordinary"
-					:button-text="$t('global.button.edit')"
-					icon-name="edit"
-					icon-width="16"
-					icon-height="16"
-					@click="openEventModal"
-				/>
+				<!--			</template>-->
+				<div
+					v-if="userStore.isAuthorized"
+					class="event-info__actions"
+				>
+					<div
+						v-if="
+							userStore.id === posterEvent.creatorId ||
+							posterEvent.creatorId === 'dev-user'
+						"
+						class="event-info__manage"
+					>
+						<CommonButton
+							class="event-info__button-admin"
+							button-kind="warning"
+							:button-text="$t('global.button.delete')"
+							icon-name="trash"
+							icon-width="16"
+							icon-height="16"
+							@click="openDeleteEventModal"
+						/>
+						<CommonButton
+							class="event-info__button-admin"
+							button-kind="ordinary"
+							:button-text="$t('global.button.edit')"
+							icon-name="edit"
+							icon-width="16"
+							icon-height="16"
+							@click="openEventModal"
+						/>
+					</div>
+					<CommonButton
+						v-if="
+							!mobile &&
+							posterEvent.id !== userStore.id &&
+							posterEvent.creatorId !== 'dev-user'
+						"
+						button-kind="ordinary"
+						:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
+						:button-text="
+							isInFavourites
+								? $t('global.button.in_favourites')
+								: $t('global.button.add_to_favourites')
+						"
+						@click="toggleFavourites"
+					/>
+				</div>
 			</div>
-		</div>
+		</main>
+		<FooterCommon v-if="!mobile" />
 	</div>
-	<!-- todo - временная затычка -->
-	<div v-else>Request errored or pending</div>
 </template>
 
 <style lang="less" scoped>
@@ -260,106 +282,20 @@ patchDeleteEventModal({
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
-	//max-height: calc(100vh - var(--header-height));
+	min-height: calc(100vh - var(--header-height));
 	padding-left: var(--padding-side);
 	padding-right: var(--padding-side);
+	padding-bottom: 15px;
 
-	//// Для адаптивной height на iOs
-	//@supports (-webkit-touch-callout: none) {
-	//	max-height: -webkit-fill-available;
-	//}
-
-	&-info {
-		display: flex;
-		width: 100%;
-		min-height: 250px;
-		flex-direction: column;
-		padding-inline: 0;
-
-		&__tag-wrapper {
-			display: flex;
-			width: 100%;
-			justify-content: space-between;
-			align-items: center;
-			margin-bottom: 12px;
-		}
-
-		&__author {
-			//TODO: пока верстка только мобилки
-			max-width: 480px;
-			word-wrap: break-word;
-			font-size: var(--font-size-XS);
-			font-weight: var(--font-weight-bold);
-			line-height: 16px;
-			text-align: left;
-			color: var(--color-text-secondary);
-			margin-bottom: 12px;
-		}
-
-		&__title {
-			//TODO: пока верстка только мобилки
-			max-width: 480px;
-			word-wrap: break-word;
-			font-size: var(--font-size-L);
-			font-weight: var(--font-weight-bold);
-			line-height: 24px;
-			margin-bottom: var(--space-related-items);
-		}
-
-		&__datetime {
-			font-size: var(--font-size-XS);
-			font-weight: var(--font-weight-bold);
-			line-height: 16px;
-			color: var(--color-text-secondary);
-			margin-bottom: var(--space-related-items);
-		}
-
-		&__geolink {
-			margin-bottom: var(--space-unrelated-items);
-		}
-
-		&__description {
-			//TODO: пока верстка только мобилки
-			max-width: 480px;
-			word-wrap: break-word;
-			white-space: pre-line;
-			overflow-y: auto;
-			-webkit-overflow-scrolling: touch;
-			font-size: var(--font-size-S);
-			line-height: 20px;
-		}
+	// Для адаптивной height на iOs
+	@supports (-webkit-touch-callout: none) {
+		min-height: -webkit-fill-available;
 	}
 
-	&-actions {
-		display: flex;
-		flex-direction: column;
-		background-color: var(--color-white);
-		margin-top: auto;
-		padding-top: 15px;
-		padding-bottom: 15px;
-
-		&__manage {
-			display: flex;
-			justify-content: center;
-		}
-
-		&__button {
-			width: 100%;
-			min-width: 165px;
-			height: 40px;
-
-			&--connect {
-				&:not(:last-child) {
-					margin-bottom: var(--space-unrelated-items);
-				}
-			}
-
-			&--admin {
-				&:not(:last-child) {
-					margin-right: 17px;
-				}
-			}
-		}
+	@media (min-width: 768px) {
+		padding-bottom: 30px;
+		min-height: unset;
+		height: unset;
 	}
 }
 
@@ -367,16 +303,23 @@ patchDeleteEventModal({
 	&__container {
 		display: flex;
 		width: 100%;
-		min-height: 250px;
-		position: relative;
+		aspect-ratio: 2 / 1.43;
+		height: auto;
+		max-height: 450px;
 		line-height: 0;
 		background-color: var(--color-input-field);
 		margin-bottom: 12px;
 		border-radius: 8px;
 
-		&--background {
-			background: url('@/assets/img/event-preview@2x.png') center center no-repeat;
-			background-size: cover;
+		@media (min-width: 768px) {
+			aspect-ratio: 2 / 1;
+			max-height: 540px;
+			margin-bottom: 24px;
+		}
+
+		@media (min-width: 1440px) {
+			max-height: 580px;
+			margin-top: 10px;
 		}
 	}
 
@@ -384,12 +327,187 @@ patchDeleteEventModal({
 		width: 100%;
 		min-width: 100%;
 		max-width: 100%;
-		height: 250px;
-		position: absolute;
-		top: 0;
-		left: 0;
+		aspect-ratio: 2 / 1.43;
+		height: auto;
 		object-fit: cover;
 		border-radius: 8px;
+
+		@media (min-width: 768px) {
+			aspect-ratio: 2 / 1;
+		}
+	}
+}
+
+.event-info {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	min-height: 250px;
+	padding-inline: 0;
+
+	@media (min-width: 768px) {
+		flex-direction: row;
+	}
+
+	&__summary {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		flex-direction: column;
+
+		@media (min-width: 768px) {
+			width: 66%;
+		}
+	}
+
+	&__tag-wrapper {
+		display: flex;
+		width: 100%;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 12px;
+
+		@media (min-width: 768px) {
+			margin-bottom: 24px;
+		}
+	}
+
+	&__title-wrapper {
+		display: flex;
+		width: 100%;
+		flex-direction: column;
+		margin-bottom: var(--space-related-items);
+
+		@media (min-width: 768px) {
+			flex-direction: column-reverse;
+			margin-bottom: 24px;
+		}
+	}
+
+	&__author {
+		//TODO: пока верстка только мобилки
+		max-width: 480px;
+		word-wrap: break-word;
+		font-size: var(--font-size-XS);
+		font-weight: var(--font-weight-bold);
+		line-height: 16px;
+		text-align: left;
+		color: var(--color-text-secondary);
+		margin-bottom: 12px;
+
+		@media (min-width: 768px) {
+			margin-bottom: 0;
+		}
+	}
+
+	&__title {
+		//TODO: пока верстка только мобилки
+		max-width: 480px;
+		word-wrap: break-word;
+		font-size: var(--font-size-L);
+		font-weight: var(--font-weight-bold);
+		line-height: 24px;
+
+		@media (min-width: 768px) {
+			font-size: var(--font-size-XXL);
+			line-height: 36px;
+			margin-bottom: 12px;
+		}
+	}
+
+	&__details {
+		display: flex;
+		width: 100%;
+		flex-direction: column;
+		margin-bottom: var(--space-unrelated-items);
+
+		@media (min-width: 768px) {
+			width: max-content;
+			padding-top: 24px;
+			border-top: 1px solid var(--color-input-field);
+		}
+	}
+
+	&__datetime {
+		margin-bottom: var(--space-inner);
+	}
+
+	&__description-title {
+		@media (min-width: 768px) {
+			display: flex;
+			width: 100%;
+			font-size: var(--font-size-ML);
+			padding-top: 24px;
+			border-top: 1px solid var(--color-input-field);
+			margin-bottom: 24px;
+		}
+	}
+
+	&__description {
+		word-wrap: break-word;
+		white-space: pre-line;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+		font-size: var(--font-size-S);
+		line-height: 20px;
+		margin-bottom: 24px;
+	}
+
+	&__button-contact {
+		margin-top: auto;
+
+		@media (min-width: 768px) {
+			margin-top: 0;
+			max-width: 60%;
+		}
+
+		@media (min-width: 1440px) {
+			max-width: 43%;
+		}
+	}
+
+	&__actions {
+		display: flex;
+		width: 100%;
+		padding-top: 15px;
+
+		@media (min-width: 768px) {
+			width: 34%;
+			justify-content: flex-end;
+			padding-top: 50px;
+		}
+	}
+
+	&__manage {
+		display: flex;
+		width: 100%;
+		justify-content: center;
+
+		@media (min-width: 768px) {
+			flex-direction: column-reverse;
+			justify-content: flex-end;
+			align-items: flex-start;
+			padding-left: 30px;
+		}
+
+		@media (min-width: 1440px) {
+			flex-direction: row;
+		}
+	}
+
+	&__button-admin {
+		width: 100%;
+		min-width: 165px;
+		height: 40px;
+
+		@media (min-width: 768px) {
+			margin-bottom: 15px;
+		}
+
+		&:not(:last-child) {
+			margin-right: 17px;
+		}
 	}
 }
 </style>

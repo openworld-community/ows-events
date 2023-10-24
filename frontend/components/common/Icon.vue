@@ -1,5 +1,7 @@
 <script lang="ts">
 export type IconName =
+	| 'afisha-logo-light'
+	| 'afisha-logo-dark'
 	| 'arrow-right'
 	| 'back'
 	| 'button-plus'
@@ -23,7 +25,6 @@ export type IconName =
 	| 'logout'
 	| 'map-pin'
 	| 'notebook'
-	| 'peredelano-afisha'
 	| 'picture'
 	| 'plus'
 	| 'privacy'
@@ -41,6 +42,11 @@ export type IconName =
 	| 'social/twitter'
 	| 'social/linkedin'
 	| 'social/facebook'
+	| 'social/telegram-round'
+	| 'social/instagram-round'
+	| 'social/twitter-round'
+	| 'social/linkedin-round'
+	| 'social/facebook-round'
 	| 'currency/BTC'
 	| 'currency/ETH'
 	| 'currency/EUR'

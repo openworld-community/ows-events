@@ -107,6 +107,7 @@ export default {
 		image: {
 			event: 'Изображение мероприятия'
 		},
+		description_title: 'Описание мероприятия',
 		price: {
 			free: 'Бесплатно',
 			unknown: 'Цена не указана',
@@ -114,14 +115,21 @@ export default {
 			to: 'До'
 		}
 	},
+	footer: {
+		navigation: {
+			about: 'Об Афише',
+			support: 'Поддержка',
+			donate: 'Поддержать проект',
+			limitation_of_liability: 'Ограничение ответственности'
+		}
+	},
 	global: {
 		country: 'Страна',
 		city: 'Город',
-		search: 'Поиск',
 		timezone: 'Часовой пояс',
 		button: {
 			authorize: 'Авторизоваться',
-			add_to_favourites: 'Добавить в Избранное',
+			add_to_favourites: 'Добавить в избранное',
 			back: 'Назад',
 			cancel: 'Отмена',
 			close: 'Закрыть',
@@ -134,9 +142,10 @@ export default {
 			edit: 'Редактировать',
 			edit_profile: 'Редактировать профиль',
 			follow: 'Перейти',
+			in_favourites: 'В избранном',
 			logout: 'Выйти из аккаунта',
 			register: 'Зарегистрироваться',
-			remove_from_favourites: 'Удалить из Избранного',
+			remove_from_favourites: 'Удалить из избранного',
 			save: 'Сохранить',
 			search: 'Поиск',
 			share: 'Поделиться',
@@ -161,7 +170,7 @@ export default {
 		navigation: {
 			user: 'Пользователь',
 			authorize: 'Авторизоваться',
-			about: 'Oб Афише',
+			about: 'O проекте',
 			support: 'Поддержка',
 			donation: 'Поддержать проект',
 			limitation_of_liability: 'Ограничение ответственности',
@@ -170,8 +179,7 @@ export default {
 		subscription_expired: '$t(dates.day.key) до конца подписки',
 	},
 	home: {
-		hidden_title: 'Поиск мероприятий',
-		title: 'Мероприятия',
+		title: 'Объединяем людей вокруг событий',
 		button: {
 			add_event_aria: 'Добавить мероприятие'
 		},
@@ -185,7 +193,8 @@ export default {
 		},
 		filter: {
 			aria_country: 'Фильтр по стране',
-			aria_city: 'Фильтр по городу'
+			aria_city: 'Фильтр по городу',
+			search: 'Что вас интересует?',
 		},
 		user_location: {
 			not_found: 'Мы не смогли найти вас'
@@ -282,7 +291,8 @@ export default {
 	},
 	user: {
 		unauthorized: {
-			title: 'Авторизуйтесь, чтобы получить доступ к дополнительным возможностям',
+			title: 'Войдите в личный кабинет',
+			text: 'Авторизуйтесь, чтобы получить доступ к дополнительным возможностям',
 			continue: 'Продолжить без авторизации',
 		},
 		greeting: 'Привет',
@@ -296,7 +306,8 @@ export default {
 			no_favourites: 'Вы еще ничего не добавили в “Избранное”',
 		},
 		donate: {
-			text: 'Станьте частью нашего проекта!',
+			title: 'Станьте частью нашего проекта!',
+			text: 'Мы приглашаем вас вступить в нашу творческую семью и вместе создавать нечто особенное',
 			button: 'Внести вклад'
 		}
 	}

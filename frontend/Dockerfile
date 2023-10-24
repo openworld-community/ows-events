@@ -6,9 +6,9 @@ COPY ./common ../common/
 COPY ./frontend/package-lock.json ./
 COPY ./frontend/package.json ./
 
-RUN npm ci
-
 COPY ./frontend/ ./
+
+RUN npm ci
 
 ARG NODE_ENV
 ARG VITE_API_URL

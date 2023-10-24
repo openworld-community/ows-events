@@ -22,17 +22,13 @@ import { delocalizeObject } from '../../../utils/localization/delocalizeObject';
 
 export const addEvent: IAddEventHandler = async (request) => {
 	const { event } = request.body;
-	if (vars.env !== 'dev') {
-		const token = request.headers.authorization;
-		if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
+	const token = request.headers.authorization;
+	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-		const jwtData = jwt.verify(token, vars.secret) as ITokenData;
-		if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
+	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
-		event.creatorId = jwtData.id;
-	} else {
-		event.creatorId = 'dev-user';
-	}
+	event.creatorId = jwtData.id;
 
 	if (event.creatorId === 'parser') {
 		event.type = EventTypes.PARSED;
@@ -92,36 +88,32 @@ export const getEvent: IGetEventHandler = async (request) => {
 };
 
 export const deleteEvent: IDeleteEventHandler = async (request) => {
-	if (vars.env !== 'dev') {
-		const token = request.headers.authorization;
-		if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
+	const token = request.headers.authorization;
+	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-		const jwtData = jwt.verify(token, vars.secret) as ITokenData;
-		if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
+	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
-		const oldEvent = await eventsStateController.getEvent(request.body.id);
-		const isAuthor = oldEvent?.creatorId === String(jwtData.id);
-		if (!isAuthor) throw new Error(CommonErrorsEnum.FORBIDDEN);
-	}
+	const oldEvent = await eventsStateController.getEvent(request.body.id);
+	const isAuthor = oldEvent?.creatorId === String(jwtData.id);
+	if (!isAuthor) throw new Error(CommonErrorsEnum.FORBIDDEN);
 
 	await eventsStateController.deleteEvent(request.body.id);
 	return undefined;
 };
 
 export const updateEvent: IUpdateEventHandler = async (request) => {
-	if (vars.env !== 'dev') {
-		const token = request.headers.authorization;
-		if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
+	const token = request.headers.authorization;
+	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-		const jwtData = jwt.verify(token, vars.secret) as ITokenData;
-		if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
+	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
-		const oldEvent = await eventsStateController.getEvent(request.body.event.id);
-		const isAuthor = oldEvent?.creatorId === String(jwtData.id);
-		if (!isAuthor) throw new Error(CommonErrorsEnum.FORBIDDEN);
-		const isEventInPast = oldEvent?.date < Date.now();
-		if (isEventInPast) throw new Error(CommonErrorsEnum.FORBIDDEN);
-	}
+	const oldEvent = await eventsStateController.getEvent(request.body.event.id);
+	const isAuthor = oldEvent?.creatorId === String(jwtData.id);
+	if (!isAuthor) throw new Error(CommonErrorsEnum.FORBIDDEN);
+	const isEventInPast = oldEvent?.date < Date.now();
+	if (isEventInPast) throw new Error(CommonErrorsEnum.FORBIDDEN);
 
 	await eventsStateController.updateEvent(request.body.event);
 	return undefined;

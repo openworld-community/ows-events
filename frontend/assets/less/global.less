@@ -20,8 +20,8 @@ body {
   width: 100%;
   min-width: var(--width-mobile);
   min-height: 100%;
-  //TODO: пока верстка только мобилки
-  max-width: 480px;
+  ////TODO: пока верстка только мобилки
+  //max-width: 480px;
   display: flex;
   font-family: var(--font-family-main);
   font-size: var(--font-size-M);
@@ -47,10 +47,23 @@ body {
   }
 }
 
-#__nuxt {
+#__nuxt,
+.root {
+  display: flex;
+  flex-direction: column;
   min-width: 100%;
   min-height: 100%;
 }
+
+main {
+  padding-top: var(--header-height);
+
+  @media (min-width: 768px) {
+    height: 100%;
+    padding-top: 30px;
+  }
+}
+
 
 a {
   cursor: pointer;

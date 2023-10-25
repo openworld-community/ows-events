@@ -32,21 +32,25 @@
 
 
   @media (min-width: 768px) {
-    --font-size-M: 16px;
-    --font-size-S: 14px;
+    --font-size-XXS: 10px;
     --font-size-XS: 12px;
+    --font-size-S: 14px;
+    --font-size-M: 16px;
     --font-size-L: 18px;
+    --font-size-ML: 20px;
     --font-size-XL: 24px;
     --font-size-XXL: 32px;
   }
 
   @media (min-width: 1440px) {
-    --font-size-M: 16px;
-    --font-size-S: 14px;
-    --font-size-XS: 12px;
-    --font-size-L: 18px;
-    --font-size-XL: 24px;
-    --font-size-XXL: 32px;
+    --font-size-XXS: 12px;
+    --font-size-XS: 14px;
+    --font-size-S: 16px;
+    --font-size-M: 18px;
+    --font-size-L: 20px;
+    --font-size-ML: 24px;
+    --font-size-XL: 28px;
+    --font-size-XXL: 34px;
   }
 
   //Margins
@@ -56,16 +60,36 @@
   --space-subsections: 24px;
   --space-sections: 32px;
 
+  @media (min-width: 768px) {
+    --space-inner: 8px;
+    --space-related-items: 16px;
+    --space-unrelated-items: 24px;
+    --space-subsections: 32px;
+    //--space-sections: 40px;
+  }
+
+  @media (min-width: 1440px) {
+    --space-inner: 10px;
+    --space-related-items: 20px;
+    --space-unrelated-items: 30px;
+    --space-subsections: 40px;
+    //--space-sections: 50px;
+  }
+
   //BODY PADDINGS
   --padding-side: 12px;
   --padding-vertical: 16px;
   --header-height: 52px;
 
-  //@media (min-width: 768px) {
-  //    --padding-side: 30px;
-  //}
-  //
-  //@media (min-width: 1440px) {
-  //    --padding-side: 110px;
-  //}
+  @media (min-width: 768px) {
+    --padding-side: 40px;
+    --padding-vertical: 50px;
+    --header-height: 72px;
+  }
+
+  @media (min-width: 1440px) {
+    --padding-side: 100px;
+    --padding-vertical: 100px;
+    --header-height: 72px;
+  }
 }

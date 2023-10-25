@@ -1,14 +1,11 @@
-import type { IDelocalizedObject, ILocalizedObject } from './localization';
 import type { Timezone } from './location';
-import { SupportedLanguages } from '../const';
 import { EventTypes } from '../const/eventTypes';
 
 export type EventDbEntity = {
 	id: string;
 	creatorId?: string;
 	title: string;
-	originDescriptionLanguage?: SupportedLanguages | 'undefined';
-	description: ILocalizedObject;
+	description: string;
 	date: number;
 	durationInSeconds: number;
 	location: {
@@ -25,7 +22,7 @@ export type EventDbEntity = {
 	type: EventTypes;
 };
 
-export type EventOnPoster = IDelocalizedObject<EventDbEntity>;
+export type EventOnPoster = EventDbEntity;
 
 export type PostEventPayload = {
 	event: {

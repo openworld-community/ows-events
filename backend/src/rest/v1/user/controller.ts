@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import { EventDbEntity } from '@common/types/event';
-import { CommonErrorsEnum, SupportedLanguages } from '../../../../../common/const';
+import { CommonErrorsEnum } from '../../../../../common/const';
 
 import {
 	IAddFavoriteEventHandler,
@@ -15,7 +14,6 @@ import {
 import { userController } from '../../../controllers/user-controller';
 import { vars } from '../../../config/vars';
 import { ITokenData } from '../../types';
-import { delocalizeObject } from '../../../utils/localization/delocalizeObject';
 
 export const getTGInfoByToken: IGetTGInfoHandler = async (request) => {
 	const res = await userController.getUserTGInfoByToken(request.query.token);
@@ -65,14 +63,8 @@ export const getFavoriteEvents: IGetFavoriteEventsHandler = async (request) => {
 	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
 	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
-	const language =
-		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.RUSSIAN;
-
 	const favoriteEvents = await userController.getFavorites(token);
-	const localizedEvents = favoriteEvents.map((event) =>
-		delocalizeObject<EventDbEntity>(event, language)
-	);
-	return localizedEvents;
+	return favoriteEvents;
 };
 
 export const getFavoriteEventsId: IGetFavoriteEventsIdHandler = async (request) => {

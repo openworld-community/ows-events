@@ -41,7 +41,7 @@ const component = computed(() => {
 </script>
 
 <template>
-	<li :class="['sidebar-item', {'sidebar-item--current': current}]">
+	<li :class="['sidebar-item', { 'sidebar-item--current': current }]">
 		<component
 			:is="component"
 			:to="linkTo ?? null"
@@ -81,7 +81,8 @@ const component = computed(() => {
 		border-bottom-left-radius: 6px;
 	}
 
-	&:hover, &focus {
+	&:hover,
+	&focus {
 		background-color: var(--color-background-secondary);
 	}
 
@@ -94,7 +95,8 @@ const component = computed(() => {
 		cursor: default;
 		pointer-events: none;
 
-		& > a > span, & > button > span {
+		& > a > span,
+		& > button > span {
 			text-decoration: underline;
 		}
 	}
@@ -120,6 +122,10 @@ const component = computed(() => {
 	&__text {
 		margin-right: 10px;
 		line-height: 20px;
+
+		@media (min-width: 768px) {
+			font-size: var(--font-size-S);
+		}
 	}
 
 	&__icon {

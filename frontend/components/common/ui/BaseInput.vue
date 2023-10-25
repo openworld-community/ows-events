@@ -2,8 +2,6 @@
 import { type PropType } from 'vue';
 import type { IconName } from '../Icon.vue';
 
-defineOptions({ inheritAttrs: false });
-
 defineProps({
 	className: {
 		type: String,
@@ -16,6 +14,10 @@ defineProps({
 	name: {
 		type: String,
 		required: true
+	},
+	appearance: {
+		type: String as PropType<'border' | 'no-border'>,
+		default: 'border'
 	},
 	type: {
 		type: String as PropType<'text' | 'date' | 'time' | 'number' | 'textarea' | 'datalist'>,
@@ -96,12 +98,12 @@ const onRemove = () => {
 		<input
 			:class="[
 				'input__field',
+				{ 'input__field--no-border': appearance === 'no-border' },
 				{ 'input__field--cursor-pointer': inputReadonly && !modelValue },
 				{ 'input__field--without-cursor': inputReadonly && modelValue },
 				{ 'input__field--shifted': hasValueIcon && modelValue },
 				{ form__error: error }
 			]"
-			v-bind="$attrs"
 			:name="name"
 			:type="type"
 			:value="modelValue"
@@ -119,7 +121,7 @@ const onRemove = () => {
 		<CommonIcon
 			v-if="iconName && !modelValue"
 			:name="iconName"
-			:class="['input__button', {'input__button--disabled': disabled}]"
+			:class="['input__button', { 'input__button--disabled': disabled }]"
 			color="var(--color-input-icons)"
 		/>
 
@@ -129,7 +131,7 @@ const onRemove = () => {
 			is-icon
 			:has-states="false"
 			:icon-name="buttonName"
-			:class="['input__button', {'input__button--disabled': disabled}]"
+			:class="['input__button', { 'input__button--disabled': disabled }]"
 		/>
 
 		<!-- кнопка очистки инпута-->

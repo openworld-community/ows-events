@@ -12,6 +12,7 @@ locationStore.getUserLocation();
 	>
 		<CommonIcon
 			class="user-location__pin"
+			color="var(--color-white)"
 			name="map-pin"
 		/>
 		<p
@@ -37,17 +38,14 @@ locationStore.getUserLocation();
 
 <style lang="less" scoped>
 .user-location {
-	&__container {
-		display: flex;
-	}
 
 	&__pin {
-		color: var(--color-accent-green-main);
-		margin-right: 13px;
+		margin-right: 8px;
 	}
 
 	&__text {
-		font-size: var(--font-size-XS);
+		font-size: var(--font-size-M);
+		color: var(--color-white);
 	}
 }
 </style>

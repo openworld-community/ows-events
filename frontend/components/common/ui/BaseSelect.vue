@@ -19,6 +19,10 @@ const props = defineProps({
 		type: String,
 		required: true
 	},
+	appearance: {
+		type: String as PropType<'border' | 'no-border'>,
+		default: 'border'
+	},
 	placeholder: {
 		type: String,
 		default: ''
@@ -96,6 +100,7 @@ const filteredList = computed(() =>
 			:required="required"
 			:input-readonly="inputReadonly"
 			icon-name="container"
+			:appearance="appearance"
 			:has-value-icon="hasIconItems && Array.from(list).includes(modelValue)"
 			:aria-expanded="isOpen"
 			@update:model-value="emit('update:model-value', $event)"
@@ -138,16 +143,16 @@ const filteredList = computed(() =>
 
 	&__list-box {
 		position: absolute;
-		top: 50px;
+		top: calc(100% + 5px);
 		max-width: 100%;
 		min-width: 267px;
 		height: 202px;
-		padding: 14px 16px;
+		padding: 14px 0;
 		background-color: var(--color-white);
+		box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
 		max-height: 200px;
 		z-index: 99;
 		border-radius: 8px;
-		border: 1px solid #ccc;
 
 		&--left {
 			left: 0;
@@ -165,29 +170,30 @@ const filteredList = computed(() =>
 		overflow-x: hidden;
 
 		& li {
-			transition: background-color 200ms;
+			padding-left: 16px;
 			cursor: pointer;
-			border-radius: 5px;
 			max-width: 100%;
 
+			transition: background-color 0.3s ease;
+
 			&:hover {
-				background-color: var(--color-background-secondary);
+				background-color: var(--color-accent-green-main-40);
 			}
 		}
 	}
 
 	&__list::-webkit-scrollbar {
-		width: 5px;
+		width: 1px;
 		background-color: var(--color-white);
 		border-radius: 5px;
 		height: 200px;
 	}
 
 	&__list::-webkit-scrollbar-thumb {
-		width: 5px;
+		width: 1px;
+		height: 20px;
 		background: var(--color-input-field);
 		border-radius: 5px;
-		height: 20px;
 	}
 
 	&__list::-webkit-scrollbar-track {

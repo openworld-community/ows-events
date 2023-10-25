@@ -11,7 +11,7 @@ export const translate = async (string: string, lang: string): Promise<string> =
 	try {
 		const req = await axios({
 			method: 'GET',
-			url: `http://94.241.173.117:5000/translated_text`,
+			url: `${vars.localization.url}/translated_text`,
 			params: queryParams,
 			headers: {
 				Authorization: vars.apiKeys.localization
@@ -31,7 +31,7 @@ export const getLanguage = async (string: string): Promise<SupportedLanguages | 
 	formData.append('text', string);
 	const req = await axios({
 		method: 'POST',
-		url: `http://94.241.173.117:5000/get_language`,
+		url: `${vars.localization.url}/get_language`,
 		headers: {
 			Authorization: vars.apiKeys.localization
 		},

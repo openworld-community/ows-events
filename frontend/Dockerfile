@@ -1,4 +1,4 @@
-FROM node:16.15.1-alpine AS builder
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
@@ -6,7 +6,7 @@ COPY ./common ../common/
 COPY ./frontend/package-lock.json ./
 COPY ./frontend/package.json ./
 
-RUN npm install
+RUN npm ci
 
 COPY ./frontend/ ./
 
@@ -32,7 +32,7 @@ ENV VITE_DOMAIN ${VITE_DOMAIN}
 
 RUN npm run build-demo
 
-FROM node:16.15.1-alpine
+FROM node:18-alpine
 
 WORKDIR /app
 

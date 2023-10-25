@@ -101,11 +101,20 @@ export default {
 		image: {
 			event: 'Event image'
 		},
+		description_title: 'Event description',
 		price: {
 			free: 'Free',
 			unknown: 'Price not specified',
 			from: 'From',
 			to: 'To'
+		}
+	},
+	footer: {
+		navigation: {
+			about: 'About Us',
+			support: 'Support',
+			donate: 'Support the Project',
+			limitation_of_liability: 'Limitation of Liability'
 		}
 	},
 	form: {
@@ -145,7 +154,6 @@ export default {
 	global: {
 		country: 'Country',
 		city: 'City',
-		search: 'Search',
 		timezone: 'Timezone',
 		button: {
 			authorize: 'Authorize',
@@ -162,6 +170,7 @@ export default {
 			edit: 'Edit',
 			edit_profile: 'Edit profile',
 			follow: 'Follow',
+			in_favourites: 'In Favourites',
 			logout: 'Logout',
 			register: 'Register',
 			remove_from_favourites: 'Remove from Favorites',
@@ -189,7 +198,7 @@ export default {
 		navigation: {
 			user: 'User',
 			authorize: 'Authorize',
-			about: 'About Afisha',
+			about: 'About us',
 			support: 'Support',
 			donation: 'Support the Project',
 			limitation_of_liability: 'Limitation of Liability',
@@ -197,8 +206,7 @@ export default {
 		subscription_expired: '$t(dates.day.key) until the end of subscription',
 	},
 	home: {
-		hidden_title: 'Search for Events',
-		title: 'Events',
+		title: 'Bringing people together around events',
 		button: {
 			add_event_aria: 'Add an event'
 		},
@@ -212,7 +220,8 @@ export default {
 		},
 		filter: {
 			aria_country: 'Filter by country',
-			aria_city: 'Filter by city'
+			aria_city: 'Filter by city',
+			search: 'What are you interested in?',
 		},
 		user_location: {
 			not_found: 'We couldn\'t find your location'
@@ -280,7 +289,8 @@ export default {
 	},
 	user: {
 		unauthorized: {
-			title: 'Please log in to access additional features',
+			title: 'Log into your account',
+			text: 'Please log in to access additional features',
 			continue: 'Continue without authorization',
 		},
 		greeting: 'Hello',
@@ -294,7 +304,8 @@ export default {
 			no_favourites: 'You haven\'t added anything to your "Favourites" yet',
 		},
 		donate: {
-			text: 'Become a part of our project!',
+			title: 'Become a part of our project!',
+			text: 'We invite you to join our creative family and create something special together',
 			button: 'Make a contribution'
 		}
 	}

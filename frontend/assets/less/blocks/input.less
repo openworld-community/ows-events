@@ -75,6 +75,14 @@
       z-index: 1;
     }
 
+    &--no-border {
+      border-color: var(--color-white);
+
+      &:disabled {
+        border-color: var(--color-white);
+      }
+    }
+
     &--textarea {
       appearance: none;
       width: 100%;
@@ -93,6 +101,10 @@
 
       &::-webkit-resizer {
         display: none;
+      }
+
+      @media (min-width: 768px) {
+        min-height: 140px;
       }
     }
   }

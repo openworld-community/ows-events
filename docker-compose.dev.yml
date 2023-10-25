@@ -36,10 +36,8 @@ services:
         logging: *default-logging
         depends_on:
             - mongo
-            - localization
         links:
             - mongo
-            - localization
         environment:
             - MODE=dev
             - FRONTEND_URL=http://127.0.0.1
@@ -61,40 +59,3 @@ services:
             - '27020:27017'
         volumes:
             - /tmp/ows-events/db:/data/db
-
-    pgdatabase:
-        image: postgres:13
-        environment:
-            - POSTGRES_USER=root
-            - POSTGRES_PASSWORD=root
-            - POSTGRES_DB=data
-        ports:
-            - 5433:5432
-        volumes:
-            - ./localization/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
-
-    localization:
-        build:
-            context: ./localization
-        container_name: ows-events-localization
-        command: python /app/start.py
-        restart: always
-        depends_on:
-            - pgdatabase
-        links:
-            - pgdatabase
-        ports:
-            - 5000:5000
-        environment:
-            - USER=root
-            - PASSWORD=root
-            - HOST=pgdatabase
-            - PORT=5432
-            - DB=data
-            - AUTH=123
-            - OPENAI_API_KEY=qwe
-            - SECRET_KEY=123
-        volumes:
-            - ./localization/root/:/app/root/
-            - ./localization/start.py:/app/start.py
-            - ./localization/store/:/app/store/

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { SeoItempropGlobalEnum } from '~/constants/enums/seo';
 import { RoutePathEnum } from '~/constants/enums/route';
-import { useFileSystemAccess } from '@vueuse/core';
 import donateImgDesktop2x from '@/assets/img/user/donate/donate-screen-desktop@2x.png';
 import donateImg2x from '@/assets/img/user/donate/donate-screen@2x.jpg';
 import donateImgDesktop1x from '@/assets/img/user/donate/donate-screen-desktop@1x.png';

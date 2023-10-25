@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { RoutePathEnum } from '@/constants/enums/route';
 import { SUPPORT_TG_URL } from '../../../constants/url';
-import { SeoItemTypeEnum } from '../../../constants/enums/seo';
 import { useUserStore } from '../../../stores/user.store';
 import { RouteNameEnum } from '../../../constants/enums/route';
 
@@ -12,11 +11,9 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-	<nav
+	<div
 		class="navigation"
 		role="navigation"
-		itemscope
-		:itemtype="SeoItemTypeEnum.NAV"
 	>
 		<ul>
 			<HeaderSidebarItem
@@ -87,7 +84,7 @@ const localePath = useLocalePath();
 		<!--              :alt="translate('global.button.share')"-->
 		<!--            />-->
 		<!--          </div>-->
-	</nav>
+	</div>
 </template>
 
 <style scoped lang="less">
@@ -97,7 +94,7 @@ const localePath = useLocalePath();
 	flex-direction: column;
 	align-items: flex-end;
 	position: absolute;
-	top: -9px;
+	top: -10px;
 	right: 0;
 	background-color: var(--color-white);
 	box-shadow: var(--shadow-sidebar);

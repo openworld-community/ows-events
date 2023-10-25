@@ -6,7 +6,16 @@ import { searchForWorkspaceRoot } from 'vite'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	modules: ['@nuxtjs/i18n', '@pinia/nuxt', '@vueuse/nuxt', '@nuxtjs/plausible'],
+	modules: ['@nuxtjs/i18n', '@pinia/nuxt', '@vueuse/nuxt', '@nuxtjs/plausible', [
+		'nuxt-viewport', {
+				breakpoints: {
+					mobile: 375,
+					tablet: 768,
+					desktop: 1440,
+				},
+			}
+		],
+	],
 	routeRules: {
 		'/': {redirect: '/ru'}
 	},
@@ -61,7 +70,7 @@ export default defineNuxtConfig({
 			hmr: {
 				// нужно пока комментить, если фронт не через докер
 				protocol: 'ws',
-				clientPort: 24678
+				clientPort: 80
 			},
 			fs: {
 				allow: [

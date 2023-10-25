@@ -39,6 +39,7 @@ const localePath = useLocalePath();
 			/>
 		</div>
 		<div class="card__description description">
+			<div class="description__info">
 			<h2
 				class="description__title"
 				:itemprop="SeoItempropEventEnum.NAME"
@@ -51,6 +52,7 @@ const localePath = useLocalePath();
 			>
 				{{ convertToLocaleString(eventData.date) }}
 			</p>
+			</div>
 			<CommonTag
 				:price="eventData.price"
 				size="small"
@@ -66,8 +68,12 @@ const localePath = useLocalePath();
 	background-color: var(--color-background-secondary);
 	border: 1px solid var(--color-background-secondary);
 	border-radius: 8px;
-	padding: var(--space-related-items);
-	margin-bottom: var(--padding-side);
+	padding: 8px;
+	margin-bottom: 12px;
+
+	@media(min-width: 768px) {
+		padding: 16px 12px;
+	}
 
 	transition-property: background-color, border-color;
 	transition-duration: 0.3s;
@@ -95,11 +101,29 @@ const localePath = useLocalePath();
 		background-size: cover;
 		border-radius: 4px;
 		line-height: 0;
-		margin-right: var(--space-related-items);
+		margin-right: 8px;
+
+		@media(min-width: 768px) {
+			width: 248px;
+			height: 108px;
+			margin-right: 12px;
+		}
 
 		&--background {
-			background: url('@/assets/img/event-small-preview@2x.png') center center no-repeat;
+			background-image: url('@/assets/img/event/event-small-preview-mobile@1x.png');
 			background-size: cover;
+
+			@media(min-width: 768px) {
+				background-image: url('@/assets/img/event/event-small-preview-desktop@1x.png');
+			}
+
+			@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+				background-image: url('@/assets/img/event/event-small-preview-mobile@2x.png');
+
+				@media(min-width: 768px) {
+					background-image: url('@/assets/img/event/event-small-preview-desktop@2x.png');
+				}
+			}
 		}
 	}
 
@@ -118,6 +142,17 @@ const localePath = useLocalePath();
 	flex-direction: column;
 	overflow: hidden;
 
+	@media(min-width: 768px) {
+		justify-content: space-between;
+	}
+
+	&__info {
+		display: flex;
+		width: 100%;
+		flex-direction: column;
+		margin-bottom: 8px;
+	}
+
 	&__title {
 		display: inline-block;
 		font-size: var(--font-size-S);
@@ -125,13 +160,22 @@ const localePath = useLocalePath();
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		margin-bottom: var(--space-related-items);
+		margin-bottom: 8px;
+
+		@media(min-width: 768px) {
+			font-size: 14px;
+			line-height: 20px;
+			margin-bottom: 12px;
+		}
 	}
 
 	&__date {
 		font-size: var(--font-size-XS);
 		line-height: 16px;
-		margin-bottom: var(--space-related-items);
+
+		@media(min-width: 768px) {
+			font-size: 12px;
+		}
 	}
 }
 </style>

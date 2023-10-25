@@ -15,6 +15,8 @@ type Props = {
 const props = defineProps<Props>();
 const locationStore = useLocationStore();
 const userStore = useUserStore();
+const { locale } = useI18n();
+const desktop = inject('desktop');
 
 const closeModal = () => {
 	setTimeout(() => props.closeEventModal(), 300);
@@ -145,7 +147,7 @@ const submitEvent = async () => {
 		const { data } = await apiRouter.events.add.useMutation({ data: { event } });
 
 		if (data.value) {
-			await navigateTo(`/event/${data.value.id}`);
+			await navigateTo(`${locale.value}/event/${data.value.id}`);
 		} else {
 			isLoading.value = false;
 			return;
@@ -190,7 +192,10 @@ watch(
 watch(
 	() => [inputValues.value.location.country, inputValues.value.location.city],
 	async ([country, city]) => {
-		if (!country) return;
+		if (!country) {
+			inputValues.value.location.address = '';
+			return;
+		}
 		inputValues.value.timezone = await getTimezone(country, city);
 	}
 );
@@ -238,36 +243,40 @@ watch(
 		"
 	>
 		<template #form>
-			<ModalUiModalSection :label="$t('modal.new_event_modal.fields.location')">
+			<ModalUiModalSection
+				:label="$t('modal.new_event_modal.fields.location')"
+				:type="desktop ? 'column-row' : 'column'"
+			>
 				<template #child>
-					<CommonUiBaseSelect
-						v-model="inputValues.location.country"
-						name="country"
-						:placeholder="$t('global.country')"
-						:list="locationStore.countries"
-						input-readonly
-						required
-					/>
+					<div>
+						<CommonUiBaseSelect
+							v-model="inputValues.location.country"
+							name="country"
+							:placeholder="$t('global.country')"
+							:list="locationStore.countries"
+							input-readonly
+							required
+						/>
 
-					<CommonUiBaseSelect
-						v-model="inputValues.location.city"
-						name="city"
-						:disabled="!inputValues.location.country"
-						:placeholder="$t('global.city')"
-						:list="locationStore.getCitiesByCountry(inputValues.location.country)"
-						input-readonly
-						required
-					/>
+						<CommonUiBaseSelect
+							v-model="inputValues.location.city"
+							name="city"
+							:disabled="!inputValues.location.country"
+							:placeholder="$t('global.city')"
+							:list="locationStore.getCitiesByCountry(inputValues.location.country)"
+							input-readonly
+							required
+						/>
 
-					<CommonUiBaseSelect
-						v-model="inputValues.timezone"
-						name="timezone"
-						:disabled="!inputValues.location.country"
-						:placeholder="$t('global.timezone')"
-						:list="allTimezones"
-						required
-					/>
-
+						<CommonUiBaseSelect
+							v-model="inputValues.timezone"
+							name="timezone"
+							:disabled="!inputValues.location.country"
+							:placeholder="$t('global.timezone')"
+							:list="allTimezones"
+							required
+						/>
+					</div>
 					<CommonUiBaseInput
 						v-model="inputValues.location.address"
 						name="address"

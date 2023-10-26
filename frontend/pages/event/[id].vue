@@ -56,7 +56,7 @@ const deleteCard = async () => {
 	if (error.value) return;
 
 	await closeDeleteEventModal();
-	navigateTo({ path: RoutePathEnum.HOME });
+	navigateTo(localePath({ path: RoutePathEnum.USER_PAGE }));
 };
 
 // TODO подключить, когда вернемся к проработке регистрации

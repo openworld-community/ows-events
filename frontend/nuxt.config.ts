@@ -2,22 +2,28 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import path from 'path';
 import { fileURLToPath, URL } from 'node:url';
-import { searchForWorkspaceRoot } from 'vite'
+import { searchForWorkspaceRoot } from 'vite';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	modules: ['@nuxtjs/i18n', '@pinia/nuxt', '@vueuse/nuxt', '@nuxtjs/plausible', [
-		'nuxt-viewport', {
+	modules: [
+		'@nuxtjs/i18n',
+		'@pinia/nuxt',
+		'@vueuse/nuxt',
+		'@nuxtjs/plausible',
+		[
+			'nuxt-viewport',
+			{
 				breakpoints: {
 					mobile: 375,
 					tablet: 768,
-					desktop: 1440,
-				},
+					desktop: 1440
+				}
 			}
-		],
+		]
 	],
 	routeRules: {
-		'/': {redirect: '/ru'}
+		'/': { redirect: '/ru', ssr: true }
 	},
 	i18n: {
 		// debug: true,
@@ -66,17 +72,15 @@ export default defineNuxtConfig({
 	vite: {
 		server: {
 			watch: {
-				usePolling: true},
+				usePolling: true
+			},
 			hmr: {
 				// нужно пока комментить, если фронт не через докер
 				protocol: 'ws',
 				clientPort: 80
 			},
 			fs: {
-				allow: [
-					searchForWorkspaceRoot(process.cwd()),
-					'/app/common'
-				]
+				allow: [searchForWorkspaceRoot(process.cwd()), '/app/common']
 			}
 		},
 		plugins: [

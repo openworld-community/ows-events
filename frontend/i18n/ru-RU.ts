@@ -170,7 +170,7 @@ export default {
 		navigation: {
 			user: 'Пользователь',
 			authorize: 'Авторизоваться',
-			about: 'O проекте',
+			about: 'Об Афише',
 			support: 'Поддержка',
 			donation: 'Помочь Afisha',
 			limitation_of_liability: 'Ограничение ответственности',

@@ -12,7 +12,6 @@ getMeta({
 });
 
 const userStore = useUserStore();
-// const mobile = inject('mobile');
 
 const {
 	open: openEventModal,

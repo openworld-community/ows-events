@@ -35,6 +35,10 @@ services:
                       - node_modules/
                 - path: ./frontend/package.json
                   action: rebuild
+                - path: ./frontend/package-lock.json
+                  action: rebuild
+                - path: ./frontend/Dockerfile
+                  action: rebuild
 
     backend:
         build:

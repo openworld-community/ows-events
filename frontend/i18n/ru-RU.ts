@@ -172,7 +172,7 @@ export default {
 			authorize: 'Авторизоваться',
 			about: 'O проекте',
 			support: 'Поддержка',
-			donation: 'Поддержать проект',
+			donation: 'Помочь Afisha',
 			limitation_of_liability: 'Ограничение ответственности',
 
 		},

@@ -166,7 +166,7 @@ export default {
 			authorize: 'Authorize',
 			about: 'About us',
 			support: 'Support',
-			donation: 'Support the Project',
+			donation: 'Help Afisha',
 			limitation_of_liability: 'Limitation of Liability',
 		},
 		subscription_expired: '$t(dates.day.key) until the end of subscription',

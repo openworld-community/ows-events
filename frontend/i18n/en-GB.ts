@@ -113,7 +113,7 @@ export default {
 		navigation: {
 			about: 'About Us',
 			support: 'Support',
-			donate: 'Support the Project',
+			donate: 'Help Afisha',
 			limitation_of_liability: 'Limitation of Liability'
 		}
 	},

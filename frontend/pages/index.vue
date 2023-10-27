@@ -12,7 +12,6 @@ getMeta({
 });
 
 const userStore = useUserStore();
-const mobile = inject('mobile');
 
 const {
 	open: openEventModal,
@@ -58,10 +57,10 @@ const onButtonClick = () => {
 		<main class="main-page">
 			<div class="main-page__top">
 				<h1 class="main-page__title">{{ $t('home.title') }}</h1>
-				<HomeUserLocation
+				<!-- <HomeUserLocation
 					v-if="mobile"
 					class="main-page__location"
-				/>
+				/> -->
 				<HomeFilter
 					v-model:search="eventsQuery.searchLine"
 					v-model:country="eventsQuery.country"

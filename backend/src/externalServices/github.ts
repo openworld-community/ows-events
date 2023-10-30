@@ -7,9 +7,10 @@ import { sleep } from '../utils/sleep';
 import { EventModel } from '../models/event.model';
 import { countriesAndCitiesController } from '../controllers/countries-and-cities.controller';
 import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
+import { vars } from '../config/vars';
 
 const octokit = new Octokit({
-	auth: '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'
+	auth: vars.apiKeys.github.parsing
 });
 
 export const parseGithub = () => {

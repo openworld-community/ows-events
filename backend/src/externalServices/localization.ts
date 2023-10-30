@@ -5,13 +5,13 @@ import { sleep } from '../utils/sleep';
 
 export const translate = async (string: string, lang: string): Promise<string> => {
 	const queryParams = new URLSearchParams({
-		text: string.trim(),
+		text: string,
 		tl: lang
 	});
 	try {
 		const req = await axios({
 			method: 'GET',
-			url: `http://94.241.173.117:5000/translated_text`,
+			url: `${vars.localization.url}/translated_text`,
 			params: queryParams,
 			headers: {
 				Authorization: vars.apiKeys.localization
@@ -19,6 +19,7 @@ export const translate = async (string: string, lang: string): Promise<string> =
 		});
 		return req.data;
 	} catch (e) {
+		console.error(e);
 		await sleep(100);
 		return await translate(string, lang);
 	}
@@ -30,7 +31,7 @@ export const getLanguage = async (string: string): Promise<SupportedLanguages | 
 	formData.append('text', string);
 	const req = await axios({
 		method: 'POST',
-		url: `http://94.241.173.117:5000/get_language`,
+		url: `${vars.localization.url}/get_language`,
 		headers: {
 			Authorization: vars.apiKeys.localization
 		},

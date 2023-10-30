@@ -22,10 +22,10 @@ export default {
 		team: 'We are a team of enthusiasts committed to making the world more interesting and socially active. Our developers, designers, and managers work to ensure that your app experience is unforgettable.',
 		values: {
 			title: 'Our values that guide our work:',
-			openness: 'Openness: We believe in the power of communication and openness.',
-			innovation: 'Innovation: We constantly seek ways to make our app better.',
-			community: 'Community: We strive to create a space where everyone feels welcome.',
-			accessibility: 'Accessibility: We make cultural events accessible to all.',
+			openness: 'Openness: We believe in the power of communication and openness;',
+			innovation: 'Innovation: We constantly seek ways to make our app better;',
+			community: 'Community: We strive to create a space where everyone feels welcome;',
+			accessibility: 'Accessibility: We make cultural events accessible to all;',
 			quality: 'Quality: We maintain high quality, whether for large platforms or small initiatives.'
 		},
 		github: 'Link to the Project\'s GitHub',
@@ -46,7 +46,7 @@ export default {
 		title: 'Become a Part of Our Project!',
 		description: 'We invite you to join our creative family and together create something greater than just a list of events. Your support will enable us to develop the project, expand its capabilities, and bring our boldest ideas to life, so we can offer you something truly unique.',
 		gratitude: 'Thank you for making our mission possible!',
-		subscription: 'With love, the AfishaPeredelano Team',
+		subscription: 'With love, the AfishaPeredelano Team.',
 		method: {
 			title: 'Contribute:',
 			patreon: 'Patreon',
@@ -101,6 +101,7 @@ export default {
 		image: {
 			event: 'Event image'
 		},
+		description_title: 'Event description',
 		price: {
 			free: 'Free',
 			unknown: 'Price not specified',
@@ -108,10 +109,17 @@ export default {
 			to: 'To'
 		}
 	},
+	footer: {
+		navigation: {
+			about: 'About Us',
+			support: 'Support',
+			donate: 'Help Afisha',
+			limitation_of_liability: 'Limitation of Liability'
+		}
+	},
 	global: {
 		country: 'Country',
 		city: 'City',
-		search: 'Search',
 		timezone: 'Timezone',
 		button: {
 			authorize: 'Authorize',
@@ -128,6 +136,7 @@ export default {
 			edit: 'Edit',
 			edit_profile: 'Edit profile',
 			follow: 'Follow',
+			in_favourites: 'In Favourites',
 			logout: 'Logout',
 			register: 'Register',
 			remove_from_favourites: 'Remove from Favorites',
@@ -155,16 +164,15 @@ export default {
 		navigation: {
 			user: 'User',
 			authorize: 'Authorize',
-			about: 'About Afisha',
+			about: 'About us',
 			support: 'Support',
-			donation: 'Support the Project',
+			donation: 'Help Afisha',
 			limitation_of_liability: 'Limitation of Liability',
 		},
 		subscription_expired: '$t(dates.day.key) until the end of subscription',
 	},
 	home: {
-		hidden_title: 'Search for Events',
-		title: 'Events',
+		title: 'Bringing people together around events',
 		button: {
 			add_event_aria: 'Add an event'
 		},
@@ -178,7 +186,8 @@ export default {
 		},
 		filter: {
 			aria_country: 'Filter by country',
-			aria_city: 'Filter by city'
+			aria_city: 'Filter by city',
+			search: 'What are you interested in?',
 		},
 		user_location: {
 			not_found: 'We couldn\'t find your location'
@@ -197,7 +206,7 @@ export default {
 		p_5: 'Afisha does not guarantee the accuracy of information posted by users on the Service. Afisha does not guarantee that events, information about which is posted by users, will take place, and that websites linked by users will operate properly, comply with legal requirements, and ensure the confidentiality of user data.',
 		p_6: 'Users who post content on the Service are individually responsible to third parties and state authorities for their actions. By using the Service, the user undertakes not to violate anyone\'s copyright, rights to trademarks, means of individualization, and/or rights to other objects of intellectual property. The user undertakes to independently and at their own expense resolve conflicts with third parties related to the user\'s actions on the Service.',
 	p_7: 'The user and third parties undertake to resolve conflicts with Afisha out of court by sending claims through any available communication channels. In case of impossibility to resolve the conflict through pretrial procedures, it shall be settled in accordance with applicable law.',
-	p_8: 'The absence of guarantees means that Afisha does not assume any obligations and does not bear responsibility to users of the Service or third parties in connection with the content posted on the Service.'
+	p_8: 'The absence of guarantees means that the Afisha and/or any persons directly or indirectly involved in it do not assume any obligations and do not bear any responsibility to the users of the Service and/or any other third parties in connection with the content posted on the Service.'
 },
 	meta: {
 		site_name: 'Afisha Peredelano',
@@ -242,6 +251,7 @@ export default {
 				timezone: 'Timezone',
 				main_info: 'General information',
 				title: 'Title',
+				organizer: 'Organizer',
 				description: 'Description',
 				start: 'Start',
 				end: 'End',
@@ -274,7 +284,8 @@ export default {
 	},
 	user: {
 		unauthorized: {
-			title: 'Please log in to access additional features',
+			title: 'Log into your account',
+			text: 'Please log in to access additional features',
 			continue: 'Continue without authorization',
 		},
 		greeting: 'Hello',
@@ -288,7 +299,8 @@ export default {
 			no_favourites: 'You haven\'t added anything to your "Favourites" yet',
 		},
 		donate: {
-			text: 'Become a part of our project!',
+			title: 'Become a part of our project!',
+			text: 'We invite you to join our creative family and create something special together',
 			button: 'Make a contribution'
 		}
 	}

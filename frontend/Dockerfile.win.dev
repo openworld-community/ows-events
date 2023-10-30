@@ -1,0 +1,19 @@
+FROM node:18-alpine
+
+WORKDIR /app/frontend
+
+COPY ./frontend /app/frontend
+COPY ./common /app/common
+COPY ./frontend/entrypoint.dev.win.sh /scripts/
+RUN chmod +x -R /scripts
+
+RUN npm ci
+RUN npm run postinstall
+
+ENV NUXT_HOST=0.0.0.0
+ENV NUXT_PORT=80
+
+EXPOSE 80
+EXPOSE 24678
+
+ENTRYPOINT ["sh", "/scripts/entrypoint.dev.win.sh"]

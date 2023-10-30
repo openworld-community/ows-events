@@ -18,12 +18,12 @@ services:
             dockerfile: ./frontend/Dockerfile
             args:
                 - NODE_ENV=production
-                - VITE_API_URL=https://api.poster-demo-peredelano.orby-tech.space/api
-                - VITE_BASE_URL=https://api.poster-demo-peredelano.orby-tech.space
+                - VITE_API_URL=https://api-demo.afisha.peredelano.com/api
+                - VITE_BASE_URL=https://api-demo.afisha.peredelano.com
                 - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
                 - VITE_TELEGRAM_AUTH_BOT_NAME
                 - VITE_MODE=production
-                - VITE_DOMAIN=poster-demo-peredelano.orby-tech.space
+                - VITE_DOMAIN=demo.afisha.peredelano.com
         logging: *default-logging
         restart: always
         labels:
@@ -31,12 +31,12 @@ services:
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
             - 'traefik.http.middlewares.compressor.compress=true'
             - 'traefik.http.middlewares.redirect-https.redirectscheme.scheme=https'
-            - 'traefik.http.routers.demo_frontend_https.rule=Host(`poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_frontend_https.rule=Host(`demo.afisha.peredelano.com`)'
             - 'traefik.http.routers.demo_frontend_https.middlewares=sslheader@docker'
             - 'traefik.http.routers.demo_frontend_https.middlewares=compressor@docker'
             - 'traefik.http.routers.demo_frontend_https.entrypoints=http, https'
             - 'traefik.http.routers.demo_frontend_https.tls.certresolver=myresolver'
-            - 'traefik.http.routers.demo_frontend_http.rule=Host(`poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_frontend_http.rule=Host(`demo.afisha.peredelano.com`)'
             - 'traefik.http.routers.demo_frontend_http.middlewares=redirect-to-https@docker'
             - 'traefik.http.routers.demo_frontend_http.entrypoints=http'
         networks:
@@ -58,17 +58,17 @@ services:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
             - 'traefik.http.middlewares.redirect-https.redirectscheme.scheme=https'
-            - 'traefik.http.routers.demo_backend_https.rule=Host(`api.poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_backend_https.rule=Host(`api-demo.afisha.peredelano.com`)'
             - 'traefik.http.routers.demo_backend_https.middlewares=sslheader@docker'
             - 'traefik.http.routers.demo_backend_https.entrypoints=http, https'
             - 'traefik.http.routers.demo_backend_https.tls.certresolver=myresolver'
-            - 'traefik.http.routers.demo_backend_http.rule=Host(`api.poster-demo-peredelano.orby-tech.space`)'
+            - 'traefik.http.routers.demo_backend_http.rule=Host(`api-demo.afisha.peredelano.com`)'
             - 'traefik.http.routers.demo_backend_http.middlewares=redirect-https@docker'
             - 'traefik.http.routers.demo_backend_http.entrypoints=http'
         environment:
             - MODE=prod
             - MONGO_URI=mongodb://mongo:27017/demo
-            - FRONTEND_URL=https://poster-demo-peredelano.orby-tech.space
+            - FRONTEND_URL=https://demo.afisha.peredelano.com
             - SECRET_KEY
             - LOCALIZATION_API_KEY
         networks:

@@ -2,15 +2,21 @@ import type { EventPrice } from '../../common/types/event';
 
 // Получает аббривеатуру валюты (если существует)
 export const formatCurrency = (currency: string) => {
-	const formatter = new Intl.NumberFormat('ru', {
-		style: 'currency',
-		currency: currency,
-		currencyDisplay: 'narrowSymbol',
-		minimumFractionDigits: 0
-	});
-	// эта стандартная функция работает только если передать в нее число (цену), а нам нужен только значок валюты
-	// поэтому передаем в функцию просто единицу, и далее обрезаем ее
-	return formatter.format(1).slice(1);
+	try {
+		const formatter = new Intl.NumberFormat('ru', {
+			style: 'currency',
+			currency: currency,
+			currencyDisplay: 'narrowSymbol',
+			minimumFractionDigits: 0
+		});
+		// эта стандартная функция работает только если передать в нее число (цену), а нам нужен только значок валюты
+		// поэтому передаем в функцию просто единицу, и далее обрезаем ее
+
+		return formatter.format(1).slice(1);
+	} catch {
+		// при использовании кодов, не входящих в перечень ISO (USDT, USDC) выведется аббривеатура валюты
+		return currency;
+	}
 };
 
 // Форматирует значение цены в зависимости от значения или интервала:

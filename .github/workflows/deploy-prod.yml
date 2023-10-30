@@ -26,8 +26,8 @@ jobs:
       - name: connect and pull
         run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ vars.PROD_DIR }} && git checkout ${{ vars.PROD_BRANCH }} && git pull"
       - name: connect and update traefik
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ vars.PROD_DIR }} && docker-compose --compatibility -p ows-events -f docker-compose.traefik.yml up -d --build && exit"
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ vars.PROD_DIR }} && docker compose --compatibility -p ows-events -f docker-compose.traefik.yml up -d --build && exit"
       - name: connect and rebuild services
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "export LOCALIZATION_API_KEY=${{ secrets.LOCALIZATION_API_KEY }} && export SECRET_KEY=${{ secrets.BACKEND_SECRET_KEY }} && export VITE_TELEGRAM_AUTH_BOT_NAME=${{ vars.PROD_AUTH_TELEGRAM_BOT_NAME }} && cd ${{ vars.PROD_DIR }} && docker-compose --compatibility -p ows-events_prod -f docker-compose.prod.yml up -d --force-recreate --build  && exit"
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "export SECRET_KEY=${{ secrets.BACKEND_SECRET_KEY }} && export VITE_TELEGRAM_AUTH_BOT_NAME=${{ vars.PROD_AUTH_TELEGRAM_BOT_NAME }} && cd ${{ vars.PROD_DIR }} && docker compose --compatibility -p ows-events_prod -f docker-compose.prod.yml up -d --force-recreate --build  && exit"
       - name: cleanup
         run: rm -rf ~/.ssh

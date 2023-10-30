@@ -5,6 +5,7 @@ import { type EventOnPoster } from '@/../common/types';
 import type { ImageLoaderFile } from '../common/ImageLoader.vue';
 import { EventTypes } from '../../../common/const/eventTypes';
 import { getCurrencyByCountry } from '../../utils/prices';
+import { useUserStore } from '../../stores/user.store';
 
 type Props = {
 	closeEventModal: () => void;
@@ -13,6 +14,9 @@ type Props = {
 };
 const props = defineProps<Props>();
 const locationStore = useLocationStore();
+const userStore = useUserStore();
+const { locale } = useI18n();
+const desktop = inject('desktop');
 
 const closeModal = () => {
 	setTimeout(() => props.closeEventModal(), 300);
@@ -31,6 +35,7 @@ const isFree = ref(props.dataForEdit?.price?.value === 0);
 const inputValues = ref({
 	id: props.dataForEdit?.id ?? '',
 	title: props.dataForEdit?.title ?? '',
+	organizer: props.dataForEdit?.organizer ?? userStore.userInfo.company ?? '',
 	description: props.dataForEdit?.description ?? '',
 	startDate: getDateFromEpochInMs(props.dataForEdit?.date),
 	startTime: getTimeFromEpochInMs(props.dataForEdit?.date),
@@ -93,6 +98,7 @@ const checkFormFilling = computed(() => {
 const paramsForSubmit = computed(() => {
 	return {
 		title: inputValues.value.title,
+		organizer: inputValues.value.organizer,
 		description: inputValues.value.description,
 		date: eventStartEpoch.value,
 		durationInSeconds: Math.floor(
@@ -141,7 +147,7 @@ const submitEvent = async () => {
 		const { data } = await apiRouter.events.add.useMutation({ data: { event } });
 
 		if (data.value) {
-			await navigateTo(`/event/${data.value.id}`);
+			await navigateTo(`${locale.value}/event/${data.value.id}`);
 		} else {
 			isLoading.value = false;
 			return;
@@ -163,9 +169,13 @@ async function addImage(image: ImageLoaderFile) {
 watch(
 	() => inputValues.value.location.country,
 	(country) => {
-		if (!inputValues.value.location.country) inputValues.value.timezone = '';
-		inputValues.value.location.city = '';
-		if (!isFree.value) inputValues.value.price.currency = getCurrencyByCountry(country);
+		if (!isFree.value && country) inputValues.value.price.currency = getCurrencyByCountry(country);
+		if (!country) {
+			inputValues.value.timezone = '';
+			inputValues.value.location.city = '';
+			inputValues.value.price.currency = ''
+		}
+
 	}
 );
 
@@ -182,7 +192,10 @@ watch(
 watch(
 	() => [inputValues.value.location.country, inputValues.value.location.city],
 	async ([country, city]) => {
-		if (!country) return;
+		if (!country) {
+			inputValues.value.location.address = '';
+			return;
+		}
 		inputValues.value.timezone = await getTimezone(country, city);
 	}
 );
@@ -230,35 +243,40 @@ watch(
 		"
 	>
 		<template #form>
-			<ModalUiModalSection :label="$t('modal.new_event_modal.fields.location')">
+			<ModalUiModalSection
+				:label="$t('modal.new_event_modal.fields.location')"
+				:type="desktop ? 'column-row' : 'column'"
+			>
 				<template #child>
-					<CommonUiBaseSelect
-						v-model="inputValues.location.country"
-						name="country"
-						:placeholder="$t('global.country')"
-						:list="locationStore.countries"
-						input-readonly
-						required
-					/>
+					<div>
+						<CommonUiBaseSelect
+							v-model="inputValues.location.country"
+							name="country"
+							:placeholder="$t('global.country')"
+							:list="locationStore.countries"
+							input-readonly
+							required
+						/>
 
-					<CommonUiBaseSelect
-						v-model="inputValues.location.city"
-						name="city"
-						:disabled="!inputValues.location.country"
-						:placeholder="$t('global.city')"
-						:list="locationStore.getCitiesByCountry(inputValues.location.country)"
-						required
-					/>
+						<CommonUiBaseSelect
+							v-model="inputValues.location.city"
+							name="city"
+							:disabled="!inputValues.location.country"
+							:placeholder="$t('global.city')"
+							:list="locationStore.getCitiesByCountry(inputValues.location.country)"
+							input-readonly
+							required
+						/>
 
-					<CommonUiBaseSelect
-						v-model="inputValues.timezone"
-						name="timezone"
-						:disabled="!inputValues.location.country"
-						:placeholder="$t('global.timezone')"
-						:list="allTimezones"
-						required
-					/>
-
+						<CommonUiBaseSelect
+							v-model="inputValues.timezone"
+							name="timezone"
+							:disabled="!inputValues.location.country"
+							:placeholder="$t('global.timezone')"
+							:list="allTimezones"
+							required
+						/>
+					</div>
 					<CommonUiBaseInput
 						v-model="inputValues.location.address"
 						name="address"
@@ -300,6 +318,11 @@ watch(
 						name="title"
 						:placeholder="$t('modal.new_event_modal.fields.title')"
 						required
+					/>
+					<CommonUiBaseInput
+						v-model="inputValues.organizer"
+						name="organizer"
+						:placeholder="$t('modal.new_event_modal.fields.organizer')"
 					/>
 					<CommonUiTextArea
 						v-model="inputValues.description"

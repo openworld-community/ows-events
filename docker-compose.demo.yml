@@ -71,6 +71,7 @@ services:
             - FRONTEND_URL=https://demo.afisha.peredelano.com
             - SECRET_KEY
             - LOCALIZATION_API_KEY
+            - GITHUB_PARSING_KEY
         networks:
             - traefikpublic
         ports:

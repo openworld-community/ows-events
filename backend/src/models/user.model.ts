@@ -52,10 +52,6 @@ const schema = new Schema<IUserDocument>(
 				default: ''
 			}
 		},
-		token: {
-			type: String,
-			required: true
-		},
 		favorites: {
 			type: [String]
 		}

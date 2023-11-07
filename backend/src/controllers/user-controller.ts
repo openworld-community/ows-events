@@ -38,9 +38,9 @@ class UserController {
 		return newToken;
 	}
 
-	async getUserTGInfoByToken(token: string) {
+	async getUserTGInfoById(id: string) {
 		const userEntity = await UserModel.findOne(
-			{ token },
+			{ id },
 			{ token: 0, userInfo: 0, 'telegram.auth_date': 0 }
 		);
 		if (!userEntity) throw new Error(CommonErrorsEnum.USER_DOES_NOT_EXIST);
@@ -55,8 +55,8 @@ class UserController {
 		return userEntity;
 	}
 
-	async getUserInfoByToken(token: string) {
-		const userEntity = await UserModel.findOne({ token }, { token: 0, telegram: 0 });
+	async getUserInfoById(id: string) {
+		const userEntity = await UserModel.findOne({ id }, { token: 0, telegram: 0 });
 		if (!userEntity) throw new Error(CommonErrorsEnum.USER_DOES_NOT_EXIST);
 
 		return userEntity.userInfo;

@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import { CommonErrorsEnum } from '../../../../../common/const';
 import { eventsStateController } from '../../../controllers/events-state-controller';
 import {
@@ -7,8 +6,7 @@ import {
 	IGetTagByEventHandler,
 	IDeleteTagsHandler
 } from './type';
-import { ITokenData } from '../../types';
-import { vars } from '../../../config/vars';
+import { JWTController } from '../../../controllers/JWT-controller';
 
 export const addTags: IAddTagHandler = async (request) => {
 	const { event } = request.body;
@@ -16,7 +14,7 @@ export const addTags: IAddTagHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
+	const jwtData = JWTController.decodeToken(token);
 	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
 	event.creatorId = jwtData.id;
@@ -45,7 +43,7 @@ export const deleteTag: IDeleteTagsHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
+	const jwtData = JWTController.decodeToken(token);
 	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
 	event.creatorId = jwtData.id;

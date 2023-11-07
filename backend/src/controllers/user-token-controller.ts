@@ -1,6 +1,5 @@
 import { Types } from 'mongoose';
 import { UserTokenModel, UserTokenTypes } from '../models/userToken.model';
-import { userController } from './user-controller';
 import { JWTController } from './JWT-controller';
 
 class Controller {
@@ -46,18 +45,18 @@ class Controller {
 		if (userId) await UserTokenModel.deleteMany({ user: userId });
 	};
 
-	createRefreshToken = async (id: string, token: string, expiresAt: number) => {
-		const user = await userController.getUserById(id);
-		if (!user) return false;
-		const newToken = new UserTokenModel({
-			user: user._id,
-			token,
-			type: UserTokenTypes.RESET_PASSWORD,
-			expiresAt
-		});
-		await newToken.save();
-		return newToken;
-	};
+	// createRefreshToken = async (id: string, token: string, expiresAt: number) => {
+	// 	const user = await userController.getUserById(id);
+	// 	if (!user) return false;
+	// 	const newToken = new UserTokenModel({
+	// 		user: user._id,
+	// 		token,
+	// 		type: UserTokenTypes.RESET_PASSWORD,
+	// 		expiresAt
+	// 	});
+	// 	await newToken.save();
+	// 	return newToken;
+	// };
 }
 
 export const UserTokenController = new Controller();

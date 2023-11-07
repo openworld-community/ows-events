@@ -17,13 +17,14 @@ import { eventsValidator } from '../../../validators/event-validator';
 import { manualModerationController } from '../../../controllers/manual-moderation-controller';
 import { vars } from '../../../config/vars';
 import { EventModel } from '../../../models/event.model';
+import { JWTController } from '../../../controllers/JWT-controller';
 
 export const addEvent: IAddEventHandler = async (request) => {
 	const { event } = request.body;
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
+	const jwtData = JWTController.decodeToken(token);
 	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
 	event.creatorId = jwtData.id;
@@ -78,7 +79,7 @@ export const deleteEvent: IDeleteEventHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
+	const jwtData = JWTController.decodeToken(token);
 	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
 	const oldEvent = await eventsStateController.getEvent(request.body.id);
@@ -93,7 +94,7 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
+	const jwtData = JWTController.decodeToken(token);
 	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
 	const oldEvent = await eventsStateController.getEvent(request.body.event.id);

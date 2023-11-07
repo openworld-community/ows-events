@@ -1,9 +1,11 @@
 import { TGUser, UserInfo } from '@common/types/user';
-import jwt from 'jsonwebtoken';
+import { v4 } from 'uuid';
 import { UserModel } from '../models/user.model';
 import { CommonErrorsEnum } from '../../../common/const';
-import { vars } from '../config/vars';
 import { EventModel } from '../models/event.model';
+import { JWTController } from './JWT-controller';
+import { UserTokenController } from './user-token-controller';
+import { getTimestamp, TimestampTypesEnum } from '../utils/get-timestamp';
 
 export type FindEventParams = {
 	searchLine?: string;
@@ -13,21 +15,15 @@ export type FindEventParams = {
 
 class UserController {
 	async addTGUser(telegramData: TGUser) {
-		const newToken = jwt.sign(
-			{
-				id: telegramData.id,
-				username: telegramData.username
-			},
-			vars.secret
-		);
-		await UserModel.findOneAndUpdate(
+		const newUserId = v4();
+		const user = await UserModel.findOneAndUpdate(
 			{ 'telegram.id': telegramData.id },
 			{
 				$set: {
-					telegram: { ...telegramData },
-					token: newToken
+					telegram: { ...telegramData }
 				},
 				$setOnInsert: {
+					id: newUserId,
 					'userInfo.nickname': telegramData.username,
 					'userInfo.first_name': telegramData.first_name,
 					'userInfo.last_name': telegramData.last_name
@@ -35,7 +31,17 @@ class UserController {
 			},
 			{ upsert: true, new: true }
 		);
-		return newToken;
+		const newToken = JWTController.issueAccessToken({
+			id: user.id,
+			username: telegramData.username
+		});
+		const expiresAt = Date.now() + getTimestamp({ type: TimestampTypesEnum.DAYS, value: 30 });
+		const savedToken = await UserTokenController.createAccessToken(
+			user._id,
+			newToken,
+			expiresAt
+		);
+		return savedToken.token;
 	}
 
 	async getUserTGInfoById(id: string) {
@@ -62,26 +68,26 @@ class UserController {
 		return userEntity.userInfo;
 	}
 
-	async changeUserInfo(token: string, userInfo: UserInfo) {
-		await UserModel.findOneAndUpdate({ token }, { $set: { userInfo: { ...userInfo } } });
+	async changeUserInfo(id: string, userInfo: UserInfo) {
+		await UserModel.findOneAndUpdate({ id }, { $set: { userInfo: { ...userInfo } } });
 	}
 
-	async addToFavorites(token: string, event: string) {
-		await UserModel.findOneAndUpdate({ token }, { $addToSet: { favorites: event } });
+	async addToFavorites(id: string, event: string) {
+		await UserModel.findOneAndUpdate({ id }, { $addToSet: { favorites: event } });
 	}
 
-	async removeFromFavorites(token: string, event: string) {
-		await UserModel.findOneAndUpdate({ token }, { $pull: { favorites: event } });
+	async removeFromFavorites(id: string, event: string) {
+		await UserModel.findOneAndUpdate({ id }, { $pull: { favorites: event } });
 	}
 
-	async getFavoritesId(token: string) {
-		const user = await UserModel.findOne({ token });
+	async getFavoritesId(id: string) {
+		const user = await UserModel.findOne({ id });
 		if (!user) throw new Error(CommonErrorsEnum.USER_DOES_NOT_EXIST);
 		return user.favorites;
 	}
 
-	async getFavorites(token: string) {
-		const user = await UserModel.findOne({ token });
+	async getFavorites(id: string) {
+		const user = await UserModel.findOne({ id });
 		if (!user) throw new Error(CommonErrorsEnum.USER_DOES_NOT_EXIST);
 		const favoriteEventsId = user.favorites;
 		const favoriteEvents = await EventModel.find(

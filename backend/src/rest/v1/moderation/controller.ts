@@ -1,10 +1,14 @@
+import { CommonErrorsEnum } from '../../../../../common/const';
 import { IApproveEventHandler, IDeclineEventHandler, IGetEventsHandler } from './types';
 import { manualModerationController } from '../../../controllers/manual-moderation-controller';
 import { JWTController } from '../../../controllers/JWT-controller';
+import { UserTokenController } from '../../../controllers/user-token-controller';
 
 export const approve: IApproveEventHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error('Unauthorized');
+	const isTokenValid = UserTokenController.checkAccessToken(token);
+	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
 	if (jwtData.id !== 'moderator') throw new Error('Unauthorized');
 	const { eventId } = request.params;
@@ -14,6 +18,8 @@ export const approve: IApproveEventHandler = async (request) => {
 export const decline: IDeclineEventHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error('Unauthorized');
+	const isTokenValid = UserTokenController.checkAccessToken(token);
+	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
 	if (jwtData.id !== 'moderator') throw new Error('Unauthorized');
 	const { eventId } = request.params;

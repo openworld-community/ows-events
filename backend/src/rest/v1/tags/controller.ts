@@ -7,6 +7,7 @@ import {
 	IDeleteTagsHandler
 } from './type';
 import { JWTController } from '../../../controllers/JWT-controller';
+import { UserTokenController } from '../../../controllers/user-token-controller';
 
 export const addTags: IAddTagHandler = async (request) => {
 	const { event } = request.body;
@@ -14,8 +15,9 @@ export const addTags: IAddTagHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
+	const isTokenValid = UserTokenController.checkAccessToken(token);
+	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
-	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
 	event.creatorId = jwtData.id;
 	const response = await eventsStateController.addTags(event);
@@ -43,8 +45,9 @@ export const deleteTag: IDeleteTagsHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
+	const isTokenValid = UserTokenController.checkAccessToken(token);
+	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
-	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 
 	event.creatorId = jwtData.id;
 	const response = await eventsStateController.removeTags(event);

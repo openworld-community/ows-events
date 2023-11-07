@@ -192,17 +192,24 @@ patchDeleteEventModal({
 						/>
 					</div>
 					<p
-						v-if="!mobile"
+						v-if="!mobile && posterEvent.creatorId !== 'peredelanoParser'"
 						class="event-info__description-title"
 					>
 						{{ $t('event.description_title') }}
 					</p>
 					<p
+						v-if="posterEvent.creatorId !== 'peredelanoParser'"
 						class="event-info__description"
 						:itemprop="SeoItempropEventEnum.DESCRIPTION"
 					>
 						{{ posterEvent.description }}
 					</p>
+					<div
+						v-if="posterEvent.creatorId === 'peredelanoParser'"
+						class="event-info__html-description"
+						:itemprop="SeoItempropEventEnum.DESCRIPTION"
+						v-html="posterEvent.description"
+					/>
 					<CommonButton
 						v-if="posterEvent.url"
 						class="event-info__button-contact"
@@ -452,6 +459,77 @@ patchDeleteEventModal({
 		font-size: var(--font-size-S);
 		line-height: 20px;
 		margin-bottom: 24px;
+	}
+
+	&__html-description {
+		word-wrap: break-word;
+		white-space: pre-line;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+		font-size: var(--font-size-S);
+		line-height: 20px;
+		margin-bottom: 24px;
+		padding-top: 8px;
+
+		&:deep(h1),
+		&:deep(h2),
+		&:deep(h3),
+		&:deep(h4),
+		&:deep(h5) {
+			padding-bottom: 0.3em;
+			margin-bottom: 16px;
+			line-height: normal;
+		}
+
+		&:deep(h1),
+		&:deep(h2) {
+			border-bottom: 1px solid var(--color-input-icons, var(--color-input-icons));
+		}
+
+		&:deep(a) {
+			text-decoration: underline;
+			text-underline-offset: 0.2rem;
+		}
+
+		&:deep(p) {
+			margin-top: 0;
+			margin-bottom: 16px;
+		}
+
+		&:deep(img) {
+			min-width: 0 !important;
+			max-width: 100% !important;
+			box-sizing: content-box;
+		}
+
+		&:deep(blockquote) {
+			padding: 0 1em;
+			border-left: 0.25em solid var(--color-input-icons, var(--color-input-icons));
+		}
+
+		&:deep(table) {
+			width: max-content;
+			max-width: 100%;
+			overflow: auto;
+			margin-top: 0;
+			margin-bottom: 16px;
+			border-collapse: collapse;
+			border-spacing: 0;
+		}
+
+		&:deep(tr) {
+			border-top: 1px solid var(--color-input-icons, var(--color-input-icons));
+		}
+
+		&:deep(th),
+		&:deep(td) {
+			padding: 6px 13px;
+			border: 1px solid var(--color-input-icons, var(--color-input-icons));
+		}
+
+		&:deep(th) {
+			font-weight: var(--base-text-weight-semibold, 600);
+		}
 	}
 
 	&__button-contact {

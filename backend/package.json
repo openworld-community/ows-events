@@ -19,6 +19,7 @@
     "@fastify/static": "^6.10.1",
     "@fastify/swagger": "^8.5.1",
     "@fastify/swagger-ui": "^1.8.1",
+    "@octokit/rest": "^20.0.1",
     "axios": "^1.4.0",
     "city-timezones": "^1.2.1",
     "dotenv": "^16.1.4",
@@ -27,10 +28,12 @@
     "moment-timezone": "^0.5.43",
     "mongoose": "^7.2.3",
     "nodemon": "^2.0.22",
+    "octokit": "^3.1.0",
     "ts-node": "^10.9.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@octokit/types": "^11.1.0",
     "@types/axios": "^0.14.0",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "^20.2.0",

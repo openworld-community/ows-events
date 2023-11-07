@@ -11,7 +11,10 @@ export const vars = {
 	},
 	secret: process.env.SECRET_KEY || 'secret',
 	apiKeys: {
-		localization: process.env.LOCALIZATION_API_KEY || '123'
+		localization: process.env.LOCALIZATION_API_KEY || '123',
+		github: {
+			parsing: process.env.GITHUB_PARSING_TOKEN || ''
+		}
 	},
 	localization: {
 		url: process.env.LOCALIZATION_URL || 'http://localization:5000'

@@ -6,3 +6,19 @@ export type ITelegramRoute = {
 };
 
 export type ITelegramHandler = IRouteHandler<ITelegramRoute>;
+
+export type ISignoutRoute = {
+	Headers: {
+		Authorization: string;
+	};
+};
+
+export type ISignoutHandler = IRouteHandler<ISignoutRoute>;
+
+export type ISignoutEverywhereRoute = {
+	Headers: {
+		Authorization: string;
+	};
+};
+
+export type ISignoutEverywhereHandler = IRouteHandler<ISignoutEverywhereRoute>;

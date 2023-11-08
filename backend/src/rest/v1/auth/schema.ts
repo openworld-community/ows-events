@@ -1,0 +1,48 @@
+export const telegramSchema = {
+	description: 'Login/register through telegram',
+	tags: ['Auth'],
+	summary: 'Login through telegram',
+	response: {
+		302: {
+			type: 'null',
+			description: 'Redirect to special page, where token get stored on client side'
+		}
+	},
+	querystring: {
+		type: 'object',
+		properties: {
+			id: {
+				type: 'string'
+			},
+			first_name: {
+				type: 'string'
+			},
+			last_name: {
+				type: 'string'
+			},
+			username: {
+				type: 'string'
+			},
+			photo_url: {
+				type: 'string'
+			},
+			auth_date: {
+				type: 'number'
+			}
+		}
+	}
+};
+
+export const signoutSchema = {
+	description: "Closes current users' session",
+	tags: ['Auth'],
+	summary: "Closes current users' session",
+	security: [{ authJWT: [] }]
+};
+
+export const signoutEverywhereSchema = {
+	description: "Closes all users' sessions",
+	tags: ['Auth'],
+	summary: "Closes all users' sessions",
+	security: [{ authJWT: [] }]
+};

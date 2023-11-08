@@ -53,7 +53,7 @@ export const migrate = () => {
 	const db = client.db();
 	const users = db.collection('users');
 	users
-		.updateMany({}, [
+		.updateMany({ id: { $exists: false } }, [
 			{
 				$addFields: {
 					id: '$telegram.id'

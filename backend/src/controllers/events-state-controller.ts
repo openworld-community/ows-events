@@ -98,7 +98,7 @@ class EventsStateController {
 		return event;
 	}
 
-	async findAllTags() {
+	async findUsedTags() {
 		const tags = await EventModel.distinct('tags');
 
 		return tags;

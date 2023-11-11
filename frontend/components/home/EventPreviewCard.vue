@@ -35,10 +35,17 @@ const localePath = useLocalePath();
 
 		<div class="card-description">
 			<div class="card-description__top">
-				<CommonTag
-					:price="eventData?.price"
-					class="card-description__tag"
-				/>
+				<template
+					v-for="tag in tags"
+					:key="tag.tagKey"
+				>
+					<CommonTag
+						v-if="tags.length > 0"
+						:tags="tags"
+						:tag-key="tag.tagKey"
+						class="card-description__tag"
+					/>
+				</template>
 				<h2
 					class="card-description__title"
 					:itemprop="SeoItempropEventEnum.NAME"
@@ -56,11 +63,13 @@ const localePath = useLocalePath();
 			<div class="card-description__bottom">
 				<CommonEventDetails
 					class="card-description__datetime"
+					:price="eventData?.price"
 					:start-date="convertToLocaleString(eventData.date)"
 					with-pin
 				/>
 				<CommonEventDetails
 					class="card-description__geo"
+					:price="eventData?.price"
 					:location="eventData.location"
 					with-pin
 				/>

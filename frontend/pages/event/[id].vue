@@ -98,6 +98,16 @@ patchDeleteEventModal({
 		removeEvent: deleteCard
 	}
 });
+const tags = ref([
+	{
+		id: 1,
+		tagKey: 'free'
+	},
+	{
+		id: 2,
+		tagKey: 'free 2'
+	}
+]);
 </script>
 
 <template>
@@ -136,10 +146,18 @@ patchDeleteEventModal({
 			<div class="event-info">
 				<div class="event-info__summary">
 					<div class="event-info__tag-wrapper">
-						<CommonTag
-							class-name="event-info__price"
-							:price="posterEvent.price"
-						/>
+						<template
+							v-for="tag in tags"
+							:key="tag.tagKey"
+						>
+							<CommonTag
+								v-if="tags.length > 0"
+								:tags="tags"
+								class-name="event-info__price"
+								:price="posterEvent.price"
+								:tag-key="tag.tagKey"
+							/>
+						</template>
 						<CommonButton
 							v-if="
 								mobile && userStore.isAuthorized && userStore.id !== posterEvent.id
@@ -174,6 +192,7 @@ patchDeleteEventModal({
 					<div class="event-info__details">
 						<CommonEventDetails
 							class="event-info__datetime"
+							:price="posterEvent.price"
 							:start-date="convertToLocaleString(posterEvent.date)"
 							:end-date="
 								posterEvent.durationInSeconds
@@ -186,6 +205,7 @@ patchDeleteEventModal({
 						/>
 						<CommonEventDetails
 							:location="posterEvent.location"
+							:price="posterEvent.price"
 							class="event-info__geolink"
 							is-link
 							with-pin
@@ -371,7 +391,7 @@ patchDeleteEventModal({
 	&__tag-wrapper {
 		display: flex;
 		width: 100%;
-		justify-content: space-between;
+		gap: var(--space-related-items);
 		align-items: center;
 		margin-bottom: 12px;
 

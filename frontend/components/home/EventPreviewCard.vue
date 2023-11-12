@@ -5,6 +5,16 @@ import { RoutePathEnum } from '../../constants/enums/route';
 
 defineProps<{ eventData: EventOnPoster }>();
 const localePath = useLocalePath();
+const tags = ref([
+	{
+		id: 1,
+		tagKey: 'free'
+	},
+	{
+		id: 2,
+		tagKey: 'free 2'
+	}
+]);
 </script>
 
 <template>
@@ -35,6 +45,7 @@ const localePath = useLocalePath();
 
 		<div class="card-description">
 			<div class="card-description__top">
+				<div class="card-tags">
 				<template
 					v-for="tag in tags"
 					:key="tag.tagKey"
@@ -42,10 +53,11 @@ const localePath = useLocalePath();
 					<CommonTag
 						v-if="tags.length > 0"
 						:tags="tags"
-						:tag-key="tag.tagKey"
-						class="card-description__tag"
+						tag-key="tag.tagKey"
+						size="small"
 					/>
 				</template>
+			</div>
 				<h2
 					class="card-description__title"
 					:itemprop="SeoItempropEventEnum.NAME"
@@ -64,15 +76,15 @@ const localePath = useLocalePath();
 				<CommonEventDetails
 					class="card-description__datetime"
 					:price="eventData?.price"
+					:location="eventData.location"
 					:start-date="convertToLocaleString(eventData.date)"
 					with-pin
 				/>
-				<CommonEventDetails
+				<!-- <CommonEventDetails
 					class="card-description__geo"
-					:price="eventData?.price"
 					:location="eventData.location"
 					with-pin
-				/>
+				/> -->
 			</div>
 		</div>
 	</NuxtLink>
@@ -83,6 +95,10 @@ const localePath = useLocalePath();
 	display: flex;
 	flex-direction: column;
 	width: 100%;
+	&-tags{
+		display: flex;
+		gap:12px;
+	}
 
 	@media (min-width: 768px) {
 		width: 100%;
@@ -94,6 +110,7 @@ const localePath = useLocalePath();
 	@media (min-width: 1440px) {
 		width: 100%;
 	}
+
 
 	&__image-container {
 		display: flex;
@@ -183,5 +200,8 @@ const localePath = useLocalePath();
 			margin-bottom: 8px;
 		}
 	}
+
+
 }
+
 </style>

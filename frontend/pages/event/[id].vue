@@ -154,7 +154,6 @@ const tags = ref([
 								v-if="tags.length > 0"
 								:tags="tags"
 								class-name="event-info__price"
-								:price="posterEvent.price"
 								:tag-key="tag.tagKey"
 							/>
 						</template>
@@ -193,6 +192,7 @@ const tags = ref([
 						<CommonEventDetails
 							class="event-info__datetime"
 							:price="posterEvent.price"
+							:location="posterEvent.location"
 							:start-date="convertToLocaleString(posterEvent.date)"
 							:end-date="
 								posterEvent.durationInSeconds
@@ -201,13 +201,6 @@ const tags = ref([
 									  )
 									: null
 							"
-							with-pin
-						/>
-						<CommonEventDetails
-							:location="posterEvent.location"
-							:price="posterEvent.price"
-							class="event-info__geolink"
-							is-link
 							with-pin
 						/>
 					</div>
@@ -450,7 +443,7 @@ const tags = ref([
 		margin-bottom: var(--space-unrelated-items);
 
 		@media (min-width: 768px) {
-			width: max-content;
+			width: 295px;
 			padding-top: 24px;
 			border-top: 1px solid var(--color-input-field);
 		}

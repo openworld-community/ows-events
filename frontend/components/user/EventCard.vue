@@ -11,7 +11,16 @@ defineProps({
 		required: true
 	}
 });
-
+const tags = ref([
+	{
+		id: 1,
+		tagKey: 'free'
+	},
+	{
+		id: 2,
+		tagKey: 'free 2'
+	}
+]);
 const localePath = useLocalePath();
 </script>
 
@@ -53,17 +62,19 @@ const localePath = useLocalePath();
 					{{ convertToLocaleString(eventData.date) }}
 				</p>
 			</div>
-			<template
-				v-for="tag in tags"
-				:key="tag.tagKey"
-			>
-				<CommonTag
-					v-if="tags.length > 0"
-					:tags="tags"
-					tag-key="tag.tagKey"
-					size="small"
-				/>
-			</template>
+			<div class="card-tags">
+				<template
+					v-for="tag in tags"
+					:key="tag.tagKey"
+				>
+					<CommonTag
+						v-if="tags.length > 0"
+						:tags="tags"
+						tag-key="tag.tagKey"
+						size="small"
+					/>
+				</template>
+			</div>
 		</div>
 	</NuxtLink>
 </template>
@@ -143,6 +154,10 @@ const localePath = useLocalePath();
 		object-fit: cover;
 		border-radius: 4px;
 	}
+	&-tags {
+		display: flex;
+		gap: 12px;
+	}
 }
 
 .description {
@@ -151,14 +166,13 @@ const localePath = useLocalePath();
 	overflow: hidden;
 
 	@media (min-width: 768px) {
-		justify-content: space-between;
 	}
 
 	&__info {
 		display: flex;
 		width: 100%;
 		flex-direction: column;
-		margin-bottom: 8px;
+		margin-bottom: 12px;
 	}
 
 	&__title {

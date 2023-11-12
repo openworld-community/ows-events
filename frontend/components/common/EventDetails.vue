@@ -33,7 +33,8 @@ const props = defineProps({
 	},
 	price: {
 		type: [Object, null] as PropType<EventPrice | null>,
-		required: true
+		required: true,
+		default: null
 	}
 });
 
@@ -54,45 +55,24 @@ const component = computed(() => {
 		itemscope
 	>
 		<div class="details__wrapper">
-			<CommonIcon
+			<!-- <CommonIcon
 				v-if="withPin"
 				:name="location ? 'map-pin' : 'calendar'"
 				class="details__icon"
 				color="var(--color-accent-green-main)"
-			/>
-			<!--	Локация		-->
-			<span
-				v-if="location"
-				:class="['details__text', { 'details__text--link': isLink }]"
-				itemscope
-				:itemtype="SeoItemTypeEnum.ADDRESS"
-				:itemprop="SeoItempropLocationEnum.GROUP_ITEMPROP"
-			>
-				<span
-					v-if="props.location.country"
-					:itemprop="SeoItempropLocationEnum.COUNTRY"
-				>
-					{{ location.country }},
-				</span>
-				<span
-					v-if="location.city"
-					:itemprop="SeoItempropLocationEnum.CITY"
-				>
-					{{ location.city }}
-				</span>
-				<span
-					v-if="location?.address"
-					:itemprop="SeoItempropLocationEnum.ADDRESS"
-					>, {{ location.address }}
-				</span>
-			</span>
-
+			/> -->
 			<!--	Дата	-->
 			<span
 				v-if="startDate"
 				class="details__text"
 				:itemprop="SeoItempropEventEnum.START_DATE"
 			>
+				<CommonIcon
+					v-if="withPin"
+					name="calendar"
+					class="details__icon"
+					color="var(--color-accent-green-main)"
+				/>
 				{{ startDate }}
 			</span>
 			<span
@@ -108,59 +88,95 @@ const component = computed(() => {
 			>
 				{{ endDate }}
 			</span>
+
+			<!-- Цена -->
+			<div class="details__price">
+				<span v-if="!price">
+					<CommonIcon
+						v-if="withPin"
+						name="dollar"
+						class="details__icon"
+						color="var(--color-accent-green-main)"
+					/>
+					{{ $t('event.price.unknown') }}
+				</span>
+
+				<span
+					v-else-if="price.value === 0"
+					:itemprop="SeoItempropPriceEnum.FREE"
+					content="true"
+				>
+					<CommonIcon
+						v-if="withPin"
+						name="dollar"
+						class="details__icon"
+						color="var(--color-accent-green-main)"
+					/>
+					{{ $t('event.price.free') }}
+				</span>
+
+				<span
+					v-else
+					:itemprop="SeoItempropPriceEnum.GROUP_ITEMPROP"
+					itemscope
+					:itemtype="SeoItemTypeEnum.OFFER"
+				>
+					<CommonIcon
+						v-if="withPin"
+						name="dollar"
+						class="details__icon"
+						color="var(--color-accent-green-main)"
+					/>
+					<span
+						:itemprop="SeoItempropPriceEnum.PRICE"
+						:content="price.value"
+					>
+						{{ formatPrice(price) }}
+					</span>
+					<span
+						class="visually-hidden"
+						:itemprop="SeoItempropPriceEnum.CURRENCY"
+					>
+						{{ price.currency }}
+					</span>
+				</span>
+			</div>
+			<!--	Локация		-->
+			<span
+				v-if="location"
+				:class="['details__text', { 'details__text--link': isLink }]"
+				itemscope
+				:itemtype="SeoItemTypeEnum.ADDRESS"
+				:itemprop="SeoItempropLocationEnum.GROUP_ITEMPROP"
+			>
+				<span
+					class="details__country"
+					v-if="props.location.country"
+					:itemprop="SeoItempropLocationEnum.COUNTRY"
+				>
+					<CommonIcon
+						v-if="withPin"
+						:name="location ? 'map-pin' : 'calendar'"
+						class="details__icon"
+						color="var(--color-accent-green-main)"
+					/>
+
+					{{ location.country }},
+				</span>
+				<span
+					v-if="location.city"
+					:itemprop="SeoItempropLocationEnum.CITY"
+				>
+					{{ location.city }}
+				</span>
+				<span
+					v-if="location?.address"
+					:itemprop="SeoItempropLocationEnum.ADDRESS"
+					>, {{ location.address }}
+				</span>
+			</span>
 		</div>
 	</component>
-	<div class="details__price">
-		<p v-if="!price">
-			<CommonIcon
-				v-if="withPin"
-				name="dollar"
-				class="details__icon"
-				color="var(--color-accent-green-main)"
-			/>
-			{{ $t('event.price.unknown') }}
-		</p>
-
-		<p
-			v-else-if="price.value === 0"
-			:itemprop="SeoItempropPriceEnum.FREE"
-			content="true"
-		>
-			<CommonIcon
-				v-if="withPin"
-				name="dollar"
-				class="details__icon"
-				color="var(--color-accent-green-main)"
-			/>
-			{{ $t('event.price.free') }}
-		</p>
-
-		<p
-			v-else
-			:itemprop="SeoItempropPriceEnum.GROUP_ITEMPROP"
-			itemscope
-			:itemtype="SeoItemTypeEnum.OFFER"
-		>
-			<CommonIcon
-				v-if="withPin"
-				name="dollar"
-				class="details__icon"
-				color="var(--color-accent-green-main)"
-			/>
-			<span
-				:itemprop="SeoItempropPriceEnum.PRICE"
-				:content="price.value"
-			>
-				{{ formatPrice(price) }}
-			</span>
-			<span
-				class="visually-hidden"
-				:itemprop="SeoItempropPriceEnum.CURRENCY"
-			>
-				{{ price.currency }}
-			</span>
-		</p>
-	</div>
 </template>
 
 <style scoped lang="less">
@@ -170,7 +186,7 @@ const component = computed(() => {
 
 	&__wrapper {
 		display: flex;
-		align-items: center;
+		flex-direction: column;
 	}
 
 	&__icon {
@@ -179,17 +195,28 @@ const component = computed(() => {
 
 	&__text {
 		font-size: var(--font-size-S);
+		display: flex;
+		align-items: center;
 
 		&--link {
 			text-decoration: underline;
 		}
 	}
-	&__price p {
+	&__country {
+		display: flex;
+		align-items: center;
+		padding-right: 5px;
+	}
+	&__price {
 		display: flex;
 		align-items: center;
 		font-size: 16px;
 		line-height: 150%;
 		margin: 12px 0;
+		span {
+			display: flex;
+			align-items: center;
+		}
 	}
 }
 </style>

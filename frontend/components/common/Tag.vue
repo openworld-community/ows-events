@@ -17,9 +17,9 @@ defineProps({
 
 <template>
 	<div :class="['tag', { 'tag--small': size === 'small' }]">
-		<p>
+		<span>
 			{{ $t(`event.category.${tagKey}`) }}
-		</p>
+		</span>
 	</div>
 </template>
 

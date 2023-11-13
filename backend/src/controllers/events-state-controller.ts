@@ -3,7 +3,6 @@ import { FilterQuery } from 'mongoose';
 import { EventDbEntity, EventOnPoster } from '@common/types/event';
 import { EventModel } from '../models/event.model';
 import { imageController } from './image-controller';
-import { localize } from '../utils/localization/localize';
 
 export type FindEventParams = {
 	searchLine?: string;
@@ -14,16 +13,11 @@ export type FindEventParams = {
 class EventsStateController {
 	async addEvent(event: EventOnPoster) {
 		const id = uuid();
-		const { originLanguage, localizationObject } = await localize(event.description);
-		const localizedEvent = {
+		const eventWithId = {
 			...event,
-			id,
-			...{
-				description: localizationObject,
-				originDescriptionLanguage: originLanguage
-			}
+			id
 		};
-		const newEvent = new EventModel(localizedEvent);
+		const newEvent = new EventModel(eventWithId);
 		await newEvent.save().catch((e) => {
 			// eslint-disable-next-line no-console
 			console.error(e);
@@ -68,18 +62,10 @@ class EventsStateController {
 	}
 
 	async updateEvent(event: EventOnPoster) {
-		const { originLanguage, localizationObject } = await localize(event.description);
-		const localizedEvent = {
-			...event,
-			...{
-				description: localizationObject,
-				originDescriptionLanguage: originLanguage
-			}
-		};
 		const updatedEvent = await EventModel.findOneAndUpdate(
-			{ id: localizedEvent.id },
+			{ id: event.id },
 			{
-				$set: localizedEvent
+				$set: event
 			}
 		);
 

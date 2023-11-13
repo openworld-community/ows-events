@@ -21,6 +21,8 @@ defineProps({
 
 const emit = defineEmits(['closeModal']);
 
+const desktop = inject('desktop');
+
 // В safari на iphone при открытии клавиатуры происходит скролл страницы и не возвращается обратно при закрытии
 // код ниже возвращает скролл в исходное положение
 
@@ -58,12 +60,12 @@ const scrollUnlockOnBeforeCloseModal = () => {
 		swipe-to-close="down"
 		:click-to-close="true"
 		:esc-to-close="true"
-		:lock-scroll="false"
+		:lock-scroll="!!desktop"
 		content-class="overlay"
 		@before-open="scrollLockOnBeforeOpenModal"
 		@before-close="scrollUnlockOnBeforeCloseModal"
 	>
-		<div class="modal-card">
+		<div :class="['modal-card', { 'modal-card--info': modalType === 'info' }]">
 			<header
 				:class="['modal-card__head', { 'modal-card__head--center': modalType === 'info' }]"
 			>
@@ -104,7 +106,6 @@ const scrollUnlockOnBeforeCloseModal = () => {
 .modal-card {
 	display: flex;
 	flex-direction: column;
-	//TODO: пока верстка только мобилки
 	width: 95vw;
 	min-width: calc(var(--width-mobile) - 2 * var(--padding-side));
 	max-width: 400px;
@@ -121,6 +122,16 @@ const scrollUnlockOnBeforeCloseModal = () => {
 	transition-duration: 0.4s;
 	z-index: 1;
 
+	@media (min-width: 768px) {
+		width: 80vw;
+		max-width: 820px;
+		margin: 0 auto;
+	}
+
+	&--info {
+		max-width: 400px;
+	}
+
 	&__head {
 		display: flex;
 		justify-content: space-between;
@@ -131,6 +142,11 @@ const scrollUnlockOnBeforeCloseModal = () => {
 
 		&--center {
 			justify-content: center;
+		}
+
+		@media (min-width: 768px) {
+			line-height: 30px;
+			padding: 30px;
 		}
 	}
 
@@ -149,11 +165,18 @@ const scrollUnlockOnBeforeCloseModal = () => {
 	}
 
 	&__body {
+		display: flex;
 		width: 100%;
+		flex-direction: column;
+		align-items: center;
 		overflow-y: auto;
 		-webkit-overflow-scrolling: touch;
 		background-color: var(--color-white);
 		padding: 20px;
+
+		@media (min-width: 768px) {
+			padding: 30px;
+		}
 	}
 
 	&__foot {
@@ -172,11 +195,18 @@ const scrollUnlockOnBeforeCloseModal = () => {
 		&--center {
 			justify-content: center;
 		}
+
+		@media (min-width: 768px) {
+			padding: 30px;
+		}
 	}
 }
 
 .body {
 	&__required {
+		width: 100%;
+		max-width: 540px;
+		text-align: left;
 		font-size: var(--font-size-XS);
 		line-height: 18px;
 		color: var(--color-text-secondary);

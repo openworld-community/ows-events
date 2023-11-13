@@ -96,8 +96,8 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			isIcon && buttonKind ? `icon__${buttonKind}` : '',
 			isDisabled ? `button__${buttonKind}--disabled` : '',
 			{ 'button--round': isRound && !isIcon },
-			{'icon--round' : isIcon && isRound},
-			{'no-states' : !hasStates}
+			{ 'icon--round': isIcon && isRound },
+			{ 'no-states': !hasStates }
 		]"
 		:aria-label="alt ? alt : null"
 		@click="!link && !isDisabled ? emit('click') : null"
@@ -144,6 +144,10 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 	&__content {
 		font-size: var(--font-size-M);
+
+		@media (min-width: 768px) {
+			font-size: var(--font-size-S);
+		}
 	}
 
 	&__icon {
@@ -313,12 +317,14 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 	&--round {
 		width: 36px;
+		min-width: 36px;
 		height: 36px;
 		border-radius: 50%;
 		background-color: var(--color-background-secondary);
 		border: 1px solid var(--color-background-secondary);
 
-		&:hover, &:focus {
+		&:hover,
+		&:focus {
 			&::v-deep(svg) {
 				color: var(--color-accent-green-main-30);
 			}
@@ -345,8 +351,9 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 }
 
 .no-states {
-
-	&:hover, &:focus, &:active {
+	&:hover,
+	&:focus,
+	&:active {
 		border-color: unset;
 		background-color: unset;
 		color: unset;

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
-import EventModal from '@/components/modal/Event.client.vue';
 import { SeoItemTypeEnum } from '../constants/enums/seo';
 import { useUserStore } from '../stores/user.store';
+import { RoutePathEnum } from '../constants/enums/route';
+import { useEventStore } from '../stores/event.store';
 
 const { t } = useI18n();
 
@@ -11,14 +12,9 @@ getMeta({
 	title: t('meta.default_title')
 });
 
-const userStore = useUserStore()
+const userStore = useUserStore();
+const localePath = useLocalePath();
 
-const {
-	open: openEventModal,
-	close: closeEventModal,
-	patchOptions: eventModalPatch
-} = useModal({ component: EventModal });
-eventModalPatch({ attrs: { closeEventModal } });
 const {
 	open: openNeedAuthorizeModal,
 	close: closeNeedAuthorizeModal,
@@ -42,96 +38,176 @@ const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 	data: { query: debouncedEventsRequestQuery }
 });
 
-const onButtonClick = () => {
+const onButtonClick = async () => {
 	if (userStore.isAuthorized) {
-		openEventModal();
+		const eventStore = useEventStore();
+		eventStore.createDefaultEventData();
+		await navigateTo(localePath({ path: RoutePathEnum.EVENT_FORM }));
 	} else {
-		openNeedAuthorizeModal();
+		await openNeedAuthorizeModal();
 	}
 };
 </script>
 
 <template>
-	<div class="main-page">
-		<h1 class="visually-hidden">{{ $t('home.hidden_title') }}</h1>
-		<HomeSearch
-			v-model:search="eventsQuery.searchLine"
-			class="main-page__search"
-		/>
-		<div class="main-page__location">
-			<HomeUserLocation />
-		</div>
-		<h2 class="main-page__title">
-			{{ $t('home.title') }}
-		</h2>
-		<HomeFilter
-			v-model:country="eventsQuery.country"
-			v-model:city="eventsQuery.city"
-			class="main-page__filter"
-		/>
-
-		<ul class="main-page__card-list">
-			<li
-				v-for="event in posterEvents"
-				:key="event.id"
-				itemscope
-				:itemtype="SeoItemTypeEnum.EVENT"
-			>
-				<HomeEventPreviewCard
-					:event-data="event"
+	<div class="root">
+		<HeaderCommon />
+		<main class="main-page">
+			<div class="main-page__top">
+				<h1 class="main-page__title">{{ $t('home.title') }}</h1>
+				<!-- <HomeUserLocation
+					v-if="mobile"
+					class="main-page__location"
+				/> -->
+				<HomeFilter
+					v-model:search="eventsQuery.searchLine"
+					v-model:country="eventsQuery.country"
+					v-model:city="eventsQuery.city"
+					class="main-page__filter"
 				/>
-				<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
-			</li>
-		</ul>
+			</div>
+			<ul class="main-page__card-list">
+				<li
+					v-for="event in posterEvents"
+					:key="event.id"
+					class="main-page__card-item"
+					itemscope
+					:itemtype="SeoItemTypeEnum.EVENT"
+				>
+					<HomeEventPreviewCard :event-data="event" />
+					<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
+				</li>
+			</ul>
 
-		<CommonButton
-			class="add-event-button"
-			button-kind="success"
-			is-round
-			icon-name="plus"
-			:alt="$t('home.button.add_event_aria')"
-			aria-haspopup="true"
-			@click="onButtonClick"
-		/>
+			<CommonButton
+				class="add-event-button"
+				button-kind="success"
+				is-round
+				icon-name="plus"
+				:alt="$t('home.button.add_event_aria')"
+				aria-haspopup="true"
+				@click="onButtonClick"
+			/>
+		</main>
+		<FooterCommon />
 	</div>
 </template>
 
 <style lang="less" scoped>
 .main-page {
-	padding-top: 16px;
+	@media (min-width: 768px) {
+		padding-top: 0;
+	}
 
-	&__search {
+	&__top {
+		display: flex;
+		width: 100%;
+		align-items: center;
+		flex-direction: column;
+		background: linear-gradient(
+			90deg,
+			var(--color-accent-background) 0%,
+			var(--color-accent-green-main) 100%
+		);
+		margin-top: 12px;
+		margin-bottom: 32px;
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
-		margin-bottom: 40px;
+
+		@media (min-width: 768px) {
+			border-radius: 10px;
+			padding-top: 65px;
+			margin-top: 0;
+			margin-bottom: 80px;
+		}
+
+		@media (min-width: 1440px) {
+			position: relative;
+			border-radius: 16px;
+			padding-top: 99px;
+			margin-bottom: 100px;
+		}
+	}
+
+	&__title {
+		max-width: 400px;
+		font-size: var(--font-size-XXL);
+		line-height: 40px;
+		text-align: center;
+		word-wrap: break-word;
+		color: var(--color-white);
+		padding-top: 28px;
+		margin-bottom: 24px;
+
+		@media (min-width: 768px) {
+			max-width: 600px;
+			font-size: 50px;
+			line-height: 60px;
+			padding-top: 0;
+			margin-bottom: 40px;
+		}
+
+		@media (min-width: 1440px) {
+			max-width: 900px;
+			font-size: 70px;
+			line-height: 80px;
+			margin-bottom: 120px;
+		}
 	}
 
 	&__location {
 		display: flex;
 		width: 100%;
-		padding-left: var(--padding-side);
-		padding-right: var(--padding-side);
-		margin-bottom: 16px;
-	}
-
-	&__title {
-		font-size: var(--font-size-XXL);
-		line-height: 40px;
-		padding-left: var(--padding-side);
-		padding-right: var(--padding-side);
+		justify-content: center;
 		margin-bottom: 24px;
 	}
 
 	&__filter {
-		padding-left: var(--padding-side);
-		padding-right: var(--padding-side);
+		width: 100%;
 		margin-bottom: 24px;
+
+		@media (min-width: 1440px) {
+			position: absolute;
+			bottom: -60px;
+		}
 	}
 
 	&__card-list {
 		display: flex;
 		flex-direction: column;
 		width: 100%;
+
+		@media (min-width: 768px) {
+			flex-direction: row;
+			flex-wrap: wrap;
+			padding-left: var(--padding-side);
+			padding-right: var(--padding-side);
+		}
+	}
+
+	&__card-item {
+		@media (min-width: 768px) {
+			display: flex;
+			width: 49.2%;
+			height: auto;
+			margin-bottom: 5%;
+			margin-right: 1.5%;
+
+			&:nth-child(2n) {
+				margin-right: 0;
+			}
+		}
+
+		@media (min-width: 1440px) {
+			display: flex;
+			width: 32.3%;
+			min-height: 100%;
+			margin-right: 0;
+
+			&:not(:nth-child(3n)) {
+				margin-right: 1.5%;
+			}
+		}
 	}
 }
 
@@ -141,6 +217,7 @@ const onButtonClick = () => {
 	right: 0;
 	margin-left: auto;
 	margin-right: 20px;
+	margin-bottom: var(--space-related-items);
 	z-index: 1;
 }
 </style>

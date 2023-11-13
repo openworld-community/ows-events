@@ -35,6 +35,10 @@ services:
                       - node_modules/
                 - path: ./frontend/package.json
                   action: rebuild
+                - path: ./frontend/package-lock.json
+                  action: rebuild
+                - path: ./frontend/Dockerfile
+                  action: rebuild
 
     backend:
         build:
@@ -43,10 +47,8 @@ services:
         logging: *default-logging
         depends_on:
             - mongo
-            - localization
         links:
             - mongo
-            - localization
         environment:
             - FRONTEND_URL=http://127.0.0.1
             - MONGO_URI=mongodb://mongo:27017/dev
@@ -73,44 +75,3 @@ services:
             start_period: 30s
         ports:
             - '27020:27017'
-
-    pgdatabase:
-        image: postgres:13
-        environment:
-            - POSTGRES_USER=root
-            - POSTGRES_PASSWORD=root
-            - POSTGRES_DB=data
-        ports:
-            - 5433:5432
-        volumes:
-            - ./localization/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
-
-    localization:
-        build:
-            context: ./localization
-            dockerfile: Dockerfile.win.dev
-        container_name: ows-events-localisation
-        command: python /app/start.py
-        restart: always
-        ports:
-            - 5000:5000
-        environment:
-            - USER=root
-            - PASSWORD=root
-            - HOST=pgdatabase
-            - PORT=5432
-            - DB=data
-            - AUTH=123
-            - OPENAI_API_KEY=qwe
-            - SECRET_KEY=123
-        develop:
-            watch:
-                - path: ./localization/root
-                  action: rebuild
-                  target: /app/root
-                - path: ./localization/start.py
-                  action: rebuild
-                  target: /app/start.py
-                - path: ./localization/store
-                  action: rebuild
-                  target: /app/store

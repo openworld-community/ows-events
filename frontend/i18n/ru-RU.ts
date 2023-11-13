@@ -11,7 +11,7 @@
 // import modal from '/locales/ru/modal';
 // import user from '/locales/ru/user';
 // import { type ErrorCodes } from '@/../common/const';
-import { CommonErrorsEnum } from '../../common/const/common-errors';
+// import { CommonErrorsEnum } from '../../common/const/common-errors';
 import { EventValidatorErrorTypes } from '../../common/const/event-validation-error'
 
 // TODO: сейчас в либе nuxtjs i18n не работает разбивка по файлам при lazy load по локалям, необходимо отслеживать issue
@@ -64,6 +64,7 @@ export default {
 	},
 	error: {
 		[EventValidatorErrorTypes.EVENT_IS_NOT_DEFINED]: 'Мероприятие не определено',
+		'event-not-found': 'Мероприятие не найдено',
 		TITLE_IS_NOT_DEFINED: 'Заголовок не определен',
 		TITLE_IS_TOO_SHORT: 'Заголовок слишком короткий',
 		TITLE_IS_TOO_LONG: 'Заголовок слишком длинный',
@@ -83,7 +84,7 @@ export default {
 		URL_IS_TOO_LONG: 'Ссылка на мероприятие слишком длинная',
 		TITLE_IS_NOT_CLEAN: 'В заголовоке ненормативная лексика',
 		DESCRIPTION_IS_NOT_CLEAN: 'В описании ненормативная лексика',
-		[CommonErrorsEnum.EVENT_NOT_FOUND]: 'Мероприятие не найдено',
+		// [CommonErrorsEnum.EVENT_NOT_FOUND]: 'Мероприятие не найдено',
 		'image-addition-error': 'Ошибка при добавлении изображения',
 		'image-deletion-error': 'Ошибка при удалении изображения',
 		'image-encoding-problem': 'Ошибка формата изображения',
@@ -107,6 +108,7 @@ export default {
 		image: {
 			event: 'Изображение мероприятия'
 		},
+		description_title: 'Описание мероприятия',
 		price: {
 			free: 'Бесплатно',
 			unknown: 'Цена не указана',
@@ -114,14 +116,56 @@ export default {
 			to: 'До'
 		}
 	},
+	footer: {
+		navigation: {
+			about: 'Об Афише',
+			support: 'Поддержка',
+			donate: 'Помочь Afisha',
+			limitation_of_liability: 'Ограничение ответственности'
+		}
+	},
+	form: {
+		global: {
+			required: '* поля, обязательные для заполнения'
+		},
+		event: {
+			title: 'Создание мероприятия',
+			title_edit: 'Редактирование мероприятия',
+			add_image: 'Добавить фото',
+			remove_image: 'Удалить фото',
+			image: 'Изображение мероприятия',
+			fields: {
+				location: 'Локация',
+				country: 'Страна',
+				city: 'Город',
+				address: 'Адрес',
+				address_placeholder: 'Улица, дом или название локации',
+				check_address: 'Проверьте правильность отображения локации ',
+				// \u00A0 - неразрывный пробел
+				address_link: 'на\u00A0карте',
+				timezone: 'Часовой пояс',
+				main_info: 'Общая информация',
+				title: 'Название',
+				organizer: 'Организатор',
+				description: 'Описание',
+				start: 'Начало',
+				end: 'Окончание',
+				price: 'Стоимость',
+				price_placeholder: 'Цена',
+				currency_placeholder: 'Валюта',
+				price_free: 'Бесплатно',
+				url_to_registration: 'Ссылка на регистрацию',
+				url_placeholder: 'https://example.com'
+			}
+		},
+	},
 	global: {
 		country: 'Страна',
 		city: 'Город',
-		search: 'Поиск',
 		timezone: 'Часовой пояс',
 		button: {
 			authorize: 'Авторизоваться',
-			add_to_favourites: 'Добавить в Избранное',
+			add_to_favourites: 'Добавить в избранное',
 			back: 'Назад',
 			cancel: 'Отмена',
 			close: 'Закрыть',
@@ -134,9 +178,10 @@ export default {
 			edit: 'Редактировать',
 			edit_profile: 'Редактировать профиль',
 			follow: 'Перейти',
+			in_favourites: 'В избранном',
 			logout: 'Выйти из аккаунта',
 			register: 'Зарегистрироваться',
-			remove_from_favourites: 'Удалить из Избранного',
+			remove_from_favourites: 'Удалить из избранного',
 			save: 'Сохранить',
 			search: 'Поиск',
 			share: 'Поделиться',
@@ -161,17 +206,16 @@ export default {
 		navigation: {
 			user: 'Пользователь',
 			authorize: 'Авторизоваться',
-			about: 'Oб Афише',
+			about: 'Об Афише',
 			support: 'Поддержка',
-			donation: 'Поддержать проект',
+			donation: 'Помочь Afisha',
 			limitation_of_liability: 'Ограничение ответственности',
 
 		},
 		subscription_expired: '$t(dates.day.key) до конца подписки',
 	},
 	home: {
-		hidden_title: 'Поиск мероприятий',
-		title: 'Мероприятия',
+		title: 'Объединяем людей вокруг событий',
 		button: {
 			add_event_aria: 'Добавить мероприятие'
 		},
@@ -185,7 +229,8 @@ export default {
 		},
 		filter: {
 			aria_country: 'Фильтр по стране',
-			aria_city: 'Фильтр по городу'
+			aria_city: 'Фильтр по городу',
+			search: 'Что вас интересует?',
 		},
 		user_location: {
 			not_found: 'Мы не смогли найти вас'
@@ -232,40 +277,8 @@ export default {
 		global: {
 			required: '* поля, обязательные для заполнения'
 		},
-		new_event_modal: {
-			title: 'Добавьте мероприятие',
-			title_edit: 'Редактирование мероприятия',
-			add_image: 'Добавить фото',
-			remove_image: 'Удалить фото',
-			fields: {
-				location: 'Локация',
-				country: 'Страна',
-				city: 'Город',
-				address: 'Адрес',
-				address_placeholder: 'Улица, дом или название локации',
-				check_address: 'Проверьте правильность отображения локации ',
-				// \u00A0 - неразрывный пробел
-				address_link: 'на\u00A0карте',
-				timezone: 'Часовой пояс',
-				main_info: 'Общая информация',
-				title: 'Название',
-				organizer: 'Организатор',
-				description: 'Описание',
-				start: 'Начало',
-				end: 'Окончание',
-				price: 'Стоимость',
-				price_placeholder: 'Цена',
-				currency_placeholder: 'Валюта',
-				price_free: 'Бесплатно',
-				url_to_registration: 'Ссылка на регистрацию',
-				url_placeholder: 'https://example.com'
-			}
-		},
-		need_authorize_modal: {
-			title: 'Для создания мероприятия необходимо авторизоваться',
-		},
-		delete_event_modal: {
-			title: 'Удаление мероприятия',
+		clear_event_form: {
+			title: 'Несохраненные данные будут удалены. Хотите закрыть форму?'
 		},
 		edit_profile: {
 			title: 'Редактирование профиля',
@@ -278,11 +291,18 @@ export default {
 				organizer: 'Организатор',
 				organizer_placeholder: 'Имя организатора мероприятия'
 			}
+		},
+		delete_event_modal: {
+			title: 'Удаление мероприятия',
+		},
+		need_authorize_modal: {
+			title: 'Для создания мероприятия необходимо авторизоваться',
 		}
 	},
 	user: {
 		unauthorized: {
-			title: 'Авторизуйтесь, чтобы получить доступ к дополнительным возможностям',
+			title: 'Войдите в личный кабинет',
+			text: 'Авторизуйтесь, чтобы получить доступ к дополнительным возможностям',
 			continue: 'Продолжить без авторизации',
 		},
 		greeting: 'Привет',
@@ -296,7 +316,8 @@ export default {
 			no_favourites: 'Вы еще ничего не добавили в “Избранное”',
 		},
 		donate: {
-			text: 'Станьте частью нашего проекта!',
+			title: 'Станьте частью нашего проекта!',
+			text: 'Мы приглашаем вас вступить в нашу творческую семью и вместе создавать нечто особенное',
 			button: 'Внести вклад'
 		}
 	}

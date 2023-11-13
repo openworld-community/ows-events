@@ -2,13 +2,31 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import path from 'path';
 import { fileURLToPath, URL } from 'node:url';
-import { searchForWorkspaceRoot } from 'vite'
+import { searchForWorkspaceRoot } from 'vite';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	modules: ['@nuxtjs/i18n', '@pinia/nuxt', '@vueuse/nuxt', '@nuxtjs/plausible'],
+	devtools: {
+		enabled: true // or false to disable
+	},
+	modules: [
+		'@nuxtjs/i18n',
+		'@pinia/nuxt',
+		'@vueuse/nuxt',
+		'@nuxtjs/plausible',
+		[
+			'nuxt-viewport',
+			{
+				breakpoints: {
+					mobile: 375,
+					tablet: 768,
+					desktop: 1440
+				}
+			}
+		]
+	],
 	routeRules: {
-		'/': {redirect: '/ru'}
+		'/': { redirect: '/ru', ssr: true }
 	},
 	i18n: {
 		// debug: true,
@@ -57,17 +75,15 @@ export default defineNuxtConfig({
 	vite: {
 		server: {
 			watch: {
-				usePolling: true},
+				usePolling: true
+			},
 			hmr: {
 				// нужно пока комментить, если фронт не через докер
 				protocol: 'ws',
-				clientPort: 24678
+				clientPort: 80
 			},
 			fs: {
-				allow: [
-					searchForWorkspaceRoot(process.cwd()),
-					'/app/common'
-				]
+				allow: [searchForWorkspaceRoot(process.cwd()), '/app/common']
 			}
 		},
 		plugins: [
@@ -83,8 +99,12 @@ export default defineNuxtConfig({
 		],
 		resolve: { alias: { '@common': fileURLToPath(new URL('../common', import.meta.url)) } }
 	},
+	// watcher:
 	// на винде очень долго стартует дев-сервер, проблема недавняя
 	// один из авторов Нукста на ГХ посоветовал такое решение
 	// если у кого-то от этой настройки наоборот что-то ломается, то скажите - что-нибудь придумаем
-	experimental: { watcher: 'chokidar' }
+	// appManifest:
+	// Почему-то при билде накст генерит разные buildId для appManifest и entry, пробую отключить
+	// (могут сломаться редиректы по языкам)
+	experimental: { watcher: 'chokidar', appManifest: false }
 });

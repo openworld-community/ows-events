@@ -5,6 +5,7 @@ export const SEO_SCHEMA_BASE_URL = 'https://schema.org/';
 export enum SeoItemTypeEnum {
 	OFFER = `${SEO_SCHEMA_BASE_URL}Offer`,
 	EVENT = `${SEO_SCHEMA_BASE_URL}Event`,
+	DATE = `${SEO_SCHEMA_BASE_URL}DateTime`,
 	LOCATION = `${SEO_SCHEMA_BASE_URL}Place`,
 	ADDRESS = `${SEO_SCHEMA_BASE_URL}PostalAddress`,
 	ABOUT = `${SEO_SCHEMA_BASE_URL}AboutPage`,
@@ -33,7 +34,7 @@ export enum SeoItempropEventEnum {
 	DESCRIPTION = 'description',
 	ORGANIZER = 'composer',
 	START_DATE = 'startDate',
-	DURATION = 'duration',
+	END_DATE = 'endDate',
 	LOCATION = 'location'
 }
 

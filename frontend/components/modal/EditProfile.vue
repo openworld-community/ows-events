@@ -51,49 +51,54 @@ const updateUserData = async () => {
 		@close-modal="closeEditProfileModal"
 	>
 		<template #form>
-			<ModalUiModalSection :label="$t('modal.edit_profile.fields.name')">
-				<template #child>
-					<CommonUiBaseInput
-						v-model="userData.first_name"
-						name="name"
-						:placeholder="$t('modal.edit_profile.fields.name_placeholder')"
-					/>
-					<CommonUiBaseInput
-						v-model="userData.last_name"
-						name="surname"
-						:placeholder="$t('modal.edit_profile.fields.surname_placeholder')"
-					/>
-				</template>
-			</ModalUiModalSection>
-			<ModalUiModalSection :label="$t('modal.edit_profile.fields.nickname')">
-				<template #child>
-					<CommonUiBaseInput
-						v-model="userData.nickname"
-						name="nickname"
-						:placeholder="$t('modal.edit_profile.fields.nickname_placeholder')"
-						required
-					/>
-				</template>
-			</ModalUiModalSection>
-			<ModalUiModalSection :label="$t('modal.edit_profile.fields.organizer')">
-				<template #child>
-					<CommonUiBaseInput
-						v-model="userData.company"
-						name="organizer"
-						:placeholder="$t('modal.edit_profile.fields.organizer_placeholder')"
-					/>
-				</template>
-			</ModalUiModalSection>
+			<div class="edit-profile__fields">
+				<ModalUiModalSection
+					:label="$t('modal.edit_profile.fields.name')"
+					:type="'column'"
+				>
+					<template #child>
+						<CommonUiBaseInput
+							v-model="userData.first_name"
+							name="name"
+							:placeholder="$t('modal.edit_profile.fields.name_placeholder')"
+						/>
+						<CommonUiBaseInput
+							v-model="userData.last_name"
+							name="surname"
+							:placeholder="$t('modal.edit_profile.fields.surname_placeholder')"
+						/>
+					</template>
+				</ModalUiModalSection>
+				<ModalUiModalSection :label="$t('modal.edit_profile.fields.nickname')">
+					<template #child>
+						<CommonUiBaseInput
+							v-model="userData.nickname"
+							name="nickname"
+							:placeholder="$t('modal.edit_profile.fields.nickname_placeholder')"
+							required
+						/>
+					</template>
+				</ModalUiModalSection>
+				<ModalUiModalSection :label="$t('modal.edit_profile.fields.organizer')">
+					<template #child>
+						<CommonUiBaseInput
+							v-model="userData.company"
+							name="organizer"
+							:placeholder="$t('modal.edit_profile.fields.organizer_placeholder')"
+						/>
+					</template>
+				</ModalUiModalSection>
+			</div>
 		</template>
 		<template #footer>
 			<CommonButton
-				class="modal-card__button modal-card__button--edit"
+				class="edit-profile__button"
 				button-kind="ordinary"
 				:button-text="$t('global.button.cancel')"
 				@click="closeEditProfileModal"
 			/>
 			<CommonButton
-				class="modal-card__button modal-card__button--save"
+				class="edit-profile__button"
 				button-kind="success"
 				:button-text="$t('global.button.save')"
 				:is-disabled="!checkFormFilling"
@@ -104,4 +109,19 @@ const updateUserData = async () => {
 	</CommonModalWrapper>
 </template>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.edit-profile {
+	&__fields {
+		width: 100%;
+
+		@media (min-width: 768px) {
+			max-width: 540px;
+		}
+	}
+
+	&__button {
+		width: 25%;
+		min-width: max-content;
+	}
+}
+</style>

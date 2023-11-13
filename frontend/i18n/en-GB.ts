@@ -10,7 +10,7 @@
 // import meta from '/locales/en/meta';
 // import modal from '/locales/en/modal';
 // import user from '/locales/en/user';
-import { CommonErrorsEnum } from '../../common/const/common-errors';
+// import { CommonErrorsEnum } from '../../common/const/common-errors';
 import { EventValidatorErrorTypes } from '../../common/const/event-validation-error'
 
 export default {
@@ -77,7 +77,7 @@ export default {
 		URL_IS_TOO_LONG: 'Event URL is too long',
 		TITLE_IS_NOT_CLEAN: 'Inappropriate language in the title',
 		DESCRIPTION_IS_NOT_CLEAN: 'Inappropriate language in the description',
-		[CommonErrorsEnum.EVENT_NOT_FOUND]: 'Event not found',
+		'event-not-found': 'Event not found',
 		'image-addition-error': 'Error adding image',
 		'image-deletion-error': 'Error deleting image',
 		'image-encoding-problem': 'Image format error',
@@ -101,6 +101,7 @@ export default {
 		image: {
 			event: 'Event image'
 		},
+		description_title: 'Event description',
 		price: {
 			free: 'Free',
 			unknown: 'Price not specified',
@@ -108,10 +109,52 @@ export default {
 			to: 'To'
 		}
 	},
+	footer: {
+		navigation: {
+			about: 'About Us',
+			support: 'Support',
+			donate: 'Help Afisha',
+			limitation_of_liability: 'Limitation of Liability'
+		}
+	},
+	form: {
+		global: {
+			required: '* required fields'
+		},
+		event: {
+			title: 'Create Event',
+			title_edit: 'Edit Event',
+			add_image: 'Add image',
+			remove_image: 'Remove image',
+			image: 'Изображение мероприятия',
+			fields: {
+				location: 'Location',
+				country: 'Country',
+				city: 'City',
+				address: 'Address',
+				address_placeholder: 'Street, house, or location name',
+				check_address: 'Check the location for accuracy ',
+				// \u00A0 - non-breaking space
+				address_link: 'on\u00A0map',
+				timezone: 'Timezone',
+				main_info: 'General information',
+				title: 'Title',
+				organizer: 'Organizer',
+				description: 'Description',
+				start: 'Start',
+				end: 'End',
+				price: 'Price',
+				price_placeholder: 'Price',
+				currency_placeholder: 'Currency',
+				price_free: 'Free',
+				url_to_registration: 'Registration link',
+				url_placeholder: 'https://example.com'
+			}
+		},
+	},
 	global: {
 		country: 'Country',
 		city: 'City',
-		search: 'Search',
 		timezone: 'Timezone',
 		button: {
 			authorize: 'Authorize',
@@ -128,6 +171,7 @@ export default {
 			edit: 'Edit',
 			edit_profile: 'Edit profile',
 			follow: 'Follow',
+			in_favourites: 'In Favourites',
 			logout: 'Logout',
 			register: 'Register',
 			remove_from_favourites: 'Remove from Favorites',
@@ -155,16 +199,15 @@ export default {
 		navigation: {
 			user: 'User',
 			authorize: 'Authorize',
-			about: 'About Afisha',
+			about: 'About us',
 			support: 'Support',
-			donation: 'Support the Project',
+			donation: 'Help Afisha',
 			limitation_of_liability: 'Limitation of Liability',
 		},
 		subscription_expired: '$t(dates.day.key) until the end of subscription',
 	},
 	home: {
-		hidden_title: 'Search for Events',
-		title: 'Events',
+		title: 'Bringing people together around events',
 		button: {
 			add_event_aria: 'Add an event'
 		},
@@ -178,7 +221,8 @@ export default {
 		},
 		filter: {
 			aria_country: 'Filter by country',
-			aria_city: 'Filter by city'
+			aria_city: 'Filter by city',
+			search: 'What are you interested in?',
 		},
 		user_location: {
 			not_found: 'We couldn\'t find your location'
@@ -225,40 +269,8 @@ export default {
 		global: {
 			required: '* required fields'
 		},
-		new_event_modal: {
-			title: 'Add new Event',
-			title_edit: 'Edit Event',
-			add_image: 'Add image',
-			remove_image: 'Remove image',
-			fields: {
-				location: 'Location',
-				country: 'Country',
-				city: 'City',
-				address: 'Address',
-				address_placeholder: 'Street, house, or location name',
-				check_address: 'Check the location for accuracy ',
-				// \u00A0 - non-breaking space
-				address_link: 'on\u00A0map',
-				timezone: 'Timezone',
-				main_info: 'General information',
-				title: 'Title',
-				organizer: 'Organizer',
-				description: 'Description',
-				start: 'Start',
-				end: 'End',
-				price: 'Price',
-				price_placeholder: 'Price',
-				currency_placeholder: 'Currency',
-				price_free: 'Free',
-				url_to_registration: 'Registration link',
-				url_placeholder: 'https://example.com'
-			}
-		},
-		need_authorize_modal: {
-			title: 'Authorization required to create an Event',
-		},
-		delete_event_modal: {
-			title: 'Delete event',
+		clear_event_form: {
+			title: 'Unsaved data will be deleted. Do you want to close the form?'
 		},
 		edit_profile: {
 			title: 'Edit Profile',
@@ -271,11 +283,18 @@ export default {
 				organizer: 'Organizer',
 				organizer_placeholder: 'Event organizer name'
 			}
+		},
+		delete_event_modal: {
+			title: 'Delete event',
+		},
+		need_authorize_modal: {
+			title: 'Authorization required to create an Event',
 		}
 	},
 	user: {
 		unauthorized: {
-			title: 'Please log in to access additional features',
+			title: 'Log into your account',
+			text: 'Please log in to access additional features',
 			continue: 'Continue without authorization',
 		},
 		greeting: 'Hello',
@@ -289,7 +308,8 @@ export default {
 			no_favourites: 'You haven\'t added anything to your "Favourites" yet',
 		},
 		donate: {
-			text: 'Become a part of our project!',
+			title: 'Become a part of our project!',
+			text: 'We invite you to join our creative family and create something special together',
 			button: 'Make a contribution'
 		}
 	}

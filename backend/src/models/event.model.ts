@@ -1,6 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import { EventDbEntity, IEventMeta } from '@common/types/event';
-import { localizedData } from './localizedData.schema';
 
 export type IEventDocument = EventDbEntity & IEventMeta & Document;
 
@@ -18,10 +17,10 @@ const schema = new Schema<IEventDocument>(
 			type: String,
 			required: true
 		},
-		originDescriptionLanguage: {
-			type: String
+		description: {
+			type: String,
+			required: true
 		},
-		description: localizedData,
 		date: {
 			type: Number,
 			required: true

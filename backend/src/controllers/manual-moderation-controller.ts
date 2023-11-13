@@ -6,7 +6,15 @@ export class Controller {
 		const filter: FilterQuery<IEventDocument> = status
 			? { 'meta.moderation.status': status }
 			: {};
-		const events = await EventModel.find(filter);
+		const events = await EventModel.find(
+			filter,
+			{},
+			{
+				sort: {
+					updatedAt: 'descending'
+				}
+			}
+		);
 		return events;
 	}
 

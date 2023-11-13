@@ -16,7 +16,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 			if (lastEvent && defaultEvent !== lastEvent) {
 				eventStore.$patch({
 					showClearFormModal: true,
-					navigateTo: to.path
+					navTo: to.path
 				});
 				return false;
 			} else {

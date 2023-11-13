@@ -133,9 +133,7 @@ patchDeleteEventModal({
 							:price="posterEvent.price"
 						/>
 						<CommonButton
-							v-if="
-								mobile && userStore.isAuthorized && userStore.id !== posterEvent.id
-							"
+							v-if="mobile && userStore.isAuthorized"
 							is-icon
 							is-round
 							:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
@@ -147,7 +145,7 @@ patchDeleteEventModal({
 							@click="toggleFavourites"
 						/>
 					</div>
-					<div class="event-info__title-wrapper">
+					<div class="event-info__header">
 						<!--      TODO когда будет user info, нужно будет подставлять имя создавшего -->
 						<p
 							v-if="posterEvent.organizer"
@@ -156,12 +154,26 @@ patchDeleteEventModal({
 						>
 							{{ posterEvent?.organizer }}
 						</p>
-						<h1
-							class="event-info__title"
-							:itemprop="SeoItempropEventEnum.NAME"
-						>
-							{{ posterEvent.title }}
-						</h1>
+						<div class="event-info__title-wrapper">
+							<h1
+								class="event-info__title"
+								:itemprop="SeoItempropEventEnum.NAME"
+							>
+								{{ posterEvent.title }}
+							</h1>
+							<CommonButton
+								v-if="!mobile && userStore.isAuthorized"
+								is-icon
+								is-round
+								:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
+								:alt="
+									isInFavourites
+										? $t('global.button.remove_from_favourites')
+										: $t('global.button.add_to_favourites')
+								"
+								@click="toggleFavourites"
+							/>
+						</div>
 					</div>
 					<div class="event-info__details">
 						<CommonEventDetails
@@ -228,10 +240,7 @@ patchDeleteEventModal({
 					class="event-info__actions"
 				>
 					<div
-						v-if="
-							userStore.id === posterEvent.creatorId ||
-							posterEvent.creatorId === 'dev-user'
-						"
+						v-if="userStore.id === posterEvent.creatorId"
 						class="event-info__manage"
 					>
 						<CommonButton
@@ -253,21 +262,6 @@ patchDeleteEventModal({
 							@click="onEditButtonClick"
 						/>
 					</div>
-					<CommonButton
-						v-if="
-							!mobile &&
-							posterEvent.id !== userStore.id &&
-							posterEvent.creatorId !== 'dev-user'
-						"
-						button-kind="ordinary"
-						:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
-						:button-text="
-							isInFavourites
-								? $t('global.button.in_favourites')
-								: $t('global.button.add_to_favourites')
-						"
-						@click="toggleFavourites"
-					/>
 				</div>
 			</div>
 		</main>
@@ -372,7 +366,7 @@ patchDeleteEventModal({
 		}
 	}
 
-	&__title-wrapper {
+	&__header {
 		display: flex;
 		width: 100%;
 		flex-direction: column;
@@ -400,6 +394,10 @@ patchDeleteEventModal({
 		}
 	}
 
+	&__title-wrapper {
+		display: flex;
+	}
+
 	&__title {
 		//TODO: пока верстка только мобилки
 		max-width: 480px;
@@ -412,6 +410,7 @@ patchDeleteEventModal({
 			font-size: var(--font-size-XXL);
 			line-height: 36px;
 			margin-bottom: 12px;
+			margin-right: 16px;
 		}
 	}
 

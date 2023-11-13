@@ -8,7 +8,7 @@ const clearForm = async () => {
 		showClearFormModal: false,
 		clearForm: true
 	});
-	await navigateTo({ path: eventStore.navigateTo });
+	await navigateTo({ path: eventStore.navTo });
 	eventStore.resetEventData();
 };
 </script>

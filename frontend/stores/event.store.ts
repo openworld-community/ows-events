@@ -11,7 +11,7 @@ export const useEventStore = defineStore('event', {
 		return {
 			clearForm: false,
 			showClearFormModal: false,
-			navigateTo: '',
+			navTo: '',
 			allTimezones: [],
 			minDate: new Date(),
 			eventData: {
@@ -54,7 +54,7 @@ export const useEventStore = defineStore('event', {
 				state.eventData.location.address = '';
 				state.eventData.price.currency = '';
 			}
-			if (state.eventData.location.country) {
+			if (state.eventData.location.country && process.client) {
 				state.eventData.timezone = await getTimezone(
 					state.eventData.location.country,
 					state.eventData.location.city
@@ -152,7 +152,7 @@ export const useEventStore = defineStore('event', {
 		resetEventData() {
 			const userStore = useUserStore();
 			this.allTimezones = [];
-			this.navigateTo = '';
+			this.navTo = '';
 			this.showClearFormModal = false;
 			this.minDate = new Date();
 			this.eventData = {

@@ -335,6 +335,11 @@ const submitEvent = async () => {
 	overflow: hidden;
 	max-height: 100vh;
 
+	// Для адаптивной height на iOs
+	@supports (-webkit-touch-callout: none) {
+		max-height: -webkit-fill-available;
+	}
+
 	&__title-wrapper {
 		display: flex;
 		width: 100%;
@@ -348,7 +353,11 @@ const submitEvent = async () => {
 		text-align: left;
 		font-size: var(--font-size-XL);
 		font-weight: var(--font-weight-regular);
-		padding: 30px var(--padding-side);
+		padding: 12px var(--padding-side);
+
+		@media(min-width: 768px) {
+			padding: 30px var(--padding-side);
+		}
 	}
 
 	&__fields-wrapper {
@@ -385,7 +394,11 @@ const submitEvent = async () => {
 		width: 100%;
 		max-width: 1200px;
 		justify-content: space-between;
-		padding: 30px var(--padding-side);
+		padding: 12px var(--padding-side);
+
+		@media(min-width: 768px) {
+			padding: 30px var(--padding-side);
+		}
 	}
 
 	&__button {

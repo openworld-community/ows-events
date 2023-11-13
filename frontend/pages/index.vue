@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
-import EventModal from '@/components/modal/Event.client.vue';
 import { SeoItemTypeEnum } from '../constants/enums/seo';
 import { useUserStore } from '../stores/user.store';
+import { RoutePathEnum } from '../constants/enums/route';
+import { useEventStore } from '../stores/event.store';
 
 const { t } = useI18n();
 
@@ -12,13 +13,8 @@ getMeta({
 });
 
 const userStore = useUserStore();
+const localePath = useLocalePath();
 
-const {
-	open: openEventModal,
-	close: closeEventModal,
-	patchOptions: eventModalPatch
-} = useModal({ component: EventModal });
-eventModalPatch({ attrs: { closeEventModal } });
 const {
 	open: openNeedAuthorizeModal,
 	close: closeNeedAuthorizeModal,
@@ -42,11 +38,13 @@ const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
 	data: { query: debouncedEventsRequestQuery }
 });
 
-const onButtonClick = () => {
+const onButtonClick = async () => {
 	if (userStore.isAuthorized) {
-		openEventModal();
+		const eventStore = useEventStore();
+		eventStore.createDefaultEventData();
+		await navigateTo(localePath({ path: RoutePathEnum.EVENT_FORM }));
 	} else {
-		openNeedAuthorizeModal();
+		await openNeedAuthorizeModal();
 	}
 };
 </script>

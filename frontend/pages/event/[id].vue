@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RoutePathEnum } from '@/constants/enums/route';
-import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
 
 import { trimString } from '../../utils/trimString';
@@ -12,20 +11,21 @@ import {
 } from '../../constants/enums/seo';
 import { useUserStore } from '../../stores/user.store';
 import { apiRouter } from '../../composables/useApiRouter';
+import { useEventStore } from '../../stores/event.store';
 
 const mobile = inject<boolean>('mobile');
 const route = useRoute();
 const localePath = useLocalePath();
 const id = getFirstParam(route.params.id);
-
 const userStore = useUserStore();
+const posterEvent = ref(null);
 
-const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ data: { id } });
-
-const posterEvent = computed(() => {
-	if (!data.value) return void navigateTo(localePath(RoutePathEnum.HOME));
-	return data.value;
-});
+const { data } = await apiRouter.events.get.useQuery({ data: { id } });
+if (data.value) {
+	posterEvent.value = data.value;
+} else {
+	navigateTo(localePath(RoutePathEnum.HOME));
+}
 
 const eventImage = computed(() => {
 	return getEventImage(posterEvent.value);
@@ -59,6 +59,13 @@ const deleteCard = async () => {
 	navigateTo(localePath({ path: RoutePathEnum.USER_PAGE }));
 };
 
+const onEditButtonClick = async () => {
+	const eventStore = useEventStore();
+	eventStore.setEventData(posterEvent.value);
+	eventStore.createDefaultEventData();
+	await navigateTo(localePath({ path: RoutePathEnum.EVENT_FORM }));
+};
+
 // TODO подключить, когда вернемся к проработке регистрации
 // const {
 // 	open: openRegistrationModal,
@@ -69,21 +76,6 @@ const deleteCard = async () => {
 // 	attrs: { eventId: id, close: () => void 0 }
 // } as UseModalOptions<InstanceType<typeof VueFinalModal>['$props']>);
 // patchRegistrationModal({ attrs: { close: closeRegistrationModal } });
-
-const {
-	open: openEventModal,
-	close: closeEventModal,
-	patchOptions: patchEventModal
-} = useModal({ component: EventModal } as UseModalOptions<
-	InstanceType<typeof VueFinalModal>['$props']
->);
-patchEventModal({
-	attrs: {
-		dataForEdit: posterEvent,
-		closeEventModal,
-		refreshEvent
-	}
-});
 
 const {
 	open: openDeleteEventModal,
@@ -141,9 +133,7 @@ patchDeleteEventModal({
 							:price="posterEvent.price"
 						/>
 						<CommonButton
-							v-if="
-								mobile && userStore.isAuthorized && userStore.id !== posterEvent.id
-							"
+							v-if="mobile && userStore.isAuthorized"
 							is-icon
 							is-round
 							:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
@@ -155,7 +145,7 @@ patchDeleteEventModal({
 							@click="toggleFavourites"
 						/>
 					</div>
-					<div class="event-info__title-wrapper">
+					<div class="event-info__header">
 						<!--      TODO когда будет user info, нужно будет подставлять имя создавшего -->
 						<p
 							v-if="posterEvent.organizer"
@@ -164,12 +154,26 @@ patchDeleteEventModal({
 						>
 							{{ posterEvent?.organizer }}
 						</p>
-						<h1
-							class="event-info__title"
-							:itemprop="SeoItempropEventEnum.NAME"
-						>
-							{{ posterEvent.title }}
-						</h1>
+						<div class="event-info__title-wrapper">
+							<h1
+								class="event-info__title"
+								:itemprop="SeoItempropEventEnum.NAME"
+							>
+								{{ posterEvent.title }}
+							</h1>
+							<CommonButton
+								v-if="!mobile && userStore.isAuthorized"
+								is-icon
+								is-round
+								:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
+								:alt="
+									isInFavourites
+										? $t('global.button.remove_from_favourites')
+										: $t('global.button.add_to_favourites')
+								"
+								@click="toggleFavourites"
+							/>
+						</div>
 					</div>
 					<div class="event-info__details">
 						<CommonEventDetails
@@ -236,10 +240,7 @@ patchDeleteEventModal({
 					class="event-info__actions"
 				>
 					<div
-						v-if="
-							userStore.id === posterEvent.creatorId ||
-							posterEvent.creatorId === 'dev-user'
-						"
+						v-if="userStore.id === posterEvent.creatorId"
 						class="event-info__manage"
 					>
 						<CommonButton
@@ -258,24 +259,9 @@ patchDeleteEventModal({
 							icon-name="edit"
 							icon-width="16"
 							icon-height="16"
-							@click="openEventModal"
+							@click="onEditButtonClick"
 						/>
 					</div>
-					<CommonButton
-						v-if="
-							!mobile &&
-							posterEvent.id !== userStore.id &&
-							posterEvent.creatorId !== 'dev-user'
-						"
-						button-kind="ordinary"
-						:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
-						:button-text="
-							isInFavourites
-								? $t('global.button.in_favourites')
-								: $t('global.button.add_to_favourites')
-						"
-						@click="toggleFavourites"
-					/>
 				</div>
 			</div>
 		</main>
@@ -380,7 +366,7 @@ patchDeleteEventModal({
 		}
 	}
 
-	&__title-wrapper {
+	&__header {
 		display: flex;
 		width: 100%;
 		flex-direction: column;
@@ -408,6 +394,10 @@ patchDeleteEventModal({
 		}
 	}
 
+	&__title-wrapper {
+		display: flex;
+	}
+
 	&__title {
 		//TODO: пока верстка только мобилки
 		max-width: 480px;
@@ -420,6 +410,7 @@ patchDeleteEventModal({
 			font-size: var(--font-size-XXL);
 			line-height: 36px;
 			margin-bottom: 12px;
+			margin-right: 16px;
 		}
 	}
 

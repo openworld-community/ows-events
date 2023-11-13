@@ -35,6 +35,10 @@ services:
                       - node_modules/
                 - path: ./frontend/package.json
                   action: rebuild
+                - path: ./frontend/package-lock.json
+                  action: rebuild
+                - path: ./frontend/Dockerfile
+                  action: rebuild
 
     backend:
         build:
@@ -43,10 +47,8 @@ services:
         logging: *default-logging
         depends_on:
             - mongo
-            - localization
         links:
             - mongo
-            - localization
         environment:
             - FRONTEND_URL=http://127.0.0.1
             - MONGO_URI=mongodb://mongo:27017/dev

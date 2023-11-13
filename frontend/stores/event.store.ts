@@ -43,43 +43,49 @@ export const useEventStore = defineStore('event', {
 	},
 	getters: {
 		setEventToLocalStorage(state) {
-			if (process.client) {
-				if (!state.clearForm) {
-					localStorage.setItem(
-						LocalStorageEnum.EVENT_DATA,
-						JSON.stringify(state.eventData)
-					);
+			(function () {
+				if (process.client) {
+					if (!state.clearForm) {
+						localStorage.setItem(
+							LocalStorageEnum.EVENT_DATA,
+							JSON.stringify(state.eventData)
+						);
+					}
 				}
-			}
+			})();
 		},
-		async controlLocation(state) {
-			if (process.client) {
-				if (!state.eventData.location.country) {
-					state.eventData.timezone = '';
-					state.eventData.location.city = '';
-					state.eventData.location.address = '';
-					state.eventData.price.currency = '';
+		controlLocation(state) {
+			(async function () {
+				if (process.client) {
+					if (!state.eventData.location.country) {
+						state.eventData.timezone = '';
+						state.eventData.location.city = '';
+						state.eventData.location.address = '';
+						state.eventData.price.currency = '';
+					}
+					if (state.eventData.location.country) {
+						state.eventData.timezone = await getTimezone(
+							state.eventData.location.country,
+							state.eventData.location.city
+						);
+					}
+					if (!state.eventData.isFree && state.eventData.location.country)
+						state.eventData.price.currency = getCurrencyByCountry(
+							state.eventData.location.country
+						);
 				}
-				if (state.eventData.location.country) {
-					state.eventData.timezone = await getTimezone(
-						state.eventData.location.country,
-						state.eventData.location.city
-					);
-				}
-				if (!state.eventData.isFree && state.eventData.location.country)
-					state.eventData.price.currency = getCurrencyByCountry(
-						state.eventData.location.country
-					);
-			}
+			})();
 		},
 		controlDateTime(state) {
-			if (!state.eventData.startDate || !state.eventData.startTime) {
-				state.eventData.endDate = null;
-				state.eventData.startTime = null;
-			}
-			if (!state.eventData.endDate) {
-				state.eventData.endTime = null;
-			}
+			(function() {
+				if (!state.eventData.startDate || !state.eventData.startTime) {
+					state.eventData.endDate = null;
+					state.eventData.startTime = null;
+				}
+				if (!state.eventData.endDate) {
+					state.eventData.endTime = null;
+				}
+			})()
 		},
 		checkFormFilling(state) {
 			return !!(

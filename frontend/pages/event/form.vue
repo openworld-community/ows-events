@@ -335,6 +335,11 @@ const submitEvent = async () => {
 	overflow: hidden;
 	max-height: 100vh;
 
+	// Для адаптивной height на iOs
+	@supports (-webkit-touch-callout: none) {
+		max-height: -webkit-fill-available;
+	}
+
 	&__title-wrapper {
 		display: flex;
 		width: 100%;

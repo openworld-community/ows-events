@@ -64,7 +64,7 @@ const props = defineProps({
 
 		& > :deep(div:not(:last-child)) {
 			display: flex;
-			gap: var(--space-unrelated-items);
+			gap: 16px;
 			margin-bottom: var(--space-unrelated-items);
 		}
 	}

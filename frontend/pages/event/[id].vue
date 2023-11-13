@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RoutePathEnum } from '@/constants/enums/route';
-import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
 
 import { trimString } from '../../utils/trimString';
@@ -18,15 +17,15 @@ const mobile = inject<boolean>('mobile');
 const route = useRoute();
 const localePath = useLocalePath();
 const id = getFirstParam(route.params.id);
-
 const userStore = useUserStore();
+const posterEvent = ref(null);
 
-const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ data: { id } });
-
-const posterEvent = computed(() => {
-	if (!data.value) return void navigateTo(localePath(RoutePathEnum.HOME));
-	return data.value;
-});
+const { data } = await apiRouter.events.get.useQuery({ data: { id } });
+if (data.value) {
+	posterEvent.value = data.value;
+} else {
+	navigateTo(localePath(RoutePathEnum.HOME));
+}
 
 const eventImage = computed(() => {
 	return getEventImage(posterEvent.value);
@@ -63,6 +62,7 @@ const deleteCard = async () => {
 const onEditButtonClick = async () => {
 	const eventStore = useEventStore();
 	eventStore.setEventData(posterEvent.value);
+	eventStore.createDefaultEventData();
 	await navigateTo(localePath({ path: RoutePathEnum.EVENT_FORM }));
 };
 
@@ -76,21 +76,6 @@ const onEditButtonClick = async () => {
 // 	attrs: { eventId: id, close: () => void 0 }
 // } as UseModalOptions<InstanceType<typeof VueFinalModal>['$props']>);
 // patchRegistrationModal({ attrs: { close: closeRegistrationModal } });
-
-const {
-	open: openEventModal,
-	close: closeEventModal,
-	patchOptions: patchEventModal
-} = useModal({ component: EventModal } as UseModalOptions<
-	InstanceType<typeof VueFinalModal>['$props']
->);
-patchEventModal({
-	attrs: {
-		dataForEdit: posterEvent,
-		closeEventModal,
-		refreshEvent
-	}
-});
 
 const {
 	open: openDeleteEventModal,
@@ -258,7 +243,7 @@ patchDeleteEventModal({
 							icon-name="edit"
 							icon-width="16"
 							icon-height="16"
-							@click="openEventModal"
+							@click="onEditButtonClick"
 						/>
 					</div>
 					<CommonButton

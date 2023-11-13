@@ -10,7 +10,7 @@
 // import meta from '/locales/en/meta';
 // import modal from '/locales/en/modal';
 // import user from '/locales/en/user';
-import { CommonErrorsEnum } from '../../common/const/common-errors';
+// import { CommonErrorsEnum } from '../../common/const/common-errors';
 import { EventValidatorErrorTypes } from '../../common/const/event-validation-error'
 
 export default {
@@ -77,7 +77,7 @@ export default {
 		URL_IS_TOO_LONG: 'Event URL is too long',
 		TITLE_IS_NOT_CLEAN: 'Inappropriate language in the title',
 		DESCRIPTION_IS_NOT_CLEAN: 'Inappropriate language in the description',
-		[CommonErrorsEnum.EVENT_NOT_FOUND]: 'Event not found',
+		'event-not-found': 'Event not found',
 		'image-addition-error': 'Error adding image',
 		'image-deletion-error': 'Error deleting image',
 		'image-encoding-problem': 'Image format error',
@@ -126,6 +126,7 @@ export default {
 			title_edit: 'Edit Event',
 			add_image: 'Add image',
 			remove_image: 'Remove image',
+			image: 'Изображение мероприятия',
 			fields: {
 				location: 'Location',
 				country: 'Country',
@@ -268,11 +269,8 @@ export default {
 		global: {
 			required: '* required fields'
 		},
-		need_authorize_modal: {
-			title: 'Authorization required to create an Event',
-		},
-		delete_event_modal: {
-			title: 'Delete event',
+		clear_event_form: {
+			title: 'Unsaved data will be deleted. Do you want to close the form?'
 		},
 		edit_profile: {
 			title: 'Edit Profile',
@@ -285,6 +283,12 @@ export default {
 				organizer: 'Organizer',
 				organizer_placeholder: 'Event organizer name'
 			}
+		},
+		delete_event_modal: {
+			title: 'Delete event',
+		},
+		need_authorize_modal: {
+			title: 'Authorization required to create an Event',
 		}
 	},
 	user: {

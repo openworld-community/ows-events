@@ -115,7 +115,7 @@ export const useLocationStore = defineStore('location', {
 							if (!data.value) return;
 							this.userLocation = data.value;
 						} catch (error: any) {
-							console.log('error: ', error.message);
+							console.error('error: ', error.message);
 						}
 					},
 

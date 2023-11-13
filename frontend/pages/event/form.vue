@@ -1,461 +1,328 @@
 <script setup lang="ts">
-import { getAllTimezones, getTimezone } from '@/services/timezone.services';
-import { useLocationStore, type Country, type City } from '@/stores/location.store';
-import { type EventOnPoster } from '@/../common/types';
-import type { ImageLoaderFile } from '../common/ImageLoader.vue';
-import { EventTypes } from '../../../common/const/eventTypes';
-import { getCurrencyByCountry } from '../../utils/prices';
-import { useUserStore } from '../../stores/user.store';
-import { LocalStorageEnum } from '../../constants/enums/common';
+import { useLocationStore } from '@/stores/location.store';
 import { useEventStore } from '../../stores/event.store';
+import type { PostEventPayload } from '../../../common/types/event';
 
-type Props = {
-	dataForEdit?: EventOnPoster;
-	refreshEvent?: () => void;
-};
-const props = defineProps<Props>();
 const locationStore = useLocationStore();
-const userStore = useUserStore();
-const eventStore = useEventStore()
+const eventStore = useEventStore();
 const router = useRouter();
-const localePath = useLocalePath()
+const localePath = useLocalePath();
+const mobile = inject('mobile');
 
-const isLoading = ref(false);
-const newImageFile = ref<ImageLoaderFile>(null);
-
-onMounted(() => {
-	eventStore.setEventData()
-})
-
-const allTimezones = (await getAllTimezones()).map((timezone) =>
-	timezoneToString(timezone)
-) as string[];
-const minDate = new Date();
-
-const isFree = ref(eventStore.eventData.price.value === 0);
-
-const inputValues = ref({
-	id: props.dataForEdit?.id ?? '',
-	title: props.dataForEdit?.title ?? '',
-	organizer: props.dataForEdit?.organizer ?? userStore.userInfo?.company ?? '',
-	description: props.dataForEdit?.description ?? '',
-	startDate: getDateFromEpochInMs(props.dataForEdit?.date),
-	startTime: getTimeFromEpochInMs(props.dataForEdit?.date),
-	endDate: props.dataForEdit?.durationInSeconds
-		? getDateFromEpochInMs(
-				(props.dataForEdit?.date ?? 0) + props.dataForEdit.durationInSeconds * 1000
-		  )
-		: null,
-	endTime: props.dataForEdit?.durationInSeconds
-		? getTimeFromEpochInMs(
-				(props.dataForEdit?.date ?? 0) + props.dataForEdit.durationInSeconds * 1000
-		  )
-		: null,
-	location: {
-		country: (props.dataForEdit?.location.country ?? '') satisfies Country,
-		city: (props.dataForEdit?.location.city ?? '') satisfies City,
-		address: props.dataForEdit?.location.address ?? ''
-	},
-	image: props.dataForEdit?.image ?? '',
-	price: {
-		value: !isFree.value ? props.dataForEdit?.price?.value ?? '' : '',
-		currency: props.dataForEdit?.price?.currency ?? ''
-	},
-	timezone: props.dataForEdit?.timezone ? timezoneToString(props.dataForEdit.timezone) : '',
-	url: props.dataForEdit?.url ?? ''
-});
-
-const eventStartEpoch = computed(() =>
-	combineDateTime(inputValues.value.startDate, inputValues.value.startTime).getTime()
-);
-const eventEndEpoch = computed(() =>
-	combineDateTime(inputValues.value.endDate, inputValues.value.endTime).getTime()
-);
-
-const toggleFree = (value: boolean) => {
-	isFree.value = value;
-	//убираем значение из инпута, в paramsForSubmit подставляется 0
-	if (value) {
-		inputValues.value.price.value = '';
-		inputValues.value.price.currency = '';
-	}
-};
-
-const checkFormFilling = computed(() => {
-	return !!(
-		inputValues.value.title &&
-		inputValues.value.description &&
-		inputValues.value.url &&
-		inputValues.value.startDate &&
-		inputValues.value.startTime &&
-		// endDate & endTime both must be null or non-null
-		(inputValues.value.endDate ? inputValues.value.endTime : !inputValues.value.endTime) &&
-		inputValues.value.location.country &&
-		inputValues.value.location.city &&
-		inputValues.value.timezone &&
-		allTimezones.includes(inputValues.value.timezone) &&
-		(isFree.value || (inputValues.value.price.value && inputValues.value.price.currency))
-	);
-});
-
-const paramsForSubmit = computed(() => {
-	return {
-		title: inputValues.value.title,
-		organizer: inputValues.value.organizer,
-		description: inputValues.value.description,
-		date: eventStartEpoch.value,
-		durationInSeconds: Math.floor(
-			Math.max(0, eventEndEpoch.value - eventStartEpoch.value) / 1000
-		),
-		location: {
-			country: inputValues.value.location.country,
-			city: inputValues.value.location.city,
-			address: inputValues.value.location.address
-		},
-		price: {
-			minValue: null,
-			value: isFree.value ? 0 : Number(inputValues.value.price.value),
-			maxValue: null,
-			currency: isFree.value ? null : inputValues.value.price.currency
-		},
-		timezone: stringToTimezone(inputValues.value.timezone),
-		url: inputValues.value.url
-	};
+onMounted(async () => {
+	await eventStore.getTimezones();
+	eventStore.setEventData();
 });
 
 const submitEvent = async () => {
-	isLoading.value = true;
+	eventStore.eventData.isLoading = true;
 
-	if (props.dataForEdit) {
-		let image = props.dataForEdit.image;
-		if (newImageFile.value && props.dataForEdit.image) {
-			await apiRouter.events.image.delete.useMutation({
-				data: { path: props.dataForEdit.image }
-			});
-			image = '';
-		}
-		image = (await addImage(newImageFile.value)) ?? image;
+	const eventStartEpoch = combineDateTime(
+		eventStore.eventData.startDate,
+		eventStore.eventData.startTime
+	).getTime();
 
-		const event = Object.assign(paramsForSubmit.value, {
-			id: inputValues.value.id,
-			image,
-			type: EventTypes.USER_GENERATED
+	const eventEndEpoch = combineDateTime(
+		eventStore.eventData.endDate,
+		eventStore.eventData.endTime
+	).getTime();
+
+	const paramsForSubmit: PostEventPayload = {
+		title: eventStore.eventData.title,
+		organizer: eventStore.eventData.organizer,
+		description: eventStore.eventData.description,
+		date: eventStartEpoch,
+		durationInSeconds: Math.floor(Math.max(0, eventEndEpoch - eventStartEpoch) / 1000),
+		location: {
+			country: eventStore.eventData.location.country,
+			city: eventStore.eventData.location.city,
+			address: eventStore.eventData.location.address
+		},
+		price: {
+			minValue: null,
+			value: eventStore.eventData.isFree ? 0 : Number(eventStore.eventData.price.value),
+			maxValue: null,
+			currency: eventStore.eventData.isFree ? null : eventStore.eventData.price.currency
+		},
+		timezone: stringToTimezone(eventStore.eventData.timezone),
+		image: eventStore.eventData.image,
+		url: eventStore.eventData.url
+	};
+
+	if (eventStore.eventData.editing) {
+		paramsForSubmit.id = eventStore.eventData.id;
+		const { error } = await apiRouter.events.edit.useMutation({
+			data: { event: paramsForSubmit }
 		});
-		const { error } = await apiRouter.events.edit.useMutation({ data: { event } });
-
-		if (!error.value) props.refreshEvent?.();
+		if (!error.value) {
+			eventStore.$patch({ clearForm: true });
+			await navigateTo(localePath(`/event/${eventStore.eventData.id}`));
+		}
 	} else {
-		const image = (await addImage(newImageFile.value)) ?? '';
-		const event = Object.assign(paramsForSubmit.value, { image });
-		const { data } = await apiRouter.events.add.useMutation({ data: { event } });
+		const { data } = await apiRouter.events.add.useMutation({
+			data: { event: paramsForSubmit }
+		});
 
 		if (data.value) {
+			eventStore.$patch({ clearForm: true });
 			await navigateTo(localePath(`/event/${data.value.id}`));
 		} else {
-			isLoading.value = false;
+			eventStore.eventData.isLoading = false;
 			return;
 		}
 	}
 
-	isLoading.value = false;
+	eventStore.eventData.isLoading = false;
 };
-
-async function addImage(image: ImageLoaderFile) {
-	if (!image || image === 'DELETED') return;
-	const { data } = await apiRouter.events.image.add.useMutation({ data: { image } });
-	if (!data.value) return;
-	return data.value.path;
-}
-
-// #region country, city, timezone string input relationship logic
-// watch(
-// 	() => inputValues.value.location.country,
-// 	(country) => {
-// 		if (!isFree.value && country)
-// 			inputValues.value.price.currency = getCurrencyByCountry(country);
-// 		if (!country) {
-// 			inputValues.value.timezone = '';
-// 			inputValues.value.location.city = '';
-// 			inputValues.value.price.currency = '';
-// 		}
-// 	}
-// );
-
-// watch(
-// 	() => isFree.value,
-// 	() => {
-// 		if (!isFree.value)
-// 			inputValues.value.price.currency = getCurrencyByCountry(
-// 				inputValues.value.location.country
-// 			);
-// 	}
-// );
-
-// watch(
-// 	() => [inputValues.value.location.country, inputValues.value.location.city],
-// 	async ([country, city]) => {
-// 		if (!country) return;
-// 		inputValues.value.timezone = await getTimezone(country, city);
-// 	}
-// );
-// #endregion
-
-// #region datetime input relationship logic
-watch(
-	() => !!inputValues.value.startDate,
-	(isStartSet) => {
-		if (isStartSet) return;
-		inputValues.value.startTime = null;
-		inputValues.value.endDate = null;
-	}
-);
-watch(
-	() => !!inputValues.value.endDate,
-	(isEndSet) => {
-		if (isEndSet) return;
-		inputValues.value.endTime = null;
-	}
-);
-watch(
-	() => [eventStartEpoch.value, eventEndEpoch.value],
-	([startEpoch, endEpoch]) => {
-		const { endDate, startDate, endTime } = inputValues.value;
-		if (!endDate || !startDate) return;
-		if (endEpoch >= startEpoch) return;
-
-		if (endTime) {
-			inputValues.value.endTime = null;
-			return;
-		}
-
-		if (startDate.toDateString() === endDate.toDateString()) return;
-		inputValues.value.endDate = null;
-	}
-);
-// #endregion
 </script>
 
 <template>
 	<div class="event-form">
-		<h1 class="event-form__title">
-			{{ $t(props.dataForEdit ? 'form.event.title_edit' : 'form.event.title') }}
-		</h1>
-		<div class="event-form__fields">
-			<ModalUiModalSection :label="$t('form.event.fields.location')">
-				<template #child>
-					<CommonUiBaseSelect
-						v-model="eventStore.eventData.location.country"
-						name="country"
-						:placeholder="$t('global.country')"
-						:list="locationStore.countries"
-						input-readonly
-						required
-					/>
+		<div class="event-form__title-wrapper">
+			<h1 class="event-form__title">
+				{{
+					$t(eventStore.eventData.editing ? 'form.event.title_edit' : 'form.event.title')
+				}}
+			</h1>
+		</div>
+		<div class="event-form__fields-wrapper">
+			<div class="event-form__fields">
+				<ModalUiModalSection
+					:label="$t('form.event.fields.location')"
+					:type="mobile ? 'column' : 'column-row'"
+				>
+					<template #child>
+						<div>
+							<CommonUiBaseSelect
+								v-model="eventStore.eventData.location.country"
+								name="country"
+								:placeholder="$t('global.country')"
+								:list="locationStore.countries"
+								input-readonly
+								required
+							/>
 
-					<CommonUiBaseSelect
-						v-model="eventStore.eventData.location.city"
-						name="city"
-						:disabled="!eventStore.eventData.location.country"
-						:placeholder="$t('global.city')"
-						:list="locationStore.getCitiesByCountry(eventStore.eventData.location.country)"
-						input-readonly
-						required
-					/>
+							<CommonUiBaseSelect
+								v-model="eventStore.eventData.location.city"
+								name="city"
+								:disabled="!eventStore.eventData.location.country"
+								:placeholder="$t('global.city')"
+								:list="
+									locationStore.getCitiesByCountry(
+										eventStore.eventData.location.country
+									)
+								"
+								input-readonly
+								required
+							/>
 
-					<CommonUiBaseSelect
-						v-model="eventStore.eventData.timezone"
-						name="timezone"
-						:disabled="!eventStore.eventData.location.country"
-						:placeholder="$t('global.timezone')"
-						:list="allTimezones"
-						required
-					/>
-
-					<CommonUiBaseInput
-						v-model="eventStore.eventData.location.address"
-						name="address"
-						:placeholder="$t('form.event.fields.address_placeholder')"
-						:disabled="!(eventStore.eventData.location.country && eventStore.eventData.location.city)"
-					/>
-
-					<div
-						v-if="eventStore.eventData.location.city && eventStore.eventData.location.address"
-						class="modal-card__check-location check-location"
-					>
-						<CommonIcon
-							class="check-location__icon"
-							name="error"
-							width="26"
-							height="26"
-							color="var(--color-accent-red)"
+							<CommonUiBaseSelect
+								v-model="eventStore.eventData.timezone"
+								name="timezone"
+								:disabled="!eventStore.eventData.location.country"
+								:placeholder="$t('global.timezone')"
+								:list="eventStore.allTimezones"
+								required
+							/>
+						</div>
+						<CommonUiBaseInput
+							v-model="eventStore.eventData.location.address"
+							name="address"
+							:placeholder="$t('form.event.fields.address_placeholder')"
+							:disabled="
+								!(
+									eventStore.eventData.location.country &&
+									eventStore.eventData.location.city
+								)
+							"
 						/>
-						<p class="check-location__text">
-							<span>
-								{{ $t('form.event.fields.check_address') }}
-							</span>
-							<NuxtLink
-								:to="getLocationLink(eventStore.eventData.location)"
-								target="_blank"
-								class="check-location__link"
-							>
-								{{ $t('form.event.fields.address_link') }}
-							</NuxtLink>
-						</p>
-					</div>
-				</template>
-			</ModalUiModalSection>
 
-			<ModalUiModalSection :label="$t('form.event.fields.main_info')">
-				<template #child>
-					<CommonUiBaseInput
-						v-model="eventStore.eventData.title"
-						name="title"
-						:placeholder="$t('form.event.fields.title')"
-						required
-					/>
-					<CommonUiBaseInput
-						v-model="eventStore.eventData.organizer"
-						name="organizer"
-						:placeholder="$t('form.event.fields.organizer')"
-					/>
-					<CommonUiTextArea
-						v-model="eventStore.eventData.description"
-						name="description"
-						:placeholder="$t('form.event.fields.description')"
-						required
-					/>
-				</template>
-			</ModalUiModalSection>
+						<div
+							v-if="
+								eventStore.eventData.location.city &&
+								eventStore.eventData.location.address
+							"
+							class="modal-card__check-location check-location"
+						>
+							<CommonIcon
+								class="check-location__icon"
+								name="error"
+								width="26"
+								height="26"
+								color="var(--color-accent-red)"
+							/>
+							<p class="check-location__text">
+								<span>
+									{{ $t('form.event.fields.check_address') }}
+								</span>
+								<NuxtLink
+									:to="getLocationLink(eventStore.eventData.location)"
+									target="_blank"
+									class="check-location__link"
+								>
+									{{ $t('form.event.fields.address_link') }}
+								</NuxtLink>
+							</p>
+						</div>
+					</template>
+				</ModalUiModalSection>
 
-			<ModalUiModalSection
-				type="row"
-				:label="$t('form.event.fields.start')"
-			>
-				<template #child>
-					<CommonUiDateTimepicker
-						v-model="eventStore.eventData.startDate"
-						type="date"
-						name="startDate"
-						:min-date="minDate"
-						required
-					/>
-					<CommonUiDateTimepicker
-						v-model="eventStore.eventData.startTime"
-						type="time"
-						name="startTime"
-						placeholder="--:--"
-
-						:disabled="!eventStore.eventData.startDate"
-						required
-					/>
-<!--		:min-time="
-							eventStore.eventData.startDate?.toDateString() === new Date().toDateString()
-								? getTimeFromEpochInMs(Date.now(), true)
-								: undefined
-						"			-->
-				</template>
-			</ModalUiModalSection>
-
-			<ModalUiModalSection
-				type="row"
-				:label="$t('form.event.fields.end')"
-			>
-				<template #child>
-					<CommonUiDateTimepicker
-						v-model="eventStore.eventData.endDate"
-						type="date"
-						name="endDate"
-						:min-date="eventStore.eventData.startDate ?? minDate"
-						:disabled="!eventStore.eventData.startDate"
-					/>
-					<CommonUiDateTimepicker
-						v-model="eventStore.eventData.endTime"
-						type="time"
-						name="endTime"
-						placeholder="--:--"
-
-						:disabled="!eventStore.eventData.endDate"
-						:required="!!eventStore.eventData.endDate"
-					/>
-<!--			:min-time="
-							eventStore.eventData.startDate?.toDateString() ===
-							eventStore.eventData.endDate?.toDateString()
-								? eventStore.eventData.startTime
-								: undefined
-						"		-->
-				</template>
-			</ModalUiModalSection>
-
-			<ModalUiModalSection
-				type="column-row"
-				:label="$t('form.event.fields.price')"
-			>
-				<template #child>
-					<div>
-						<CommonUiBaseSelect
-							v-model="eventStore.eventData.price.currency"
-							name="currency"
-							:placeholder="$t('form.event.fields.currency_placeholder')"
-							:list="locationStore.currencies"
-							has-icon-items
-							input-readonly
-							:disabled="eventStore.isFree"
-							:required="!eventStore.isFree"
+				<ModalUiModalSection :label="$t('form.event.fields.main_info')">
+					<template #child>
+						<CommonUiBaseInput
+							v-model="eventStore.eventData.title"
+							name="title"
+							:placeholder="$t('form.event.fields.title')"
+							required
 						/>
 						<CommonUiBaseInput
-							v-model="eventStore.eventData.price.value"
-							name="price"
-							type="number"
-							:min-value="0"
-							:disabled="eventStore.isFree"
-							:required="!eventStore.isFree"
-							:placeholder="$t('form.event.fields.price_placeholder')"
+							v-model="eventStore.eventData.organizer"
+							name="organizer"
+							:placeholder="$t('form.event.fields.organizer')"
 						/>
-					</div>
-					<CommonUiBaseCheckbox
-						value="free"
-						:label="$t('form.event.fields.price_free')"
-						is-reversed
-						:model-value="eventStore.isFree"
-						@update:model-value="eventStore.isFree = !eventStore.isFree"
-					/>
-				</template>
-			</ModalUiModalSection>
+						<CommonUiTextArea
+							v-model="eventStore.eventData.description"
+							name="description"
+							:placeholder="$t('form.event.fields.description')"
+							required
+						/>
+					</template>
+				</ModalUiModalSection>
 
-			<ModalUiModalSection :label="$t('form.event.fields.url_to_registration')">
-				<template #child>
-					<CommonUiBaseInput
-						v-model="eventStore.eventData.url"
-						name="url"
-						:placeholder="$t('form.event.fields.url_placeholder')"
-						required
-					/>
-				</template>
-			</ModalUiModalSection>
+				<ModalUiModalSection
+					type="row"
+					:label="$t('form.event.fields.start')"
+				>
+					<template #child>
+						<CommonUiDateTimepicker
+							v-model="eventStore.eventData.startDate"
+							type="date"
+							name="startDate"
+							:min-date="eventStore.minDate"
+							required
+						/>
+						<CommonUiDateTimepicker
+							v-model="eventStore.eventData.startTime"
+							type="time"
+							name="startTime"
+							placeholder="--:--"
+							:disabled="!eventStore.eventData.startDate"
+							required
+							:min-time="
+								eventStore.eventData.startDate?.toDateString() ===
+								new Date().toDateString()
+									? getTimeFromEpochInMs(Date.now(), true)
+									: undefined
+							"
+						/>
+					</template>
+				</ModalUiModalSection>
 
-			<CommonImageLoader
-				v-model="newImageFile"
-				:external-image="eventStore.eventData.image"
-			/>
-			<p class="event-form__required">{{ $t('form.global.required') }}</p>
+				<ModalUiModalSection
+					type="row"
+					:label="$t('form.event.fields.end')"
+				>
+					<template #child>
+						<CommonUiDateTimepicker
+							v-model="eventStore.eventData.endDate"
+							type="date"
+							name="endDate"
+							:min-date="eventStore.eventData.startDate ?? eventStore.minDate"
+							:disabled="
+								!eventStore.eventData.startDate && !eventStore.eventData.startTime
+							"
+						/>
+						<CommonUiDateTimepicker
+							v-model="eventStore.eventData.endTime"
+							type="time"
+							name="endTime"
+							placeholder="--:--"
+							:disabled="!eventStore.eventData.endDate"
+							:required="!!eventStore.eventData.endDate"
+							:min-time="
+								eventStore.eventData.startDate?.toDateString() ===
+								eventStore.eventData.endDate?.toDateString()
+									? eventStore.eventData.startTime
+									: undefined
+							"
+						/>
+					</template>
+				</ModalUiModalSection>
+
+				<ModalUiModalSection
+					type="column-row"
+					:label="$t('form.event.fields.price')"
+				>
+					<template #child>
+						<div>
+							<CommonUiBaseSelect
+								v-model="eventStore.eventData.price.currency"
+								name="currency"
+								:placeholder="$t('form.event.fields.currency_placeholder')"
+								:list="locationStore.currencies"
+								has-icon-items
+								input-readonly
+								:disabled="eventStore.eventData.isFree"
+								:required="!eventStore.eventData.isFree"
+							/>
+							<CommonUiBaseInput
+								v-model="eventStore.eventData.price.value"
+								name="price"
+								type="number"
+								:min-value="0"
+								:disabled="eventStore.eventData.isFree"
+								:required="!eventStore.eventData.isFree"
+								:placeholder="$t('form.event.fields.price_placeholder')"
+							/>
+						</div>
+						<CommonUiBaseCheckbox
+							value="free"
+							:label="$t('form.event.fields.price_free')"
+							is-reversed
+							:model-value="eventStore.eventData.isFree"
+							@update:model-value="eventStore.toggleFree"
+						/>
+					</template>
+				</ModalUiModalSection>
+
+				<ModalUiModalSection :label="$t('form.event.fields.url_to_registration')">
+					<template #child>
+						<CommonUiBaseInput
+							v-model="eventStore.eventData.url"
+							name="url"
+							:placeholder="$t('form.event.fields.url_placeholder')"
+							required
+						/>
+					</template>
+				</ModalUiModalSection>
+
+				<CommonImageLoader
+					v-model="eventStore.eventData.image"
+					:external-image="eventStore.eventData.image"
+				/>
+				<p class="event-form__required">{{ $t('form.global.required') }}</p>
+			</div>
 		</div>
-		<div class="event-form__bottom">
-			<CommonButton
-				class="event-form__button"
-				button-kind="ordinary"
-				:button-text="$t('global.button.cancel')"
-				:is-active="!isLoading"
-				@click="router.back()"
-			/>
-			<CommonButton
-				class="event-form__button"
-				button-kind="success"
-				:button-text="$t('global.button.save')"
-				:is-loading="isLoading"
-				:is-disabled="!checkFormFilling || isLoading"
-				@click="isLoading ? null : submitEvent()"
-			/>
+		<div class="event-form__bottom-wrapper">
+			<div class="event-form__bottom">
+				<CommonButton
+					class="event-form__button"
+					button-kind="ordinary"
+					:button-text="$t('global.button.cancel')"
+					:is-active="!eventStore.eventData.isLoading"
+					@click="router.back()"
+				/>
+				<CommonButton
+					class="event-form__button"
+					button-kind="success"
+					:button-text="$t('global.button.save')"
+					:is-loading="eventStore.eventData.isLoading"
+					:is-disabled="!eventStore.checkFormFilling || eventStore.eventData.isLoading"
+					@click="eventStore.eventData.isLoading ? null : submitEvent()"
+				/>
+			</div>
 		</div>
+		<ModalClearEventForm v-if="eventStore.showClearFormModal" />
 	</div>
 </template>
 
@@ -464,19 +331,39 @@ watch(
 	display: flex;
 	width: 100%;
 	flex-direction: column;
-	padding: 20px var(--padding-side);
+	align-items: center;
+	overflow: hidden;
+	max-height: 100vh;
+
+	&__title-wrapper {
+		display: flex;
+		width: 100%;
+		justify-content: center;
+		background-color: var(--color-background-secondary);
+	}
 
 	&__title {
+		width: 100%;
+		max-width: 1200px;
+		text-align: left;
 		font-size: var(--font-size-XL);
 		font-weight: var(--font-weight-regular);
-		margin-bottom: 30px;
+		padding: 30px var(--padding-side);
+	}
+
+	&__fields-wrapper {
+		width: 100%;
+		overflow-y: auto;
 	}
 
 	&__fields {
 		display: flex;
 		width: 100%;
+		max-width: 1200px;
 		flex-direction: column;
-		margin-bottom: 30px;
+		margin-left: auto;
+		margin-right: auto;
+		padding: 20px var(--padding-side);
 	}
 
 	&__required {
@@ -486,10 +373,19 @@ watch(
 		margin-top: var(--space-unrelated-items);
 	}
 
+	&__bottom-wrapper {
+		display: flex;
+		width: 100%;
+		justify-content: center;
+		background-color: var(--color-background-secondary);
+	}
+
 	&__bottom {
 		display: flex;
 		width: 100%;
+		max-width: 1200px;
 		justify-content: space-between;
+		padding: 30px var(--padding-side);
 	}
 
 	&__button {

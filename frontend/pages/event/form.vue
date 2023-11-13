@@ -2,6 +2,9 @@
 import { useLocationStore } from '@/stores/location.store';
 import { useEventStore } from '../../stores/event.store';
 import type { PostEventPayload } from '../../../common/types/event';
+import { LocalStorageEnum } from '../../constants/enums/common';
+import { getTimezone } from '../../services/timezone.services';
+import { getCurrencyByCountry } from '../../utils/prices';
 
 const locationStore = useLocationStore();
 const eventStore = useEventStore();
@@ -13,6 +16,55 @@ onMounted(async () => {
 	await eventStore.getTimezones();
 	eventStore.setEventData();
 });
+
+// Запись в localStorage
+watch(
+	() => eventStore.$state.eventData,
+	(eventData) => {
+		if (!eventStore.clearForm) {
+			localStorage.setItem(LocalStorageEnum.EVENT_DATA, JSON.stringify(eventData));
+		}
+	},
+	{ deep: true }
+);
+
+// Изменение страны и города
+watch(
+	[
+		() => eventStore.$state.eventData.location.country,
+		() => eventStore.$state.eventData.location.city
+	],
+	async ([country, city]) => {
+		if (country) {
+			eventStore.eventData.timezone = await getTimezone(country, city);
+
+			if (!eventStore.eventData.isFree) {
+				eventStore.eventData.price.currency = getCurrencyByCountry(country);
+			}
+		} else {
+			eventStore.eventData.timezone = '';
+			eventStore.eventData.location.city = '';
+			eventStore.eventData.location.address = '';
+			eventStore.eventData.price.currency = '';
+		}
+	},
+	{ deep: true }
+);
+
+// Изменение даты и времени
+watch(
+	[
+		() => eventStore.$state.eventData.startDate,
+		() => eventStore.$state.eventData.startTime,
+		() => eventStore.$state.eventData.endDate
+	],
+	([startDate, startTime, endDate]) => {
+		if (!startDate) eventStore.eventData.startTime = null;
+		if (!startTime) eventStore.eventData.endDate = null;
+		if (!endDate) eventStore.eventData.endTime = null;
+	},
+	{ deep: true }
+);
 
 const submitEvent = async () => {
 	eventStore.eventData.isLoading = true;
@@ -355,7 +407,7 @@ const submitEvent = async () => {
 		font-weight: var(--font-weight-regular);
 		padding: 12px var(--padding-side);
 
-		@media(min-width: 768px) {
+		@media (min-width: 768px) {
 			padding: 30px var(--padding-side);
 		}
 	}
@@ -396,7 +448,7 @@ const submitEvent = async () => {
 		justify-content: space-between;
 		padding: 12px var(--padding-side);
 
-		@media(min-width: 768px) {
+		@media (min-width: 768px) {
 			padding: 30px var(--padding-side);
 		}
 	}

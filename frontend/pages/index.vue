@@ -14,7 +14,6 @@ getMeta({
 
 const userStore = useUserStore();
 const localePath = useLocalePath();
-const mobile = inject('mobile');
 
 const {
 	open: openNeedAuthorizeModal,
@@ -45,7 +44,7 @@ const onButtonClick = async () => {
 		eventStore.createDefaultEventData();
 		await navigateTo(localePath({ path: RoutePathEnum.EVENT_FORM }));
 	} else {
-		openNeedAuthorizeModal();
+		await openNeedAuthorizeModal();
 	}
 };
 </script>

@@ -317,6 +317,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 	&--round {
 		width: 36px;
+		min-width: 36px;
 		height: 36px;
 		border-radius: 50%;
 		background-color: var(--color-background-secondary);

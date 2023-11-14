@@ -6,6 +6,9 @@ import { searchForWorkspaceRoot } from 'vite';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+	devtools: {
+		enabled: true // or false to disable
+	},
 	modules: [
 		'@nuxtjs/i18n',
 		'@pinia/nuxt',
@@ -96,8 +99,12 @@ export default defineNuxtConfig({
 		],
 		resolve: { alias: { '@common': fileURLToPath(new URL('../common', import.meta.url)) } }
 	},
+	// watcher:
 	// на винде очень долго стартует дев-сервер, проблема недавняя
 	// один из авторов Нукста на ГХ посоветовал такое решение
 	// если у кого-то от этой настройки наоборот что-то ломается, то скажите - что-нибудь придумаем
-	experimental: { watcher: 'chokidar' }
+	// appManifest:
+	// Почему-то при билде накст генерит разные buildId для appManifest и entry, пробую отключить
+	// (могут сломаться редиректы по языкам)
+	experimental: { watcher: 'chokidar', appManifest: false }
 });

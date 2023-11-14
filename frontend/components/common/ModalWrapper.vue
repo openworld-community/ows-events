@@ -124,7 +124,7 @@ const scrollUnlockOnBeforeCloseModal = () => {
 
 	@media (min-width: 768px) {
 		width: 80vw;
-		max-width: unset;
+		max-width: 820px;
 		margin: 0 auto;
 	}
 
@@ -165,7 +165,10 @@ const scrollUnlockOnBeforeCloseModal = () => {
 	}
 
 	&__body {
+		display: flex;
 		width: 100%;
+		flex-direction: column;
+		align-items: center;
 		overflow-y: auto;
 		-webkit-overflow-scrolling: touch;
 		background-color: var(--color-white);
@@ -201,6 +204,9 @@ const scrollUnlockOnBeforeCloseModal = () => {
 
 .body {
 	&__required {
+		width: 100%;
+		max-width: 540px;
+		text-align: left;
 		font-size: var(--font-size-XS);
 		line-height: 18px;
 		color: var(--color-text-secondary);

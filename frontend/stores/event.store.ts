@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { LocalStorageEnum } from '../constants/enums/common';
 import { useUserStore } from './user.store';
 import { getCurrencyByCountry } from '../utils/prices';
-import { getAllTimezones, getTimezone } from '../services/timezone.services';
+import { getAllTimezones } from '../services/timezone.services';
 import { timezoneToString } from '../.nuxt/imports';
 
 export const useEventStore = defineStore('event', {
@@ -193,6 +193,12 @@ export const useEventStore = defineStore('event', {
 			if (this.eventData.isFree) {
 				this.eventData.price.value = '';
 				this.eventData.price.currency = '';
+			}
+			//при отключении check "бесплатно" подтягивается валюта (если указана страна)
+			if (!this.eventData.isFree && this.eventData.location.country) {
+				this.eventData.price.currency = getCurrencyByCountry(
+					this.eventData.location.country
+				);
 			}
 		}
 	}

@@ -47,6 +47,7 @@ watch(
 			eventStore.eventData.location.address = '';
 			eventStore.eventData.price.currency = '';
 		}
+		if (!city) eventStore.eventData.location.address = '';
 	},
 	{ deep: true }
 );
@@ -280,9 +281,7 @@ const submitEvent = async () => {
 							type="date"
 							name="endDate"
 							:min-date="eventStore.eventData.startDate ?? eventStore.minDate"
-							:disabled="
-								!eventStore.eventData.startDate && !eventStore.eventData.startTime
-							"
+							:disabled="!eventStore.eventData.startTime"
 						/>
 						<CommonUiDateTimepicker
 							v-model="eventStore.eventData.endTime"

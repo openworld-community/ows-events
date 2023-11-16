@@ -26,19 +26,18 @@ export type EventDbEntity = {
 export type EventOnPoster = EventDbEntity;
 
 export type PostEventPayload = {
-	event: {
-		date: number;
-		image: string;
-		durationInSeconds: number;
-		price: EventPrice;
-		timezone: Timezone;
-		description: string;
-		organizer: string;
-		location: { country: string; city: string; address: string };
-		title: string;
-		url: string;
-		tags?: string[];
-	};
+	id?: string;
+	date: number;
+	image: string;
+	durationInSeconds: number;
+	price: EventPrice;
+	timezone: Timezone;
+	title: string;
+	description: string;
+	organizer: string;
+	location: { country: string; city: string; address: string };
+	url: string;
+	tags?: string[];
 };
 
 export type EventParams = {

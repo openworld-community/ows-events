@@ -17,3 +17,5 @@ export enum Tags {
 }
 
 export const TagsArray = Object.values(Tags);
+
+export type Tag = keyof Tags;

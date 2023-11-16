@@ -36,7 +36,7 @@ const isChecked = computed(() => model.value);
 <template>
 	<div class="checkbox__wrapper">
 		<label :class="['checkbox', { 'checkbox--reversed': isReversed }]">
-			<div :class="['checkbox__box', { 'checkbox__box--checked': isChecked }]">
+			<span :class="['checkbox__box', { 'checkbox__box--checked': isChecked }]">
 				<CommonIcon
 					v-if="isChecked"
 					name="check"
@@ -45,7 +45,7 @@ const isChecked = computed(() => model.value);
 					width="16px"
 					height="16px"
 				/>
-			</div>
+			</span>
 			<span class="checkbox__text">
 				{{ label }}
 			</span>

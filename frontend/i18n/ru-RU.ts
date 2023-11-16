@@ -11,7 +11,7 @@
 // import modal from '/locales/ru/modal';
 // import user from '/locales/ru/user';
 // import { type ErrorCodes } from '@/../common/const';
-import { CommonErrorsEnum } from '../../common/const/common-errors';
+// import { CommonErrorsEnum } from '../../common/const/common-errors';
 import { EventValidatorErrorTypes } from '../../common/const/event-validation-error'
 // import { Tags } from '../../common/const/tags';
 
@@ -51,7 +51,7 @@ export default {
 	donate: {
 		title: 'Станьте частью нашего проекта!',
 		description:
-			'Мы приглашаем Вас вступить в нашу творческую семью и вместе создавать нечто большее, чем просто список мероприятий. Ваша поддержка позволит нам развивать проект, расширять его возможности и реализовывать наши самые смелые идеи, чтобы мы могли предложить Вам нечто поистине уникальное.',
+			'Мы приглашаем вас вступить в нашу творческую семью и вместе создавать нечто большее, чем просто список мероприятий. Ваша поддержка позволит нам развивать проект, расширять его возможности и реализовывать наши самые смелые идеи, чтобы мы могли предложить вам нечто поистине уникальное.',
 		gratitude: 'Спасибо, что делаете нашу миссию возможной!',
 		subscription: 'С любовью, Команда AfishaPeredelano.',
 		method: {
@@ -65,6 +65,7 @@ export default {
 	},
 	error: {
 		[EventValidatorErrorTypes.EVENT_IS_NOT_DEFINED]: 'Мероприятие не определено',
+		'event-not-found': 'Мероприятие не найдено',
 		TITLE_IS_NOT_DEFINED: 'Заголовок не определен',
 		TITLE_IS_TOO_SHORT: 'Заголовок слишком короткий',
 		TITLE_IS_TOO_LONG: 'Заголовок слишком длинный',
@@ -84,7 +85,7 @@ export default {
 		URL_IS_TOO_LONG: 'Ссылка на мероприятие слишком длинная',
 		TITLE_IS_NOT_CLEAN: 'В заголовоке ненормативная лексика',
 		DESCRIPTION_IS_NOT_CLEAN: 'В описании ненормативная лексика',
-		[CommonErrorsEnum.EVENT_NOT_FOUND]: 'Мероприятие не найдено',
+		// [CommonErrorsEnum.EVENT_NOT_FOUND]: 'Мероприятие не найдено',
 		'image-addition-error': 'Ошибка при добавлении изображения',
 		'image-deletion-error': 'Ошибка при удалении изображения',
 		'image-encoding-problem': 'Ошибка формата изображения',
@@ -140,6 +141,41 @@ export default {
 			donate: 'Помочь Afisha',
 			limitation_of_liability: 'Ограничение ответственности'
 		}
+	},
+	form: {
+		global: {
+			required: '* поля, обязательные для заполнения'
+		},
+		event: {
+			title: 'Создание мероприятия',
+			title_edit: 'Редактирование мероприятия',
+			add_image: 'Добавить фото',
+			remove_image: 'Удалить фото',
+			image: 'Изображение мероприятия',
+			fields: {
+				location: 'Локация',
+				country: 'Страна',
+				city: 'Город',
+				address: 'Адрес',
+				address_placeholder: 'Улица, дом или название локации',
+				check_address: 'Проверьте правильность отображения локации ',
+				// \u00A0 - неразрывный пробел
+				address_link: 'на\u00A0карте',
+				timezone: 'Часовой пояс',
+				main_info: 'Общая информация',
+				title: 'Название',
+				organizer: 'Организатор',
+				description: 'Описание',
+				start: 'Начало',
+				end: 'Окончание',
+				price: 'Стоимость',
+				price_placeholder: 'Цена',
+				currency_placeholder: 'Валюта',
+				price_free: 'Бесплатно',
+				url_to_registration: 'Ссылка на регистрацию',
+				url_placeholder: 'https://example.com'
+			}
+		},
 	},
 	global: {
 		country: 'Страна',
@@ -259,40 +295,8 @@ export default {
 		global: {
 			required: '* поля, обязательные для заполнения'
 		},
-		new_event_modal: {
-			title: 'Добавьте мероприятие',
-			title_edit: 'Редактирование мероприятия',
-			add_image: 'Добавить фото',
-			remove_image: 'Удалить фото',
-			fields: {
-				location: 'Локация',
-				country: 'Страна',
-				city: 'Город',
-				address: 'Адрес',
-				address_placeholder: 'Улица, дом или название локации',
-				check_address: 'Проверьте правильность отображения локации ',
-				// \u00A0 - неразрывный пробел
-				address_link: 'на\u00A0карте',
-				timezone: 'Часовой пояс',
-				main_info: 'Общая информация',
-				title: 'Название',
-				organizer: 'Организатор',
-				description: 'Описание',
-				start: 'Начало',
-				end: 'Окончание',
-				price: 'Стоимость',
-				price_placeholder: 'Цена',
-				currency_placeholder: 'Валюта',
-				price_free: 'Бесплатно',
-				url_to_registration: 'Ссылка на регистрацию',
-				url_placeholder: 'https://example.com'
-			}
-		},
-		need_authorize_modal: {
-			title: 'Для создания мероприятия необходимо авторизоваться',
-		},
-		delete_event_modal: {
-			title: 'Удаление мероприятия',
+		clear_event_form: {
+			title: 'Несохраненные данные будут удалены. Хотите закрыть форму?'
 		},
 		edit_profile: {
 			title: 'Редактирование профиля',
@@ -305,6 +309,12 @@ export default {
 				organizer: 'Организатор',
 				organizer_placeholder: 'Имя организатора мероприятия'
 			}
+		},
+		delete_event_modal: {
+			title: 'Удаление мероприятия',
+		},
+		need_authorize_modal: {
+			title: 'Для создания мероприятия необходимо авторизоваться',
 		}
 	},
 	user: {

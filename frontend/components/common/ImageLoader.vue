@@ -6,45 +6,30 @@ const props = defineProps<{
 	externalImage?: string;
 }>();
 
-const emit = defineEmits<{
-	'update:model-value': [file: ImageLoaderFile];
-}>();
+const emit = defineEmits(['update:model-value']);
 
 const input = ref<HTMLInputElement>();
-const imageSrc = ref(props.externalImage ? `${BASE_URL}${props.externalImage}` : '');
+const imageSrc = computed(() => (props.externalImage ? `${BASE_URL}${props.externalImage}` : ''));
 
-const loadImage = (event: Event) => {
+const loadImage = async (event: Event) => {
 	if (!event.target) return console.warn('Load Image Event has no target attached');
 	const target = event.target as HTMLInputElement;
 	if (!target.files || !target.files[0])
 		return console.warn('Load Image Event targed to has no files');
 	const file = target.files[0];
-	const reader = new FileReader();
 
-	// TODO: определить тип при загрузке изображения
-	reader.addEventListener(
-		'load',
-		(e: ProgressEvent<FileReader>) => {
-			if (!e.target) return console.warn('Reader Load Event has no target attached');
-			const result = e.target.result;
-			if (typeof result !== 'string')
-				return console.warn(
-					'Reader Load Event received data format which is not supported'
-				);
-			imageSrc.value = result;
-		},
-		{ once: true }
-	);
-	reader.readAsDataURL(file);
-	emit('update:model-value', file);
+	const { data } = await apiRouter.events.image.add.useMutation({ data: { image: file } });
+	input.value.value = null;
+	if (!data.value) return;
+	emit('update:model-value', data.value.path);
 };
 
-const removeImage = () => {
-	imageSrc.value = '';
-	if (input.value) {
-		input.value.value = '';
-	}
-	emit('update:model-value', 'DELETED');
+const removeImage = async () => {
+	await apiRouter.events.image.delete.useMutation({
+		data: { path: props.externalImage }
+	});
+	input.value.value = null;
+	emit('update:model-value', '');
 };
 </script>
 
@@ -64,15 +49,16 @@ const removeImage = () => {
 			<img
 				:src="imageSrc"
 				class="image"
+				:alt="$t('form.event.image')"
 			/>
 			<button
 				class="delete-button"
-				:aria-label="$t('modal.new_event_modal.remove_image')"
+				:aria-label="$t('form.event.remove_image')"
 				@click="removeImage"
 			>
 				<CommonIcon
 					name="delete"
-					color="var(--color-accend-red-dark)"
+					color="var(--color-accent-red-dark)"
 				/>
 			</button>
 		</div>
@@ -80,7 +66,7 @@ const removeImage = () => {
 			v-else
 			class="add-button"
 			button-kind="ordinary"
-			:button-text="$t('modal.new_event_modal.add_image')"
+			:button-text="$t('form.event.add_image')"
 			icon-name="picture"
 			@click="input?.click()"
 		/>

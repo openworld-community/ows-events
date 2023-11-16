@@ -10,7 +10,7 @@
 // import meta from '/locales/en/meta';
 // import modal from '/locales/en/modal';
 // import user from '/locales/en/user';
-import { CommonErrorsEnum } from '../../common/const/common-errors';
+// import { CommonErrorsEnum } from '../../common/const/common-errors';
 import { EventValidatorErrorTypes } from '../../common/const/event-validation-error'
 // import { Tags } from '../../common/const/tags';
 
@@ -78,7 +78,7 @@ export default {
 		URL_IS_TOO_LONG: 'Event URL is too long',
 		TITLE_IS_NOT_CLEAN: 'Inappropriate language in the title',
 		DESCRIPTION_IS_NOT_CLEAN: 'Inappropriate language in the description',
-		[CommonErrorsEnum.EVENT_NOT_FOUND]: 'Event not found',
+		'event-not-found': 'Event not found',
 		'image-addition-error': 'Error adding image',
 		'image-deletion-error': 'Error deleting image',
 		'image-encoding-problem': 'Image format error',
@@ -134,6 +134,41 @@ export default {
 			donate: 'Help Afisha',
 			limitation_of_liability: 'Limitation of Liability'
 		}
+	},
+	form: {
+		global: {
+			required: '* required fields'
+		},
+		event: {
+			title: 'Create Event',
+			title_edit: 'Edit Event',
+			add_image: 'Add image',
+			remove_image: 'Remove image',
+			image: 'Изображение мероприятия',
+			fields: {
+				location: 'Location',
+				country: 'Country',
+				city: 'City',
+				address: 'Address',
+				address_placeholder: 'Street, house, or location name',
+				check_address: 'Check the location for accuracy ',
+				// \u00A0 - non-breaking space
+				address_link: 'on\u00A0map',
+				timezone: 'Timezone',
+				main_info: 'General information',
+				title: 'Title',
+				organizer: 'Organizer',
+				description: 'Description',
+				start: 'Start',
+				end: 'End',
+				price: 'Price',
+				price_placeholder: 'Price',
+				currency_placeholder: 'Currency',
+				price_free: 'Free',
+				url_to_registration: 'Registration link',
+				url_placeholder: 'https://example.com'
+			}
+		},
 	},
 	global: {
 		country: 'Country',
@@ -252,40 +287,8 @@ export default {
 		global: {
 			required: '* required fields'
 		},
-		new_event_modal: {
-			title: 'Add new Event',
-			title_edit: 'Edit Event',
-			add_image: 'Add image',
-			remove_image: 'Remove image',
-			fields: {
-				location: 'Location',
-				country: 'Country',
-				city: 'City',
-				address: 'Address',
-				address_placeholder: 'Street, house, or location name',
-				check_address: 'Check the location for accuracy ',
-				// \u00A0 - non-breaking space
-				address_link: 'on\u00A0map',
-				timezone: 'Timezone',
-				main_info: 'General information',
-				title: 'Title',
-				organizer: 'Organizer',
-				description: 'Description',
-				start: 'Start',
-				end: 'End',
-				price: 'Price',
-				price_placeholder: 'Price',
-				currency_placeholder: 'Currency',
-				price_free: 'Free',
-				url_to_registration: 'Registration link',
-				url_placeholder: 'https://example.com'
-			}
-		},
-		need_authorize_modal: {
-			title: 'Authorization required to create an Event',
-		},
-		delete_event_modal: {
-			title: 'Delete event',
+		clear_event_form: {
+			title: 'Unsaved data will be deleted. Do you want to close the form?'
 		},
 		edit_profile: {
 			title: 'Edit Profile',
@@ -298,6 +301,12 @@ export default {
 				organizer: 'Organizer',
 				organizer_placeholder: 'Event organizer name'
 			}
+		},
+		delete_event_modal: {
+			title: 'Delete event',
+		},
+		need_authorize_modal: {
+			title: 'Authorization required to create an Event',
 		}
 	},
 	user: {

@@ -2,6 +2,7 @@ import type { UseFetchOptions } from 'nuxt/app';
 import { API_URL } from '~/constants/url';
 import { useUserStore } from '../../stores/user.store';
 import { CookieNameEnum } from '../../constants/enums/common';
+import { v4 as uuid } from 'uuid';
 
 type ApiRouter = {
 	[K in string]: ApiRouter | ReturnType<typeof defineQuery> | ReturnType<typeof defineMutation>;
@@ -129,7 +130,7 @@ export function defineMutation<T extends ((data: any) => any) | void = void>(
 export function useBackendFetch<T>(
 	request: Parameters<typeof useFetch>[0],
 	opts: UseFetchOptions<T> = {},
-	modifiers: { auth?: boolean; noDefaults?: boolean } = {}
+	modifiers: { auth?: boolean; noDefaults?: boolean; uuid?: boolean } = {}
 ) {
 	if (modifiers.noDefaults)
 		return (opts_: UseFetchOptions<T> = {}) => useFetch(request, Object.assign(opts, opts_));
@@ -157,10 +158,15 @@ export function useBackendFetch<T>(
 	if (opts.body) {
 		opts.method ??= 'POST';
 	}
+
+	// TODO: Костыль https://github.com/nuxt/nuxt/issues/13583#issuecomment-1782685562, т.к баг nuxt дает несоответствие гидрации
+	if (modifiers.uuid) {
+		opts.key = uuid();
+	}
+
 	return async (opts_: UseFetchOptions<T> = {}) => {
 		const getData = () => useFetch(request, Object.assign(opts, opts_));
 		if (process.server) return await getData();
-
 		const data = await getData();
 		if (data.error.value) {
 			// todo - переделать эту проверку когда бэк уже стандартизирует вывод своих ошибок везде

@@ -5,6 +5,7 @@ import type { PostEventPayload } from '../../../common/types/event';
 import { LocalStorageEnum } from '../../constants/enums/common';
 import { getTimezone } from '../../services/timezone.services';
 import { getCurrencyByCountry } from '../../utils/prices';
+import { TagsArray } from '../../../common/const/tags';
 
 const locationStore = useLocationStore();
 const eventStore = useEventStore();
@@ -99,7 +100,8 @@ const submitEvent = async () => {
 		},
 		timezone: stringToTimezone(eventStore.eventData.timezone),
 		image: eventStore.eventData.image,
-		url: eventStore.eventData.url
+		url: eventStore.eventData.url,
+		tags: eventStore.eventData.tags
 	};
 
 	if (eventStore.eventData.editing) {
@@ -239,6 +241,16 @@ const submitEvent = async () => {
 							:placeholder="$t('form.event.fields.description')"
 							required
 						/>
+						<div class="event-form__tags">
+							<CommonTag
+								v-for="tag in TagsArray"
+								:key="tag"
+								v-model="eventStore.eventData.tags"
+								:tag-key="tag"
+								is-checkbox
+								size="small"
+							/>
+						</div>
 					</template>
 				</ModalUiModalSection>
 
@@ -424,6 +436,13 @@ const submitEvent = async () => {
 		margin-left: auto;
 		margin-right: auto;
 		padding: 20px var(--padding-side);
+	}
+
+	&__tags {
+		display: flex;
+		width: 100%;
+		flex-wrap: wrap;
+		gap: 10px;
 	}
 
 	&__required {

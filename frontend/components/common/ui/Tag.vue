@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { type PropType } from 'vue';
-import { SeoItempropEventEnum } from '../../constants/enums/seo';
-import Tag from './Tag.vue';
-
-type TagSize = 'standard' | 'small';
+import type { Tag } from '../../../../common/const/tags';
+import { SeoItempropEventEnum } from '../../../constants/enums/seo';
 
 const props = defineProps({
 	tagKey: {
-		type: String as PropType<typeof Tag>,
+		type: String as PropType<Tag>,
 		required: true
 	},
 	size: {
-		type: String as PropType<TagSize>,
+		type: String as PropType<'standard' | 'small'>,
 		default: 'standard'
 	},
 	isCheckbox: {
@@ -21,6 +19,10 @@ const props = defineProps({
 	modelValue: {
 		type: Array,
 		default: () => []
+	},
+	isDisabled: {
+		type: Boolean,
+		default: false
 	}
 });
 
@@ -34,9 +36,6 @@ const model = computed({
 		emit('update:model-value', value);
 	}
 });
-
-//TODO: костыль, т.к. CSS-селктор :has считает все чекбоксы checked при маунте (скорее всего бага nuxt)
-const isChecked = computed(() => props.modelValue.includes(props.tagKey));
 </script>
 
 <template>
@@ -47,8 +46,7 @@ const isChecked = computed(() => props.modelValue.includes(props.tagKey));
 			'tag',
 			{
 				'tag--small': size === 'small',
-				tag__check: isCheckbox,
-				'tag__check--checked': isChecked
+				tag__check: isCheckbox
 			}
 		]"
 	>
@@ -66,10 +64,10 @@ const isChecked = computed(() => props.modelValue.includes(props.tagKey));
 			:id="tagKey"
 			v-model="model"
 			type="checkbox"
-			class="tag__checkbox visually-hidden"
 			:name="tagKey"
 			:value="tagKey"
-			checked
+			:disabled="isDisabled"
+			class="tag__checkbox visually-hidden"
 		/>
 	</component>
 </template>
@@ -77,6 +75,7 @@ const isChecked = computed(() => props.modelValue.includes(props.tagKey));
 <style lang="less" scoped>
 .tag {
 	min-width: 50px;
+	width: max-content;
 	max-width: max-content;
 
 	font-size: var(--font-size-S);
@@ -96,6 +95,10 @@ const isChecked = computed(() => props.modelValue.includes(props.tagKey));
 	&--small {
 		font-size: var(--font-size-XS);
 		line-height: 16px;
+
+		@media (min-width: 1440px) {
+			font-size: var(--font-size-XXS);
+		}
 	}
 
 	&__check {
@@ -109,19 +112,28 @@ const isChecked = computed(() => props.modelValue.includes(props.tagKey));
 			border-color: var(--color-text-main);
 		}
 
-		&--checked {
+		&:has(.tag__checkbox:checked) {
 			background-color: var(--color-text-main);
 			border-color: var(--color-text-main);
 			color: var(--color-white);
+
+			&:hover {
+				background-color: var(--color-text-secondary);
+				color: var(--color-text-main);
+			}
 
 			&:has(.tag__checkbox:focus) {
 				color: var(--color-input-field);
 				border-color: var(--color-input-field);
 			}
+		}
+
+		&:has(.tag__checkbox:disabled) {
+			opacity: 0.6;
+			cursor: default;
 
 			&:hover {
-				background-color: var(--color-text-secondary);
-				color: var(--color-text-main);
+				background-color: var(--color-input-field);
 			}
 		}
 	}

@@ -15,6 +15,10 @@ const props = defineProps({
 		type: Object as PropType<Location | null>,
 		default: null
 	},
+	hasLinkToGMaps: {
+		type: Boolean,
+		default: false
+	},
 	startDate: {
 		type: String,
 		default: ''
@@ -22,14 +26,6 @@ const props = defineProps({
 	endDate: {
 		type: String,
 		default: ''
-	},
-	isLink: {
-		type: Boolean,
-		default: false
-	},
-	withPin: {
-		type: Boolean,
-		default: false
 	},
 	price: {
 		type: [Object, null] as PropType<EventPrice | null>,
@@ -39,40 +35,28 @@ const props = defineProps({
 });
 
 const component = computed(() => {
-	if (props.isLink) return defineNuxtLink({});
+	if (props.hasLinkToGMaps) return defineNuxtLink({});
 	else return 'p';
 });
 </script>
 
 <template>
-	<component
-		:is="component"
-		class="details"
-		:to="isLink ? getLocationLink(location) : null"
-		:target="isLink ? '_blank' : null"
-		:itemprop="location ? SeoItempropEventEnum.LOCATION : null"
-		:itemtype="location ? SeoItemTypeEnum.LOCATION : SeoItemTypeEnum.DATE"
-		itemscope
-	>
-		<div class="details__wrapper">
-			<!-- <CommonIcon
-				v-if="withPin"
-				:name="location ? 'map-pin' : 'calendar'"
+	<ul class="details">
+		<!--	Дата	-->
+		<li
+			v-if="startDate"
+			class="details__item"
+			:itemtype="SeoItemTypeEnum.DATE"
+		>
+			<CommonIcon
+				name="calendar"
 				class="details__icon"
 				color="var(--color-accent-green-main)"
-			/> -->
-			<!--	Дата	-->
+			/>
 			<span
-				v-if="startDate"
 				class="details__text"
 				:itemprop="SeoItempropEventEnum.START_DATE"
 			>
-				<CommonIcon
-					v-if="withPin"
-					name="calendar"
-					class="details__icon"
-					color="var(--color-accent-green-main)"
-				/>
 				{{ startDate }}
 			</span>
 			<span
@@ -88,105 +72,117 @@ const component = computed(() => {
 			>
 				{{ endDate }}
 			</span>
+		</li>
 
-			<!-- Цена -->
-			<div class="details__price">
-				<span v-if="!price">
-					<CommonIcon
-						v-if="withPin"
-						name="dollar"
-						class="details__icon"
-						color="var(--color-accent-green-main)"
-					/>
-					{{ $t('event.price.unknown') }}
-				</span>
-
-				<span
-					v-else-if="price.value === 0"
-					:itemprop="SeoItempropPriceEnum.FREE"
-					content="true"
-				>
-					<CommonIcon
-						v-if="withPin"
-						name="dollar"
-						class="details__icon"
-						color="var(--color-accent-green-main)"
-					/>
-					{{ $t('event.price.free') }}
-				</span>
-
-				<span
-					v-else
-					:itemprop="SeoItempropPriceEnum.GROUP_ITEMPROP"
-					itemscope
-					:itemtype="SeoItemTypeEnum.OFFER"
-				>
-					<CommonIcon
-						v-if="withPin"
-						name="dollar"
-						class="details__icon"
-						color="var(--color-accent-green-main)"
-					/>
-					<span
-						:itemprop="SeoItempropPriceEnum.PRICE"
-						:content="price.value"
-					>
-						{{ formatPrice(price) }}
-					</span>
-					<span
-						class="visually-hidden"
-						:itemprop="SeoItempropPriceEnum.CURRENCY"
-					>
-						{{ price.currency }}
-					</span>
-				</span>
-			</div>
-			<!--	Локация		-->
+		<!-- Цена -->
+		<li class="details__item">
+			<CommonIcon
+				name="dollar"
+				class="details__icon"
+				color="var(--color-accent-green-main)"
+			/>
 			<span
-				v-if="location"
-				:class="['details__text', { 'details__text--link': isLink }]"
+				v-if="!price"
+				class="details__text"
+			>
+				{{ $t('event.price.unknown') }}
+			</span>
+
+			<span
+				v-else-if="price.value === 0"
+				class="details__text"
+				:itemtype="SeoItempropPriceEnum.FREE"
+			>
+				{{ $t('event.price.free') }}
+			</span>
+
+			<span
+				v-else
+				:itemprop="SeoItempropPriceEnum.GROUP_ITEMPROP"
 				itemscope
-				:itemtype="SeoItemTypeEnum.ADDRESS"
-				:itemprop="SeoItempropLocationEnum.GROUP_ITEMPROP"
+				:itemtype="SeoItemTypeEnum.OFFER"
 			>
 				<span
-					class="details__country"
+					:itemprop="SeoItempropPriceEnum.PRICE"
+					class="details__text"
+				>
+					{{ formatPrice(price) }}
+				</span>
+				<span
+					class="visually-hidden"
+					:itemprop="SeoItempropPriceEnum.CURRENCY"
+				>
+					{{ price.currency }}
+				</span>
+			</span>
+		</li>
+
+		<!--	Локация		-->
+		<li
+			v-if="location"
+			class="details__item"
+			itemscope
+			:itemtype="SeoItemTypeEnum.LOCATION"
+			:itemprop="SeoItempropLocationEnum.GROUP_ITEMPROP"
+		>
+			<component
+				:is="component"
+				:to="hasLinkToGMaps ? getLocationLink(location) : null"
+				:target="hasLinkToGMaps ? '_blank' : null"
+				:itemprop="SeoItempropLocationEnum.GROUP_ITEMPROP"
+				:itemtype="SeoItemTypeEnum.ADDRESS"
+				itemscope
+			>
+				<CommonIcon
+					name="map-pin"
+					class="details__icon"
+					color="var(--color-accent-green-main)"
+				/>
+				<span
 					v-if="props.location.country"
+					:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
 					:itemprop="SeoItempropLocationEnum.COUNTRY"
 				>
-					<CommonIcon
-						v-if="withPin"
-						:name="location ? 'map-pin' : 'calendar'"
-						class="details__icon"
-						color="var(--color-accent-green-main)"
-					/>
-
-					{{ location.country }},
+					{{ location.country }}
 				</span>
 				<span
 					v-if="location.city"
+					:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
 					:itemprop="SeoItempropLocationEnum.CITY"
 				>
-					{{ location.city }}
+					, {{ location.city }}
 				</span>
 				<span
 					v-if="location?.address"
+					:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
 					:itemprop="SeoItempropLocationEnum.ADDRESS"
 					>, {{ location.address }}
 				</span>
-			</span>
-		</div>
-	</component>
+			</component>
+		</li>
+	</ul>
 </template>
 
 <style scoped lang="less">
 .details {
 	display: flex;
-	max-width: max-content;
+	width: 100%;
+	flex-direction: column;
 
-	&__wrapper {
+	&__item,
+	&__item > a,
+	&__item > p {
 		display: flex;
-		flex-direction: column;
+		width: 100%;
+		align-items: center;
+
+		&:not(:last-child) {
+			margin-bottom: 8px;
+
+			@media (min-width: 1440px) {
+				margin-bottom: 12px;
+			}
+		}
 	}
 
 	&__icon {
@@ -195,27 +191,14 @@ const component = computed(() => {
 
 	&__text {
 		font-size: var(--font-size-S);
-		display: flex;
-		align-items: center;
+		vertical-align: center;
+
+		@media (min-width: 1440px) {
+			font-size: var(--font-size-XS);
+		}
 
 		&--link {
 			text-decoration: underline;
-		}
-	}
-	&__country {
-		display: flex;
-		align-items: center;
-		padding-right: 5px;
-	}
-	&__price {
-		display: flex;
-		align-items: center;
-		font-size: 16px;
-		line-height: 150%;
-		margin: 12px 0;
-		span {
-			display: flex;
-			align-items: center;
 		}
 	}
 }

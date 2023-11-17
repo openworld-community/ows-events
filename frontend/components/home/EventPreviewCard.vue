@@ -5,16 +5,7 @@ import { RoutePathEnum } from '../../constants/enums/route';
 
 defineProps<{ eventData: EventOnPoster }>();
 const localePath = useLocalePath();
-const tags = ref([
-	{
-		id: 1,
-		tagKey: 'free'
-	},
-	{
-		id: 2,
-		tagKey: 'free 2'
-	}
-]);
+const mobile = inject('mobile');
 </script>
 
 <template>
@@ -45,19 +36,11 @@ const tags = ref([
 
 		<div class="card-description">
 			<div class="card-description__top">
-				<div class="card-tags">
-				<template
-					v-for="tag in tags"
-					:key="tag.tagKey"
-				>
-					<CommonTag
-						v-if="tags.length > 0"
-						:tags="tags"
-						tag-key="tag.tagKey"
-						size="small"
-					/>
-				</template>
-			</div>
+				<CommonTagList
+					v-if="!mobile && eventData.tags"
+					:tag-list="eventData.tags"
+					class="card-description__tags"
+				/>
 				<h2
 					class="card-description__title"
 					:itemprop="SeoItempropEventEnum.NAME"
@@ -74,17 +57,16 @@ const tags = ref([
 			</div>
 			<div class="card-description__bottom">
 				<CommonEventDetails
-					class="card-description__datetime"
+					class="card-description__details"
 					:price="eventData?.price"
 					:location="eventData.location"
 					:start-date="convertToLocaleString(eventData.date)"
-					with-pin
 				/>
-				<!-- <CommonEventDetails
-					class="card-description__geo"
-					:location="eventData.location"
-					with-pin
-				/> -->
+				<CommonTagList
+					v-if="mobile && eventData.tags"
+					:tag-list="eventData.tags"
+					class="card-description__tags"
+				/>
 			</div>
 		</div>
 	</NuxtLink>
@@ -95,10 +77,6 @@ const tags = ref([
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	&-tags{
-		display: flex;
-		gap:12px;
-	}
 
 	@media (min-width: 768px) {
 		width: 100%;
@@ -110,7 +88,6 @@ const tags = ref([
 	@media (min-width: 1440px) {
 		width: 100%;
 	}
-
 
 	&__image-container {
 		display: flex;
@@ -154,20 +131,13 @@ const tags = ref([
 		display: flex;
 		width: 100%;
 		flex-direction: column;
-		padding: 12px 16px 44px;
+		padding: 12px 16px 32px;
 
 		@media (min-width: 768px) {
 			height: inherit;
-			justify-content: space-between;
 			padding: 12px;
 			border-bottom-left-radius: 8px;
 			border-bottom-right-radius: 8px;
-		}
-
-		&__bottom {
-			@media (min-width: 786px) {
-				margin-top: auto;
-			}
 		}
 
 		&__author {
@@ -182,7 +152,8 @@ const tags = ref([
 			margin-bottom: 12px;
 		}
 
-		&__tag {
+		&__tags {
+			margin-top: auto;
 			margin-bottom: 12px;
 		}
 
@@ -196,12 +167,9 @@ const tags = ref([
 			margin-bottom: 12px;
 		}
 
-		&__datetime {
-			margin-bottom: 8px;
+		&__details {
+			margin-bottom: 12px;
 		}
 	}
-
-
 }
-
 </style>

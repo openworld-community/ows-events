@@ -5,23 +5,40 @@ import { RoutePathEnum } from '../../constants/enums/route';
 import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { dateNow } from '~/utils/dates';
 
-defineProps({
+const props = defineProps({
 	eventData: {
 		type: Object as PropType<EventOnPoster>,
 		required: true
 	}
 });
-const tags = ref([
-	{
-		id: 1,
-		tagKey: 'free'
-	},
-	{
-		id: 2,
-		tagKey: 'free 2'
-	}
-]);
 const localePath = useLocalePath();
+const description = ref(null);
+const tagList = ref(null);
+
+const tagArray = computed(() => {
+	if (process.client) {
+		const tags = props.eventData.tags;
+		for (let i = props.eventData.tags?.length; i >= 0; i--) {
+			if (tagList.value?.root?.getBoundingClientRect().height > 24) {
+				tags.slice(-1, -1);
+			}
+		}
+		return tags;
+	}
+});
+
+const asd = () => {
+	let tags = props.eventData.tags;
+	for (let i = props.eventData.tags?.length; i > 0; i--) {
+		console.log();
+		if (tagList.width > description) {
+			tags.slice(-1, -1);
+		} else return tags;
+	}
+	return tags;
+};
+
+asd();
 </script>
 
 <template>
@@ -47,7 +64,10 @@ const localePath = useLocalePath();
 				height="74"
 			/>
 		</div>
-		<div class="card__description description">
+		<div
+			ref="description"
+			class="card__description description"
+		>
 			<div class="description__info">
 				<h2
 					class="description__title"
@@ -62,19 +82,13 @@ const localePath = useLocalePath();
 					{{ convertToLocaleString(eventData.date) }}
 				</p>
 			</div>
-			<div class="card-tags">
-				<template
-					v-for="tag in tags"
-					:key="tag.tagKey"
-				>
-					<CommonTag
-						v-if="tags.length > 0"
-						:tags="tags"
-						tag-key="tag.tagKey"
-						size="small"
-					/>
-				</template>
-			</div>
+			<CommonTagList
+				v-if="eventData.tags.length"
+				ref="tagList"
+				:tag-list="tagArray"
+				tag-size="small"
+				class="description__tags"
+			/>
 		</div>
 	</NuxtLink>
 </template>
@@ -83,6 +97,7 @@ const localePath = useLocalePath();
 .card {
 	display: flex;
 	width: 100%;
+	align-items: center;
 	background-color: var(--color-background-secondary);
 	border: 1px solid var(--color-background-secondary);
 	border-radius: 8px;
@@ -154,10 +169,6 @@ const localePath = useLocalePath();
 		object-fit: cover;
 		border-radius: 4px;
 	}
-	&-tags {
-		display: flex;
-		gap: 12px;
-	}
 }
 
 .description {
@@ -165,14 +176,15 @@ const localePath = useLocalePath();
 	flex-direction: column;
 	overflow: hidden;
 
-	@media (min-width: 768px) {
-	}
-
 	&__info {
 		display: flex;
 		width: 100%;
 		flex-direction: column;
-		margin-bottom: 12px;
+		margin-bottom: 8px;
+
+		@media (min-width: 768px) {
+			margin-bottom: 12px;
+		}
 	}
 
 	&__title {
@@ -182,7 +194,7 @@ const localePath = useLocalePath();
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		margin-bottom: 8px;
+		margin-bottom: 6px;
 
 		@media (min-width: 768px) {
 			font-size: 14px;
@@ -197,6 +209,18 @@ const localePath = useLocalePath();
 
 		@media (min-width: 768px) {
 			font-size: 12px;
+		}
+	}
+
+	&__tags {
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		scrollbar-width: none;
+
+		&::-webkit-scrollbar {
+			display: none;
+			width: 0;
+			height: 0;
 		}
 	}
 }

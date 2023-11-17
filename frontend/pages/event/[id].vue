@@ -90,16 +90,6 @@ patchDeleteEventModal({
 		removeEvent: deleteCard
 	}
 });
-const tags = ref([
-	{
-		id: 1,
-		tagKey: 'free'
-	},
-	{
-		id: 2,
-		tagKey: 'free 2'
-	}
-]);
 </script>
 
 <template>
@@ -138,17 +128,11 @@ const tags = ref([
 			<div class="event-info">
 				<div class="event-info__summary">
 					<div class="event-info__tag-wrapper">
-						<template
-							v-for="tag in tags"
-							:key="tag.tagKey"
-						>
-							<CommonTag
-								v-if="tags.length > 0"
-								:tags="tags"
-								class-name="event-info__price"
-								:tag-key="tag.tagKey"
-							/>
-						</template>
+						<CommonTagList
+							:tag-list="posterEvent.tags"
+							:tag-size="mobile ? 'standard' : 'small'"
+						/>
+
 						<CommonButton
 							v-if="mobile && userStore.isAuthorized"
 							is-icon
@@ -192,22 +176,20 @@ const tags = ref([
 							/>
 						</div>
 					</div>
-					<div class="event-info__details">
-						<CommonEventDetails
-							class="event-info__datetime"
-							:price="posterEvent.price"
-							:location="posterEvent.location"
-							:start-date="convertToLocaleString(posterEvent.date)"
-							:end-date="
-								posterEvent.durationInSeconds
-									? convertToLocaleString(
-											posterEvent.date + posterEvent.durationInSeconds * 1000
-									  )
-									: null
-							"
-							with-pin
-						/>
-					</div>
+					<CommonEventDetails
+						class="event-info__details"
+						:price="posterEvent.price"
+						:start-date="convertToLocaleString(posterEvent.date)"
+						:end-date="
+							posterEvent.durationInSeconds
+								? convertToLocaleString(
+										posterEvent.date + posterEvent.durationInSeconds * 1000
+								  )
+								: null
+						"
+						:location="posterEvent.location"
+						has-link-to-g-maps
+					/>
 					<p
 						v-if="!mobile && posterEvent.creatorId !== 'peredelanoParser'"
 						class="event-info__description-title"
@@ -370,8 +352,7 @@ const tags = ref([
 	&__tag-wrapper {
 		display: flex;
 		width: 100%;
-		gap: var(--space-related-items);
-		align-items: center;
+		gap: 12px;
 		margin-bottom: 12px;
 
 		@media (min-width: 768px) {
@@ -392,8 +373,6 @@ const tags = ref([
 	}
 
 	&__author {
-		//TODO: пока верстка только мобилки
-		max-width: 480px;
 		word-wrap: break-word;
 		font-size: var(--font-size-XS);
 		font-weight: var(--font-weight-bold);
@@ -412,8 +391,6 @@ const tags = ref([
 	}
 
 	&__title {
-		//TODO: пока верстка только мобилки
-		max-width: 480px;
 		word-wrap: break-word;
 		font-size: var(--font-size-L);
 		font-weight: var(--font-weight-bold);
@@ -434,14 +411,9 @@ const tags = ref([
 		margin-bottom: var(--space-unrelated-items);
 
 		@media (min-width: 768px) {
-			width: 295px;
 			padding-top: 24px;
 			border-top: 1px solid var(--color-input-field);
 		}
-	}
-
-	&__datetime {
-		margin-bottom: var(--space-inner);
 	}
 
 	&__description-title {

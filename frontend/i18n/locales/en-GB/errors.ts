@@ -1,4 +1,4 @@
-import { CommonErrorsEnum, EventValidatorErrorTypes } from '@/../common/const';
+import { CommonErrorsEnum, EventValidatorErrorTypes } from '../../../../common/const';
 
 export default {
 	[EventValidatorErrorTypes.EVENT_IS_NOT_DEFINED]: 'Event is not defined',

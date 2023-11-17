@@ -12,6 +12,7 @@
 // import user from '/locales/en/user';
 // import { CommonErrorsEnum } from '../../common/const/common-errors';
 import { EventValidatorErrorTypes } from '../../common/const/event-validation-error'
+// import { Tags } from '../../common/const/tags';
 
 export default {
 	about: {
@@ -107,6 +108,23 @@ export default {
 			unknown: 'Price not specified',
 			from: 'From',
 			to: 'To'
+		},
+		tags: {
+			adult: 'For adults',
+			children: 'For children',
+			concert: 'Concert',
+			conference: 'Conference',
+			excursion: 'Excursion',
+			exhibition: 'Exhibition',
+			festival: 'Festival',
+			holiday: 'Holiday',
+			lecture: 'Lecture',
+			masterclass: 'Masterclass',
+			party: 'Party',
+			sport: 'Sport',
+			standup: 'Stand-up',
+			theater: 'Theatre',
+			tourism: 'Tourism'
 		}
 	},
 	footer: {

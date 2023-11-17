@@ -35,7 +35,9 @@ export enum SeoItempropEventEnum {
 	ORGANIZER = 'composer',
 	START_DATE = 'startDate',
 	END_DATE = 'endDate',
-	LOCATION = 'location'
+	LOCATION = 'location',
+	CATEGORY = 'about',
+	AGE = 'audience'
 }
 
 // Price

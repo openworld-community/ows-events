@@ -13,6 +13,7 @@
 // import { type ErrorCodes } from '@/../common/const';
 // import { CommonErrorsEnum } from '../../common/const/common-errors';
 import { EventValidatorErrorTypes } from '../../common/const/event-validation-error'
+// import { Tags } from '../../common/const/tags';
 
 // TODO: сейчас в либе nuxtjs i18n не работает разбивка по файлам при lazy load по локалям, необходимо отслеживать issue
 // https://github.com/nuxt-modules/i18n/issues/2215 и вернуть разбивку, когда проблема решится
@@ -50,7 +51,7 @@ export default {
 	donate: {
 		title: 'Станьте частью нашего проекта!',
 		description:
-			'Мы приглашаем Вас вступить в нашу творческую семью и вместе создавать нечто большее, чем просто список мероприятий. Ваша поддержка позволит нам развивать проект, расширять его возможности и реализовывать наши самые смелые идеи, чтобы мы могли предложить Вам нечто поистине уникальное.',
+			'Мы приглашаем вас вступить в нашу творческую семью и вместе создавать нечто большее, чем просто список мероприятий. Ваша поддержка позволит нам развивать проект, расширять его возможности и реализовывать наши самые смелые идеи, чтобы мы могли предложить вам нечто поистине уникальное.',
 		gratitude: 'Спасибо, что делаете нашу миссию возможной!',
 		subscription: 'С любовью, Команда AfishaPeredelano.',
 		method: {
@@ -114,6 +115,23 @@ export default {
 			unknown: 'Цена не указана',
 			from: 'От',
 			to: 'До'
+		},
+		tags: {
+			adult: 'Для взрослых',
+			children: 'Для детей',
+			concert: 'Концерт',
+			conference: 'Конференция',
+			excursion: 'Экскурсия',
+			exhibition: 'Выставка',
+			festival: 'Фестиваль',
+			holiday: 'Праздник',
+			lecture: 'Лекция',
+			masterclass: 'Мастер-класс',
+			party: 'Вечеринка',
+			sport: 'Спорт',
+			standup: 'Стендап',
+			theater: 'Театр',
+			tourism: 'Туризм',
 		}
 	},
 	footer: {

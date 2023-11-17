@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { LocalStorageEnum } from '../constants/enums/common';
 import { useUserStore } from './user.store';
 import { getCurrencyByCountry } from '../utils/prices';
-import { getAllTimezones, getTimezone } from '../services/timezone.services';
+import { getAllTimezones } from '../services/timezone.services';
 import { timezoneToString } from '../.nuxt/imports';
 
 export const useEventStore = defineStore('event', {
@@ -11,7 +11,7 @@ export const useEventStore = defineStore('event', {
 		return {
 			clearForm: false,
 			showClearFormModal: false,
-			navigateTo: '',
+			navTo: '',
 			allTimezones: [],
 			minDate: new Date(),
 			eventData: {
@@ -21,6 +21,7 @@ export const useEventStore = defineStore('event', {
 				title: '',
 				organizer: userStore.userInfo?.company ?? '',
 				description: '',
+				tags: [],
 				startDate: null,
 				startTime: null,
 				endDate: null,
@@ -42,38 +43,38 @@ export const useEventStore = defineStore('event', {
 		};
 	},
 	getters: {
-		setEventToLocalStorage(state) {
-			if (!state.clearForm) {
-				localStorage.setItem(LocalStorageEnum.EVENT_DATA, JSON.stringify(state.eventData));
-			}
-		},
-		async controlLocation(state) {
-			if (!state.eventData.location.country) {
-				state.eventData.timezone = '';
-				state.eventData.location.city = '';
-				state.eventData.location.address = '';
-				state.eventData.price.currency = '';
-			}
-			if (state.eventData.location.country) {
-				state.eventData.timezone = await getTimezone(
-					state.eventData.location.country,
-					state.eventData.location.city
-				);
-			}
-			if (!state.eventData.isFree && state.eventData.location.country)
-				state.eventData.price.currency = getCurrencyByCountry(
-					state.eventData.location.country
-				);
-		},
-		controlDateTime(state) {
-			if (!state.eventData.startDate || !state.eventData.startTime) {
-				state.eventData.endDate = null;
-				state.eventData.startTime = null;
-			}
-			if (!state.eventData.endDate) {
-				state.eventData.endTime = null;
-			}
-		},
+		// setEventToLocalStorage(state) {
+		// 	if (!state.clearForm) {
+		// 		localStorage.setItem(LocalStorageEnum.EVENT_DATA, JSON.stringify(state.eventData));
+		// 	}
+		// },
+		// async controlLocation(state) {
+		// 	if (!state.eventData.location.country) {
+		// 		state.eventData.timezone = '';
+		// 		state.eventData.location.city = '';
+		// 		state.eventData.location.address = '';
+		// 		state.eventData.price.currency = '';
+		// 	}
+		// 	if (state.eventData.location.country) {
+		// 		state.eventData.timezone = await getTimezone(
+		// 			state.eventData.location.country,
+		// 			state.eventData.location.city
+		// 		);
+		// 	}
+		// 	if (!state.eventData.isFree && state.eventData.location.country)
+		// 		state.eventData.price.currency = getCurrencyByCountry(
+		// 			state.eventData.location.country
+		// 		);
+		// },
+		// controlDateTime(state) {
+		// 		if (!state.eventData.startDate || !state.eventData.startTime) {
+		// 			state.eventData.endDate = null;
+		// 			state.eventData.startTime = null;
+		// 		}
+		// 		if (!state.eventData.endDate) {
+		// 			state.eventData.endTime = null;
+		// 		}
+		// },
 		checkFormFilling(state) {
 			return !!(
 				state.eventData.title &&
@@ -103,6 +104,7 @@ export const useEventStore = defineStore('event', {
 					title: posterEvent?.title ?? '',
 					organizer: posterEvent?.organizer ?? '',
 					description: posterEvent?.description ?? '',
+					tags: posterEvent?.tags ?? [],
 					startDate: getDateFromEpochInMs(posterEvent?.date),
 					startTime: getTimeFromEpochInMs(posterEvent?.date),
 					endDate: posterEvent?.durationInSeconds
@@ -133,7 +135,13 @@ export const useEventStore = defineStore('event', {
 			} else {
 				const storageData = localStorage.getItem(LocalStorageEnum.EVENT_DATA);
 				if (storageData) {
-					this.eventData = JSON.parse(storageData);
+					const parsedData = JSON.parse(storageData);
+					for (const key in this.eventData) {
+						if (key in parsedData) {
+							this.eventData[key] = parsedData[key];
+						}
+					}
+
 					if (this.eventData.startDate) {
 						this.eventData.startDate = new Date(this.eventData.startDate);
 					}
@@ -152,7 +160,7 @@ export const useEventStore = defineStore('event', {
 		resetEventData() {
 			const userStore = useUserStore();
 			this.allTimezones = [];
-			this.navigateTo = '';
+			this.navTo = '';
 			this.showClearFormModal = false;
 			this.minDate = new Date();
 			this.eventData = {
@@ -162,6 +170,7 @@ export const useEventStore = defineStore('event', {
 				title: '',
 				organizer: userStore.userInfo?.company ?? '',
 				description: '',
+				tags: [],
 				startDate: null,
 				startTime: null,
 				endDate: null,
@@ -193,6 +202,12 @@ export const useEventStore = defineStore('event', {
 			if (this.eventData.isFree) {
 				this.eventData.price.value = '';
 				this.eventData.price.currency = '';
+			}
+			//при отключении check "бесплатно" подтягивается валюта (если указана страна)
+			if (!this.eventData.isFree && this.eventData.location.country) {
+				this.eventData.price.currency = getCurrencyByCountry(
+					this.eventData.location.country
+				);
 			}
 		}
 	}

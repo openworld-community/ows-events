@@ -2,6 +2,10 @@
 import { useLocationStore } from '@/stores/location.store';
 import { useEventStore } from '../../stores/event.store';
 import type { PostEventPayload } from '../../../common/types/event';
+import { LocalStorageEnum } from '../../constants/enums/common';
+import { getTimezone } from '../../services/timezone.services';
+import { getCurrencyByCountry } from '../../utils/prices';
+import { TagsArray } from '../../../common/const/tags';
 
 const locationStore = useLocationStore();
 const eventStore = useEventStore();
@@ -13,6 +17,56 @@ onMounted(async () => {
 	await eventStore.getTimezones();
 	eventStore.setEventData();
 });
+
+// Запись в localStorage
+watch(
+	() => eventStore.$state.eventData,
+	(eventData) => {
+		if (!eventStore.clearForm) {
+			localStorage.setItem(LocalStorageEnum.EVENT_DATA, JSON.stringify(eventData));
+		}
+	},
+	{ deep: true }
+);
+
+// Изменение страны и города
+watch(
+	[
+		() => eventStore.$state.eventData.location.country,
+		() => eventStore.$state.eventData.location.city
+	],
+	async ([country, city]) => {
+		if (country) {
+			eventStore.eventData.timezone = await getTimezone(country, city);
+
+			if (!eventStore.eventData.isFree) {
+				eventStore.eventData.price.currency = getCurrencyByCountry(country);
+			}
+		} else {
+			eventStore.eventData.timezone = '';
+			eventStore.eventData.location.city = '';
+			eventStore.eventData.location.address = '';
+			eventStore.eventData.price.currency = '';
+		}
+		if (!city) eventStore.eventData.location.address = '';
+	},
+	{ deep: true }
+);
+
+// Изменение даты и времени
+watch(
+	[
+		() => eventStore.$state.eventData.startDate,
+		() => eventStore.$state.eventData.startTime,
+		() => eventStore.$state.eventData.endDate
+	],
+	([startDate, startTime, endDate]) => {
+		if (!startDate) eventStore.eventData.startTime = null;
+		if (!startTime) eventStore.eventData.endDate = null;
+		if (!endDate) eventStore.eventData.endTime = null;
+	},
+	{ deep: true }
+);
 
 const submitEvent = async () => {
 	eventStore.eventData.isLoading = true;
@@ -46,7 +100,8 @@ const submitEvent = async () => {
 		},
 		timezone: stringToTimezone(eventStore.eventData.timezone),
 		image: eventStore.eventData.image,
-		url: eventStore.eventData.url
+		url: eventStore.eventData.url,
+		tags: eventStore.eventData.tags
 	};
 
 	if (eventStore.eventData.editing) {
@@ -186,6 +241,16 @@ const submitEvent = async () => {
 							:placeholder="$t('form.event.fields.description')"
 							required
 						/>
+						<div class="event-form__tags">
+							<CommonTag
+								v-for="tag in TagsArray"
+								:key="tag"
+								v-model="eventStore.eventData.tags"
+								:tag-key="tag"
+								is-checkbox
+								size="small"
+							/>
+						</div>
 					</template>
 				</ModalUiModalSection>
 
@@ -228,9 +293,7 @@ const submitEvent = async () => {
 							type="date"
 							name="endDate"
 							:min-date="eventStore.eventData.startDate ?? eventStore.minDate"
-							:disabled="
-								!eventStore.eventData.startDate && !eventStore.eventData.startTime
-							"
+							:disabled="!eventStore.eventData.startTime"
 						/>
 						<CommonUiDateTimepicker
 							v-model="eventStore.eventData.endTime"
@@ -335,6 +398,11 @@ const submitEvent = async () => {
 	overflow: hidden;
 	max-height: 100vh;
 
+	// Для адаптивной height на iOs
+	@supports (-webkit-touch-callout: none) {
+		max-height: -webkit-fill-available;
+	}
+
 	&__title-wrapper {
 		display: flex;
 		width: 100%;
@@ -348,7 +416,11 @@ const submitEvent = async () => {
 		text-align: left;
 		font-size: var(--font-size-XL);
 		font-weight: var(--font-weight-regular);
-		padding: 30px var(--padding-side);
+		padding: 12px var(--padding-side);
+
+		@media (min-width: 768px) {
+			padding: 30px var(--padding-side);
+		}
 	}
 
 	&__fields-wrapper {
@@ -364,6 +436,13 @@ const submitEvent = async () => {
 		margin-left: auto;
 		margin-right: auto;
 		padding: 20px var(--padding-side);
+	}
+
+	&__tags {
+		display: flex;
+		width: 100%;
+		flex-wrap: wrap;
+		gap: 10px;
 	}
 
 	&__required {
@@ -385,7 +464,11 @@ const submitEvent = async () => {
 		width: 100%;
 		max-width: 1200px;
 		justify-content: space-between;
-		padding: 30px var(--padding-side);
+		padding: 12px var(--padding-side);
+
+		@media (min-width: 768px) {
+			padding: 30px var(--padding-side);
+		}
 	}
 
 	&__button {

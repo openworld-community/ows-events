@@ -26,16 +26,13 @@ export default defineNuxtConfig({
 		'/': { redirect: '/ru', ssr: true }
 	},
 	i18n: {
-		// debug: true,
-		experimental: {
-			jsTsFormatResource: true
-		},
+		debug: true,
 		locales: [
-			{ code: 'ru', name: 'Russian', iso: 'ru-RU', dir: 'ltr', file: 'ru-RU.ts' },
-			{ code: 'en', name: 'English', iso: 'en-US', dir: 'ltr', file: 'en-GB.ts' }
+			{ code: 'ru', name: 'Russian', iso: 'ru-RU', dir: 'ltr', file: 'ru-RU.json' },
+			{ code: 'en', name: 'English', iso: 'en-GB', dir: 'ltr', file: 'en-GB.json' }
 		],
 		lazy: true,
-		langDir: 'i18n',
+		langDir: '.nuxt/i18n',
 		strategy: 'prefix',
 		//
 		defaultLocale: 'ru',

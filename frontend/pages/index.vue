@@ -115,7 +115,6 @@ const onButtonClick = async () => {
 		padding-right: var(--padding-side);
 
 		@media (min-width: 768px) {
-			border-radius: 10px;
 			padding-top: 65px;
 			margin-top: 0;
 			margin-bottom: 80px;
@@ -123,7 +122,6 @@ const onButtonClick = async () => {
 
 		@media (min-width: 1440px) {
 			position: relative;
-			border-radius: 16px;
 			padding-top: 99px;
 			margin-bottom: 100px;
 		}

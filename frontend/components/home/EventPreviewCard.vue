@@ -5,6 +5,7 @@ import { RoutePathEnum } from '../../constants/enums/route';
 
 defineProps<{ eventData: EventOnPoster }>();
 const localePath = useLocalePath();
+const mobile = inject('mobile');
 </script>
 
 <template>
@@ -35,9 +36,10 @@ const localePath = useLocalePath();
 
 		<div class="card-description">
 			<div class="card-description__top">
-				<CommonTag
-					:price="eventData?.price"
-					class="card-description__tag"
+				<CommonTagList
+					v-if="!mobile && eventData.tags"
+					:tag-list="eventData.tags"
+					class="card-description__tags"
 				/>
 				<h2
 					class="card-description__title"
@@ -55,14 +57,15 @@ const localePath = useLocalePath();
 			</div>
 			<div class="card-description__bottom">
 				<CommonEventDetails
-					class="card-description__datetime"
-					:start-date="convertToLocaleString(eventData.date)"
-					with-pin
-				/>
-				<CommonEventDetails
-					class="card-description__geo"
+					class="card-description__details"
+					:price="eventData?.price"
 					:location="eventData.location"
-					with-pin
+					:start-date="convertToLocaleString(eventData.date)"
+				/>
+				<CommonTagList
+					v-if="mobile && eventData.tags"
+					:tag-list="eventData.tags"
+					class="card-description__tags"
 				/>
 			</div>
 		</div>
@@ -128,20 +131,13 @@ const localePath = useLocalePath();
 		display: flex;
 		width: 100%;
 		flex-direction: column;
-		padding: 12px 16px 44px;
+		padding: 12px 16px 32px;
 
 		@media (min-width: 768px) {
 			height: inherit;
-			justify-content: space-between;
 			padding: 12px;
 			border-bottom-left-radius: 8px;
 			border-bottom-right-radius: 8px;
-		}
-
-		&__bottom {
-			@media (min-width: 786px) {
-				margin-top: auto;
-			}
 		}
 
 		&__author {
@@ -156,7 +152,8 @@ const localePath = useLocalePath();
 			margin-bottom: 12px;
 		}
 
-		&__tag {
+		&__tags {
+			margin-top: auto;
 			margin-bottom: 12px;
 		}
 
@@ -170,8 +167,8 @@ const localePath = useLocalePath();
 			margin-bottom: 12px;
 		}
 
-		&__datetime {
-			margin-bottom: 8px;
+		&__details {
+			margin-bottom: 12px;
 		}
 	}
 }

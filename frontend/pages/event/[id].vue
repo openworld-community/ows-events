@@ -128,10 +128,11 @@ patchDeleteEventModal({
 			<div class="event-info">
 				<div class="event-info__summary">
 					<div class="event-info__tag-wrapper">
-						<CommonTag
-							class-name="event-info__price"
-							:price="posterEvent.price"
+						<CommonTagList
+							:tag-list="posterEvent.tags"
+							:tag-size="mobile ? 'standard' : 'small'"
 						/>
+
 						<CommonButton
 							v-if="mobile && userStore.isAuthorized"
 							is-icon
@@ -175,26 +176,20 @@ patchDeleteEventModal({
 							/>
 						</div>
 					</div>
-					<div class="event-info__details">
-						<CommonEventDetails
-							class="event-info__datetime"
-							:start-date="convertToLocaleString(posterEvent.date)"
-							:end-date="
-								posterEvent.durationInSeconds
-									? convertToLocaleString(
-											posterEvent.date + posterEvent.durationInSeconds * 1000
-									  )
-									: null
-							"
-							with-pin
-						/>
-						<CommonEventDetails
-							:location="posterEvent.location"
-							class="event-info__geolink"
-							is-link
-							with-pin
-						/>
-					</div>
+					<CommonEventDetails
+						class="event-info__details"
+						:price="posterEvent.price"
+						:start-date="convertToLocaleString(posterEvent.date)"
+						:end-date="
+							posterEvent.durationInSeconds
+								? convertToLocaleString(
+										posterEvent.date + posterEvent.durationInSeconds * 1000
+								  )
+								: null
+						"
+						:location="posterEvent.location"
+						has-link-to-g-maps
+					/>
 					<p
 						v-if="!mobile && posterEvent.creatorId !== 'peredelanoParser'"
 						class="event-info__description-title"
@@ -357,8 +352,7 @@ patchDeleteEventModal({
 	&__tag-wrapper {
 		display: flex;
 		width: 100%;
-		justify-content: space-between;
-		align-items: center;
+		gap: 12px;
 		margin-bottom: 12px;
 
 		@media (min-width: 768px) {
@@ -379,8 +373,6 @@ patchDeleteEventModal({
 	}
 
 	&__author {
-		//TODO: пока верстка только мобилки
-		max-width: 480px;
 		word-wrap: break-word;
 		font-size: var(--font-size-XS);
 		font-weight: var(--font-weight-bold);
@@ -399,8 +391,6 @@ patchDeleteEventModal({
 	}
 
 	&__title {
-		//TODO: пока верстка только мобилки
-		max-width: 480px;
 		word-wrap: break-word;
 		font-size: var(--font-size-L);
 		font-weight: var(--font-weight-bold);
@@ -421,14 +411,9 @@ patchDeleteEventModal({
 		margin-bottom: var(--space-unrelated-items);
 
 		@media (min-width: 768px) {
-			width: max-content;
 			padding-top: 24px;
 			border-top: 1px solid var(--color-input-field);
 		}
-	}
-
-	&__datetime {
-		margin-bottom: var(--space-inner);
 	}
 
 	&__description-title {

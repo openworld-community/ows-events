@@ -1,16 +1,23 @@
 <script setup lang="ts">
 import type { Location } from '../../../common/types/address';
 import type { PropType } from 'vue';
+import type { EventPrice } from '../../../common/types/event';
+import { formatPrice } from '../../utils/prices';
 import {
 	SeoItempropEventEnum,
 	SeoItempropLocationEnum,
-	SeoItemTypeEnum
+	SeoItemTypeEnum,
+	SeoItempropPriceEnum
 } from '../../constants/enums/seo';
 
 const props = defineProps({
 	location: {
 		type: Object as PropType<Location | null>,
 		default: null
+	},
+	hasLinkToGMaps: {
+		type: Boolean,
+		default: false
 	},
 	startDate: {
 		type: String,
@@ -20,93 +27,163 @@ const props = defineProps({
 		type: String,
 		default: ''
 	},
-	isLink: {
-		type: Boolean,
-		default: false
-	},
-	withPin: {
-		type: Boolean,
-		default: false
+	price: {
+		type: [Object, null] as PropType<EventPrice | null>,
+		required: true,
+		default: null
 	}
 });
 
 const component = computed(() => {
-	if (props.isLink) return defineNuxtLink({});
+	if (props.hasLinkToGMaps) return defineNuxtLink({});
 	else return 'p';
 });
 </script>
 
 <template>
-	<component
-		:is="component"
-		class="details"
-		:to="isLink ? getLocationLink(location) : null"
-		:target="isLink ? '_blank' : null"
-		:itemprop="location ? SeoItempropEventEnum.LOCATION : null"
-		:itemtype="location ? SeoItemTypeEnum.LOCATION : SeoItemTypeEnum.DATE"
-		itemscope
-	>
-		<CommonIcon
-			v-if="withPin"
-			:name="location ? 'map-pin' : 'calendar'"
-			class="details__icon"
-			color="var(--color-accent-green-main)"
-		/>
+	<ul class="details">
+		<!--	Дата	-->
+		<li
+			v-if="startDate"
+			class="details__item"
+			:itemtype="SeoItemTypeEnum.DATE"
+		>
+			<CommonIcon
+				name="calendar"
+				class="details__icon"
+				color="var(--color-accent-green-main)"
+			/>
+			<span
+				class="details__text"
+				:itemprop="SeoItempropEventEnum.START_DATE"
+			>
+				{{ startDate }}
+			</span>
+			<span
+				v-if="endDate"
+				class="details__text"
+			>
+				&nbsp;-&nbsp;
+			</span>
+			<span
+				v-if="endDate"
+				class="details__text"
+				:itemprop="SeoItempropEventEnum.END_DATE"
+			>
+				{{ endDate }}
+			</span>
+		</li>
+
+		<!-- Цена -->
+		<li class="details__item">
+			<CommonIcon
+				name="dollar"
+				class="details__icon"
+				color="var(--color-accent-green-main)"
+			/>
+			<span
+				v-if="!price"
+				class="details__text"
+			>
+				{{ $t('event.price.unknown') }}
+			</span>
+
+			<span
+				v-else-if="price.value === 0"
+				class="details__text"
+				:itemtype="SeoItempropPriceEnum.FREE"
+			>
+				{{ $t('event.price.free') }}
+			</span>
+
+			<span
+				v-else
+				:itemprop="SeoItempropPriceEnum.GROUP_ITEMPROP"
+				itemscope
+				:itemtype="SeoItemTypeEnum.OFFER"
+			>
+				<span
+					:itemprop="SeoItempropPriceEnum.PRICE"
+					class="details__text"
+				>
+					{{ formatPrice(price) }}
+				</span>
+				<span
+					class="visually-hidden"
+					:itemprop="SeoItempropPriceEnum.CURRENCY"
+				>
+					{{ price.currency }}
+				</span>
+			</span>
+		</li>
 
 		<!--	Локация		-->
-		<span
+		<li
 			v-if="location"
-			:class="['details__text', { 'details__text--link': isLink }]"
+			class="details__item"
 			itemscope
-			:itemtype="SeoItemTypeEnum.ADDRESS"
+			:itemtype="SeoItemTypeEnum.LOCATION"
 			:itemprop="SeoItempropLocationEnum.GROUP_ITEMPROP"
 		>
-			<span
-				v-if="props.location.country"
-				:itemprop="SeoItempropLocationEnum.COUNTRY"
+			<component
+				:is="component"
+				:to="hasLinkToGMaps ? getLocationLink(location) : null"
+				:target="hasLinkToGMaps ? '_blank' : null"
+				:itemprop="SeoItempropLocationEnum.GROUP_ITEMPROP"
+				:itemtype="SeoItemTypeEnum.ADDRESS"
+				itemscope
 			>
-				{{ location.country }},
-			</span>
-			<span
-				v-if="location.city"
-				:itemprop="SeoItempropLocationEnum.CITY"
-			>
-				{{ location.city }}
-			</span>
-			<span
-				v-if="location?.address"
-				:itemprop="SeoItempropLocationEnum.ADDRESS"
-				>, {{ location.address }}
-			</span>
-		</span>
-
-		<!--	Дата	-->
-		<span
-			v-if="startDate"
-			class="details__text"
-			:itemprop="SeoItempropEventEnum.START_DATE"
-		>
-			{{ startDate }}
-		</span>
-		<span
-			v-if="endDate"
-			class="details__text"
-			> &nbsp;-&nbsp;
-		</span>
-		<span
-			v-if="endDate"
-			class="details__text"
-			:itemprop="SeoItempropEventEnum.END_DATE"
-		>
-			{{ endDate }}
-		</span>
-	</component>
+				<CommonIcon
+					name="map-pin"
+					class="details__icon"
+					color="var(--color-accent-green-main)"
+				/>
+				<span
+					v-if="props.location.country"
+					:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
+					:itemprop="SeoItempropLocationEnum.COUNTRY"
+				>
+					{{ location.country }}
+				</span>
+				<span
+					v-if="location.city"
+					:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
+					:itemprop="SeoItempropLocationEnum.CITY"
+				>
+					, {{ location.city }}
+				</span>
+				<span
+					v-if="location?.address"
+					:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
+					:itemprop="SeoItempropLocationEnum.ADDRESS"
+					>, {{ location.address }}
+				</span>
+			</component>
+		</li>
+	</ul>
 </template>
 
 <style scoped lang="less">
 .details {
 	display: flex;
-	max-width: max-content;
+	width: 100%;
+	flex-direction: column;
+
+	&__item,
+	&__item > a,
+	&__item > p {
+		display: flex;
+		width: 100%;
+		align-items: center;
+
+		&:not(:last-child) {
+			margin-bottom: 8px;
+
+			@media (min-width: 1440px) {
+				margin-bottom: 12px;
+			}
+		}
+	}
 
 	&__icon {
 		margin-right: 8px;
@@ -114,6 +191,11 @@ const component = computed(() => {
 
 	&__text {
 		font-size: var(--font-size-S);
+		vertical-align: center;
+
+		@media (min-width: 1440px) {
+			font-size: var(--font-size-XS);
+		}
 
 		&--link {
 			text-decoration: underline;

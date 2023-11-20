@@ -16,6 +16,7 @@ export enum Tags {
 	ADULT = 'adult'
 }
 
-export const TagsArray = Object.values(Tags);
+export const TagsArray: string[] = Object.values(Tags);
 
-export type Tag = keyof Tags;
+export type TagList = typeof TagsArray;
+export type Tag = (typeof TagsArray)[number];

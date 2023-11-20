@@ -242,12 +242,16 @@ const submitEvent = async () => {
 							required
 						/>
 						<div class="event-form__tags">
-							<CommonTag
+							<CommonUiTag
 								v-for="tag in TagsArray"
 								:key="tag"
 								v-model="eventStore.eventData.tags"
 								:tag-key="tag"
 								is-checkbox
+								:is-disabled="
+									eventStore.eventData.tags.length >= 6 &&
+									!eventStore.eventData.tags.includes(tag)
+								"
 								size="small"
 							/>
 						</div>

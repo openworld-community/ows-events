@@ -13,6 +13,7 @@
 // import { type ErrorCodes } from '@/../common/const';
 // import { CommonErrorsEnum } from '../../common/const/common-errors';
 import { EventValidatorErrorTypes } from '../../common/const/event-validation-error'
+// import { Tags } from '../../common/const/tags';
 
 // TODO: сейчас в либе nuxtjs i18n не работает разбивка по файлам при lazy load по локалям, необходимо отслеживать issue
 // https://github.com/nuxt-modules/i18n/issues/2215 и вернуть разбивку, когда проблема решится
@@ -114,6 +115,23 @@ export default {
 			unknown: 'Цена не указана',
 			from: 'От',
 			to: 'До'
+		},
+		tags: {
+			adult: 'Для взрослых',
+			children: 'Для детей',
+			concert: 'Концерт',
+			conference: 'Конференция',
+			excursion: 'Экскурсия',
+			exhibition: 'Выставка',
+			festival: 'Фестиваль',
+			holiday: 'Праздник',
+			lecture: 'Лекция',
+			masterclass: 'Мастер-класс',
+			party: 'Вечеринка',
+			sport: 'Спорт',
+			standup: 'Стендап',
+			theater: 'Театр',
+			tourism: 'Туризм',
 		}
 	},
 	footer: {

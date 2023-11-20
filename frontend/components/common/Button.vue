@@ -132,6 +132,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	border-radius: 8px;
 	padding: 7px 14px;
 	align-items: center;
+
 	transition-property: background-color, color, border-color;
 	transition-duration: 0.3s;
 	transition-timing-function: ease;

@@ -13,8 +13,26 @@ export default defineNuxtRouteMiddleware((to, from) => {
 		const eventStore = useEventStore();
 
 		if (!eventStore.clearForm) {
-			const defaultEvent = localStorage.getItem(LocalStorageEnum.DEFAULT_EVENT_DATA);
-			const lastEvent = localStorage.getItem(LocalStorageEnum.EVENT_DATA);
+			let defaultEvent = localStorage.getItem(LocalStorageEnum.DEFAULT_EVENT_DATA);
+			let lastEvent = localStorage.getItem(LocalStorageEnum.EVENT_DATA);
+
+			let parsedDefaultEvent = null;
+			let parsedLastEvent = null;
+			if (defaultEvent) {
+				parsedDefaultEvent = JSON.parse(defaultEvent);
+				if (parsedDefaultEvent.tags.length) {
+					parsedDefaultEvent.tags.sort();
+				}
+				defaultEvent = JSON.stringify(parsedDefaultEvent);
+			}
+			if (lastEvent) {
+				parsedLastEvent = JSON.parse(lastEvent);
+				if (parsedLastEvent.tags.length) {
+					parsedLastEvent.tags.sort();
+				}
+
+				lastEvent = JSON.stringify(parsedLastEvent);
+			}
 
 			if (lastEvent && defaultEvent !== lastEvent) {
 				eventStore.$patch({

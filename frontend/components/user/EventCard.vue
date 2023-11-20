@@ -5,20 +5,46 @@ import { RoutePathEnum } from '../../constants/enums/route';
 import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { dateNow } from '~/utils/dates';
 
-defineProps({
+const props = defineProps({
 	eventData: {
 		type: Object as PropType<EventOnPoster>,
 		required: true
 	}
 });
-
 const localePath = useLocalePath();
+const description = ref(null);
+const tagList = ref(null);
+
+const tagArray = computed(() => {
+	if (process.client) {
+		const tags = props.eventData.tags;
+		for (let i = props.eventData.tags?.length; i >= 0; i--) {
+			if (tagList.value?.root?.getBoundingClientRect().height > 24) {
+				tags.slice(-1, -1);
+			}
+		}
+		return tags;
+	}
+});
+
+const asd = () => {
+	const tags = props.eventData.tags;
+	for (let i = props.eventData.tags?.length; i > 0; i--) {
+		console.log();
+		if (tagList.width > description) {
+			tags.slice(-1, -1);
+		} else return tags;
+	}
+	return tags;
+};
+
+asd();
 </script>
 
 <template>
 	<NuxtLink
 		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
-		:class="['card', {'card--expired': eventData.date < dateNow}]"
+		:class="['card', { 'card--expired': eventData.date < dateNow }]"
 		:itemprop="SeoItempropGlobalEnum.URL"
 	>
 		<div
@@ -38,24 +64,30 @@ const localePath = useLocalePath();
 				height="74"
 			/>
 		</div>
-		<div class="card__description description">
+		<div
+			ref="description"
+			class="card__description description"
+		>
 			<div class="description__info">
-			<h2
-				class="description__title"
-				:itemprop="SeoItempropEventEnum.NAME"
-			>
-				{{ eventData.title }}
-			</h2>
-			<p
-				class="description__date"
-				:itemprop="SeoItempropEventEnum.START_DATE"
-			>
-				{{ convertToLocaleString(eventData.date) }}
-			</p>
+				<h2
+					class="description__title"
+					:itemprop="SeoItempropEventEnum.NAME"
+				>
+					{{ eventData.title }}
+				</h2>
+				<p
+					class="description__date"
+					:itemprop="SeoItempropEventEnum.START_DATE"
+				>
+					{{ convertToLocaleString(eventData.date) }}
+				</p>
 			</div>
-			<CommonTag
-				:price="eventData.price"
-				size="small"
+			<CommonTagList
+				v-if="eventData.tags.length"
+				ref="tagList"
+				:tag-list="tagArray"
+				tag-size="small"
+				class="description__tags"
 			/>
 		</div>
 	</NuxtLink>
@@ -65,13 +97,14 @@ const localePath = useLocalePath();
 .card {
 	display: flex;
 	width: 100%;
+	align-items: center;
 	background-color: var(--color-background-secondary);
 	border: 1px solid var(--color-background-secondary);
 	border-radius: 8px;
 	padding: 8px;
 	margin-bottom: 12px;
 
-	@media(min-width: 768px) {
+	@media (min-width: 768px) {
 		padding: 16px 12px;
 	}
 
@@ -79,7 +112,8 @@ const localePath = useLocalePath();
 	transition-duration: 0.3s;
 	transition-timing-function: ease;
 
-	&:hover, &:focus {
+	&:hover,
+	&:focus {
 		border-color: var(--color-accent-green-main-30);
 	}
 
@@ -103,7 +137,7 @@ const localePath = useLocalePath();
 		line-height: 0;
 		margin-right: 8px;
 
-		@media(min-width: 768px) {
+		@media (min-width: 768px) {
 			width: 248px;
 			height: 108px;
 			margin-right: 12px;
@@ -113,14 +147,14 @@ const localePath = useLocalePath();
 			background-image: url('@/assets/img/event/event-small-preview-mobile@1x.png');
 			background-size: cover;
 
-			@media(min-width: 768px) {
+			@media (min-width: 768px) {
 				background-image: url('@/assets/img/event/event-small-preview-desktop@1x.png');
 			}
 
 			@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 				background-image: url('@/assets/img/event/event-small-preview-mobile@2x.png');
 
-				@media(min-width: 768px) {
+				@media (min-width: 768px) {
 					background-image: url('@/assets/img/event/event-small-preview-desktop@2x.png');
 				}
 			}
@@ -142,15 +176,15 @@ const localePath = useLocalePath();
 	flex-direction: column;
 	overflow: hidden;
 
-	@media(min-width: 768px) {
-		justify-content: space-between;
-	}
-
 	&__info {
 		display: flex;
 		width: 100%;
 		flex-direction: column;
 		margin-bottom: 8px;
+
+		@media (min-width: 768px) {
+			margin-bottom: 12px;
+		}
 	}
 
 	&__title {
@@ -160,9 +194,9 @@ const localePath = useLocalePath();
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		margin-bottom: 8px;
+		margin-bottom: 6px;
 
-		@media(min-width: 768px) {
+		@media (min-width: 768px) {
 			font-size: 14px;
 			line-height: 20px;
 			margin-bottom: 12px;
@@ -173,8 +207,20 @@ const localePath = useLocalePath();
 		font-size: var(--font-size-XS);
 		line-height: 16px;
 
-		@media(min-width: 768px) {
+		@media (min-width: 768px) {
 			font-size: 12px;
+		}
+	}
+
+	&__tags {
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		scrollbar-width: none;
+
+		&::-webkit-scrollbar {
+			display: none;
+			width: 0;
+			height: 0;
 		}
 	}
 }

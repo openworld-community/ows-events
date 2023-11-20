@@ -10,15 +10,18 @@
 // import meta from '/locales/en/meta';
 // import modal from '/locales/en/modal';
 // import user from '/locales/en/user';
-// import { CommonErrorsEnum } from '../../common/const/common-errors';
-import { EventValidatorErrorTypes } from '../../common/const/event-validation-error'
+import { CommonErrorsEnum } from '../../common/const/common-errors';
+import { EventValidatorErrorTypes } from '../../common/const/event-validation-error';
+// import { Tags } from '../../common/const/tags';
 
 export default {
 	about: {
 		title: 'About Us',
 		idea: 'At AfishaPeredelano, we aim to make cultural and social life more accessible.',
-		mission: 'Our mission is to bring people together based on their interests, enabling them to easily discover and create unique events, from exhibitions and concerts to weekly yoga sessions in the park.',
-		functionality: 'Now, information about events of all scales is gathered in one place. Thanks to convenient search and filtering functions, you can organize your leisure activities in just a few minutes.',
+		mission:
+			'Our mission is to bring people together based on their interests, enabling them to easily discover and create unique events, from exhibitions and concerts to weekly yoga sessions in the park.',
+		functionality:
+			'Now, information about events of all scales is gathered in one place. Thanks to convenient search and filtering functions, you can organize your leisure activities in just a few minutes.',
 		team: 'We are a team of enthusiasts committed to making the world more interesting and socially active. Our developers, designers, and managers work to ensure that your app experience is unforgettable.',
 		values: {
 			title: 'Our values that guide our work:',
@@ -26,9 +29,10 @@ export default {
 			innovation: 'Innovation: We constantly seek ways to make our app better;',
 			community: 'Community: We strive to create a space where everyone feels welcome;',
 			accessibility: 'Accessibility: We make cultural events accessible to all;',
-			quality: 'Quality: We maintain high quality, whether for large platforms or small initiatives.'
+			quality:
+				'Quality: We maintain high quality, whether for large platforms or small initiatives.'
 		},
-		github: 'Link to the Project\'s GitHub',
+		github: "Link to the Project's GitHub",
 		social: {
 			title: 'Follow us on social media:',
 			alt: 'Link to the'
@@ -40,11 +44,12 @@ export default {
 			key_one: '{count} day',
 			key_few: '{count} days',
 			key_many: '{count} days'
-		},
+		}
 	},
 	donate: {
 		title: 'Become a Part of Our Project!',
-		description: 'We invite you to join our creative family and together create something greater than just a list of events. Your support will enable us to develop the project, expand its capabilities, and bring our boldest ideas to life, so we can offer you something truly unique.',
+		description:
+			'We invite you to join our creative family and together create something greater than just a list of events. Your support will enable us to develop the project, expand its capabilities, and bring our boldest ideas to life, so we can offer you something truly unique.',
 		gratitude: 'Thank you for making our mission possible!',
 		subscription: 'With love, the AfishaPeredelano Team.',
 		method: {
@@ -58,44 +63,46 @@ export default {
 	},
 	error: {
 		[EventValidatorErrorTypes.EVENT_IS_NOT_DEFINED]: 'Event is not defined',
-		TITLE_IS_NOT_DEFINED: 'Title is not defined',
-		TITLE_IS_TOO_SHORT: 'Title is too short',
-		TITLE_IS_TOO_LONG: 'Title is too long',
-		DESCRIPTION_IS_NOT_DEFINED: 'Description is not defined',
-		DESCRIPTION_IS_TOO_SHORT: 'Description is too short',
-		DESCRIPTION_IS_TOO_LONG: 'Description is too long',
-		START_DATE_IS_NOT_DEFINED: 'Start date is not defined',
-		START_DATE_IS_IN_THE_PAST: 'Start date is in the past',
-		DURATION_IS_NEGATIVE: 'Duration is negative',
-		LOCATION_IS_NOT_DEFINED: 'Location is not defined',
-		COUNTRY_IS_NOT_DEFINED: 'Country is not defined',
-		CITY_IS_NOT_DEFINED: 'City is not defined',
-		IMAGE_LINK_IS_TOO_SHORT: 'Image link is too short',
-		IMAGE_LINK_IS_TOO_LONG: 'Image link is too long',
-		URL_IS_NOT_DEFINED: 'Event URL is not defined',
-		URL_IS_TOO_SHORT: 'Event URL is too short',
-		URL_IS_TOO_LONG: 'Event URL is too long',
-		TITLE_IS_NOT_CLEAN: 'Inappropriate language in the title',
-		DESCRIPTION_IS_NOT_CLEAN: 'Inappropriate language in the description',
-		'event-not-found': 'Event not found',
-		'image-addition-error': 'Error adding image',
-		'image-deletion-error': 'Error deleting image',
-		'image-encoding-problem': 'Image format error',
-		'image-too-large': 'Image file is too large',
-		'no-image-to-add': 'Image file not found',
-		'no-image-to-delete': 'Image file not found',
-		'payment-info-file-parse-error': 'Error in ',
-		'payment-info-file-not-exist': 'Payment method not specified',
-		'payment-info-not-found': 'Payment method not found',
-		'unknown-image-route-error': 'Unexpected error while processing the image',
-		'wrong-token': 'Your authentication token is invalid',
-		forbidden: 'Access error',
-		unauthorized: 'You don\'t have access to this resource',
-		'event-already-exists': 'This event already exists',
-		'event-sent-on-moderation': 'Event sent for moderation',
-		'no-payload-provided': 'Empty request payload sent',
-		'timezone-city-not-found': 'Could not find a time zone for the specified parameters',
-		'user-does-not-exist': 'User not found'
+		[EventValidatorErrorTypes.TITLE_IS_NOT_DEFINED]: 'Title is not defined',
+		[EventValidatorErrorTypes.TITLE_IS_TOO_SHORT]: 'Title is too short',
+		[EventValidatorErrorTypes.TITLE_IS_TOO_LONG]: 'Title is too long',
+		[EventValidatorErrorTypes.DESCRIPTION_IS_NOT_DEFINED]: 'Description is not defined',
+		[EventValidatorErrorTypes.DESCRIPTION_IS_TOO_SHORT]: 'Description is too short',
+		[EventValidatorErrorTypes.DESCRIPTION_IS_TOO_LONG]: 'Description is too long',
+		[EventValidatorErrorTypes.START_DATE_IS_NOT_DEFINED]: 'Start date is not defined',
+		[EventValidatorErrorTypes.START_DATE_IS_IN_THE_PAST]: 'Start date is in the past',
+		[EventValidatorErrorTypes.DURATION_IS_NEGATIVE]: 'Duration is negative',
+		[EventValidatorErrorTypes.LOCATION_IS_NOT_DEFINED]: 'Location is not defined',
+		[EventValidatorErrorTypes.COUNTRY_IS_NOT_DEFINED]: 'Country is not defined',
+		[EventValidatorErrorTypes.CITY_IS_NOT_DEFINED]: 'City is not defined',
+		[EventValidatorErrorTypes.IMAGE_LINK_IS_TOO_SHORT]: 'Image link is too short',
+		[EventValidatorErrorTypes.IMAGE_LINK_IS_TOO_LONG]: 'Image link is too long',
+		[EventValidatorErrorTypes.URL_IS_NOT_DEFINED]: 'Event URL is not defined',
+		[EventValidatorErrorTypes.URL_IS_TOO_SHORT]: 'Event URL is too short',
+		[EventValidatorErrorTypes.URL_IS_TOO_LONG]: 'Event URL is too long',
+		[EventValidatorErrorTypes.TITLE_IS_NOT_CLEAN]: 'Inappropriate language in the title',
+		[EventValidatorErrorTypes.DESCRIPTION_IS_NOT_CLEAN]:
+			'Inappropriate language in the description',
+		[CommonErrorsEnum.EVENT_NOT_FOUND]: 'Event not found',
+		[CommonErrorsEnum.IMAGE_ADDITION_ERROR]: 'Error adding image',
+		[CommonErrorsEnum.IMAGE_DELETION_ERROR]: 'Error deleting image',
+		[CommonErrorsEnum.IMAGE_ENCODING_ERROR]: 'Image format error',
+		[CommonErrorsEnum.IMAGE_TOO_LARGE]: 'Image file is too large',
+		[CommonErrorsEnum.NO_IMAGE_TO_ADD]: 'Image file not found',
+		[CommonErrorsEnum.NO_IMAGE_TO_DELETE]: 'Image file not found',
+		[CommonErrorsEnum.PAYMENT_INFO_FILE_PARSE_ERROR]: 'Error in ',
+		[CommonErrorsEnum.PAYMENT_INFO_FILE_NOT_EXIST]: 'Payment method not specified',
+		[CommonErrorsEnum.PAYMENT_INFO_NOT_FOUND]: 'Payment method not found',
+		[CommonErrorsEnum.UNKNOWN_IMAGE_ROUTE_ERROR]: 'Unexpected error while processing the image',
+		[CommonErrorsEnum.WRONG_TOKEN]: 'Your authentication token is invalid',
+		[CommonErrorsEnum.FORBIDDEN]: 'Access error',
+		[CommonErrorsEnum.UNAUTHORIZED]: "You don't have access to this resource",
+		[CommonErrorsEnum.EVENT_ALREADY_EXISTS]: 'This event already exists',
+		[CommonErrorsEnum.EVENT_SENT_ON_MODERATION]: 'Event sent for moderation',
+		[CommonErrorsEnum.NO_PAYLOAD_PROVIDED]: 'Empty request payload sent',
+		[CommonErrorsEnum.TIMEZONE_CITY_NOT_FOUND]:
+			'Could not find a time zone for the specified parameters',
+		[CommonErrorsEnum.USER_DOES_NOT_EXIST]: 'User not found'
 	},
 	event: {
 		image: {
@@ -107,6 +114,23 @@ export default {
 			unknown: 'Price not specified',
 			from: 'From',
 			to: 'To'
+		},
+		tags: {
+			adult: 'For adults',
+			children: 'For children',
+			concert: 'Concert',
+			conference: 'Conference',
+			excursion: 'Excursion',
+			exhibition: 'Exhibition',
+			festival: 'Festival',
+			holiday: 'Holiday',
+			lecture: 'Lecture',
+			masterclass: 'Masterclass',
+			party: 'Party',
+			sport: 'Sport',
+			standup: 'Stand-up',
+			theater: 'Theatre',
+			tourism: 'Tourism'
 		}
 	},
 	footer: {
@@ -150,7 +174,7 @@ export default {
 				url_to_registration: 'Registration link',
 				url_placeholder: 'https://example.com'
 			}
-		},
+		}
 	},
 	global: {
 		country: 'Country',
@@ -177,7 +201,7 @@ export default {
 			remove_from_favourites: 'Remove from Favorites',
 			save: 'Save',
 			search: 'Search',
-			share: 'Share',
+			share: 'Share'
 		}
 	},
 	header: {
@@ -202,9 +226,9 @@ export default {
 			about: 'About us',
 			support: 'Support',
 			donation: 'Help Afisha',
-			limitation_of_liability: 'Limitation of Liability',
+			limitation_of_liability: 'Limitation of Liability'
 		},
-		subscription_expired: '$t(dates.day.key) until the end of subscription',
+		subscription_expired: '$t(dates.day.key) until the end of subscription'
 	},
 	home: {
 		title: 'Bringing people together around events',
@@ -222,10 +246,10 @@ export default {
 		filter: {
 			aria_country: 'Filter by country',
 			aria_city: 'Filter by city',
-			search: 'What are you interested in?',
+			search: 'What are you interested in?'
 		},
 		user_location: {
-			not_found: 'We couldn\'t find your location'
+			not_found: "We couldn't find your location"
 		}
 	},
 	limitation_of_liability: {
@@ -239,14 +263,15 @@ export default {
 		p_3: 'Afisha is not responsible and does not compensate any direct or indirect damage caused to the user of the website or any third parties as a result of using or being unable to use the Service and information posted on the Service.',
 		p_4: 'Users of the website have the opportunity to independently post content on the Afisha website without the involvement of the administration. Afisha is not obliged to moderate the content posted by users.',
 		p_5: 'Afisha does not guarantee the accuracy of information posted by users on the Service. Afisha does not guarantee that events, information about which is posted by users, will take place, and that websites linked by users will operate properly, comply with legal requirements, and ensure the confidentiality of user data.',
-		p_6: 'Users who post content on the Service are individually responsible to third parties and state authorities for their actions. By using the Service, the user undertakes not to violate anyone\'s copyright, rights to trademarks, means of individualization, and/or rights to other objects of intellectual property. The user undertakes to independently and at their own expense resolve conflicts with third parties related to the user\'s actions on the Service.',
-	p_7: 'The user and third parties undertake to resolve conflicts with Afisha out of court by sending claims through any available communication channels. In case of impossibility to resolve the conflict through pretrial procedures, it shall be settled in accordance with applicable law.',
-	p_8: 'The absence of guarantees means that the Afisha and/or any persons directly or indirectly involved in it do not assume any obligations and do not bear any responsibility to the users of the Service and/or any other third parties in connection with the content posted on the Service.'
-},
+		p_6: "Users who post content on the Service are individually responsible to third parties and state authorities for their actions. By using the Service, the user undertakes not to violate anyone's copyright, rights to trademarks, means of individualization, and/or rights to other objects of intellectual property. The user undertakes to independently and at their own expense resolve conflicts with third parties related to the user's actions on the Service.",
+		p_7: 'The user and third parties undertake to resolve conflicts with Afisha out of court by sending claims through any available communication channels. In case of impossibility to resolve the conflict through pretrial procedures, it shall be settled in accordance with applicable law.',
+		p_8: 'The absence of guarantees means that the Afisha and/or any persons directly or indirectly involved in it do not assume any obligations and do not bear any responsibility to the users of the Service and/or any other third parties in connection with the content posted on the Service.'
+	},
 	meta: {
 		site_name: 'Afisha Peredelano',
 		default_title: 'Events Calendar for Serbia, Montenegro, Kyrgyzstan',
-		default_description: 'The catalog features dozens of events across various categories: concerts, meetings, exhibitions, festivals, masterclasses',
+		default_description:
+			'The catalog features dozens of events across various categories: concerts, meetings, exhibitions, festivals, masterclasses',
 		about_us: {
 			title: 'About Peredelano Afisha Project',
 			description: 'Learn more about our project, team and mission'
@@ -256,7 +281,8 @@ export default {
 		},
 		donate: {
 			title: 'Support the Peredelano Afisha Project',
-			description: 'Thanks to your support, we are expanding the project, enhancing its capabilities, and bringing our boldest ideas to life.'
+			description:
+				'Thanks to your support, we are expanding the project, enhancing its capabilities, and bringing our boldest ideas to life.'
 		},
 		user: {
 			info: {
@@ -285,27 +311,27 @@ export default {
 			}
 		},
 		delete_event_modal: {
-			title: 'Delete event',
+			title: 'Delete event'
 		},
 		need_authorize_modal: {
-			title: 'Authorization required to create an Event',
+			title: 'Authorization required to create an Event'
 		}
 	},
 	user: {
 		unauthorized: {
 			title: 'Log into your account',
 			text: 'Please log in to access additional features',
-			continue: 'Continue without authorization',
+			continue: 'Continue without authorization'
 		},
 		greeting: 'Hello',
 		user: 'User',
 		my_events: {
 			title: 'My events',
-			no_my_events: 'You haven\'t created any events yet',
+			no_my_events: "You haven't created any events yet"
 		},
 		favourites: {
-			title:'Favourites',
-			no_favourites: 'You haven\'t added anything to your "Favourites" yet',
+			title: 'Favourites',
+			no_favourites: 'You haven\'t added anything to your "Favourites" yet'
 		},
 		donate: {
 			title: 'Become a part of our project!',
@@ -313,7 +339,6 @@ export default {
 			button: 'Make a contribution'
 		}
 	}
-
 
 	// about,
 	// dates,

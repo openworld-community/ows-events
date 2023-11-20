@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { type PropType } from 'vue';
-import type { Tag } from '../../../../common/const/tags';
 import { SeoItempropEventEnum } from '../../../constants/enums/seo';
+import { type Tag } from '../../../../common/const/tags';
 
 const props = defineProps({
 	tagKey: {

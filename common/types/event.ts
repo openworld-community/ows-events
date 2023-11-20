@@ -1,6 +1,6 @@
 import type { Timezone } from './location';
 import { EventTypes } from '../const/eventTypes';
-import { Tags } from '../const/tags';
+import type { Tag } from '../const/tags';
 
 export type EventDbEntity = {
 	id: string;
@@ -19,7 +19,7 @@ export type EventDbEntity = {
 	timezone?: Timezone;
 	url: string;
 	organizer?: string;
-	tags?: Tags[];
+	tags?: Tag[];
 	type: EventTypes;
 };
 

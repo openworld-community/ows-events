@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
-import type { Tag } from '../../../common/const/tags';
+import { type TagList} from '../../../common/const/tags';
 
 defineProps({
 	tagList: {
-		type: Array as PropType<Tag[]>,
+		type: Array as PropType<TagList>,
 		required: true
 	},
 	tagSize: {
 		type: String as PropType<'standard' | 'small'>,
-		required: true
+		default: 'standard'
 	}
 });
 </script>

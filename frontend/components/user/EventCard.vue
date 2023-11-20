@@ -28,7 +28,7 @@ const tagArray = computed(() => {
 });
 
 const asd = () => {
-	let tags = props.eventData.tags;
+	const tags = props.eventData.tags;
 	for (let i = props.eventData.tags?.length; i > 0; i--) {
 		console.log();
 		if (tagList.width > description) {

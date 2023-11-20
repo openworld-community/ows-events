@@ -63,3 +63,21 @@ export const getUsedCountriesSchema = {
 		}
 	}
 };
+
+export const getUsedCitiesByCountrySchema = {
+	description: 'get used cities by country',
+	tags: ['Location'],
+	summary: 'Get used cities by country',
+	params: {
+		type: 'object',
+		properties: {
+			country: { type: 'string' }
+		}
+	},
+	response: {
+		200: {
+			type: 'array',
+			items: { type: 'string' }
+		}
+	}
+};

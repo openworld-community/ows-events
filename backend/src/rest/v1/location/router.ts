@@ -11,6 +11,7 @@ import {
 	getCitiesByCountrySchema,
 	getCountriesSchema,
 	getMetaSchema,
+	getUsedCitiesByCountrySchema,
 	getUsedCountriesSchema
 } from './schema';
 
@@ -34,5 +35,8 @@ export const locationApi = async (fastify: FastifyInstance) => {
 		schema: getUsedCountriesSchema,
 		handler: getUsedCountries
 	});
-	fastify.get<IGetCitiesByCountryRouteProps>('/usedCities/:country', getUsedCities);
+	fastify.get<IGetCitiesByCountryRouteProps>('/usedCities/:country', {
+		schema: getUsedCitiesByCountrySchema,
+		handler: getUsedCities
+	});
 };

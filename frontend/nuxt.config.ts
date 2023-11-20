@@ -2,23 +2,49 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import path from 'path';
 import { fileURLToPath, URL } from 'node:url';
+import { searchForWorkspaceRoot } from 'vite';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+	devtools: {
+		enabled: true // or false to disable
+	},
 	modules: [
-		[
-			'@nuxtjs/i18n',
-			{
-				// debug: true,
-				experimental: {
-					jsTsFormatResource: true
-				}
-			}
-		],
+		'@nuxtjs/i18n',
 		'@pinia/nuxt',
 		'@vueuse/nuxt',
-		'@nuxtjs/plausible'
+		'@nuxtjs/plausible',
+		[
+			'nuxt-viewport',
+			{
+				breakpoints: {
+					mobile: 375,
+					tablet: 768,
+					desktop: 1440
+				}
+			}
+		]
 	],
+	routeRules: {
+		'/': { redirect: '/ru', ssr: true }
+	},
+	i18n: {
+		// debug: true,
+		experimental: {
+			jsTsFormatResource: true
+		},
+		locales: [
+			{ code: 'ru', name: 'Russian', iso: 'ru-RU', dir: 'ltr', file: 'ru-RU.ts' },
+			{ code: 'en', name: 'English', iso: 'en-US', dir: 'ltr', file: 'en-GB.ts' }
+		],
+		lazy: true,
+		langDir: 'i18n',
+		strategy: 'prefix',
+		//
+		defaultLocale: 'ru',
+		detectBrowserLanguage: false,
+		vueI18n: './i18n.config.ts'
+	},
 	// На случай добавления скриптов:
 	// app: {
 	// 	head: {
@@ -39,7 +65,7 @@ export default defineNuxtConfig({
 			'poster-test-peredelano.orby-tech.space',
 		apiHost: 'https://afisha-metrics.orby-tech.space'
 	},
-	typescript: { strict: true },
+	typescript: { strict: false },
 	nitro: {
 		devProxy: {
 			'/api': 'http://backend:7080/api',
@@ -50,6 +76,14 @@ export default defineNuxtConfig({
 		server: {
 			watch: {
 				usePolling: true
+			},
+			hmr: {
+				// нужно пока комментить, если фронт не через докер
+				protocol: 'ws',
+				clientPort: 80
+			},
+			fs: {
+				allow: [searchForWorkspaceRoot(process.cwd()), '/app/common']
 			}
 		},
 		plugins: [
@@ -58,15 +92,19 @@ export default defineNuxtConfig({
 			// vue(),
 			vueJsx(),
 			createSvgIconsPlugin({
-				iconDirs: [path.resolve(process.cwd(), 'assets/img/icon')],
+				iconDirs: [path.resolve(process.cwd(), 'assets/icon')],
 				symbolId: '[name]',
 				inject: 'body-first'
 			})
 		],
 		resolve: { alias: { '@common': fileURLToPath(new URL('../common', import.meta.url)) } }
 	},
+	// watcher:
 	// на винде очень долго стартует дев-сервер, проблема недавняя
 	// один из авторов Нукста на ГХ посоветовал такое решение
 	// если у кого-то от этой настройки наоборот что-то ломается, то скажите - что-нибудь придумаем
-	experimental: { watcher: 'chokidar' }
+	// appManifest:
+	// Почему-то при билде накст генерит разные buildId для appManifest и entry, пробую отключить
+	// (могут сломаться редиректы по языкам)
+	experimental: { watcher: 'chokidar', appManifest: false }
 });

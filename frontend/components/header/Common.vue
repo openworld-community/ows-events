@@ -1,8 +1,22 @@
 <script setup lang="ts">
-import { RouteNameEnum } from '../../constants/enums/route';
-import {SeoItempropNavEnum, SeoItemTypeEnum} from '../../constants/enums/seo';
+import { SeoItempropNavEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
+import { RouteNameEnum, RoutePathEnum } from '../../constants/enums/route';
+import { getRouteName } from '../../utils';
+import { SUPPORT_TG_URL } from '../../constants/url';
+import { useUserStore } from '../../stores/user.store';
 
 const route = useRoute();
+const router = useRouter();
+const localePath = useLocalePath();
+const userStore = useUserStore();
+const mobile = inject('mobile');
+
+defineProps({
+	hasBackButton: {
+		type: Boolean,
+		default: false
+	}
+});
 
 const isNavbarOpen = ref<boolean>(false);
 const navbarToggle = () => {
@@ -14,63 +28,135 @@ const navigationBurger = ref(null);
 
 onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 
-const isAtHome = computed(() => route.name === RouteNameEnum.HOME);
+const isAtHome = computed(() => getRouteName(route.name as string) === RouteNameEnum.HOME);
 const logoComponentIs = computed(() => {
 	if (isAtHome.value) return 'button';
 	else return defineNuxtLink({});
 });
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+const goBack = () => {
+	if (router.options.history.state.back) {
+		router.back();
+	} else if (
+		getRouteName(route.name as string).includes(RouteNameEnum.USER_FAVOURITES) ||
+		getRouteName(route.name as string).includes(RouteNameEnum.USER_MY_EVENTS)
+	) {
+		navigateTo(localePath({ path: RoutePathEnum.USER_PAGE }));
+	} else {
+		navigateTo(localePath({ path: RoutePathEnum.HOME }));
+	}
+};
 </script>
 
 <template>
 	<header
-			class="header"
-			itemscope
-			:itemtype="SeoItemTypeEnum.HEADER"
+		class="header"
+		itemscope
+		:itemtype="SeoItemTypeEnum.HEADER"
 	>
-		<div class="header__container">
-			<div
-				class="header__left"
-				itemscope
-				:itemtype="SeoItemTypeEnum.NAV"
-			>
+		<nav
+			class="header__container"
+			itemscope
+			:itemtype="SeoItemTypeEnum.NAV"
+		>
+			<div class="header__left">
+				<CommonButton
+					v-if="hasBackButton"
+					is-icon
+					icon-name="back"
+					button-kind="ordinary"
+					:alt="$t('global.button.back')"
+					@click="goBack"
+				/>
 				<component
 					:is="logoComponentIs"
-					class="header__navigation-link"
+					v-else
+					class="header__logo"
 					:aria-label="
 						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
 					"
-					:to="!isAtHome ? { name: RouteNameEnum.HOME } : undefined"
+					:to="!isAtHome ? localePath(RoutePathEnum.HOME) : undefined"
 					:itemprop="SeoItempropNavEnum.URL"
 					@click="isAtHome && scrollToTop()"
 				>
 					<CommonIcon
-						name="peredelano-afisha"
+						name="afisha-logo-light"
 						width="86"
 						height="40"
+						color="var(--color-accent-green-main)"
 						alt="Peredelano Афиша"
 					/>
 				</component>
 			</div>
+			<ul
+				v-if="!mobile"
+				class="header__center"
+			>
+				<li class="header__nav-item">
+					<NuxtLink
+						:to="localePath(RoutePathEnum.ABOUT)"
+						class="header__nav-link"
+					>
+						{{ $t('header.navigation.about') }}
+					</NuxtLink>
+				</li>
+				<li
+					class="header__point"
+					aria-hidden="true"
+				/>
+				<li class="header__nav-item">
+					<NuxtLink
+						:to="SUPPORT_TG_URL"
+						target="_blank"
+						class="header__nav-link"
+					>
+						{{ $t('header.navigation.support') }}
+					</NuxtLink>
+				</li>
+				<li
+					class="header__point"
+					aria-hidden="true"
+				/>
+				<li class="header__nav-item">
+					<NuxtLink
+						:to="localePath(RoutePathEnum.DONATION)"
+						class="header__nav-link"
+					>
+						{{ $t('header.navigation.donation') }}
+					</NuxtLink>
+				</li>
+			</ul>
 			<div class="header__right">
-				<!--        TODO: вернуться при доработке подписки-->
-				<!--				<HeaderSubscriptionExpired-->
-				<!--					v-if="route.name === RouteNameEnum.HOME"-->
-				<!--					class="header__subscription"-->
-				<!--				/>-->
+				<HeaderLanguageSelector
+					v-if="!hasBackButton"
+					class="header__language-selector"
+				/>
 				<HeaderNavigationBurger
+					v-if="mobile"
 					ref="navigationBurger"
 					:is-cross="isNavbarOpen"
-					:aria-label="$t(isNavbarOpen ? 'header.button.close' : 'header.button.open')"
+					:aria-label="$t(isNavbarOpen ? 'header.burger.close' : 'header.burger.open')"
 					@click="navbarToggle"
 				/>
 				<HeaderNavigationSidebar
-					v-if="isNavbarOpen"
+					v-if="mobile && isNavbarOpen"
 					ref="sidebar"
 					@close="navbarToggle"
 				/>
+				<CommonButton
+					v-if="!mobile"
+					:link="localePath(RoutePathEnum.USER_PAGE)"
+					:button-kind="userStore.isAuthorized ? 'success' : 'ordinary'"
+					icon-name="user"
+					:button-text="
+						userStore.isAuthorized
+							? $t('header.navigation.user')
+							: $t('header.navigation.authorize')
+					"
+				/>
 			</div>
-		</div>
+		</nav>
 	</header>
 </template>
 
@@ -84,22 +170,29 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 	//TODO разобраться с z-индексами
 	z-index: 3;
 
+	@media (min-width: 768px) {
+		position: static;
+		height: unset;
+		background-color: transparent;
+	}
+
 	&__container {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		min-width: var(--width-mobile);
 		height: var(--header-height);
-		//TODO: пока верстка только мобилки
-		max-width: 480px;
 		background-color: var(--color-white);
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
 		margin-left: auto;
 		margin-right: auto;
 
-		@media (min-width: 1440px) {
-			max-width: 600px;
+		@media (min-width: 768px) {
+			height: unset;
+			padding-top: 32px;
+			padding-bottom: 20px;
+			background-color: transparent;
 		}
 	}
 
@@ -107,7 +200,6 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 		display: flex;
 		height: 100%;
 		align-items: center;
-		margin-right: auto;
 	}
 
 	&__right {
@@ -115,18 +207,73 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 		justify-content: flex-end;
 		text-align: center;
 		position: relative;
-		margin-left: 12px;
 	}
 
-	&__subscription {
+	&__center {
+		@media (min-width: 768px) {
+			display: flex;
+			width: 100%;
+			max-width: 450px;
+			justify-content: space-between;
+			align-items: center;
+			margin-left: 5%;
+			margin-right: 5%;
+		}
+	}
+
+	&__logo {
 		display: flex;
-		max-width: max-content;
-	}
-
-	&__navigation-link {
 		height: 100%;
 		align-items: center;
-		display: flex;
+		border-radius: 6px;
+
+		&:deep(svg) {
+			transition: color 0.3s ease;
+		}
+
+		&:hover,
+		&:focus,
+		&:active {
+			&:deep(svg) {
+				color: var(--color-accent-green-dark);
+			}
+		}
+	}
+
+	&__nav-item {
+		@media (min-width: 768px) {
+			display: flex;
+			align-items: center;
+			position: relative;
+		}
+	}
+
+	&__nav-link {
+		@media (min-width: 768px) {
+			font-size: var(--font-size-S);
+		}
+	}
+
+	&__point {
+		@media (min-width: 768px) {
+			width: 4px;
+			height: 4px;
+			background-color: var(--color-text-main);
+			border-radius: 50%;
+		}
+
+		@media (min-width: 1440px) {
+			width: 6px;
+			height: 6px;
+		}
+	}
+
+	&__language-selector {
+		margin-right: var(--space-inner);
+
+		@media (min-width: 1440px) {
+			margin-right: 32px;
+		}
 	}
 }
 </style>

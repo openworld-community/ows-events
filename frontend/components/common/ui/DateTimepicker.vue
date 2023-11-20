@@ -7,7 +7,7 @@ import type { Time } from '../../../utils/dates';
 
 const props = defineProps({
 	className: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	modelValue: {
@@ -15,7 +15,7 @@ const props = defineProps({
 		required: true
 	},
 	placeholder: {
-		type: String as PropType<string>,
+		type: String,
 		default: 'дд.мм.гг'
 	},
 	type: {
@@ -23,11 +23,11 @@ const props = defineProps({
 		required: true
 	},
 	name: {
-		type: String as PropType<string>,
+		type: String,
 		required: true
 	},
 	label: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	minDate: {
@@ -39,20 +39,22 @@ const props = defineProps({
 		default: null
 	},
 	disabled: {
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	error: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	required: {
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	}
 });
 
-const emit = defineEmits<{ 'update:model-value': [modelValue: typeof props.modelValue] }>();
+const { locale } = useI18n();
+
+const emit = defineEmits(['update:model-value']);
 const isDateType = computed(() => props.type === 'date');
 const datepicker = ref<DatePickerInstance>(null);
 
@@ -89,6 +91,7 @@ const onRemove = () => {
 		<VueDatePicker
 			ref="datepicker"
 			:model-value="modelValue"
+			:locale="locale"
 			:name="name"
 			:placeholder="required ? `${placeholder} *` : placeholder"
 			:input-class-name="`input input__field ${error ? 'form__error' : ''}`"
@@ -116,13 +119,13 @@ const onRemove = () => {
 		<CommonIcon
 			v-if="!modelValue"
 			:name="isDateType ? 'calendar' : 'clock'"
-			class="input__button"
-			:alt="$t('dates.clock')"
+			:class="['input__button', { 'input__button--disabled': disabled }]"
 		/>
 		<CommonButton
 			v-else
 			is-icon
-			icon-name="delete"
+			:has-states="false"
+			icon-name="close"
 			class="input__button"
 			@click="onRemove"
 		/>
@@ -138,6 +141,10 @@ const onRemove = () => {
 
 <style lang="less">
 .dp {
+	&__disabled {
+		background-color: transparent;
+	}
+
 	&__menu {
 		left: unset !important;
 		transform: unset !important;
@@ -158,7 +165,7 @@ const onRemove = () => {
 
 	&__menu_transitioned,
 	&__input {
-		border-radius: 24px;
+		border-radius: 8px;
 	}
 
 	&__input {
@@ -180,7 +187,7 @@ const onRemove = () => {
 		}
 
 		&:disabled {
-			background-color: var(--color-background-secondary);
+			opacity: 0.4;
 		}
 
 		&::placeholder {
@@ -266,6 +273,7 @@ const onRemove = () => {
 		border-color: var(--color-accent-green-main);
 	}
 
+	&__overlay_cell_active,
 	&__active_date {
 		padding: 3px;
 		background-color: var(--color-accent-green-main);
@@ -292,14 +300,24 @@ const onRemove = () => {
 .dp__inner_nav_disabled,
 .dp__overlay_cell_disabled {
 	background: none;
+
 	&:hover {
+		background: none;
+		cursor: default;
+	}
+
+	&:active,
+	&:focus {
+		background: none;
 		cursor: unset;
 	}
+
 	svg {
 		color: var(--color-input-field);
 	}
 }
+
 .dp__btn:focus {
-	background: var(--dp-hover-color);
+	background: transparent;
 }
 </style>

@@ -5,6 +5,7 @@ export const SEO_SCHEMA_BASE_URL = 'https://schema.org/';
 export enum SeoItemTypeEnum {
 	OFFER = `${SEO_SCHEMA_BASE_URL}Offer`,
 	EVENT = `${SEO_SCHEMA_BASE_URL}Event`,
+	DATE = `${SEO_SCHEMA_BASE_URL}DateTime`,
 	LOCATION = `${SEO_SCHEMA_BASE_URL}Place`,
 	ADDRESS = `${SEO_SCHEMA_BASE_URL}PostalAddress`,
 	ABOUT = `${SEO_SCHEMA_BASE_URL}AboutPage`,
@@ -12,8 +13,9 @@ export enum SeoItemTypeEnum {
 	DONATE_METHOD = `${SEO_SCHEMA_BASE_URL}MoneyTransfer`,
 	HEADER = `${SEO_SCHEMA_BASE_URL}WPHeader`,
 	NAV = `${SEO_SCHEMA_BASE_URL}SiteNavigationElement`,
-	URL = `${SEO_SCHEMA_BASE_URL}/URL`,
-	ORGANIZATION = `${SEO_SCHEMA_BASE_URL}/Organization`,
+	URL = `${SEO_SCHEMA_BASE_URL}URL`,
+	ORGANIZATION = `${SEO_SCHEMA_BASE_URL}Organization`,
+	USER = `${SEO_SCHEMA_BASE_URL}Person`
 }
 
 // ITEMPROPS
@@ -32,7 +34,7 @@ export enum SeoItempropEventEnum {
 	DESCRIPTION = 'description',
 	ORGANIZER = 'composer',
 	START_DATE = 'startDate',
-	DURATION = 'duration',
+	END_DATE = 'endDate',
 	LOCATION = 'location'
 }
 
@@ -71,16 +73,23 @@ export enum SeoItempropAboutEnum {
 // Navigation
 export enum SeoItempropNavEnum {
 	NAME = 'name',
-	URL = 'url',
+	URL = 'url'
 }
 
 // URL
 export enum SeoItempropURLEnum {
-	FEEDBACK_POLITY = 'actionableFeedbackPolicy',
+	FEEDBACK_POLITY = 'actionableFeedbackPolicy'
 }
 
 // Organization
 export enum SeoItempropOrganizationEnum {
 	BRAND = 'brand',
-	PUBLISHING_PRINCIPLES = 'publishingPrinciples',
+	PUBLISHING_PRINCIPLES = 'publishingPrinciples'
+}
+
+// User
+export enum SeoItempropUserEnum {
+	name = 'name',
+	nickname = 'alternateName',
+	company = 'affiliation'
 }

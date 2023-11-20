@@ -20,8 +20,8 @@ body {
   width: 100%;
   min-width: var(--width-mobile);
   min-height: 100%;
-  //TODO: пока верстка только мобилки
-  max-width: 480px;
+  ////TODO: пока верстка только мобилки
+  //max-width: 480px;
   display: flex;
   font-family: var(--font-family-main);
   font-size: var(--font-size-M);
@@ -31,12 +31,39 @@ body {
   background-color: var(--background-color);
   margin-left: auto;
   margin-right: auto;
+
+  -webkit-overflow-scrolling:touch;
 }
 
-#__nuxt {
+//Для фиксации body при открытии модалки на iphone
+.no-scroll {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  position: fixed;
+
+  @supports (-webkit-touch-callout: none) {
+  	max-height: -webkit-fill-available;
+  }
+}
+
+#__nuxt,
+.root {
+  display: flex;
+  flex-direction: column;
   min-width: 100%;
   min-height: 100%;
 }
+
+main {
+  padding-top: var(--header-height);
+
+  @media (min-width: 768px) {
+    height: 100%;
+    padding-top: 30px;
+  }
+}
+
 
 a {
   cursor: pointer;
@@ -84,6 +111,7 @@ button {
   background-color: transparent;
 }
 
+a,
 button,
 input,
 optgroup,

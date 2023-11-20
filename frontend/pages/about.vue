@@ -1,78 +1,109 @@
 <script setup lang="ts">
-import eventScreen from '../assets/img/event-screen@2x.png';
-import { SeoItempropAboutEnum, SeoItemTypeEnum } from '../constants/enums/seo';
-import { RouteNameEnum } from '../constants/enums/route';
-import {REPO_URL, SocialLinks} from '../constants/url';
+import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
+import { REPO_URL, SocialLinks } from '~/constants/url';
 
 const { t } = useI18n();
+const mobile = inject('mobile');
 
-definePageMeta({ name: RouteNameEnum.ABOUT });
 getMeta({
 	title: t('meta.about_us.title'),
-  description: t('meta.about_us.description')
+	description: t('meta.about_us.description')
 });
 </script>
 
 <template>
-	<div
-		class="about"
-		itemscope
-		:itemtype="SeoItemTypeEnum.ABOUT"
-	>
-		<h1 class="about__title">{{ $t('about.title') }}</h1>
-		<img
-			:src="eventScreen"
-			class="about__img"
-			:alt="$t('about.alt')"
-			:itemprop="SeoItempropAboutEnum.IMAGE"
-		/>
-		<div
-			class="about__description"
-			:itemprop="SeoItempropAboutEnum.MAIN_CONTENT"
+	<div class="root">
+		<HeaderCommon />
+		<main
+			class="about"
+			itemscope
+			:itemtype="SeoItemTypeEnum.ABOUT"
 		>
-			<p class="about__paragraph">{{ $t('about.idea') }}</p>
-			<p class="about__paragraph">{{ $t('about.functionality') }}</p>
-			<p class="about__paragraph">{{ $t('about.perspectives') }}</p>
-			<p class="about__paragraph">
-				{{ $t('about.github') }}:
-				<NuxtLink
-					:href="REPO_URL"
-					class="about__link"
-					target="_blank"
-					rel="noopener noreferrer"
-					:itemprop="SeoItempropAboutEnum.SIGNIFICANT_LINK"
-				>
-					Repo
-				</NuxtLink>
-			</p>
-		</div>
-		<div class="about__social-links social-links">
-			<h2 class="social-links__title">
-				{{ $t('about.social.title') }}
-			</h2>
-			<ul class="social-links__list">
-				<li
-					v-for="(link, key) in SocialLinks"
-					:key="link"
-					class="social-links__item"
-				>
+			<h1 class="about__title">{{ $t('about.title') }}</h1>
+			<div
+				v-if="mobile"
+				class="about__image-container"
+			>
+				<img
+					srcset="@/assets/img/about/about-screen@2x.png 2x"
+					src="@/assets/img/about/about-screen@1x.png"
+					width="351"
+					height="232"
+					class="about__img"
+					alt=""
+					:itemprop="SeoItempropAboutEnum.IMAGE"
+				/>
+			</div>
+			<div
+				class="about__description"
+				:itemprop="SeoItempropAboutEnum.MAIN_CONTENT"
+			>
+				<p class="about__paragraph about__paragraph--separated">{{ $t('about.idea') }}</p>
+				<p class="about__paragraph">{{ $t('about.mission') }}</p>
+				<p class="about__paragraph about__paragraph--separated">
+					{{ $t('about.functionality') }}
+				</p>
+				<p class="about__paragraph about__paragraph--separated">{{ $t('about.team') }}</p>
+				<h2 class="about__list-title">{{ $t('about.values.title') }}</h2>
+				<ul class="about__list">
+					<li class="about__list-item">
+						{{ $t('about.values.openness') }}
+					</li>
+					<li class="about__list-item">
+						{{ $t('about.values.innovation') }}
+					</li>
+					<li class="about__list-item">
+						{{ $t('about.values.community') }}
+					</li>
+					<li class="about__list-item">
+						{{ $t('about.values.accessibility') }}
+					</li>
+					<li class="about__list-item">
+						{{ $t('about.values.quality') }}
+					</li>
+				</ul>
+				<p class="about__paragraph">
+					{{ $t('about.github') }}:
 					<NuxtLink
-						:to="link"
+						:href="REPO_URL"
+						class="about__link"
 						target="_blank"
-						class="social-links__link"
-						:style="`backgroundColor: var(--color-social-${key})`"
-						:aria-label="`${$t('about.social.alt')} ${key}`"
-						:itemprop="SeoItempropAboutEnum.SOCIAL_LINK"
+						rel="noopener noreferrer"
+						:itemprop="SeoItempropAboutEnum.SIGNIFICANT_LINK"
 					>
-						<CommonIcon
-							:name="`social/${key}`"
-							width="40px"
-              height="40px"
-						/>
+						Repo
 					</NuxtLink>
-				</li>
-			</ul>
-		</div>
+				</p>
+			</div>
+			<div class="about__social-links social-links">
+				<h2 class="social-links__title">
+					{{ $t('about.social.title') }}
+				</h2>
+				<ul class="social-links__list">
+					<li
+						v-for="(link, key) in SocialLinks"
+						:key="link"
+						class="social-links__item"
+					>
+						<NuxtLink
+							:to="link"
+							target="_blank"
+							class="social-links__link"
+							:style="`backgroundColor: var(--color-social-${key})`"
+							:aria-label="`${$t('about.social.alt')} ${key}`"
+							:itemprop="SeoItempropAboutEnum.SOCIAL_LINK"
+						>
+							<CommonIcon
+								:name="`social/${key}-round`"
+								width="40px"
+								height="40px"
+							/>
+						</NuxtLink>
+					</li>
+				</ul>
+			</div>
+		</main>
+		<FooterCommon v-if="!mobile" />
 	</div>
 </template>
 
@@ -80,13 +111,29 @@ getMeta({
 .about {
 	padding-left: var(--padding-side);
 	padding-right: var(--padding-side);
-	padding-top: var(--padding-vertical);
 	padding-bottom: var(--padding-vertical);
 
 	&__title {
+		padding-top: var(--padding-vertical);
 		font-size: var(--font-size-XXL);
 		line-height: var(--line-height-XXL);
 		font-weight: var(--font-weight-bold);
+		margin-bottom: var(--space-unrelated-items);
+
+		@media (min-width: 768px) {
+			padding-top: 0;
+			margin-bottom: 20px;
+		}
+	}
+
+	&__image-container {
+		display: flex;
+		width: 100%;
+		min-height: 232px;
+		line-height: 0;
+		background-color: var(--color-input-field);
+		border-radius: 4px;
+		margin-bottom: var(--space-related-items);
 	}
 
 	&__img {
@@ -94,8 +141,6 @@ getMeta({
 		min-width: 100%;
 		max-width: 100%;
 		height: 100%;
-		margin-top: var(--space-unrelated-items);
-		margin-bottom: var(--space-related-items);
 		border-radius: 4px;
 	}
 
@@ -103,10 +148,30 @@ getMeta({
 		margin-bottom: var(--space-subsections);
 	}
 
+	&__list-title {
+		font-size: var(--font-size-S);
+		line-height: 20px;
+		margin-bottom: var(--space-related-items);
+	}
+
+	&__list {
+		margin-bottom: var(--space-unrelated-items);
+	}
+
+	&__list-item {
+		list-style-type: disc;
+		list-style-position: inside;
+		font-size: var(--font-size-S);
+		line-height: 20px;
+	}
+
 	&__paragraph {
 		font-size: var(--font-size-S);
 		line-height: 20px;
-		margin-bottom: var(--space-unrelated-items);
+
+		&--separated {
+			margin-bottom: var(--space-unrelated-items);
+		}
 	}
 
 	&__link {

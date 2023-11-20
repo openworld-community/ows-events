@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 import { FilterQuery } from 'mongoose';
-import { EventOnPoster } from '@common/types/event';
+import { EventDbEntity, EventOnPoster } from '@common/types/event';
 import { EventModel } from '../models/event.model';
 import { imageController } from './image-controller';
 
@@ -13,7 +13,10 @@ export type FindEventParams = {
 class EventsStateController {
 	async addEvent(event: EventOnPoster) {
 		const id = uuid();
-		const eventWithId = { ...event, id };
+		const eventWithId = {
+			...event,
+			id
+		};
 		const newEvent = new EventModel(eventWithId);
 		await newEvent.save().catch((e) => {
 			// eslint-disable-next-line no-console
@@ -22,7 +25,7 @@ class EventsStateController {
 		return id;
 	}
 
-	async getEvents(query?: FindEventParams | undefined): Promise<EventOnPoster[]> {
+	async getEvents(query?: FindEventParams | undefined): Promise<EventDbEntity[]> {
 		const queryObject: FilterQuery<EventOnPoster> = {};
 		if (query?.searchLine) {
 			queryObject.$text = { $search: query.searchLine };
@@ -35,15 +38,6 @@ class EventsStateController {
 		}
 		queryObject['meta.moderation.status'] = { $nin: ['declined', 'in-progress'] };
 
-		const pastEvents = await EventModel.find(
-			{ ...queryObject, date: { $lte: Date.now() } },
-			{},
-			{
-				sort: {
-					date: 'descending'
-				}
-			}
-		);
 		const futureEvents = await EventModel.find(
 			{ ...queryObject, date: { $gt: Date.now() } },
 			{},
@@ -52,11 +46,9 @@ class EventsStateController {
 					date: 'ascending'
 				}
 			}
-		);
+		).exec();
 
-		const events = futureEvents.concat(pastEvents);
-
-		return events;
+		return futureEvents.map((event) => event.toObject());
 	}
 
 	async getEvent(id: string) {
@@ -65,19 +57,19 @@ class EventsStateController {
 				id
 			},
 			{ meta: 0 }
-		);
-		return event;
+		).exec();
+		return event?.toObject();
 	}
 
-	async updateEvent(data: EventOnPoster) {
-		const event = await EventModel.findOneAndUpdate(
-			{ id: data.id },
+	async updateEvent(event: EventOnPoster) {
+		const updatedEvent = await EventModel.findOneAndUpdate(
+			{ id: event.id },
 			{
-				$set: data
+				$set: event
 			}
 		);
 
-		return event;
+		return updatedEvent;
 	}
 
 	async deleteEvent(id: string) {
@@ -98,38 +90,49 @@ class EventsStateController {
 	async addTags(data: EventOnPoster) {
 		const event = await EventModel.findOneAndUpdate(
 			{ id: data.id },
-            { 
-                $addToSet: { tags: { $each: data.tags } } 
-            }
+			{
+				$addToSet: { tags: { $each: data.tags } }
+			}
 		);
 
 		return event;
 	}
 
 	async findAllTags() {
-		const tags = await EventModel.distinct("tags");
+		const tags = await EventModel.distinct('tags');
 
 		return tags;
 	}
 
 	async findTagsByEventId(id: string) {
-		const event = await EventModel.findOne(
-            { id }, 
-            { _id: 0, tags: 1 }
-        );
-		
-        return event?.tags;
+		const event = await EventModel.findOne({ id }, { _id: 0, tags: 1 });
+
+		return event?.tags;
 	}
 
-	async removeTags(data: EventOnPoster ) { 
+	async removeTags(data: EventOnPoster) {
 		const event = await EventModel.findOneAndUpdate(
 			{ id: data.id },
-            { 
-                $pull: { tags: { $in: data.tags } }
-            }
+			{
+				$pull: { tags: { $in: data.tags } }
+			}
 		);
 
 		return event;
+	}
+
+	async getUserEvents(userId: string) {
+		const events = await EventModel.find(
+			{ creatorId: userId },
+			{},
+			{
+				sort: {
+					date: 'descending'
+				}
+			}
+		).exec();
+
+		return events.map((event) => event.toObject());
 	}
 }
 

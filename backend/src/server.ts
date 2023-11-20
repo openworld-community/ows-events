@@ -20,7 +20,10 @@ import { tagsApi } from './rest/v1/tags/router';
 import { migrate } from './migrations/price-structure-18-07-23';
 import { userApi } from './rest/v1/user/router';
 import { migrate as migrateUserStructure } from './migrations/user-structure-12-06-23';
-
+import { migrate as migrateDelocalization } from './migrations/remove-localization-25-08-23';
+import { migrate as migrateEventsStructure } from './migrations/events-structure-25-07-23';
+import { parseGithub } from './externalServices/github';
+import { vars } from './config/vars';
 
 const server = fastify({
 	logger: true,
@@ -34,6 +37,11 @@ connectToMongo()
 		// TODO: Remove after merge ASAP!
 		migrate().then();
 		migrateUserStructure();
+		migrateDelocalization();
+		migrateEventsStructure();
+		if (vars.env === 'prod') {
+			parseGithub();
+		}
 		// eslint-disable-next-line no-console
 		console.log('Connected to mongo');
 	})

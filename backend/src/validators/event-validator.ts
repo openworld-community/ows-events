@@ -1,7 +1,7 @@
 import { type EventOnPoster, type PostEventPayload } from '@common/types/event';
 import { EventValidatorErrorTypes } from '../../../common/const';
 
-type ValidateInput = PostEventPayload | { event: EventOnPoster | undefined };
+type ValidateInput = { event: PostEventPayload } | { event: EventOnPoster | undefined };
 
 type EventValidatorResult = {
 	isValid: boolean;

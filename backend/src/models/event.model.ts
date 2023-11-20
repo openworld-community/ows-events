@@ -1,15 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { EventOnPoster } from '@common/types/event';
+import { EventDbEntity, IEventMeta } from '@common/types/event';
 
-export type IEventMeta = {
-	meta: {
-		moderation: {
-			status: string;
-			problems: string[];
-		};
-	};
-};
-export type IEventDocument = EventOnPoster & IEventMeta & Document;
+export type IEventDocument = EventDbEntity & IEventMeta & Document;
 
 const schema = new Schema<IEventDocument>(
 	{
@@ -27,7 +19,7 @@ const schema = new Schema<IEventDocument>(
 		},
 		description: {
 			type: String,
-			required: false
+			required: true
 		},
 		date: {
 			type: Number,
@@ -79,9 +71,12 @@ const schema = new Schema<IEventDocument>(
 				required: true
 			}
 		},
-        tags: {
-            type: [String]
-        },
+		tags: {
+			type: [String]
+		},
+		organizer: {
+			type: String
+		},
 		meta: {
 			moderation: {
 				status: {
@@ -95,6 +90,10 @@ const schema = new Schema<IEventDocument>(
 					}
 				]
 			}
+		},
+		type: {
+			type: String,
+			enum: ['parsed', 'paid', 'user-generated']
 		}
 	},
 	{
@@ -105,7 +104,8 @@ const schema = new Schema<IEventDocument>(
 
 schema.index({
 	title: 'text',
-	description: 'text',
+	'description.ru': 'text',
+	'description.en': 'text',
 	'location.city': 'text',
 	'location.country': 'text'
 });

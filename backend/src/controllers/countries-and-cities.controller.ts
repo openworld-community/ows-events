@@ -13,19 +13,31 @@ class CountriesAndCitiesController {
 		this.citiesByCountry = map;
 	}
 
+	getCountryByCity(city: string) {
+		const { countries } = this;
+		if (countries.includes(city)) return city;
+		const possibleCountries = countries.filter((country) =>
+			this.citiesByCountry[country].includes(city)
+		);
+		return possibleCountries[0];
+	}
+
 	getCitiesByCountry(country: string) {
 		const citiesByCountry = this.citiesByCountry[country];
 		return citiesByCountry;
 	}
 
 	async getUsedCountries() {
-		const countries: string[] = await EventModel.distinct('location.country');
+		const countries: string[] = await EventModel.distinct('location.country', {
+			date: { $gt: Date.now() }
+		});
 		return countries;
 	}
 
 	async getUsedCities(country: string) {
 		const cities: string[] = await EventModel.distinct('location.city', {
-			'location.country': country
+			'location.country': country,
+			date: { $gt: Date.now() }
 		});
 		return cities;
 	}

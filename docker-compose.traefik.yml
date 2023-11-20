@@ -18,7 +18,7 @@ services:
         command:
             - '--certificatesresolvers.myresolver.acme.httpchallenge=true'
             - '--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=http'
-            - '--certificatesresolvers.myresolver.acme.email=tibode495@gmail.com'
+            - '--certificatesresolvers.myresolver.acme.email=afisha.peredelano@proton.me'
             - '--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json'
             - '--providers.docker=true'
             - '--providers.docker.network=ows-events_test_traefikpublic'

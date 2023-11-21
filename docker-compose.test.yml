@@ -24,6 +24,7 @@ services:
                 - VITE_TELEGRAM_AUTH_BOT_NAME
                 - VITE_MODE=production
                 - VITE_DOMAIN=test.afisha.peredelano.com
+                - VITE_GTAG_ID
         logging: *default-logging
         restart: always
         labels:

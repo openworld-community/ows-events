@@ -13,7 +13,7 @@ export default defineNuxtConfig({
 		'@nuxtjs/i18n',
 		'@pinia/nuxt',
 		'@vueuse/nuxt',
-		'@nuxtjs/plausible',
+		'nuxt-gtag',
 		[
 			'nuxt-viewport',
 			{
@@ -29,7 +29,7 @@ export default defineNuxtConfig({
 		'/': { redirect: '/ru', ssr: true }
 	},
 	i18n: {
-		debug: true,
+		debug: false,
 		locales: [
 			{ code: 'ru', name: 'Russian', iso: 'ru-RU', dir: 'ltr', file: 'ru-RU.json' },
 			{ code: 'en', name: 'English', iso: 'en-GB', dir: 'ltr', file: 'en-GB.json' }
@@ -54,13 +54,10 @@ export default defineNuxtConfig({
 	// 		]
 	// 	}
 	// },
-	//https://github.com/nuxt-modules/plausible#module-options
-	plausible: {
-		domain:
-			import.meta.env.VITE_DOMAIN ||
-			process.env.VITE_DOMAIN ||
-			'poster-test-peredelano.orby-tech.space',
-		apiHost: 'https://afisha-metrics.orby-tech.space'
+	// https://nuxt.com/modules/gtag
+	gtag: {
+		id: import.meta.env.VITE_GTAG_ID || process.env.VITE_GTAG_ID || '',
+		initialConsent: false
 	},
 	typescript: { strict: false },
 	nitro: {

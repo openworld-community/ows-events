@@ -13,7 +13,7 @@ const viewport = useViewport();
 
 const mobile = computed(() => viewport.isLessThan('tablet'));
 const tablet = computed(
-	() => viewport.isGreaterOrEquals('tablet') || viewport.isLessThan('desktop')
+	() => viewport.isGreaterOrEquals('tablet') && viewport.isLessThan('desktop')
 );
 const desktop = computed(() => viewport.isGreaterOrEquals('desktop'));
 
@@ -34,7 +34,6 @@ useHead({
 });
 
 useCookie(CookieNameEnum.LOCALE, { maxAge: TOKEN_MAX_AGE_SECONDS }).value = locale.value;
-
 </script>
 <template>
 	<ModalsContainer />

@@ -7,7 +7,6 @@ import { ModalsContainer } from 'vue-final-modal';
 import { CookieNameEnum } from './constants/enums/common';
 import { TOKEN_MAX_AGE_SECONDS } from './constants/defaultValues/time';
 import { getRouteName } from './utils';
-import { useGtag } from '.nuxt/imports';
 
 const { locale, t } = useI18n();
 

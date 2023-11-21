@@ -29,7 +29,7 @@ export default defineNuxtConfig({
 		'/': { redirect: '/ru', ssr: true }
 	},
 	i18n: {
-		debug: true,
+		debug: false,
 		locales: [
 			{ code: 'ru', name: 'Russian', iso: 'ru-RU', dir: 'ltr', file: 'ru-RU.json' },
 			{ code: 'en', name: 'English', iso: 'en-GB', dir: 'ltr', file: 'en-GB.json' }

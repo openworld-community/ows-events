@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { PropType } from 'vue';
+import type { ComputedRef, PropType } from 'vue';
 import type { EventOnPoster } from '../../../common/types';
 import { RoutePathEnum } from '../../constants/enums/route';
 import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { dateNow } from '~/utils/dates';
+import type { ComputedInjectGetter } from '@vueuse/core';
 
 const props = defineProps({
 	eventData: {
@@ -11,9 +12,9 @@ const props = defineProps({
 		required: true
 	}
 });
-const mobile = inject('mobile');
-const tablet = inject('tablet');
-const desktop = inject('desktop');
+const mobile: ComputedRef<boolean> = inject('mobile');
+const tablet: ComputedRef<boolean> = inject('tablet');
+const desktop: ComputedRef<boolean> = inject('desktop');
 const localePath = useLocalePath();
 
 const tagArray = computed(() => {

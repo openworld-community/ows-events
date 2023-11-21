@@ -6,6 +6,7 @@ import 'virtual:svg-icons-register';
 import { ModalsContainer } from 'vue-final-modal';
 import { CookieNameEnum } from './constants/enums/common';
 import { TOKEN_MAX_AGE_SECONDS } from './constants/defaultValues/time';
+import type { ComputedRef } from 'vue';
 
 const { locale, t } = useI18n();
 
@@ -17,9 +18,9 @@ const tablet = computed(
 );
 const desktop = computed(() => viewport.isGreaterOrEquals('desktop'));
 
-provide('mobile', mobile);
-provide('tablet', tablet);
-provide('desktop', desktop);
+provide('mobile', mobile as ComputedRef<boolean>);
+provide('tablet', tablet as ComputedRef<boolean>);
+provide('desktop', desktop as ComputedRef<boolean>);
 
 useHead({
 	title: t('meta.default_title'),

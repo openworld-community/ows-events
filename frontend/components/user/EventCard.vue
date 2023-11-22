@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { PropType } from 'vue';
+import type { ComputedRef, PropType } from 'vue';
 import type { EventOnPoster } from '../../../common/types';
 import { RoutePathEnum } from '../../constants/enums/route';
 import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { dateNow } from '~/utils/dates';
+import type { ComputedInjectGetter } from '@vueuse/core';
 
 const props = defineProps({
 	eventData: {
@@ -11,34 +12,16 @@ const props = defineProps({
 		required: true
 	}
 });
+const mobile: ComputedRef<boolean> = inject('mobile');
+const tablet: ComputedRef<boolean> = inject('tablet');
+const desktop: ComputedRef<boolean> = inject('desktop');
 const localePath = useLocalePath();
-const description = ref(null);
-const tagList = ref(null);
 
 const tagArray = computed(() => {
-	if (process.client) {
-		const tags = props.eventData.tags;
-		for (let i = props.eventData.tags?.length; i >= 0; i--) {
-			if (tagList.value?.root?.getBoundingClientRect().height > 24) {
-				tags.slice(-1, -1);
-			}
-		}
-		return tags;
-	}
+	if (mobile.value) return props.eventData.tags.slice(0, 2);
+	if (tablet.value) return props.eventData.tags.slice(0, 3);
+	if (desktop.value) return props.eventData.tags.slice(0, 4);
 });
-
-const asd = () => {
-	const tags = props.eventData.tags;
-	for (let i = props.eventData.tags?.length; i > 0; i--) {
-		console.log();
-		if (tagList.width > description) {
-			tags.slice(-1, -1);
-		} else return tags;
-	}
-	return tags;
-};
-
-asd();
 </script>
 
 <template>
@@ -64,10 +47,7 @@ asd();
 				height="74"
 			/>
 		</div>
-		<div
-			ref="description"
-			class="card__description description"
-		>
+		<div class="card__description description">
 			<div class="description__info">
 				<h2
 					class="description__title"
@@ -84,7 +64,6 @@ asd();
 			</div>
 			<CommonTagList
 				v-if="eventData.tags.length"
-				ref="tagList"
 				:tag-list="tagArray"
 				tag-size="small"
 				class="description__tags"
@@ -209,18 +188,6 @@ asd();
 
 		@media (min-width: 768px) {
 			font-size: 12px;
-		}
-	}
-
-	&__tags {
-		flex-wrap: nowrap;
-		overflow-x: auto;
-		scrollbar-width: none;
-
-		&::-webkit-scrollbar {
-			display: none;
-			width: 0;
-			height: 0;
 		}
 	}
 }

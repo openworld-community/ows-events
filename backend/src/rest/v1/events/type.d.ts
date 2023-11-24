@@ -1,7 +1,6 @@
 import { EventOnPoster } from '@common/types';
-import { EventParams } from '@common/types/event';
+import { EventParams, SearchEventPayload } from '@common/types/event';
 import { SupportedLanguages } from '../../../../../common/const';
-import { FindEventParams } from '../../../controllers/events-state-controller';
 import { IRouteHandler } from '../../types';
 
 type IAddEventRoute = {
@@ -55,7 +54,7 @@ type IFindEventRoute = {
 	Header: {
 		'accept-language': SupportedLanguages;
 	};
-	Body: FindEventParams;
+	Body: SearchEventPayload;
 	Reply: EventOnPoster[];
 };
 type IFindEventHandler = IRouteHandler<IFindEventRoute>;

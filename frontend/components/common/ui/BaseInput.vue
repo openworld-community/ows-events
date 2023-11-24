@@ -20,7 +20,18 @@ defineProps({
 		default: 'border'
 	},
 	type: {
-		type: String as PropType<'text' | 'date' | 'time' | 'number' | 'textarea' | 'datalist'>,
+		type: String as PropType<
+			| 'text'
+			| 'date'
+			| 'time'
+			| 'number'
+			| 'textarea'
+			| 'datalist'
+			| 'url'
+			| 'email'
+			| 'phone'
+			| 'search'
+		>,
 		default: 'text'
 	},
 	required: {

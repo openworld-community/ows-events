@@ -1,6 +1,6 @@
 export default {
 	navigation: {
-		about: 'Об Афише',
+		about: 'О проекте',
 		support: 'Поддержка',
 		donate: 'Помочь Afisha',
 		limitation_of_liability: 'Ограничение ответственности'

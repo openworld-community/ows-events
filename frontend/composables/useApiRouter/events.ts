@@ -9,7 +9,7 @@ export const events = {
 			query: { searchLine?: string; country?: string; city?: string };
 		}) => EventOnPoster[]
 	>((input) => {
-		return useBackendFetch('events/find', { body: input?.query ?? {} });
+		return useBackendFetch('events/find', { body: input?.query ?? {} }, {watch: false});
 	}),
 	get: defineQuery<(input: { id: string }) => EventOnPoster>((input) => {
 		return useBackendFetch(`events/${input.id}`);

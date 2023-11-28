@@ -130,12 +130,20 @@ export function defineMutation<T extends ((data: any) => any) | void = void>(
 export function useBackendFetch<T>(
 	request: Parameters<typeof useFetch>[0],
 	opts: UseFetchOptions<T> = {},
-	modifiers: { auth?: boolean; noDefaults?: boolean; uuid?: boolean } = {}
+	modifiers: { auth?: boolean; noDefaults?: boolean; uuid?: boolean; watch?: boolean; immediate?:boolean } = {}
 ) {
 	if (modifiers.noDefaults)
 		return (opts_: UseFetchOptions<T> = {}) => useFetch(request, Object.assign(opts, opts_));
 
 	opts.baseURL ??= API_URL;
+
+	if (modifiers?.watch === false) {
+		opts.watch = false
+	}
+
+	if (modifiers?.immediate === false) {
+		opts.immediate = false
+	}
 
 	if (modifiers.auth) {
 		const userStore = useUserStore();
@@ -163,7 +171,6 @@ export function useBackendFetch<T>(
 	if (modifiers.uuid) {
 		opts.key = uuid();
 	}
-
 	return async (opts_: UseFetchOptions<T> = {}) => {
 		const getData = () => useFetch(request, Object.assign(opts, opts_));
 		if (process.server) return await getData();

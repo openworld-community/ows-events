@@ -12,9 +12,20 @@ export default {
 		aria: 'You are in'
 	},
 	filter: {
-		aria_country: 'Filter by country',
-		aria_city: 'Filter by city',
-		search: 'What are you interested in?'
+		country: {
+			placeholder: 'Country',
+			title: 'Select a country',
+			aria: 'Filter by country'
+		},
+		city: {
+			placeholder: 'City',
+			title: 'Select a city',
+			aria: 'Filter by city'
+		},
+		searchLine: {
+			placeholder: 'What are you interested in?',
+			aria: 'Enter a search query'
+		}
 	},
 	user_location: {
 		not_found: "We couldn't find your location"

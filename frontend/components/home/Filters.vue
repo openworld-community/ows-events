@@ -28,6 +28,7 @@ watch(
 				city: filters.city || undefined
 			}
 		});
+		if (filters.country) filterStore.getUsedCitiesByCountry(filters.country)
 		if (!filters.country) filterStore.filters.city = '';
 		if (timeout) {
 			clearTimeout(timeout);

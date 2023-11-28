@@ -37,19 +37,7 @@ export const useFilterStore = defineStore('filter', {
 			}
 		};
 	},
-	getters: {
-		async getUsedCitiesByCountry(state) {
-			if (process.server) return;
-			const country = state.filters.country;
-			if (!country || state.usedCitiesByCountry?.[country]) return;
-			const { data } = await apiRouter.location.country.getUsedCities.useQuery({
-				data: { country }
-			});
-			if (!data.value) return;
-			state.usedCitiesByCountry[country] = data.value;
-			return state.usedCitiesByCountry;
-		}
-	},
+	getters: {},
 	actions: {
 		async getFilteredEvents() {
 			if (process.server) return;
@@ -66,8 +54,15 @@ export const useFilterStore = defineStore('filter', {
 			const { data } = await apiRouter.location.country.getUsedCountries.useQuery({});
 			if (!data.value?.length) return;
 			this.usedCountries = data.value;
-
-			return this.usedCountries;
+		},
+		async getUsedCitiesByCountry(country) {
+			if (process.server) return;
+			if (!country || this.usedCitiesByCountry?.[country]) return;
+			const { data } = await apiRouter.location.country.getUsedCities.useQuery({
+				data: { country }
+			});
+			if (!data.value) return;
+			this.usedCitiesByCountry[country] = data.value;
 		}
 	}
 });

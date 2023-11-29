@@ -12,6 +12,8 @@ onBeforeMount(() => {
 		setTimeout(async () => {
 			await filterStore.getFilteredEvents();
 			await filterStore.getUsedCountries();
+			if (filterStore.filters.country)
+				await filterStore.getUsedCitiesByCountry(filterStore.filters.country);
 		});
 	}
 });
@@ -19,7 +21,7 @@ onBeforeMount(() => {
 let timeout = null;
 watch(
 	() => filterStore.filters,
-	(filters) => {
+	async (filters) => {
 		navigateTo({
 			query: {
 				...route.query,
@@ -28,7 +30,9 @@ watch(
 				city: filters.city || undefined
 			}
 		});
-		if (filters.country) filterStore.getUsedCitiesByCountry(filters.country)
+		if (filters.country) {
+			await filterStore.getUsedCitiesByCountry(filters.country);
+		}
 		if (!filters.country) filterStore.filters.city = '';
 		if (timeout) {
 			clearTimeout(timeout);
@@ -66,10 +70,11 @@ const openFilterModal = async (type: string, list: string[]) => {
 			<CommonUiFilter
 				filter-type="select"
 				name="city"
-				:list="filterStore.usedCitiesByCountry?.[filterStore.filters.country] ?? []"
+				:list="filterStore.usedCitiesByCountry[filterStore.filters.country] ?? []"
 				:disabled="
 					!filterStore.filters.country ||
-					!filterStore.usedCitiesByCountry?.[filterStore.filters.country]
+					(!filterStore.usedCitiesByCountry[filterStore.filters.country] &&
+						!filterStore.filters.city)
 				"
 				:dropdown-position="mobile ? 'right' : 'left'"
 				@on-filter-button-click="

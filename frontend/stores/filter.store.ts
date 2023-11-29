@@ -55,9 +55,9 @@ export const useFilterStore = defineStore('filter', {
 			if (!data.value?.length) return;
 			this.usedCountries = data.value;
 		},
-		async getUsedCitiesByCountry(country) {
+		async getUsedCitiesByCountry(country: Country) {
 			if (process.server) return;
-			if (!country || this.usedCitiesByCountry?.[country]) return;
+			if (!country || this.usedCitiesByCountry[country]) return;
 			const { data } = await apiRouter.location.country.getUsedCities.useQuery({
 				data: { country }
 			});

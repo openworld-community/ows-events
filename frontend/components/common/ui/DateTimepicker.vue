@@ -124,7 +124,7 @@ const onRemove = () => {
 		<CommonButton
 			v-else
 			is-icon
-			:has-states="false"
+			:interactive="false"
 			icon-name="close"
 			class="input__button"
 			@click="onRemove"

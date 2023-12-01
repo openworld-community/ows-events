@@ -134,12 +134,12 @@ const onButtonClick = async () => {
 		}
 	}
 
-	&__location {
-		display: flex;
-		width: 100%;
-		justify-content: center;
-		margin-bottom: 24px;
-	}
+	//&__location {
+	//	display: flex;
+	//	width: 100%;
+	//	justify-content: center;
+	//	margin-bottom: 24px;
+	//}
 
 	&__filter {
 		width: 100%;

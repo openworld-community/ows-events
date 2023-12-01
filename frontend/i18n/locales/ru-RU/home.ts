@@ -25,6 +25,11 @@ export default {
 		searchLine: {
 			placeholder: 'Что вас интересует?',
 			aria: 'Введите запрос для поиска'
+		},
+		tags: {
+			placeholder: 'Тема',
+			title: 'Выберите тему мероприятия',
+			aria: 'Фильтр по теме мероприятия'
 		}
 	},
 	user_location: {

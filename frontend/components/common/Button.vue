@@ -19,7 +19,7 @@ const props = defineProps({
 		type: String as PropType<ButtonKind>,
 		default: ''
 	},
-	hasStates: {
+	interactive: {
 		//  необходимость подсветки hover, focus, active
 		type: Boolean,
 		default: true
@@ -104,7 +104,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			{
 				'button--round': isRound && !isIcon,
 				'icon--round': isIcon && isRound,
-				'no-states': !hasStates,
+				'no-interactive': !interactive,
 				[`button__${buttonKind}--filled`]: filled
 			}
 		]"
@@ -306,7 +306,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		border: 1px solid var(--color-white);
 		border-radius: 8px;
 
-		& > span {
+		& > .button__content {
 			font-size: var(--font-size-S);
 			line-height: 20px;
 			margin-right: 10px;
@@ -403,7 +403,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	}
 }
 
-.no-states {
+.no-interactive {
 	&:hover,
 	&:focus,
 	&:active {

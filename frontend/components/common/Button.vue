@@ -120,7 +120,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			v-if="iconName"
 			:class="{ button__icon: buttonText }"
 			:name="iconName"
-			:alt="alt ? alt : null"
 			:width="iconWidth"
 			:height="iconHeight"
 		/>

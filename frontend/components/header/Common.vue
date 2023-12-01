@@ -73,9 +73,8 @@ const goBack = () => {
 					:is="logoComponentIs"
 					v-else
 					class="header__logo"
-					:aria-label="
-						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
-					"
+					:title="$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')"
+					:aria-label="$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')"
 					:to="!isAtHome ? localePath(RoutePathEnum.HOME) : undefined"
 					:itemprop="SeoItempropNavEnum.URL"
 					@click="isAtHome && scrollToTop()"
@@ -85,7 +84,6 @@ const goBack = () => {
 						width="86"
 						height="40"
 						color="var(--color-accent-green-main)"
-						alt="Peredelano Афиша"
 					/>
 				</component>
 			</div>
@@ -137,6 +135,7 @@ const goBack = () => {
 					ref="navigationBurger"
 					:is-cross="isNavbarOpen"
 					:aria-label="$t(isNavbarOpen ? 'header.burger.close' : 'header.burger.open')"
+					:title="$t(isNavbarOpen ? 'header.burger.close' : 'header.burger.open')"
 					@click="navbarToggle"
 				/>
 				<HeaderNavigationSidebar

@@ -66,6 +66,7 @@ const onButtonClick = async () => {
 				is-round
 				icon-name="plus"
 				:alt="$t('home.button.add_event_aria')"
+				:title="$t('home.button.add_event_aria')"
 				aria-haspopup="true"
 				@click="onButtonClick"
 			/>

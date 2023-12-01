@@ -13,6 +13,8 @@ const mobile = inject('mobile');
 			<div class="footer__logo logo">
 				<NuxtLink
 					:to="localePath(RoutePathEnum.HOME)"
+					:title="$t('footer.logo.other_page_aria')"
+					:aria-label="$t('footer.logo.other_page_aria')"
 					class="logo__link"
 				>
 					<CommonIcon
@@ -71,6 +73,8 @@ const mobile = inject('mobile');
 					>
 						<NuxtLink
 							:to="link"
+							:title="$t(`footer.social.${key}`)"
+							:aria-label="$t(`footer.social.${key}`)"
 							target="_blank"
 							class="social__link"
 						>

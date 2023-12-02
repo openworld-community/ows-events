@@ -96,7 +96,7 @@ class EventsStateController {
 	}
 
 	async findUsedTags() {
-		const tags = await EventModel.distinct('tags');
+		const tags = await EventModel.distinct('tags', { date: { $gt: Date.now() } });
 
 		return tags;
 	}

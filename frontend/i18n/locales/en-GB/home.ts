@@ -25,6 +25,11 @@ export default {
 		searchLine: {
 			placeholder: 'What are you interested in?',
 			aria: 'Enter a search query'
+		},
+		tags: {
+			placeholder: 'Theme',
+			title: 'Select an event theme',
+			aria: 'Filter by event theme'
 		}
 	},
 	user_location: {

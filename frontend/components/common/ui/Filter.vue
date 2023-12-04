@@ -13,8 +13,18 @@ defineProps({
 		required: true
 	},
 	list: {
-		type: Array as PropType<string[]>,
+		type: Array as PropType<string[] | { [key: string]: string }[]>,
 		default: () => []
+	},
+	// для объектов: ключ значения, которое нужно возвращать
+	returnKey: {
+		type: String,
+		default: ''
+	},
+	// для объектов: ключ значения, которое нужно показывать в списке
+	showKey: {
+		type: String,
+		default: ''
 	},
 	disabled: {
 		type: Boolean,
@@ -75,11 +85,15 @@ const showModal = computed(() => filterStore.modal.show);
 				v-if="showModal"
 				:filter-list="filterStore.modal.list"
 				:filter-type="filterStore.modal.type"
+				:return-key="returnKey"
+				:show-key="showKey"
 			/>
 		</template>
 		<CommonUiBaseSelect
 			v-else
 			v-model="filterStore.filters[name]"
+			:show-key="showKey"
+			:return-key="returnKey"
 			:class="['filter', { 'filter--no-separator': noSeparator }]"
 			:name="name"
 			:placeholder="$t(`home.filter.${name}.placeholder`)"
@@ -94,16 +108,27 @@ const showModal = computed(() => filterStore.modal.show);
 
 <style scoped lang="less">
 .filter {
+	@media (max-width: 767px) {
+		&.button {
+			max-width: 32.6%;
+
+			& > :deep(.button__content) {
+				display: inline-block;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+	}
+
 	@media (min-width: 1440px) {
-		&:deep(svg) {
+		width: 50%;
+
+		&:deep(.input__button) {
 			top: 25px;
 		}
 
-		&:deep(button) {
-			top: 25px;
-		}
-
-		&:deep(input) {
+		&:deep(.input__field) {
 			height: 72px;
 		}
 	}

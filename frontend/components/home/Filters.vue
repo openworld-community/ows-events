@@ -4,14 +4,14 @@ import { useFilterStore } from '../../stores/filter.store';
 const filterStore = useFilterStore();
 
 const route = useRoute();
-const mobile = inject('mobile');
+const tablet = inject('tablet');
 
 onBeforeMount(() => {
 	//TODO костыль, иначе при ините страницы не достается value из запроса
 	if (process.client) {
 		setTimeout(async () => {
 			await filterStore.getFilteredEvents();
-			await filterStore.getUsedCountries();
+			await filterStore.getUsedFilters();
 			if (filterStore.filters.country)
 				await filterStore.getUsedCitiesByCountry(filterStore.filters.country);
 		});
@@ -42,13 +42,20 @@ watch(
 	{ deep: true }
 );
 
-const openFilterModal = async (type: string, list: string[]) => {
+const openFilterModal = (type: string, list: string[]) => {
 	if (list.length) {
 		filterStore.modal.list = list;
 		filterStore.modal.type = type;
 		filterStore.$patch({ modal: { show: true } });
 	}
 };
+
+const usedTags = computed(() => {
+	return filterStore.usedTags.map((elem) => {
+		return elem.name;
+	});
+});
+const mobile = inject('mobile');
 </script>
 
 <template>
@@ -61,6 +68,7 @@ const openFilterModal = async (type: string, list: string[]) => {
 		/>
 		<div class="filters__wrapper">
 			<CommonUiFilter
+				:key="mobile ? 'mobile-country' : 'other-country'"
 				filter-type="select"
 				name="country"
 				:list="filterStore.usedCountries"
@@ -68,6 +76,7 @@ const openFilterModal = async (type: string, list: string[]) => {
 				@on-filter-button-click="openFilterModal('country', filterStore.usedCountries)"
 			/>
 			<CommonUiFilter
+				:key="mobile ? 'mobile-city' : 'other-city'"
 				filter-type="select"
 				name="city"
 				:list="filterStore.usedCitiesByCountry[filterStore.filters.country] ?? []"
@@ -76,13 +85,23 @@ const openFilterModal = async (type: string, list: string[]) => {
 					(!filterStore.usedCitiesByCountry[filterStore.filters.country] &&
 						!filterStore.filters.city)
 				"
-				:dropdown-position="mobile ? 'right' : 'left'"
 				@on-filter-button-click="
 					openFilterModal(
 						'city',
 						filterStore.usedCitiesByCountry?.[filterStore.filters.country] ?? []
 					)
 				"
+			/>
+			<CommonUiFilter
+				:key="mobile ? 'mobile-tags' : 'other-tags'"
+				filter-type="select"
+				name="tags"
+				:list="usedTags"
+				show-key="name"
+				return-key="name"
+				:disabled="!filterStore.usedTags.length"
+				:dropdown-position="tablet ? 'right' : 'left'"
+				@on-filter-button-click="openFilterModal('tags', usedTags)"
 			/>
 		</div>
 	</section>
@@ -107,7 +126,7 @@ const openFilterModal = async (type: string, list: string[]) => {
 		display: flex;
 		width: 100%;
 		margin-top: 8px;
-		gap: 8px;
+		gap: 2%;
 
 		@media (min-width: 1440px) {
 			align-items: center;

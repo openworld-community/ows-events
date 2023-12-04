@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { VueFinalModal } from 'vue-final-modal';
 import { useFilterStore } from '../../stores/filter.store';
 
@@ -10,20 +10,22 @@ const props = defineProps({
 		required: true
 	},
 	filterList: {
-		type: Array as PropType<string[]>,
+		type: Array as PropType<string[] | { [key: string]: string }[]>,
 		required: true
+	},
+	// для объектов: ключ значения, которое нужно возвращать
+	returnKey: {
+		type: String,
+		default: ''
+	},
+	// для объектов: ключ значения, которое нужно показывать в списке
+	showKey: {
+		type: String,
+		default: ''
 	}
 });
 
 const closeModal = () => filterStore.$patch({ modal: { show: false } });
-const showModal = computed({
-	get() {
-		return filterStore.modal.show;
-	},
-	set() {
-		closeModal();
-	}
-});
 const model = ref<string>(
 	filterStore?.filters[props.filterType as keyof (typeof filterStore)['filters']] ?? ''
 );
@@ -40,7 +42,7 @@ const resetFilter = () => {
 
 <template>
 	<VueFinalModal
-		v-model="showModal"
+		v-model="filterStore.modal.show"
 		:hide-overlay="false"
 		overlay-transition="vfm-fade"
 		overlay-transition-duration="2600"
@@ -64,15 +66,15 @@ const resetFilter = () => {
 					:key="key"
 				>
 					<label class="list__item">
-						{{ item }}
+						{{ item[showKey] ?? item }}
 						<input
 							v-model="model"
 							class="radio"
 							type="radio"
-							:value="item"
+							:value="item[returnKey] ?? item"
 						/>
 						<CommonIcon
-							v-if="model === item"
+							v-if="model === item || model === item[returnKey]"
 							class="list__icon"
 							name="check"
 							color="var(--color-accent-green-main)"
@@ -129,6 +131,7 @@ const resetFilter = () => {
 		justify-content: space-between;
 		width: 100%;
 		padding: 8px var(--padding-side);
+		cursor: pointer;
 	}
 
 	&__icon {

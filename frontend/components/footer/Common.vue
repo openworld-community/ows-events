@@ -1,28 +1,72 @@
 <script setup lang="ts">
-import { RoutePathEnum } from '../../constants/enums/route';
+import { RoutePathEnum, RouteNameEnum } from '../../constants/enums/route';
 import { SocialLinks, SUPPORT_TG_URL } from '../../constants/url';
 
+import { SeoItempropNavEnum } from '../../constants/enums/seo';
+import { getRouteName } from '../../utils';
+
+defineProps({
+	hasBackButton: {
+		type: Boolean,
+		default: false
+	}
+});
+
+const route = useRoute();
+const router = useRouter();
 const localePath = useLocalePath();
 
 const mobile = inject('mobile');
+
+const goBack = () => {
+	if (router.options.history.state.back) {
+		router.back();
+	} else if (
+		getRouteName(route.name as string).includes(RouteNameEnum.USER_FAVOURITES) ||
+		getRouteName(route.name as string).includes(RouteNameEnum.USER_MY_EVENTS)
+	) {
+		navigateTo(localePath({ path: RoutePathEnum.USER_PAGE }));
+	} else {
+		navigateTo(localePath({ path: RoutePathEnum.HOME }));
+	}
+};
+const isAtHome = computed(() => getRouteName(route.name as string) === RouteNameEnum.HOME);
+const logoComponentIs = computed(() => {
+	if (isAtHome.value) return 'button';
+	else return defineNuxtLink({});
+});
+const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 </script>
 
 <template>
 	<footer class="footer">
 		<div class="footer__links">
 			<div class="footer__logo logo">
-				<NuxtLink
-					:to="localePath(RoutePathEnum.HOME)"
-					:title="$t('footer.logo.other_page_aria')"
-					:aria-label="$t('footer.logo.other_page_aria')"
+				<CommonButton
+					v-if="hasBackButton"
+					is-icon
+					icon-name="back"
+					button-kind="ordinary"
+					:alt="$t('global.button.back')"
+					@click="goBack"
+				/>
+				<component
+					:is="logoComponentIs"
+					v-else
 					class="logo__link"
+					:title="$t(isAtHome ? 'footer.logo.at_home_aria' : 'footer.logo.other_page_aria')"
+					:aria-label="$t(isAtHome ? 'footer.logo.at_home_aria' : 'footer.logo.other_page_aria')"
+					:to="!isAtHome ? localePath(RoutePathEnum.HOME) : undefined"
+					:itemprop="SeoItempropNavEnum.URL"
+					@click="isAtHome && scrollToTop()"
 				>
 					<CommonIcon
 						name="afisha-logo-dark"
 						width="86"
 						height="40"
+						color="var(--color-accent-green-main)"
 					/>
-				</NuxtLink>
+				</component>
 			</div>
 
 			<ul class="footer__navigation navigation">

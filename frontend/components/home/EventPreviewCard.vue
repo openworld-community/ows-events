@@ -13,6 +13,7 @@ const mobile = inject('mobile');
 	<NuxtLink
 		class="card"
 		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
+		:title="trimString(`Afisha: ${eventData.location.city}, ${eventData.title}` ?? '',250)"
 		:itemprop="SeoItempropGlobalEnum.URL"
 	>
 		<div
@@ -23,7 +24,6 @@ const mobile = inject('mobile');
 				v-if="eventData.image"
 				class="card__image"
 				:src="getEventImage(eventData)"
-				:title="`Afisha: ${eventData.location.city}, ${eventData.title}`"
 				:alt="trimString(`Afisha: ${eventData.location.city}, ${eventData.title}` ?? '',250)"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>

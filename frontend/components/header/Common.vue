@@ -135,7 +135,6 @@ const goBack = () => {
 					ref="navigationBurger"
 					:is-cross="isNavbarOpen"
 					:aria-label="$t(isNavbarOpen ? 'header.burger.close' : 'header.burger.open')"
-					:title="$t(isNavbarOpen ? 'header.burger.close' : 'header.burger.open')"
 					@click="navbarToggle"
 				/>
 				<HeaderNavigationSidebar

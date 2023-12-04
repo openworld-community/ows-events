@@ -1,7 +1,7 @@
 export default {
 	logo: {
-		at_home_aria: 'Return to the beginning of the page',
-		other_page_aria: 'Return to the home page'
+		at_home_aria: 'Вернуться к началу страницы',
+		other_page_aria: 'Вернуться на домашнюю страницу'
 	},
 	navigation: {
 		about: 'О проекте',

@@ -42,7 +42,7 @@ class EventsStateController {
 					$expr: {
 						$gte: [
 							{
-								$add: ['$date', '$durationInSeconds']
+								$add: ['$date', { $multiply: [1000, '$durationInSeconds'] }]
 							},
 							{
 								$toDouble: '$$NOW'

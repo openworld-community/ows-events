@@ -111,7 +111,7 @@ patchDeleteEventModal({
 					:src="eventImage"
 					width="350"
 					height="250"
-					:alt="trimString(`Afisha: ${posterEvent.location.city}, ${posterEvent.title}` ?? '',250)"
+					:alt="trimString(`Afisha: ${posterEvent.location.city}, ${posterEvent.title}` ?? '', 460)"
 					:itemprop="SeoItempropGlobalEnum.IMAGE"
 				/>
 				<img

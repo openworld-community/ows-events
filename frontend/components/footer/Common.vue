@@ -5,31 +5,11 @@ import { SocialLinks, SUPPORT_TG_URL } from '../../constants/url';
 import { SeoItempropNavEnum } from '../../constants/enums/seo';
 import { getRouteName } from '../../utils';
 
-defineProps({
-	hasBackButton: {
-		type: Boolean,
-		default: false
-	}
-});
-
 const route = useRoute();
-const router = useRouter();
 const localePath = useLocalePath();
 
 const mobile = inject('mobile');
 
-const goBack = () => {
-	if (router.options.history.state.back) {
-		router.back();
-	} else if (
-		getRouteName(route.name as string).includes(RouteNameEnum.USER_FAVOURITES) ||
-		getRouteName(route.name as string).includes(RouteNameEnum.USER_MY_EVENTS)
-	) {
-		navigateTo(localePath({ path: RoutePathEnum.USER_PAGE }));
-	} else {
-		navigateTo(localePath({ path: RoutePathEnum.HOME }));
-	}
-};
 const isAtHome = computed(() => getRouteName(route.name as string) === RouteNameEnum.HOME);
 const logoComponentIs = computed(() => {
 	if (isAtHome.value) return 'button';
@@ -42,17 +22,8 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 	<footer class="footer">
 		<div class="footer__links">
 			<div class="footer__logo logo">
-				<CommonButton
-					v-if="hasBackButton"
-					is-icon
-					icon-name="back"
-					button-kind="ordinary"
-					:alt="$t('global.button.back')"
-					@click="goBack"
-				/>
 				<component
 					:is="logoComponentIs"
-					v-else
 					class="logo__link"
 					:title="$t(isAtHome ? 'footer.logo.at_home_aria' : 'footer.logo.other_page_aria')"
 					:aria-label="$t(isAtHome ? 'footer.logo.at_home_aria' : 'footer.logo.other_page_aria')"

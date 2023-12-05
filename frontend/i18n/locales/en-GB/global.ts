@@ -5,6 +5,7 @@ export default {
 	button: {
 		authorize: 'Authorize',
 		add_to_favourites: 'Add to Favorites',
+		apply: 'Применить',
 		back: 'Back',
 		cancel: 'Cancel',
 		close: 'Close',
@@ -21,6 +22,7 @@ export default {
 		logout: 'Logout',
 		register: 'Register',
 		remove_from_favourites: 'Remove from Favorites',
+		reset: 'Сбросить',
 		save: 'Save',
 		search: 'Search',
 		share: 'Share'

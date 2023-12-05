@@ -216,6 +216,7 @@ patchDeleteEventModal({
 						:button-text="$t('global.button.contact')"
 						:link="posterEvent.url"
 						is-external-link
+						@click="useTrackEvent('redirect to event url')"
 					/>
 				</div>
 

@@ -30,6 +30,7 @@ onClickOutside(sidebar, () => toggleSelector(), { ignore: [selectorButton] });
 			ref="selectorButton"
 			is-icon
 			:icon-name="`language/${language}`"
+			:title="$t('header.language_selector.label')"
 			:alt="$t('header.language_selector.label')"
 			@click="toggleSelector"
 		/>

@@ -90,7 +90,8 @@ getMeta({
 							target="_blank"
 							class="social-links__link"
 							:style="`backgroundColor: var(--color-social-${key})`"
-							:aria-label="`${$t('about.social.alt')} ${key}`"
+							:title="$t(`about.social_title.${key}`)"
+							:aria-label="$t(`about.social_title.${key}`)"
 							:itemprop="SeoItempropAboutEnum.SOCIAL_LINK"
 						>
 							<CommonIcon

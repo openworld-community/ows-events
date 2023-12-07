@@ -56,8 +56,7 @@ export default defineNuxtConfig({
 	// },
 	// https://nuxt.com/modules/gtag
 	gtag: {
-		id: import.meta.env.VITE_GTAG_ID || process.env.VITE_GTAG_ID || '',
-		initialConsent: false
+		id: import.meta.env.VITE_GTAG_ID || process.env.VITE_GTAG_ID || ''
 	},
 	typescript: { strict: false },
 	nitro: {

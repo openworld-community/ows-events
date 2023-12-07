@@ -17,7 +17,7 @@ export default {
 	navigation: {
 		user: 'User',
 		authorize: 'Authorize',
-		about: 'About us',
+		about: 'About the project',
 		support: 'Support',
 		donation: 'Help Afisha',
 		limitation_of_liability: 'Limitation of Liability'

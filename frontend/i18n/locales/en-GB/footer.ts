@@ -1,6 +1,6 @@
 export default {
 	navigation: {
-		about: 'About Us',
+		about: 'About the project',
 		support: 'Support',
 		donate: 'Help Afisha',
 		limitation_of_liability: 'Limitation of Liability'

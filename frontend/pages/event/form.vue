@@ -357,6 +357,7 @@ const submitEvent = async () => {
 						<CommonUiBaseInput
 							v-model="eventStore.eventData.url"
 							name="url"
+							type="url"
 							:placeholder="$t('form.event.fields.url_placeholder')"
 							required
 						/>

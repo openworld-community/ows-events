@@ -4,7 +4,6 @@ import type { EventOnPoster } from '../../../common/types';
 import { RoutePathEnum } from '../../constants/enums/route';
 import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { dateNow } from '~/utils/dates';
-import type { ComputedInjectGetter } from '@vueuse/core';
 
 const props = defineProps({
 	eventData: {

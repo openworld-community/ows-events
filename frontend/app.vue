@@ -35,11 +35,13 @@ useHead({
 	}
 });
 
-const route = useRoute();
-const { gtag } = useGtag();
-gtag('event', 'page_view', {
-	screen_name: () => getRouteName(route.name as string)
-});
+if (process.client) {
+	const route = useRoute();
+	const { gtag } = useGtag();
+	gtag('event', 'page_view', {
+		screen_name: () => getRouteName(route.name as string)
+	});
+}
 
 useCookie(CookieNameEnum.LOCALE, { maxAge: TOKEN_MAX_AGE_SECONDS }).value = locale.value;
 

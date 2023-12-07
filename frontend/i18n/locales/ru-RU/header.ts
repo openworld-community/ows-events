@@ -17,7 +17,7 @@ export default {
 	navigation: {
 		user: 'Пользователь',
 		authorize: 'Авторизоваться',
-		about: 'Об Афише',
+		about: 'О проекте',
 		support: 'Поддержка',
 		donation: 'Помочь Afisha',
 		limitation_of_liability: 'Ограничение ответственности'

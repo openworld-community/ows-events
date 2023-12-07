@@ -23,8 +23,8 @@ export default {
 	},
 	social_title: {
 		instagram: 'Instagram Afisha',
-		twitter: 'Telegram Afisha',
-		linkedin: 'Twitter Afisha',
-		telegram: 'LinkedIn Afisha'
+		twitter: 'Twitter Afisha',
+		linkedin: 'LinkedIn Afisha',
+		telegram: 'Telegram Afisha '
 	},
 };

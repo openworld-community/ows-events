@@ -10,6 +10,7 @@ RUN npm install
 
 COPY ./backend/ ./
 
+RUN npm test
 RUN npm run build
 
 FROM node:18-alpine

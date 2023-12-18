@@ -12,7 +12,17 @@ const props = defineProps({
 		required: true
 	},
 	list: {
-		type: [Array, String, Set] as PropType<string[] | Set<string>>,
+		type: [Array, String, Set] as PropType<string | string[] | { [key: string]: string }[] | Set<string>>,
+		required: true
+	},
+	// для объектов: ключ значения, которое нужно возвращать
+	returnKey: {
+		type: String,
+		default: ''
+	},
+	// для объектов: ключ значения, которое нужно показывать в списке
+	showKey: {
+		type: String,
 		default: ''
 	},
 	name: {
@@ -74,14 +84,12 @@ const closeSelect = () => {
 	isOpen.value = false;
 };
 
-const filteredList = computed(() =>
-	(Array.isArray(props.list) ? props.list : [...props.list]).filter((item) => {
-		return (
-			item.toLowerCase().startsWith(props.modelValue.toLowerCase()) &&
-			item !== props.modelValue
-		);
-	})
-);
+const showInputValueIcon = computed(() => {
+	const needIcon = Array.isArray(props.list)
+		? Array.from(props.list as string[]).includes(props.modelValue)
+		: Object.values(props.list).includes(props.modelValue);
+	return props.hasIconItems && needIcon;
+});
 </script>
 
 <template>
@@ -101,29 +109,29 @@ const filteredList = computed(() =>
 			:input-readonly="inputReadonly"
 			icon-name="container"
 			:appearance="appearance"
-			:has-value-icon="hasIconItems && Array.from(list).includes(modelValue)"
+			:has-value-icon="showInputValueIcon"
 			:aria-expanded="isOpen"
 			@update:model-value="emit('update:model-value', $event)"
 			@click="openSelect"
 		/>
 
 		<div
-			v-if="isOpen && filteredList.length"
+			v-if="isOpen && list"
 			:class="['select__list-box', `select__list-box--${dropdownPosition}`]"
 		>
 			<ul class="select__list">
 				<li
-					v-for="item in filteredList"
-					:key="item"
+					v-for="item in list"
+					:key="item[returnKey] ?? item"
 					class="select__list-item list-item"
-					@click="emit('update:model-value', item)"
+					@click="emit('update:model-value', item[returnKey] ?? item)"
 				>
 					<CommonIcon
 						v-if="hasIconItems"
 						class="list-item__icon"
-						:name="`${name}/${item}`"
+						:name="`${name}/${item[returnKey] ?? item}`"
 					/>
-					<span>{{ item }}</span>
+					<span>{{ item[showKey] ?? item }}</span>
 				</li>
 			</ul>
 		</div>

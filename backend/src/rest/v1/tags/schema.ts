@@ -1,4 +1,4 @@
-import { ItemEvent } from "../events/schema";
+import { ItemEvent } from '../events/schema';
 
 export const addTagSchema = {
 	description: 'Add new tag/s',
@@ -17,10 +17,10 @@ export const addTagSchema = {
 	security: [{ authJWT: [] }]
 };
 
-export const getAllTagsSchema = {
-	description: 'get all tags',
+export const getUsedTagsSchema = {
+	description: 'get used tags',
 	tags: ['Tags'],
-	summary: 'Get all tags',
+	summary: 'Get used tags',
 	response: {
 		200: {
 			type: 'array',
@@ -41,12 +41,12 @@ export const getTagByEventSchema = {
 	},
 	params: {
 		type: 'object',
-        properties: {
-            id: {
-                type: 'string',
-                description: 'Event id'
-            }
-        }
+		properties: {
+			id: {
+				type: 'string',
+				description: 'Event id'
+			}
+		}
 	}
 };
 

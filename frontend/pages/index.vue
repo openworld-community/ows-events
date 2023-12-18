@@ -5,6 +5,7 @@ import { SeoItemTypeEnum } from '../constants/enums/seo';
 import { useUserStore } from '../stores/user.store';
 import { RoutePathEnum } from '../constants/enums/route';
 import { useEventStore } from '../stores/event.store';
+import { useFilterStore } from '../stores/filter.store';
 
 const { t } = useI18n();
 
@@ -13,6 +14,7 @@ getMeta({
 });
 
 const userStore = useUserStore();
+const filterStore = useFilterStore();
 const localePath = useLocalePath();
 
 const {
@@ -21,22 +23,6 @@ const {
 	patchOptions: needAuthorizeModalPatch
 } = useModal({ component: NeedAuthorize });
 needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
-
-const route = useRoute();
-// todo - move this to the components?
-const eventsQuery = ref({
-	searchLine: getFirstQuery(route.query.search),
-	city: getFirstQuery(route.query.city),
-	country: getFirstQuery(route.query.country)
-});
-const debouncedEventsRequestQuery = refDebounced(
-	computed(() => ({ ...eventsQuery.value })),
-	500,
-	{ maxWait: 5000 }
-);
-const { data: posterEvents } = await apiRouter.events.findMany.useQuery({
-	data: { query: debouncedEventsRequestQuery }
-});
 
 const onButtonClick = async () => {
 	if (userStore.isAuthorized) {
@@ -59,16 +45,11 @@ const onButtonClick = async () => {
 					v-if="mobile"
 					class="main-page__location"
 				/> -->
-				<HomeFilter
-					v-model:search="eventsQuery.searchLine"
-					v-model:country="eventsQuery.country"
-					v-model:city="eventsQuery.city"
-					class="main-page__filter"
-				/>
+				<HomeFilters class="main-page__filter" />
 			</div>
 			<ul class="main-page__card-list">
 				<li
-					v-for="event in posterEvents"
+					v-for="event in filterStore.filteredEvents"
 					:key="event.id"
 					class="main-page__card-item"
 					itemscope
@@ -115,7 +96,6 @@ const onButtonClick = async () => {
 		padding-right: var(--padding-side);
 
 		@media (min-width: 768px) {
-			border-radius: 10px;
 			padding-top: 65px;
 			margin-top: 0;
 			margin-bottom: 80px;
@@ -123,7 +103,6 @@ const onButtonClick = async () => {
 
 		@media (min-width: 1440px) {
 			position: relative;
-			border-radius: 16px;
 			padding-top: 99px;
 			margin-bottom: 100px;
 		}
@@ -155,12 +134,12 @@ const onButtonClick = async () => {
 		}
 	}
 
-	&__location {
-		display: flex;
-		width: 100%;
-		justify-content: center;
-		margin-bottom: 24px;
-	}
+	//&__location {
+	//	display: flex;
+	//	width: 100%;
+	//	justify-content: center;
+	//	margin-bottom: 24px;
+	//}
 
 	&__filter {
 		width: 100%;

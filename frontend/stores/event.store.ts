@@ -21,6 +21,7 @@ export const useEventStore = defineStore('event', {
 				title: '',
 				organizer: userStore.userInfo?.company ?? '',
 				description: '',
+				tags: [],
 				startDate: null,
 				startTime: null,
 				endDate: null,
@@ -103,6 +104,7 @@ export const useEventStore = defineStore('event', {
 					title: posterEvent?.title ?? '',
 					organizer: posterEvent?.organizer ?? '',
 					description: posterEvent?.description ?? '',
+					tags: posterEvent?.tags ?? [],
 					startDate: getDateFromEpochInMs(posterEvent?.date),
 					startTime: getTimeFromEpochInMs(posterEvent?.date),
 					endDate: posterEvent?.durationInSeconds
@@ -133,7 +135,13 @@ export const useEventStore = defineStore('event', {
 			} else {
 				const storageData = localStorage.getItem(LocalStorageEnum.EVENT_DATA);
 				if (storageData) {
-					this.eventData = JSON.parse(storageData);
+					const parsedData = JSON.parse(storageData);
+					for (const key in this.eventData) {
+						if (key in parsedData) {
+							this.eventData[key] = parsedData[key];
+						}
+					}
+
 					if (this.eventData.startDate) {
 						this.eventData.startDate = new Date(this.eventData.startDate);
 					}
@@ -162,6 +170,7 @@ export const useEventStore = defineStore('event', {
 				title: '',
 				organizer: userStore.userInfo?.company ?? '',
 				description: '',
+				tags: [],
 				startDate: null,
 				startTime: null,
 				endDate: null,

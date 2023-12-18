@@ -13,7 +13,7 @@ module.exports = {
 		tsconfigRootDir: __dirname,
 		ecmaVersion: 'latest'
 	},
-	ignorePatterns: ['./node_modules/*', './build/*', './dist/*', './assets/*'],
+	ignorePatterns: ['./node_modules/*', './build/*', './dist/*', './assets/*', "modules/1compileI18n/index.ts"],
 	rules: {
 		'vue/html-self-closing': 'off',
 		'vue/multi-word-component-names': 'off',

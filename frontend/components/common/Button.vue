@@ -11,7 +11,7 @@ type LinkObjectType = {
 	path?: string;
 };
 
-type ButtonKind = 'ordinary' | 'success' | 'warning' | 'text'; // для задания внешнего вида
+type ButtonKind = 'ordinary' | 'success' | 'warning' | 'text' | 'filter'; // для задания внешнего вида
 
 const props = defineProps({
 	buttonKind: {
@@ -19,7 +19,7 @@ const props = defineProps({
 		type: String as PropType<ButtonKind>,
 		default: ''
 	},
-	hasStates: {
+	interactive: {
 		//  необходимость подсветки hover, focus, active
 		type: Boolean,
 		default: true
@@ -35,17 +35,17 @@ const props = defineProps({
 	},
 	isExternalLink: {
 		// если необходимо открыть в новом окне
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	isRound: {
 		// если кнопка круглая
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	isIcon: {
 		// если компонент выглядит, как иконка
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	iconName: {
@@ -61,16 +61,21 @@ const props = defineProps({
 		type: [String, Number] as PropType<string | number>,
 		default: IconDefaultParams.HEIGHT
 	},
+	// для кнопок-фильтров, обеспечивает заливку при заданном фильтре
+	filled: {
+		type: Boolean,
+		default: false
+	},
 	alt: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	isDisabled: {
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	isLoading: {
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	}
 });
@@ -79,7 +84,8 @@ const loaderColorDict = {
 	ordinary: 'var(--color-text-main)',
 	success: 'var(--color-white)',
 	warning: 'var(--color-accent-red)',
-	text: 'var(--color-text-main)'
+	text: 'var(--color-text-main)',
+	filter: 'var(--color-text-secondary)'
 } satisfies Record<ButtonKind, string>;
 const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 </script>
@@ -95,12 +101,15 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			isIcon ? 'icon' : `button button__${buttonKind}`,
 			isIcon && buttonKind ? `icon__${buttonKind}` : '',
 			isDisabled ? `button__${buttonKind}--disabled` : '',
-			{ 'button--round': isRound && !isIcon },
-			{ 'icon--round': isIcon && isRound },
-			{ 'no-states': !hasStates }
+			{
+				'button--round': isRound && !isIcon,
+				'icon--round': isIcon && isRound,
+				'no-interactive': !interactive,
+				[`button__${buttonKind}--filled`]: filled
+			}
 		]"
 		:aria-label="alt ? alt : null"
-		@click="!link && !isDisabled ? emit('click') : null"
+		@click="!isDisabled ? emit('click') : null"
 	>
 		<CommonUiLoadSpinner
 			v-if="isLoading"
@@ -132,6 +141,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	border-radius: 8px;
 	padding: 7px 14px;
 	align-items: center;
+
 	transition-property: background-color, color, border-color;
 	transition-duration: 0.3s;
 	transition-timing-function: ease;
@@ -286,6 +296,49 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			}
 		}
 	}
+
+	&__filter {
+		display: flex;
+		width: 50%;
+		height: 36px;
+		flex-direction: row-reverse;
+		background-color: var(--color-white);
+		border: 1px solid var(--color-white);
+		border-radius: 8px;
+
+		& > .button__content {
+			font-size: var(--font-size-S);
+			line-height: 20px;
+			margin-right: 10px;
+		}
+
+		&::v-deep(svg) {
+			color: var(--color-text-secondary);
+			width: 20px;
+			height: 20px;
+			margin-right: 0;
+		}
+
+		&--disabled {
+			color: var(--color-input-icons);
+			border-color: var(--color-white);
+			cursor: default;
+
+			&::v-deep(svg) {
+				color: var(--color-input-icons);
+			}
+		}
+
+		&--filled {
+			background-color: var(--color-input-field);
+			//color: var(--color-white);
+			border-color: var(--color-input-field);
+
+			&::v-deep(svg) {
+				color: var(--color-text-main);
+			}
+		}
+	}
 }
 
 .icon {
@@ -350,7 +403,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	}
 }
 
-.no-states {
+.no-interactive {
 	&:hover,
 	&:focus,
 	&:active {

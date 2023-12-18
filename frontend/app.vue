@@ -4,8 +4,10 @@ import 'vue-final-modal/style.css';
 import 'vue-toastification/dist/index.css';
 import 'virtual:svg-icons-register';
 import { ModalsContainer } from 'vue-final-modal';
-import { CookieNameEnum } from './constants/enums/common';
+import { CookieNameEnum, LocalStorageEnum } from './constants/enums/common';
 import { TOKEN_MAX_AGE_SECONDS } from './constants/defaultValues/time';
+import type { ComputedRef } from 'vue';
+import { getRouteName } from './utils';
 
 const { locale, t } = useI18n();
 
@@ -13,13 +15,13 @@ const viewport = useViewport();
 
 const mobile = computed(() => viewport.isLessThan('tablet'));
 const tablet = computed(
-	() => viewport.isGreaterOrEquals('tablet') || viewport.isLessThan('desktop')
+	() => viewport.isGreaterOrEquals('tablet') && viewport.isLessThan('desktop')
 );
 const desktop = computed(() => viewport.isGreaterOrEquals('desktop'));
 
-provide('mobile', mobile);
-provide('tablet', tablet);
-provide('desktop', desktop);
+provide('mobile', mobile as ComputedRef<boolean>);
+provide('tablet', tablet as ComputedRef<boolean>);
+provide('desktop', desktop as ComputedRef<boolean>);
 
 useHead({
 	title: t('meta.default_title'),
@@ -33,8 +35,16 @@ useHead({
 	}
 });
 
+const route = useRoute();
+const { gtag } = useGtag();
+gtag('event', 'page_view', {
+	screen_name: () => getRouteName(route.name as string)
+});
+
 useCookie(CookieNameEnum.LOCALE, { maxAge: TOKEN_MAX_AGE_SECONDS }).value = locale.value;
 
+//TODO ALL_TIMEZONES перенесены в sessionStorage, ниже функция для очистки их в localStorage у пользователей
+onMounted(() => localStorage.removeItem(LocalStorageEnum.TIMEZONES));
 </script>
 <template>
 	<ModalsContainer />

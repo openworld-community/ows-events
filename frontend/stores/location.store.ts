@@ -8,10 +8,8 @@ export type Currency = string;
 
 type LocationStore = {
 	_countries: Set<Country>;
-	_usedCountries: Set<Country>;
 	_citiesByCountry: Map<Country, City[]>;
-	_usedCitiesByCountry: Map<Country, City[]>;
-	_currencies: Set<Currency>;
+	_currencies: Currency[];
 	userLocation: UserLocation;
 };
 
@@ -21,10 +19,8 @@ export const useLocationStore = defineStore('location', {
 	state: (): LocationStore => {
 		return {
 			_countries: new Set(),
-			_usedCountries: new Set(),
 			_citiesByCountry: new Map(),
-			_usedCitiesByCountry: new Map(),
-			_currencies: new Set(),
+			_currencies: [],
 			userLocation: {}
 		};
 	},
@@ -65,25 +61,8 @@ export const useLocationStore = defineStore('location', {
 			return state._countries;
 		},
 		currencies(state): LocationStore['_currencies'] {
-			const currencies = ['USD', 'EUR', 'RSD', 'KGS', 'BTC', 'USDT', 'USDC', 'ETH'];
-			state._currencies = new Set(currencies);
+			state._currencies = ['USD', 'EUR', 'RSD', 'KGS', 'BTC', 'USDT', 'USDC', 'ETH'];
 			return state._currencies;
-		},
-		usedCountries(state): LocationStore['_usedCountries'] {
-			(async function () {
-				if (process.server) return;
-				if (state._usedCountries.size) return;
-
-				// otherwise Nuxt doesn't do request on client during initial hydration, I'm not smart enough to tell why
-				await new Promise((r) => r(0));
-
-				const { data } = await apiRouter.location.country.getUsedCountries.useQuery({});
-				if (!data.value?.length) return;
-
-				state._usedCountries = new Set(data.value);
-			})();
-
-			return state._usedCountries;
 		}
 	},
 	actions: {
@@ -179,24 +158,6 @@ export const useLocationStore = defineStore('location', {
 			})();
 
 			return this._citiesByCountry.get(country) ?? [];
-		},
-		getUsedCitiesByCountry(country: Country) {
-			(async () => {
-				if (process.server) return;
-				if (!country || this._usedCitiesByCountry.get(country)) return;
-
-				// forces Nuxt to await function calls if there are multiple of them(avoid duplication of requests)
-				await new Promise((r) => r(0));
-
-				const { data } = await apiRouter.location.country.getUsedCities.useQuery({
-					data: { country }
-				});
-
-				if (!data.value) return;
-				this._usedCitiesByCountry.set(country, data.value);
-			})();
-
-			return this._usedCitiesByCountry.get(country) ?? [];
 		}
 	}
 });

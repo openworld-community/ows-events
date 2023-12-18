@@ -1,14 +1,8 @@
 import { v4 as uuid } from 'uuid';
 import { FilterQuery } from 'mongoose';
-import { EventDbEntity, EventOnPoster } from '@common/types/event';
+import { EventDbEntity, EventOnPoster, SearchEventPayload } from '@common/types/event';
 import { EventModel } from '../models/event.model';
 import { imageController } from './image-controller';
-
-export type FindEventParams = {
-	searchLine?: string;
-	city?: string;
-	country?: string;
-};
 
 class EventsStateController {
 	async addEvent(event: EventOnPoster) {
@@ -25,7 +19,7 @@ class EventsStateController {
 		return id;
 	}
 
-	async getEvents(query?: FindEventParams | undefined): Promise<EventDbEntity[]> {
+	async getEvents(query?: SearchEventPayload | undefined): Promise<EventDbEntity[]> {
 		const queryObject: FilterQuery<EventOnPoster> = {};
 		if (query?.searchLine) {
 			queryObject.$text = { $search: query.searchLine };
@@ -36,19 +30,32 @@ class EventsStateController {
 		if (query?.city) {
 			queryObject['location.city'] = query?.city;
 		}
+		if (query?.tags && query?.tags.length !== 0) {
+			queryObject.tags = { $in: query?.tags };
+		}
 		queryObject['meta.moderation.status'] = { $nin: ['declined', 'in-progress'] };
 
-		const futureEvents = await EventModel.find(
-			{ ...queryObject, date: { $gt: Date.now() } },
-			{},
+		const pipeline = [
 			{
-				sort: {
-					date: 'ascending'
+				$match: {
+					...queryObject,
+					$expr: {
+						$gte: [
+							{
+								$add: ['$date', { $multiply: [1000, '$durationInSeconds'] }]
+							},
+							{
+								$toDouble: '$$NOW'
+							}
+						]
+					}
 				}
 			}
-		).exec();
-
-		return futureEvents.map((event) => event.toObject());
+		];
+		const futureEvents = await EventModel.aggregate(pipeline)
+			.sort({ date: 'ascending' })
+			.exec();
+		return futureEvents;
 	}
 
 	async getEvent(id: string) {
@@ -98,8 +105,8 @@ class EventsStateController {
 		return event;
 	}
 
-	async findAllTags() {
-		const tags = await EventModel.distinct('tags');
+	async findUsedTags() {
+		const tags = await EventModel.distinct('tags', { date: { $gt: Date.now() } });
 
 		return tags;
 	}

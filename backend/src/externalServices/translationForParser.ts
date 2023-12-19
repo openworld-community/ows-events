@@ -2,9 +2,11 @@ import { citiesForParserController } from '../controllers/cities-for-parser.cont
 import { countriesForParserController } from '../controllers/countries-for-parser.controller';
 
 export const translatePeredelanoPlaceName = async (place: string) => {
-	const isRussian = !/^[а-яА-Я0-9]+$/.test(place);
+	const isRussian = /^[а-яА-Я0-9-]+$/.test(place);
 	if (!isRussian) throw new Error(`Not russian language detected in string: ${place}`);
-	const city = await citiesForParserController.findEnglishCityNameByRussian(place);
-	const country = await countriesForParserController.findEnglishCountryNameByRussian(place);
-	return city || country;
+	const englishName =
+		(await citiesForParserController.findEnglishCityNameByRussian(place)) ||
+		(await countriesForParserController.findEnglishCountryNameByRussian(place));
+	if (!englishName) throw new Error(`No city or country found for russian name: ${place}`);
+	return englishName;
 };

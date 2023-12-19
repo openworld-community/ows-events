@@ -5,7 +5,7 @@ class Controller {
 		const city = await CitiesForParserModel.findOne({
 			alternateNames: russianCityName
 		});
-		if (!city) throw new Error(`No city found with russian name: ${russianCityName}`);
+		if (!city) return null;
 		return city.name;
 	}
 }

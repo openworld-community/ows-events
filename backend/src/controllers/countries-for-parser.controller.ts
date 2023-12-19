@@ -5,7 +5,7 @@ class Controller {
 		const country = await CountriesForParserModel.findOne({
 			russian_short: { $regex: russianCountryName, $options: 'i' }
 		});
-		if (!country) throw new Error(`No country found with russian name: ${russianCountryName}`);
+		if (!country) return null;
 		return country.english_short;
 	}
 }

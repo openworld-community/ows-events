@@ -1,12 +1,16 @@
-export const getFilterPlaceholder = (multiply: boolean, name: string, list: string[] | { [key: string]: string }[], model: string | string[], showKey: string, returnKey: string): string => {
-	const {$i18n} = useNuxtApp()
-	if (
-		(!multiply && model) ||
-		(multiply && model.length)
-	) {
+export const getFilterPlaceholder = (
+	multiply: boolean,
+	name: string,
+	list: string | string[] | { [key: string]: string }[] | Set<string>,
+	model: string | string[],
+	showKey: string,
+	returnKey: string
+): string => {
+	const { $i18n } = useNuxtApp();
+	if ((!multiply && model) || (multiply && model !== '')) {
 		if (multiply) {
 			if (showKey) {
-				return list
+				return [...list]
 					.reduce((acc: string[], el: { [key: string]: string }) => {
 						if (model.includes(el[returnKey])) {
 							acc.push(el[showKey]);
@@ -15,20 +19,18 @@ export const getFilterPlaceholder = (multiply: boolean, name: string, list: stri
 					}, [])
 					.join(', ');
 			}
-			return model.join(', ');
-		}
-		else {
+			return (model as string[]).join(', ');
+		} else {
 			if (showKey) {
-				return list.find(
-					(el: { [key: string]: string }) =>
-						el[returnKey] === model
-				)[showKey];
+				return [...list].find((el: { [key: string]: string }) => el[returnKey] === model)[
+					showKey
+				];
 			}
-			return model as string
+			return model as string;
 		}
 	} else {
 		return $i18n.t(`home.filter.${name}.placeholder`);
 	}
 };
 
-export default {getFilterPlaceholder}
+export default { getFilterPlaceholder };

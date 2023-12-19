@@ -30,7 +30,9 @@ const model = computed({
 });
 
 const isChecked = computed(() =>
-	props.multiply ? model.value.includes(props.value) : props.value === model.value
+	props.multiply
+		? (model.value as unknown as any[]).includes(props.value)
+		: props.value === model.value
 );
 </script>
 

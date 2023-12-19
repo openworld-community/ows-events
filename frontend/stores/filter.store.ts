@@ -9,14 +9,17 @@ type FilterStore = {
 	usedTags: { name: string; key: Tag }[];
 	modal: {
 		show: boolean;
-		list: string[];
+		list: string[] | { [key: string]: string }[];
+		multiply: boolean;
 		type: string;
+		showKey: string;
+		returnKey: string;
 	};
 	filters: {
 		country: Country;
 		city: City;
 		searchLine: string;
-		tags: Tag;
+		tags: Tag[];
 	};
 	filteredEvents: EventOnPoster[];
 };
@@ -32,13 +35,16 @@ export const useFilterStore = defineStore('filter', {
 				country: getFirstQuery(route.query.country) ?? '',
 				city: getFirstQuery(route.query.city) ?? '',
 				searchLine: getFirstQuery(route.query.search) ?? '',
-				tags: getFirstQuery(route.query.tags) ?? ''
+				tags: getFirstQuery(route.query.tags).split(', ') ?? []
 			},
 			filteredEvents: [],
 			modal: {
 				show: false,
 				list: [],
-				type: ''
+				multiply: false,
+				type: '',
+				showKey: '',
+				returnKey: ''
 			}
 		};
 	},
@@ -47,18 +53,10 @@ export const useFilterStore = defineStore('filter', {
 		async getFilteredEvents() {
 			if (process.server) return;
 
-			const tags: Tag[] = this.usedTags.reduce((acc, elem) => {
-				if (elem.name === this.filters.tags) acc.push(elem.key);
-				return acc;
-			}, []);
-
 			const { data: posterEvents } = await apiRouter.filters.findEvents.useQuery({
 				data: {
 					query: {
-						country: this.filters.country,
-						city: this.filters.city,
-						searchLine: this.filters.searchLine,
-						tags: tags
+						...this.filters
 					}
 				}
 			});
@@ -69,12 +67,8 @@ export const useFilterStore = defineStore('filter', {
 		async getUsedFilters() {
 			if (process.server) return;
 			// получение usedCountries
-			if (!this.usedCountries.length) {
-				const { data: usedCountries } = await apiRouter.filters.getUsedCountries.useQuery(
-					{}
-				);
-				if (usedCountries.value?.length) this.usedCountries = usedCountries.value;
-			}
+			const { data: usedCountries } = await apiRouter.filters.getUsedCountries.useQuery({});
+			if (usedCountries.value?.length) this.usedCountries = usedCountries.value;
 			// получение usedTags
 			const { data: usedTags } = await apiRouter.filters.getUsedTags.useQuery({});
 			if (usedTags.value?.length) {

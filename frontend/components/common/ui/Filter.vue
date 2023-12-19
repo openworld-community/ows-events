@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
 import { useFilterStore } from '../../../stores/filter.store';
+import { getFilterPlaceholder } from '../../../utils/texts';
 
 defineProps({
 	filterType: {
 		type: String as PropType<'input' | 'select'>,
 		required: true
 	},
-	// должен соответствовать названию в filter.store и ключу в файлах i18n/home[filter]
 	name: {
+		// должен соответствовать названию в filter.store и ключу в файлах i18n/home[filter]
 		type: String,
 		required: true
 	},
@@ -16,13 +17,17 @@ defineProps({
 		type: Array as PropType<string[] | { [key: string]: string }[]>,
 		default: () => []
 	},
-	// для объектов: ключ значения, которое нужно возвращать
+	multiply: {
+		type: Boolean,
+		default: false
+	},
 	returnKey: {
+		// для объектов: ключ значения, которое нужно возвращать
 		type: String,
 		default: ''
 	},
-	// для объектов: ключ значения, которое нужно показывать в списке
 	showKey: {
+		// для объектов: ключ значения, которое нужно показывать в списке
 		type: String,
 		default: ''
 	},
@@ -34,8 +39,8 @@ defineProps({
 		type: String,
 		default: ''
 	},
-	// если фильтр первый в строке на десктопе
 	noSeparator: {
+		// если фильтр первый в строке на десктопе
 		type: Boolean,
 		default: false
 	},
@@ -71,11 +76,18 @@ const showModal = computed(() => filterStore.modal.show);
 				button-kind="filter"
 				icon-name="container"
 				:button-text="
-					filterStore.filters[name]
-						? filterStore.filters[name]
-						: $t(`home.filter.${name}.placeholder`)
+					getFilterPlaceholder(
+						multiply,
+						name,
+						list,
+						filterStore.filters[name],
+						showKey,
+						returnKey
+					)
 				"
-				:filled="!!filterStore.filters[name]"
+				:filled="
+					multiply ? !!filterStore.filters[name].length : !!filterStore.filters[name]
+				"
 				:is-disabled="disabled"
 				:alt="$t(`home.filter.${name}.aria`)"
 				class="filter"
@@ -85,8 +97,9 @@ const showModal = computed(() => filterStore.modal.show);
 				v-if="showModal"
 				:filter-list="filterStore.modal.list"
 				:filter-type="filterStore.modal.type"
-				:return-key="returnKey"
-				:show-key="showKey"
+				:multiply="filterStore.modal.multiply"
+				:return-key="filterStore.modal.returnKey"
+				:show-key="filterStore.modal.showKey"
 			/>
 		</template>
 		<CommonUiBaseSelect
@@ -98,6 +111,7 @@ const showModal = computed(() => filterStore.modal.show);
 			:name="name"
 			:placeholder="$t(`home.filter.${name}.placeholder`)"
 			:list="list"
+			:multiply="multiply"
 			:disabled="disabled"
 			appearance="no-border"
 			:dropdown-position="dropdownPosition"
@@ -108,27 +122,22 @@ const showModal = computed(() => filterStore.modal.show);
 
 <style scoped lang="less">
 .filter {
-	@media (max-width: 767px) {
-		&.button {
-			max-width: 32.6%;
-
-			& > :deep(.button__content) {
-				display: inline-block;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-		}
-	}
-
 	@media (min-width: 1440px) {
 		width: 50%;
+		min-width: 33.3%;
 
-		&:deep(.input__button) {
+		&:deep(.input__button),
+		&:deep(.button__icon),
+		&:deep(.select__clear-button) {
 			top: 25px;
 		}
 
-		&:deep(.input__field) {
+		&:deep(.button__multiselect) {
+			max-width: 33.3%;
+		}
+
+		&:deep(.input__field),
+		&:deep(.button__multiselect) {
 			height: 72px;
 		}
 	}
@@ -148,14 +157,24 @@ const showModal = computed(() => filterStore.modal.show);
 	// Скрытие сепараторов при фокусе (в т.ч. псевдоэлементов соседнего компонента)
 	//если поле внутри имеет инпут в фокусе
 	.filter:has(input:focus)::before,
+	.filter:has(.button__multiselect:focus)::before,
+	.filter:has(.select__field--green-border)::before,
 		//если поле внутри имеет инпут в фокусе, а в разметке рядом есть еще одно поле
 	.filter:has(input:focus) + .filter::before,
+	.filter:has(.button__multiselect) + .filter::before,
+	.filter:has(.select__field--green-border) + .filter::before,
 		//если поле внутри имеет инпут в фокусе, а в разметке рядом есть враппер с полями, то у первого child
 	.filter:has(input:focus) + .filters__wrapper .filter:first-child::before,
+	.filter:has(.button__multiselect) + .filters__wrapper .filter:first-child::before,
+	.filter:has(.select__field--green-border) + .filters__wrapper .filter:first-child::before,
 		//если враппер имеет последнее child поле с инпутом в фокусе и рядом еще один враппер, то у первого child
 	.filters__wrapper:has(.filter:last-child input:focus) + .filters__wrapper .filter:first-child::before,
+	.filters__wrapper:has(.button__multiselect) + .filters__wrapper .filter:first-child::before,
+	.filters__wrapper:has(.select__field--green-border) + .filters__wrapper .filter:first-child::before,
 		//если враппер имеет последнее child поле с инпутом в фокусе и рядом есть еще одно поле
-	.filters__wrapper:has(.filter:last-child input:focus) + .filter::before
+	.filters__wrapper:has(.filter:last-child input:focus) + .filter::before,
+	.filters__wrapper:has(.button__multiselect) + .filter::before,
+	.filters__wrapper:has(.select__field--green-border) + .filter::before
 		//псевдоэлементы ::before становятся прозрачными
 	{
 		background-color: transparent;

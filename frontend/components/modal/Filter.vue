@@ -13,29 +13,38 @@ const props = defineProps({
 		type: Array as PropType<string[] | { [key: string]: string }[]>,
 		required: true
 	},
-	// для объектов: ключ значения, которое нужно возвращать
+	multiply: {
+		type: Boolean,
+		required: true
+	},
 	returnKey: {
+		// для объектов: ключ значения, которое нужно возвращать
 		type: String,
 		default: ''
 	},
-	// для объектов: ключ значения, которое нужно показывать в списке
 	showKey: {
+		// для объектов: ключ значения, которое нужно показывать в списке
 		type: String,
 		default: ''
 	}
 });
 
 const closeModal = () => filterStore.$patch({ modal: { show: false } });
-const model = ref<string>(
-	filterStore?.filters[props.filterType as keyof (typeof filterStore)['filters']] ?? ''
+const model = ref<string | string[]>(
+	filterStore?.filters[props.filterType as keyof (typeof filterStore)['filters']]
+		? filterStore?.filters[props.filterType]
+		: props.multiply
+		? []
+		: ''
 );
+
 const updateFilter = () => {
 	filterStore.$patch({ filters: { [props.filterType]: model.value } });
 	closeModal();
 };
 const resetFilter = () => {
-	filterStore.$patch({ filters: { [props.filterType]: '' } });
-	model.value = '';
+	filterStore.$patch({ filters: { [props.filterType]: props.multiply ? [] : '' } });
+	model.value = props.multiply ? [] : '';
 	closeModal();
 };
 </script>
@@ -65,21 +74,13 @@ const resetFilter = () => {
 					v-for="(item, key) in filterList"
 					:key="key"
 				>
-					<label class="list__item">
-						{{ item[showKey] ?? item }}
-						<input
-							v-model="model"
-							class="radio"
-							type="radio"
-							:value="item[returnKey] ?? item"
-						/>
-						<CommonIcon
-							v-if="model === item || model === item[returnKey]"
-							class="list__icon"
-							name="check"
-							color="var(--color-accent-green-main)"
-						/>
-					</label>
+					<CommonUiRowSelectItem
+						v-model="model"
+						:label="item[showKey] ?? item"
+						:value="item[returnKey] ?? item"
+						:multiply="multiply"
+						class="list__item"
+					/>
 				</li>
 			</ul>
 
@@ -105,7 +106,6 @@ const resetFilter = () => {
 .filter-modal {
 	&__wrapper {
 		width: 100vw;
-		max-width: 480px;
 		background-color: var(--color-white);
 		padding: 20px var(--padding-side);
 		margin: auto auto 0;
@@ -127,21 +127,17 @@ const resetFilter = () => {
 	margin-right: calc(-1 * var(--padding-side));
 
 	&__item {
-		display: flex;
-		justify-content: space-between;
-		width: 100%;
 		padding: 8px var(--padding-side);
-		cursor: pointer;
 	}
 
 	&__icon {
 		min-width: 24px;
 		margin-left: 10px;
 	}
-}
 
-.radio {
-	appearance: none;
+	&__input {
+		appearance: none;
+	}
 }
 
 .buttons {

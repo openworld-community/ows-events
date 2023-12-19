@@ -11,7 +11,7 @@ type LinkObjectType = {
 	path?: string;
 };
 
-type ButtonKind = 'ordinary' | 'success' | 'warning' | 'text' | 'filter'; // для задания внешнего вида
+type ButtonKind = 'ordinary' | 'success' | 'warning' | 'text' | 'filter' | 'multiselect'; // для задания внешнего вида
 
 const props = defineProps({
 	buttonKind: {
@@ -25,7 +25,7 @@ const props = defineProps({
 		default: true
 	},
 	buttonText: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	link: {
@@ -61,8 +61,8 @@ const props = defineProps({
 		type: [String, Number] as PropType<string | number>,
 		default: IconDefaultParams.HEIGHT
 	},
-	// для кнопок-фильтров, обеспечивает заливку при заданном фильтре
 	filled: {
+		// для кнопок-фильтров и мультиселектов, обеспечивает внешний вид при заданных значениях
 		type: Boolean,
 		default: false
 	},
@@ -85,8 +85,10 @@ const loaderColorDict = {
 	success: 'var(--color-white)',
 	warning: 'var(--color-accent-red)',
 	text: 'var(--color-text-main)',
-	filter: 'var(--color-text-secondary)'
+	filter: 'var(--color-text-secondary)',
+	multiselect: null
 } satisfies Record<ButtonKind, string>;
+
 const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 </script>
 
@@ -99,9 +101,10 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		:disabled="!link && isDisabled"
 		:class="[
 			isIcon ? 'icon' : `button button__${buttonKind}`,
-			isIcon && buttonKind ? `icon__${buttonKind}` : '',
-			isDisabled ? `button__${buttonKind}--disabled` : '',
+
 			{
+				[`icon__${buttonKind}`]: isIcon && buttonKind,
+				[`button__${buttonKind}--disabled`]: isDisabled,
 				'button--round': isRound && !isIcon,
 				'icon--round': isIcon && isRound,
 				'no-interactive': !interactive,
@@ -117,9 +120,9 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			class="loader"
 		/>
 		<CommonIcon
-			v-if="iconName"
+			v-if="iconName || (buttonKind === 'multiselect' && !filled)"
 			:class="{ button__icon: buttonText }"
-			:name="iconName"
+			:name="buttonKind === 'multiselect' && !filled ? 'container' : iconName"
 			:width="iconWidth"
 			:height="iconHeight"
 		/>
@@ -309,6 +312,11 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			font-size: var(--font-size-S);
 			line-height: 20px;
 			margin-right: 10px;
+
+			display: inline-block;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 
 		&::v-deep(svg) {
@@ -329,13 +337,53 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		}
 
 		&--filled {
-			background-color: var(--color-input-field);
-			//color: var(--color-white);
-			border-color: var(--color-input-field);
+			background-color: var(--color-dark);
+			color: var(--color-white);
+			border-color: var(--color-dark);
 
 			&::v-deep(svg) {
+				color: var(--color-text-secondary);
+			}
+		}
+	}
+
+	&__multiselect {
+		min-width: 100%;
+		justify-content: flex-start;
+		position: relative;
+		background-color: var(--color-white);
+		border: 1px solid var(--color-white);
+		padding-right: 40px;
+
+		& > .button__content {
+			font-size: var(--font-size-M);
+			color: var(--color-input-icons);
+
+			display: inline-block;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		&:deep(svg) {
+			position: absolute;
+			top: 8px;
+			right: 12px;
+			margin-right: 0;
+			width: 26px;
+			height: 26px;
+			color: var(--color-input-icons);
+		}
+
+		&--filled {
+			& > .button__content {
 				color: var(--color-text-main);
 			}
+		}
+
+		&:focus,
+		&:active {
+			border-color: var(--color-accent-green-main);
 		}
 	}
 }

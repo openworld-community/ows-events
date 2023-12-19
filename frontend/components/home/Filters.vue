@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useFilterStore } from '../../stores/filter.store';
+import { debouncedWatch } from '@vueuse/core';
 
 const filterStore = useFilterStore();
 
@@ -18,7 +19,6 @@ onBeforeMount(() => {
 	}
 });
 
-let timeout = null;
 watch(
 	() => filterStore.filters,
 	async (filters) => {
@@ -27,34 +27,42 @@ watch(
 				...route.query,
 				search: filters.searchLine || undefined,
 				country: filters.country || undefined,
-				city: filters.city || undefined
+				city: filters.city || undefined,
+				tags: filters.tags.join(', ') || undefined
 			}
 		});
 		if (filters.country) {
 			await filterStore.getUsedCitiesByCountry(filters.country);
 		}
 		if (!filters.country) filterStore.filters.city = '';
-		if (timeout) {
-			clearTimeout(timeout);
-		}
-		timeout = setTimeout(async () => await filterStore.getFilteredEvents(), 500);
 	},
 	{ deep: true }
 );
 
-const openFilterModal = (type: string, list: string[]) => {
+debouncedWatch(
+	filterStore.filters,
+	async () => {
+		await filterStore.getFilteredEvents();
+	},
+	{ debounce: 700, maxWait: 1000 }
+);
+
+const openFilterModal = (
+	type: string,
+	list: string[] | { [key: string]: string }[],
+	multiply = false,
+	showKey?: string,
+	returnKey?: string
+) => {
 	if (list.length) {
 		filterStore.modal.list = list;
+		filterStore.modal.multiply = multiply;
 		filterStore.modal.type = type;
+		filterStore.modal.showKey = showKey;
+		filterStore.modal.returnKey = returnKey;
 		filterStore.$patch({ modal: { show: true } });
 	}
 };
-
-const usedTags = computed(() => {
-	return filterStore.usedTags.map((elem) => {
-		return elem.name;
-	});
-});
 const mobile = inject('mobile');
 </script>
 
@@ -72,7 +80,7 @@ const mobile = inject('mobile');
 				filter-type="select"
 				name="country"
 				:list="filterStore.usedCountries"
-				:disabled="!filterStore.usedCountries"
+				:disabled="!filterStore.usedCountries.length"
 				@on-filter-button-click="openFilterModal('country', filterStore.usedCountries)"
 			/>
 			<CommonUiFilter
@@ -96,12 +104,15 @@ const mobile = inject('mobile');
 				:key="mobile ? 'mobile-tags' : 'other-tags'"
 				filter-type="select"
 				name="tags"
-				:list="usedTags"
+				:list="filterStore.usedTags"
+				multiply
 				show-key="name"
-				return-key="name"
+				return-key="key"
 				:disabled="!filterStore.usedTags.length"
 				:dropdown-position="tablet ? 'right' : 'left'"
-				@on-filter-button-click="openFilterModal('tags', usedTags)"
+				@on-filter-button-click="
+					openFilterModal('tags', filterStore.usedTags, true, 'name', 'key')
+				"
 			/>
 		</div>
 	</section>
@@ -128,10 +139,28 @@ const mobile = inject('mobile');
 		margin-top: 8px;
 		gap: 2%;
 
+		@media (max-width: 767px) {
+			&:deep(.button__filter) {
+				max-width: 32.6%;
+			}
+		}
+
+		@media (min-width: 768px) {
+			&:deep(.filter),
+			&:deep(.button__multiselect) {
+				max-width: 32%;
+			}
+		}
+
 		@media (min-width: 1440px) {
 			align-items: center;
 			margin-top: 0;
 			gap: 0;
+
+			&:deep(.filter),
+			&:deep(.button__multiselect) {
+				max-width: 34%;
+			}
 		}
 	}
 }

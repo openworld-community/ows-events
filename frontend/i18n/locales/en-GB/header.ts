@@ -20,7 +20,7 @@ export default {
 		about: 'About the project',
 		support: 'Support',
 		donation: 'Help Afisha',
-		limitation_of_liability: 'Limitation of Liability'
+		limitation_of_liability: 'Limitation of liability'
 	},
 	subscription_expired: '$t(dates.day.key) until the end of subscription'
 };

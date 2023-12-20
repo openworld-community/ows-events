@@ -1,5 +1,5 @@
 export default {
-	title: 'Limitation of Liability',
+	title: 'Limitation of liability',
 	last_change: 'Last Modified:',
 	p_1_1: 'The administration of the website',
 	p_1_2: ' and social networks AfishaPeredelano (hereinafter referred to as "Afisha") does not independently organize events featured on the website',

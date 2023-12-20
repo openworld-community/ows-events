@@ -24,6 +24,7 @@ export default {
 			description: 'Описание',
 			start: 'Начало',
 			end: 'Окончание',
+			date_placeholder: 'дд.мм.гггг',
 			price: 'Стоимость',
 			price_placeholder: 'Цена',
 			currency_placeholder: 'Валюта',

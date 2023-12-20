@@ -9,7 +9,7 @@ const props = defineProps({
 		default: ''
 	},
 	modelValue: {
-		type: [String, Array] as PropType<string>,
+		type: [String, Array] as PropType<string | string[]>,
 		required: true
 	},
 	list: {

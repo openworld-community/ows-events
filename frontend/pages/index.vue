@@ -34,25 +34,10 @@ const onButtonClick = async () => {
 		await openNeedAuthorizeModal();
 	}
 };
-const {gtag} = useGtag();
-const a = () => {
-	console.log('1')
-	try {
-		gtag('event', 'screen_view', {
-			app_name: 'My App',
-			screen_name: 'Home'
-		})
-	} catch (e) {
-		console.log(e)
-	}
-
-	console.log('2')
-}
 </script>
 
 <template>
 	<div class="root">
-		<button style="background-color: red; position: absolute; top: 120px" @click="a">gTag</button>
 		<HeaderCommon />
 		<main class="main-page">
 			<div class="main-page__top">

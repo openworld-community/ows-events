@@ -35,7 +35,10 @@ export const useFilterStore = defineStore('filter', {
 				country: getFirstQuery(route.query.country) ?? '',
 				city: getFirstQuery(route.query.city) ?? '',
 				searchLine: getFirstQuery(route.query.search) ?? '',
-				tags: getFirstQuery(route.query.tags).split(', ') ?? []
+				tags:
+					getFirstQuery(route.query.tags)
+						.split(', ')
+						.filter((item) => item !== '') ?? []
 			},
 			filteredEvents: [],
 			modal: {

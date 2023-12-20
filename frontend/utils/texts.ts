@@ -7,7 +7,7 @@ export const getFilterPlaceholder = (
 	returnKey: string
 ): string => {
 	const { $i18n } = useNuxtApp();
-	if ((!multiply && model) || (multiply && model !== '')) {
+	if ((!multiply && model) || (multiply && model.length)) {
 		if (multiply) {
 			if (showKey) {
 				return [...list]

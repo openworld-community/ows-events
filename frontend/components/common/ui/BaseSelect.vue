@@ -81,9 +81,19 @@ const isOpen = ref(false);
 
 const emit = defineEmits(['update:model-value']);
 
-const model = computed({
+const model = computed<string | string[]>({
 	get() {
-		return props.modelValue ? props.modelValue : props.multiply ? [] : '';
+		return props.modelValue ? props.modelValue : props.multiply ? ([] as string[]) : '';
+	},
+	set(value) {
+		emit('update:model-value', value);
+		return value;
+	}
+});
+
+const hackModel = computed<string>({
+	get() {
+		return props.modelValue ? (props.modelValue as string) : '';
 	},
 	set(value) {
 		emit('update:model-value', value);
@@ -143,7 +153,7 @@ const showInputValueIcon = computed(() => {
 		</template>
 		<CommonUiBaseInput
 			v-else
-			v-model="model"
+			v-model="hackModel"
 			v-on-click-outside="closeSelect"
 			:name="name"
 			:label="label"

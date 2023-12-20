@@ -42,23 +42,28 @@ export default defineNuxtConfig({
 		detectBrowserLanguage: false,
 		vueI18n: './i18n.config.ts'
 	},
-	// На случай добавления скриптов:
-	// app: {
-	// 	head: {
-	// 		script: [
-	// 			{
-	// 				defer: true,
-	// 				'data-domain': 'poster-peredelano.orby-tech.space',
-	// 				src: 'http://metrics.orby-tech.space/js/script.js'
-	// 			}
-	// 		]
-	// 	}
-	// },
 	// https://nuxt.com/modules/gtag
 	gtag: {
 		id: import.meta.env.VITE_GTAG_ID || process.env.VITE_GTAG_ID || '',
 		initialConsent: false
 	},
+	// На случай добавления скриптов:
+	// app: {
+	// 	head: {
+	// 		script: [
+	// 			{
+	// 				async: true,
+	// 				src: `https://www.googletagmanager.com/gtag/js?id=${import.meta.env.VITE_GTAG_ID || process.env.VITE_GTAG_ID || ''}`
+	// 			},
+	// 			{
+	// 				children: `window.dataLayer = window.dataLayer || [];
+	// 							function gtag(){dataLayer.push(arguments);}
+	// 							gtag('js', new Date());
+	// 							gtag('config', ${import.meta.env.VITE_GTAG_ID || process.env.VITE_GTAG_ID || ''});`,
+	// 			}
+	// 		]
+	// 	}
+	// },
 	typescript: { strict: false },
 	nitro: {
 		devProxy: {

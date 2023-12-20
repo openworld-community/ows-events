@@ -39,7 +39,7 @@ if (process.client) {
 	const route = useRoute();
 	const { gtag } = useGtag();
 	gtag('event', 'page_view', {
-		screen_name: () => getRouteName(route.name as string)
+		page_title: () => getRouteName(route.name as string)
 	});
 }
 

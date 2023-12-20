@@ -91,7 +91,7 @@ const model = computed<string | string[]>({
 	}
 });
 
-const hackModel = computed<string>({
+const modelSingle = computed<string>({
 	get() {
 		return props.modelValue ? (props.modelValue as string) : '';
 	},
@@ -153,7 +153,7 @@ const showInputValueIcon = computed(() => {
 		</template>
 		<CommonUiBaseInput
 			v-else
-			v-model="hackModel"
+			v-model="modelSingle"
 			v-on-click-outside="closeSelect"
 			:name="name"
 			:label="label"

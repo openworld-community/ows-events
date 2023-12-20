@@ -17,7 +17,7 @@ defineProps({
 		type: Array as PropType<string[] | { [key: string]: string }[]>,
 		default: () => []
 	},
-	multiply: {
+	multiple: {
 		type: Boolean,
 		default: false
 	},
@@ -77,7 +77,7 @@ const showModal = computed(() => filterStore.modal.show);
 				icon-name="container"
 				:button-text="
 					getFilterPlaceholder(
-						multiply,
+						multiple,
 						name,
 						list,
 						filterStore.filters[name],
@@ -86,7 +86,7 @@ const showModal = computed(() => filterStore.modal.show);
 					)
 				"
 				:filled="
-					multiply ? !!filterStore.filters[name].length : !!filterStore.filters[name]
+					multiple ? !!filterStore.filters[name].length : !!filterStore.filters[name]
 				"
 				:is-disabled="disabled"
 				:alt="$t(`home.filter.${name}.aria`)"
@@ -97,7 +97,7 @@ const showModal = computed(() => filterStore.modal.show);
 				v-if="showModal"
 				:filter-list="filterStore.modal.list"
 				:filter-type="filterStore.modal.type"
-				:multiply="filterStore.modal.multiply"
+				:multiple="filterStore.modal.multiple"
 				:return-key="filterStore.modal.returnKey"
 				:show-key="filterStore.modal.showKey"
 			/>
@@ -111,7 +111,7 @@ const showModal = computed(() => filterStore.modal.show);
 			:name="name"
 			:placeholder="$t(`home.filter.${name}.placeholder`)"
 			:list="list"
-			:multiply="multiply"
+			:multiple="multiple"
 			:disabled="disabled"
 			appearance="no-border"
 			:dropdown-position="dropdownPosition"

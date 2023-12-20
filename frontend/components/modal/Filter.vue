@@ -13,7 +13,7 @@ const props = defineProps({
 		type: Array as PropType<string[] | { [key: string]: string }[]>,
 		required: true
 	},
-	multiply: {
+	multiple: {
 		type: Boolean,
 		required: true
 	},
@@ -33,7 +33,7 @@ const closeModal = () => filterStore.$patch({ modal: { show: false } });
 const model = ref<string | string[]>(
 	filterStore?.filters[props.filterType as keyof (typeof filterStore)['filters']]
 		? filterStore?.filters[props.filterType]
-		: props.multiply
+		: props.multiple
 		? []
 		: ''
 );
@@ -43,8 +43,8 @@ const updateFilter = () => {
 	closeModal();
 };
 const resetFilter = () => {
-	filterStore.$patch({ filters: { [props.filterType]: props.multiply ? [] : '' } });
-	model.value = props.multiply ? [] : '';
+	filterStore.$patch({ filters: { [props.filterType]: props.multiple ? [] : '' } });
+	model.value = props.multiple ? [] : '';
 	closeModal();
 };
 </script>
@@ -78,7 +78,7 @@ const resetFilter = () => {
 						v-model="model"
 						:label="item[showKey] ?? item"
 						:value="item[returnKey] ?? item"
-						:multiply="multiply"
+						:multiple="multiple"
 						class="list__item"
 					/>
 				</li>

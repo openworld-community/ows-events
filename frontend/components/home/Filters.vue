@@ -50,13 +50,13 @@ debouncedWatch(
 const openFilterModal = (
 	type: string,
 	list: string[] | { [key: string]: string }[],
-	multiply = false,
+	multiple = false,
 	showKey?: string,
 	returnKey?: string
 ) => {
 	if (list.length) {
 		filterStore.modal.list = list;
-		filterStore.modal.multiply = multiply;
+		filterStore.modal.multiple = multiple;
 		filterStore.modal.type = type;
 		filterStore.modal.showKey = showKey;
 		filterStore.modal.returnKey = returnKey;
@@ -105,7 +105,7 @@ const mobile = inject('mobile');
 				filter-type="select"
 				name="tags"
 				:list="filterStore.usedTags"
-				multiply
+				multiple
 				show-key="name"
 				return-key="key"
 				:disabled="!filterStore.usedTags.length"

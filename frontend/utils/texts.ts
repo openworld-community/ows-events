@@ -1,5 +1,5 @@
 export const getFilterPlaceholder = (
-	multiply: boolean,
+	multiple: boolean,
 	name: string,
 	list: string | string[] | { [key: string]: string }[] | Set<string>,
 	model: string | string[],
@@ -7,8 +7,8 @@ export const getFilterPlaceholder = (
 	returnKey: string
 ): string => {
 	const { $i18n } = useNuxtApp();
-	if ((!multiply && model) || (multiply && model.length)) {
-		if (multiply) {
+	if ((!multiple && model) || (multiple && model.length)) {
+		if (multiple) {
 			if (showKey) {
 				return [...list]
 					.reduce((acc: string[], el: { [key: string]: string }) => {

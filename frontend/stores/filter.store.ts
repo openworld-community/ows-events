@@ -10,7 +10,7 @@ type FilterStore = {
 	modal: {
 		show: boolean;
 		list: string[] | { [key: string]: string }[];
-		multiply: boolean;
+		multiple: boolean;
 		type: string;
 		showKey: string;
 		returnKey: string;
@@ -44,7 +44,7 @@ export const useFilterStore = defineStore('filter', {
 			modal: {
 				show: false,
 				list: [],
-				multiply: false,
+				multiple: false,
 				type: '',
 				showKey: '',
 				returnKey: ''

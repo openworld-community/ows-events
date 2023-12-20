@@ -12,7 +12,7 @@ const props = defineProps({
 		type: [Boolean, String, Array],
 		required: true
 	},
-	multiply: {
+	multiple: {
 		type: Boolean,
 		default: false
 	}
@@ -30,7 +30,7 @@ const model = computed({
 });
 
 const isChecked = computed(() =>
-	props.multiply
+	props.multiple
 		? (model.value as unknown as any[]).includes(props.value)
 		: props.value === model.value
 );
@@ -42,7 +42,7 @@ const isChecked = computed(() =>
 		<input
 			v-model="model"
 			class="checkbox-row__input"
-			:type="multiply ? 'checkbox' : 'radio'"
+			:type="multiple ? 'checkbox' : 'radio'"
 			:value="value"
 		/>
 		<CommonIcon

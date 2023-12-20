@@ -18,7 +18,7 @@ const props = defineProps({
 		>,
 		required: true
 	},
-	multiply: {
+	multiple: {
 		// множественный выбор
 		type: Boolean,
 		default: false
@@ -83,7 +83,7 @@ const emit = defineEmits(['update:model-value']);
 
 const model = computed<string | string[]>({
 	get() {
-		return props.modelValue ? props.modelValue : props.multiply ? ([] as string[]) : '';
+		return props.modelValue ? props.modelValue : props.multiple ? ([] as string[]) : '';
 	},
 	set(value) {
 		emit('update:model-value', value);
@@ -111,7 +111,7 @@ const closeSelect = () => {
 };
 
 const onClickOutsideList = () => {
-	if (props.multiply) {
+	if (props.multiple) {
 		closeSelect();
 	}
 	isOpen.value ? closeSelect() : null;
@@ -123,7 +123,7 @@ const clearModel = () => {
 };
 
 const showInputValueIcon = computed(() => {
-	if (!props.multiply) {
+	if (!props.multiple) {
 		const needIcon = Array.isArray(props.list)
 			? Array.from(props.list as string[]).includes(props.modelValue as string)
 			: Object.values(props.list).includes(props.modelValue);
@@ -134,10 +134,10 @@ const showInputValueIcon = computed(() => {
 
 <template>
 	<div :class="['select__wrapper', { className: className }]">
-		<template v-if="multiply">
+		<template v-if="multiple">
 			<CommonButton
 				button-kind="multiselect"
-				:button-text="getFilterPlaceholder(multiply, name, list, model, showKey, returnKey)"
+				:button-text="getFilterPlaceholder(multiple, name, list, model, showKey, returnKey)"
 				:filled="!!model.length"
 				:class="{ 'select__field--green-border': isOpen }"
 				@click="openSelect"
@@ -179,13 +179,13 @@ const showInputValueIcon = computed(() => {
 					v-for="item in list"
 					:key="item[returnKey] ?? item"
 					class="select__list-item list-item"
-					@click="multiply ? null : emit('update:model-value', item[returnKey] ?? item)"
+					@click="multiple ? null : emit('update:model-value', item[returnKey] ?? item)"
 				>
 					<CommonUiRowSelectItem
 						v-model="model"
 						:label="item[showKey] ?? item"
 						:value="item[returnKey] ?? item"
-						:multiply="multiply"
+						:multiple="multiple"
 					/>
 				</li>
 			</ul>

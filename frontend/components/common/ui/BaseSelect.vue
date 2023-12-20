@@ -201,7 +201,7 @@ const showInputValueIcon = computed(() => {
 	}
 
 	&__field {
-		&--green-border {
+		&--green-border, &--green-border:deep(.input__field--no-border) {
 			border-color: var(--color-accent-green-main);
 		}
 	}

@@ -141,6 +141,10 @@ const showModal = computed(() => filterStore.modal.show);
 			height: 72px;
 		}
 	}
+
+	&.button__filter {
+		transition: unset;
+	}
 }
 
 @media (min-width: 1440px) {

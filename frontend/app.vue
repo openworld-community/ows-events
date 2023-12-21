@@ -38,8 +38,9 @@ useHead({
 if (process.client) {
 	const route = useRoute();
 	const { gtag } = useGtag();
+	const pageTitle = getRouteName(route.name as string)
 	gtag('event', 'page_view', {
-		page_title: () => getRouteName(route.name as string)
+		page_title: pageTitle
 	});
 }
 

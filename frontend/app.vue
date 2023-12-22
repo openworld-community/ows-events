@@ -4,9 +4,10 @@ import 'vue-final-modal/style.css';
 import 'vue-toastification/dist/index.css';
 import 'virtual:svg-icons-register';
 import { ModalsContainer } from 'vue-final-modal';
-import { CookieNameEnum } from './constants/enums/common';
+import { CookieNameEnum, LocalStorageEnum } from './constants/enums/common';
 import { TOKEN_MAX_AGE_SECONDS } from './constants/defaultValues/time';
 import type { ComputedRef } from 'vue';
+import { getRouteName } from './utils';
 
 const { locale, t } = useI18n();
 
@@ -34,7 +35,18 @@ useHead({
 	}
 });
 
+if (process.client) {
+	const route = useRoute();
+	const { gtag } = useGtag();
+	gtag('event', 'page_view', {
+		screen_name: () => getRouteName(route.name as string)
+	});
+}
+
 useCookie(CookieNameEnum.LOCALE, { maxAge: TOKEN_MAX_AGE_SECONDS }).value = locale.value;
+
+//TODO ALL_TIMEZONES перенесены в sessionStorage, ниже функция для очистки их в localStorage у пользователей
+onMounted(() => localStorage.removeItem(LocalStorageEnum.TIMEZONES));
 </script>
 <template>
 	<ModalsContainer />

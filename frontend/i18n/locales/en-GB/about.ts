@@ -19,5 +19,11 @@ export default {
 	social: {
 		title: 'Follow us on social media:',
 		alt: 'Link to the'
-	}
+	},
+	social_title: {
+		instagram: 'Instagram Afisha',
+		twitter: 'Twitter Afisha',
+		linkedin: 'LinkedIn Afisha',
+		telegram: 'Telegram Afisha '
+	},
 };

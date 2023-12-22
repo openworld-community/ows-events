@@ -2,6 +2,7 @@
 import type { EventOnPoster } from '../../../common/types';
 import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { RoutePathEnum } from '../../constants/enums/route';
+import { trimString } from '../../utils/trimString';
 
 defineProps<{ eventData: EventOnPoster }>();
 const localePath = useLocalePath();
@@ -12,6 +13,7 @@ const mobile = inject('mobile');
 	<NuxtLink
 		class="card"
 		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
+		:title="trimString(`Afisha: ${eventData.location.city}, ${eventData.title}` ?? '',460)"
 		:itemprop="SeoItempropGlobalEnum.URL"
 	>
 		<div
@@ -22,7 +24,7 @@ const mobile = inject('mobile');
 				v-if="eventData.image"
 				class="card__image"
 				:src="getEventImage(eventData)"
-				:alt="$t('home.events.image_alt')"
+				:alt="trimString(`Afisha: ${eventData.location.city}, ${eventData.title}` ?? '',460)"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
 			<img
@@ -30,7 +32,7 @@ const mobile = inject('mobile');
 				class="card__image"
 				src="@/assets/img/event-preview@2x.png"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
-				:alt="$t('home.events.image_alt')"
+				alt=""
 			/>
 		</div>
 

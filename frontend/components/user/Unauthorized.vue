@@ -79,9 +79,13 @@ watch(
 			</p>
 			<div class="unauthorized__buttons">
 				<div
-					v-if="!userStore.isAuthorized"
 					ref="telegram"
 					class="unauthorized__telegram-button"
+					@click="
+						useTrackEvent('login', {
+							method: 'Telegram'
+						})
+					"
 				/>
 				<NuxtLink
 					:to="localePath(RoutePathEnum.HOME)"

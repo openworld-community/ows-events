@@ -28,7 +28,7 @@ export default {
 			price_placeholder: 'Price',
 			currency_placeholder: 'Currency',
 			price_free: 'Free',
-			url_to_registration: 'Registration link',
+			url_to_registration: 'Link for contact',
 			url_placeholder: 'https://example.com'
 		}
 	}

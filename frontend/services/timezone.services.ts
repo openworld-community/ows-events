@@ -13,13 +13,13 @@ export const stringToTimezone = (timezone: string) => {
 
 export const getAllTimezones = async (): Promise<Timezone[]> => {
 	if (process.server) return [];
-	const local = localStorage.getItem(LocalStorageEnum.TIMEZONES);
+	const local = sessionStorage.getItem(LocalStorageEnum.TIMEZONES);
 	if (local) return parseJSON(local);
 
 	const { data } = await apiRouter.timezone.getAll.useQuery({});
 	if (!data.value) return [];
 
-	localStorage.setItem(LocalStorageEnum.TIMEZONES, JSON.stringify(data.value));
+	sessionStorage.setItem(LocalStorageEnum.TIMEZONES, JSON.stringify(data.value));
 	return data.value;
 };
 

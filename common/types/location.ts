@@ -8,3 +8,6 @@ export type Timezone = {
 	timezoneName: string;
 	timezoneOffset: string;
 };
+
+export type Country = string;
+export type City = string;

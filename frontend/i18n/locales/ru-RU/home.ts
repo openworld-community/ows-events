@@ -12,9 +12,25 @@ export default {
 		aria: 'Вы находитесь в'
 	},
 	filter: {
-		aria_country: 'Фильтр по стране',
-		aria_city: 'Фильтр по городу',
-		search: 'Что вас интересует?'
+		country: {
+			placeholder: 'Страна',
+			title: 'Выберите страну',
+			aria: 'Фильтр по стране'
+		},
+		city: {
+			placeholder: 'Город',
+			title: 'Выберите город',
+			aria: 'Фильтр по городу'
+		},
+		searchLine: {
+			placeholder: 'Что вас интересует?',
+			aria: 'Введите запрос для поиска'
+		},
+		tags: {
+			placeholder: 'Тема',
+			title: 'Выберите тему мероприятия',
+			aria: 'Фильтр по теме мероприятия'
+		}
 	},
 	user_location: {
 		not_found: 'Мы не смогли найти вас'

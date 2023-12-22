@@ -1,9 +1,17 @@
-import { RouteNameEnum } from '../constants/enums/route';
+import { RouteNameEnum, RoutePathEnum } from '../constants/enums/route';
 import { useEventStore } from '../stores/event.store';
 import { LocalStorageEnum } from '../constants/enums/common';
 import { useUserStore } from '../stores/user.store';
 
 export default defineNuxtRouteMiddleware((to, from) => {
+	if (
+		from.name.toString().includes(RouteNameEnum.EVENT) &&
+		to.name.toString().includes(RouteNameEnum.EVENT_FORM) &&
+		!localStorage.getItem(LocalStorageEnum.DEFAULT_EVENT_DATA)
+	) {
+		const localePath = useLocalePath();
+		return (to.path = localePath(RoutePathEnum.HOME));
+	}
 	const userStore = useUserStore();
 	if (
 		from.name.toString().includes(RouteNameEnum.EVENT_FORM) &&

@@ -18,8 +18,8 @@ export enum RouteNameEnum {
 	ABOUT = 'about',
 	DONATION = 'donate',
 	PAYMENT_INFO = 'payment-eventId',
-	LIMITATION_OF_LIABILITY = 'limitation_of_liability',
+	LIMITATION_OF_LIABILITY = 'limitation-of-liability',
 	USER_PAGE = 'user',
 	USER_FAVOURITES = 'user-favourites',
-	USER_MY_EVENTS = 'user-my_events'
+	USER_MY_EVENTS = 'user-my-events'
 }

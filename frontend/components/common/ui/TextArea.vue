@@ -1,35 +1,34 @@
 <script lang="ts" setup>
-import type { PropType } from 'vue';
 
 defineOptions({ inheritAttrs: false });
 
 defineProps({
 	className: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	modelValue: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	placeholder: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	label: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	required: {
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	error: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	name: {
-		type: String as PropType<string>,
+		type: String,
 		required: true
 	}
 });
@@ -61,7 +60,7 @@ const onRemove = () => {
 			v-if="modelValue"
 			class="input__button input__button--clear"
 			is-icon
-			:has-states="false"
+			:interactive="false"
 			icon-name="close"
 			:alt="$t('global.button.delete')"
 			@click="onRemove"

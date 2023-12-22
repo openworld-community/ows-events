@@ -111,7 +111,7 @@ patchDeleteEventModal({
 					:src="eventImage"
 					width="350"
 					height="250"
-					:alt="$t('event.image.event')"
+					:alt="trimString(`Afisha: ${posterEvent.location.city}, ${posterEvent.title}` ?? '', 460)"
 					:itemprop="SeoItempropGlobalEnum.IMAGE"
 				/>
 				<img
@@ -120,7 +120,7 @@ patchDeleteEventModal({
 					src="@/assets/img/event-preview@2x.png"
 					width="350"
 					height="250"
-					:alt="$t('event.image.event')"
+					alt=""
 					:itemprop="SeoItempropGlobalEnum.IMAGE"
 				/>
 			</div>
@@ -216,6 +216,7 @@ patchDeleteEventModal({
 						:button-text="$t('global.button.contact')"
 						:link="posterEvent.url"
 						is-external-link
+						@click="useTrackEvent('redirect to event url')"
 					/>
 				</div>
 

@@ -28,7 +28,7 @@ export default {
 			price_placeholder: 'Цена',
 			currency_placeholder: 'Валюта',
 			price_free: 'Бесплатно',
-			url_to_registration: 'Ссылка на регистрацию',
+			url_to_registration: 'Ссылка для связи',
 			url_placeholder: 'https://example.com'
 		}
 	}

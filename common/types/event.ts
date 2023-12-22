@@ -1,6 +1,6 @@
 import type { Timezone } from './location';
 import { EventTypes } from '../const/eventTypes';
-import type { Tag } from '../const/tags';
+import { type Tag, Tags } from '../const/tags';
 
 export type EventDbEntity = {
 	id: string;
@@ -48,6 +48,7 @@ export type SearchEventPayload = {
 	searchLine?: string;
 	country?: string;
 	city?: string;
+	tags?: Tags[];
 };
 
 export type EventPrice = {

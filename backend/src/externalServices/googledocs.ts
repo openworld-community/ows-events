@@ -135,7 +135,7 @@ export const parsePeredelano = () => {
 				price: eventPrice,
 				type: EventTypes.PARSED,
 				durationInSeconds: 0,
-				id: `${eventTitle}-${eventDate.toISOString().split('T')[0]}`,
+				id: `Peredelanoconf-${place.name}-${eventDate.toISOString().split('T')[0]}`,
 				image: eventImg
 			};
 			const newEvent = new EventModel(eventData);

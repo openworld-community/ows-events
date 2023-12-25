@@ -58,6 +58,8 @@ const getHTMLFromGithubMD = async (link: string) => {
 	}
 };
 export const parsePeredelano = () => {
+	// eslint-disable-next-line no-console
+	console.log('Peredelano parser started');
 	if (googleSheetId !== '' && githubKey !== '') return;
 
 	const parser = new PublicGoogleSheetsParser(googleSheetId);

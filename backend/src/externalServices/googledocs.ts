@@ -6,8 +6,8 @@ import { EventOnPoster } from '@common/types';
 import { countriesAndCitiesController } from '../controllers/countries-and-cities.controller';
 import { EventTypes } from '../../../common/const/eventTypes';
 import { translatePeredelanoPlaceName } from './translationForParser';
-import { eventsStateController } from '../controllers/events-state-controller';
 import { vars } from '../config/vars';
+import { EventModel } from '../models/event.model';
 
 type ParsedEvent = {
 	id: number;
@@ -79,7 +79,7 @@ export const parsePeredelano = () => {
 			);
 			const place = await translatePeredelanoPlaceName(event.city);
 			if (!place?.name) return;
-			const eventTitle = `Peredelano ${event.city}`;
+			const eventTitle = `Peredelanoconf ${event.city}`;
 			const eventCity = place.type === 'city' ? place.name : 'Unknown';
 			const eventCountry =
 				place.type === 'country'
@@ -126,6 +126,7 @@ export const parsePeredelano = () => {
 				url: eventLink,
 				description: eventDescription,
 				creatorId: 'peredelanoParser',
+				organizer: 'Peredelano',
 				location,
 				timezone: {
 					timezoneName: eventTimezoneName,
@@ -137,7 +138,11 @@ export const parsePeredelano = () => {
 				id: `${eventTitle}-${eventDate.toISOString().split('T')[0]}`,
 				image: eventImg
 			};
-			await eventsStateController.addEvent(eventData);
+			const newEvent = new EventModel(eventData);
+			await newEvent.save().catch((e) => {
+				// eslint-disable-next-line no-console
+				console.error(e);
+			});
 		});
 	});
 };

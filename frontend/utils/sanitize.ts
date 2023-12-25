@@ -1,5 +1,7 @@
 import sanitizeHtml from 'sanitize-html';
 
+//https://github.com/apostrophecms/sanitize-html#readme
+
 const options = {
 	allowedTags: [
 		"address", "article", "aside", "h1", "h2", "h3", "h4", "h5", "h6", "section", "blockquote",

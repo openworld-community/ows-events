@@ -72,6 +72,7 @@ services:
             - SECRET_KEY
             - LOCALIZATION_API_KEY
             - GITHUB_PARSING_KEY
+            - PEREDELANOCONF_GOOGLEDOC
         networks:
             - traefikpublic
         ports:

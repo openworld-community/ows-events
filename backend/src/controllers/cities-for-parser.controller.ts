@@ -6,7 +6,7 @@ class Controller {
 			alternateNames: russianCityName
 		});
 		if (!city) return null;
-		return city.name;
+		return { type: 'city', name: city.name };
 	}
 }
 

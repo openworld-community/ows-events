@@ -6,7 +6,7 @@ class Controller {
 			russian_short: { $regex: russianCountryName, $options: 'i' }
 		});
 		if (!country) return null;
-		return country.english_short;
+		return { type: 'country', name: country.english_short };
 	}
 }
 

@@ -14,6 +14,9 @@ export const vars = {
 		localization: process.env.LOCALIZATION_API_KEY || '123',
 		github: {
 			parsing: process.env.GITHUB_PARSING_TOKEN || ''
+		},
+		googledocs: {
+			peredelanoConfSheetId: process.env.PEREDELANOCONF_GOOGLEDOC || ''
 		}
 	},
 	localization: {

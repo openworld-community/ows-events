@@ -5,6 +5,8 @@ import { useUserStore } from '@/stores/user.store';
 import { TELEGRAM_AUTH_BOT_NAME } from '@/constants/url';
 import { BASE_URL } from '@/constants/url';
 import { CookieNameEnum } from '@/constants/enums/common';
+import unauthorizedImg1x from '@/assets/img/user/unauthorized-img@1x.jpg';
+import unauthorizedImg2x from '@/assets/img/user/unauthorized-img@2x.jpg';
 
 const userStore = useUserStore();
 const mobile = inject('mobile');
@@ -50,8 +52,8 @@ watch(
 			class="unauthorized__image-container"
 		>
 			<img
-				srcset="@/assets/img/user/unauthorized-screen@2x.jpg 2x"
-				src="@/assets/img/user/unauthorized-screen@1x.jpg"
+				:srcset="`${unauthorizedImg2x} 2x`"
+				:src="unauthorizedImg1x"
 				width="351"
 				height="264"
 				alt=""
@@ -135,7 +137,7 @@ watch(
 		line-height: 0;
 		background-color: var(--color-input-field);
 		margin-top: 34px;
-		margin-bottom: 64px;
+		margin-bottom: 44px;
 	}
 
 	&__image {
@@ -188,7 +190,7 @@ watch(
 		font-weight: var(--font-weight-regular);
 		line-height: 20px;
 		text-align: center;
-		margin-bottom: var(--space-sections);
+		margin-bottom: 32px;
 	}
 
 	&__buttons {

@@ -12,9 +12,17 @@ if (data.value) favourites.value = data.value;
 
 <template>
 	<div class="root">
-		<HeaderCommon :has-back-button="mobile" />
+		<HeaderCommon
+			:has-back-button="mobile"
+			:title-on-mobile="$t('user.favourites.title')"
+		/>
 		<main class="favourites">
-			<h1 class="favourites__title">{{ $t('user.favourites.title') }}</h1>
+			<h1
+				v-if="!mobile"
+				class="favourites__title"
+			>
+				{{ $t('user.favourites.title') }}
+			</h1>
 
 			<ul
 				v-if="favourites.length"
@@ -62,19 +70,18 @@ if (data.value) favourites.value = data.value;
 
 	&__title {
 		width: 100%;
-		font-size: var(--font-size-ML);
+		font-size: var(--font-size-XL);
 		font-weight: var(--font-weight-regular);
-		margin-bottom: var(--space-subsections);
-		text-align: center;
-		margin-top: var(--padding-vertical);
+		text-align: left;
 
 		@media (min-width: 768px) {
 			max-width: 820px;
+			margin-bottom: 32px;
+		}
+
+		@media (min-width: 1440px) {
 			font-size: var(--font-size-XXL);
 			line-height: 38px;
-			text-align: left;
-			margin-top: 0;
-			margin-bottom: 32px;
 		}
 	}
 

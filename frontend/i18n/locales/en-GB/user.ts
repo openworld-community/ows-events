@@ -18,5 +18,8 @@ export default {
 		title: 'Become a part of our project!',
 		text: 'We invite you to join our creative family and create something special together',
 		button: 'Make a contribution'
+	},
+	new_event: {
+		title: 'Create your own unique event!'
 	}
 };

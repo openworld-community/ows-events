@@ -25,6 +25,7 @@ export const getAllTimezones = async (): Promise<Timezone[]> => {
 
 export const getTimezone = async (country: Country, city?: City) => {
 	if (!country && !city) return
+
 	const { data } = await apiRouter.timezone.get.useQuery({ data: { city, country } });
 	if (!data.value) return '';
 	return timezoneToString(data.value);

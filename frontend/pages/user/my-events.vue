@@ -147,10 +147,12 @@ if (data.value) myEvents.value = data.value;
 		position: fixed;
 		bottom: 0;
 		left: 0;
+		background-color: var(--color-white);
 		padding: 20px var(--padding-side);
 
 		@media (min-width: 768px) {
 			justify-content: flex-end;
+			background-color: transparent;
 			padding-top: 0;
 			padding-bottom: 0;
 			margin: unset 0 0 auto;

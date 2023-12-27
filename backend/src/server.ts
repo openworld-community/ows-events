@@ -23,6 +23,7 @@ import { migrate as migrateUserStructure } from './migrations/user-structure-12-
 import { migrate as migrateDelocalization } from './migrations/remove-localization-25-08-23';
 import { migrate as migrateEventsStructure } from './migrations/events-structure-25-07-23';
 import { startSchedule } from './boot/schedule';
+import { vars } from './config/vars';
 
 const server = fastify({
 	logger: true,
@@ -38,9 +39,9 @@ connectToMongo()
 		migrateUserStructure();
 		migrateDelocalization();
 		migrateEventsStructure();
-		//	if (vars.env === 'prod') {
-		startSchedule();
-		//	}
+		if (vars.env === 'prod') {
+			startSchedule();
+		}
 		// eslint-disable-next-line no-console
 		console.log('Connected to mongo');
 	})

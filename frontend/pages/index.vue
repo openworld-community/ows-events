@@ -6,7 +6,6 @@ import { useUserStore } from '../stores/user.store';
 import { RoutePathEnum } from '../constants/enums/route';
 import { useEventStore } from '../stores/event.store';
 import { useFilterStore } from '../stores/filter.store';
-import Button from '../components/common/Button.vue';
 
 const { t } = useI18n();
 

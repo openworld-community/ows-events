@@ -5,6 +5,7 @@ import cityTimezones from 'city-timezones';
 import { EventOnPoster } from '@common/types';
 import { countriesAndCitiesController } from '../controllers/countries-and-cities.controller';
 import { EventTypes } from '../../../common/const/eventTypes';
+import { Tags } from '../../../common/const/tags';
 import { translatePeredelanoPlaceName } from './translationForParser';
 import { vars } from '../config/vars';
 import { EventModel } from '../models/event.model';
@@ -60,8 +61,7 @@ const getHTMLFromGithubMD = async (link: string) => {
 export const parsePeredelano = () => {
 	// eslint-disable-next-line no-console
 	console.log('Peredelano parser started');
-	if (googleSheetId !== '' && githubKey !== '') return;
-
+	if (googleSheetId === '' || githubKey === '') return;
 	const parser = new PublicGoogleSheetsParser(googleSheetId);
 
 	parser.parse().then((events: ParsedEvent[]) => {
@@ -136,7 +136,8 @@ export const parsePeredelano = () => {
 				type: EventTypes.PARSED,
 				durationInSeconds: 0,
 				id: `Peredelanoconf-${place.name}-${eventDate.toISOString().split('T')[0]}`,
-				image: eventImg
+				image: eventImg,
+				tags: [Tags.CONFERENCE]
 			};
 			const newEvent = new EventModel(eventData);
 			await newEvent.save().catch((e) => {

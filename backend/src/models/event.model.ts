@@ -7,7 +7,8 @@ const schema = new Schema<IEventDocument>(
 	{
 		id: {
 			type: String,
-			required: true
+			required: true,
+			unique: true
 		},
 		creatorId: {
 			type: String,

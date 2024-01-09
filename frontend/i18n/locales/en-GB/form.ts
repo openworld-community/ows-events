@@ -24,6 +24,7 @@ export default {
 			description: 'Description',
 			start: 'Start',
 			end: 'End',
+			date_placeholder: 'dd.mm.yyyy',
 			price: 'Price',
 			price_placeholder: 'Price',
 			currency_placeholder: 'Currency',

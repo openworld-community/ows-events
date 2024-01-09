@@ -22,7 +22,7 @@ import { userApi } from './rest/v1/user/router';
 import { migrate as migrateUserStructure } from './migrations/user-structure-12-06-23';
 import { migrate as migrateDelocalization } from './migrations/remove-localization-25-08-23';
 import { migrate as migrateEventsStructure } from './migrations/events-structure-25-07-23';
-import { parseGithub } from './externalServices/github';
+import { startSchedule } from './boot/schedule';
 import { vars } from './config/vars';
 
 const server = fastify({
@@ -40,7 +40,7 @@ connectToMongo()
 		migrateDelocalization();
 		migrateEventsStructure();
 		if (vars.env === 'prod') {
-			parseGithub();
+			startSchedule();
 		}
 		// eslint-disable-next-line no-console
 		console.log('Connected to mongo');

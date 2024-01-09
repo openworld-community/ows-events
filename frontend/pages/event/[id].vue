@@ -2,6 +2,7 @@
 import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RoutePathEnum } from '@/constants/enums/route';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
+import { useSanitizer } from '../../utils/sanitize';
 
 import { trimString } from '../../utils/trimString';
 import {
@@ -111,7 +112,12 @@ patchDeleteEventModal({
 					:src="eventImage"
 					width="350"
 					height="250"
-					:alt="$t('event.image.event')"
+					:alt="
+						trimString(
+							`Afisha: ${posterEvent.location.city}, ${posterEvent.title}` ?? '',
+							460
+						)
+					"
 					:itemprop="SeoItempropGlobalEnum.IMAGE"
 				/>
 				<img
@@ -120,7 +126,7 @@ patchDeleteEventModal({
 					src="@/assets/img/event-preview@2x.png"
 					width="350"
 					height="250"
-					:alt="$t('event.image.event')"
+					alt=""
 					:itemprop="SeoItempropGlobalEnum.IMAGE"
 				/>
 			</div>
@@ -207,7 +213,7 @@ patchDeleteEventModal({
 						v-if="posterEvent.creatorId === 'peredelanoParser'"
 						class="event-info__html-description"
 						:itemprop="SeoItempropEventEnum.DESCRIPTION"
-						v-html="posterEvent.description"
+						v-html="useSanitizer(posterEvent.description)"
 					/>
 					<CommonButton
 						v-if="posterEvent.url"
@@ -431,8 +437,6 @@ patchDeleteEventModal({
 	&__description {
 		word-wrap: break-word;
 		white-space: pre-line;
-		overflow-y: auto;
-		-webkit-overflow-scrolling: touch;
 		font-size: var(--font-size-S);
 		line-height: 20px;
 		margin-bottom: 24px;
@@ -441,8 +445,6 @@ patchDeleteEventModal({
 	&__html-description {
 		word-wrap: break-word;
 		white-space: pre-line;
-		overflow-y: auto;
-		-webkit-overflow-scrolling: touch;
 		font-size: var(--font-size-S);
 		line-height: 20px;
 		margin-bottom: 24px;
@@ -453,24 +455,28 @@ patchDeleteEventModal({
 		&:deep(h3),
 		&:deep(h4),
 		&:deep(h5) {
-			padding-bottom: 0.3em;
-			margin-bottom: 16px;
 			line-height: normal;
+			font-size: var(--font-size-S);
 		}
 
 		&:deep(h1),
 		&:deep(h2) {
-			border-bottom: 1px solid var(--color-input-icons, var(--color-input-icons));
+			font-size: var(--font-size-L);
+			border-top: 1px solid var(--color-input-field);
+			padding-top: 24px;
+
+			@media (min-width: 768px) {
+				font-size: var(--font-size-ML);
+			}
+
+			@media (min-width: 1440px) {
+				margin-bottom: 14px;
+			}
 		}
 
 		&:deep(a) {
 			text-decoration: underline;
 			text-underline-offset: 0.2rem;
-		}
-
-		&:deep(p) {
-			margin-top: 0;
-			margin-bottom: 16px;
 		}
 
 		&:deep(img) {
@@ -481,7 +487,7 @@ patchDeleteEventModal({
 
 		&:deep(blockquote) {
 			padding: 0 1em;
-			border-left: 0.25em solid var(--color-input-icons, var(--color-input-icons));
+			border-left: 0.25em solid var(--color-input-icons);
 		}
 
 		&:deep(table) {
@@ -495,17 +501,22 @@ patchDeleteEventModal({
 		}
 
 		&:deep(tr) {
-			border-top: 1px solid var(--color-input-icons, var(--color-input-icons));
+			border-top: 1px solid var(--color-input-icons);
 		}
 
 		&:deep(th),
 		&:deep(td) {
 			padding: 6px 13px;
-			border: 1px solid var(--color-input-icons, var(--color-input-icons));
+			border: 1px solid var(--color-input-icons);
 		}
 
 		&:deep(th) {
-			font-weight: var(--base-text-weight-semibold, 600);
+			font-weight: var(--font-weight-bold);
+		}
+
+		&:deep(hr) {
+			border-style: none;
+			border-top: 1px solid var(--color-input-field);
 		}
 	}
 

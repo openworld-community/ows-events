@@ -20,5 +20,11 @@ export default {
 	social: {
 		title: 'Подпишитесь на нас в соцсетях:',
 		alt: 'Ссылка на страницу в'
-	}
+	},
+	social_title: {
+		instagram: 'Instagram Afisha',
+		twitter: 'Twitter Afisha',
+		linkedin: 'LinkedIn Afisha',
+		telegram: 'Telegram Afisha '
+	},
 };

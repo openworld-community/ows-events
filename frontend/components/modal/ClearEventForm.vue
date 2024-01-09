@@ -26,7 +26,7 @@ const clearForm = async () => {
 				@click="eventStore.$patch({ showClearFormModal: false })"
 			/>
 			<CommonButton
-				button-kind="success"
+				button-kind="dark"
 				:button-text="$t('global.button.close')"
 				@click="clearForm"
 			/>

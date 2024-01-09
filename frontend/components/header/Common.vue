@@ -159,7 +159,7 @@ const goBack = () => {
 				<CommonButton
 					v-if="!mobile"
 					:link="localePath(RoutePathEnum.USER_PAGE)"
-					:button-kind="userStore.isAuthorized ? 'success' : 'ordinary'"
+					button-kind="ordinary"
 					icon-name="user"
 					:button-text="
 						userStore.isAuthorized

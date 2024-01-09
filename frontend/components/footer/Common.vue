@@ -40,8 +40,8 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 				</component>
 			</div>
 
-			<ul class="footer__navigation navigation">
-				<div class="navigation__item-container">
+			<div class="footer__navigation navigation">
+				<ul class="navigation__item-container">
 					<li class="navigation__item">
 						<NuxtLink
 							:to="localePath(RoutePathEnum.ABOUT)"
@@ -59,8 +59,8 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 							{{ $t('footer.navigation.support') }}
 						</NuxtLink>
 					</li>
-				</div>
-				<div class="navigation__item-container">
+				</ul>
+				<ul class="navigation__item-container">
 					<li class="navigation__item">
 						<NuxtLink
 							:to="localePath(RoutePathEnum.DONATION)"
@@ -77,8 +77,8 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 							{{ $t('footer.navigation.limitation_of_liability') }}
 						</NuxtLink>
 					</li>
-				</div>
-			</ul>
+				</ul>
+			</div>
 			<div class="footer__social social">
 				<ul class="social__list">
 					<li

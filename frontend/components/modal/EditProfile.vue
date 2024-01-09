@@ -99,7 +99,7 @@ const updateUserData = async () => {
 			/>
 			<CommonButton
 				class="edit-profile__button"
-				button-kind="success"
+				button-kind="dark"
 				:button-text="$t('global.button.save')"
 				:is-disabled="!checkFormFilling"
 				:is-loading="isLoading"

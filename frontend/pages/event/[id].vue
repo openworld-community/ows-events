@@ -13,10 +13,12 @@ import {
 import { useUserStore } from '../../stores/user.store';
 import { apiRouter } from '../../composables/useApiRouter';
 import { useEventStore } from '../../stores/event.store';
+import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
 
 const mobile = inject<boolean>('mobile');
 const route = useRoute();
 const localePath = useLocalePath();
+const { t } = useI18n();
 const id = getFirstParam(route.params.id);
 const userStore = useUserStore();
 const posterEvent = ref(null);
@@ -36,7 +38,10 @@ getMeta({
 	title: posterEvent.value?.location
 		? `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}, ${posterEvent.value?.location.country}`
 		: posterEvent.value?.title,
-	description: trimString(posterEvent.value?.description ?? '', 120),
+	description:
+		posterEvent.value.creatorId === PEREDELANO_CREATOR_ID
+			? t('meta.event.description_peredelano')
+			: trimString(posterEvent.value?.description ?? '', 120),
 	image: eventImage.value
 });
 
@@ -197,20 +202,20 @@ patchDeleteEventModal({
 						has-link-to-g-maps
 					/>
 					<p
-						v-if="!mobile && posterEvent.creatorId !== 'peredelanoParser'"
+						v-if="!mobile && posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
 						class="event-info__description-title"
 					>
 						{{ $t('event.description_title') }}
 					</p>
 					<p
-						v-if="posterEvent.creatorId !== 'peredelanoParser'"
+						v-if="posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
 						class="event-info__description"
 						:itemprop="SeoItempropEventEnum.DESCRIPTION"
 					>
 						{{ posterEvent.description }}
 					</p>
 					<div
-						v-if="posterEvent.creatorId === 'peredelanoParser'"
+						v-if="posterEvent.creatorId === PEREDELANO_CREATOR_ID"
 						class="event-info__html-description"
 						:itemprop="SeoItempropEventEnum.DESCRIPTION"
 						v-html="useSanitizer(posterEvent.description)"
@@ -459,7 +464,6 @@ patchDeleteEventModal({
 			font-size: var(--font-size-S);
 		}
 
-		&:deep(h1),
 		&:deep(h2) {
 			font-size: var(--font-size-L);
 			border-top: 1px solid var(--color-input-field);

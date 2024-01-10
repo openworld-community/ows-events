@@ -4,7 +4,7 @@ import moment from 'moment-timezone';
 import cityTimezones from 'city-timezones';
 import { EventOnPoster } from '@common/types';
 import { countriesAndCitiesController } from '../controllers/countries-and-cities.controller';
-import { EventTypes } from '../../../common/const/eventTypes';
+import { EventTypes, PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
 import { Tags } from '../../../common/const/tags';
 import { translatePeredelanoPlaceName } from './translationForParser';
 import { vars } from '../config/vars';
@@ -125,7 +125,7 @@ export const parsePeredelano = () => {
 				title: eventTitle,
 				url: eventLink,
 				description: eventDescription,
-				creatorId: 'peredelanoParser',
+				creatorId: PEREDELANO_CREATOR_ID,
 				organizer: 'Peredelano',
 				location,
 				timezone: {

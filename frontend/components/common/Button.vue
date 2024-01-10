@@ -363,6 +363,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		&::v-deep(svg) {
 			color: var(--color-text-secondary);
 			width: 20px;
+			min-width: 20px;
 			height: 20px;
 			margin-right: 0;
 		}
@@ -384,6 +385,10 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 			&::v-deep(svg) {
 				color: var(--color-text-secondary);
+			}
+
+			& > .button__content {
+				margin-right: 0;
 			}
 		}
 	}

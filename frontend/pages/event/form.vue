@@ -395,7 +395,7 @@ const submitEvent = async () => {
 				/>
 				<CommonButton
 					class="event-form__button"
-					button-kind="success"
+					button-kind="dark"
 					:button-text="$t('global.button.save')"
 					:is-loading="eventStore.eventData.isLoading"
 					:is-disabled="!eventStore.checkFormFilling || eventStore.eventData.isLoading"

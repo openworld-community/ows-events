@@ -218,7 +218,7 @@ patchDeleteEventModal({
 					<CommonButton
 						v-if="posterEvent.url"
 						class="event-info__button-contact"
-						button-kind="success"
+						button-kind="dark"
 						:button-text="$t('global.button.contact')"
 						:link="posterEvent.url"
 						is-external-link

@@ -93,6 +93,7 @@ const resetFilter = () => {
 				/>
 				<CommonButton
 					button-kind="warning"
+					no-border
 					:button-text="$t('global.button.reset')"
 					class="buttons__item"
 					@click="resetFilter"

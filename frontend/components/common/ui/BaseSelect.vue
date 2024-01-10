@@ -139,6 +139,7 @@ const showInputValueIcon = computed(() => {
 				button-kind="multiselect"
 				:button-text="getFilterPlaceholder(multiple, name, list, model, showKey, returnKey)"
 				:filled="!!model.length"
+				:is-disabled="disabled"
 				:class="{ 'select__field--green-border': isOpen }"
 				@click="openSelect"
 			/>
@@ -201,7 +202,8 @@ const showInputValueIcon = computed(() => {
 	}
 
 	&__field {
-		&--green-border, &--green-border:deep(.input__field--no-border) {
+		&--green-border,
+		&--green-border:deep(.input__field--no-border) {
 			border-color: var(--color-accent-green-main);
 		}
 	}

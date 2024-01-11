@@ -29,7 +29,9 @@ class CountriesAndCitiesController {
 
 	async getUsedCountries() {
 		const countries: string[] = await EventModel.distinct('location.country', {
-			date: { $gt: Date.now() }
+			$expr: {
+				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]
+			}
 		});
 		return countries;
 	}
@@ -37,7 +39,9 @@ class CountriesAndCitiesController {
 	async getUsedCities(country: string) {
 		const cities: string[] = await EventModel.distinct('location.city', {
 			'location.country': country,
-			date: { $gt: Date.now() }
+			$expr: {
+				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]
+			}
 		});
 		return cities;
 	}

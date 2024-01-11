@@ -1,6 +1,7 @@
 import sanitizeHtml from 'sanitize-html';
 
 //https://github.com/apostrophecms/sanitize-html#readme
+//TODO: отслеживать настройки санитайзера при добавлении внешнего HTML, при необходимости вынести настройки индивидуально на каждую страницу
 
 const options = {
 	allowedTags: [
@@ -27,7 +28,9 @@ const options = {
 	enforceHtmlBoundary: false,
 	parseStyleAttributes: true,
 	transformTags: {
-		'a': sanitizeHtml.simpleTransform('a', {target: '_blank'})
+		'a': sanitizeHtml.simpleTransform('a', {target: '_blank'}),
+		// заменяем h1 на h2, т.к. страницы, на которые вставляется внешний html, уже имеют заголовок h1
+		'h1': sanitizeHtml.simpleTransform('h2',{})
 	}
 }
 

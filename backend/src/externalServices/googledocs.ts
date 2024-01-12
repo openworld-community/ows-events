@@ -128,6 +128,7 @@ export const parsePeredelano = () => {
 				creatorId: PEREDELANO_CREATOR_ID,
 				organizer: 'Peredelano',
 				location,
+				isOnline: false,
 				timezone: {
 					timezoneName: eventTimezoneName,
 					timezoneOffset: eventTimezoneOffset

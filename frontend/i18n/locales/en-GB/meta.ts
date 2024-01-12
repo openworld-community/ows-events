@@ -22,6 +22,6 @@ export default {
 		}
 	},
 	event: {
-		description_peredelano: 'We gather to help others and ourselves. Classic format, industrial and entertaining talks, networking, activities, and a focus on the community.'
+		description_peredelano: 'Classic format, industrial and entertaining talks, networking, activities, and a focus on the community.'
 	}
 };

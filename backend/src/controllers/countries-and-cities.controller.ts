@@ -29,6 +29,7 @@ class CountriesAndCitiesController {
 
 	async getUsedCountries() {
 		const countries: string[] = await EventModel.distinct('location.country', {
+			'meta.moderation.status': { $nin: ['declined', 'in-progress'] },
 			$expr: {
 				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]
 			}
@@ -39,6 +40,7 @@ class CountriesAndCitiesController {
 	async getUsedCities(country: string) {
 		const cities: string[] = await EventModel.distinct('location.city', {
 			'location.country': country,
+			'meta.moderation.status': { $nin: ['declined', 'in-progress'] },
 			$expr: {
 				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]
 			}

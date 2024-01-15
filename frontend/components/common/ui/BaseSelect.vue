@@ -187,6 +187,7 @@ const showInputValueIcon = computed(() => {
 						:label="item[showKey] ?? item"
 						:value="item[returnKey] ?? item"
 						:multiple="multiple"
+						:icon-name="hasIconItems ? $t(`${name}/${item}`) : ''"
 					/>
 				</li>
 			</ul>

@@ -8,6 +8,7 @@ export const ItemEvent = {
 		date: { type: 'number' },
 		durationInSeconds: { type: 'number' },
 		image: { type: 'string' },
+		isOnline: { type: 'boolean' },
 		location: {
 			type: 'object',
 			properties: {

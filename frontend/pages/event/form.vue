@@ -33,19 +33,29 @@ watch(
 watch(
 	() => eventStore.$state.eventData.location.country,
 	async (country) => {
-		eventStore.eventData.location.city = '';
-		eventStore.eventData.location.address = '';
+		if (
+			!country ||
+			!locationStore._citiesByCountry
+				.get(country)
+				.includes(eventStore.eventData.location.city)
+		) {
+			eventStore.eventData.location.city = '';
+			eventStore.eventData.location.address = '';
+		}
 		if (country) {
-			eventStore.eventData.timezone = await getTimezone(
-				country,
-				eventStore.eventData.location.city
-			);
+			if (!eventStore.eventData.location.city)
+				eventStore.eventData.timezone = await getTimezone(
+					country,
+					eventStore.eventData.location.city
+				);
 			if (!eventStore.eventData.isFree) {
 				eventStore.eventData.price.currency = getCurrencyByCountry(country);
 			}
 		} else {
-			eventStore.eventData.timezone = '';
 			eventStore.eventData.price.currency = '';
+			if (!eventStore.eventData.isOnline) {
+				eventStore.eventData.timezone = '';
+			}
 		}
 	},
 	{ deep: true }
@@ -54,11 +64,13 @@ watch(
 watch(
 	() => eventStore.$state.eventData.location.city,
 	async (city) => {
-		eventStore.eventData.timezone = await getTimezone(
-			eventStore.eventData.location.country,
-			city
-		);
-		if (!city) eventStore.eventData.location.address = '';
+		if (city) {
+			eventStore.eventData.timezone = await getTimezone(
+				eventStore.eventData.location.country,
+				city
+			);
+		}
+		eventStore.eventData.location.address = '';
 	},
 	{ deep: true }
 );
@@ -97,6 +109,7 @@ const submitEvent = async () => {
 		description: eventStore.eventData.description,
 		date: eventStartEpoch,
 		durationInSeconds: Math.floor(Math.max(0, eventEndEpoch - eventStartEpoch) / 1000),
+		isOnline: eventStore.eventData.isOnline,
 		location: {
 			country: eventStore.eventData.location.country,
 			city: eventStore.eventData.location.city,
@@ -113,6 +126,10 @@ const submitEvent = async () => {
 		url: eventStore.eventData.url,
 		tags: eventStore.eventData.tags
 	};
+
+	if (eventStore.eventData.isOnline && !paramsForSubmit.tags.includes('online')) {
+		paramsForSubmit.tags.push('online');
+	}
 
 	if (eventStore.eventData.editing) {
 		paramsForSubmit.id = eventStore.eventData.id;
@@ -158,13 +175,23 @@ const submitEvent = async () => {
 				>
 					<template #child>
 						<div>
+							<CommonUiBaseCheckbox
+								value="online"
+								:label="$t('form.event.fields.online')"
+								:model-value="eventStore.eventData.isOnline"
+								is-reversed
+								@update:model-value="eventStore.toggleOnline"
+							/>
+						</div>
+						<div>
 							<CommonUiBaseSelect
 								v-model="eventStore.eventData.location.country"
 								name="country"
 								:placeholder="$t('global.country')"
 								:list="locationStore.countries"
+								:disabled="eventStore.eventData.isOnline"
 								input-readonly
-								required
+								:required="!eventStore.eventData.isOnline"
 							/>
 
 							<CommonUiBaseSelect
@@ -178,13 +205,16 @@ const submitEvent = async () => {
 									)
 								"
 								input-readonly
-								required
+								:required="!eventStore.eventData.isOnline"
 							/>
 
 							<CommonUiBaseSelect
 								v-model="eventStore.eventData.timezone"
 								name="timezone"
-								:disabled="!eventStore.eventData.location.country"
+								:disabled="
+									!eventStore.eventData.location.country &&
+									!eventStore.eventData.isOnline
+								"
 								:placeholder="$t('global.timezone')"
 								:list="eventStore.allTimezones"
 								input-readonly

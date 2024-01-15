@@ -30,3 +30,9 @@ export const getTimezone = async (country: Country, city?: City) => {
 	if (!data.value) return '';
 	return timezoneToString(data.value);
 };
+
+export const getUserTimezone = () => {
+	const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+	const timezones = JSON.parse(sessionStorage.getItem(LocalStorageEnum.TIMEZONES))
+	return timezones.find((el) => el.timezoneName === tz)
+}

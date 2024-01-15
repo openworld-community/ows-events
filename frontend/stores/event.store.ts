@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { LocalStorageEnum } from '../constants/enums/common';
 import { useUserStore } from './user.store';
 import { getCurrencyByCountry } from '../utils/prices';
-import { getAllTimezones } from '../services/timezone.services';
+import { getAllTimezones, getUserTimezone } from '../services/timezone.services';
 import { timezoneToString } from '../.nuxt/imports';
 
 export const useEventStore = defineStore('event', {
@@ -26,6 +26,7 @@ export const useEventStore = defineStore('event', {
 				startTime: null,
 				endDate: null,
 				endTime: null,
+				isOnline: false,
 				location: {
 					country: '',
 					city: '',
@@ -84,8 +85,8 @@ export const useEventStore = defineStore('event', {
 				state.eventData.startTime &&
 				// endDate & endTime both must be null or non-null
 				(state.eventData.endDate ? state.eventData.endTime : !state.eventData.endTime) &&
-				state.eventData.location.country &&
-				state.eventData.location.city &&
+				(state.eventData.isOnline ||
+					(state.eventData.location.country && state.eventData.location.city)) &&
 				state.eventData.timezone &&
 				state.allTimezones.includes(state.eventData.timezone) &&
 				(state.eventData.isFree ||
@@ -117,6 +118,7 @@ export const useEventStore = defineStore('event', {
 								(posterEvent?.date ?? 0) + posterEvent.durationInSeconds * 1000
 						  )
 						: null,
+					isOnline: posterEvent.isOnline ?? false,
 					location: {
 						country: posterEvent?.location.country ?? '',
 						city: posterEvent?.location.city ?? '',
@@ -175,6 +177,7 @@ export const useEventStore = defineStore('event', {
 				startTime: null,
 				endDate: null,
 				endTime: null,
+				isOnline: false,
 				location: {
 					country: '',
 					city: '',
@@ -208,6 +211,19 @@ export const useEventStore = defineStore('event', {
 				this.eventData.price.currency = getCurrencyByCountry(
 					this.eventData.location.country
 				);
+			}
+		},
+		toggleOnline() {
+			this.eventData.isOnline = !this.eventData.isOnline;
+
+			if (this.eventData.isOnline) {
+				this.eventData.location.country = '';
+				this.eventData.location.city = '';
+				this.eventData.location.address = '';
+
+				this.eventData.timezone = timezoneToString(getUserTimezone());
+			} else {
+				this.eventData.timezone = '';
 			}
 		}
 	}

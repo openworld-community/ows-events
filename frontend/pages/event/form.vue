@@ -43,7 +43,7 @@ watch(
 			eventStore.eventData.location.address = '';
 		}
 		if (country) {
-			if (country && !eventStore.eventData.location.city)
+			if (!eventStore.eventData.location.city)
 				eventStore.eventData.timezone = await getTimezone(
 					country,
 					eventStore.eventData.location.city

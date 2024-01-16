@@ -31,23 +31,33 @@ watch(
 
 // Изменение страны и города
 watch(
-	[
-		() => eventStore.$state.eventData.location.country,
-		() => eventStore.$state.eventData.location.city
-	],
-	async ([country, city]) => {
+	() => eventStore.$state.eventData.location.country,
+	async (country) => {
+		eventStore.eventData.location.city = '';
+		eventStore.eventData.location.address = '';
 		if (country) {
-			eventStore.eventData.timezone = await getTimezone(country, city);
-
+			eventStore.eventData.timezone = await getTimezone(
+				country,
+				eventStore.eventData.location.city
+			);
 			if (!eventStore.eventData.isFree) {
 				eventStore.eventData.price.currency = getCurrencyByCountry(country);
 			}
 		} else {
 			eventStore.eventData.timezone = '';
-			eventStore.eventData.location.city = '';
-			eventStore.eventData.location.address = '';
 			eventStore.eventData.price.currency = '';
 		}
+	},
+	{ deep: true }
+);
+
+watch(
+	() => eventStore.$state.eventData.location.city,
+	async (city) => {
+		eventStore.eventData.timezone = await getTimezone(
+			eventStore.eventData.location.country,
+			city
+		);
 		if (!city) eventStore.eventData.location.address = '';
 	},
 	{ deep: true }
@@ -177,6 +187,7 @@ const submitEvent = async () => {
 								:disabled="!eventStore.eventData.location.country"
 								:placeholder="$t('global.timezone')"
 								:list="eventStore.allTimezones"
+								input-readonly
 								required
 							/>
 						</div>
@@ -267,6 +278,7 @@ const submitEvent = async () => {
 							v-model="eventStore.eventData.startDate"
 							type="date"
 							name="startDate"
+							:placeholder="$t('form.event.fields.date_placeholder')"
 							:min-date="eventStore.minDate"
 							required
 						/>
@@ -296,6 +308,7 @@ const submitEvent = async () => {
 							v-model="eventStore.eventData.endDate"
 							type="date"
 							name="endDate"
+							:placeholder="$t('form.event.fields.date_placeholder')"
 							:min-date="eventStore.eventData.startDate ?? eventStore.minDate"
 							:disabled="!eventStore.eventData.startTime"
 						/>

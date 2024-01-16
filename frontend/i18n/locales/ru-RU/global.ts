@@ -20,6 +20,7 @@ export default {
 		follow: 'Перейти',
 		in_favourites: 'В избранном',
 		logout: 'Выйти из аккаунта',
+		new_event: 'Создать новое мероприятие',
 		register: 'Зарегистрироваться',
 		remove_from_favourites: 'Удалить из избранного',
 		reset: 'Сбросить',

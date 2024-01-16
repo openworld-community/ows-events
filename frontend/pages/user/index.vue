@@ -108,7 +108,7 @@ const logout = () => {
 						<span class="link__text">{{ $t('user.favourites.title') }}</span>
 					</NuxtLink>
 				</div>
-				<UserDonateLink v-if="userData && mobile" />
+				<UserAdditionalBlock v-if="userData && mobile" />
 				<CommonButton
 					class="user-page__logout-button"
 					button-kind="warning"
@@ -117,7 +117,7 @@ const logout = () => {
 					@click="logout()"
 				/>
 			</div>
-			<UserDonateLink v-if="userData && !mobile" />
+			<UserAdditionalBlock v-if="userData && !mobile" />
 		</main>
 		<UserUnauthorized v-else />
 
@@ -161,7 +161,7 @@ const logout = () => {
 		width: 100%;
 		height: 100%;
 		flex-direction: column;
-		padding-top: 24px;
+		padding-top: 18px;
 
 		@media (min-width: 768px) {
 			width: 40%;
@@ -197,7 +197,7 @@ const logout = () => {
 	width: 100%;
 	flex-direction: column;
 	align-items: center;
-	margin-bottom: var(--space-sections);
+	margin-bottom: 24px;
 
 	@media (min-width: 768px) {
 		align-items: flex-start;
@@ -208,7 +208,7 @@ const logout = () => {
 		display: flex;
 		width: 100%;
 		flex-direction: column;
-		margin-bottom: var(--space-subsections);
+		margin-bottom: 18px;
 
 		@media (min-width: 768px) {
 			margin-bottom: 12px;
@@ -219,7 +219,7 @@ const logout = () => {
 		font-size: var(--font-size-ML);
 		font-weight: var(--font-weight-regular);
 		line-height: 24px;
-		margin-bottom: var(--space-related-items);
+		margin-bottom: 6px;
 
 		@media (min-width: 768px) {
 			font-size: var(--font-size-L);
@@ -233,7 +233,7 @@ const logout = () => {
 		color: var(--color-text-secondary);
 
 		&:not(:last-child) {
-			margin-bottom: var(--space-inner);
+			margin-bottom: 6px;
 		}
 
 		@media (min-width: 1440px) {
@@ -265,7 +265,7 @@ const logout = () => {
 .link {
 	display: flex;
 	width: 100%;
-	margin-bottom: var(--space-sections);
+	margin-bottom: 24px;
 
 	@media (min-width: 768px) {
 		width: max-content;

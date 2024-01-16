@@ -15,6 +15,10 @@ defineProps({
 	hasBackButton: {
 		type: Boolean,
 		default: false
+	},
+	titleOnMobile: {
+		type: String,
+		default: ''
 	}
 });
 
@@ -73,6 +77,9 @@ const goBack = () => {
 					:is="logoComponentIs"
 					v-else
 					class="header__logo"
+					:title="
+						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
+					"
 					:aria-label="
 						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
 					"
@@ -85,10 +92,15 @@ const goBack = () => {
 						width="86"
 						height="40"
 						color="var(--color-accent-green-main)"
-						alt="Peredelano Афиша"
 					/>
 				</component>
 			</div>
+			<h1
+				v-if="mobile && titleOnMobile"
+				class="header__title"
+			>
+				{{ titleOnMobile }}
+			</h1>
 			<ul
 				v-if="!mobile"
 				class="header__center"
@@ -238,6 +250,11 @@ const goBack = () => {
 				color: var(--color-accent-green-dark);
 			}
 		}
+	}
+
+	&__title {
+		font-size: var(--font-size-ML);
+		font-weight: var(--font-weight-regular);
 	}
 
 	&__nav-item {

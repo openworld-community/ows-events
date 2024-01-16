@@ -20,6 +20,7 @@ export default {
 		follow: 'Follow',
 		in_favourites: 'In Favourites',
 		logout: 'Logout',
+		new_event: 'Create new event',
 		register: 'Register',
 		remove_from_favourites: 'Remove from Favorites',
 		reset: 'Сбросить',

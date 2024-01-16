@@ -23,8 +23,9 @@ export const getAllTimezones = async (): Promise<Timezone[]> => {
 	return data.value;
 };
 
-//TODO летят ошибки, пока не выберешь город с привязанной таймзоной
 export const getTimezone = async (country: Country, city?: City) => {
+	if (!country && !city) return
+
 	const { data } = await apiRouter.timezone.get.useQuery({ data: { city, country } });
 	if (!data.value) return '';
 	return timezoneToString(data.value);

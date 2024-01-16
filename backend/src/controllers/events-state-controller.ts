@@ -39,6 +39,9 @@ class EventsStateController {
 		if (query?.tags && query?.tags.length !== 0) {
 			queryObject.tags = { $in: query?.tags };
 		}
+		if (queryObject.$and?.length === 0) {
+			delete queryObject.$and;
+		}
 		queryObject['meta.moderation.status'] = { $nin: ['declined', 'in-progress'] };
 
 		const pipeline = [

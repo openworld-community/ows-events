@@ -20,15 +20,21 @@ class EventsStateController {
 	}
 
 	async getEvents(query?: SearchEventPayload | undefined): Promise<EventDbEntity[]> {
-		const queryObject: FilterQuery<EventOnPoster> = {};
+		const queryObject: FilterQuery<EventOnPoster> = {
+			$and: []
+		};
 		if (query?.searchLine) {
 			queryObject.$text = { $search: query.searchLine };
 		}
 		if (query?.country) {
-			queryObject['location.country'] = query?.country;
+			const countryQuery = {
+				$or: [{ 'location.country': query?.country }, { isOnline: true }]
+			};
+			queryObject.$and?.push(countryQuery);
 		}
 		if (query?.city) {
-			queryObject['location.city'] = query?.city;
+			const cityQuery = { $or: [{ 'location.city': query?.city }, { isOnline: true }] };
+			queryObject.$and?.push(cityQuery);
 		}
 		if (query?.tags && query?.tags.length !== 0) {
 			queryObject.tags = { $in: query?.tags };
@@ -53,7 +59,7 @@ class EventsStateController {
 			}
 		];
 		const futureEvents = await EventModel.aggregate(pipeline)
-			.sort({ date: 'ascending' })
+			.sort({ isOnline: 'ascending', date: 'ascending' })
 			.exec();
 		return futureEvents;
 	}

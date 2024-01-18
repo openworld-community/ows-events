@@ -32,7 +32,8 @@ class CountriesAndCitiesController {
 			'meta.moderation.status': { $nin: ['declined', 'in-progress'] },
 			$expr: {
 				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]
-			}
+			},
+			'location.country': { $nin: [''] }
 		});
 		return countries;
 	}
@@ -41,6 +42,7 @@ class CountriesAndCitiesController {
 		const cities: string[] = await EventModel.distinct('location.city', {
 			'location.country': country,
 			'meta.moderation.status': { $nin: ['declined', 'in-progress'] },
+			'location.city': { $nin: [''] },
 			$expr: {
 				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]
 			}

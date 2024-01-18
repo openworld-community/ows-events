@@ -3,17 +3,26 @@ import type { EventOnPoster } from '../../../common/types';
 import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { RoutePathEnum } from '../../constants/enums/route';
 import { trimString } from '../../utils/trimString';
+import { convertToLocaleString } from '../../utils/dates';
+import { getUserTimezoneName } from '../../services/timezone.services';
 
-defineProps<{ eventData: EventOnPoster }>();
+const props = defineProps<{ eventData: EventOnPoster }>();
 const localePath = useLocalePath();
 const mobile = inject('mobile');
+
+const startDate = ref(
+	convertToLocaleString(
+		props.eventData.date,
+		props.eventData.isOnline ? getUserTimezoneName() : 'UTC'
+	)
+);
 </script>
 
 <template>
 	<NuxtLink
 		class="card"
 		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
-		:title="trimString(`Afisha: ${eventData.location.city}, ${eventData.title}` ?? '',460)"
+		:title="trimString(`Afisha: ${eventData.location.city}, ${eventData.title}` ?? '', 460)"
 		:itemprop="SeoItempropGlobalEnum.URL"
 	>
 		<div
@@ -24,7 +33,9 @@ const mobile = inject('mobile');
 				v-if="eventData.image"
 				class="card__image"
 				:src="getEventImage(eventData)"
-				:alt="trimString(`Afisha: ${eventData.location.city}, ${eventData.title}` ?? '',460)"
+				:alt="
+					trimString(`Afisha: ${eventData.location.city}, ${eventData.title}` ?? '', 460)
+				"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
 			<img
@@ -61,8 +72,9 @@ const mobile = inject('mobile');
 				<CommonEventDetails
 					class="card-description__details"
 					:price="eventData?.price"
+					:is-online="eventData.isOnline"
 					:location="eventData.location"
-					:start-date="convertToLocaleString(eventData.date)"
+					:start-date="startDate"
 				/>
 				<CommonTagList
 					v-if="mobile && eventData.tags"
@@ -97,6 +109,7 @@ const mobile = inject('mobile');
 		aspect-ratio: 2 / 1.33;
 		height: auto;
 		max-height: 400px;
+		position: relative;
 		background-color: var(--color-input-field);
 		background-size: cover;
 		line-height: 0;

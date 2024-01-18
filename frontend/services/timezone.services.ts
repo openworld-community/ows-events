@@ -24,7 +24,7 @@ export const getAllTimezones = async (): Promise<Timezone[]> => {
 };
 
 export const getTimezone = async (country: Country, city?: City) => {
-	if (!country && !city) return
+	if (!country && !city) return;
 
 	const { data } = await apiRouter.timezone.get.useQuery({ data: { city, country } });
 	if (!data.value) return '';
@@ -33,6 +33,10 @@ export const getTimezone = async (country: Country, city?: City) => {
 
 export const getUserTimezone = () => {
 	const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-	const timezones = JSON.parse(sessionStorage.getItem(LocalStorageEnum.TIMEZONES))
-	return timezones.find((el) => el.timezoneName === tz)
-}
+	const timezones = JSON.parse(sessionStorage.getItem(LocalStorageEnum.TIMEZONES));
+	return timezones.find((el) => el.timezoneName === tz);
+};
+
+export const getUserTimezoneName = () => {
+	return Intl.DateTimeFormat().resolvedOptions().timeZone;
+};

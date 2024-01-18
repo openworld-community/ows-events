@@ -34,7 +34,11 @@ watch(
 		if (filters.country) {
 			await filterStore.getUsedCitiesByCountry(filters.country);
 		}
-		if (!filters.country) filterStore.filters.city = '';
+		if (
+			!filters.country ||
+			!filterStore.usedCitiesByCountry[filters.country].includes(filters.city)
+		)
+			filterStore.filters.city = '';
 	},
 	{ deep: true }
 );

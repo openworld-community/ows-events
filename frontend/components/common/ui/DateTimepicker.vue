@@ -5,6 +5,8 @@ import dayjs from 'dayjs';
 import type { PropType } from 'vue';
 import type { Time } from '../../../utils/dates';
 
+// https://vue3datepicker.com/props/modes/
+
 const props = defineProps({
 	className: {
 		type: String,
@@ -103,11 +105,12 @@ const onRemove = () => {
 			partial-flow
 			:flow="['calendar']"
 			:time-picker="!isDateType"
+			minutes-increment="10"
 			:enable-time-picker="!isDateType"
 			:min-date="minDate ?? undefined"
 			:start-date="minDate ?? undefined"
 			:min-time="minTime ?? undefined"
-			:start-time="minTime ?? undefined"
+			:start-time="minTime ?? { hours: 12, minutes: 0 }"
 			:format="isDateType ? dateFormat : timeFormat"
 			:disabled="disabled"
 			:required="required"

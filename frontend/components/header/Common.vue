@@ -220,8 +220,8 @@ const goBack = () => {
 			max-width: 400px;
 			justify-content: space-between;
 			align-items: center;
-			margin-left: 5%;
-			margin-right: 5%;
+			margin-left: 7%;
+			margin-right: 7%;
 		}
 	}
 

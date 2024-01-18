@@ -4,6 +4,8 @@ import type { EventOnPoster } from '../../../common/types';
 import { RoutePathEnum } from '../../constants/enums/route';
 import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { dateNow } from '~/utils/dates';
+import { convertToLocaleString } from '../../utils/dates';
+import { getUserTimezoneName } from '../../services/timezone.services';
 
 const props = defineProps({
 	eventData: {
@@ -15,6 +17,13 @@ const mobile: ComputedRef<boolean> = inject('mobile');
 const tablet: ComputedRef<boolean> = inject('tablet');
 const desktop: ComputedRef<boolean> = inject('desktop');
 const localePath = useLocalePath();
+
+const startDate = ref(
+	convertToLocaleString(
+		props.eventData.date,
+		props.eventData.isOnline ? getUserTimezoneName() : 'UTC'
+	)
+);
 
 const tagArray = computed(() => {
 	if (mobile.value) return props.eventData.tags.slice(0, 2);
@@ -58,7 +67,7 @@ const tagArray = computed(() => {
 					class="description__date"
 					:itemprop="SeoItempropEventEnum.START_DATE"
 				>
-					{{ convertToLocaleString(eventData.date) }}
+					{{ startDate }}
 				</p>
 			</div>
 			<CommonTagList

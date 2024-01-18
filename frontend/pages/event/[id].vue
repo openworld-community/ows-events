@@ -14,6 +14,8 @@ import { useUserStore } from '../../stores/user.store';
 import { apiRouter } from '../../composables/useApiRouter';
 import { useEventStore } from '../../stores/event.store';
 import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
+import { getUserTimezoneName } from '../../services/timezone.services';
+import { convertToLocaleString } from '../../utils/dates';
 
 const mobile = inject<boolean>('mobile');
 const route = useRoute();
@@ -21,10 +23,24 @@ const localePath = useLocalePath();
 const { t } = useI18n();
 const id = getFirstParam(route.params.id);
 const userStore = useUserStore();
+const userTimezone = getUserTimezoneName();
+
 const posterEvent = ref(null);
+const startDate = ref(null);
+const endDate = ref(null);
 
 const { data } = await apiRouter.events.get.useQuery({ data: { id } });
 if (data.value) {
+	startDate.value = convertToLocaleString(
+		data.value.date,
+		data.value.isOnline ? userTimezone : 'UTC'
+	);
+	endDate.value = data.value.durationInSeconds
+		? convertToLocaleString(
+				data.value.date + data.value.durationInSeconds * 1000,
+				data.value.isOnline ? userTimezone : 'UTC'
+		  )
+		: null;
 	posterEvent.value = data.value;
 } else {
 	navigateTo(localePath(RoutePathEnum.HOME));
@@ -190,14 +206,9 @@ patchDeleteEventModal({
 					<CommonEventDetails
 						class="event-info__details"
 						:price="posterEvent.price"
-						:start-date="convertToLocaleString(posterEvent.date)"
-						:end-date="
-							posterEvent.durationInSeconds
-								? convertToLocaleString(
-										posterEvent.date + posterEvent.durationInSeconds * 1000
-								  )
-								: null
-						"
+						:start-date="startDate"
+						:end-date="endDate"
+						:is-online="posterEvent.isOnline"
 						:location="posterEvent.location"
 						has-link-to-g-maps
 					/>

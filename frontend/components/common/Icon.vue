@@ -16,6 +16,7 @@ export type IconName =
 	| 'donate'
 	| 'edit'
 	| 'error'
+	| 'globe'
 	| 'heart'
 	| 'heart-filled'
 	| 'info'

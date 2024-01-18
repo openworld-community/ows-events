@@ -5,7 +5,7 @@ dayjs.extend(utc);
 
 export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
 
-export const dateNow = Date.now()
+export const dateNow = Date.now();
 
 export const getDateFromEpochInMs = (epoch: number | undefined, keepTimezone = false) => {
 	if (!epoch) return null;
@@ -41,10 +41,10 @@ export const combineDateTime = (date: Date | null, time: Time | null): Date => {
 		.toDate();
 };
 
-export const convertToLocaleString = (epoch: number) => {
-	const { locale} = useI18n();
+export const convertToLocaleString = (epoch: number, timezoneName = 'UTC') => {
+	const { locale } = useI18n();
 	return new Date(epoch).toLocaleString(locale.value, {
-		timeZone: 'UTC',
+		timeZone: timezoneName,
 		month: 'long',
 		day: 'numeric',
 		hour: '2-digit',
@@ -57,4 +57,8 @@ export const day = 1000 * 60 * 60 * 24;
 export const getDatesDayDifference = (firstDate: Date, secondDate: Date): number => {
 	const diffTime = Math.abs(secondDate.getTime() - firstDate.getTime());
 	return Math.ceil(diffTime / day);
+};
+
+export const roundTime = (date, interval) => {
+	return Math.ceil(new Date(date).getTime() / (interval * 60 * 1000)) * (interval * 60 * 1000);
 };

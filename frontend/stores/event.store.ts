@@ -4,6 +4,7 @@ import { useUserStore } from './user.store';
 import { getCurrencyByCountry } from '../utils/prices';
 import { getAllTimezones, getUserTimezone } from '../services/timezone.services';
 import { timezoneToString } from '../.nuxt/imports';
+import { roundTime } from '../utils/dates';
 
 export const useEventStore = defineStore('event', {
 	state: () => {
@@ -13,7 +14,7 @@ export const useEventStore = defineStore('event', {
 			showClearFormModal: false,
 			navTo: '',
 			allTimezones: [],
-			minDate: new Date(),
+			minDate: new Date(roundTime(Date.now(), 10)),
 			eventData: {
 				editing: false,
 				isLoading: false,
@@ -164,7 +165,7 @@ export const useEventStore = defineStore('event', {
 			this.allTimezones = [];
 			this.navTo = '';
 			this.showClearFormModal = false;
-			this.minDate = new Date();
+			this.minDate = new Date(roundTime(Date.now(), 10));
 			this.eventData = {
 				editing: false,
 				isLoading: false,

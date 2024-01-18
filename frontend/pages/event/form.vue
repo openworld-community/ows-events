@@ -5,7 +5,7 @@ import type { PostEventPayload } from '../../../common/types/event';
 import { LocalStorageEnum } from '../../constants/enums/common';
 import { getTimezone } from '../../services/timezone.services';
 import { getCurrencyByCountry } from '../../utils/prices';
-import { TagsArray } from '../../../common/const/tags';
+import { Tags, TagsArray } from '../../../common/const/tags';
 
 const locationStore = useLocationStore();
 const eventStore = useEventStore();
@@ -284,7 +284,7 @@ const submitEvent = async () => {
 						/>
 						<div class="event-form__tags">
 							<CommonUiTag
-								v-for="tag in TagsArray"
+								v-for="tag in TagsArray.filter((el) => el !== Tags.ONLINE)"
 								:key="tag"
 								v-model="eventStore.eventData.tags"
 								:tag-key="tag"
@@ -322,7 +322,7 @@ const submitEvent = async () => {
 							:min-time="
 								eventStore.eventData.startDate?.toDateString() ===
 								new Date().toDateString()
-									? getTimeFromEpochInMs(Date.now(), true)
+									? getTimeFromEpochInMs(roundTime(Date.now(), 10), true)
 									: undefined
 							"
 						/>

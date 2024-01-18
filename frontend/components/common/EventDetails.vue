@@ -15,6 +15,10 @@ const props = defineProps({
 		type: Object as PropType<Location | null>,
 		default: null
 	},
+	isOnline: {
+		type: Boolean,
+		required: true
+	},
 	hasLinkToGMaps: {
 		type: Boolean,
 		default: false
@@ -91,7 +95,8 @@ const component = computed(() => {
 			<span
 				v-else-if="price.value === 0"
 				class="details__text"
-				:itemtype="SeoItempropPriceEnum.FREE"
+				:itemprop="SeoItempropPriceEnum.FREE"
+				content="true"
 			>
 				{{ $t('event.price.free') }}
 			</span>
@@ -119,14 +124,28 @@ const component = computed(() => {
 
 		<!--	Локация		-->
 		<li
-			v-if="location"
+			v-if="location || isOnline"
 			class="details__item"
 			itemscope
 			:itemtype="SeoItemTypeEnum.LOCATION"
 			:itemprop="SeoItempropLocationEnum.GROUP_ITEMPROP"
 		>
+			<p v-if="isOnline">
+				<CommonIcon
+					name="globe"
+					class="details__icon"
+					color="var(--color-accent-green-main)"
+				/>
+				<span
+					class="details__text"
+					:itemprop="SeoItempropLocationEnum.NAME"
+				>
+					{{ $t('event.tags.online') }}
+				</span>
+			</p>
 			<component
 				:is="component"
+				v-else
 				:to="hasLinkToGMaps ? getLocationLink(location) : null"
 				:target="hasLinkToGMaps ? '_blank' : null"
 				:itemprop="SeoItempropLocationEnum.GROUP_ITEMPROP"
@@ -138,26 +157,27 @@ const component = computed(() => {
 					class="details__icon"
 					color="var(--color-accent-green-main)"
 				/>
-				<span
-					v-if="props.location.country"
-					:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
-					:itemprop="SeoItempropLocationEnum.COUNTRY"
-				>
-					{{ location.country }}
-				</span>
-				<span
-					v-if="location.city"
-					:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
-					:itemprop="SeoItempropLocationEnum.CITY"
-				>
-					, {{ location.city }}
-				</span>
-				<span
-					v-if="location?.address"
-					:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
-					:itemprop="SeoItempropLocationEnum.ADDRESS"
-					>, {{ location.address }}
-				</span>
+				<p>
+					<span
+						v-if="props.location.country"
+						:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
+						:itemprop="SeoItempropLocationEnum.COUNTRY"
+					>
+						{{ location.country }}
+					</span>
+					<span
+						v-if="location.city"
+						:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
+						:itemprop="SeoItempropLocationEnum.CITY"
+						>, {{ location.city }}
+					</span>
+					<span
+						v-if="location?.address"
+						:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
+						:itemprop="SeoItempropLocationEnum.ADDRESS"
+						>, {{ location.address }}
+					</span>
+				</p>
 			</component>
 		</li>
 	</ul>
@@ -175,6 +195,7 @@ const component = computed(() => {
 		display: flex;
 		width: 100%;
 		align-items: center;
+		line-height: 20px;
 
 		&:not(:last-child) {
 			margin-bottom: 8px;
@@ -186,6 +207,7 @@ const component = computed(() => {
 	}
 
 	&__icon {
+		min-width: 24px;
 		margin-right: 8px;
 	}
 

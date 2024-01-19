@@ -5,7 +5,7 @@ import { RoutePathEnum } from '../../constants/enums/route';
 import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { dateNow } from '~/utils/dates';
 import { convertToLocaleString } from '../../utils/dates';
-import { getUserTimezoneName } from '../../services/timezone.services';
+import { Tags } from '../../../common/const/tags';
 
 const props = defineProps({
 	eventData: {
@@ -19,10 +19,7 @@ const desktop: ComputedRef<boolean> = inject('desktop');
 const localePath = useLocalePath();
 
 const startDate = ref(
-	convertToLocaleString(
-		props.eventData.date,
-		props.eventData.isOnline ? getUserTimezoneName() : 'UTC'
-	)
+	convertToLocaleString(props.eventData.date, props.eventData.isOnline, props.eventData.timezone)
 );
 
 const tagArray = computed(() => {
@@ -53,6 +50,13 @@ const tagArray = computed(() => {
 				:src="getEventImage(eventData)"
 				width="94"
 				height="74"
+			/>
+			<CommonUiTag
+				v-if="eventData.isOnline"
+				:tag-key="Tags.ONLINE"
+				appearance="accent"
+				:size="mobile ? 'mini' : 'small'"
+				class="card__online-tag"
 			/>
 		</div>
 		<div class="card__description description">
@@ -118,6 +122,7 @@ const tagArray = computed(() => {
 		width: 94px;
 		min-width: 94px;
 		height: 74px;
+		position: relative;
 		background-color: var(--color-input-field);
 		background-size: cover;
 		border-radius: 4px;
@@ -155,6 +160,17 @@ const tagArray = computed(() => {
 		height: 100%;
 		object-fit: cover;
 		border-radius: 4px;
+	}
+
+	&__online-tag {
+		position: absolute;
+		top: 2px;
+		left: 2px;
+
+		@media (min-width: 768px) {
+			top: 7px;
+			left: 5px;
+		}
 	}
 }
 

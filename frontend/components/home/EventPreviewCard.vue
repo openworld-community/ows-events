@@ -4,17 +4,15 @@ import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enu
 import { RoutePathEnum } from '../../constants/enums/route';
 import { trimString } from '../../utils/trimString';
 import { convertToLocaleString } from '../../utils/dates';
-import { getUserTimezoneName } from '../../services/timezone.services';
+import { Tags } from '../../../common/const/tags';
 
 const props = defineProps<{ eventData: EventOnPoster }>();
+const { t } = useI18n();
 const localePath = useLocalePath();
 const mobile = inject('mobile');
 
 const startDate = ref(
-	convertToLocaleString(
-		props.eventData.date,
-		props.eventData.isOnline ? getUserTimezoneName() : 'UTC'
-	)
+	convertToLocaleString(props.eventData.date, props.eventData.isOnline, props.eventData.timezone)
 );
 </script>
 
@@ -22,7 +20,14 @@ const startDate = ref(
 	<NuxtLink
 		class="card"
 		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
-		:title="trimString(`Afisha: ${eventData.location.city}, ${eventData.title}` ?? '', 460)"
+		:title="
+			trimString(
+				`Afisha: ${
+					eventData.isOnline ? t(`event.tags.${Tags.ONLINE}`) : eventData.location.city
+				}, ${eventData.title}` ?? '',
+				460
+			)
+		"
 		:itemprop="SeoItempropGlobalEnum.URL"
 	>
 		<div
@@ -34,7 +39,14 @@ const startDate = ref(
 				class="card__image"
 				:src="getEventImage(eventData)"
 				:alt="
-					trimString(`Afisha: ${eventData.location.city}, ${eventData.title}` ?? '', 460)
+					trimString(
+						`Afisha: ${
+							eventData.isOnline
+								? t(`event.tags.${Tags.ONLINE}`)
+								: eventData.location.city
+						}, ${eventData.title}` ?? '',
+						460
+					)
 				"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
@@ -44,6 +56,12 @@ const startDate = ref(
 				src="@/assets/img/event-preview@2x.png"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 				alt=""
+			/>
+			<CommonUiTag
+				v-if="eventData.isOnline"
+				:tag-key="Tags.ONLINE"
+				appearance="accent"
+				class="card__online-tag"
 			/>
 		</div>
 
@@ -142,11 +160,22 @@ const startDate = ref(
 		}
 	}
 
+	&__online-tag {
+		position: absolute;
+		top: 16px;
+		left: 16px;
+
+		@media (min-width: 768px) {
+			top: 12px;
+			left: 12px;
+		}
+	}
+
 	.card-description {
 		display: flex;
 		width: 100%;
 		flex-direction: column;
-		padding: 12px 16px 32px;
+		padding: 12px 16px 18px;
 
 		@media (min-width: 768px) {
 			height: inherit;

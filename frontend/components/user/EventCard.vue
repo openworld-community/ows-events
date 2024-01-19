@@ -4,7 +4,7 @@ import type { EventOnPoster } from '../../../common/types';
 import { RoutePathEnum } from '../../constants/enums/route';
 import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { dateNow } from '~/utils/dates';
-import { convertToLocaleString } from '../../utils/dates';
+import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
 
 const props = defineProps({
@@ -19,7 +19,11 @@ const desktop: ComputedRef<boolean> = inject('desktop');
 const localePath = useLocalePath();
 
 const startDate = ref(
-	convertToLocaleString(props.eventData.date, props.eventData.isOnline, props.eventData.timezone)
+	convertEventDateToLocaleString(
+		props.eventData.date,
+		props.eventData.isOnline,
+		props.eventData.timezone
+	)
 );
 
 const tagArray = computed(() => {

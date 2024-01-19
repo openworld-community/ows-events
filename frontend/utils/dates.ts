@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import type { Timezone } from '../../common/types/location';
+import { getUserTimezoneName } from '../services/timezone.services';
 
 dayjs.extend(utc);
 
@@ -42,33 +43,32 @@ export const combineDateTime = (date: Date | null, time: Time | null): Date => {
 		.toDate();
 };
 
-export const convertToLocaleString = (
-	epoch: number,
-	isOnline: boolean,
-	eventTimezone: Timezone
-) => {
+export const convertToLocaleString = (epoch: number, timezoneName?: string) => {
 	const { locale } = useI18n();
-	const options: {
+
+	return new Date(epoch).toLocaleString(locale.value, {
 		month: 'long',
 		day: 'numeric',
 		hour: '2-digit',
 		minute: '2-digit',
-		timeZone?: string
-	} = {
-		month: 'long',
-		day: 'numeric',
-		hour: '2-digit',
-		minute: '2-digit'
-	};
+		timeZone: timezoneName ?? 'UTC'
+	});
+};
+
+export const convertEventDateToLocaleString = (
+	epoch: number,
+	isOnline: boolean,
+	eventTimezone: Timezone
+) => {
 	let time: number;
 	if (isOnline) {
 		// учитывает разницу между часовым поясом мероприятия и пользователя
 		time = epoch - parseInt(eventTimezone.timezoneOffset) * 1000 * 60 * 60;
+		return convertToLocaleString(time, getUserTimezoneName());
 	} else {
 		time = epoch;
-		options.timeZone = 'UTC';
+		return convertToLocaleString(time);
 	}
-	return new Date(time).toLocaleString(locale.value, options);
 };
 
 export const day = 1000 * 60 * 60 * 24;

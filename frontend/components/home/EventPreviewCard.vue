@@ -3,7 +3,7 @@ import type { EventOnPoster } from '../../../common/types';
 import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { RoutePathEnum } from '../../constants/enums/route';
 import { trimString } from '../../utils/trimString';
-import { convertToLocaleString } from '../../utils/dates';
+import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
 
 const props = defineProps<{ eventData: EventOnPoster }>();
@@ -12,7 +12,11 @@ const localePath = useLocalePath();
 const mobile = inject('mobile');
 
 const startDate = ref(
-	convertToLocaleString(props.eventData.date, props.eventData.isOnline, props.eventData.timezone)
+	convertEventDateToLocaleString(
+		props.eventData.date,
+		props.eventData.isOnline,
+		props.eventData.timezone
+	)
 );
 </script>
 

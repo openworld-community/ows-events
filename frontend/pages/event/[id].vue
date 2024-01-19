@@ -14,7 +14,7 @@ import { useUserStore } from '../../stores/user.store';
 import { apiRouter } from '../../composables/useApiRouter';
 import { useEventStore } from '../../stores/event.store';
 import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
-import { convertToLocaleString } from '../../utils/dates';
+import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
 
 const mobile = inject<boolean>('mobile');
@@ -30,13 +30,13 @@ const endDate = ref(null);
 
 const { data } = await apiRouter.events.get.useQuery({ data: { id } });
 if (data.value) {
-	startDate.value = convertToLocaleString(
+	startDate.value = convertEventDateToLocaleString(
 		data.value.date,
 		data.value.isOnline,
 		data.value.timezone
 	);
 	endDate.value = data.value.durationInSeconds
-		? convertToLocaleString(
+		? convertEventDateToLocaleString(
 				data.value.date + data.value.durationInSeconds * 1000,
 				data.value.isOnline,
 				data.value.timezone

@@ -49,11 +49,11 @@ export const convertToLocaleString = (
 ) => {
 	const { locale } = useI18n();
 	const options: {
-		month: string;
-		day: string;
-		hour: string;
-		minute: string;
-		timeZone?: string;
+		month: 'long',
+		day: 'numeric',
+		hour: '2-digit',
+		minute: '2-digit',
+		timeZone?: string
 	} = {
 		month: 'long',
 		day: 'numeric',

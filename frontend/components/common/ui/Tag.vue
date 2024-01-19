@@ -9,8 +9,12 @@ const props = defineProps({
 		required: true
 	},
 	size: {
-		type: String as PropType<'standard' | 'small'>,
+		type: String as PropType<'standard' | 'small' | 'mini'>,
 		default: 'standard'
+	},
+	appearance: {
+		type: String as PropType<'primary' | 'accent'>,
+		default: 'primary'
 	},
 	isCheckbox: {
 		type: Boolean,
@@ -45,7 +49,8 @@ const model = computed({
 		:class="[
 			'tag',
 			{
-				'tag--small': size === 'small',
+				[`tag--${size}`]: size !== 'standard',
+				[`tag--${appearance}`]: appearance !== 'primary',
 				tag__check: isCheckbox
 			}
 		]"
@@ -92,6 +97,8 @@ const model = computed({
 	transition-timing-function: ease;
 	transition-duration: 0.3s;
 
+	//SIZES
+
 	&--small {
 		font-size: var(--font-size-XS);
 		line-height: 16px;
@@ -100,6 +107,23 @@ const model = computed({
 			font-size: var(--font-size-XXS);
 		}
 	}
+
+	&--mini {
+		font-size: var(--font-size-XXS);
+		line-height: 12px;
+		padding: 0 4px;
+		border-radius: 3px;
+	}
+
+	// APPEARANCES
+
+	&--accent {
+		background-color: var(--color-accent-green-main);
+		border-color: var(--color-accent-green-main);
+		color: var(--color-white);
+	}
+
+	// CHECK
 
 	&__check {
 		cursor: pointer;

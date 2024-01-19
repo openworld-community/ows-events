@@ -14,8 +14,8 @@ import { useUserStore } from '../../stores/user.store';
 import { apiRouter } from '../../composables/useApiRouter';
 import { useEventStore } from '../../stores/event.store';
 import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
-import { getUserTimezoneName } from '../../services/timezone.services';
-import { convertToLocaleString } from '../../utils/dates';
+import { convertEventDateToLocaleString } from '../../utils/dates';
+import { Tags } from '../../../common/const/tags';
 
 const mobile = inject<boolean>('mobile');
 const route = useRoute();
@@ -23,7 +23,6 @@ const localePath = useLocalePath();
 const { t } = useI18n();
 const id = getFirstParam(route.params.id);
 const userStore = useUserStore();
-const userTimezone = getUserTimezoneName();
 
 const posterEvent = ref(null);
 const startDate = ref(null);
@@ -31,14 +30,16 @@ const endDate = ref(null);
 
 const { data } = await apiRouter.events.get.useQuery({ data: { id } });
 if (data.value) {
-	startDate.value = convertToLocaleString(
+	startDate.value = convertEventDateToLocaleString(
 		data.value.date,
-		data.value.isOnline ? userTimezone : 'UTC'
+		data.value.isOnline,
+		data.value.timezone
 	);
 	endDate.value = data.value.durationInSeconds
-		? convertToLocaleString(
+		? convertEventDateToLocaleString(
 				data.value.date + data.value.durationInSeconds * 1000,
-				data.value.isOnline ? userTimezone : 'UTC'
+				data.value.isOnline,
+				data.value.timezone
 		  )
 		: null;
 	posterEvent.value = data.value;
@@ -51,9 +52,9 @@ const eventImage = computed(() => {
 });
 
 getMeta({
-	title: posterEvent.value?.location
-		? `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}, ${posterEvent.value?.location.country}`
-		: posterEvent.value?.title,
+	title: posterEvent.value?.isOnline
+		? `${posterEvent.value?.title} / ${t(`event.tags.${Tags.ONLINE}`)}`
+		: `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}, ${posterEvent.value?.location.country}`,
 	description:
 		posterEvent.value.creatorId === PEREDELANO_CREATOR_ID
 			? t('meta.event.description_peredelano')
@@ -135,7 +136,11 @@ patchDeleteEventModal({
 					height="250"
 					:alt="
 						trimString(
-							`Afisha: ${posterEvent.location.city}, ${posterEvent.title}` ?? '',
+							`Afisha: ${
+								posterEvent.isOnline
+									? $t(`event.tags.${Tags.ONLINE}`)
+									: posterEvent.location.city
+							}, ${posterEvent.title}` ?? '',
 							460
 						)
 					"

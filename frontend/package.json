@@ -20,6 +20,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxtjs/robots": "^3.0.0",
     "@pinia/nuxt": "^0.4.11",
     "@types/uuid": "^9.0.1",
     "@vuepic/vue-datepicker": "^5.1.2",

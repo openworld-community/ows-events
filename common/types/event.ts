@@ -9,6 +9,7 @@ export type EventDbEntity = {
 	description: string;
 	date: number;
 	durationInSeconds: number;
+	isOnline: boolean;
 	location: {
 		country: string;
 		city: string;
@@ -35,6 +36,7 @@ export type PostEventPayload = {
 	title: string;
 	description: string;
 	organizer: string;
+	isOnline: boolean;
 	location: { country: string; city: string; address: string };
 	url: string;
 	tags?: string[];

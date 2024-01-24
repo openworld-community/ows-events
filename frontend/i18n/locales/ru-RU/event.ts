@@ -1,5 +1,6 @@
 import { Tags } from '../../../../common/const/tags';
 
+
 export default {
 	image: {
 		event: 'Изображение мероприятия'
@@ -22,6 +23,7 @@ export default {
 		[Tags.HOLIDAY]: 'Праздник',
 		[Tags.LECTURE]: 'Лекция',
 		[Tags.MASTERCLASS]: 'Мастер-класс',
+		[Tags.ONLINE]: 'Онлайн',
 		[Tags.PARTY]: 'Вечеринка',
 		[Tags.SPORT]: 'Спорт',
 		[Tags.STANDUP]: 'Стендап',

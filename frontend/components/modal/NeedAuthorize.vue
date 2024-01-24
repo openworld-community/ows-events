@@ -6,7 +6,7 @@ type Props = {
 };
 const props = defineProps<Props>();
 
-const localePath = useLocalePath()
+const localePath = useLocalePath();
 </script>
 
 <template>
@@ -21,7 +21,7 @@ const localePath = useLocalePath()
 				@click="props.closeNeedAuthorizeModal"
 			/>
 			<CommonButton
-				button-kind="success"
+				button-kind="dark"
 				:link="localePath(RoutePathEnum.USER_PAGE)"
 				:button-text="$t('global.button.authorize')"
 			/>

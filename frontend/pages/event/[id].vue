@@ -13,16 +13,35 @@ import {
 import { useUserStore } from '../../stores/user.store';
 import { apiRouter } from '../../composables/useApiRouter';
 import { useEventStore } from '../../stores/event.store';
+import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
+import { convertEventDateToLocaleString } from '../../utils/dates';
+import { Tags } from '../../../common/const/tags';
 
 const mobile = inject<boolean>('mobile');
 const route = useRoute();
 const localePath = useLocalePath();
+const { t } = useI18n();
 const id = getFirstParam(route.params.id);
 const userStore = useUserStore();
+
 const posterEvent = ref(null);
+const startDate = ref(null);
+const endDate = ref(null);
 
 const { data } = await apiRouter.events.get.useQuery({ data: { id } });
 if (data.value) {
+	startDate.value = convertEventDateToLocaleString(
+		data.value.date,
+		data.value.isOnline,
+		data.value.timezone
+	);
+	endDate.value = data.value.durationInSeconds
+		? convertEventDateToLocaleString(
+				data.value.date + data.value.durationInSeconds * 1000,
+				data.value.isOnline,
+				data.value.timezone
+		  )
+		: null;
 	posterEvent.value = data.value;
 } else {
 	navigateTo(localePath(RoutePathEnum.HOME));
@@ -33,10 +52,13 @@ const eventImage = computed(() => {
 });
 
 getMeta({
-	title: posterEvent.value?.location
-		? `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}, ${posterEvent.value?.location.country}`
-		: posterEvent.value?.title,
-	description: trimString(posterEvent.value?.description ?? '', 120),
+	title: posterEvent.value?.isOnline
+		? `${posterEvent.value?.title} / ${t(`event.tags.${Tags.ONLINE}`)}`
+		: `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}, ${posterEvent.value?.location.country}`,
+	description:
+		posterEvent.value.creatorId === PEREDELANO_CREATOR_ID
+			? t('meta.event.description_peredelano')
+			: trimString(posterEvent.value?.description ?? '', 120),
 	image: eventImage.value
 });
 
@@ -114,7 +136,11 @@ patchDeleteEventModal({
 					height="250"
 					:alt="
 						trimString(
-							`Afisha: ${posterEvent.location.city}, ${posterEvent.title}` ?? '',
+							`Afisha: ${
+								posterEvent.isOnline
+									? $t(`event.tags.${Tags.ONLINE}`)
+									: posterEvent.location.city
+							}, ${posterEvent.title}` ?? '',
 							460
 						)
 					"
@@ -185,32 +211,27 @@ patchDeleteEventModal({
 					<CommonEventDetails
 						class="event-info__details"
 						:price="posterEvent.price"
-						:start-date="convertToLocaleString(posterEvent.date)"
-						:end-date="
-							posterEvent.durationInSeconds
-								? convertToLocaleString(
-										posterEvent.date + posterEvent.durationInSeconds * 1000
-								  )
-								: null
-						"
+						:start-date="startDate"
+						:end-date="endDate"
+						:is-online="posterEvent.isOnline"
 						:location="posterEvent.location"
 						has-link-to-g-maps
 					/>
 					<p
-						v-if="!mobile && posterEvent.creatorId !== 'peredelanoParser'"
+						v-if="!mobile && posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
 						class="event-info__description-title"
 					>
 						{{ $t('event.description_title') }}
 					</p>
 					<p
-						v-if="posterEvent.creatorId !== 'peredelanoParser'"
+						v-if="posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
 						class="event-info__description"
 						:itemprop="SeoItempropEventEnum.DESCRIPTION"
 					>
 						{{ posterEvent.description }}
 					</p>
 					<div
-						v-if="posterEvent.creatorId === 'peredelanoParser'"
+						v-if="posterEvent.creatorId === PEREDELANO_CREATOR_ID"
 						class="event-info__html-description"
 						:itemprop="SeoItempropEventEnum.DESCRIPTION"
 						v-html="useSanitizer(posterEvent.description)"
@@ -218,7 +239,7 @@ patchDeleteEventModal({
 					<CommonButton
 						v-if="posterEvent.url"
 						class="event-info__button-contact"
-						button-kind="success"
+						button-kind="dark"
 						:button-text="$t('global.button.contact')"
 						:link="posterEvent.url"
 						is-external-link
@@ -459,7 +480,6 @@ patchDeleteEventModal({
 			font-size: var(--font-size-S);
 		}
 
-		&:deep(h1),
 		&:deep(h2) {
 			font-size: var(--font-size-L);
 			border-top: 1px solid var(--color-input-field);

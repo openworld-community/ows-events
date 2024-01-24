@@ -50,11 +50,12 @@ export enum SeoItempropPriceEnum {
 
 // Location
 export enum SeoItempropLocationEnum {
-	GROUP_ITEMPROP = 'address',
+	GROUP_ITEMPROP = 'location',
 	MAP = 'hasMap',
 	COUNTRY = 'addressCountry',
 	CITY = 'addressLocality',
-	ADDRESS = 'streetAddress'
+	ADDRESS = 'streetAddress',
+	NAME = 'name'
 }
 
 // Donation

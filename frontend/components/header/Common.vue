@@ -113,10 +113,6 @@ const goBack = () => {
 						{{ $t('header.navigation.about') }}
 					</NuxtLink>
 				</li>
-				<li
-					class="header__point"
-					aria-hidden="true"
-				/>
 				<li class="header__nav-item">
 					<NuxtLink
 						:to="SUPPORT_TG_URL"
@@ -126,10 +122,6 @@ const goBack = () => {
 						{{ $t('header.navigation.support') }}
 					</NuxtLink>
 				</li>
-				<li
-					class="header__point"
-					aria-hidden="true"
-				/>
 				<li class="header__nav-item">
 					<NuxtLink
 						:to="localePath(RoutePathEnum.DONATION)"
@@ -159,7 +151,7 @@ const goBack = () => {
 				<CommonButton
 					v-if="!mobile"
 					:link="localePath(RoutePathEnum.USER_PAGE)"
-					:button-kind="userStore.isAuthorized ? 'success' : 'ordinary'"
+					button-kind="ordinary"
 					icon-name="user"
 					:button-text="
 						userStore.isAuthorized
@@ -225,11 +217,11 @@ const goBack = () => {
 		@media (min-width: 768px) {
 			display: flex;
 			width: 100%;
-			max-width: 450px;
+			max-width: 400px;
 			justify-content: space-between;
 			align-items: center;
-			margin-left: 5%;
-			margin-right: 5%;
+			margin-left: 7%;
+			margin-right: 7%;
 		}
 	}
 
@@ -268,20 +260,6 @@ const goBack = () => {
 	&__nav-link {
 		@media (min-width: 768px) {
 			font-size: var(--font-size-S);
-		}
-	}
-
-	&__point {
-		@media (min-width: 768px) {
-			width: 4px;
-			height: 4px;
-			background-color: var(--color-text-main);
-			border-radius: 50%;
-		}
-
-		@media (min-width: 1440px) {
-			width: 6px;
-			height: 6px;
 		}
 	}
 

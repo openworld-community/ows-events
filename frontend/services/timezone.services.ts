@@ -24,9 +24,19 @@ export const getAllTimezones = async (): Promise<Timezone[]> => {
 };
 
 export const getTimezone = async (country: Country, city?: City) => {
-	if (!country && !city) return
+	if (!country && !city) return;
 
 	const { data } = await apiRouter.timezone.get.useQuery({ data: { city, country } });
 	if (!data.value) return '';
 	return timezoneToString(data.value);
+};
+
+export const getUserTimezoneName = () => {
+	return Intl.DateTimeFormat().resolvedOptions().timeZone;
+};
+
+export const getUserTimezone = () => {
+	const tz = getUserTimezoneName();
+	const timezones = JSON.parse(sessionStorage.getItem(LocalStorageEnum.TIMEZONES));
+	return timezones.find((el) => el.timezoneName === tz);
 };

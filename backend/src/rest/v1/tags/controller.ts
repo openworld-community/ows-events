@@ -1,4 +1,3 @@
-// import jwt from 'jsonwebtoken';
 import { CommonErrorsEnum } from '../../../../../common/const';
 import { eventsStateController } from '../../../controllers/events-state-controller';
 import {
@@ -7,8 +6,6 @@ import {
 	IGetTagByEventHandler
 	// IDeleteTagsHandler
 } from './type';
-import { JWTController } from '../../../controllers/JWT-controller';
-import { UserTokenController } from '../../../controllers/user-token-controller';
 
 // export const addTags: IAddTagHandler = async (request) => {
 // 	const { event } = request.body;

@@ -29,7 +29,11 @@ class CountriesAndCitiesController {
 
 	async getUsedCountries() {
 		const countries: string[] = await EventModel.distinct('location.country', {
-			date: { $gt: Date.now() }
+			'meta.moderation.status': { $nin: ['declined', 'in-progress'] },
+			$expr: {
+				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]
+			},
+			'location.country': { $nin: [''] }
 		});
 		return countries;
 	}
@@ -37,7 +41,11 @@ class CountriesAndCitiesController {
 	async getUsedCities(country: string) {
 		const cities: string[] = await EventModel.distinct('location.city', {
 			'location.country': country,
-			date: { $gt: Date.now() }
+			'meta.moderation.status': { $nin: ['declined', 'in-progress'] },
+			'location.city': { $nin: [''] },
+			$expr: {
+				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]
+			}
 		});
 		return cities;
 	}

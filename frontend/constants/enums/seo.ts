@@ -32,10 +32,12 @@ export enum SeoItempropGlobalEnum {
 export enum SeoItempropEventEnum {
 	NAME = 'name',
 	DESCRIPTION = 'description',
-	ORGANIZER = 'composer',
+	ORGANIZER = 'organizer',
 	START_DATE = 'startDate',
 	END_DATE = 'endDate',
-	LOCATION = 'location'
+	LOCATION = 'location',
+	CATEGORY = 'about',
+	AGE = 'audience'
 }
 
 // Price
@@ -48,11 +50,12 @@ export enum SeoItempropPriceEnum {
 
 // Location
 export enum SeoItempropLocationEnum {
-	GROUP_ITEMPROP = 'address',
+	GROUP_ITEMPROP = 'location',
 	MAP = 'hasMap',
 	COUNTRY = 'addressCountry',
 	CITY = 'addressLocality',
-	ADDRESS = 'streetAddress'
+	ADDRESS = 'streetAddress',
+	NAME = 'name'
 }
 
 // Donation

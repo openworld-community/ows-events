@@ -8,10 +8,10 @@ type IAddTagRoute = {
 };
 type IAddTagHandler = IRouteHandler<IAddTagRoute>;
 
-type IGetAllTagsRoute = {
-    Reply: string[];
+type IGetUsedTagsRoute = {
+	Reply: string[];
 };
-type IGetAllTagsHandler = IRouteHandler<IGetAllTagsRoute>;
+type IGetUsedTagsHandler = IRouteHandler<IGetUsedTagsRoute>;
 
 type IDeleteTagsRoute = {
 	Body: { event: EventOnPoster };
@@ -21,8 +21,7 @@ type IDeleteTagsRoute = {
 type IDeleteTagsHandler = IRouteHandler<IDeleteTagsRoute>;
 
 type IGetTagByEventRoute = {
-    Params: { id: string };
-    Reply: string[];
+	Params: { id: string };
+	Reply: string[];
 };
 type IGetTagByEventHandler = IRouteHandler<IGetTagByEventRoute>;
-

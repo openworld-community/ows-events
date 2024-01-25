@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { vOnClickOutside } from '@vueuse/components';
 import type { PropType } from 'vue';
+import { ref } from 'vue';
 
 const props = defineProps({
 	className: {
@@ -8,11 +9,28 @@ const props = defineProps({
 		default: ''
 	},
 	modelValue: {
-		type: String,
+		type: [String, Array] as PropType<string | string[]>,
 		required: true
 	},
 	list: {
-		type: [Array, String, Set] as PropType<string[] | Set<string>>,
+		type: [Array, String, Set] as PropType<
+			string | string[] | { [key: string]: string }[] | Set<string>
+		>,
+		required: true
+	},
+	multiple: {
+		// множественный выбор
+		type: Boolean,
+		default: false
+	},
+	returnKey: {
+		// для объектов: ключ значения, которое нужно возвращать
+		type: String,
+		default: ''
+	},
+	showKey: {
+		// для объектов: ключ значения, которое нужно показывать в списке
+		type: String,
 		default: ''
 	},
 	name: {
@@ -44,8 +62,8 @@ const props = defineProps({
 		type: String as PropType<'left' | 'right'>,
 		default: 'left'
 	},
-	// добавление иконок в список (иконки должны быть сохранены в отдельной папке с названием, идентичным props.name, и называться соответственно айтему)
 	hasIconItems: {
+		// добавление иконок в список (иконки должны быть сохранены в отдельной папке с названием, идентичным props.name, и называться соответственно айтему)
 		type: Boolean,
 		default: false
 	},
@@ -61,9 +79,27 @@ const props = defineProps({
 
 const isOpen = ref(false);
 
-const emit = defineEmits<{
-	'update:model-value': [model: typeof props.modelValue];
-}>();
+const emit = defineEmits(['update:model-value']);
+
+const model = computed<string | string[]>({
+	get() {
+		return props.modelValue ? props.modelValue : props.multiple ? ([] as string[]) : '';
+	},
+	set(value) {
+		emit('update:model-value', value);
+		return value;
+	}
+});
+
+const modelSingle = computed<string>({
+	get() {
+		return props.modelValue ? (props.modelValue as string) : '';
+	},
+	set(value) {
+		emit('update:model-value', value);
+		return value;
+	}
+});
 
 const openSelect = () => {
 	if (props.disabled) return;
@@ -74,56 +110,85 @@ const closeSelect = () => {
 	isOpen.value = false;
 };
 
-const filteredList = computed(() =>
-	(Array.isArray(props.list) ? props.list : [...props.list]).filter((item) => {
-		return (
-			item.toLowerCase().startsWith(props.modelValue.toLowerCase()) &&
-			item !== props.modelValue
-		);
-	})
-);
+const onClickOutsideList = () => {
+	if (props.multiple) {
+		closeSelect();
+	}
+	isOpen.value ? closeSelect() : null;
+};
+
+const clearModel = () => {
+	model.value = [];
+	isOpen.value = true;
+};
+
+const showInputValueIcon = computed(() => {
+	if (!props.multiple) {
+		const needIcon = Array.isArray(props.list)
+			? Array.from(props.list as string[]).includes(props.modelValue as string)
+			: Object.values(props.list).includes(props.modelValue);
+		return props.hasIconItems && needIcon;
+	}
+});
 </script>
 
 <template>
-	<div
-		class="select__wrapper"
-		:class="{ [className ?? '']: className }"
-	>
+	<div :class="['select__wrapper', { className: className }]">
+		<template v-if="multiple">
+			<CommonButton
+				button-kind="multiselect"
+				:button-text="getFilterPlaceholder(multiple, name, list, model, showKey, returnKey)"
+				:filled="!!model.length"
+				:is-disabled="disabled"
+				:class="{ 'select__field--green-border': isOpen }"
+				@click="openSelect"
+			/>
+			<CommonButton
+				v-if="model.length"
+				is-icon
+				icon-name="close"
+				:interactive="false"
+				class="select__clear-button"
+				@click="clearModel"
+			/>
+		</template>
 		<CommonUiBaseInput
+			v-else
+			v-model="modelSingle"
 			v-on-click-outside="closeSelect"
 			:name="name"
 			:label="label"
 			:disabled="disabled"
 			:placeholder="placeholder"
 			:error="error"
-			:model-value="modelValue"
 			:required="required"
 			:input-readonly="inputReadonly"
 			icon-name="container"
 			:appearance="appearance"
-			:has-value-icon="hasIconItems && Array.from(list).includes(modelValue)"
+			:has-value-icon="showInputValueIcon"
 			:aria-expanded="isOpen"
-			@update:model-value="emit('update:model-value', $event)"
+			:class="{ 'select__field--green-border': isOpen }"
 			@click="openSelect"
 		/>
-
 		<div
-			v-if="isOpen && filteredList.length"
+			v-if="isOpen && list"
+			v-on-click-outside="onClickOutsideList"
 			:class="['select__list-box', `select__list-box--${dropdownPosition}`]"
 		>
 			<ul class="select__list">
 				<li
-					v-for="item in filteredList"
-					:key="item"
+					v-for="item in list"
+					:key="item[returnKey] ?? item"
 					class="select__list-item list-item"
-					@click="emit('update:model-value', item)"
+					@click="multiple ? null : emit('update:model-value', item[returnKey] ?? item)"
 				>
-					<CommonIcon
-						v-if="hasIconItems"
-						class="list-item__icon"
-						:name="`${name}/${item}`"
+					<CommonUiRowSelectItem
+						v-model="model"
+						:label="item[showKey] ?? item"
+						:value="item[returnKey] ?? item"
+						:multiple="multiple"
+						:icon-name="hasIconItems ? $t(`${name}/${item}`) : ''"
 					/>
-					<span>{{ item }}</span>
 				</li>
 			</ul>
 		</div>
@@ -137,6 +202,19 @@ const filteredList = computed(() =>
 		position: relative;
 	}
 
+	&__field {
+		&--green-border,
+		&--green-border:deep(.input__field--no-border) {
+			border-color: var(--color-accent-green-main);
+		}
+	}
+
+	&__clear-button {
+		position: absolute;
+		top: 8px;
+		right: 12px;
+	}
+
 	&__box {
 		position: static;
 	}
@@ -144,9 +222,11 @@ const filteredList = computed(() =>
 	&__list-box {
 		position: absolute;
 		top: calc(100% + 5px);
+		display: flex;
+		flex-direction: column;
 		max-width: 100%;
 		min-width: 267px;
-		height: 202px;
+		min-height: 202px;
 		padding: 14px 0;
 		background-color: var(--color-white);
 		box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
@@ -168,18 +248,6 @@ const filteredList = computed(() =>
 		overflow-y: scroll;
 		-webkit-overflow-scrolling: touch;
 		overflow-x: hidden;
-
-		& li {
-			padding-left: 16px;
-			cursor: pointer;
-			max-width: 100%;
-
-			transition: background-color 0.3s ease;
-
-			&:hover {
-				background-color: var(--color-accent-green-main-40);
-			}
-		}
 	}
 
 	&__list::-webkit-scrollbar {
@@ -204,7 +272,23 @@ const filteredList = computed(() =>
 .list-item {
 	display: flex;
 	align-items: center;
-	padding: 5px;
+	padding: 5px 5px 5px 16px;
+	cursor: pointer;
+	max-width: 100%;
+
+	transition: background-color 0.3s ease;
+
+	&:hover {
+		background-color: var(--color-accent-green-main-40);
+	}
+
+	&:has(.checkbox-row) {
+		padding: 0;
+	}
+
+	& > .checkbox-row {
+		padding: 5px 5px 5px 16px;
+	}
 
 	&__icon {
 		margin-right: 4px;

@@ -24,6 +24,7 @@ services:
                 - VITE_TELEGRAM_AUTH_BOT_NAME
                 - VITE_MODE=production
                 - VITE_DOMAIN=afisha.peredelano.com
+                - VITE_GTAG_ID
         logging: *default-logging
         restart: always
         labels:
@@ -71,7 +72,8 @@ services:
             - FRONTEND_URL=https://afisha.peredelano.com
             - SECRET_KEY
             - LOCALIZATION_API_KEY
-            - GITHUB_PARSING_KEY
+            - GITHUB_PARSING_TOKEN
+            - PEREDELANOCONF_GOOGLEDOC
         networks:
             - traefikpublic
         ports:

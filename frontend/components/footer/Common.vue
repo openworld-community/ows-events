@@ -1,30 +1,47 @@
 <script setup lang="ts">
-import { RoutePathEnum } from '../../constants/enums/route';
+import { RoutePathEnum, RouteNameEnum } from '../../constants/enums/route';
 import { SocialLinks, SUPPORT_TG_URL } from '../../constants/url';
 
+import { SeoItempropNavEnum } from '../../constants/enums/seo';
+import { getRouteName } from '../../utils';
+
+const route = useRoute();
 const localePath = useLocalePath();
 
 const mobile = inject('mobile');
+
+const isAtHome = computed(() => getRouteName(route.name as string) === RouteNameEnum.HOME);
+const logoComponentIs = computed(() => {
+	if (isAtHome.value) return 'button';
+	else return defineNuxtLink({});
+});
+const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 </script>
 
 <template>
 	<footer class="footer">
 		<div class="footer__links">
 			<div class="footer__logo logo">
-				<NuxtLink
-					:to="localePath(RoutePathEnum.HOME)"
+				<component
+					:is="logoComponentIs"
 					class="logo__link"
+					:title="$t(isAtHome ? 'footer.logo.at_home_aria' : 'footer.logo.other_page_aria')"
+					:aria-label="$t(isAtHome ? 'footer.logo.at_home_aria' : 'footer.logo.other_page_aria')"
+					:to="!isAtHome ? localePath(RoutePathEnum.HOME) : undefined"
+					:itemprop="SeoItempropNavEnum.URL"
+					@click="isAtHome && scrollToTop()"
 				>
 					<CommonIcon
 						name="afisha-logo-dark"
 						width="86"
 						height="40"
+						color="var(--color-accent-green-main)"
 					/>
-				</NuxtLink>
+				</component>
 			</div>
 
-			<ul class="footer__navigation navigation">
-				<div class="navigation__item-container">
+			<div class="footer__navigation navigation">
+				<ul class="navigation__item-container">
 					<li class="navigation__item">
 						<NuxtLink
 							:to="localePath(RoutePathEnum.ABOUT)"
@@ -42,8 +59,8 @@ const mobile = inject('mobile');
 							{{ $t('footer.navigation.support') }}
 						</NuxtLink>
 					</li>
-				</div>
-				<div class="navigation__item-container">
+				</ul>
+				<ul class="navigation__item-container">
 					<li class="navigation__item">
 						<NuxtLink
 							:to="localePath(RoutePathEnum.DONATION)"
@@ -60,8 +77,8 @@ const mobile = inject('mobile');
 							{{ $t('footer.navigation.limitation_of_liability') }}
 						</NuxtLink>
 					</li>
-				</div>
-			</ul>
+				</ul>
+			</div>
 			<div class="footer__social social">
 				<ul class="social__list">
 					<li
@@ -71,6 +88,8 @@ const mobile = inject('mobile');
 					>
 						<NuxtLink
 							:to="link"
+							:title="$t(`footer.social.${key}`)"
+							:aria-label="$t(`footer.social.${key}`)"
 							target="_blank"
 							class="social__link"
 						>

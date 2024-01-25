@@ -22,8 +22,8 @@ definePageMeta({
 		}).value = user.value;
 	}
 });
-await navigateTo(localePath(RoutePathEnum.USER_PAGE, langCookie.value ?? 'ru'));
+await navigateTo(localePath(RoutePathEnum.HOME, langCookie.value ?? 'ru'));
 </script>
 <template>
-	<div/>
+	<div />
 </template>

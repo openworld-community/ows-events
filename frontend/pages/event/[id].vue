@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useModal, type UseModalOptions, VueFinalModal } from 'vue-final-modal';
 import { RoutePathEnum } from '@/constants/enums/route';
-import EventModal from '@/components/modal/Event.client.vue';
 import DeleteEvent from '@/components/modal/DeleteEvent.vue';
+import { useSanitizer } from '../../utils/sanitize';
 
 import { trimString } from '../../utils/trimString';
 import {
@@ -12,30 +12,53 @@ import {
 } from '../../constants/enums/seo';
 import { useUserStore } from '../../stores/user.store';
 import { apiRouter } from '../../composables/useApiRouter';
+import { useEventStore } from '../../stores/event.store';
+import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
+import { convertEventDateToLocaleString } from '../../utils/dates';
+import { Tags } from '../../../common/const/tags';
 
 const mobile = inject<boolean>('mobile');
 const route = useRoute();
 const localePath = useLocalePath();
+const { t } = useI18n();
 const id = getFirstParam(route.params.id);
-
 const userStore = useUserStore();
 
-const { data, refresh: refreshEvent } = await apiRouter.events.get.useQuery({ data: { id } });
+const posterEvent = ref(null);
+const startDate = ref(null);
+const endDate = ref(null);
 
-const posterEvent = computed(() => {
-	if (!data.value) return void navigateTo(localePath(RoutePathEnum.HOME));
-	return data.value;
-});
+const { data } = await apiRouter.events.get.useQuery({ data: { id } });
+if (data.value) {
+	startDate.value = convertEventDateToLocaleString(
+		data.value.date,
+		data.value.isOnline,
+		data.value.timezone
+	);
+	endDate.value = data.value.durationInSeconds
+		? convertEventDateToLocaleString(
+				data.value.date + data.value.durationInSeconds * 1000,
+				data.value.isOnline,
+				data.value.timezone
+		  )
+		: null;
+	posterEvent.value = data.value;
+} else {
+	navigateTo(localePath(RoutePathEnum.HOME));
+}
 
 const eventImage = computed(() => {
 	return getEventImage(posterEvent.value);
 });
 
 getMeta({
-	title: posterEvent.value?.location
-		? `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}, ${posterEvent.value?.location.country}`
-		: posterEvent.value?.title,
-	description: trimString(posterEvent.value?.description ?? '', 120),
+	title: posterEvent.value?.isOnline
+		? `${posterEvent.value?.title} / ${t(`event.tags.${Tags.ONLINE}`)}`
+		: `${posterEvent.value?.title} / ${posterEvent.value?.location?.city}, ${posterEvent.value?.location.country}`,
+	description:
+		posterEvent.value.creatorId === PEREDELANO_CREATOR_ID
+			? t('meta.event.description_peredelano')
+			: trimString(posterEvent.value?.description ?? '', 120),
 	image: eventImage.value
 });
 
@@ -59,6 +82,13 @@ const deleteCard = async () => {
 	navigateTo(localePath({ path: RoutePathEnum.USER_PAGE }));
 };
 
+const onEditButtonClick = async () => {
+	const eventStore = useEventStore();
+	eventStore.setEventData(posterEvent.value);
+	eventStore.createDefaultEventData();
+	await navigateTo(localePath({ path: RoutePathEnum.EVENT_FORM }));
+};
+
 // TODO подключить, когда вернемся к проработке регистрации
 // const {
 // 	open: openRegistrationModal,
@@ -69,21 +99,6 @@ const deleteCard = async () => {
 // 	attrs: { eventId: id, close: () => void 0 }
 // } as UseModalOptions<InstanceType<typeof VueFinalModal>['$props']>);
 // patchRegistrationModal({ attrs: { close: closeRegistrationModal } });
-
-const {
-	open: openEventModal,
-	close: closeEventModal,
-	patchOptions: patchEventModal
-} = useModal({ component: EventModal } as UseModalOptions<
-	InstanceType<typeof VueFinalModal>['$props']
->);
-patchEventModal({
-	attrs: {
-		dataForEdit: posterEvent,
-		closeEventModal,
-		refreshEvent
-	}
-});
 
 const {
 	open: openDeleteEventModal,
@@ -119,7 +134,16 @@ patchDeleteEventModal({
 					:src="eventImage"
 					width="350"
 					height="250"
-					:alt="$t('event.image.event')"
+					:alt="
+						trimString(
+							`Afisha: ${
+								posterEvent.isOnline
+									? $t(`event.tags.${Tags.ONLINE}`)
+									: posterEvent.location.city
+							}, ${posterEvent.title}` ?? '',
+							460
+						)
+					"
 					:itemprop="SeoItempropGlobalEnum.IMAGE"
 				/>
 				<img
@@ -128,7 +152,7 @@ patchDeleteEventModal({
 					src="@/assets/img/event-preview@2x.png"
 					width="350"
 					height="250"
-					:alt="$t('event.image.event')"
+					alt=""
 					:itemprop="SeoItempropGlobalEnum.IMAGE"
 				/>
 			</div>
@@ -136,14 +160,13 @@ patchDeleteEventModal({
 			<div class="event-info">
 				<div class="event-info__summary">
 					<div class="event-info__tag-wrapper">
-						<CommonTag
-							class-name="event-info__price"
-							:price="posterEvent.price"
+						<CommonTagList
+							:tag-list="posterEvent.tags"
+							:tag-size="mobile ? 'standard' : 'small'"
 						/>
+
 						<CommonButton
-							v-if="
-								mobile && userStore.isAuthorized && userStore.id !== posterEvent.id
-							"
+							v-if="mobile && userStore.isAuthorized"
 							is-icon
 							is-round
 							:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
@@ -155,7 +178,7 @@ patchDeleteEventModal({
 							@click="toggleFavourites"
 						/>
 					</div>
-					<div class="event-info__title-wrapper">
+					<div class="event-info__header">
 						<!--      TODO когда будет user info, нужно будет подставлять имя создавшего -->
 						<p
 							v-if="posterEvent.organizer"
@@ -164,59 +187,63 @@ patchDeleteEventModal({
 						>
 							{{ posterEvent?.organizer }}
 						</p>
-						<h1
-							class="event-info__title"
-							:itemprop="SeoItempropEventEnum.NAME"
-						>
-							{{ posterEvent.title }}
-						</h1>
+						<div class="event-info__title-wrapper">
+							<h1
+								class="event-info__title"
+								:itemprop="SeoItempropEventEnum.NAME"
+							>
+								{{ posterEvent.title }}
+							</h1>
+							<CommonButton
+								v-if="!mobile && userStore.isAuthorized"
+								is-icon
+								is-round
+								:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
+								:alt="
+									isInFavourites
+										? $t('global.button.remove_from_favourites')
+										: $t('global.button.add_to_favourites')
+								"
+								@click="toggleFavourites"
+							/>
+						</div>
 					</div>
-					<div class="event-info__details">
-						<CommonEventDetails
-							class="event-info__datetime"
-							:start-date="convertToLocaleString(posterEvent.date)"
-							:end-date="
-								posterEvent.durationInSeconds
-									? convertToLocaleString(
-											posterEvent.date + posterEvent.durationInSeconds * 1000
-									  )
-									: null
-							"
-							with-pin
-						/>
-						<CommonEventDetails
-							:location="posterEvent.location"
-							class="event-info__geolink"
-							is-link
-							with-pin
-						/>
-					</div>
+					<CommonEventDetails
+						class="event-info__details"
+						:price="posterEvent.price"
+						:start-date="startDate"
+						:end-date="endDate"
+						:is-online="posterEvent.isOnline"
+						:location="posterEvent.location"
+						has-link-to-g-maps
+					/>
 					<p
-						v-if="!mobile && posterEvent.creatorId !== 'peredelanoParser'"
+						v-if="!mobile && posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
 						class="event-info__description-title"
 					>
 						{{ $t('event.description_title') }}
 					</p>
 					<p
-						v-if="posterEvent.creatorId !== 'peredelanoParser'"
+						v-if="posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
 						class="event-info__description"
 						:itemprop="SeoItempropEventEnum.DESCRIPTION"
 					>
 						{{ posterEvent.description }}
 					</p>
 					<div
-						v-if="posterEvent.creatorId === 'peredelanoParser'"
+						v-if="posterEvent.creatorId === PEREDELANO_CREATOR_ID"
 						class="event-info__html-description"
 						:itemprop="SeoItempropEventEnum.DESCRIPTION"
-						v-html="posterEvent.description"
+						v-html="useSanitizer(posterEvent.description)"
 					/>
 					<CommonButton
 						v-if="posterEvent.url"
 						class="event-info__button-contact"
-						button-kind="success"
+						button-kind="dark"
 						:button-text="$t('global.button.contact')"
 						:link="posterEvent.url"
 						is-external-link
+						@click="useTrackEvent('redirect to event url')"
 					/>
 				</div>
 
@@ -236,10 +263,7 @@ patchDeleteEventModal({
 					class="event-info__actions"
 				>
 					<div
-						v-if="
-							userStore.id === posterEvent.creatorId ||
-							posterEvent.creatorId === 'dev-user'
-						"
+						v-if="userStore.id === posterEvent.creatorId"
 						class="event-info__manage"
 					>
 						<CommonButton
@@ -258,24 +282,9 @@ patchDeleteEventModal({
 							icon-name="edit"
 							icon-width="16"
 							icon-height="16"
-							@click="openEventModal"
+							@click="onEditButtonClick"
 						/>
 					</div>
-					<CommonButton
-						v-if="
-							!mobile &&
-							posterEvent.id !== userStore.id &&
-							posterEvent.creatorId !== 'dev-user'
-						"
-						button-kind="ordinary"
-						:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
-						:button-text="
-							isInFavourites
-								? $t('global.button.in_favourites')
-								: $t('global.button.add_to_favourites')
-						"
-						@click="toggleFavourites"
-					/>
 				</div>
 			</div>
 		</main>
@@ -371,8 +380,7 @@ patchDeleteEventModal({
 	&__tag-wrapper {
 		display: flex;
 		width: 100%;
-		justify-content: space-between;
-		align-items: center;
+		gap: 12px;
 		margin-bottom: 12px;
 
 		@media (min-width: 768px) {
@@ -380,7 +388,7 @@ patchDeleteEventModal({
 		}
 	}
 
-	&__title-wrapper {
+	&__header {
 		display: flex;
 		width: 100%;
 		flex-direction: column;
@@ -393,8 +401,6 @@ patchDeleteEventModal({
 	}
 
 	&__author {
-		//TODO: пока верстка только мобилки
-		max-width: 480px;
 		word-wrap: break-word;
 		font-size: var(--font-size-XS);
 		font-weight: var(--font-weight-bold);
@@ -408,9 +414,11 @@ patchDeleteEventModal({
 		}
 	}
 
+	&__title-wrapper {
+		display: flex;
+	}
+
 	&__title {
-		//TODO: пока верстка только мобилки
-		max-width: 480px;
 		word-wrap: break-word;
 		font-size: var(--font-size-L);
 		font-weight: var(--font-weight-bold);
@@ -420,6 +428,7 @@ patchDeleteEventModal({
 			font-size: var(--font-size-XXL);
 			line-height: 36px;
 			margin-bottom: 12px;
+			margin-right: 16px;
 		}
 	}
 
@@ -430,14 +439,9 @@ patchDeleteEventModal({
 		margin-bottom: var(--space-unrelated-items);
 
 		@media (min-width: 768px) {
-			width: max-content;
 			padding-top: 24px;
 			border-top: 1px solid var(--color-input-field);
 		}
-	}
-
-	&__datetime {
-		margin-bottom: var(--space-inner);
 	}
 
 	&__description-title {
@@ -454,8 +458,6 @@ patchDeleteEventModal({
 	&__description {
 		word-wrap: break-word;
 		white-space: pre-line;
-		overflow-y: auto;
-		-webkit-overflow-scrolling: touch;
 		font-size: var(--font-size-S);
 		line-height: 20px;
 		margin-bottom: 24px;
@@ -464,8 +466,6 @@ patchDeleteEventModal({
 	&__html-description {
 		word-wrap: break-word;
 		white-space: pre-line;
-		overflow-y: auto;
-		-webkit-overflow-scrolling: touch;
 		font-size: var(--font-size-S);
 		line-height: 20px;
 		margin-bottom: 24px;
@@ -476,24 +476,27 @@ patchDeleteEventModal({
 		&:deep(h3),
 		&:deep(h4),
 		&:deep(h5) {
-			padding-bottom: 0.3em;
-			margin-bottom: 16px;
 			line-height: normal;
+			font-size: var(--font-size-S);
 		}
 
-		&:deep(h1),
 		&:deep(h2) {
-			border-bottom: 1px solid var(--color-input-icons, var(--color-input-icons));
+			font-size: var(--font-size-L);
+			border-top: 1px solid var(--color-input-field);
+			padding-top: 24px;
+
+			@media (min-width: 768px) {
+				font-size: var(--font-size-ML);
+			}
+
+			@media (min-width: 1440px) {
+				margin-bottom: 14px;
+			}
 		}
 
 		&:deep(a) {
 			text-decoration: underline;
 			text-underline-offset: 0.2rem;
-		}
-
-		&:deep(p) {
-			margin-top: 0;
-			margin-bottom: 16px;
 		}
 
 		&:deep(img) {
@@ -504,7 +507,7 @@ patchDeleteEventModal({
 
 		&:deep(blockquote) {
 			padding: 0 1em;
-			border-left: 0.25em solid var(--color-input-icons, var(--color-input-icons));
+			border-left: 0.25em solid var(--color-input-icons);
 		}
 
 		&:deep(table) {
@@ -518,17 +521,22 @@ patchDeleteEventModal({
 		}
 
 		&:deep(tr) {
-			border-top: 1px solid var(--color-input-icons, var(--color-input-icons));
+			border-top: 1px solid var(--color-input-icons);
 		}
 
 		&:deep(th),
 		&:deep(td) {
 			padding: 6px 13px;
-			border: 1px solid var(--color-input-icons, var(--color-input-icons));
+			border: 1px solid var(--color-input-icons);
 		}
 
 		&:deep(th) {
-			font-weight: var(--base-text-weight-semibold, 600);
+			font-weight: var(--font-weight-bold);
+		}
+
+		&:deep(hr) {
+			border-style: none;
+			border-top: 1px solid var(--color-input-field);
 		}
 	}
 

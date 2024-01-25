@@ -1,7 +1,7 @@
 import { type EventOnPoster, type PostEventPayload } from '@common/types/event';
 import { EventValidatorErrorTypes } from '../../../common/const';
 
-type ValidateInput = PostEventPayload | { event: EventOnPoster | undefined };
+type ValidateInput = { event: PostEventPayload } | { event: EventOnPoster | undefined };
 
 type EventValidatorResult = {
 	isValid: boolean;
@@ -169,13 +169,6 @@ class EventsValidator {
 
 		if (!location) {
 			errors.push(EventValidatorErrorTypes.LOCATION_IS_NOT_DEFINED);
-		} else {
-			if (!location.country) {
-				errors.push(EventValidatorErrorTypes.COUNTRY_IS_NOT_DEFINED);
-			}
-			if (!location.city) {
-				errors.push(EventValidatorErrorTypes.CITY_IS_NOT_DEFINED);
-			}
 		}
 
 		return errors;

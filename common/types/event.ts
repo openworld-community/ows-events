@@ -1,5 +1,6 @@
 import type { Timezone } from './location';
 import { EventTypes } from '../const/eventTypes';
+import { type Tag, Tags } from '../const/tags';
 
 export type EventDbEntity = {
 	id: string;
@@ -8,6 +9,7 @@ export type EventDbEntity = {
 	description: string;
 	date: number;
 	durationInSeconds: number;
+	isOnline: boolean;
 	location: {
 		country: string;
 		city: string;
@@ -18,26 +20,26 @@ export type EventDbEntity = {
 	timezone?: Timezone;
 	url: string;
 	organizer?: string;
-	tags?: string[];
+	tags?: Tag[];
 	type: EventTypes;
 };
 
 export type EventOnPoster = EventDbEntity;
 
 export type PostEventPayload = {
-	event: {
-		date: number;
-		image: string;
-		durationInSeconds: number;
-		price: EventPrice;
-		timezone: Timezone;
-		description: string;
-		organizer: string;
-		location: { country: string; city: string; address: string };
-		title: string;
-		url: string;
-		tags?: string[];
-	};
+	id?: string;
+	date: number;
+	image: string;
+	durationInSeconds: number;
+	price: EventPrice;
+	timezone: Timezone;
+	title: string;
+	description: string;
+	organizer: string;
+	isOnline: boolean;
+	location: { country: string; city: string; address: string };
+	url: string;
+	tags?: string[];
 };
 
 export type EventParams = {
@@ -48,6 +50,7 @@ export type SearchEventPayload = {
 	searchLine?: string;
 	country?: string;
 	city?: string;
+	tags?: Tags[];
 };
 
 export type EventPrice = {

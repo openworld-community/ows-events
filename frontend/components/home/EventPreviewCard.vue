@@ -2,15 +2,36 @@
 import type { EventOnPoster } from '../../../common/types';
 import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { RoutePathEnum } from '../../constants/enums/route';
+import { trimString } from '../../utils/trimString';
+import { convertEventDateToLocaleString } from '../../utils/dates';
+import { Tags } from '../../../common/const/tags';
 
-defineProps<{ eventData: EventOnPoster }>();
+const props = defineProps<{ eventData: EventOnPoster }>();
+const { t } = useI18n();
 const localePath = useLocalePath();
+const mobile = inject('mobile');
+
+const startDate = ref(
+	convertEventDateToLocaleString(
+		props.eventData.date,
+		props.eventData.isOnline,
+		props.eventData.timezone
+	)
+);
 </script>
 
 <template>
 	<NuxtLink
 		class="card"
 		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
+		:title="
+			trimString(
+				`Afisha: ${
+					eventData.isOnline ? t(`event.tags.${Tags.ONLINE}`) : eventData.location.city
+				}, ${eventData.title}` ?? '',
+				460
+			)
+		"
 		:itemprop="SeoItempropGlobalEnum.URL"
 	>
 		<div
@@ -21,7 +42,16 @@ const localePath = useLocalePath();
 				v-if="eventData.image"
 				class="card__image"
 				:src="getEventImage(eventData)"
-				:alt="$t('home.events.image_alt')"
+				:alt="
+					trimString(
+						`Afisha: ${
+							eventData.isOnline
+								? t(`event.tags.${Tags.ONLINE}`)
+								: eventData.location.city
+						}, ${eventData.title}` ?? '',
+						460
+					)
+				"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
 			<img
@@ -29,15 +59,22 @@ const localePath = useLocalePath();
 				class="card__image"
 				src="@/assets/img/event-preview@2x.png"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
-				:alt="$t('home.events.image_alt')"
+				alt=""
+			/>
+			<CommonUiTag
+				v-if="eventData.isOnline"
+				:tag-key="Tags.ONLINE"
+				appearance="accent"
+				class="card__online-tag"
 			/>
 		</div>
 
 		<div class="card-description">
 			<div class="card-description__top">
-				<CommonTag
-					:price="eventData?.price"
-					class="card-description__tag"
+				<CommonTagList
+					v-if="!mobile && eventData.tags"
+					:tag-list="eventData.tags"
+					class="card-description__tags"
 				/>
 				<h2
 					class="card-description__title"
@@ -55,14 +92,16 @@ const localePath = useLocalePath();
 			</div>
 			<div class="card-description__bottom">
 				<CommonEventDetails
-					class="card-description__datetime"
-					:start-date="convertToLocaleString(eventData.date)"
-					with-pin
-				/>
-				<CommonEventDetails
-					class="card-description__geo"
+					class="card-description__details"
+					:price="eventData?.price"
+					:is-online="eventData.isOnline"
 					:location="eventData.location"
-					with-pin
+					:start-date="startDate"
+				/>
+				<CommonTagList
+					v-if="mobile && eventData.tags"
+					:tag-list="eventData.tags"
+					class="card-description__tags"
 				/>
 			</div>
 		</div>
@@ -92,6 +131,7 @@ const localePath = useLocalePath();
 		aspect-ratio: 2 / 1.33;
 		height: auto;
 		max-height: 400px;
+		position: relative;
 		background-color: var(--color-input-field);
 		background-size: cover;
 		line-height: 0;
@@ -124,24 +164,28 @@ const localePath = useLocalePath();
 		}
 	}
 
+	&__online-tag {
+		position: absolute;
+		top: 16px;
+		left: 16px;
+
+		@media (min-width: 768px) {
+			top: 12px;
+			left: 12px;
+		}
+	}
+
 	.card-description {
 		display: flex;
 		width: 100%;
 		flex-direction: column;
-		padding: 12px 16px 44px;
+		padding: 12px 16px 18px;
 
 		@media (min-width: 768px) {
 			height: inherit;
-			justify-content: space-between;
 			padding: 12px;
 			border-bottom-left-radius: 8px;
 			border-bottom-right-radius: 8px;
-		}
-
-		&__bottom {
-			@media (min-width: 786px) {
-				margin-top: auto;
-			}
 		}
 
 		&__author {
@@ -156,7 +200,8 @@ const localePath = useLocalePath();
 			margin-bottom: 12px;
 		}
 
-		&__tag {
+		&__tags {
+			margin-top: auto;
 			margin-bottom: 12px;
 		}
 
@@ -170,8 +215,8 @@ const localePath = useLocalePath();
 			margin-bottom: 12px;
 		}
 
-		&__datetime {
-			margin-bottom: 8px;
+		&__details {
+			margin-bottom: 12px;
 		}
 	}
 }

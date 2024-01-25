@@ -6,11 +6,15 @@ import { searchForWorkspaceRoot } from 'vite';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+	devtools: {
+		enabled: true // or false to disable
+	},
 	modules: [
 		'@nuxtjs/i18n',
 		'@pinia/nuxt',
 		'@vueuse/nuxt',
-		'@nuxtjs/plausible',
+		'nuxt-gtag',
+		'@nuxtjs/robots',
 		[
 			'nuxt-viewport',
 			{
@@ -26,42 +30,40 @@ export default defineNuxtConfig({
 		'/': { redirect: '/ru', ssr: true }
 	},
 	i18n: {
-		// debug: true,
-		experimental: {
-			jsTsFormatResource: true
-		},
+		debug: false,
 		locales: [
-			{ code: 'ru', name: 'Russian', iso: 'ru-RU', dir: 'ltr', file: 'ru-RU.ts' },
-			{ code: 'en', name: 'English', iso: 'en-US', dir: 'ltr', file: 'en-GB.ts' }
+			{ code: 'ru', name: 'Russian', iso: 'ru-RU', dir: 'ltr', file: 'ru-RU.json' },
+			{ code: 'en', name: 'English', iso: 'en-GB', dir: 'ltr', file: 'en-GB.json' }
 		],
 		lazy: true,
-		langDir: 'i18n',
+		langDir: '.nuxt/i18n',
 		strategy: 'prefix',
 		//
 		defaultLocale: 'ru',
 		detectBrowserLanguage: false,
 		vueI18n: './i18n.config.ts'
 	},
+	// https://nuxt.com/modules/gtag
+	gtag: {
+		id: import.meta.env.VITE_GTAG_ID || process.env.VITE_GTAG_ID || ''
+	},
 	// На случай добавления скриптов:
 	// app: {
 	// 	head: {
 	// 		script: [
 	// 			{
-	// 				defer: true,
-	// 				'data-domain': 'poster-peredelano.orby-tech.space',
-	// 				src: 'http://metrics.orby-tech.space/js/script.js'
+	// 				async: true,
+	// 				src: `https://www.googletagmanager.com/gtag/js?id=${import.meta.env.VITE_GTAG_ID || process.env.VITE_GTAG_ID || ''}`
+	// 			},
+	// 			{
+	// 				children: `window.dataLayer = window.dataLayer || [];
+	// 							function gtag(){dataLayer.push(arguments);}
+	// 							gtag('js', new Date());
+	// 							gtag('config', ${import.meta.env.VITE_GTAG_ID || process.env.VITE_GTAG_ID || ''});`,
 	// 			}
 	// 		]
 	// 	}
 	// },
-	//https://github.com/nuxt-modules/plausible#module-options
-	plausible: {
-		domain:
-			import.meta.env.VITE_DOMAIN ||
-			process.env.VITE_DOMAIN ||
-			'poster-test-peredelano.orby-tech.space',
-		apiHost: 'https://afisha-metrics.orby-tech.space'
-	},
 	typescript: { strict: false },
 	nitro: {
 		devProxy: {
@@ -96,8 +98,12 @@ export default defineNuxtConfig({
 		],
 		resolve: { alias: { '@common': fileURLToPath(new URL('../common', import.meta.url)) } }
 	},
+	// watcher:
 	// на винде очень долго стартует дев-сервер, проблема недавняя
 	// один из авторов Нукста на ГХ посоветовал такое решение
 	// если у кого-то от этой настройки наоборот что-то ломается, то скажите - что-нибудь придумаем
-	experimental: { watcher: 'chokidar' }
+	// appManifest:
+	// Почему-то при билде накст генерит разные buildId для appManifest и entry, пробую отключить
+	// (могут сломаться редиректы по языкам)
+	experimental: { watcher: 'chokidar', appManifest: false }
 });

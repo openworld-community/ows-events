@@ -6,7 +6,11 @@ import { CookieNameEnum } from '../constants/enums/common';
 import { RouteNameEnum } from '../constants/enums/route';
 import { getRouteName } from '../utils';
 
-const pagesWithAuth: string[] = [RouteNameEnum.USER_FAVOURITES, RouteNameEnum.USER_MY_EVENTS];
+const pagesWithAuth: string[] = [
+	RouteNameEnum.USER_FAVOURITES,
+	RouteNameEnum.USER_MY_EVENTS,
+	RouteNameEnum.EVENT_FORM
+];
 
 export default defineNuxtRouteMiddleware(async (to) => {
 	const localePath = useNuxtApp().$localePath;
@@ -29,7 +33,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 			token.value = null;
 			userCookie.value = null;
 			if (to.name && pagesWithAuth.includes(getRouteName(to.name as string))) {
-				return navigateTo(localePath({ path: RoutePathEnum.USER_PAGE }));
+				return (to.path = localePath(RoutePathEnum.USER_PAGE));
 			}
 		} else {
 			userStore.$patch({ userInfo: userData });

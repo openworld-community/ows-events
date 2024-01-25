@@ -19,7 +19,7 @@ const props = defineProps<Props>();
 				@click="props.closeDeleteEventModal"
 			/>
 			<CommonButton
-				button-kind="success"
+				button-kind="dark"
 				:button-text="$t('global.button.confirm')"
 				@click="props.removeEvent"
 			/>

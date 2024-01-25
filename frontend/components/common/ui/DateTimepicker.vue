@@ -5,9 +5,11 @@ import dayjs from 'dayjs';
 import type { PropType } from 'vue';
 import type { Time } from '../../../utils/dates';
 
+// https://vue3datepicker.com/props/modes/
+
 const props = defineProps({
 	className: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	modelValue: {
@@ -15,7 +17,7 @@ const props = defineProps({
 		required: true
 	},
 	placeholder: {
-		type: String as PropType<string>,
+		type: String,
 		default: 'дд.мм.гг'
 	},
 	type: {
@@ -23,11 +25,11 @@ const props = defineProps({
 		required: true
 	},
 	name: {
-		type: String as PropType<string>,
+		type: String,
 		required: true
 	},
 	label: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	minDate: {
@@ -39,22 +41,22 @@ const props = defineProps({
 		default: null
 	},
 	disabled: {
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	error: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	required: {
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	}
 });
 
-const {locale} = useI18n()
+const { locale } = useI18n();
 
-const emit = defineEmits<{ 'update:model-value': [modelValue: typeof props.modelValue] }>();
+const emit = defineEmits(['update:model-value']);
 const isDateType = computed(() => props.type === 'date');
 const datepicker = ref<DatePickerInstance>(null);
 
@@ -103,11 +105,12 @@ const onRemove = () => {
 			partial-flow
 			:flow="['calendar']"
 			:time-picker="!isDateType"
+			minutes-increment="10"
 			:enable-time-picker="!isDateType"
 			:min-date="minDate ?? undefined"
 			:start-date="minDate ?? undefined"
 			:min-time="minTime ?? undefined"
-			:start-time="minTime ?? undefined"
+			:start-time="minTime ?? { hours: 12, minutes: 0 }"
 			:format="isDateType ? dateFormat : timeFormat"
 			:disabled="disabled"
 			:required="required"
@@ -119,12 +122,12 @@ const onRemove = () => {
 		<CommonIcon
 			v-if="!modelValue"
 			:name="isDateType ? 'calendar' : 'clock'"
-			:class="['input__button', {'input__button--disabled' : disabled}]"
+			:class="['input__button', { 'input__button--disabled': disabled }]"
 		/>
 		<CommonButton
 			v-else
 			is-icon
-			:has-states="false"
+			:interactive="false"
 			icon-name="close"
 			class="input__button"
 			@click="onRemove"
@@ -141,7 +144,6 @@ const onRemove = () => {
 
 <style lang="less">
 .dp {
-
 	&__disabled {
 		background-color: transparent;
 	}
@@ -301,18 +303,23 @@ const onRemove = () => {
 .dp__inner_nav_disabled,
 .dp__overlay_cell_disabled {
 	background: none;
+
 	&:hover {
 		background: none;
 		cursor: default;
 	}
-	&:active, &:focus {
+
+	&:active,
+	&:focus {
 		background: none;
 		cursor: unset;
 	}
+
 	svg {
 		color: var(--color-input-field);
 	}
 }
+
 .dp__btn:focus {
 	background: transparent;
 }

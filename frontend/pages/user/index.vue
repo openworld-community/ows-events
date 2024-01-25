@@ -68,6 +68,7 @@ const logout = () => {
 						v-if="userData"
 						class="user-info__edit-button"
 						button-kind="ordinary"
+						:no-border="!mobile"
 						:button-text="$t('global.button.edit_profile')"
 						icon-name="edit"
 						@click="openEditProfileModal"
@@ -77,47 +78,34 @@ const logout = () => {
 					v-if="userData"
 					class="user-page__link link"
 				>
-					<NuxtLink
-						:to="localePath(RoutePathEnum.USER_MY_EVENTS)"
+					<CommonButton
+						:link="localePath(RoutePathEnum.USER_MY_EVENTS)"
+						:button-text="$t('user.my_events.title')"
+						icon-name="notebook"
+						button-kind="ordinary"
+						no-border
 						class="link__item"
-					>
-						<CommonIcon
-							class="link__icon"
-							name="notebook"
-							:width="mobile ? '32' : '24'"
-							:height="mobile ? '32' : '24'"
-							:color="
-								mobile ? 'var(--color-accent-green-main)' : 'var(--color-text-main)'
-							"
-						/>
-						<span>{{ $t('user.my_events.title') }}</span>
-					</NuxtLink>
-					<NuxtLink
-						:to="localePath(RoutePathEnum.USER_FAVOURITES)"
+					/>
+					<CommonButton
+						:link="localePath(RoutePathEnum.USER_FAVOURITES)"
+						:button-text="$t('user.favourites.title')"
+						icon-name="heart"
+						button-kind="ordinary"
+						no-border
 						class="link__item"
-					>
-						<CommonIcon
-							class="link__icon"
-							name="heart"
-							:width="mobile ? '32' : '24'"
-							:height="mobile ? '32' : '24'"
-							:color="
-								mobile ? 'var(--color-accent-green-main)' : 'var(--color-text-main)'
-							"
-						/>
-						<span class="link__text">{{ $t('user.favourites.title') }}</span>
-					</NuxtLink>
+					/>
 				</div>
-				<UserDonateLink v-if="userData && mobile" />
+				<UserAdditionalBlock v-if="userData && mobile" />
 				<CommonButton
 					class="user-page__logout-button"
 					button-kind="warning"
+					no-border
 					:button-text="$t('global.button.logout')"
 					icon-name="logout"
 					@click="logout()"
 				/>
 			</div>
-			<UserDonateLink v-if="userData && !mobile" />
+			<UserAdditionalBlock v-if="userData && !mobile" />
 		</main>
 		<UserUnauthorized v-else />
 
@@ -161,7 +149,7 @@ const logout = () => {
 		width: 100%;
 		height: 100%;
 		flex-direction: column;
-		padding-top: 24px;
+		padding-top: 18px;
 
 		@media (min-width: 768px) {
 			width: 40%;
@@ -171,7 +159,6 @@ const logout = () => {
 		@media (min-width: 1440px) {
 			width: 32%;
 			padding-top: 44px;
-			padding-left: 18px;
 		}
 	}
 
@@ -186,8 +173,13 @@ const logout = () => {
 		margin-top: auto;
 
 		@media (min-width: 768px) {
-			width: max-content;
+			justify-content: flex-start;
 			margin-top: unset;
+			width: 226px;
+		}
+
+		@media (min-width: 1440px) {
+			width: 250px;
 		}
 	}
 }
@@ -197,7 +189,7 @@ const logout = () => {
 	width: 100%;
 	flex-direction: column;
 	align-items: center;
-	margin-bottom: var(--space-sections);
+	margin-bottom: 24px;
 
 	@media (min-width: 768px) {
 		align-items: flex-start;
@@ -208,9 +200,10 @@ const logout = () => {
 		display: flex;
 		width: 100%;
 		flex-direction: column;
-		margin-bottom: var(--space-subsections);
+		margin-bottom: 18px;
 
 		@media (min-width: 768px) {
+			padding-left: 18px;
 			margin-bottom: 12px;
 		}
 	}
@@ -219,7 +212,7 @@ const logout = () => {
 		font-size: var(--font-size-ML);
 		font-weight: var(--font-weight-regular);
 		line-height: 24px;
-		margin-bottom: var(--space-related-items);
+		margin-bottom: 6px;
 
 		@media (min-width: 768px) {
 			font-size: var(--font-size-L);
@@ -233,7 +226,7 @@ const logout = () => {
 		color: var(--color-text-secondary);
 
 		&:not(:last-child) {
-			margin-bottom: var(--space-inner);
+			margin-bottom: 6px;
 		}
 
 		@media (min-width: 1440px) {
@@ -265,64 +258,64 @@ const logout = () => {
 .link {
 	display: flex;
 	width: 100%;
-	margin-bottom: var(--space-sections);
+	margin-bottom: 24px;
 
 	@media (min-width: 768px) {
-		width: max-content;
 		flex-direction: column;
 		margin-bottom: 0;
 	}
 
 	&__item {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-		height: 108px;
-		background-color: var(--color-background-secondary);
-		border: 1px solid var(--color-background-secondary);
-		border-radius: 8px;
+		justify-content: flex-start;
+		width: 226px;
 
-		transition-property: background-color, border-color;
-		transition-duration: 0.3s;
-		transition-timing-function: ease;
-
-		@media (min-width: 768px) {
-			flex-direction: row;
-			justify-content: flex-start;
-			height: 40px;
-			background-color: unset;
-			border-color: var(--color-white);
-			font-size: var(--font-size-S);
-			margin-bottom: 4px;
+		@media (min-width: 1440px) {
+			width: 250px;
 		}
 
-		&:not(:last-child) {
-			margin-right: var(--padding-side);
+		@media (max-width: 767px) {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+			height: 108px;
+			background-color: var(--color-background-secondary);
+			border: 1px solid var(--color-background-secondary);
+			border-radius: 8px;
 
-			@media (min-width: 768px) {
-				margin-right: 0;
+			transition-property: background-color, border-color;
+			transition-duration: 0.3s;
+			transition-timing-function: ease;
+
+			&:deep(.button__content) {
+				font-size: var(--font-size-S);
 			}
-		}
 
-		&:hover,
-		&:focus {
-			border-color: var(--color-accent-green-main-30);
-		}
+			&:not(:last-child) {
+				margin-right: var(--padding-side);
 
-		&:active {
-			background-color: var(--color-accent-green-main-10);
-			border-color: var(--color-accent-green-main-10);
-		}
-	}
+				@media (min-width: 768px) {
+					margin-right: 0;
+				}
+			}
 
-	&__icon {
-		margin-bottom: var(--space-related-items);
+			&:deep(svg) {
+				color: var(--color-accent-green-main);
+				width: 32px;
+				height: 32px;
+				margin-bottom: 8px;
+			}
 
-		@media (min-width: 768px) {
-			margin-bottom: 0;
-			margin-right: 5px;
+			&:hover,
+			&:focus {
+				border-color: var(--color-accent-green-main-30);
+			}
+
+			&:active {
+				background-color: var(--color-accent-green-main-10);
+				border-color: var(--color-accent-green-main-10);
+			}
 		}
 	}
 }

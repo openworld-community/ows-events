@@ -11,7 +11,7 @@ type LinkObjectType = {
 	path?: string;
 };
 
-type ButtonKind = 'ordinary' | 'success' | 'warning' | 'text'; // для задания внешнего вида
+type ButtonKind = 'ordinary' | 'success' | 'warning' | 'dark' | 'text' | 'filter' | 'multiselect'; // для задания внешнего вида
 
 const props = defineProps({
 	buttonKind: {
@@ -19,13 +19,18 @@ const props = defineProps({
 		type: String as PropType<ButtonKind>,
 		default: ''
 	},
-	hasStates: {
+	noBorder: {
+		// для внешнего вида обычных кнопок
+		type: Boolean,
+		default: false
+	},
+	interactive: {
 		//  необходимость подсветки hover, focus, active
 		type: Boolean,
 		default: true
 	},
 	buttonText: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	link: {
@@ -35,17 +40,17 @@ const props = defineProps({
 	},
 	isExternalLink: {
 		// если необходимо открыть в новом окне
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	isRound: {
 		// если кнопка круглая
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	isIcon: {
 		// если компонент выглядит, как иконка
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	iconName: {
@@ -61,26 +66,35 @@ const props = defineProps({
 		type: [String, Number] as PropType<string | number>,
 		default: IconDefaultParams.HEIGHT
 	},
+	filled: {
+		// для кнопок-фильтров и мультиселектов, обеспечивает внешний вид при заданных значениях
+		type: Boolean,
+		default: false
+	},
 	alt: {
-		type: String as PropType<string>,
+		type: String,
 		default: ''
 	},
 	isDisabled: {
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	isLoading: {
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	}
 });
 
 const loaderColorDict = {
 	ordinary: 'var(--color-text-main)',
+	dark: 'var(--color-white)',
 	success: 'var(--color-white)',
 	warning: 'var(--color-accent-red)',
-	text: 'var(--color-text-main)'
+	text: 'var(--color-text-main)',
+	filter: 'var(--color-text-secondary)',
+	multiselect: null
 } satisfies Record<ButtonKind, string>;
+
 const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 </script>
 
@@ -93,14 +107,19 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		:disabled="!link && isDisabled"
 		:class="[
 			isIcon ? 'icon' : `button button__${buttonKind}`,
-			isIcon && buttonKind ? `icon__${buttonKind}` : '',
-			isDisabled ? `button__${buttonKind}--disabled` : '',
-			{ 'button--round': isRound && !isIcon },
-			{ 'icon--round': isIcon && isRound },
-			{ 'no-states': !hasStates }
+
+			{
+				[`icon__${buttonKind}`]: isIcon && buttonKind,
+				[`button__${buttonKind}--disabled`]: isDisabled,
+				[`button__${buttonKind}--no-border`]: noBorder,
+				'button--round': isRound && !isIcon,
+				'icon--round': isIcon && isRound,
+				'no-interactive': !interactive,
+				[`button__${buttonKind}--filled`]: filled
+			}
 		]"
 		:aria-label="alt ? alt : null"
-		@click="!link && !isDisabled ? emit('click') : null"
+		@click="!isDisabled ? emit('click') : null"
 	>
 		<CommonUiLoadSpinner
 			v-if="isLoading"
@@ -108,10 +127,9 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			class="loader"
 		/>
 		<CommonIcon
-			v-if="iconName"
+			v-if="iconName || (buttonKind === 'multiselect' && !filled)"
 			:class="{ button__icon: buttonText }"
-			:name="iconName"
-			:alt="alt ? alt : null"
+			:name="buttonKind === 'multiselect' && !filled ? 'container' : iconName"
 			:width="iconWidth"
 			:height="iconHeight"
 		/>
@@ -132,6 +150,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	border-radius: 8px;
 	padding: 7px 14px;
 	align-items: center;
+
 	transition-property: background-color, color, border-color;
 	transition-duration: 0.3s;
 	transition-timing-function: ease;
@@ -158,6 +177,28 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 	.loader {
 		margin-right: 10px;
+	}
+
+	&__dark {
+		border: 1px solid var(--color-text-main);
+		background-color: var(--color-text-main);
+		color: var(--color-white);
+
+		&::v-deep(svg) {
+			color: var(--color-white);
+		}
+
+		&:hover,
+		&:focus,
+		&:active {
+			background-color: var(--color-dark);
+			border-color: var(--color-dark);
+		}
+
+		&--disabled {
+			opacity: 0.4;
+			cursor: default;
+		}
 	}
 
 	&__success {
@@ -196,18 +237,13 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		}
 
 		&:hover,
-		&:focus {
+		&:focus,
+		&:active {
 			background-color: var(--color-input-field);
 		}
 
-		&:active {
-			color: var(--color-white);
-			background-color: var(--color-text-main);
-			border-color: var(--color-text-main);
-
-			&::v-deep(svg) {
-				color: var(--color-white);
-			}
+		&--no-border {
+			border-color: transparent;
 		}
 
 		&--disabled {
@@ -216,6 +252,12 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 			&::v-deep(svg) {
 				color: var(--color-input-field);
+			}
+
+			&:hover,
+			&:focus,
+			&:active {
+				background-color: inherit;
 			}
 		}
 	}
@@ -261,18 +303,23 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		}
 
 		&:hover,
-		&:focus {
-			color: var(--color-white);
-			background-color: var(--color-accent-red);
-			border-color: var(--color-accent-red);
-
-			&::v-deep(svg) {
-				color: var(--color-white);
-			}
+		&:focus,
+		&:active {
+			background-color: var(--color-accent-red-30);
 		}
 
-		&:active {
-			background-color: var(--color-accent-red-semitransparent);
+		&--no-border {
+			border: 1px solid transparent;
+
+			&::v-deep(svg) {
+				color: var(--color-accent-red);
+			}
+
+			&:hover,
+			&:focus,
+			&:active {
+				background-color: var(--color-accent-red-30);
+			}
 		}
 
 		&--disabled {
@@ -284,6 +331,109 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			&::v-deep(svg) {
 				color: var(--color-input-field);
 			}
+
+			&:hover,
+			&:focus,
+			&:active {
+				background-color: inherit;
+			}
+		}
+	}
+
+	&__filter {
+		display: flex;
+		width: 50%;
+		height: 36px;
+		flex-direction: row-reverse;
+		background-color: var(--color-white);
+		border: 1px solid var(--color-white);
+		border-radius: 8px;
+
+		& > .button__content {
+			font-size: var(--font-size-S);
+			line-height: 20px;
+			margin-right: 10px;
+
+			display: inline-block;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		&::v-deep(svg) {
+			color: var(--color-text-secondary);
+			width: 20px;
+			min-width: 20px;
+			height: 20px;
+			margin-right: 0;
+		}
+
+		&--disabled {
+			color: var(--color-input-icons);
+			border-color: var(--color-white);
+			cursor: default;
+
+			&::v-deep(svg) {
+				color: var(--color-input-icons);
+			}
+		}
+
+		&--filled {
+			background-color: var(--color-dark);
+			color: var(--color-white);
+			border-color: var(--color-dark);
+
+			&::v-deep(svg) {
+				color: var(--color-text-secondary);
+			}
+
+			& > .button__content {
+				margin-right: 0;
+			}
+		}
+	}
+
+	&__multiselect {
+		min-width: 100%;
+		justify-content: flex-start;
+		position: relative;
+		background-color: var(--color-white);
+		border: 1px solid var(--color-white);
+		padding-right: 40px;
+
+		& > .button__content {
+			font-size: var(--font-size-M);
+			color: var(--color-input-icons);
+
+			display: inline-block;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		&:deep(svg) {
+			position: absolute;
+			top: 8px;
+			right: 12px;
+			margin-right: 0;
+			width: 26px;
+			height: 26px;
+			color: var(--color-input-icons);
+		}
+
+		&--filled {
+			& > .button__content {
+				color: var(--color-text-main);
+			}
+		}
+
+		&:focus,
+		&:active {
+			border-color: var(--color-accent-green-main);
+		}
+
+		&--disabled {
+			opacity: 0.4;
 		}
 	}
 }
@@ -317,6 +467,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 	&--round {
 		width: 36px;
+		min-width: 36px;
 		height: 36px;
 		border-radius: 50%;
 		background-color: var(--color-background-secondary);
@@ -349,7 +500,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	}
 }
 
-.no-states {
+.no-interactive {
 	&:hover,
 	&:focus,
 	&:active {

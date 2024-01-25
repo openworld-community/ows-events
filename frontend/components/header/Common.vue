@@ -15,6 +15,10 @@ defineProps({
 	hasBackButton: {
 		type: Boolean,
 		default: false
+	},
+	titleOnMobile: {
+		type: String,
+		default: ''
 	}
 });
 
@@ -73,6 +77,9 @@ const goBack = () => {
 					:is="logoComponentIs"
 					v-else
 					class="header__logo"
+					:title="
+						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
+					"
 					:aria-label="
 						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
 					"
@@ -85,10 +92,15 @@ const goBack = () => {
 						width="86"
 						height="40"
 						color="var(--color-accent-green-main)"
-						alt="Peredelano Афиша"
 					/>
 				</component>
 			</div>
+			<h1
+				v-if="mobile && titleOnMobile"
+				class="header__title"
+			>
+				{{ titleOnMobile }}
+			</h1>
 			<ul
 				v-if="!mobile"
 				class="header__center"
@@ -101,10 +113,6 @@ const goBack = () => {
 						{{ $t('header.navigation.about') }}
 					</NuxtLink>
 				</li>
-				<li
-					class="header__point"
-					aria-hidden="true"
-				/>
 				<li class="header__nav-item">
 					<NuxtLink
 						:to="SUPPORT_TG_URL"
@@ -114,10 +122,6 @@ const goBack = () => {
 						{{ $t('header.navigation.support') }}
 					</NuxtLink>
 				</li>
-				<li
-					class="header__point"
-					aria-hidden="true"
-				/>
 				<li class="header__nav-item">
 					<NuxtLink
 						:to="localePath(RoutePathEnum.DONATION)"
@@ -147,7 +151,7 @@ const goBack = () => {
 				<CommonButton
 					v-if="!mobile"
 					:link="localePath(RoutePathEnum.USER_PAGE)"
-					:button-kind="userStore.isAuthorized ? 'success' : 'ordinary'"
+					button-kind="ordinary"
 					icon-name="user"
 					:button-text="
 						userStore.isAuthorized
@@ -213,11 +217,11 @@ const goBack = () => {
 		@media (min-width: 768px) {
 			display: flex;
 			width: 100%;
-			max-width: 450px;
+			max-width: 400px;
 			justify-content: space-between;
 			align-items: center;
-			margin-left: 5%;
-			margin-right: 5%;
+			margin-left: 7%;
+			margin-right: 7%;
 		}
 	}
 
@@ -240,6 +244,11 @@ const goBack = () => {
 		}
 	}
 
+	&__title {
+		font-size: var(--font-size-ML);
+		font-weight: var(--font-weight-regular);
+	}
+
 	&__nav-item {
 		@media (min-width: 768px) {
 			display: flex;
@@ -251,20 +260,6 @@ const goBack = () => {
 	&__nav-link {
 		@media (min-width: 768px) {
 			font-size: var(--font-size-S);
-		}
-	}
-
-	&__point {
-		@media (min-width: 768px) {
-			width: 4px;
-			height: 4px;
-			background-color: var(--color-text-main);
-			border-radius: 50%;
-		}
-
-		@media (min-width: 1440px) {
-			width: 6px;
-			height: 6px;
 		}
 	}
 

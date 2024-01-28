@@ -1,4 +1,10 @@
-import { ISignoutEverywhereHandler, ISignoutHandler, ITelegramHandler } from './type';
+import {
+	ILocalAuthHandler,
+	ILocalSignupHandler,
+	ISignoutEverywhereHandler,
+	ISignoutHandler,
+	ITelegramHandler
+} from './type';
 import { userController } from '../../../controllers/user-controller';
 import { vars } from '../../../config/vars';
 import { UserTokenController } from '../../../controllers/user-token-controller';
@@ -8,6 +14,18 @@ import { JWTController } from '../../../controllers/JWT-controller';
 export const telegramLogin: ITelegramHandler = async (request, reply) => {
 	const data = request.query;
 	const token = await userController.addTGUser(data);
+	reply.redirect(302, `${vars.frontend_url}/postauth/${token}`);
+};
+
+export const localSignup: ILocalSignupHandler = async (request, reply) => {
+	const data = request.body;
+	const token = await userController.addLocalUser(data);
+	reply.redirect(302, `${vars.frontend_url}/postauth/${token}`);
+};
+
+export const localAuth: ILocalAuthHandler = async (request, reply) => {
+	const data = request.body;
+	const token = await userController.authLocalUser(data);
 	reply.redirect(302, `${vars.frontend_url}/postauth/${token}`);
 };
 

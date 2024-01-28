@@ -52,6 +52,14 @@ const schema = new Schema<IUserDocument>(
 				default: ''
 			}
 		},
+		localAuth: {
+			login: {
+				type: String
+			},
+			password: {
+				type: String
+			}
+		},
 		favorites: {
 			type: [String]
 		},

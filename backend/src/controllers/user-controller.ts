@@ -1,4 +1,4 @@
-import { TGUser, UserInfo } from '@common/types/user';
+import { LocalAuthInfo, TGUser, UserInfo } from '@common/types/user';
 import { v4 } from 'uuid';
 import { UserModel } from '../models/user.model';
 import { CommonErrorsEnum } from '../../../common/const';
@@ -34,6 +34,49 @@ class UserController {
 		const newToken = JWTController.issueAccessToken({
 			id: user.id,
 			username: telegramData.username
+		});
+		const expiresAt = Date.now() + getTimestamp({ type: TimestampTypesEnum.DAYS, value: 30 });
+		const savedToken = await UserTokenController.createAccessToken(
+			user._id,
+			newToken,
+			expiresAt
+		);
+		return savedToken.token;
+	}
+
+	async addLocalUser(userData: LocalAuthInfo) {
+		const newUserId = v4();
+		const isUserExist = await UserModel.findOne({ 'localAuth.login': userData.login });
+		if (isUserExist) throw new Error(CommonErrorsEnum.USER_ALREADY_EXIST);
+		const user = await new UserModel({
+			id: newUserId,
+			localAuth: {
+				login: userData.login,
+				password: userData.password
+			}
+		});
+		const newToken = JWTController.issueAccessToken({
+			id: user.id,
+			username: userData.login
+		});
+		const expiresAt = Date.now() + getTimestamp({ type: TimestampTypesEnum.DAYS, value: 30 });
+		const savedToken = await UserTokenController.createAccessToken(
+			user._id,
+			newToken,
+			expiresAt
+		);
+		return savedToken.token;
+	}
+
+	async authLocalUser(userData: LocalAuthInfo) {
+		const user = await UserModel.findOne({
+			'localAuth.login': userData.login,
+			password: userData.password
+		});
+		if (!user) throw new Error(CommonErrorsEnum.USER_DOES_NOT_EXIST);
+		const newToken = JWTController.issueAccessToken({
+			id: user.id,
+			username: userData.login
 		});
 		const expiresAt = Date.now() + getTimestamp({ type: TimestampTypesEnum.DAYS, value: 30 });
 		const savedToken = await UserTokenController.createAccessToken(

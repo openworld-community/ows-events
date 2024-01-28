@@ -15,6 +15,11 @@ export type UserDbEntity = {
 		email: string;
 		phone: string;
 	};
+
+	localAuth: {
+		login: string;
+		password: string;
+	};
 	token: string;
 
 	favorites: string[];
@@ -25,6 +30,8 @@ export type TGUser = UserDbEntity['telegram'];
 export type TGUserInfo = Omit<TGUser, 'auth_date'>;
 
 export type UserInfo = UserDbEntity['userInfo'];
+
+export type LocalAuthInfo = UserDbEntity['localAuth'];
 
 export type PostUserInfo = {
 	last_name: string;

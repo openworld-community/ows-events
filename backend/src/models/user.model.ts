@@ -58,7 +58,7 @@ const schema = new Schema<IUserDocument>(
 			}
 		},
 		localAuth: {
-			login: {
+			email: {
 				type: String
 			},
 			password: {

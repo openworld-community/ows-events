@@ -1,6 +1,6 @@
-import { TGUser, UserInfo } from '@common/types/user';
+import { LocalAuthInfo, TGUser, UserInfo } from '@common/types/user';
 import { v4 } from 'uuid';
-import { UserModel } from '../models/user.model';
+import { IUserDocument, UserModel } from '../models/user.model';
 import { CommonErrorsEnum } from '../../../common/const';
 import { EventModel } from '../models/event.model';
 import { JWTController } from './JWT-controller';
@@ -34,6 +34,50 @@ class UserController {
 		const newToken = JWTController.issueAccessToken({
 			id: user.id,
 			username: telegramData.username
+		});
+		const expiresAt = Date.now() + getTimestamp({ type: TimestampTypesEnum.DAYS, value: 30 });
+		const savedToken = await UserTokenController.createAccessToken(
+			user._id,
+			newToken,
+			expiresAt
+		);
+		return savedToken.token;
+	}
+
+	async addLocalUser(userData: LocalAuthInfo) {
+		const newUserId = v4();
+		const isUserExist = await UserModel.findOne({ 'localAuth.email': userData.email });
+		if (isUserExist) throw new Error(CommonErrorsEnum.USER_ALREADY_EXIST);
+		const user = await new UserModel({
+			id: newUserId,
+			localAuth: {
+				email: userData.email,
+				password: userData.password
+			}
+		});
+		const newToken = JWTController.issueAccessToken({
+			id: user.id,
+			username: userData.email
+		});
+		const expiresAt = Date.now() + getTimestamp({ type: TimestampTypesEnum.DAYS, value: 30 });
+		const savedToken = await UserTokenController.createAccessToken(
+			user._id,
+			newToken,
+			expiresAt
+		);
+		return savedToken.token;
+	}
+
+	async authLocalUser(userData: LocalAuthInfo) {
+		const user: IUserDocument | null = await UserModel.findOne({
+			'localAuth.email': userData.email
+		});
+		if (!user) throw new Error(CommonErrorsEnum.USER_DOES_NOT_EXIST);
+		const isPasswordValid = user.isValidPassword(userData.password);
+		if (!isPasswordValid) throw new Error(CommonErrorsEnum.WRONG_LOGIN_OR_PASSWORD);
+		const newToken = JWTController.issueAccessToken({
+			id: user.id,
+			username: userData.email
 		});
 		const expiresAt = Date.now() + getTimestamp({ type: TimestampTypesEnum.DAYS, value: 30 });
 		const savedToken = await UserTokenController.createAccessToken(

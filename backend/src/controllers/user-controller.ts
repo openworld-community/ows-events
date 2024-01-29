@@ -1,6 +1,6 @@
 import { LocalAuthInfo, TGUser, UserInfo } from '@common/types/user';
 import { v4 } from 'uuid';
-import { UserModel } from '../models/user.model';
+import { IUserDocument, UserModel } from '../models/user.model';
 import { CommonErrorsEnum } from '../../../common/const';
 import { EventModel } from '../models/event.model';
 import { JWTController } from './JWT-controller';
@@ -69,11 +69,12 @@ class UserController {
 	}
 
 	async authLocalUser(userData: LocalAuthInfo) {
-		const user = await UserModel.findOne({
-			'localAuth.login': userData.login,
-			password: userData.password
+		const user: IUserDocument | null = await UserModel.findOne({
+			'localAuth.login': userData.login
 		});
 		if (!user) throw new Error(CommonErrorsEnum.USER_DOES_NOT_EXIST);
+		const isPasswordValid = user.isValidPassword(userData.password);
+		if (!isPasswordValid) throw new Error(CommonErrorsEnum.WRONG_LOGIN_OR_PASSWORD);
 		const newToken = JWTController.issueAccessToken({
 			id: user.id,
 			username: userData.login

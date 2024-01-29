@@ -19,6 +19,7 @@ export type UserDbEntity = {
 	localAuth: {
 		login: string;
 		password: string;
+		salt: string;
 	};
 	token: string;
 

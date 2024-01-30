@@ -8,6 +8,10 @@ const props = defineProps({
 		type: String as PropType<Tag>,
 		required: true
 	},
+	name: {
+		type: String,
+		default: ''
+	},
 	size: {
 		type: String as PropType<'standard' | 'small' | 'mini'>,
 		default: 'standard'
@@ -69,7 +73,7 @@ const model = computed({
 			:id="tagKey"
 			v-model="model"
 			type="checkbox"
-			:name="tagKey"
+			:name="name ? name : tagKey"
 			:value="tagKey"
 			:disabled="isDisabled"
 			class="tag__checkbox visually-hidden"

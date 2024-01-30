@@ -99,6 +99,7 @@ export const useEventStore = defineStore('event', {
 		setEventData(posterEvent = null) {
 			this.clearForm = false;
 			if (posterEvent) {
+				console.log('posterEvent', posterEvent);
 				this.eventData = {
 					editing: true,
 					isLoading: false,

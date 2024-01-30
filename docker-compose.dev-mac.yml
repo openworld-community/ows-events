@@ -19,8 +19,8 @@ services:
             - backend
         environment:
             - NODE_ENV=dev
-            - VITE_API_URL=http://127.0.0.1/api
-            - VITE_BASE_URL=http://127.0.0.1
+            - VITE_API_URL=http://backend/api
+            - VITE_BASE_URL=http://backend
             - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
             - VITE_MODE=development
             - VITE_TELEGRAM_AUTH_BOT_NAME=afisha_oauth_local_bot

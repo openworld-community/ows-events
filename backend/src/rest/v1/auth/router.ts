@@ -17,8 +17,8 @@ import {
 
 export const authApi = async (fastify: FastifyInstance) => {
 	fastify.get<ITelegramRoute>('/telegram', { schema: telegramSchema, handler: telegramLogin });
-	fastify.get<ILocalSignupRoute>('/signup', { schema: localSignupSchema, handler: localSignup });
-	fastify.get<ILocalAuthRoute>('/login', { schema: localAuthSchema, handler: localAuth });
+	fastify.post<ILocalSignupRoute>('/signup', { schema: localSignupSchema, handler: localSignup });
+	fastify.post<ILocalAuthRoute>('/login', { schema: localAuthSchema, handler: localAuth });
 	fastify.get<ISignoutRoute>('/signout', { schema: signoutSchema, handler: signout });
 	fastify.get<ISignoutEverywhereRoute>('/signoutEverywhere', {
 		schema: signoutEverywhereSchema,

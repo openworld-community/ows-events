@@ -32,7 +32,7 @@ export type TGUserInfo = Omit<TGUser, 'auth_date'>;
 
 export type UserInfo = UserDbEntity['userInfo'];
 
-export type LocalAuthInfo = UserDbEntity['localAuth'];
+export type LocalAuthInfo = Omit<UserDbEntity['localAuth'], 'salt'>;
 
 export type PostUserInfo = {
 	last_name: string;

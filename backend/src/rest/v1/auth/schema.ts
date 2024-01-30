@@ -46,7 +46,7 @@ export const localSignupSchema = {
 	body: {
 		type: 'object',
 		properties: {
-			login: {
+			email: {
 				type: 'string'
 			},
 			password: {
@@ -69,7 +69,7 @@ export const localAuthSchema = {
 	body: {
 		type: 'object',
 		properties: {
-			login: {
+			email: {
 				type: 'string'
 			},
 			password: {

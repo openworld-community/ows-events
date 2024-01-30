@@ -33,6 +33,26 @@ export const telegramSchema = {
 	}
 };
 
+export const googleSchema = {
+	description: 'Register through google',
+	tags: ['Auth'],
+	summary: 'Register through google',
+	response: {
+		302: {
+			type: 'null',
+			description: 'Redirect to special page, where token get stored on client side'
+		}
+	},
+	body: {
+		type: 'object',
+		properties: {
+			credential: {
+				type: 'string'
+			}
+		}
+	}
+};
+
 export const localSignupSchema = {
 	description: 'Register through login/password',
 	tags: ['Auth'],

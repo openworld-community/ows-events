@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useLocationStore } from '@/stores/location.store';
 import { useEventStore } from '../../stores/event.store';
+import { getInitialEventValues } from '../../utils/events';
 import type { PostEventPayload } from '../../../common/types/event';
 import { LocalStorageEnum } from '../../constants/enums/common';
 import { getTimezone } from '../../services/timezone.services';
@@ -8,7 +9,7 @@ import { getCurrencyByCountry } from '../../utils/prices';
 import { Tags, TagsArray } from '../../../common/const/tags';
 import { Field, useForm } from 'vee-validate';
 
-import * as yup from 'yup';
+import * as yup from '../../yup';
 const locationStore = useLocationStore();
 const eventStore = useEventStore();
 const router = useRouter();
@@ -16,7 +17,7 @@ const localePath = useLocalePath();
 const mobile = inject('mobile');
 
 const schema = yup.object().shape({
-	title: yup.string(),
+	title: yup.string().required(),
 	organizer: yup.string(),
 	description: yup.string(),
 	tags: yup.array(),
@@ -26,7 +27,7 @@ const schema = yup.object().shape({
 	endTime: yup.date().nullable(),
 	isOnline: yup.boolean(),
 	location: yup.object({
-		country: yup.string(),
+		country: yup.string().required(),
 		city: yup.string(),
 		address: yup.string()
 	}),
@@ -49,12 +50,10 @@ onMounted(async () => {
 
 const { values, errors, defineField, handleSubmit } = useForm({
 	validationSchema: schema,
-	initialValues: eventStore.eventData
+	initialValues: getInitialEventValues()
 });
 // Изменение страны и города
-const [title, titleProps] = defineField('title', {
-	validateOnModelUpdate: false
-});
+const [title] = defineField('title');
 const [isOnline, isOnlineProps] = defineField('isOnline', {
 	validateOnModelUpdate: false
 });
@@ -62,8 +61,11 @@ const [isFree, isFreeProps] = defineField('isFree', {
 	validateOnModelUpdate: false
 });
 const [country] = defineField('location.country');
+const [city] = defineField('location.city');
 const [timezone] = defineField('timezone');
+const [address] = defineField('location.address');
 const submitEvent = handleSubmit((values) => console.log(JSON.stringify(values, null, 2)));
+console.log('errors', errors, errors['title']);
 </script>
 
 <template>
@@ -71,53 +73,138 @@ const submitEvent = handleSubmit((values) => console.log(JSON.stringify(values, 
 		class="event-form"
 		@submit="submitEvent"
 	>
-		<CommonUiBaseInput
-			v-model="title"
-			error="errors.title"
-			name="location.address"
-			v-bind="titleProps"
-			:placeholder="$t('form.event.fields.address_placeholder')"
-			:disabled="false"
-		/>
-
-		<div>
-			<CommonUiBaseCheckbox
-				v-model="isOnline"
-				value="isOnline"
-				:label="$t('form.event.fields.online')"
-				is-reversed
-			/>
+		<div class="event-form__title-wrapper">
+			<h1 class="event-form__title">
+				{{ $t('form.event.title') }}
+			</h1>
 		</div>
-		<CommonUiBaseSelect
-			v-model="country"
-			name="country"
-			:placeholder="$t('global.country')"
-			:list="locationStore.countries"
-			:disabled="isOnline"
-			input-readonly
-			:required="!isOnline"
-		/>
-		<CommonUiBaseSelect
-			v-model="timezone"
-			name="timezone"
-			:disabled="false"
-			:placeholder="$t('global.timezone')"
-			:list="eventStore.allTimezones"
-			input-readonly
-			required
-		/>
 
-		<CommonFormTags />
-		<pre>values: {{ values }}</pre>
-		<pre>errors: {{ errors }}</pre>
-		<CommonButton
-			class="event-form__button"
-			button-kind="dark"
-			:button-text="$t('global.button.save')"
-			:is-loading="eventStore.eventData.isLoading"
-			:is-disabled="false"
-			type="submit"
-		/>
+		<div class="event-form__fields-wrapper">
+			<div class="event-form__fields">
+				<ModalUiModalSection
+					:label="$t('form.event.fields.location')"
+					:type="mobile ? 'column' : 'column-row'"
+				>
+					<template #child>
+						<div>
+							<CommonUiBaseCheckbox
+								v-model="isOnline"
+								value="isOnline"
+								:label="$t('form.event.fields.online')"
+								is-reversed
+							/>
+							<CommonErrorComponent :error="JSON.stringify(errors.isOnline)" />
+						</div>
+						<div>
+							<CommonUiBaseSelect
+								v-model="country"
+								name="country"
+								:placeholder="$t('global.country')"
+								:list="locationStore.countries"
+								:disabled="values.isOnline"
+								input-readonly
+								:required="!values.isOnline"
+								:error="JSON.stringify(errors['location.country'])"
+							/>
+
+							<CommonUiBaseSelect
+								v-model="city"
+								name="city"
+								:disabled="!values.location.country"
+								:placeholder="$t('global.city')"
+								:list="
+									locationStore.getCitiesByCountry(
+										eventStore.eventData.location.country
+									)
+								"
+								input-readonly
+								:required="!values.isOnline"
+							/>
+
+							<CommonUiBaseSelect
+								v-model="timezone"
+								name="timezone"
+								:placeholder="$t('global.timezone')"
+								:list="eventStore.allTimezones"
+								input-readonly
+								required
+							/>
+						</div>
+						<CommonUiBaseInput
+							v-model="address"
+							name="address"
+							:placeholder="$t('form.event.fields.address_placeholder')"
+							:disabled="!(values.location.country && values.location.city)"
+						/>
+					</template>
+				</ModalUiModalSection>
+				<CommonUiBaseInput
+					v-model="title"
+					:error="JSON.stringify(errors.title)"
+					name="title"
+					:placeholder="$t('form.event.fields.title')"
+					:disabled="false"
+				/>
+				<p>{{ JSON.stringify(errors.title) }}</p>
+				<CommonErrorComponent :error="JSON.stringify(errors)" />
+
+				<div>
+					<CommonUiBaseCheckbox
+						v-model="isOnline"
+						value="isOnline"
+						:label="$t('form.event.fields.online')"
+						is-reversed
+					/>
+				</div>
+				<CommonUiBaseSelect
+					v-model="country"
+					name="country"
+					:placeholder="$t('global.country')"
+					:list="locationStore.countries"
+					:disabled="isOnline"
+					input-readonly
+					:required="!isOnline"
+				/>
+				<CommonUiBaseSelect
+					v-model="eventStore.allTimezones"
+					name="timezone"
+					:disabled="false"
+					:placeholder="$t('global.timezone')"
+					:list="eventStore.allTimezones"
+					input-readonly
+					required
+				/>
+
+				<CommonFormTags />
+				<CommonFormDatapicker
+					:placeholder="$t('form.event.fields.date_placeholder')"
+					name="startDate"
+					type="date"
+				/>
+
+				<p>errors: {{ JSON.stringify(errors) }}</p>
+				<p>{{ JSON.stringify(values) }}</p>
+			</div>
+		</div>
+		<div class="event-form__bottom-wrapper">
+			<div class="event-form__bottom">
+				<CommonButton
+					class="event-form__button"
+					button-kind="ordinary"
+					:button-text="$t('global.button.cancel')"
+					:is-active="!eventStore.eventData.isLoading"
+					@click="router.back()"
+				/>
+				<CommonButton
+					class="event-form__button"
+					button-kind="dark"
+					:button-text="$t('global.button.save')"
+					:is-loading="eventStore.eventData.isLoading"
+					:is-disabled="false"
+					type="submit"
+				/>
+			</div>
+		</div>
 	</form>
 </template>
 
@@ -128,6 +215,7 @@ const submitEvent = handleSubmit((values) => console.log(JSON.stringify(values, 
 	flex-direction: column;
 	align-items: center;
 	overflow: hidden;
+	height: 100%;
 	max-height: 100vh;
 
 	// Для адаптивной height на iOs
@@ -158,6 +246,7 @@ const submitEvent = handleSubmit((values) => console.log(JSON.stringify(values, 
 	&__fields-wrapper {
 		width: 100%;
 		overflow-y: auto;
+		flex-grow: 1;
 	}
 
 	&__fields {

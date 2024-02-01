@@ -113,7 +113,7 @@ const onRemove = () => {
 				{ 'input__field--cursor-pointer': inputReadonly && !modelValue },
 				{ 'input__field--without-cursor': inputReadonly && modelValue },
 				{ 'input__field--shifted': hasValueIcon && modelValue },
-				{ form__error: error }
+				{ form__error: Boolean(error) }
 			]"
 			:name="name"
 			:type="type"

@@ -1,13 +1,8 @@
 <script setup lang="ts">
-import { useField, useFieldArray } from 'vee-validate';
-import { useEventStore } from '../../../stores/event.store';
+import { useField } from 'vee-validate';
 import { Tags, TagsArray } from '../../../../common/const/tags';
 
-const eventStore = useEventStore();
-
-// The `name` is returned in a function because we want to make sure it stays reactive
-// If the name changes you want `useField` to be able to pick it up
-const { value, errorMessage } = useField(() => 'tags');
+const { value, errorMessage } = useField<String[]>(() => 'tags');
 </script>
 <template>
 	<div class="event-form__tags">
@@ -18,7 +13,7 @@ const { value, errorMessage } = useField(() => 'tags');
 			name="tags"
 			:tag-key="tag"
 			is-checkbox
-			:is-disabled="eventStore.eventData.tags.length >= 6"
+			:is-disabled="value.length >= 6"
 			size="small"
 		/>
 	</div>

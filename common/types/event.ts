@@ -26,6 +26,21 @@ export type EventDbEntity = {
 
 export type EventOnPoster = EventDbEntity;
 
+export type EventFormType = {
+	date: number;
+	image: string;
+	durationInSeconds: number;
+	price: EventPrice;
+	timezone: string;
+	title: string;
+	description: string;
+	organizer: string;
+	isOnline: boolean;
+	location: { country: string; city: string; address: string };
+	url: string;
+	tags?: string[];
+}
+
 export type PostEventPayload = {
 	id?: string;
 	date: number;

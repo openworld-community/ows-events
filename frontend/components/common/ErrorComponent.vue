@@ -1,24 +1,17 @@
 <script setup lang="ts">
 import { useField } from 'vee-validate';
 const props = defineProps({
-	name: {
+	error: {
 		type: String,
 		default: ''
 	}
 });
 // The `name` is returned in a function because we want to make sure it stays reactive
 // If the name changes you want `useField` to be able to pick it up
-const { value, errorMessage } = useField(() => props.name);
+//const { value, errorMessage } = useField(() => props.name);
 </script>
 <template>
-	<div class="field">
-		<slot
-			v-bind="error"
-			:v-model="value"
-			error="Boolean(errorMessage)"
-		></slot>
-		<p class="field__error">{{ errorMessage }}</p>
-	</div>
+	<p class="form-error">{{ error }}</p>
 </template>
 
 <style lang="less" scoped>

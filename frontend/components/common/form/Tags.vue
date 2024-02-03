@@ -5,19 +5,19 @@ import { Tags, TagsArray } from '../../../../common/const/tags';
 const { value, errorMessage } = useField<String[]>(() => 'tags');
 </script>
 <template>
-	<div class="event-form__tags">
-		<CommonUiTag
-			v-for="tag in TagsArray.filter((el) => el !== Tags.ONLINE)"
-			:key="tag"
-			v-model="value"
-			name="tags"
-			:tag-key="tag"
-			is-checkbox
-			:is-disabled="value.length >= 6"
-			size="small"
-		/>
-	</div>
-	<p>{{ errorMessage }}</p>
+	<CommonFormField :error="errorMessage">
+		<div class="event-form__tags">
+			<CommonUiTag
+				v-for="tag in TagsArray.filter((el) => el !== Tags.ONLINE)"
+				:key="tag"
+				v-model="value"
+				name="tags"
+				:tag-key="tag"
+				is-checkbox
+				size="small"
+			/>
+		</div>
+	</CommonFormField>
 </template>
 
 <style lang="less" scoped>

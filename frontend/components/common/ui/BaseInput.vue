@@ -162,12 +162,5 @@ const onRemove = () => {
 			class="input__value-icon"
 			:name="`${name}/${modelValue}`"
 		/>
-
-		<span
-			v-if="error"
-			class="form__error"
-		>
-			{{ error }}
-		</span>
 	</div>
 </template>

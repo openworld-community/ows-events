@@ -27,10 +27,17 @@ export type EventDbEntity = {
 export type EventOnPoster = EventDbEntity;
 
 export type EventFormType = {
-	date: number;
-	image: string;
-	durationInSeconds: number;
-	price: EventPrice;
+	startDate:Date,
+	endDate:Date,
+	startTime:Date,
+	endTime:Date,
+	image?: string;
+	
+	price: {
+		val: number|null,
+		currency: string
+	};
+	isFree:boolean,
 	timezone: string;
 	title: string;
 	description: string;

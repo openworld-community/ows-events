@@ -1,8 +1,9 @@
 import { BASE_URL } from '@/constants/url';
 import type { EventOnPoster } from '../../common/types';
 import type { Location } from '../../common/types/address';
+import type { EventFormType } from '../../common/types/event';
 
-export const getInitialEventValues = (data?: EventOnPoster) => {
+export const getInitialEventValues = (data?: EventOnPoster): EventFormType => {
 	return {
 		title: (data && data.title) || '',
 		organizer: (data && data.organizer) || '',
@@ -24,10 +25,10 @@ export const getInitialEventValues = (data?: EventOnPoster) => {
 		},
 		image: (data && data.image) || '',
 		price: (data && {
-			value: (data.price && data.price.value !== 0) || '',
+			val: data.price && data.price.value !== 0 ? data.price.value : null,
 			currency: data.price && data.price.currency !== null ? data.price.currency : ''
 		}) || {
-			value: '',
+			val: null,
 			currency: ''
 		},
 		timezone: data && data.timezone ? timezoneToString(data.timezone) : '',

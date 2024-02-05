@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { FilterQuery } from 'mongoose';
+import { FilterQuery, PipelineStage, SortValues } from 'mongoose';
 import { EventDbEntity, EventOnPoster, SearchEventPayload } from '@common/types/event';
 import { EventModel } from '../models/event.model';
 import { imageController } from './image-controller';
@@ -23,6 +23,8 @@ class EventsStateController {
 		const queryObject: FilterQuery<EventOnPoster> = {
 			$and: []
 		};
+		const sortObject: string | Record<string, SortValues> | PipelineStage.Sort['$sort'] = {};
+
 		if (query?.searchLine) {
 			queryObject.$text = { $search: query.searchLine };
 		}
@@ -31,10 +33,12 @@ class EventsStateController {
 				$or: [{ 'location.country': query?.country }, { isOnline: true }]
 			};
 			queryObject.$and?.push(countryQuery);
+			sortObject.isOnline = 'ascending';
 		}
 		if (query?.city) {
 			const cityQuery = { $or: [{ 'location.city': query?.city }, { isOnline: true }] };
 			queryObject.$and?.push(cityQuery);
+			sortObject.isOnline = 'ascending';
 		}
 		if (query?.tags && query?.tags.length !== 0) {
 			queryObject.tags = { $in: query?.tags };
@@ -43,6 +47,8 @@ class EventsStateController {
 			delete queryObject.$and;
 		}
 		queryObject['meta.moderation.status'] = { $nin: ['declined', 'in-progress'] };
+
+		sortObject.date = 'ascending';
 
 		const pipeline = [
 			{
@@ -61,9 +67,7 @@ class EventsStateController {
 				}
 			}
 		];
-		const futureEvents = await EventModel.aggregate(pipeline)
-			.sort({ isOnline: 'ascending', date: 'ascending' })
-			.exec();
+		const futureEvents = await EventModel.aggregate(pipeline).sort(sortObject).exec();
 		return futureEvents;
 	}
 

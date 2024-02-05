@@ -56,7 +56,7 @@ if (data.value) myEvents.value = data.value;
 			<div class="my-events__bottom">
 				<CommonButton
 					class="my-events__button"
-					button-kind="success"
+					button-kind="dark"
 					:button-text="$t('global.button.new_event')"
 					:link="localePath(RoutePathEnum.EVENT_FORM)"
 					@click="eventStore.createDefaultEventData()"

@@ -20,5 +20,8 @@ export default {
 			title: 'User Profile',
 			description: 'Manage your profile and events in your personal account'
 		}
+	},
+	event: {
+		description_peredelano: 'Classic format, industrial and entertaining talks, networking, activities, and a focus on the community.'
 	}
 };

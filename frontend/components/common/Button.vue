@@ -11,13 +11,18 @@ type LinkObjectType = {
 	path?: string;
 };
 
-type ButtonKind = 'ordinary' | 'success' | 'warning' | 'text' | 'filter' | 'multiselect'; // для задания внешнего вида
+type ButtonKind = 'ordinary' | 'success' | 'warning' | 'dark' | 'text' | 'filter' | 'multiselect'; // для задания внешнего вида
 
 const props = defineProps({
 	buttonKind: {
 		// для обычных кнопок задает внешний вид согласно стайл-гайду, для кнопок-инонок раскрашивает в соответствующие цвета
 		type: String as PropType<ButtonKind>,
 		default: ''
+	},
+	noBorder: {
+		// для внешнего вида обычных кнопок
+		type: Boolean,
+		default: false
 	},
 	interactive: {
 		//  необходимость подсветки hover, focus, active
@@ -82,6 +87,7 @@ const props = defineProps({
 
 const loaderColorDict = {
 	ordinary: 'var(--color-text-main)',
+	dark: 'var(--color-white)',
 	success: 'var(--color-white)',
 	warning: 'var(--color-accent-red)',
 	text: 'var(--color-text-main)',
@@ -105,6 +111,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			{
 				[`icon__${buttonKind}`]: isIcon && buttonKind,
 				[`button__${buttonKind}--disabled`]: isDisabled,
+				[`button__${buttonKind}--no-border`]: noBorder,
 				'button--round': isRound && !isIcon,
 				'icon--round': isIcon && isRound,
 				'no-interactive': !interactive,
@@ -172,6 +179,28 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		margin-right: 10px;
 	}
 
+	&__dark {
+		border: 1px solid var(--color-text-main);
+		background-color: var(--color-text-main);
+		color: var(--color-white);
+
+		&::v-deep(svg) {
+			color: var(--color-white);
+		}
+
+		&:hover,
+		&:focus,
+		&:active {
+			background-color: var(--color-dark);
+			border-color: var(--color-dark);
+		}
+
+		&--disabled {
+			opacity: 0.4;
+			cursor: default;
+		}
+	}
+
 	&__success {
 		color: var(--color-white);
 		background-color: var(--color-accent-green-main);
@@ -208,18 +237,13 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		}
 
 		&:hover,
-		&:focus {
+		&:focus,
+		&:active {
 			background-color: var(--color-input-field);
 		}
 
-		&:active {
-			color: var(--color-white);
-			background-color: var(--color-text-main);
-			border-color: var(--color-text-main);
-
-			&::v-deep(svg) {
-				color: var(--color-white);
-			}
+		&--no-border {
+			border-color: transparent;
 		}
 
 		&--disabled {
@@ -228,6 +252,12 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 			&::v-deep(svg) {
 				color: var(--color-input-field);
+			}
+
+			&:hover,
+			&:focus,
+			&:active {
+				background-color: inherit;
 			}
 		}
 	}
@@ -273,18 +303,23 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		}
 
 		&:hover,
-		&:focus {
-			color: var(--color-white);
-			background-color: var(--color-accent-red);
-			border-color: var(--color-accent-red);
-
-			&::v-deep(svg) {
-				color: var(--color-white);
-			}
+		&:focus,
+		&:active {
+			background-color: var(--color-accent-red-30);
 		}
 
-		&:active {
-			background-color: var(--color-accent-red-semitransparent);
+		&--no-border {
+			border: 1px solid transparent;
+
+			&::v-deep(svg) {
+				color: var(--color-accent-red);
+			}
+
+			&:hover,
+			&:focus,
+			&:active {
+				background-color: var(--color-accent-red-30);
+			}
 		}
 
 		&--disabled {
@@ -295,6 +330,12 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 			&::v-deep(svg) {
 				color: var(--color-input-field);
+			}
+
+			&:hover,
+			&:focus,
+			&:active {
+				background-color: inherit;
 			}
 		}
 	}
@@ -322,6 +363,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		&::v-deep(svg) {
 			color: var(--color-text-secondary);
 			width: 20px;
+			min-width: 20px;
 			height: 20px;
 			margin-right: 0;
 		}
@@ -343,6 +385,10 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 			&::v-deep(svg) {
 				color: var(--color-text-secondary);
+			}
+
+			& > .button__content {
+				margin-right: 0;
 			}
 		}
 	}
@@ -384,6 +430,10 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		&:focus,
 		&:active {
 			border-color: var(--color-accent-green-main);
+		}
+
+		&--disabled {
+			opacity: 0.4;
 		}
 	}
 }

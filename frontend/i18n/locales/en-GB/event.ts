@@ -21,6 +21,7 @@ export default {
 		[Tags.HOLIDAY]: 'Holiday',
 		[Tags.LECTURE]: 'Lecture',
 		[Tags.MASTERCLASS]: 'Masterclass',
+		[Tags.ONLINE]: 'Online',
 		[Tags.PARTY]: 'Party',
 		[Tags.SPORT]: 'Sport',
 		[Tags.STANDUP]: 'Stand-up',

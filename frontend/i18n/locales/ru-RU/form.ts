@@ -9,6 +9,7 @@ export default {
 		remove_image: 'Удалить фото',
 		image: 'Изображение мероприятия',
 		fields: {
+			online: 'Онлайн',
 			location: 'Локация',
 			country: 'Страна',
 			city: 'Город',

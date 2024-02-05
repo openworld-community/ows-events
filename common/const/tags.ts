@@ -13,7 +13,8 @@ export enum Tags {
 	HOLIDAY = 'holiday',
 	CONCERT = 'concert',
 	CHILDREN = 'children',
-	ADULT = 'adult'
+	ADULT = 'adult',
+	ONLINE = 'online'
 }
 
 export const TagsArray: string[] = Object.values(Tags);

@@ -15,6 +15,10 @@ const props = defineProps({
 	multiple: {
 		type: Boolean,
 		default: false
+	},
+	iconName: {
+		type: String,
+		default: ''
 	}
 });
 
@@ -38,6 +42,11 @@ const isChecked = computed(() =>
 
 <template>
 	<label class="checkbox-row">
+		<CommonIcon
+			v-if="iconName"
+			:name="iconName"
+			class="checkbox-row__value-icon"
+		/>
 		{{ label }}
 		<input
 			v-model="model"
@@ -57,13 +66,17 @@ const isChecked = computed(() =>
 <style scoped lang="less">
 .checkbox-row {
 	display: flex;
-	justify-content: space-between;
 	width: 100%;
 	cursor: pointer;
 
+	&__value-icon {
+		min-width: 24px;
+		margin-right: 4px;
+	}
+
 	&__icon {
 		min-width: 24px;
-		margin-left: 10px;
+		margin-left: auto;
 	}
 
 	&__input {

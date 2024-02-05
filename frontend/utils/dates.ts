@@ -1,11 +1,13 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import type { Timezone } from '../../common/types/location';
+import { getUserTimezoneName } from '../services/timezone.services';
 
 dayjs.extend(utc);
 
 export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
 
-export const dateNow = Date.now()
+export const dateNow = Date.now();
 
 export const getDateFromEpochInMs = (epoch: number | undefined, keepTimezone = false) => {
 	if (!epoch) return null;
@@ -41,15 +43,32 @@ export const combineDateTime = (date: Date | null, time: Time | null): Date => {
 		.toDate();
 };
 
-export const convertToLocaleString = (epoch: number) => {
-	const { locale} = useI18n();
+export const convertToLocaleString = (epoch: number, timezoneName?: string) => {
+	const { locale } = useI18n();
+
 	return new Date(epoch).toLocaleString(locale.value, {
-		timeZone: 'UTC',
 		month: 'long',
 		day: 'numeric',
 		hour: '2-digit',
-		minute: '2-digit'
+		minute: '2-digit',
+		timeZone: timezoneName ?? 'UTC'
 	});
+};
+
+export const convertEventDateToLocaleString = (
+	epoch: number,
+	isOnline: boolean,
+	eventTimezone: Timezone
+) => {
+	let time: number;
+	if (isOnline) {
+		// учитывает разницу между часовым поясом мероприятия и пользователя
+		time = epoch - parseInt(eventTimezone.timezoneOffset) * 1000 * 60 * 60;
+		return convertToLocaleString(time, getUserTimezoneName());
+	} else {
+		time = epoch;
+		return convertToLocaleString(time);
+	}
 };
 
 export const day = 1000 * 60 * 60 * 24;
@@ -57,4 +76,8 @@ export const day = 1000 * 60 * 60 * 24;
 export const getDatesDayDifference = (firstDate: Date, secondDate: Date): number => {
 	const diffTime = Math.abs(secondDate.getTime() - firstDate.getTime());
 	return Math.ceil(diffTime / day);
+};
+
+export const roundTime = (date, interval) => {
+	return Math.ceil(new Date(date).getTime() / (interval * 60 * 1000)) * (interval * 60 * 1000);
 };

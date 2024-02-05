@@ -29,14 +29,16 @@ const schema = new Schema<IEventDocument>(
 		durationInSeconds: {
 			type: Number
 		},
+		isOnline: {
+			type: Boolean,
+			required: true
+		},
 		location: {
 			country: {
-				type: String,
-				required: true
+				type: String
 			},
 			city: {
-				type: String,
-				required: true
+				type: String
 			},
 			address: {
 				type: String

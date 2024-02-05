@@ -4,6 +4,8 @@ import type { EventOnPoster } from '../../../common/types';
 import { RoutePathEnum } from '../../constants/enums/route';
 import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { dateNow } from '~/utils/dates';
+import { convertEventDateToLocaleString } from '../../utils/dates';
+import { Tags } from '../../../common/const/tags';
 
 const props = defineProps({
 	eventData: {
@@ -16,6 +18,14 @@ const tablet: ComputedRef<boolean> = inject('tablet');
 const desktop: ComputedRef<boolean> = inject('desktop');
 const localePath = useLocalePath();
 
+const startDate = ref(
+	convertEventDateToLocaleString(
+		props.eventData.date,
+		props.eventData.isOnline,
+		props.eventData.timezone
+	)
+);
+
 const tagArray = computed(() => {
 	if (mobile.value) return props.eventData.tags.slice(0, 2);
 	if (tablet.value) return props.eventData.tags.slice(0, 3);
@@ -26,7 +36,10 @@ const tagArray = computed(() => {
 <template>
 	<NuxtLink
 		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
-		:class="['card', { 'card--expired': eventData.date < dateNow }]"
+		:class="[
+			'card',
+			{ 'card--expired': eventData.date + eventData.durationInSeconds * 1000 < dateNow }
+		]"
 		:itemprop="SeoItempropGlobalEnum.URL"
 	>
 		<div
@@ -45,6 +58,13 @@ const tagArray = computed(() => {
 				width="94"
 				height="74"
 			/>
+			<CommonUiTag
+				v-if="eventData.isOnline"
+				:tag-key="Tags.ONLINE"
+				appearance="accent"
+				:size="mobile ? 'mini' : 'small'"
+				class="card__online-tag"
+			/>
 		</div>
 		<div class="card__description description">
 			<div class="description__info">
@@ -58,7 +78,7 @@ const tagArray = computed(() => {
 					class="description__date"
 					:itemprop="SeoItempropEventEnum.START_DATE"
 				>
-					{{ convertToLocaleString(eventData.date) }}
+					{{ startDate }}
 				</p>
 			</div>
 			<CommonTagList
@@ -109,6 +129,7 @@ const tagArray = computed(() => {
 		width: 94px;
 		min-width: 94px;
 		height: 74px;
+		position: relative;
 		background-color: var(--color-input-field);
 		background-size: cover;
 		border-radius: 4px;
@@ -146,6 +167,17 @@ const tagArray = computed(() => {
 		height: 100%;
 		object-fit: cover;
 		border-radius: 4px;
+	}
+
+	&__online-tag {
+		position: absolute;
+		top: 2px;
+		left: 2px;
+
+		@media (min-width: 768px) {
+			top: 7px;
+			left: 5px;
+		}
 	}
 }
 

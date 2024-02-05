@@ -36,7 +36,7 @@ const eventStore = useEventStore();
 				</p>
 				<CommonButton
 					class="additional-block__button"
-					button-kind="success"
+					:button-kind="desktop ? 'ordinary' : 'dark'"
 					:button-text="$t(desktop ? 'user.donate.button' : 'global.button.new_event')"
 					:icon-name="desktop ? 'donate' : ''"
 					:link="localePath(desktop ? RoutePathEnum.DONATION : RoutePathEnum.EVENT_FORM)"
@@ -47,7 +47,7 @@ const eventStore = useEventStore();
 		<CommonButton
 			v-if="desktop"
 			class="additional-block__button"
-			button-kind="success"
+			button-kind="dark"
 			:button-text="$t('global.button.new_event')"
 			:link="localePath(RoutePathEnum.EVENT_FORM)"
 			@click="eventStore.createDefaultEventData()"

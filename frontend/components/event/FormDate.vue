@@ -3,18 +3,18 @@ from 'console'; import type { CommonCheckLocation } from '#build/components'; im
 from 'console'; import type { error } from 'console';
 <script setup lang="ts">
 import { useField } from 'vee-validate';
-
+import { useEventStore } from '../../stores/event.store';
 const props = defineProps({
 	error: {
 		type: String,
 		default: ''
 	}
 });
-
-const { value: startDate, errorMessage: startDateError } = useField<string>(() => 'startDate');
-const { value: startTime, errorMessage: startTimeError } = useField<string>(() => 'startTime');
-const { value: endDate, errorMessage: endDateError } = useField<string>(() => 'endDate');
-const { value: endTime, errorMessage: endTimeError } = useField<string>(() => 'endTime');
+const eventStore = useEventStore();
+const { value: startDate, errorMessage: startDateError } = useField<Date>(() => 'startDate');
+const { value: startTime, errorMessage: startTimeError } = useField<Time>(() => 'startTime');
+const { value: endDate, errorMessage: endDateError } = useField<Date>(() => 'endDate');
+const { value: endTime, errorMessage: endTimeError } = useField<Time>(() => 'endTime');
 </script>
 <template>
 	<ModalUiModalSection
@@ -22,7 +22,7 @@ const { value: endTime, errorMessage: endTimeError } = useField<string>(() => 'e
 		:label="$t('form.event.fields.start')"
 	>
 		<template #child>
-			<CommonFormField :error="JSON.stringify(startDateError)">
+			<CommonFormField :error="startDateError">
 				<CommonUiDateTimepicker
 					v-model="startDate"
 					type="date"
@@ -31,12 +31,13 @@ const { value: endTime, errorMessage: endTimeError } = useField<string>(() => 'e
 					required
 				/>
 			</CommonFormField>
-			<CommonFormField :error="JSON.stringify(startTimeError)">
+			<CommonFormField :error="startTimeError">
 				<CommonUiDateTimepicker
 					v-model="startTime"
 					type="time"
 					name="startTime"
 					placeholder="--:--"
+					:disabled="!startDate"
 					required
 				/>
 			</CommonFormField>
@@ -48,15 +49,17 @@ const { value: endTime, errorMessage: endTimeError } = useField<string>(() => 'e
 		:label="$t('form.event.fields.end')"
 	>
 		<template #child>
-			<CommonFormField :error="JSON.stringify(endDateError)">
+			<CommonFormField :error="endDateError">
 				<CommonUiDateTimepicker
 					v-model="endDate"
 					type="date"
 					name="endDate"
 					:placeholder="$t('form.event.fields.date_placeholder')"
+					:min-date="startDate ?? undefined"
+					:disabled="!startTime"
 				/>
 			</CommonFormField>
-			<CommonFormField :error="JSON.stringify(endTimeError)">
+			<CommonFormField :error="endTimeError">
 				<CommonUiDateTimepicker
 					v-model="endTime"
 					type="time"
@@ -64,11 +67,7 @@ const { value: endTime, errorMessage: endTimeError } = useField<string>(() => 'e
 					placeholder="--:--"
 					:disabled="!endDate"
 					:required="!!endDate"
-					:min-time="
-						startDate?.toDateString() === endDate?.toDateString()
-							? startTime
-							: undefined
-					"
+					:min-time="startDate === endDate ? startTime : undefined"
 				/>
 			</CommonFormField>
 		</template>

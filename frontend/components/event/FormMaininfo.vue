@@ -12,7 +12,7 @@ const props = defineProps({
 });
 
 const titleField = useField<string>(toRef('title'));
-const organizeField = useField<string>(toRef('organize'));
+const organizeField = useField<string>(toRef('organizer'));
 
 const descriptionField = useField<string>(toRef('description'));
 </script>
@@ -25,7 +25,7 @@ const descriptionField = useField<string>(toRef('description'));
 					:placeholder="$t('form.event.fields.title')"
 					required
 					name="title"
-					:error="titleField.errorMessage.value"
+					:error="JSON.stringify(titleField.errorMessage.value)"
 				/>
 			</CommonFormField>
 
@@ -34,7 +34,6 @@ const descriptionField = useField<string>(toRef('description'));
 					v-model="organizeField.value.value"
 					:placeholder="$t('form.event.fields.organizer')"
 					name="organizer"
-					required
 					:error="JSON.stringify(organizeField.errorMessage.value)"
 				/>
 			</CommonFormField>

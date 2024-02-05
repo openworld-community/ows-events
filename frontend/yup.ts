@@ -9,7 +9,8 @@ yup.setLocale({
 	number: {
 		min: ({ min, path }) => ({ key: `validation.min.${path}`, values: { count: min } }),
 		max: ({ max, path }) => ({ key: `validation.max.${path}`, values: { count: max } }),
-		integer: ({ path }: { path: string }) => ({ key: `validation.integer.${path}` })
+		integer: ({ path }: { path: string }) => ({ key: `validation.integer.${path}` }),
+		positive: ({ path }: { path: string }) => ({ key: `validation.positive.${path}` })
 	},
 
 	string: {
@@ -27,7 +28,8 @@ const emailRegexp =
 
 const passwordRegex = /^[a-z,A-Z, 0-9, .,!,?, @,:, ;,*,/,",+,-,,]{6,20}$/;
 
-const linkRegexp = /^https:\/\//;
+const linkRegexp =
+	/^(https?|ftp):\/\/(([a-z\d]([a-z\d-]*[a-z\d])?\.)+[a-z]{2,}|localhost)(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/;
 
 function isValidLink(this: yup.StringSchema<string, yup.Maybe<yup.AnyObject>, undefined, ''>) {
 	return this.matches(linkRegexp, {

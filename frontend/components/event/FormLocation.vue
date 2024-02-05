@@ -21,10 +21,6 @@ const { value: isOnline, errorMessage: isOnlineError } = useField<boolean>(() =>
 
 const { value: city, errorMessage: cityError } = useField<string>(() => 'location.city');
 const { value: address, errorMessage: addressError } = useField<string>(() => 'location.address');
-
-//const { values, errors, defineField } = useForm();
-
-//const [timezone] = defineField('timezone');
 </script>
 <template>
 	<ModalUiModalSection
@@ -76,6 +72,7 @@ const { value: address, errorMessage: addressError } = useField<string>(() => 'l
 						input-readonly
 						:error="JSON.stringify(timezoneError)"
 						required
+						:disabled="!country && !isOnline"
 					/>
 				</CommonFormField>
 			</div>

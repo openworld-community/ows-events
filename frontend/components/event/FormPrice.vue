@@ -1,7 +1,7 @@
-import type { stringify } from 'querystring'; import type { error } from 'console'; import type {
-error } from 'console'; import type { error } from 'console'; import type { error } from 'console';
-import type { CommonCheckLocation } from '#build/components'; import type { error } from 'console';
-import type { error } from 'console';
+import type { stringify } from 'querystring'; import type { stringify } from 'querystring'; import
+type { error } from 'console'; import type { error } from 'console'; import type { error } from
+'console'; import type { error } from 'console'; import type { CommonCheckLocation } from
+'#build/components'; import type { error } from 'console'; import type { error } from 'console';
 <script setup lang="ts">
 import { useField } from 'vee-validate';
 import { useLocationStore } from '@/stores/location.store';
@@ -17,7 +17,7 @@ const locationStore = useLocationStore();
 
 const { value: currency, errorMessage: currencyError } = useField<string>(() => 'price.currency');
 const { value: val, errorMessage: valueError } = useField<number>(() => 'price.val');
-const { value: isFree, errorMessage: isFreeError } = useField<string>(() => 'isFree');
+const { value: isFree, errorMessage: isFreeError } = useField<boolean>(() => 'isFree');
 </script>
 <template>
 	<ModalUiModalSection
@@ -33,9 +33,10 @@ const { value: isFree, errorMessage: isFreeError } = useField<string>(() => 'isF
 						:placeholder="$t('form.event.fields.currency_placeholder')"
 						:list="locationStore.currencies"
 						has-icon-items
-						:error="currencyError"
+						:error="JSON.stringify(currencyError)"
 						input-readonly
 						:required="!isFree"
+						:disabled="isFree"
 					/>
 				</CommonFormField>
 				<CommonFormField :error="valueError">
@@ -47,6 +48,7 @@ const { value: isFree, errorMessage: isFreeError } = useField<string>(() => 'isF
 						:min-value="0"
 						:required="!isFree"
 						:placeholder="$t('form.event.fields.price_placeholder')"
+						:disabled="isFree"
 					/>
 				</CommonFormField>
 			</div>

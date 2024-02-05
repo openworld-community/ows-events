@@ -56,6 +56,9 @@ const errorResult = computed({
 </template>
 
 <style lang="less" scoped>
+.form-field {
+	width: 100%;
+}
 .form-hint {
 	margin-top: 6px;
 	font-size: 10px;

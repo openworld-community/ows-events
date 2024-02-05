@@ -1,6 +1,7 @@
 import type { Timezone } from './location';
 import { EventTypes } from '../const/eventTypes';
 import { type Tag, Tags } from '../const/tags';
+export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
 
 export type EventDbEntity = {
 	id: string;
@@ -28,9 +29,9 @@ export type EventOnPoster = EventDbEntity;
 
 export type EventFormType = {
 	startDate:Date,
-	endDate:Date,
-	startTime:Date,
-	endTime:Date,
+	endDate?:Date,
+	startTime:Time,
+	endTime?:Time,
 	image?: string;
 	
 	price: {

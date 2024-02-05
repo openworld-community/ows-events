@@ -1,18 +1,23 @@
 import { BASE_URL } from '@/constants/url';
 import type { EventOnPoster } from '../../common/types';
 import type { Location } from '../../common/types/address';
-import type { EventFormType } from '../../common/types/event';
+import type { EventFormType, PostEventPayload } from '../../common/types/event';
 
-export const getInitialEventValues = (data?: EventOnPoster): EventFormType => {
+export const getInitialEventFormValues = (data?: EventOnPoster): EventFormType => {
 	return {
 		title: (data && data.title) || '',
 		organizer: (data && data.organizer) || '',
 		description: (data && data.description) || '',
-		tags: [],
-		startDate: null,
-		startTime: null,
-		endDate: null,
-		endTime: null,
+		tags: (data && data.tags) || [],
+		startDate: getDateFromEpochInMs(data?.date),
+		startTime: getTimeFromEpochInMs(data?.date),
+		endDate: data?.durationInSeconds
+			? getDateFromEpochInMs((data?.date ?? 0) + data.durationInSeconds * 1000)
+			: null,
+		endTime: data?.durationInSeconds
+			? getTimeFromEpochInMs((data?.date ?? 0) + data.durationInSeconds * 1000)
+			: null,
+
 		isOnline: (data && data.isOnline) || false,
 		location: (data && {
 			country: (data.location && data.location.country) || '',
@@ -34,6 +39,41 @@ export const getInitialEventValues = (data?: EventOnPoster): EventFormType => {
 		timezone: data && data.timezone ? timezoneToString(data.timezone) : '',
 		url: (data && data.url) || '',
 		isFree: data && data.price && data.price.value === 0 ? true : false
+	};
+};
+
+export const getEventPayload = (data: EventFormType): PostEventPayload => {
+	const eventStartEpoch = combineDateTime(data.startDate, data.startTime).getTime();
+
+	const eventEndEpoch = combineDateTime(data.endDate, data.endTime).getTime();
+	return {
+		title: data.title,
+		organizer: data.organizer,
+		description: data.description,
+		date: eventStartEpoch,
+		durationInSeconds: Math.floor(Math.max(0, eventEndEpoch - eventStartEpoch) / 1000),
+		isOnline: data.isOnline,
+		location: data.isOnline
+			? {
+					country: data.location.country,
+					city: data.location.city,
+					address: data.location.address
+			  }
+			: {
+					country: '',
+					city: '',
+					address: ''
+			  },
+		price: {
+			minValue: null,
+			value: data.isFree ? 0 : Number(data.price.val),
+			maxValue: null,
+			currency: data.isFree ? null : data.price.currency
+		},
+		timezone: stringToTimezone(data.timezone),
+		image: data.image,
+		url: data.url,
+		tags: data.isOnline && !data?.tags.includes('online') ? [...data.tags, 'online'] : data.tags
 	};
 };
 

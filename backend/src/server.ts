@@ -24,6 +24,7 @@ import { migrate as migrateDelocalization } from './migrations/remove-localizati
 import { migrate as migrateEventsStructure } from './migrations/events-structure-25-07-23';
 import { migrate as migrateOnlineEvents } from './migrations/online-events-15-01-24';
 import { startSchedule } from './boot/schedule';
+import { migrate as migrateChangeAuth } from './migrations/change-auth-07-11-23';
 import { vars } from './config/vars';
 
 const server = fastify({
@@ -39,6 +40,7 @@ connectToMongo()
 		migrateUserStructure();
 		migrateDelocalization();
 		migrateEventsStructure();
+		migrateChangeAuth();
 		migrateOnlineEvents();
 		if (vars.env === 'prod') {
 			startSchedule();

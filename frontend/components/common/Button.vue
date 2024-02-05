@@ -456,9 +456,13 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		background-color: var(--color-accent-green-main-10);
 	}
 
-	&::v-deep(svg) {
+	& svg {
 		color: var(--color-input-icons);
 		transition: color 0.3s ease;
+	}
+
+	&.pw-show svg {
+		color: var(--color-accent-green-main);
 	}
 
 	& + .icon {

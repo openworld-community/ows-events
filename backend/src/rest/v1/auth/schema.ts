@@ -32,3 +32,63 @@ export const telegramSchema = {
 		}
 	}
 };
+
+export const localSignupSchema = {
+	description: 'Register through login/password',
+	tags: ['Auth'],
+	summary: 'Register through login/password',
+	response: {
+		302: {
+			type: 'null',
+			description: 'Redirect to special page, where token get stored on client side'
+		}
+	},
+	body: {
+		type: 'object',
+		properties: {
+			email: {
+				type: 'string'
+			},
+			password: {
+				type: 'string'
+			}
+		}
+	}
+};
+
+export const localAuthSchema = {
+	description: 'Login through login/password',
+	tags: ['Auth'],
+	summary: 'Login through login/password',
+	response: {
+		302: {
+			type: 'null',
+			description: 'Redirect to special page, where token get stored on client side'
+		}
+	},
+	body: {
+		type: 'object',
+		properties: {
+			email: {
+				type: 'string'
+			},
+			password: {
+				type: 'string'
+			}
+		}
+	}
+};
+
+export const signoutSchema = {
+	description: "Closes current users' session",
+	tags: ['Auth'],
+	summary: "Closes current users' session",
+	security: [{ authJWT: [] }]
+};
+
+export const signoutEverywhereSchema = {
+	description: "Closes all users' sessions",
+	tags: ['Auth'],
+	summary: "Closes all users' sessions",
+	security: [{ authJWT: [] }]
+};

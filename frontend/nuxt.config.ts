@@ -6,6 +6,7 @@ import { searchForWorkspaceRoot } from 'vite';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+	//@ts-ignore
 	devtools: {
 		enabled: true // or false to disable
 	},

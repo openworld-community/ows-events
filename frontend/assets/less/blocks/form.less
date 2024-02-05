@@ -10,18 +10,21 @@
   border-color: var(--color-accent-red);
 
   &--wrapper {
+    position: absolute;
     display: flex;
     align-items: center;
     gap: 20px;
-    position: absolute;
     top: 50%;
-    right: calc(-250px);
+    left: calc(100% + 7px);
     transform: translateY(-50%);
   }
 
   &--label {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 20px);
+    transform: translateY(-50%);
     opacity: 0;
-    max-width: 200px;
     background-color: var(--color-accent-red-bg);
     padding: 10px;
     border-radius: 8px;
@@ -34,6 +37,8 @@
 
   &--content{ 
     position: relative;
+    min-width: 100px;
+    max-width: 250px;
 
     &::after {
       content: '';

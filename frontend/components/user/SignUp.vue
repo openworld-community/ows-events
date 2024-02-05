@@ -3,16 +3,11 @@ import { useForm } from 'vee-validate'
 import * as yup from 'yup';
 import { RoutePathEnum } from '~/constants/enums/route';
 
-import { API_URL } from '~/constants/url';
-
 const { t } = useI18n()
 
 const localePath = useLocalePath()
 
 const inputType = ref<'password' | 'text'>('password')
-const changeType = () => {
-    inputType.value === 'password' ? inputType.value = 'text' : inputType.value = 'password'
-}
 
 const { errors, defineField, meta, handleSubmit, handleReset } = useForm({
     // temporary local validation

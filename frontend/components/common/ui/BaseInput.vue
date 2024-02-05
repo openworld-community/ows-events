@@ -233,7 +233,7 @@ const mobile = inject('mobile')
 			<!-- почему-то на CommonIcon не вешаются ивенты :( -->
 			<div
 				class="flex"
-				@mouseover="toggleLabel"
+				@mouseenter="toggleLabel"
 				@mouseleave="toggleLabel"
 			>
 				<CommonIcon

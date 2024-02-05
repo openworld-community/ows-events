@@ -9,9 +9,6 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 
 const inputType = ref<'password' | 'text'>('password')
-const changeType = () => {
-    inputType.value === 'password' ? inputType.value = 'text' : inputType.value = 'password'
-}
 
 const { errors, defineField, handleSubmit, handleReset } = useForm({
     validationSchema: yup.object({
@@ -71,15 +68,16 @@ const notEmptyFields = computed(() => {
                 :error="errors.email"
             />
             <CommonUiBaseInput
-                v-model="password"
+            v-model="password"
                 v-bind="passwordAttr"
                 class="signin__fieldset--input"
                 name="password"
                 :type="inputType"
                 autocomplete="true"
-                placeholder="Password"
-                :error-label="true"
+                :show-password="true"
                 :error="errors.password"
+                :error-label="true"
+                placeholder="Password"
             />
         </fieldset>
         <CommonButton

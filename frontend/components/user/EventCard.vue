@@ -36,7 +36,10 @@ const tagArray = computed(() => {
 <template>
 	<NuxtLink
 		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
-		:class="['card', { 'card--expired': eventData.date < dateNow }]"
+		:class="[
+			'card',
+			{ 'card--expired': eventData.date + eventData.durationInSeconds * 1000 < dateNow }
+		]"
 		:itemprop="SeoItempropGlobalEnum.URL"
 	>
 		<div

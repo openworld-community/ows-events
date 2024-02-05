@@ -33,5 +33,10 @@ export default {
 			url_to_registration: 'Ссылка для связи',
 			url_placeholder: 'https://example.com'
 		}
+	},
+	form: {
+		signup: 'Зарегистрироваться',
+		login: 'Войти',
+		forgotPassword: 'Забыл пароль'
 	}
 };

@@ -29,7 +29,8 @@ export const getUserInfoByToken: IGetUserInfoHandler = async (request) => {
 	const isTokenValid = UserTokenController.checkAccessToken(token);
 	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
-	return userController.getUserInfoById(jwtData.id);
+	const res = await userController.getUserInfoById(jwtData.id);
+	return res 
 };
 
 export const changeUserInfo: IChangeUserInfoHandler = async (request) => {

@@ -2,7 +2,7 @@
 import { type PropType } from 'vue';
 import type { IconName } from '../Icon.vue';
 
-defineProps({
+const props = defineProps({
 	className: {
 		type: String,
 		default: ''
@@ -31,6 +31,7 @@ defineProps({
 			| 'email'
 			| 'phone'
 			| 'search'
+			| 'password'
 		>,
 		default: 'text'
 	},
@@ -58,6 +59,10 @@ defineProps({
 		type: String,
 		default: ''
 	},
+	errorLabel: {
+		type: Boolean,
+		defualy: false
+	},
 	autocomplete: {
 		type: String,
 		default: 'off'
@@ -84,8 +89,18 @@ defineProps({
 	hasValueIcon: {
 		type: Boolean,
 		default: false
-	}
+	},
+	// для отображения пассворда по клику на иконку (password <--> text)
+	showPassword: {
+		type: Boolean,
+		default: false
+	},
 });
+ 
+// выносим проп в отдельный реф
+// если не применяется логика отображения пароля, то он ведет себе как обычный props.type
+const writableType = ref<string>(props.type)
+// 
 
 const emit = defineEmits(['update:model-value']);
 const updateValue = (event: Event) => {
@@ -95,6 +110,16 @@ const updateValue = (event: Event) => {
 const onRemove = () => {
 	emit('update:model-value', '');
 };
+
+const isVisible = ref(false)
+
+const toggleLabel = () => {
+	isVisible.value = !isVisible.value
+	console.log(isVisible.value);
+
+}
+
+const mobile = inject('mobile')
 </script>
 
 <template>
@@ -116,7 +141,7 @@ const onRemove = () => {
 				{ form__error: error }
 			]"
 			:name="name"
-			:type="type"
+			:type="writableType"
 			:value="modelValue"
 			:maxlength="maxLength ? maxLength : undefined"
 			:disabled="disabled"
@@ -147,14 +172,45 @@ const onRemove = () => {
 
 		<!-- кнопка очистки инпута-->
 		<CommonButton
-			v-else-if="(modelValue || modelValue === 0) && !disabled"
-			class="input__button input__button--clear"
+			v-else-if="(modelValue || modelValue === 0) && !disabled && !showPassword"
 			is-icon
+			class="input__button input__button--clear input__button--wrapper"
 			:interactive="false"
 			icon-name="close"
 			:alt="$t('global.button.delete')"
 			@click="onRemove"
 		/>
+
+		<!-- блок для пассворд инпута
+		оставляем кнопку для очистки + кнопка раскрытия во флекс контейнере -->
+		<div
+			v-else-if="!disabled && showPassword"
+			:class="[
+				'input__button',
+				'input__button--clear',
+				'input__button--wrapper',
+				{ 'password-shown': showPassword && writableType === 'text' }
+			]"
+		>
+			<CommonButton
+				v-if="(modelValue || modelValue === 0) && !disabled"
+				is-icon
+				:interactive="false"
+				icon-name="close"
+				:alt="$t('global.button.delete')"
+				@click="onRemove"
+			/>
+			<!-- конпка отображения пароля (password <-> text) -->
+			<CommonButton
+				is-icon
+				:interactive="false"
+				icon-name="password"
+				:alt="$t('global.button.delete')"
+				:class="{ 'pw-show': writableType === 'text' }"
+				@click="writableType === 'password' ? writableType = 'text' : writableType = 'password'"
+			/>
+		</div>
+
 
 		<!--    иконка слева (для селектов) -->
 		<CommonIcon
@@ -164,10 +220,44 @@ const onRemove = () => {
 		/>
 
 		<span
-			v-if="error"
+			v-if="error && mobile"
 			class="form__error"
 		>
 			{{ error }}
 		</span>
+
+		<div
+			v-else-if="error && errorLabel && !mobile"
+			class="form__error--wrapper"
+		>
+			<!-- почему-то на CommonIcon не вешаются ивенты :( -->
+			<div
+				class="flex"
+				@mouseover="toggleLabel"
+				@mouseleave="toggleLabel"
+			>
+				<CommonIcon
+					name="error"
+					color="var(--color-accent-red)"
+				/>
+			</div>
+			<div 
+				:class="[
+					'form__error',
+					'form__error--label',
+					{ 'form__error--label--show': isVisible }
+				]"
+			>
+				<div class="form__error--content">
+					{{ error }}
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
+
+<style lang="less" scoped>
+.flex {
+	display: flex;
+}
+</style>

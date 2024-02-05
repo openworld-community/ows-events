@@ -13,8 +13,6 @@ import {
 } from './type';
 import { JWTController } from '../../../controllers/JWT-controller';
 import { UserTokenController } from '../../../controllers/user-token-controller';
-import { ITokenData } from '../../types';
-import { vars } from '../../../config/vars';
 
 export const addEvent: IAddEventHandler = async (request) => {
 	const { event } = request.body;

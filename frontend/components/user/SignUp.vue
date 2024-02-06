@@ -127,6 +127,12 @@ const onSubmit = handleSubmit(async values => {
         flex-direction: column;
         gap: 10px;
         min-width: 0;
+
+        &--input {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
     }
 
     &__submit {

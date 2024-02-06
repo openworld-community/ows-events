@@ -1,12 +1,9 @@
 <script setup lang="ts">
-import { SeoItempropGlobalEnum } from '@/constants/enums/seo';
 import { RoutePathEnum } from '@/constants/enums/route';
 import { useUserStore } from '@/stores/user.store';
 import { TELEGRAM_AUTH_BOT_NAME } from '@/constants/url';
 import { BASE_URL } from '@/constants/url';
 import { CookieNameEnum } from '@/constants/enums/common';
-import unauthorizedImg1x from '@/assets/img/user/unauthorized-img@1x.jpg';
-import unauthorizedImg2x from '@/assets/img/user/unauthorized-img@2x.jpg';
 
 type TFormType = 'login' | 'signup'
 
@@ -57,20 +54,6 @@ watch(
 
 <template>
 	<main class="unauthorized">
-		<!-- <div
-			v-if="mobile"
-			class="unauthorized__image-container"
-		>
-			<img
-				:srcset="`${unauthorizedImg2x} 2x`"
-				:src="unauthorizedImg1x"
-				width="351"
-				height="264"
-				alt=""
-				class="unauthorized__image"
-				:itemprop="SeoItempropGlobalEnum.IMAGE"
-			/>
-		</div> -->
 		<div class="unauthorized__content-container">
 			<CommonIcon
 				v-if="!mobile"

@@ -41,6 +41,19 @@ export const combineDateTime = (date: Date | null, time: Time | null): Date => {
 		.toDate();
 };
 
+export const duration = (
+	dateStart: Date | null,
+	timeStart: Time | null,
+	dateEnd: Date | null,
+	timeEnd: Time | null
+) => {
+	const start = combineDateTime(dateStart, timeStart).getTime();
+	const end = combineDateTime(dateEnd, timeEnd).getTime();
+	const diff = Math.floor((end - start) / 1000);
+
+	return diff;
+};
+
 export const convertToLocaleString = (epoch: number, timezoneName?: string) => {
 	const { locale } = useI18n();
 

@@ -55,7 +55,7 @@ defineProps({
 		default: false
 	},
 	error: {
-		type: String,
+		type: [String, Boolean],
 		default: ''
 	},
 	autocomplete: {

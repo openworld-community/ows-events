@@ -7,7 +7,7 @@ const props = defineProps({
 });
 </script>
 <template>
-	<p class="form-error">{{ error }}</p>
+	<p :class="['form-error', { validation_error: error }]">{{ error }}</p>
 </template>
 
 <style lang="less" scoped>

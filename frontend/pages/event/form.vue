@@ -37,7 +37,7 @@ watch(
 			!country ||
 			!locationStore._citiesByCountry
 				.get(country)
-				.includes(eventStore.eventData.location.city)
+				?.includes(eventStore.eventData.location.city)
 		) {
 			eventStore.eventData.location.city = '';
 			eventStore.eventData.location.address = '';

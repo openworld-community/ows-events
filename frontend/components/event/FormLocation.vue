@@ -23,9 +23,9 @@ const { value: city, errorMessage: cityError } = useField<string>(() => 'locatio
 const { value: address, errorMessage: addressError } = useField<string>(() => 'location.address');
 </script>
 <template>
-	<ModalUiModalSection
+	<ModalUiModalLocationSection
 		:label="$t('form.event.fields.location')"
-		:type="mobile ? 'column' : 'column-row'"
+		:type="'column'"
 	>
 		<template #child>
 			<div>
@@ -38,7 +38,8 @@ const { value: address, errorMessage: addressError } = useField<string>(() => 'l
 					/>
 				</CommonFormField>
 			</div>
-			<div>
+
+			<ModalUiModalRawSection :type="mobile ? 'column' : 'row'">
 				<CommonFormField :error="countryError">
 					<CommonUiBaseSelect
 						v-model="country"
@@ -55,7 +56,7 @@ const { value: address, errorMessage: addressError } = useField<string>(() => 'l
 					<CommonUiBaseSelect
 						v-model="city"
 						name="city"
-						:disabled="!country"
+						:disabled="!country || isOnline"
 						:error="JSON.stringify(cityError)"
 						:placeholder="$t('global.city')"
 						:list="locationStore.getCitiesByCountry(country)"
@@ -75,14 +76,15 @@ const { value: address, errorMessage: addressError } = useField<string>(() => 'l
 						:disabled="!country && !isOnline"
 					/>
 				</CommonFormField>
-			</div>
+			</ModalUiModalRawSection>
+
 			<CommonFormField :error="addressError">
 				<CommonUiBaseInput
 					v-model="address"
 					name="address"
 					:error="JSON.stringify(addressError)"
 					:placeholder="$t('form.event.fields.address_placeholder')"
-					:disabled="!(country && city)"
+					:disabled="!(country && city) || isOnline"
 				/>
 			</CommonFormField>
 
@@ -91,5 +93,5 @@ const { value: address, errorMessage: addressError } = useField<string>(() => 'l
 				:location="{ city: city, country: country, address: address }"
 			/>
 		</template>
-	</ModalUiModalSection>
+	</ModalUiModalLocationSection>
 </template>

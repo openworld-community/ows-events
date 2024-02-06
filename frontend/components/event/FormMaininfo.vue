@@ -4,20 +4,18 @@ CommonCheckLocation } from '#build/components'; import type { error } from 'cons
 error } from 'console';
 <script setup lang="ts">
 import { useField } from 'vee-validate';
-const props = defineProps({
-	error: {
-		type: String,
-		default: ''
-	}
-});
 
-const titleField = useField<string>(toRef('title'));
-const organizeField = useField<string>(toRef('organizer'));
+const titleField = useField<string>(() => 'title', {
+	validateOnModelUpdate: false
+});
+const organizeField = useField<string>(toRef('organizer'), {
+	validateOnModelUpdate: false
+});
 
 const descriptionField = useField<string>(toRef('description'));
 </script>
 <template>
-	<ModalUiModalSection :label="$t('form.event.fields.main_info')">
+	<ModalUiModalLocationSection :label="$t('form.event.fields.main_info')">
 		<template #child>
 			<CommonFormField :error="titleField.errorMessage.value">
 				<CommonUiBaseInput
@@ -25,7 +23,7 @@ const descriptionField = useField<string>(toRef('description'));
 					:placeholder="$t('form.event.fields.title')"
 					required
 					name="title"
-					:error="JSON.stringify(titleField.errorMessage.value)"
+					:error="Boolean(titleField.errorMessage.value)"
 				/>
 			</CommonFormField>
 
@@ -50,5 +48,5 @@ const descriptionField = useField<string>(toRef('description'));
 
 			<CommonFormTags />
 		</template>
-	</ModalUiModalSection>
+	</ModalUiModalLocationSection>
 </template>

@@ -9,15 +9,21 @@ const props = defineProps<{
 const emit = defineEmits(['update:model-value']);
 
 const input = ref<HTMLInputElement>();
+const errorLoad = ref('');
 const imageSrc = computed(() => (props.externalImage ? `${BASE_URL}${props.externalImage}` : ''));
 
 const loadImage = async (event: Event) => {
+	errorLoad.value = '';
 	if (!event.target) return console.warn('Load Image Event has no target attached');
 	const target = event.target as HTMLInputElement;
 	if (!target.files || !target.files[0])
 		return console.warn('Load Image Event targed to has no files');
 	const file = target.files[0];
-
+	const size = target.files[0].size / (1024 * 1024); // in Mb
+	if (size > 2) {
+		errorLoad.value = 'validation.image.size';
+		return console.warn('Too big');
+	}
 	const { data } = await apiRouter.events.image.add.useMutation({ data: { image: file } });
 	input.value.value = null;
 	if (!data.value) return;
@@ -70,6 +76,12 @@ const removeImage = async () => {
 			icon-name="picture"
 			@click="input?.click()"
 		/>
+		<p
+			v-if="errorLoad"
+			class="image-error"
+		>
+			{{ $t(errorLoad) }}
+		</p>
 	</div>
 </template>
 
@@ -106,5 +118,12 @@ const removeImage = async () => {
 
 .add-button {
 	max-height: 40px;
+}
+.image-error {
+	margin-top: 6px;
+	font-size: 10px;
+	line-height: 12px;
+	margin-left: 6px;
+	color: var(--color-accent-red);
 }
 </style>

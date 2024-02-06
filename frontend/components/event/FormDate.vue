@@ -3,18 +3,19 @@ from 'console'; import type { CommonCheckLocation } from '#build/components'; im
 from 'console'; import type { error } from 'console';
 <script setup lang="ts">
 import { useField } from 'vee-validate';
-import { useEventStore } from '../../stores/event.store';
-const props = defineProps({
-	error: {
-		type: String,
-		default: ''
-	}
+
+const { value: startDate, errorMessage: startDateError } = useField<Date>(() => 'startDate', {
+	validateOnModelUpdate: false
 });
-const eventStore = useEventStore();
-const { value: startDate, errorMessage: startDateError } = useField<Date>(() => 'startDate');
-const { value: startTime, errorMessage: startTimeError } = useField<Time>(() => 'startTime');
-const { value: endDate, errorMessage: endDateError } = useField<Date>(() => 'endDate');
-const { value: endTime, errorMessage: endTimeError } = useField<Time>(() => 'endTime');
+const { value: startTime, errorMessage: startTimeError } = useField<Time>(() => 'startTime', {
+	validateOnModelUpdate: false
+});
+const { value: endDate, errorMessage: endDateError } = useField<Date>(() => 'endDate', {
+	validateOnModelUpdate: false
+});
+const { value: endTime, errorMessage: endTimeError } = useField<Time>(() => 'endTime', {
+	validateOnModelUpdate: false
+});
 </script>
 <template>
 	<ModalUiModalSection

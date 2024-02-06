@@ -4,17 +4,12 @@ from 'console'; import type { error } from 'console';
 <script setup lang="ts">
 import { useField } from 'vee-validate';
 
-const props = defineProps({
-	error: {
-		type: String,
-		default: ''
-	}
+const { value: url, errorMessage: urlError } = useField<string>(() => 'url', {
+	validateOnModelUpdate: false
 });
-
-const { value: url, errorMessage: urlError } = useField<string>(() => 'url');
 </script>
 <template>
-	<ModalUiModalSection :label="$t('form.event.fields.url_to_registration')">
+	<ModalUiModalLocationSection :label="$t('form.event.fields.url_to_registration')">
 		<template #child>
 			<CommonFormField :error="urlError">
 				<CommonUiBaseInput
@@ -27,5 +22,5 @@ const { value: url, errorMessage: urlError } = useField<string>(() => 'url');
 				/>
 			</CommonFormField>
 		</template>
-	</ModalUiModalSection>
+	</ModalUiModalLocationSection>
 </template>

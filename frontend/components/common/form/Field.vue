@@ -8,6 +8,10 @@ const props = defineProps({
 	hint: {
 		type: String,
 		default: ''
+	},
+	touched: {
+		type: Boolean,
+		default: false
 	}
 });
 

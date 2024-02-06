@@ -23,9 +23,27 @@ const changeFormType = () => {
 
 const telegram = ref<HTMLElement | null>(null);
 
+export interface TelegramUser {
+	id: number
+	first_name: string
+	username: string
+	photo_url: string
+	auth_date: number
+	hash: string
+}
+
+// declare global {
+// 	interface Window {
+//     Telegram: {
+//     //   dataOnauth: (user: TelegramUser) => void
+//     }
+//   }
+// }
+
 const initTGButton = () => {
 	const script = document.createElement('script');
-	script.async = true;
+	script.async = false;
+	script.defer = true;
 	script.src = 'https://telegram.org/js/telegram-widget.js?22';
 
 	script.setAttribute('data-size', 'large');
@@ -37,12 +55,40 @@ const initTGButton = () => {
 	telegram.value?.appendChild(script);
 };
 
+const tgFrame = ref(null)
 
 onMounted(() => {
+	console.log(parseInt(TELEGRAM_AUTH_BOT_NAME));
+
 	if (!userStore.isAuthorized) {
 		initTGButton();
+		tgFrame.value = window.frames;
+		console.log('onMounted', tgFrame.value);
 	}
 });
+
+const auth = () => {
+	tgFrame.value.Telegram.Login.auth(
+		// bot_id can't be replaced with bot_name for now  
+		// tg somehow change exchange bot_name with bot_id under the hood
+		{ bot_id: 'SOME NUMBER', request_access: true, telegram_login: TELEGRAM_AUTH_BOT_NAME, auth_url: `${BASE_URL}/api/auth/telegram` },
+		(data) => {
+			if (!data) {
+				console.log('nodata?', data)
+			}
+
+			console.log(data);
+
+			// Here you would want to validate data like described there https://core.telegram.org/widgets/login#checking-authorization
+			// doWhateverYouWantWithData(data);
+		}
+	)
+	useTrackEvent('login', {
+		method: 'Telegram'
+	})
+}
+
+// TWidgetLogin.init('widget_login', 6005864382, {"origin":"http:\/\/127.0.0.1","embed":1,"request_access":"write","return_to":"http:\/\/127.0.0.1\/ru\/user"}, false);
 
 watch(
 	() => [userStore.isAuthorized, tokenCookie.value],
@@ -71,6 +117,7 @@ watch(
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
 		</div> -->
+		<button @click="auth">Tg test</button>
 		<div class="unauthorized__content-container">
 			<CommonIcon
 				v-if="!mobile"

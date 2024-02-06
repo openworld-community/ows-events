@@ -22,7 +22,7 @@ export const localSignup: ILocalSignupHandler = async (request, reply) => {
 	const token = await userController.addLocalUser(data);
 	reply
 		.headers({
-			'Access-Control-Allow-Origin': '*',
+			'Access-Control-Allow-Origin': vars.frontend_url,
 			'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
 			'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With'
 		})
@@ -34,7 +34,7 @@ export const localAuth: ILocalAuthHandler = async (request, reply) => {
 	const token = await userController.authLocalUser(data);
 	reply
 		.headers({
-			'Access-Control-Allow-Origin': '*',
+			'Access-Control-Allow-Origin': vars.frontend_url,
 			'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
 			'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With'
 		})

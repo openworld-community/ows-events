@@ -25,8 +25,14 @@ const { errors, defineField, handleSubmit, handleReset } = useForm({
     })
 });
 
-const [email, emailAttr] = defineField('email')
-const [password, passwordAttr] = defineField('password')
+const [email, emailAttr] = defineField('email', {
+    validateOnModelUpdate: false,
+    validateOnBlur: true
+})
+const [password, passwordAttr] = defineField('password', {
+    validateOnModelUpdate: false,
+    validateOnBlur: true
+})
 
 const onSubmit = handleSubmit(async values => {
     try {
@@ -121,13 +127,12 @@ const notEmptyFields = computed(() => {
 .signin {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 10px;
     justify-content: space-between;
-    margin-bottom: 15px;
-    width: 100%;
+    width: 75%;
 
-    @media (min-width: 1440px) {
-        max-width: 65%;
+    @media (max-width: 1200px) {
+        width: 100%;
     }
 
     &__fieldset {

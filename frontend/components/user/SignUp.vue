@@ -35,9 +35,18 @@ const { errors, defineField, meta, handleSubmit, handleReset } = useForm({
     })
 });
 
-const [email, emailAttr] = defineField('email')
-const [password, passwordAttr] = defineField('password')
-const [confirmPassword, confirmPasswordAttr] = defineField('confirmPassword')
+const [email, emailAttr] = defineField('email', {
+    validateOnModelUpdate: false,
+    validateOnBlur: true
+})
+const [password, passwordAttr] = defineField('password', {
+    validateOnModelUpdate: false,
+    validateOnBlur: true
+})
+const [confirmPassword, confirmPasswordAttr] = defineField('confirmPassword', {
+    validateOnModelUpdate: false,
+    validateOnBlur: true
+})
 
 const onSubmit = handleSubmit(async values => {
     try {
@@ -112,12 +121,11 @@ const onSubmit = handleSubmit(async values => {
 .signup {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 10px;
     justify-content: space-between;
-    margin-bottom: 20px;
     width: 75%;
 
-    @media (max-width: 768px) {
+    @media (max-width: 1200px) {
         width: 100%;
     }
 

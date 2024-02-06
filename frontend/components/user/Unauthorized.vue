@@ -76,6 +76,11 @@ watch(
 			<UserLogin v-if="login === 'login'" />
 
 			<UserSignUp v-else />
+			
+			<CommonButton
+				:button-text="login === 'login' ? $t('user.unauthorized.signup') : $t('user.unauthorized.login')"
+				@click="changeFormType"
+			/>
 
 			<div class="unauthorized__buttons">
 				<div
@@ -87,10 +92,6 @@ watch(
 						})
 						"
 				></div>
-				<CommonButton
-					:button-text="login === 'login' ? $t('user.unauthorized.signup') : $t('user.unauthorized.login')"
-					@click="changeFormType"
-				/>
 				<NuxtLink
 					:to="localePath(RoutePathEnum.HOME)"
 					class="unauthorized__continue"

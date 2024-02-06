@@ -4,7 +4,6 @@ import { TOKEN_MAX_AGE_SECONDS } from '../../constants/defaultValues/time';
 import type { UserInfo } from '../../../common/types/user';
 import { CookieNameEnum } from '../../constants/enums/common';
 
-defineI18nRoute(false)
 const localePath = useLocalePath();
 const langCookie = useCookie(CookieNameEnum.LOCALE);
 definePageMeta({

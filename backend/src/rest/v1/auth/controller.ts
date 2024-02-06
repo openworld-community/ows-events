@@ -20,13 +20,25 @@ export const telegramLogin: ITelegramHandler = async (request, reply) => {
 export const localSignup: ILocalSignupHandler = async (request, reply) => {
 	const data = request.body;
 	const token = await userController.addLocalUser(data);
-	reply.redirect(302, `${vars.frontend_url}/postauth/${token}`);
+	reply
+		.headers({
+			'Access-Control-Allow-Origin': vars.frontend_url,
+			'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+			'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With'
+		})
+		.redirect(302, `${vars.frontend_url}/postauth/${token}`);
 };
 
 export const localAuth: ILocalAuthHandler = async (request, reply) => {
 	const data = request.body;
 	const token = await userController.authLocalUser(data);
-	reply.redirect(302, `${vars.frontend_url}/postauth/${token}`);
+	reply
+		.headers({
+			'Access-Control-Allow-Origin': vars.frontend_url,
+			'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+			'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With'
+		})
+		.redirect(302, `${vars.frontend_url}/postauth/${token}`);
 };
 
 export const signout: ISignoutHandler = async (request) => {

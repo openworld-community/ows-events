@@ -7,6 +7,8 @@ import { BASE_URL } from '@/constants/url';
 import { CookieNameEnum } from '@/constants/enums/common';
 import unauthorizedImg1x from '@/assets/img/user/unauthorized-img@1x.jpg';
 import unauthorizedImg2x from '@/assets/img/user/unauthorized-img@2x.jpg';
+import {GoogleSignInButton, type CredentialResponse,} from "vue3-google-signin";
+import {GOOGLE_OAUTH_URL} from '@/constants/url';
 
 const userStore = useUserStore();
 const mobile = inject('mobile');
@@ -89,6 +91,16 @@ watch(
 						})
 					"
 				/>
+				
+				<div style="align-self: center;">
+					<GoogleSignInButton    				
+						:login-uri="GOOGLE_OAUTH_URL"
+						ux-mode="redirect"
+						type="icon"
+						logo_alignment="center"
+  					></GoogleSignInButton>
+				</div>
+				
 				<NuxtLink
 					:to="localePath(RoutePathEnum.HOME)"
 					class="unauthorized__continue"

@@ -71,7 +71,7 @@ watch(
 				{{ $t('user.unauthorized.title') }}
 			</h1>
 			<p class="unauthorized__text">
-				{{ $t('user.unauthorized.text') }}
+				{{ login === 'login' ? $t('user.unauthorized.loginText') : $t('user.unauthorized.signupText') }}
 			</p>
 
 			<UserLogin v-if="login === 'login'" />

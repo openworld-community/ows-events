@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@fastify/cors": "^8.2.1",
+    "@fastify/formbody": "^7.4.0",
     "@fastify/multipart": "^7.6.0",
     "@fastify/static": "^6.10.1",
     "@fastify/swagger": "^8.5.1",

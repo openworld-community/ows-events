@@ -13,7 +13,7 @@ export const BASE_URL = import.meta.env.VITE_BASE_URL || process.env.VITE_BASE_U
 export const LOCATION_API_URL = `https://api.ipregistry.co`;
 
 //GOOGLE OAUTH
-export const GOOGLE_OAUTH_URL = `${VITE_DOMAIN}/api/auth/google`;
+export const GOOGLE_OAUTH_URL = `${BASE_URL}/api/auth/google`;
 export const VITE_GOOGLE_OAUTH_KEY =
 	import.meta.env.VITE_GOOGLE_OAUTH_KEY || process.env.VITE_GOOGLE_OAUTH_KEY;
 

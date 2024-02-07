@@ -53,7 +53,7 @@ const errorResult = computed({
 			v-if="hint"
 			class="form-hint"
 		>
-			{{ hint }}
+			{{ $t(hint) }}
 		</p>
 		<CommonErrorComponent
 			v-if="touched"
@@ -67,7 +67,7 @@ const errorResult = computed({
 	width: 100%;
 }
 .form-hint {
-	margin-top: 6px;
+	margin-top: 10px;
 	font-size: 10px;
 	line-height: 12px;
 	color: var(--color-text-secondary);

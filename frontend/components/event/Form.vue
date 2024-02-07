@@ -7,7 +7,7 @@ import { LocalStorageEnum } from '../../constants/enums/common';
 import { useForm } from 'vee-validate';
 import { eventValidationSchema } from '~/components/event/eventValidationSchema';
 import { useLocationStore } from '~/stores/location.store';
-import { getTimezone } from '~/services/timezone.services';
+import { getTimezone, getUserTimezone } from '~/services/timezone.services';
 
 const locationStore = useLocationStore();
 const eventStore = useEventStore();
@@ -26,14 +26,30 @@ const props = defineProps({
 
 const emit = defineEmits(['createEvent', 'cancelEvent']);
 
+const dataFromLocalStorage = (initialValues: EventFormType) => {
+	const parsedData = JSON.parse(localStorage.getItem(LocalStorageEnum.EVENT_DATA));
+	const copy = { ...initialValues };
+	for (const key in copy) {
+		if (key in parsedData) {
+			copy[key] = parsedData[key];
+		}
+	}
+
+	if (copy.startDate) {
+		copy.startDate = new Date(copy.startDate);
+	}
+	if (copy.endDate) {
+		copy.endDate = new Date(copy.endDate);
+	}
+
+	return copy;
+};
+
 const { values, handleSubmit, setFieldValue } = useForm<EventFormType>({
 	validationSchema: schema,
 	initialValues:
 		JSON.parse(localStorage.getItem(LocalStorageEnum.EVENT_DATA)) !== null
-			? {
-					...getInitialEventFormValues(),
-					...JSON.parse(localStorage.getItem(LocalStorageEnum.EVENT_DATA))
-			  }
+			? dataFromLocalStorage(props.initialValues)
 			: props.initialValues
 });
 const isLoading = ref(false);
@@ -96,11 +112,10 @@ watch(
 			if (values['location']['address']) {
 				setFieldValue('location.address', '');
 			}
-			const timeZone = await getTimezone(
-				values['location'['country']],
-				values['location']['city']
-			);
+			const timeZone = timezoneToString(getUserTimezone());
 			setFieldValue('timezone', timeZone);
+		} else {
+			setFieldValue('timezone', '');
 		}
 	},
 	{ deep: true }

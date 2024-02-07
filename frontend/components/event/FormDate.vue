@@ -46,7 +46,7 @@ const endTimeField = useField<Time>(() => 'endTime', {
 					v-model="startTimeField.value.value"
 					type="time"
 					name="startTime"
-					:erroe="
+					:error="
 						startTimeField.meta.touched && Boolean(startTimeField.errorMessage.value)
 					"
 					placeholder="--:--"

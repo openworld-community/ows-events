@@ -2,15 +2,19 @@
 import { useField } from 'vee-validate';
 import { Tags, TagsArray } from '../../../../common/const/tags';
 
-const { value, errorMessage } = useField<String[]>(() => 'tags');
+const tagsFields = useField<String[]>(() => 'tags');
 </script>
 <template>
-	<CommonFormField :error="errorMessage">
+	<CommonFormField
+		:error="tagsFields.errorMessage.value"
+		:touched="tagsFields.meta.touched"
+		hint="validation.hints.tags"
+	>
 		<div class="event-form__tags">
 			<CommonUiTag
 				v-for="tag in TagsArray.filter((el) => el !== Tags.ONLINE)"
 				:key="tag"
-				v-model="value"
+				v-model="tagsFields.value.value"
 				name="tags"
 				:tag-key="tag"
 				is-checkbox

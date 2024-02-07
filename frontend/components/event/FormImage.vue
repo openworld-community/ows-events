@@ -10,7 +10,7 @@ const imageField = useField<string>(() => 'image');
 	<CommonFormField
 		:error="imageField.errorMessage.value"
 		:touched="imageField.meta.touched"
-		hint="jpg, jpeg, png, <= 2Mb"
+		hint="validation.hints.image"
 	>
 		<CommonImageLoader
 			v-model="imageField.value.value"

@@ -42,7 +42,10 @@ const descriptionField = useField<string>(toRef('description'));
 				/>
 			</CommonFormField>
 
-			<CommonFormField :error="descriptionField.errorMessage.value">
+			<CommonFormField
+				:error="descriptionField.errorMessage.value"
+				:touched="descriptionField.meta.touched"
+			>
 				<CommonUiTextArea
 					v-model="descriptionField.value.value"
 					:error="

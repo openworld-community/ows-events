@@ -10,6 +10,7 @@ export default defineNuxtConfig({
 		enabled: true // or false to disable
 	},
 	modules: [
+		'nuxt-vue3-google-signin',
 		'@nuxtjs/i18n',
 		'@pinia/nuxt',
 		'@vueuse/nuxt',
@@ -24,7 +25,8 @@ export default defineNuxtConfig({
 					desktop: 1440
 				}
 			}
-		]
+		],
+		
 	],
 	routeRules: {
 		'/': { redirect: '/ru', ssr: true }
@@ -105,5 +107,8 @@ export default defineNuxtConfig({
 	// appManifest:
 	// Почему-то при билде накст генерит разные buildId для appManifest и entry, пробую отключить
 	// (могут сломаться редиректы по языкам)
-	experimental: { watcher: 'chokidar', appManifest: false }
+	experimental: { watcher: 'chokidar', appManifest: false },
+	googleSignIn: {
+		clientId: 'xxxxxxx',
+	},
 });

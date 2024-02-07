@@ -1,5 +1,6 @@
 import { LocalAuthInfo, TGUser, UserInfo } from '@common/types/user';
 import { v4 } from 'uuid';
+import { TokenPayload } from 'google-auth-library';
 import { IUserDocument, UserModel } from '../models/user.model';
 import { CommonErrorsEnum } from '../../../common/const';
 import { EventModel } from '../models/event.model';
@@ -34,6 +35,37 @@ class UserController {
 		const newToken = JWTController.issueAccessToken({
 			id: user.id,
 			username: telegramData.username
+		});
+		const expiresAt = Date.now() + getTimestamp({ type: TimestampTypesEnum.DAYS, value: 30 });
+		const savedToken = await UserTokenController.createAccessToken(
+			user._id,
+			newToken,
+			expiresAt
+		);
+		return savedToken.token;
+	}
+
+	async addGoogleUser(googleData: TokenPayload) {
+		const newUserId = v4();
+		const user = await UserModel.findOneAndUpdate(
+			{ 'google.userid': googleData.sub },
+			{
+				$set: {
+					'google.iat': googleData.iat,
+					'google.exp': googleData.exp
+				},
+				$setOnInsert: {
+					id: newUserId,
+					'userInfo.nickname': googleData.name || '',
+					'userInfo.first_name': googleData.given_name || '',
+					'userInfo.last_name': googleData.family_name || ''
+				}
+			},
+			{ upsert: true, new: true }
+		);
+		const newToken = JWTController.issueAccessToken({
+			id: user.id,
+			username: googleData.name
 		});
 		const expiresAt = Date.now() + getTimestamp({ type: TimestampTypesEnum.DAYS, value: 30 });
 		const savedToken = await UserTokenController.createAccessToken(

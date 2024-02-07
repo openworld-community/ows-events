@@ -56,6 +56,17 @@ const schema = new Schema<IUserDocument>(
 				default: ''
 			}
 		},
+		google: {
+			userid: {
+				type: String
+			},
+			exp: {
+				type: Number
+			},
+			iat: {
+				type: Number
+			}
+		},
 		localAuth: {
 			email: {
 				type: String
@@ -98,6 +109,7 @@ schema.pre('save', async function save(next) {
 	}
 });
 
+// eslint-disable-next-line func-names
 schema.methods.isValidPassword = function (password: string) {
 	const receivedPassword = createHash('sha256')
 		.update(String(password).padStart(64, this.localAuth.salt))

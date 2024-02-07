@@ -1,4 +1,5 @@
 import {
+	IGoogleHandler,
 	ILocalAuthHandler,
 	ILocalSignupHandler,
 	ISignoutEverywhereHandler,
@@ -10,10 +11,18 @@ import { vars } from '../../../config/vars';
 import { UserTokenController } from '../../../controllers/user-token-controller';
 import { CommonErrorsEnum } from '../../../../../common/const';
 import { JWTController } from '../../../controllers/JWT-controller';
+import { verifyGoogleToken } from '../../../externalServices/googleauth';
 
 export const telegramLogin: ITelegramHandler = async (request, reply) => {
 	const data = request.query;
 	const token = await userController.addTGUser(data);
+	reply.redirect(302, `${vars.frontend_url}/postauth/${token}`);
+};
+
+export const googleLogin: IGoogleHandler = async (request, reply) => {
+	const data = request.body;
+	const googledata = await verifyGoogleToken(data.credential);
+	const token = await userController.addGoogleUser(googledata);
 	reply.redirect(302, `${vars.frontend_url}/postauth/${token}`);
 };
 

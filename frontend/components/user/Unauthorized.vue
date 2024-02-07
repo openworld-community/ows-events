@@ -4,6 +4,10 @@ import { useUserStore } from '@/stores/user.store';
 import { TELEGRAM_AUTH_BOT_NAME } from '@/constants/url';
 import { BASE_URL } from '@/constants/url';
 import { CookieNameEnum } from '@/constants/enums/common';
+import unauthorizedImg1x from '@/assets/img/user/unauthorized-img@1x.jpg';
+import unauthorizedImg2x from '@/assets/img/user/unauthorized-img@2x.jpg';
+import {GoogleSignInButton, type CredentialResponse,} from "vue3-google-signin";
+import {GOOGLE_OAUTH_URL} from '@/constants/url';
 
 type TFormType = 'login' | 'signup'
 
@@ -99,6 +103,20 @@ watch(
 				>
 					{{ $t('user.unauthorized.continue') }}
 				</NuxtLink> -->
+				<CommonButton
+					:button-text="login === 'login' ? $t('user.unauthorized.signup') : $t('user.unauthorized.login')"
+					@click="changeFormType"
+				/>
+
+				<div style="align-self: center;">
+					<GoogleSignInButton
+						:login-uri="GOOGLE_OAUTH_URL"
+						ux-mode="redirect"
+						type="icon"
+						logo_alignment="center"
+  					></GoogleSignInButton>
+				</div>
+
 				<NuxtLink
 					:to="localePath(RoutePathEnum.HOME)"
 					class="unauthorized__continue"

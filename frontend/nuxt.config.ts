@@ -3,7 +3,7 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import path from 'path';
 import { fileURLToPath, URL } from 'node:url';
 import { searchForWorkspaceRoot } from 'vite';
-import { BASE_URL } from './constants/url';
+import { BASE_URL, VITE_GOOGLE_OAUTH_KEY } from './constants/url';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -27,8 +27,7 @@ export default defineNuxtConfig({
 					desktop: 1440
 				}
 			}
-		],
-		
+		]
 	],
 	routeRules: {
 		'/': { redirect: '/ru', ssr: true },
@@ -119,6 +118,6 @@ export default defineNuxtConfig({
 	// (могут сломаться редиректы по языкам)
 	experimental: { watcher: 'chokidar', appManifest: false },
 	googleSignIn: {
-		clientId: 'xxxxxxx',
-	},
+		clientId: VITE_GOOGLE_OAUTH_KEY
+	}
 });

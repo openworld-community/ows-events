@@ -29,11 +29,18 @@ const logout = () => {
 	userCookie.value = null;
 	userStore.$patch({ userInfo: null });
 };
+
+// const isGoBack = computed(() => {
+
+// }) 
 </script>
 
 <template>
 	<div class="root">
-		<HeaderCommon v-if="mobile || userStore.isAuthorized" />
+		<HeaderCommon
+			v-if="mobile || userStore.isAuthorized"
+			:has-back-button="true"
+		/>
 		<main
 			v-if="userStore.isAuthorized"
 			class="user-page"
@@ -56,9 +63,7 @@ const logout = () => {
 						>
 							{{ `@${userData?.nickname}` }}
 						</p>
-						<p
-							class="user-info__password"
-						>
+						<p class="user-info__password">
 							********
 						</p>
 						<p

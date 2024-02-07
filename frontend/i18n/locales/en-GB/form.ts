@@ -1,6 +1,7 @@
 export default {
 	global: {
-		required: '* required fields'
+		required: '* required fields',
+		close: 'Close'
 	},
 	event: {
 		title: 'Create Event',

@@ -29,7 +29,6 @@ export default defineNuxtConfig({
 	],
 	routeRules: {
 		'/': { redirect: '/ru', ssr: true },
-		'/**': { cors: false }
 	},
 	i18n: {
 		debug: false,

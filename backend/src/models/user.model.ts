@@ -13,7 +13,6 @@ const schema = new Schema<IUserDocument>(
 		telegram: {
 			id: {
 				type: String,
-				required: true
 			},
 			username: {
 				type: String
@@ -113,9 +112,9 @@ schema.pre('save', async function save(next) {
 // eslint-disable-next-line func-names
 schema.methods.isValidPassword = function (password: string) {
 	const receivedPassword = createHash('sha256')
-		.update(String(password).padStart(64, this.salt))
+		.update(String(password).padStart(64, this.localAuth.salt))
 		.digest('base64');
-	const isCorrect = receivedPassword === this.password;
+	const isCorrect = receivedPassword === this.localAuth.password;
 	return isCorrect;
 };
 

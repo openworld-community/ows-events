@@ -75,7 +75,8 @@ export const parsePeredelano = () => {
 			const eventDate = new Date(
 				Number(eventDateArr[0]),
 				Number(eventDateArr[1]),
-				Number(eventDateArr[2])
+				Number(eventDateArr[2]),
+				15
 			);
 			const place = await translatePeredelanoPlaceName(event.city);
 			if (!place?.name) return;

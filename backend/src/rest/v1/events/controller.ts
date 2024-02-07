@@ -11,9 +11,6 @@ import {
 	IGetMyEventsHandler,
 	IUpdateEventHandler
 } from './type';
-import { eventsValidator } from '../../../validators/event-validator';
-import { manualModerationController } from '../../../controllers/manual-moderation-controller';
-import { EventModel } from '../../../models/event.model';
 import { JWTController } from '../../../controllers/JWT-controller';
 import { UserTokenController } from '../../../controllers/user-token-controller';
 
@@ -34,20 +31,20 @@ export const addEvent: IAddEventHandler = async (request) => {
 		event.type = EventTypes.USER_GENERATED;
 	}
 
-	const eventWithThisLink = await EventModel.findOne({
-		url: event.url,
-		date: { $gt: Date.now() }
-	});
-	const isEventWithThisLinkExists = !!eventWithThisLink;
-	if (isEventWithThisLinkExists) throw new Error(CommonErrorsEnum.EVENT_ALREADY_EXISTS);
+	// const eventWithThisLink = await EventModel.findOne({
+	// 	url: event.url,
+	// 	date: { $gt: Date.now() }
+	// });
+	// const isEventWithThisLinkExists = !!eventWithThisLink;
+	// if (isEventWithThisLinkExists) throw new Error(CommonErrorsEnum.EVENT_ALREADY_EXISTS);
 
 	const newPostId = await eventsStateController.addEvent(event);
 
-	const validationResult = eventsValidator.validateEvent({ event });
-	if (!validationResult.isValid) {
-		await manualModerationController.inProgress(newPostId, validationResult.errors);
-		throw new Error(CommonErrorsEnum.EVENT_SENT_ON_MODERATION);
-	}
+	// const validationResult = eventsValidator.validateEvent({ event });
+	// if (!validationResult.isValid) {
+	// 	await manualModerationController.inProgress(newPostId, validationResult.errors);
+	// 	throw new Error(CommonErrorsEnum.EVENT_SENT_ON_MODERATION);
+	// }
 
 	return { id: newPostId };
 };

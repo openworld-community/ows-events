@@ -87,6 +87,9 @@ class UserController {
 				password: userData.password
 			}
 		});
+
+		await user.save()
+		
 		const newToken = JWTController.issueAccessToken({
 			id: user.id,
 			username: userData.email

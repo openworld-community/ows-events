@@ -3,9 +3,11 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import path from 'path';
 import { fileURLToPath, URL } from 'node:url';
 import { searchForWorkspaceRoot } from 'vite';
+import { BASE_URL } from './constants/url';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+	// @ts-ignore
 	devtools: {
 		enabled: true // or false to disable
 	},
@@ -28,7 +30,15 @@ export default defineNuxtConfig({
 	],
 
 	routeRules: {
-		'/': { redirect: '/ru', ssr: true }
+		'/': { redirect: '/ru', ssr: true },
+		'/**': {
+			cors: true,
+			headers: {
+				'Access-Control-Allow-Origin': BASE_URL,
+				'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+				'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With'
+			}
+		}
 	},
 	i18n: {
 		debug: false,

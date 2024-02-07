@@ -1,4 +1,3 @@
-// import jwt from 'jsonwebtoken';
 import { CommonErrorsEnum } from '../../../../../common/const';
 import { eventsStateController } from '../../../controllers/events-state-controller';
 import {
@@ -7,8 +6,6 @@ import {
 	IGetTagByEventHandler
 	// IDeleteTagsHandler
 } from './type';
-// import { ITokenData } from '../../types';
-// import { vars } from '../../../config/vars';
 
 // export const addTags: IAddTagHandler = async (request) => {
 // 	const { event } = request.body;
@@ -16,8 +13,9 @@ import {
 // 	const token = request.headers.authorization;
 // 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 //
-// 	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
-// 	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+// 	const isTokenValid = UserTokenController.checkAccessToken(token);
+// 	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+// 	const jwtData = JWTController.decodeToken(token);
 //
 // 	event.creatorId = jwtData.id;
 // 	const response = await eventsStateController.addTags(event);
@@ -45,8 +43,9 @@ export const getTagByEventId: IGetTagByEventHandler = async (request) => {
 // 	const token = request.headers.authorization;
 // 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 //
-// 	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
-// 	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+// 	const isTokenValid = UserTokenController.checkAccessToken(token);
+// 	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+// 	const jwtData = JWTController.decodeToken(token);
 //
 // 	event.creatorId = jwtData.id;
 // 	const response = await eventsStateController.removeTags(event);

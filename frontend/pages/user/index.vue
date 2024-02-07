@@ -57,6 +57,11 @@ const logout = () => {
 							{{ `@${userData?.nickname}` }}
 						</p>
 						<p
+							class="user-info__password"
+						>
+							********
+						</p>
+						<p
 							v-if="userData?.company"
 							class="user-info__organizer"
 							:itemprop="SeoItempropUserEnum.company"

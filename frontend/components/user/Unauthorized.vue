@@ -1,17 +1,22 @@
 <script setup lang="ts">
-import { SeoItempropGlobalEnum } from '@/constants/enums/seo';
 import { RoutePathEnum } from '@/constants/enums/route';
 import { useUserStore } from '@/stores/user.store';
 import { TELEGRAM_AUTH_BOT_NAME } from '@/constants/url';
 import { BASE_URL } from '@/constants/url';
 import { CookieNameEnum } from '@/constants/enums/common';
-import unauthorizedImg1x from '@/assets/img/user/unauthorized-img@1x.jpg';
-import unauthorizedImg2x from '@/assets/img/user/unauthorized-img@2x.jpg';
+
+type TFormType = 'login' | 'signup'
 
 const userStore = useUserStore();
 const mobile = inject('mobile');
 const localePath = useLocalePath();
 const tokenCookie = useCookie<string | null>(CookieNameEnum.TOKEN);
+
+const login = ref<TFormType>('login')
+
+const changeFormType = () => {
+	login.value === 'login' ? login.value = 'signup' : login.value = 'login'
+}
 
 const telegram = ref<HTMLElement | null>(null);
 
@@ -23,10 +28,12 @@ const initTGButton = () => {
 	script.setAttribute('data-size', 'large');
 	script.setAttribute('data-userpic', 'false');
 	script.setAttribute('data-telegram-login', TELEGRAM_AUTH_BOT_NAME);
+	script.setAttribute('data-radius', '8');
 	script.setAttribute('data-request-access', 'write');
 	script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
 	telegram.value?.appendChild(script);
 };
+
 
 onMounted(() => {
 	if (!userStore.isAuthorized) {
@@ -47,20 +54,6 @@ watch(
 
 <template>
 	<main class="unauthorized">
-		<div
-			v-if="mobile"
-			class="unauthorized__image-container"
-		>
-			<img
-				:srcset="`${unauthorizedImg2x} 2x`"
-				:src="unauthorizedImg1x"
-				width="351"
-				height="264"
-				alt=""
-				class="unauthorized__image"
-				:itemprop="SeoItempropGlobalEnum.IMAGE"
-			/>
-		</div>
 		<div class="unauthorized__content-container">
 			<CommonIcon
 				v-if="!mobile"
@@ -79,6 +72,11 @@ watch(
 			<p class="unauthorized__text">
 				{{ $t('user.unauthorized.text') }}
 			</p>
+
+			<UserLogin v-if="login === 'login'" />
+
+			<UserSignUp v-else />
+
 			<div class="unauthorized__buttons">
 				<div
 					ref="telegram"
@@ -87,7 +85,11 @@ watch(
 						useTrackEvent('login', {
 							method: 'Telegram'
 						})
-					"
+						"
+				></div>
+				<CommonButton
+					:button-text="login === 'login' ? $t('user.unauthorized.signup') : $t('user.unauthorized.login')"
+					@click="changeFormType"
 				/>
 				<NuxtLink
 					:to="localePath(RoutePathEnum.HOME)"
@@ -101,7 +103,7 @@ watch(
 			v-if="!mobile"
 			class="unauthorized__copyright"
 		>
-			© Peredelano Startups 2023
+			© Peredelano Startups {{ new Date().getFullYear() }}
 		</p>
 	</main>
 </template>
@@ -124,7 +126,8 @@ watch(
 		background: url(@/assets/img/user/unauthorized-background@1x.png) 0 0 no-repeat;
 		background-size: cover;
 
-		@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+		@media (-webkit-min-device-pixel-ratio: 2),
+		(min-resolution: 192dpi) {
 			background-image: url(@/assets/img/user/unauthorized-background@2x.png);
 		}
 	}
@@ -167,6 +170,7 @@ watch(
 
 		@media (min-width: 1440px) {
 			width: 35%;
+			padding: 40px;
 		}
 	}
 

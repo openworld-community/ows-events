@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import { useForm } from 'vee-validate'
 import * as yup from 'yup';
-import { RoutePathEnum } from '~/constants/enums/route';
 
 const { t } = useI18n()
-
-const localePath = useLocalePath()
 
 const inputType = ref<'password' | 'text'>('password')
 
@@ -35,20 +32,28 @@ const { errors, defineField, meta, handleSubmit, handleReset } = useForm({
     })
 });
 
-const [email, emailAttr] = defineField('email')
-const [password, passwordAttr] = defineField('password')
-const [confirmPassword, confirmPasswordAttr] = defineField('confirmPassword')
+const [email, emailAttr] = defineField('email', {
+    validateOnModelUpdate: false,
+    validateOnBlur: true
+})
+const [password, passwordAttr] = defineField('password', {
+    validateOnModelUpdate: false,
+    validateOnBlur: true
+})
+const [confirmPassword, confirmPasswordAttr] = defineField('confirmPassword', {
+    validateOnModelUpdate: false,
+    validateOnBlur: true
+})
 
 const onSubmit = handleSubmit(async values => {
     try {
-        // alert(JSON.stringify(values, null, 2));
         const { email, password } = values
-        const { error } = await apiRouter.auth.signup.useQuery({ data: { email, password } })
+        const { error, data } = await apiRouter.auth.signup.useQuery({ data: { email, password } })
         if (error.value) {
             console.log('error', error.value);
             return
         }
-        navigateTo(localePath(RoutePathEnum.HOME))
+        navigateTo(data.value, { external: true })
     } catch (error) {
         console.log(error);
     } finally {
@@ -112,12 +117,11 @@ const onSubmit = handleSubmit(async values => {
 .signup {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 10px;
     justify-content: space-between;
-    margin-bottom: 20px;
     width: 75%;
 
-    @media (max-width: 768px) {
+    @media (max-width: 1200px) {
         width: 100%;
     }
 

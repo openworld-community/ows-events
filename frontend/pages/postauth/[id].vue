@@ -9,9 +9,7 @@ const localePath = useLocalePath();
 const langCookie = useCookie(CookieNameEnum.LOCALE);
 definePageMeta({
 	middleware: async () => {
-		console.log('ROUTE1');
 		const route = useRoute();
-		console.log('ROUTE', route);
 		const userToken = getFirstParam(route.params.id);
 		useCookie<string>(CookieNameEnum.TOKEN, { maxAge: TOKEN_MAX_AGE_SECONDS }).value =
 			userToken;

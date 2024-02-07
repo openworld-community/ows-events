@@ -94,12 +94,12 @@ const props = defineProps({
 	showPassword: {
 		type: Boolean,
 		default: false
-	},
+	}
 });
 
 // выносим проп в отдельный реф
 // если не применяется логика отображения пароля, то он ведет себе как обычный props.type
-const writableType = ref<string>(props.type)
+const writableType = ref<string>(props.type);
 //
 
 const emit = defineEmits(['update:model-value']);
@@ -111,15 +111,13 @@ const onRemove = () => {
 	emit('update:model-value', '');
 };
 
-const isVisible = ref(false)
+const isVisible = ref(false);
 
 const toggleLabel = () => {
-	isVisible.value = !isVisible.value
-	console.log(isVisible.value);
+	isVisible.value = !isVisible.value;
+};
 
-}
-
-const mobile = inject('mobile')
+const mobile = inject('mobile');
 </script>
 
 <template>
@@ -207,10 +205,13 @@ const mobile = inject('mobile')
 				icon-name="password"
 				:alt="$t('global.button.delete')"
 				:class="{ 'pw-show': writableType === 'text' }"
-				@click="writableType === 'password' ? writableType = 'text' : writableType = 'password'"
+				@click="
+					writableType === 'password'
+						? (writableType = 'text')
+						: (writableType = 'password')
+				"
 			/>
 		</div>
-
 
 		<!--    иконка слева (для селектов) -->
 		<CommonIcon

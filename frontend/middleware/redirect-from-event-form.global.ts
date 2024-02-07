@@ -4,7 +4,6 @@ import { LocalStorageEnum } from '../constants/enums/common';
 import { useUserStore } from '../stores/user.store';
 
 export default defineNuxtRouteMiddleware((to, from) => {
-	console.log('kjhkjgjkgk', to, from);
 	if (
 		from.name.toString().includes(RouteNameEnum.EVENT) &&
 		to.name.toString().includes(RouteNameEnum.EVENT_FORM) &&

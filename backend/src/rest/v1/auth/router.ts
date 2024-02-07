@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+import formbody from '@fastify/formbody';
 import {
 	IGoogleRoute,
 	ILocalAuthRoute,
@@ -25,6 +26,7 @@ import {
 } from './schema';
 
 export const authApi = async (fastify: FastifyInstance) => {
+	fastify.register(formbody);
 	fastify.get<ITelegramRoute>('/telegram', { schema: telegramSchema, handler: telegramLogin });
 	fastify.post<IGoogleRoute>('/google', { schema: googleSchema, handler: googleLogin });
 	fastify.post<ILocalSignupRoute>('/signup', { schema: localSignupSchema, handler: localSignup });

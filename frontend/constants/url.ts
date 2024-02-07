@@ -5,14 +5,17 @@
 */
 
 export const API_URL = import.meta.env.VITE_API_URL || process.env.VITE_API_URL;
+export const VITE_DOMAIN =
+	import.meta.env.VITE_DOMAIN || process.env.VITE_DOMAIN || 'http://localhost';
 
 export const BASE_URL = import.meta.env.VITE_BASE_URL || process.env.VITE_BASE_URL;
 
 export const LOCATION_API_URL = `https://api.ipregistry.co`;
 
 //GOOGLE OAUTH
-export const GOOGLE_OAUTH_URL = `${BASE_URL}/api/auth/google`;
-export const VITE_GOOGLE_OAUTH_KEY = import.meta.env.VITE_BASE_URL || process.env.VITE_BASE_URL;
+export const GOOGLE_OAUTH_URL = `${VITE_DOMAIN}/api/auth/google`;
+export const VITE_GOOGLE_OAUTH_KEY =
+	import.meta.env.VITE_GOOGLE_OAUTH_KEY || process.env.VITE_GOOGLE_OAUTH_KEY;
 
 //TELEGRAM BOTS
 

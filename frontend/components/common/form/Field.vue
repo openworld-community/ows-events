@@ -55,7 +55,10 @@ const errorResult = computed({
 		>
 			{{ hint }}
 		</p>
-		<CommonErrorComponent :error="errorResult" />
+		<CommonErrorComponent
+			v-if="touched"
+			:error="errorResult"
+		/>
 	</div>
 </template>
 
@@ -68,5 +71,6 @@ const errorResult = computed({
 	font-size: 10px;
 	line-height: 12px;
 	color: var(--color-text-secondary);
+	margin-left: 6px;
 }
 </style>

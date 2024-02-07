@@ -6,7 +6,10 @@ import { LocalStorageEnum } from '../../constants/enums/common';
 
 import { useForm } from 'vee-validate';
 import { eventValidationSchema } from '~/components/event/eventValidationSchema';
+import { useLocationStore } from '~/stores/location.store';
+import { getTimezone } from '~/services/timezone.services';
 
+const locationStore = useLocationStore();
 const eventStore = useEventStore();
 
 const schema = eventValidationSchema;
@@ -23,7 +26,7 @@ const props = defineProps({
 
 const emit = defineEmits(['createEvent', 'cancelEvent']);
 
-const { values, handleSubmit } = useForm<EventFormType>({
+const { values, handleSubmit, setFieldValue } = useForm<EventFormType>({
 	validationSchema: schema,
 	initialValues:
 		JSON.parse(localStorage.getItem(LocalStorageEnum.EVENT_DATA)) !== null
@@ -39,6 +42,101 @@ watch(
 	() => values,
 	(values) => {
 		localStorage.setItem(LocalStorageEnum.EVENT_DATA, JSON.stringify(values));
+	},
+	{ deep: true }
+);
+
+// Изменение страны и города
+watch(
+	() => values['location']['country'],
+	async (country) => {
+		if (
+			!country ||
+			!locationStore._citiesByCountry
+				.get(country)
+				?.includes(eventStore.eventData.location.city)
+		) {
+			setFieldValue('location.city', '');
+			setFieldValue('location.address', '');
+		}
+		if (country) {
+			if (!values['isFree']) {
+				const currency = getCurrencyByCountry(country);
+				setFieldValue('price.currency', currency);
+			}
+		} else {
+			setFieldValue('price.currency', '');
+		}
+	},
+	{ deep: true }
+);
+
+watch(
+	() => values['location']['city'],
+	async (city) => {
+		if (city) {
+			const timezone = await getTimezone(values['location']['country'], city);
+			setFieldValue('timezone', timezone);
+		}
+		setFieldValue('location.address', '');
+	},
+	{ deep: true }
+);
+
+watch(
+	() => values['isOnline'],
+	async (online) => {
+		if (online) {
+			if (values['location']['country']) {
+				setFieldValue('location.country', '');
+			}
+			if (values['location']['city']) {
+				setFieldValue('location.city', '');
+			}
+			if (values['location']['address']) {
+				setFieldValue('location.address', '');
+			}
+			const timeZone = await getTimezone(
+				values['location'['country']],
+				values['location']['city']
+			);
+			setFieldValue('timezone', timeZone);
+		}
+	},
+	{ deep: true }
+);
+
+watch(
+	() => values['isFree'],
+	(free) => {
+		if (free) {
+			if (values['price']['currency']) {
+				setFieldValue('price.currency', '');
+			}
+			if (values['price']['val']) {
+				setFieldValue('price.val', null);
+			}
+		}
+	},
+	{ deep: true }
+);
+watch(
+	() => values['endDate'],
+	(end) => {
+		if (!end) {
+			setFieldValue('endTime', null);
+		}
+	},
+	{ deep: true }
+);
+
+// Изменение даты и времени
+watch(
+	[() => values['startDate'], () => values['startTime'], () => values['endDate']],
+	([startDate, startTime, endDate]) => {
+		if (!startDate) setFieldValue('startTime', null);
+		if (!startTime) setFieldValue('endDate', null);
+		if (!endDate) setFieldValue('endTime', null);
 	},
 	{ deep: true }
 );

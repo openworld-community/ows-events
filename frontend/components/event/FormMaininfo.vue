@@ -17,29 +17,38 @@ const descriptionField = useField<string>(toRef('description'));
 <template>
 	<ModalUiModalLocationSection :label="$t('form.event.fields.main_info')">
 		<template #child>
-			<CommonFormField :error="titleField.errorMessage.value">
+			<CommonFormField
+				:error="titleField.errorMessage.value"
+				:touched="titleField.meta.touched"
+			>
 				<CommonUiBaseInput
 					v-model="titleField.value.value"
 					:placeholder="$t('form.event.fields.title')"
 					required
 					name="title"
-					:error="Boolean(titleField.errorMessage.value)"
+					:error="titleField.meta.touched && Boolean(titleField.errorMessage.value)"
 				/>
 			</CommonFormField>
 
-			<CommonFormField :error="organizeField.errorMessage.value">
+			<CommonFormField
+				:error="organizeField.errorMessage.value"
+				:touched="organizeField.meta.touched"
+			>
 				<CommonUiBaseInput
 					v-model="organizeField.value.value"
 					:placeholder="$t('form.event.fields.organizer')"
 					name="organizer"
-					:error="JSON.stringify(organizeField.errorMessage.value)"
+					:error="organizeField.meta.touched && Boolean(organizeField.errorMessage.value)"
 				/>
 			</CommonFormField>
 
 			<CommonFormField :error="descriptionField.errorMessage.value">
 				<CommonUiTextArea
 					v-model="descriptionField.value.value"
-					:error="JSON.stringify(descriptionField.errorMessage.value)"
+					:error="
+						descriptionField.meta.touched &&
+						Boolean(descriptionField.errorMessage.value)
+					"
 					name="description"
 					:placeholder="$t('form.event.fields.description')"
 					required

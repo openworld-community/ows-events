@@ -10,17 +10,15 @@ import { useEventStore } from '../../stores/event.store';
 
 const mobile = inject('mobile');
 
-const props = defineProps({});
-
 const locationStore = useLocationStore();
 const eventStore = useEventStore();
 
-const { value: country, errorMessage: countryError } = useField<string>(() => 'location.country');
-const { value: timezone, errorMessage: timezoneError } = useField<string>(() => 'timezone');
-const { value: isOnline, errorMessage: isOnlineError } = useField<boolean>(() => 'isOnline');
+const countryField = useField<string>(() => 'location.country');
+const timeZoneField = useField<string>(() => 'timezone');
+const isOnlineField = useField<boolean>(() => 'isOnline');
 
-const { value: city, errorMessage: cityError } = useField<string>(() => 'location.city');
-const { value: address, errorMessage: addressError } = useField<string>(() => 'location.address');
+const cityField = useField<string>(() => 'location.city');
+const addressField = useField<string>(() => 'location.address');
 </script>
 <template>
 	<ModalUiModalLocationSection
@@ -29,9 +27,12 @@ const { value: address, errorMessage: addressError } = useField<string>(() => 'l
 	>
 		<template #child>
 			<div>
-				<CommonFormField :error="isOnlineError">
+				<CommonFormField
+					:error="isOnlineField.errorMessage.value"
+					:touched="isOnlineField.meta.touched"
+				>
 					<CommonUiBaseCheckbox
-						v-model="isOnline"
+						v-model="isOnlineField.value.value"
 						value="isOnline"
 						:label="$t('form.event.fields.online')"
 						is-reversed
@@ -40,57 +41,81 @@ const { value: address, errorMessage: addressError } = useField<string>(() => 'l
 			</div>
 
 			<ModalUiModalRawSection :type="mobile ? 'column' : 'row'">
-				<CommonFormField :error="countryError">
+				<CommonFormField
+					:error="countryField.errorMessage.value"
+					:touched="countryField.meta.touched"
+				>
 					<CommonUiBaseSelect
-						v-model="country"
+						v-model="countryField.value.value"
 						name="country"
 						:placeholder="$t('global.country')"
 						:list="locationStore.countries"
-						:disabled="isOnline"
+						:disabled="isOnlineField.value.value"
 						input-readonly
-						:required="!isOnline"
-						:error="JSON.stringify(countryError)"
+						:required="!isOnlineField.value.value"
+						:error="
+							countryField.errorMessage.value &&
+							Boolean(countryField.errorMessage.value)
+						"
 					/>
 				</CommonFormField>
-				<CommonFormField :error="cityError">
+				<CommonFormField
+					:error="cityField.errorMessage.value"
+					:touched="cityField.meta.touched"
+				>
 					<CommonUiBaseSelect
-						v-model="city"
+						v-model="cityField.value.value"
 						name="city"
-						:disabled="!country || isOnline"
-						:error="JSON.stringify(cityError)"
+						:disabled="!countryField.value.value || isOnlineField.value.value"
+						:error="cityField.meta.touched && Boolean(cityField.errorMessage.value)"
 						:placeholder="$t('global.city')"
-						:list="locationStore.getCitiesByCountry(country)"
+						:list="locationStore.getCitiesByCountry(countryField.value.value)"
 						input-readonly
-						:required="!isOnline"
+						:required="!isOnlineField.value.value"
 					/>
 				</CommonFormField>
-				<CommonFormField :error="timezoneError">
+				<CommonFormField
+					:error="timeZoneField.errorMessage.value"
+					:touched="timeZoneField.meta.touched"
+				>
 					<CommonUiBaseSelect
-						v-model="timezone"
+						v-model="timeZoneField.value.value"
 						name="timezone"
 						:placeholder="$t('global.timezone')"
 						:list="eventStore.allTimezones"
 						input-readonly
-						:error="JSON.stringify(timezoneError)"
+						:error="
+							timeZoneField.meta.touched && Boolean(timeZoneField.errorMessage.value)
+						"
 						required
-						:disabled="!country && !isOnline"
+						:disabled="!countryField.value.value && !isOnlineField.value.value"
 					/>
 				</CommonFormField>
 			</ModalUiModalRawSection>
 
-			<CommonFormField :error="addressError">
+			<CommonFormField
+				:error="addressField.errorMessage.value"
+				:touched="addressField.meta.touched"
+			>
 				<CommonUiBaseInput
-					v-model="address"
+					v-model="addressField.value.value"
 					name="address"
-					:error="JSON.stringify(addressError)"
+					:error="addressField.meta.touched && Boolean(addressField.errorMessage.value)"
 					:placeholder="$t('form.event.fields.address_placeholder')"
-					:disabled="!(country && city) || isOnline"
+					:disabled="
+						!(countryField.value.value && cityField.value.value) ||
+						isOnlineField.value.value
+					"
 				/>
 			</CommonFormField>
 
 			<CommonCheckLocation
-				:is-show="!!(country && city)"
-				:location="{ city: city, country: country, address: address }"
+				:is-show="!!(countryField.value.value && cityField.value.value)"
+				:location="{
+					city: cityField.value.value,
+					country: countryField.value.value,
+					address: addressField.value.value
+				}"
 			/>
 		</template>
 	</ModalUiModalLocationSection>

@@ -45,7 +45,7 @@ const props = defineProps({
 		default: false
 	},
 	error: {
-		type: String,
+		type: [String, Boolean],
 		default: ''
 	},
 	required: {
@@ -85,7 +85,7 @@ const onRemove = () => {
 	>
 		<label
 			v-if="label"
-			class="form__label"
+			class="['form__label', {'form__error': Boolean(error) }]"
 			:for="name"
 		>
 			{{ label }}
@@ -132,13 +132,6 @@ const onRemove = () => {
 			class="input__button"
 			@click="onRemove"
 		/>
-
-		<span
-			v-if="error"
-			class="form__error"
-		>
-			{{ error }}
-		</span>
 	</div>
 </template>
 

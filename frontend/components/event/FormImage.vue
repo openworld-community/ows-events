@@ -3,24 +3,19 @@ from 'console'; import type { error } from 'console'; import type { CommonCheckL
 '#build/components'; import type { error } from 'console'; import type { error } from 'console';
 <script setup lang="ts">
 import { useField } from 'vee-validate';
-import { useLocationStore } from '@/stores/location.store';
-import { useEventStore } from '../../stores/event.store';
 
-const props = defineProps({
-	error: {
-		type: String,
-		default: ''
-	}
-});
-
-const { value: image, errorMessage: imageError } = useField<string>(() => 'image');
+const imageField = useField<string>(() => 'image');
 </script>
 <template>
-	<CommonFormField :error="imageError">
+	<CommonFormField
+		:error="imageField.errorMessage.value"
+		:touched="imageField.meta.touched"
+		hint="jpg, jpeg, png, <= 2Mb"
+	>
 		<CommonImageLoader
-			v-model="image"
-			:external-image="image"
-			:error="imageError"
+			v-model="imageField.value.value"
+			:external-image="imageField.value.value"
+			:error="imageField.errorMessage.value"
 		/>
 	</CommonFormField>
 </template>

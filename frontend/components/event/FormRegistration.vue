@@ -4,21 +4,24 @@ from 'console'; import type { error } from 'console';
 <script setup lang="ts">
 import { useField } from 'vee-validate';
 
-const { value: url, errorMessage: urlError } = useField<string>(() => 'url', {
+const urlField = useField<string>(() => 'url', {
 	validateOnModelUpdate: false
 });
 </script>
 <template>
 	<ModalUiModalLocationSection :label="$t('form.event.fields.url_to_registration')">
 		<template #child>
-			<CommonFormField :error="urlError">
+			<CommonFormField
+				:error="urlField.errorMessage.value"
+				:touched="urlField.meta.touched"
+			>
 				<CommonUiBaseInput
-					v-model="url"
+					v-model="urlField.value.value"
 					name="url"
 					type="url"
 					:placeholder="$t('form.event.fields.url_placeholder')"
 					required
-					:error="JSON.stringify(urlError)"
+					:error="urlField.meta.touched && Boolean(urlField.errorMessage.value)"
 				/>
 			</CommonFormField>
 		</template>

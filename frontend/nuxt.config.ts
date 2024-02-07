@@ -3,6 +3,7 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import path from 'path';
 import { fileURLToPath, URL } from 'node:url';
 import { searchForWorkspaceRoot } from 'vite';
+import { BASE_URL } from './constants/url';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({

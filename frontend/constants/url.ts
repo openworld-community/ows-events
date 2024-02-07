@@ -8,6 +8,8 @@ export const API_URL = import.meta.env.VITE_API_URL || process.env.VITE_API_URL;
 
 export const BASE_URL = import.meta.env.VITE_BASE_URL || process.env.VITE_BASE_URL;
 
+export const GOOGLE_OAUTH_URL = 'http://localhost/api/auth/google';
+
 export const LOCATION_API_URL = `https://api.ipregistry.co`;
 
 

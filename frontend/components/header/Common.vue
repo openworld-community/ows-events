@@ -75,7 +75,6 @@ const goBack = () => {
 				/>
 				<component
 					:is="logoComponentIs"
-					v-else
 					class="header__logo"
 					:title="
 						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
@@ -132,8 +131,8 @@ const goBack = () => {
 				</li>
 			</ul>
 			<div class="header__right">
+				<!-- v-if="!hasBackButton" -->
 				<HeaderLanguageSelector
-					v-if="!hasBackButton"
 					class="header__language-selector"
 				/>
 				<HeaderNavigationBurger
@@ -204,6 +203,15 @@ const goBack = () => {
 		display: flex;
 		height: 100%;
 		align-items: center;
+		// 41рх - ширина лого
+		// костыль
+		width: calc(50% + 41px);
+		justify-content: space-between;
+
+		@media (min-width: 768px) {
+			width: auto;
+			justify-content: start;
+		}
 	}
 
 	&__right {

@@ -29,6 +29,7 @@ export type IconName =
 	| 'picture'
 	| 'plus'
 	| 'privacy'
+	| 'password'
 	| 'search'
 	| 'share'
 	| 'trash'

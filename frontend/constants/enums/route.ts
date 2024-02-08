@@ -8,13 +8,15 @@ export enum RoutePathEnum {
 	LIMITATION_OF_LIABILITY = '/limitation-of-liability',
 	USER_PAGE = '/user',
 	USER_FAVOURITES = '/user/favourites',
-	USER_MY_EVENTS = '/user/my-events'
+	USER_MY_EVENTS = '/user/my-events',
+	EVENT_CREATE = '/event/create'
 }
 
 export enum RouteNameEnum {
 	HOME = 'index',
 	EVENT = 'event-id',
 	EVENT_FORM = 'event-form',
+	EVENT_CREATE = 'event-create',
 	ABOUT = 'about',
 	DONATION = 'donate',
 	PAYMENT_INFO = 'payment-eventId',

@@ -4,9 +4,7 @@ import type { Timezone } from '../../common/types/location';
 import { getUserTimezoneName } from '../services/timezone.services';
 
 dayjs.extend(utc);
-
 export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
-
 export const dateNow = Date.now();
 
 export const getDateFromEpochInMs = (epoch: number | undefined, keepTimezone = false) => {
@@ -41,6 +39,19 @@ export const combineDateTime = (date: Date | null, time: Time | null): Date => {
 		.set('minute', +time.minutes)
 		.set('second', +(time.seconds ?? 0))
 		.toDate();
+};
+
+export const duration = (
+	dateStart: Date | null,
+	timeStart: Time | null,
+	dateEnd: Date | null,
+	timeEnd: Time | null
+) => {
+	const start = combineDateTime(dateStart, timeStart).getTime();
+	const end = combineDateTime(dateEnd, timeEnd).getTime();
+	const diff = Math.floor((end - start) / 1000);
+
+	return diff;
 };
 
 export const convertToLocaleString = (epoch: number, timezoneName?: string) => {

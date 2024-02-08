@@ -56,7 +56,7 @@ const props = defineProps({
 		default: false
 	},
 	error: {
-		type: String,
+		type: [String, Boolean],
 		default: ''
 	},
 	errorLabel: {
@@ -94,13 +94,13 @@ const props = defineProps({
 	showPassword: {
 		type: Boolean,
 		default: false
-	},
+	}
 });
- 
+
 // выносим проп в отдельный реф
 // если не применяется логика отображения пароля, то он ведет себе как обычный props.type
-const writableType = ref<string>(props.type)
-// 
+const writableType = ref<string>(props.type);
+//
 
 const emit = defineEmits(['update:model-value']);
 const updateValue = (event: Event) => {
@@ -111,15 +111,13 @@ const onRemove = () => {
 	emit('update:model-value', '');
 };
 
-const isVisible = ref(false)
+const isVisible = ref(false);
 
 const toggleLabel = () => {
-	isVisible.value = !isVisible.value
-	console.log(isVisible.value);
+	isVisible.value = !isVisible.value;
+};
 
-}
-
-const mobile = inject('mobile')
+const mobile = inject('mobile');
 </script>
 
 <template>
@@ -138,7 +136,7 @@ const mobile = inject('mobile')
 				{ 'input__field--cursor-pointer': inputReadonly && !modelValue },
 				{ 'input__field--without-cursor': inputReadonly && modelValue },
 				{ 'input__field--shifted': hasValueIcon && modelValue },
-				{ form__error: error }
+				{ form__error: Boolean(error) }
 			]"
 			:name="name"
 			:type="writableType"
@@ -207,10 +205,13 @@ const mobile = inject('mobile')
 				icon-name="password"
 				:alt="$t('global.button.delete')"
 				:class="{ 'pw-show': writableType === 'text' }"
-				@click="writableType === 'password' ? writableType = 'text' : writableType = 'password'"
+				@click="
+					writableType === 'password'
+						? (writableType = 'text')
+						: (writableType = 'password')
+				"
 			/>
 		</div>
-
 
 		<!--    иконка слева (для селектов) -->
 		<CommonIcon
@@ -241,7 +242,7 @@ const mobile = inject('mobile')
 					color="var(--color-accent-red)"
 				/>
 			</div>
-			<div 
+			<div
 				:class="[
 					'form__error',
 					'form__error--label',

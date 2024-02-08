@@ -31,6 +31,12 @@ const passwordRegex = /^[a-z,A-Z, 0-9, .,!,?, @,:, ;,*,/,",+,-,,]{6,20}$/;
 const linkRegexp =
 	/^(https?|ftp):\/\/(([a-z\d]([a-z\d-]*[a-z\d])?\.)+[a-z]{2,}|localhost)(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/;
 
+// (https?|ftp):\/\/ validate protocol
+
+//(([a-z\d]([a-z\d-]*[a-z\d])?\.)+[a-z]{2,}|localhost)    validate domain name
+
+//(\/[-a-z\d%_.~+]*)*    validate OR ip (v4) address
+
 function isValidLink(this: yup.StringSchema<string, yup.Maybe<yup.AnyObject>, undefined, ''>) {
 	return this.matches(linkRegexp, {
 		excludeEmptyStrings: true

@@ -15,15 +15,13 @@ onMounted(async () => {
 const initialValues = getInitialEventFormValues();
 
 const submitEvent = async (payload: PostEventPayload) => {
-	try {
-		const { data } = await apiRouter.events.add.useMutation({
-			data: { event: payload }
-		});
+	const { data } = await apiRouter.events.add.useMutation({
+		data: { event: payload }
+	});
+	if (data.value) {
 		localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
 
-		await navigateTo(localePath(`/event/${data.value.id}`));
-	} catch (error) {
-		console.warn('error create event:', error);
+		await navigateTo(localePath(`RoutePathEnum.EVENT/${data.value.id}`));
 	}
 };
 

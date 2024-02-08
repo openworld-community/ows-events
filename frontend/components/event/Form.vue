@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useEventStore } from '../../stores/event.store';
-import { getEventPayload, getInitialEventFormValues } from '../../utils/events';
+import { getEventPayload } from '../../utils/events';
 import type { EventFormType } from '../../../common/types/event';
 import { LocalStorageEnum } from '../../constants/enums/common';
 
@@ -162,6 +162,7 @@ const onSubmit = handleSubmit(
 
 		isLoading.value = true;
 		emit('createEvent', payload);
+		isLoading.value = false;
 	},
 	() => {
 		document.getElementsByClassName('validation_error')[0].scrollIntoView({

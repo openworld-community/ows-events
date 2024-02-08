@@ -15,7 +15,7 @@ export const LOCATION_API_URL = `https://api.ipregistry.co`;
 //GOOGLE OAUTH
 export const GOOGLE_OAUTH_URL = `${BASE_URL}/api/auth/google`;
 export const VITE_GOOGLE_OAUTH_KEY =
-	import.meta.env.VITE_GOOGLE_OAUTH_KEY || process.env.VITE_GOOGLE_OAUTH_KEY;
+	import.meta.env.VITE_GOOGLE_OAUTH_KEY || process.env.VITE_GOOGLE_OAUTH_KEY || '111111';
 
 //TELEGRAM BOTS
 

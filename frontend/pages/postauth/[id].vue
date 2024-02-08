@@ -4,6 +4,7 @@ import { TOKEN_MAX_AGE_SECONDS } from '../../constants/defaultValues/time';
 import type { UserInfo } from '../../../common/types/user';
 import { CookieNameEnum } from '../../constants/enums/common';
 
+defineI18nRoute(false);
 const langCookie = useCookie(CookieNameEnum.LOCALE);
 const localePath = useLocalePath();
 definePageMeta({
@@ -20,7 +21,6 @@ definePageMeta({
 		useCookie<UserInfo | null>(CookieNameEnum.TG_USER, {
 			maxAge: TOKEN_MAX_AGE_SECONDS
 		}).value = user.value;
-
 	}
 });
 navigateTo(localePath(RoutePathEnum.HOME, langCookie.value ?? 'ru'));

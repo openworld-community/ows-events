@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-
 defineOptions({ inheritAttrs: false });
 
 defineProps({
@@ -24,7 +23,7 @@ defineProps({
 		default: false
 	},
 	error: {
-		type: String,
+		type: [String, Boolean],
 		default: ''
 	},
 	name: {
@@ -65,12 +64,6 @@ const onRemove = () => {
 			:alt="$t('global.button.delete')"
 			@click="onRemove"
 		/>
-		<span
-			v-if="error"
-			class="textarea__error"
-		>
-			{{ error }}
-		</span>
 	</div>
 </template>
 

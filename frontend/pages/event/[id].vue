@@ -19,6 +19,7 @@ import { Tags } from '../../../common/const/tags';
 
 const mobile = inject<boolean>('mobile');
 const route = useRoute();
+
 const localePath = useLocalePath();
 const { t } = useI18n();
 const id = getFirstParam(route.params.id);

@@ -23,6 +23,7 @@ export const addEvent: IAddEventHandler = async (request) => {
 	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
 
+	console.log(jwtData);
 	event.creatorId = jwtData.id;
 
 	if (event.creatorId === 'parser') {

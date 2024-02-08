@@ -1,6 +1,3 @@
-import type { error } from 'console'; import type { error } from 'console'; import type { error }
-from 'console'; import type { CommonCheckLocation } from '#build/components'; import type { error }
-from 'console'; import type { error } from 'console';
 <script setup lang="ts">
 import { useField } from 'vee-validate';
 

@@ -42,6 +42,6 @@ export default {
 	},
 	hints: {
 		tags: 'Можно выбрать не более 6 тэгов',
-		image: 'jpg, jpeg, png, <= 2Mb'
+		image: 'jpg, jpeg, png, webp <= 2Mb'
 	}
 };

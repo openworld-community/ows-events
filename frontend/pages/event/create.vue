@@ -2,6 +2,7 @@
 import { LocalStorageEnum } from '~/constants/enums/common';
 import type { PostEventPayload } from '../../../common/types/event';
 import { useEventStore } from '~/stores/event.store';
+import { RoutePathEnum } from '~/constants/enums/route';
 
 const router = useRouter();
 const localePath = useLocalePath();
@@ -21,7 +22,7 @@ const submitEvent = async (payload: PostEventPayload) => {
 	if (data.value) {
 		localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
 
-		await navigateTo(localePath(`RoutePathEnum.EVENT/${data.value.id}`));
+		await navigateTo(localePath(`${RoutePathEnum.EVENT}/${data.value.id}`));
 	}
 };
 

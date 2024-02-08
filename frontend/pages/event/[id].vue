@@ -17,7 +17,6 @@ import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
 import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
 
-defineI18nRoute(false);
 const mobile = inject<boolean>('mobile');
 const route = useRoute();
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { BASE_URL } from '@/constants/url';
+import { isImageTooBig } from '../../utils/image';
 
 export type ImageLoaderFile = File | null | 'DELETED';
 const props = defineProps<{
@@ -19,8 +20,8 @@ const loadImage = async (event: Event) => {
 	if (!target.files || !target.files[0])
 		return console.warn('Load Image Event targed to has no files');
 	const file = target.files[0];
-	const size = target.files[0].size / (1024 * 1024); // in Mb
-	if (size > 2) {
+
+	if (isImageTooBig(file.size)) {
 		errorLoad.value = 'validation.image.size';
 		return console.warn('Too big');
 	}

@@ -1,17 +1,6 @@
-import type { stringify } from 'querystring'; import type { stringify } from 'querystring'; import
-type { error } from 'console'; import type { error } from 'console'; import type { error } from
-'console'; import type { error } from 'console'; import type { CommonCheckLocation } from
-'#build/components'; import type { error } from 'console'; import type { error } from 'console';
 <script setup lang="ts">
 import { useField } from 'vee-validate';
 import { useLocationStore } from '@/stores/location.store';
-
-const props = defineProps({
-	error: {
-		type: String,
-		default: ''
-	}
-});
 
 const locationStore = useLocationStore();
 

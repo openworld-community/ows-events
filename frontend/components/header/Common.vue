@@ -203,7 +203,7 @@ const goBack = () => {
 		display: flex;
 		height: 100%;
 		align-items: center;
-		// 41рх - ширина лого
+		// 41рх - 1/2 ширины лого
 		// костыль
 		width: calc(50% + 41px);
 		justify-content: space-between;

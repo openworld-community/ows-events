@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { useForm } from 'vee-validate'
 import * as yup from 'yup';
-import { RoutePathEnum } from '~/constants/enums/route';
 import { SUPPORT_TG_URL } from '~/constants/url';
 
 const { t } = useI18n()
-
-const localePath = useLocalePath()
 
 const inputType = ref<'password' | 'text'>('password')
 
@@ -14,7 +11,10 @@ const { errors, defineField, handleSubmit, handleReset } = useForm({
     validationSchema: yup.object({
         email: yup
             .string()
-            .email(t('errors.INVALID_EMAIL'))
+            .matches(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, {
+                excludeEmptyString: true,
+                message: t('errors.INVALID_EMAIL')
+            })
             .required(t('errors.REQUIRED_FIELD'))
             .trim(),
         password: yup
@@ -25,19 +25,24 @@ const { errors, defineField, handleSubmit, handleReset } = useForm({
     })
 });
 
-const [email, emailAttr] = defineField('email')
-const [password, passwordAttr] = defineField('password')
+const [email, emailAttr] = defineField('email', {
+    validateOnModelUpdate: false,
+    validateOnBlur: true
+})
+const [password, passwordAttr] = defineField('password', {
+    validateOnModelUpdate: false,
+    validateOnBlur: true
+})
 
 const onSubmit = handleSubmit(async values => {
     try {
-        // alert(JSON.stringify(values, null, 2));
         const { email, password } = values
-        const { error } = await apiRouter.auth.login.useQuery({ data: { email, password } })
+        const { error, data } = await apiRouter.auth.login.useQuery({ data: { email, password } })
         if (error.value) {
             console.log('error', error.value);
             return
         }
-        navigateTo(localePath(RoutePathEnum.HOME))
+        navigateTo(data.value, { external: true })
     } catch (error) {
         console.log(error);
     } finally {
@@ -68,7 +73,7 @@ const notEmptyFields = computed(() => {
                 :error="errors.email"
             />
             <CommonUiBaseInput
-            v-model="password"
+                v-model="password"
                 v-bind="passwordAttr"
                 class="signin__fieldset--input"
                 name="password"
@@ -121,13 +126,12 @@ const notEmptyFields = computed(() => {
 .signin {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 10px;
     justify-content: space-between;
-    margin-bottom: 15px;
-    width: 100%;
+    width: 75%;
 
-    @media (min-width: 1440px) {
-        max-width: 65%;
+    @media (max-width: 1200px) {
+        width: 100%;
     }
 
     &__fieldset {

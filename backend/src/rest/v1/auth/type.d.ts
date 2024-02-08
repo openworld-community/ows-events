@@ -7,6 +7,14 @@ export type ITelegramRoute = {
 
 export type ITelegramHandler = IRouteHandler<ITelegramRoute>;
 
+export type IGoogleRoute = {
+	Body: {
+		credential: string;
+	};
+};
+
+export type IGoogleHandler = IRouteHandler<IGoogleRoute>;
+
 export type ILocalSignupRoute = {
 	Body: LocalAuthInfo;
 };

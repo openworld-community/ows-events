@@ -7,6 +7,13 @@ export type UserDbEntity = {
 		photo_url: string;
 		auth_date: number;
 	};
+
+	google: {
+		userid: string;
+		iat: number;
+		exp: number;
+	};
+
 	userInfo: {
 		last_name: string;
 		first_name: string;
@@ -27,6 +34,8 @@ export type UserDbEntity = {
 };
 
 export type TGUser = UserDbEntity['telegram'];
+
+export type GoogleUser = UserDbEntity['google'];
 
 export type TGUserInfo = Omit<TGUser, 'auth_date'>;
 

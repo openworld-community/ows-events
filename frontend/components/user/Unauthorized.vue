@@ -4,11 +4,14 @@ import { useUserStore } from '@/stores/user.store';
 import { TELEGRAM_AUTH_BOT_NAME } from '@/constants/url';
 import { BASE_URL } from '@/constants/url';
 import { CookieNameEnum } from '@/constants/enums/common';
+import {GoogleSignInButton, type CredentialResponse,} from "vue3-google-signin";
+import {GOOGLE_OAUTH_URL} from '@/constants/url';
 
 type TFormType = 'login' | 'signup'
 
 const userStore = useUserStore();
 const mobile = inject('mobile');
+const desktop = inject('desktop');
 const localePath = useLocalePath();
 const tokenCookie = useCookie<string | null>(CookieNameEnum.TOKEN);
 
@@ -70,12 +73,17 @@ watch(
 				{{ $t('user.unauthorized.title') }}
 			</h1>
 			<p class="unauthorized__text">
-				{{ $t('user.unauthorized.text') }}
+				{{ login === 'login' ? $t('user.unauthorized.loginText') : $t('user.unauthorized.signupText') }}
 			</p>
 
 			<UserLogin v-if="login === 'login'" />
 
 			<UserSignUp v-else />
+
+			<CommonButton
+				:button-text="login === 'login' ? $t('user.unauthorized.signup') : $t('user.unauthorized.login')"
+				@click="changeFormType"
+			/>
 
 			<div class="unauthorized__buttons">
 				<div
@@ -87,15 +95,27 @@ watch(
 						})
 						"
 				></div>
-				<CommonButton
-					:button-text="login === 'login' ? $t('user.unauthorized.signup') : $t('user.unauthorized.login')"
-					@click="changeFormType"
-				/>
+
+				<div style="align-self: center;">
+					<GoogleSignInButton
+						:login-uri="GOOGLE_OAUTH_URL"
+						ux-mode="redirect"
+						type="icon"
+						logo_alignment="center"
+  					></GoogleSignInButton>
+				</div>
+
 				<NuxtLink
 					:to="localePath(RoutePathEnum.HOME)"
 					class="unauthorized__continue"
 				>
-					{{ $t('user.unauthorized.continue') }}
+					<CommonButton
+						v-if="desktop"
+						:is-icon="true"
+						icon-name="close"
+						:icon-color="'var(--color-icons)'"
+						:alt="$t('form.global.close')"
+					/>
 				</NuxtLink>
 			</div>
 		</div>
@@ -152,6 +172,8 @@ watch(
 	}
 
 	&__content-container {
+		position: relative;
+
 		display: flex;
 		width: 100%;
 		height: 100%;
@@ -209,19 +231,23 @@ watch(
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		margin-bottom: var(--space-subsections);
+		// margin-bottom: var(--space-subsections);
 
-		@media (min-width: 768px) {
-			margin-bottom: 24px;
-		}
+		// @media (min-width: 768px) {
+		// 	margin-bottom: 24px;
+		// }
 	}
 
 	&__continue {
+		position: absolute;
+		top: 0;
+		right: 0;
+
 		text-align: center;
 		font-size: var(--font-size-M);
 		line-height: 24px;
-		color: var(--color-input-icons);
-		padding: var(--space-inner) var(--space-related-items);
+		// padding: 10px 0;
+		padding: var(--space-related-items);
 		margin: 0 auto;
 
 		transition: color 0.3s ease;

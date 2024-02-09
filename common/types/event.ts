@@ -74,6 +74,8 @@ export type SearchEventPayload = {
 	searchLine?: string;
 	country?: string;
 	city?: string;
+	startDate?: number;
+	endDate?: number;
 	tags?: Tags[];
 };
 

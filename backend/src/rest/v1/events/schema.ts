@@ -166,7 +166,9 @@ export const findEventsSchema = {
 			searchLine: { type: 'string' },
 			city: { type: 'string' },
 			country: { type: 'string' },
-			tags: { type: 'array', items: { type: 'string' } }
+			tags: { type: 'array', items: { type: 'string' } },
+			startDate: { type: 'number' },
+			endDate: { type: 'number' }
 		}
 	},
 	security: [{ authJWT: [] }]

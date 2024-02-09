@@ -11,7 +11,6 @@ type TFormType = 'login' | 'signup'
 
 const userStore = useUserStore();
 const mobile = inject('mobile');
-const desktop = inject('desktop');
 const localePath = useLocalePath();
 const tokenCookie = useCookie<string | null>(CookieNameEnum.TOKEN);
 
@@ -110,7 +109,7 @@ watch(
 					class="unauthorized__continue"
 				>
 					<CommonButton
-						v-if="desktop"
+						v-if="!mobile"
 						:is-icon="true"
 						icon-name="close"
 						:icon-color="'var(--color-icons)'"

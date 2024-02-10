@@ -18,7 +18,7 @@ definePageMeta({
 			return;
 		}
 
-		useCookie<UserInfo | null>(CookieNameEnum.TG_USER, {
+		useCookie<UserInfoWithId | null>(CookieNameEnum.TG_USER, {
 			maxAge: TOKEN_MAX_AGE_SECONDS
 		}).value = user.value;
 	}

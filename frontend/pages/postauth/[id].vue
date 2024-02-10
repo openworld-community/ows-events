@@ -13,11 +13,12 @@ definePageMeta({
 		useCookie<string>(CookieNameEnum.TOKEN, { maxAge: TOKEN_MAX_AGE_SECONDS }).value =
 			userToken;
 		const { data: user } = await apiRouter.user.get.useQuery({ data: { userToken } });
-		console.log(user);
+
 		if (!user.value) {
 			console.error('No user data retrieved');
 			return;
 		}
+
 		useCookie<UserInfo | null>(CookieNameEnum.TG_USER, {
 			maxAge: TOKEN_MAX_AGE_SECONDS
 		}).value = user.value;

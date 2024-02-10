@@ -38,10 +38,12 @@ export default {
 		endTime: 'Время окончания не может быть меньше начала'
 	},
 	image: {
-		size: 'Файл превышает допустимый размер 2Mb.'
+		size: 'Файл превышает допустимый размер 2Mb.',
+		problemSever: 'Что-то пошло не так.'
 	},
 	hints: {
 		tags: 'Можно выбрать не более 6 тэгов',
-		image: 'jpg, jpeg, png, webp <= 2Mb'
+		image: 'jpg, jpeg, png, webp <= 2Mb',
+		extension: 'Выберите файл jpg, jpeg, png, webp формата'
 	}
 };

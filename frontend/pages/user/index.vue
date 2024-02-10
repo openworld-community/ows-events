@@ -28,6 +28,7 @@ const logout = () => {
 	tokenCookie.value = null;
 	userCookie.value = null;
 	userStore.$patch({ userInfo: null });
+	navigateTo(localePath({ path: RoutePathEnum.HOME }))
 };
 
 // const isGoBack = computed(() => {

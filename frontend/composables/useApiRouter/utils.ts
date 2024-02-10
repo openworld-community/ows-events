@@ -182,7 +182,6 @@ export function useBackendFetch<T>(
 		const getData = () => useFetch(request, Object.assign(opts, opts_));
 		if (process.server) return await getData();
 		const data = await getData();
-
 		if (data.error.value) {
 			// todo - переделать эту проверку когда бэк уже стандартизирует вывод своих ошибок везде
 			if (data.error.value?.data?.message) {

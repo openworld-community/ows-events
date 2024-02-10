@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { BASE_URL } from '@/constants/url';
-import { isImageTooBig } from '../../utils/image';
+import { isImageFormatAllowed, isImageTooBig } from '../../utils/image';
 
 export type ImageLoaderFile = File | null | 'DELETED';
 const props = defineProps<{
@@ -20,6 +20,9 @@ const loadImage = async (event: Event) => {
 	if (!target.files || !target.files[0])
 		return console.warn('Load Image Event targed to has no files');
 	const file = target.files[0];
+	if (!isImageFormatAllowed(file.name)) {
+		return 'validation.image.extension';
+	}
 
 	if (isImageTooBig(file.size)) {
 		errorLoad.value = 'validation.image.size';
@@ -27,7 +30,10 @@ const loadImage = async (event: Event) => {
 	}
 	const { data } = await apiRouter.events.image.add.useMutation({ data: { image: file } });
 	input.value.value = null;
-	if (!data.value) return;
+	if (!data.value) {
+		errorLoad.value = 'validation.image.problemSrver';
+		return;
+	}
 	emit('update:model-value', data.value.path);
 };
 
@@ -44,7 +50,7 @@ const removeImage = async () => {
 	<div>
 		<input
 			ref="input"
-			accept="image/*"
+			accept=".png,.webp, .svg, .jpeg, .jpg"
 			type="file"
 			class="d-none"
 			@change="loadImage"

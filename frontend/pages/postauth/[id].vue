@@ -17,6 +17,7 @@ definePageMeta({
 			console.error('No user data retrieved');
 			return;
 		}
+
 		useCookie<UserInfoWithId | null>(CookieNameEnum.TG_USER, {
 			maxAge: TOKEN_MAX_AGE_SECONDS
 		}).value = user.value;

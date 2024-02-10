@@ -88,8 +88,8 @@ class UserController {
 			}
 		});
 
-		await user.save()
-		
+		await user.save();
+
 		const newToken = JWTController.issueAccessToken({
 			id: user.id,
 			username: userData.email
@@ -144,7 +144,7 @@ class UserController {
 		const userEntity = await UserModel.findOne({ id }, { token: 0, telegram: 0 });
 		if (!userEntity) throw new Error(CommonErrorsEnum.USER_DOES_NOT_EXIST);
 
-		return userEntity.userInfo;
+		return { id, ...userEntity.userInfo };
 	}
 
 	async changeUserInfo(id: string, userInfo: UserInfo) {

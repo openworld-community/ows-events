@@ -16,7 +16,7 @@ class EventsStateController {
 			// eslint-disable-next-line no-console
 			console.error(e);
 		});
-		return id;
+		return newEvent.id;
 	}
 
 	async getEvents(query?: SearchEventPayload | undefined): Promise<EventDbEntity[]> {

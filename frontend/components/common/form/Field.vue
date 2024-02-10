@@ -50,7 +50,7 @@ const errorResult = computed({
 	<div class="form-field">
 		<slot></slot>
 		<p
-			v-if="hint && !errorResult"
+			v-if="hint && !(errorResult && touched)"
 			class="form-hint"
 		>
 			{{ $t(hint) }}

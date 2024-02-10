@@ -24,6 +24,19 @@ const UserSchema = {
 	}
 };
 
+const userInfoWithId = {
+	type: 'object',
+	properties: {
+		last_name: { type: 'string' },
+		first_name: { type: 'string' },
+		nickname: { type: 'string' },
+		company: { type: 'string' },
+		email: { type: 'string' },
+		phone: { type: 'string' },
+		id: { type: 'string' }
+	}
+};
+
 export const getTGInfoByTokenSchema = {
 	description: 'get user telegram info by token',
 	tags: ['User'],
@@ -38,7 +51,7 @@ export const getUserInfoByTokenSchema = {
 	tags: ['User'],
 	summary: 'Get user info by token',
 	response: {
-		200: UserSchema.userInfo
+		200: userInfoWithId
 	}
 };
 

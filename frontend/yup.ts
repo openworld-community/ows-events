@@ -31,7 +31,7 @@ const passwordRegex = /^[a-z,A-Z, 0-9, .,!,?, @,:, ;,*,/,",+,-,,]{6,20}$/;
 const linkRegexp =
 	/^(https?):\/\/(([a-z\d]([a-z\d-]*[a-z\d])?\.)+[a-z]{2,}|localhost)(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/;
 
-//  https://fjhjh.ru/blog/?name=struct-url&topic=expl#h1
+//  https://fjhjh.ru/blog/?name=struct-url&topic=expl#h1   example url
 
 // (https?):\/\/ validate protocol  https://
 

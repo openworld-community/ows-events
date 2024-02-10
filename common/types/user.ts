@@ -41,6 +41,10 @@ export type TGUserInfo = Omit<TGUser, 'auth_date'>;
 
 export type UserInfo = UserDbEntity['userInfo'];
 
+export type UserInfoWithId = UserInfo & {
+	id: string;
+};
+
 export type LocalAuthInfo = Omit<UserDbEntity['localAuth'], 'salt'>;
 
 export type PostUserInfo = {

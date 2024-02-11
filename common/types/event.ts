@@ -26,7 +26,12 @@ export type EventDbEntity = {
 	type: EventTypes;
 };
 
-export type EventOnPoster = EventDbEntity;
+export type EventOnPoster = EventDbEntity & {};
+
+export type EventToShow = EventDbEntity & {
+	startDate: string;
+	endDate?: string | null;
+};
 
 export type EventFormType = {
 	startDate: Date;

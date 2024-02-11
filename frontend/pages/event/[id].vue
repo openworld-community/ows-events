@@ -86,8 +86,8 @@ const deleteCard = async () => {
 const onEditButtonClick = async () => {
 	const eventStore = useEventStore();
 	eventStore.setEventData(posterEvent.value);
-	eventStore.createDefaultEventData();
-	await navigateTo(localePath({ path: RoutePathEnum.EVENT_FORM }));
+
+	await navigateTo(localePath({ path: `${RoutePathEnum.EVENT_EDIT}${id}` }));
 };
 
 // TODO подключить, когда вернемся к проработке регистрации

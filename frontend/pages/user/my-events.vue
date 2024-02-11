@@ -2,11 +2,9 @@
 import { SeoItemTypeEnum } from '~/constants/enums/seo';
 import type { EventOnPoster } from '../../../common/types';
 import { RoutePathEnum } from '../../constants/enums/route';
-import { useEventStore } from '../../stores/event.store';
 
 const mobile = inject<boolean>('mobile');
 const localePath = useLocalePath();
-const eventStore = useEventStore();
 
 const myEvents = ref<EventOnPoster[] | []>([]);
 
@@ -58,8 +56,7 @@ if (data.value) myEvents.value = data.value;
 					class="my-events__button"
 					button-kind="dark"
 					:button-text="$t('global.button.new_event')"
-					:link="localePath(RoutePathEnum.EVENT_FORM)"
-					@click="eventStore.createDefaultEventData()"
+					:link="localePath(`${RoutePathEnum.EVENT_EDIT}new`)"
 				/>
 			</div>
 		</main>

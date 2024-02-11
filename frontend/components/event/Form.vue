@@ -12,19 +12,29 @@ import { getTimezone, getUserTimezone } from '~/services/timezone.services';
 const locationStore = useLocationStore();
 const eventStore = useEventStore();
 
+const localePath = useLocalePath();
+
 const schema = eventValidationSchema;
 
 onMounted(async () => {
 	await eventStore.getTimezones();
 });
 const props = defineProps({
+	title: {
+		type: String,
+		default: ''
+	},
 	initialValues: {
 		type: Object as PropType<EventFormType>,
 		default: () => {}
+	},
+	pathToBack: {
+		type: String,
+		default: ''
 	}
 });
 
-const emit = defineEmits(['createEvent', 'cancelEvent']);
+const emit = defineEmits(['submitEvent', 'cancelEvent']);
 
 const dataFromLocalStorage = (initialValues: EventFormType) => {
 	const parsedData = JSON.parse(localStorage.getItem(LocalStorageEnum.EVENT_DATA));
@@ -53,6 +63,17 @@ const { values, handleSubmit, setFieldValue } = useForm<EventFormType>({
 			: props.initialValues
 });
 const isLoading = ref(false);
+const openModal = ref(false);
+
+watch(
+	() => eventStore.navTo,
+	(path) => {
+		alert(path);
+		if (path) {
+			openModal.value = true;
+		}
+	}
+);
 // Запись в localStorage
 watch(
 	() => values,
@@ -156,12 +177,30 @@ watch(
 	{ deep: true }
 );
 
+const cancelConfirmEvent = () => {
+	//	openModal.value = false;
+	eventStore.$patch({ navTo: '' });
+	openModal.value = false;
+	alert(openModal.value);
+	//	await navigateTo(localePath(`${props.pathToBack}`));
+};
+const confirmEvent = () => {
+	//	const payload = getEventPayload(values);
+	alert(openModal.value);
+	eventStore.$patch({ navTo: '' });
+	openModal.value = false;
+	//	isLoading.value = true;
+	//	emit('submitEvent', payload);
+	//	isLoading.value = false;
+};
+
 const onSubmit = handleSubmit(
 	async (values: EventFormType) => {
 		const payload = getEventPayload(values);
 
 		isLoading.value = true;
-		emit('createEvent', payload);
+
+		emit('submitEvent', payload);
 		isLoading.value = false;
 	},
 	() => {
@@ -180,7 +219,7 @@ const onSubmit = handleSubmit(
 	>
 		<div class="event-form__title-wrapper">
 			<h1 class="event-form__title">
-				{{ $t('form.event.title') }}
+				{{ title }}
 			</h1>
 		</div>
 
@@ -216,6 +255,12 @@ const onSubmit = handleSubmit(
 				/>
 			</div>
 		</div>
+		<EventFormModalConfirmChanged
+			v-if="openModal"
+			:open="openModal"
+			@cancel-event="cancelConfirmEvent"
+			@confirm-event="confirmEvent"
+		/>
 	</form>
 </template>
 

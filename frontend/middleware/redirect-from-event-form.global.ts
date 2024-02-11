@@ -4,58 +4,28 @@ import { LocalStorageEnum } from '../constants/enums/common';
 import { useUserStore } from '../stores/user.store';
 
 export default defineNuxtRouteMiddleware((to, from) => {
-	if (
-		from.name.toString().includes(RouteNameEnum.EVENT) &&
-		to.name.toString().includes(RouteNameEnum.EVENT_FORM) &&
-		!localStorage.getItem(LocalStorageEnum.DEFAULT_EVENT_DATA)
-	) {
-		const localePath = useLocalePath();
-		return (to.path = localePath(RoutePathEnum.HOME));
-	}
 	const userStore = useUserStore();
+	console.log(from.name.toString().includes(RouteNameEnum.EVENT_EDIT));
+	console.log('from', from.name.toString());
+	console.log('to', to.name.toString());
+
 	if (
-		from.name.toString().includes(RouteNameEnum.EVENT_FORM) &&
-		!to.name.toString().includes(RouteNameEnum.EVENT_FORM) &&
-		userStore.isAuthorized
+		from.name.toString().includes(RouteNameEnum.EVENT_EDIT) &&
+		!to.name.toString().includes(RouteNameEnum.EVENT_EDIT)
+
+		//userStore.isAuthorized
 	) {
-		const eventStore = useEventStore();
-
-		if (!eventStore.clearForm) {
-			let defaultEvent = localStorage.getItem(LocalStorageEnum.DEFAULT_EVENT_DATA);
-			let lastEvent = localStorage.getItem(LocalStorageEnum.EVENT_DATA);
-
-			let parsedDefaultEvent = null;
-			let parsedLastEvent = null;
-			if (defaultEvent) {
-				parsedDefaultEvent = JSON.parse(defaultEvent);
-				if (parsedDefaultEvent.tags.length) {
-					parsedDefaultEvent.tags.sort();
-				}
-				defaultEvent = JSON.stringify(parsedDefaultEvent);
-			}
-			if (lastEvent) {
-				parsedLastEvent = JSON.parse(lastEvent);
-				if (parsedLastEvent.tags.length) {
-					parsedLastEvent.tags.sort();
-				}
-
-				lastEvent = JSON.stringify(parsedLastEvent);
-			}
-
-			if (lastEvent && defaultEvent !== lastEvent) {
-				eventStore.$patch({
-					showClearFormModal: true,
-					navTo: to.path
-				});
-				return false;
-			} else {
-				eventStore.$patch({ clearForm: true });
-				eventStore.resetEventData();
-				return true;
-			}
-		} else {
-			eventStore.resetEventData();
-			return true;
+		const last = localStorage.getItem(LocalStorageEnum.EVENT_DATA);
+		if (last !== null) {
+			//This means that change route coused not submit button, submit button clear storage
+			//fact that form was not touched at all is checking in event form,
+			const eventStore = useEventStore();
+			eventStore.$patch({
+				navTo: to.path
+			});
+			return false;
 		}
+	} else {
+		return true;
 	}
 });

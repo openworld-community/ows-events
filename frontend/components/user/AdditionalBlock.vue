@@ -39,8 +39,11 @@ const eventStore = useEventStore();
 					:button-kind="desktop ? 'ordinary' : 'dark'"
 					:button-text="$t(desktop ? 'user.donate.button' : 'global.button.new_event')"
 					:icon-name="desktop ? 'donate' : ''"
-					:link="localePath(desktop ? RoutePathEnum.DONATION : RoutePathEnum.EVENT_FORM)"
-					@click="desktop ? null : eventStore.createDefaultEventData()"
+					:link="
+						localePath(
+							desktop ? RoutePathEnum.DONATION : `${RoutePathEnum.EVENT_EDIT}new`
+						)
+					"
 				/>
 			</div>
 		</div>

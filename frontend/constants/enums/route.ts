@@ -2,6 +2,7 @@ export enum RoutePathEnum {
 	HOME = '/',
 	EVENT = '/event',
 	EVENT_FORM = '/event/form',
+	EVENT_EDIT = '/event/edit-',
 	ABOUT = '/about',
 	DONATION = '/donate',
 	PAYMENT_INFO = '/payment/',
@@ -23,5 +24,6 @@ export enum RouteNameEnum {
 	LIMITATION_OF_LIABILITY = 'limitation-of-liability',
 	USER_PAGE = 'user',
 	USER_FAVOURITES = 'user-favourites',
-	USER_MY_EVENTS = 'user-my-events'
+	USER_MY_EVENTS = 'user-my-events',
+	EVENT_EDIT = 'event-edit'
 }

@@ -35,7 +35,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
 			userCookie.value = null;
 
 			if (to.name && pagesWithAuth.includes(getRouteName(to.name as string))) {
-				console.log('I am here');
 				return (to.path = localePath(RoutePathEnum.USER_PAGE));
 			}
 		} else {

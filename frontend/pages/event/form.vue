@@ -159,8 +159,9 @@ const submitEvent = async () => {
 };
 */
 </script>
-
+<!-- 
 <template>
+	
 	<div class="event-form">
 		<div class="event-form__title-wrapper">
 			<h1 class="event-form__title">
@@ -437,8 +438,9 @@ const submitEvent = async () => {
 		</div>
 		<ModalClearEventForm v-if="eventStore.showClearFormModal" />
 	</div>
+	
 </template>
-
+-->
 <style scoped lang="less">
 /**
 .event-form {

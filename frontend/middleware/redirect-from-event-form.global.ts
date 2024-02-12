@@ -17,11 +17,13 @@ export default defineNuxtRouteMiddleware((to, from) => {
 	) {
 		const last = localStorage.getItem(LocalStorageEnum.EVENT_DATA);
 		if (last !== null) {
-			//This means that change route coused not submit button, submit button clear storage
-			//fact that form was not touched at all is checking in event form,
+			//This means that change route coused not by submit button but back btn of brouser
+			//submit btn clear LocaleStore befor navigation
+
 			const eventStore = useEventStore();
 			eventStore.$patch({
-				navTo: to.path
+				navTo: to.path,
+				showClearFormModal: true
 			});
 			return false;
 		}

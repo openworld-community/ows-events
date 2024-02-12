@@ -9,7 +9,8 @@ import { getRouteName } from '../utils';
 const pagesWithAuth: string[] = [
 	RouteNameEnum.USER_FAVOURITES,
 	RouteNameEnum.USER_MY_EVENTS,
-	RouteNameEnum.EVENT_FORM
+	RouteNameEnum.EVENT_FORM,
+	RouteNameEnum.EVENT_EDIT
 ];
 
 export default defineNuxtRouteMiddleware(async (to) => {

@@ -1,25 +1,23 @@
 <script setup lang="ts">
-const props = defineProps({
-	open: {
-		type: Boolean,
-		default: false
-	}
-});
-const emit = defineEmits(['confirmEvent', 'cancelEvent']);
+import { LocalStorageEnum } from '~/constants/enums/common';
+import { useEventStore } from '../../stores/event.store';
 
-const isOpen = computed({
-	get() {
-		return props.open;
-	},
-	set(value) {
-		return value;
-	}
-});
+const eventStore = useEventStore();
+
+const cancel = () => {
+	eventStore.resetEventData();
+};
+
+const confirm = async () => {
+	localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
+	await navigateTo({ path: eventStore.navTo });
+	eventStore.resetEventData();
+};
 </script>
 
 <template>
 	<CommonModalWrapper
-		v-model="isOpen"
+		v-model="eventStore.showClearFormModal"
 		modal-type="info"
 		:title="$t('modal.clear_event_form.title')"
 	>
@@ -27,12 +25,12 @@ const isOpen = computed({
 			<CommonButton
 				button-kind="ordinary"
 				:button-text="$t('global.button.cancel')"
-				@click="emit('cancelEvent')"
+				@click="cancel"
 			/>
 			<CommonButton
 				button-kind="dark"
 				:button-text="$t('global.button.close')"
-				@click="emit('confirmEvent')"
+				@click="confirm"
 			/>
 		</template>
 	</CommonModalWrapper>

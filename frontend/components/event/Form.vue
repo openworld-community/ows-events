@@ -12,8 +12,6 @@ import { getTimezone, getUserTimezone } from '~/services/timezone.services';
 const locationStore = useLocationStore();
 const eventStore = useEventStore();
 
-const localePath = useLocalePath();
-
 const schema = eventValidationSchema;
 
 onMounted(async () => {
@@ -27,10 +25,6 @@ const props = defineProps({
 	initialValues: {
 		type: Object as PropType<EventFormType>,
 		default: () => {}
-	},
-	pathToBack: {
-		type: String,
-		default: ''
 	}
 });
 
@@ -58,22 +52,12 @@ const dataFromLocalStorage = (initialValues: EventFormType) => {
 const { values, handleSubmit, setFieldValue } = useForm<EventFormType>({
 	validationSchema: schema,
 	initialValues:
-		JSON.parse(localStorage.getItem(LocalStorageEnum.EVENT_DATA)) !== null
+		localStorage.getItem(LocalStorageEnum.EVENT_DATA) !== null
 			? dataFromLocalStorage(props.initialValues)
 			: props.initialValues
 });
 const isLoading = ref(false);
-const openModal = ref(false);
 
-watch(
-	() => eventStore.navTo,
-	(path) => {
-		alert(path);
-		if (path) {
-			openModal.value = true;
-		}
-	}
-);
 // Запись в localStorage
 watch(
 	() => values,
@@ -177,23 +161,6 @@ watch(
 	{ deep: true }
 );
 
-const cancelConfirmEvent = () => {
-	//	openModal.value = false;
-	eventStore.$patch({ navTo: '' });
-	openModal.value = false;
-	alert(openModal.value);
-	//	await navigateTo(localePath(`${props.pathToBack}`));
-};
-const confirmEvent = () => {
-	//	const payload = getEventPayload(values);
-	alert(openModal.value);
-	eventStore.$patch({ navTo: '' });
-	openModal.value = false;
-	//	isLoading.value = true;
-	//	emit('submitEvent', payload);
-	//	isLoading.value = false;
-};
-
 const onSubmit = handleSubmit(
 	async (values: EventFormType) => {
 		const payload = getEventPayload(values);
@@ -255,12 +222,7 @@ const onSubmit = handleSubmit(
 				/>
 			</div>
 		</div>
-		<EventFormModalConfirmChanged
-			v-if="openModal"
-			:open="openModal"
-			@cancel-event="cancelConfirmEvent"
-			@confirm-event="confirmEvent"
-		/>
+		<EventFormModalConfirmChanged v-if="eventStore.showClearFormModal" />
 	</form>
 </template>
 

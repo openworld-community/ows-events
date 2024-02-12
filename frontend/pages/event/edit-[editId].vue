@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { LocalStorageEnum } from '../../constants/enums/common';
-import type { EventOnPoster, EventToShow, PostEventPayload } from '../../../common/types/event';
+import type { EventOnPoster, PostEventPayload } from '../../../common/types/event';
 import { useEventStore } from '../../stores/event.store';
-import { RouteNameEnum, RoutePathEnum } from '../../constants/enums/route';
+import { RoutePathEnum } from '../../constants/enums/route';
 
 import { useRouter, useRoute, navigateTo } from 'nuxt/app';
 import { onMounted, ref } from 'vue';
 import { apiRouter } from '../../composables/useApiRouter';
 import { getFirstParam } from '../../utils';
-import { convertEventDateToLocaleString } from '../../utils/dates';
+
 import { getInitialEventFormValues } from '../../utils/events';
-import { defineNuxtRouteMiddleware, definePageMeta } from '../../.nuxt/imports';
-import { useUserStore } from '~/stores/user.store';
 
 const router = useRouter();
 const localePath = useLocalePath();
@@ -23,29 +21,19 @@ onMounted(async () => {
 });
 const id = getFirstParam(route.params.editId);
 
-console.log('lkjl', route.params);
-const event = ref<EventToShow>();
-const pathToBack = ref('');
+const event = ref<EventOnPoster>();
 
 if (id !== 'new') {
 	const { data } = await apiRouter.events.get.useQuery({ data: { id } });
 	if (data.value) {
-		event.value = { ...data.value, startDate: null, endDate: null };
-		event.value.startDate = convertEventDateToLocaleString(
-			data.value.date,
-			data.value.isOnline,
-			data.value.timezone
-		);
-		event.value.endDate = data.value.durationInSeconds
-			? convertEventDateToLocaleString(
-					data.value.date + data.value.durationInSeconds * 1000,
-					data.value.isOnline,
-					data.value.timezone
-			  )
-			: null;
+		event.value = data.value;
 	} else {
 		router.back();
-		//throw error and create error page
+		//throw error after create error page and remove router.back()
+		//	throw createError({
+		//		statusCode:404,
+		//		message: t('notFound')
+		//	})
 	}
 }
 
@@ -85,16 +73,9 @@ const submitEvent = async (payload: PostEventPayload) => {
 	}
 };
 
-const submitNewEvent = async (payload: PostEventPayload) => {
-	alert('submitNew');
-};
-
 const cancel = () => {
 	localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
 	router.back();
-};
-const clearPath = () => {
-	pathToBack.value = '';
 };
 </script>
 
@@ -105,7 +86,6 @@ const clearPath = () => {
 			:initial-values="initialValues"
 			@submit-event="submitEvent"
 			@cancel-event="cancel"
-			@clear-path="clearPath"
 		/>
 	</ClientOnly>
 </template>

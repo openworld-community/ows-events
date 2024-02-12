@@ -73,9 +73,7 @@ watch(
 	async (country) => {
 		if (
 			!country ||
-			!locationStore._citiesByCountry
-				.get(country)
-				?.includes(eventStore.eventData.location.city)
+			!locationStore._citiesByCountry.get(country)?.includes(values['location']['city'])
 		) {
 			setFieldValue('location.city', '');
 			setFieldValue('location.address', '');

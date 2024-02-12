@@ -3,7 +3,6 @@ import * as yup from 'yup';
 yup.setLocale({
 	mixed: {
 		required: ({ path }) => ({ key: `validation.required.${path}` }),
-
 		notType: 'validation.notType'
 	},
 	number: {

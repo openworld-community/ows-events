@@ -16,7 +16,7 @@ import { UserTokenController } from '../../../controllers/user-token-controller'
 export const getTGInfoByToken: IGetTGInfoHandler = async (request) => {
 	const { token } = request.query;
 	if (!token) throw new Error('Unauthorized');
-	const isTokenValid = UserTokenController.checkAccessToken(token);
+	const isTokenValid = await UserTokenController.checkAccessToken(token);
 	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
 	const res = await userController.getUserTGInfoById(jwtData.id);
@@ -26,11 +26,11 @@ export const getTGInfoByToken: IGetTGInfoHandler = async (request) => {
 export const getUserInfoByToken: IGetUserInfoHandler = async (request) => {
 	const { token } = request.query;
 	if (!token) throw new Error('Unauthorized');
-	const isTokenValid = UserTokenController.checkAccessToken(token);
+	const isTokenValid = await UserTokenController.checkAccessToken(token);
 	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
 	const res = await userController.getUserInfoById(jwtData.id);
-	return res 
+	return res;
 };
 
 export const changeUserInfo: IChangeUserInfoHandler = async (request) => {
@@ -38,7 +38,7 @@ export const changeUserInfo: IChangeUserInfoHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const isTokenValid = UserTokenController.checkAccessToken(token);
+	const isTokenValid = await UserTokenController.checkAccessToken(token);
 	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
 
@@ -50,7 +50,7 @@ export const addFavoriteEvent: IAddFavoriteEventHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const isTokenValid = UserTokenController.checkAccessToken(token);
+	const isTokenValid = await UserTokenController.checkAccessToken(token);
 	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
 
@@ -62,7 +62,7 @@ export const removeFavoriteEvent: IRemoveFavoriteEventHandler = async (request) 
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const isTokenValid = UserTokenController.checkAccessToken(token);
+	const isTokenValid = await UserTokenController.checkAccessToken(token);
 	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
 
@@ -73,7 +73,7 @@ export const getFavoriteEvents: IGetFavoriteEventsHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const isTokenValid = UserTokenController.checkAccessToken(token);
+	const isTokenValid = await UserTokenController.checkAccessToken(token);
 	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
 
@@ -85,7 +85,7 @@ export const getFavoriteEventsId: IGetFavoriteEventsIdHandler = async (request) 
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const isTokenValid = UserTokenController.checkAccessToken(token);
+	const isTokenValid = await UserTokenController.checkAccessToken(token);
 	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
 

@@ -7,7 +7,7 @@ import { UserTokenController } from '../../../controllers/user-token-controller'
 export const approve: IApproveEventHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error('Unauthorized');
-	const isTokenValid = UserTokenController.checkAccessToken(token);
+	const isTokenValid = await UserTokenController.checkAccessToken(token);
 	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
 	if (jwtData.id !== 'moderator') throw new Error('Unauthorized');
@@ -18,7 +18,7 @@ export const approve: IApproveEventHandler = async (request) => {
 export const decline: IDeclineEventHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error('Unauthorized');
-	const isTokenValid = UserTokenController.checkAccessToken(token);
+	const isTokenValid = await UserTokenController.checkAccessToken(token);
 	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
 	if (jwtData.id !== 'moderator') throw new Error('Unauthorized');

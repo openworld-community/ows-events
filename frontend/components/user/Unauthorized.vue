@@ -11,6 +11,7 @@ type TFormType = 'login' | 'signup'
 
 const userStore = useUserStore();
 const mobile = inject('mobile');
+const desktop = inject('desktop');
 const localePath = useLocalePath();
 const tokenCookie = useCookie<string | null>(CookieNameEnum.TOKEN);
 
@@ -95,7 +96,7 @@ watch(
 						"
 				></div>
 
-				<div style="align-self: center;">
+				<div style="align-self: center; margin: 10px;">
 					<GoogleSignInButton
 						:login-uri="GOOGLE_OAUTH_URL"
 						ux-mode="redirect"
@@ -109,7 +110,7 @@ watch(
 					class="unauthorized__continue"
 				>
 					<CommonButton
-						v-if="!mobile"
+						v-if="desktop"
 						:is-icon="true"
 						icon-name="close"
 						:icon-color="'var(--color-icons)'"

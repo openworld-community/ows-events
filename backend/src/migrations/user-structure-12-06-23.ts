@@ -47,7 +47,6 @@ export const migrate = () => {
 			{},
 			{
 				$rename: {
-					id: 'telegram.id',
 					first_name: 'telegram.first_name',
 					last_name: 'telegram.last_name',
 					username: 'telegram.username',

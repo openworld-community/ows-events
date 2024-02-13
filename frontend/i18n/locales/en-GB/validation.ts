@@ -7,7 +7,7 @@ export default {
 	},
 	required: {
 		price: {
-			val: 'Enter price',
+			val: 'Enter positive integer number',
 			currency: 'Choose currency'
 		},
 		location: {
@@ -34,7 +34,10 @@ export default {
 	},
 	test: {
 		endDate: 'End date can not be less then start date',
-		endTime: 'End time can not be less then start time'
+		endTime: 'End time can not be less then start time',
+		price: {
+			val: 'Price should be positive integer number'
+		}
 	},
 	image: {
 		size: 'File size is greater then 2Mb.',

@@ -56,7 +56,7 @@ export const getMyEvents: IGetMyEventsHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const isTokenValid = UserTokenController.checkAccessToken(token);
+	const isTokenValid = await UserTokenController.checkAccessToken(token);
 	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
 
@@ -76,7 +76,7 @@ export const deleteEvent: IDeleteEventHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const isTokenValid = UserTokenController.checkAccessToken(token);
+	const isTokenValid = await UserTokenController.checkAccessToken(token);
 	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
 
@@ -92,7 +92,7 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const isTokenValid = UserTokenController.checkAccessToken(token);
+	const isTokenValid = await UserTokenController.checkAccessToken(token);
 	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 	const jwtData = JWTController.decodeToken(token);
 

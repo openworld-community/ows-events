@@ -4,9 +4,9 @@ import { useLocationStore } from '@/stores/location.store';
 
 const locationStore = useLocationStore();
 
-const { value: currency, errorMessage: currencyError } = useField<string>(() => 'price.currency');
-const { value: val, errorMessage: valueError } = useField<number>(() => 'price.val');
-const { value: isFree, errorMessage: isFreeError } = useField<boolean>(() => 'isFree');
+const currencyField = useField<string>(() => 'price.currency');
+const valueField = useField<number>(() => 'price.val');
+const isFreeField = useField<boolean>(() => 'isFree');
 </script>
 <template>
 	<ModalUiModalSection
@@ -15,35 +15,46 @@ const { value: isFree, errorMessage: isFreeError } = useField<boolean>(() => 'is
 	>
 		<template #child>
 			<div>
-				<CommonFormField :error="currencyError">
+				<CommonFormField
+					:error="currencyField.errorMessage.value"
+					:touched="currencyField.meta.touched"
+				>
 					<CommonUiBaseSelect
-						v-model="currency"
+						v-model="currencyField.value.value"
 						name="currency"
 						:placeholder="$t('form.event.fields.currency_placeholder')"
 						:list="locationStore.currencies"
 						has-icon-items
-						:error="JSON.stringify(currencyError)"
+						:error="
+							currencyField.meta.touched && Boolean(currencyField.errorMessage.value)
+						"
 						input-readonly
-						:required="!isFree"
-						:disabled="isFree"
+						:required="!isFreeField.value.value"
+						:disabled="isFreeField.value.value"
 					/>
 				</CommonFormField>
-				<CommonFormField :error="valueError">
+				<CommonFormField
+					:error="valueField.errorMessage.value"
+					:touched="valueField.meta.touched"
+				>
 					<CommonUiBaseInput
-						v-model="val"
+						v-model="valueField.value.value"
 						name="val"
 						type="number"
-						:error="JSON.stringify(valueError)"
+						:error="valueField.meta.touched && Boolean(valueField.errorMessage.value)"
 						:min-value="0"
-						:required="!isFree"
+						:required="!isFreeField.value.value"
 						:placeholder="$t('form.event.fields.price_placeholder')"
-						:disabled="isFree"
+						:disabled="isFreeField.value.value"
 					/>
 				</CommonFormField>
 			</div>
-			<CommonFormField :error="isFreeError">
+			<CommonFormField
+				:error="isFreeField.errorMessage.value"
+				:touched="isFreeField.meta.touched"
+			>
 				<CommonUiBaseCheckbox
-					v-model="isFree"
+					v-model="isFreeField.value.value"
 					value="isFree"
 					:label="$t('form.event.fields.price_free')"
 					is-reversed

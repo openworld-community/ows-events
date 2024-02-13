@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** 
 import { useLocationStore } from '@/stores/location.store';
 import { useEventStore } from '../../stores/event.store';
 import type { PostEventPayload } from '../../../common/types/event';
@@ -156,9 +157,11 @@ const submitEvent = async () => {
 
 	eventStore.eventData.isLoading = false;
 };
+*/
 </script>
-
+<!-- 
 <template>
+	
 	<div class="event-form">
 		<div class="event-form__title-wrapper">
 			<h1 class="event-form__title">
@@ -435,9 +438,11 @@ const submitEvent = async () => {
 		</div>
 		<ModalClearEventForm v-if="eventStore.showClearFormModal" />
 	</div>
+	
 </template>
-
+-->
 <style scoped lang="less">
+/**
 .event-form {
 	display: flex;
 	width: 100%;
@@ -544,3 +549,5 @@ const submitEvent = async () => {
 	}
 }
 </style>
+
+**/

@@ -1,13 +1,15 @@
 <script setup lang="ts">
+import { LocalStorageEnum } from '~/constants/enums/common';
 import { useEventStore } from '../../stores/event.store';
 
 const eventStore = useEventStore();
 
-const clearForm = async () => {
-	eventStore.$patch({
-		//	showClearFormModal: false,
-		//	clearForm: true
-	});
+const cancel = () => {
+	eventStore.resetEventData();
+};
+
+const confirm = async () => {
+	localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
 	await navigateTo({ path: eventStore.navTo });
 	eventStore.resetEventData();
 };
@@ -23,12 +25,12 @@ const clearForm = async () => {
 			<CommonButton
 				button-kind="ordinary"
 				:button-text="$t('global.button.cancel')"
-				@click="eventStore.$patch({ showClearFormModal: false })"
+				@click="cancel"
 			/>
 			<CommonButton
 				button-kind="dark"
 				:button-text="$t('global.button.close')"
-				@click="clearForm"
+				@click="confirm"
 			/>
 		</template>
 	</CommonModalWrapper>

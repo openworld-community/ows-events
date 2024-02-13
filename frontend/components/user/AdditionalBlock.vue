@@ -5,11 +5,9 @@ import donateImgDesktop2x from '@/assets/img/user/additionalBlock/donate-img-des
 import donateImgDesktop1x from '@/assets/img/user/additionalBlock/donate-img-desktop@1x.png';
 import newEventImg1x from '@/assets/img/user/additionalBlock/new-event-img@1x.jpg';
 import newEventImg2x from '@/assets/img/user/additionalBlock/new-event-img@2x.jpg';
-import { useEventStore } from '../../stores/event.store';
 
 const desktop = inject('desktop');
 const localePath = useLocalePath();
-const eventStore = useEventStore();
 </script>
 
 <template>
@@ -39,8 +37,11 @@ const eventStore = useEventStore();
 					:button-kind="desktop ? 'ordinary' : 'dark'"
 					:button-text="$t(desktop ? 'user.donate.button' : 'global.button.new_event')"
 					:icon-name="desktop ? 'donate' : ''"
-					:link="localePath(desktop ? RoutePathEnum.DONATION : RoutePathEnum.EVENT_FORM)"
-					@click="desktop ? null : eventStore.createDefaultEventData()"
+					:link="
+						localePath(
+							desktop ? RoutePathEnum.DONATION : `${RoutePathEnum.EVENT_EDIT}new`
+						)
+					"
 				/>
 			</div>
 		</div>
@@ -49,8 +50,7 @@ const eventStore = useEventStore();
 			class="additional-block__button"
 			button-kind="dark"
 			:button-text="$t('global.button.new_event')"
-			:link="localePath(RoutePathEnum.EVENT_FORM)"
-			@click="eventStore.createDefaultEventData()"
+			:link="localePath(`${RoutePathEnum.EVENT_EDIT}new`)"
 		/>
 	</div>
 </template>

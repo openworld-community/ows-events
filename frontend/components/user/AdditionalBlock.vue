@@ -34,7 +34,7 @@ const localePath = useLocalePath();
 				</p>
 				<CommonButton
 					class="additional-block__button"
-					:button-kind="desktop ? 'ordinary' : 'dark'"
+					:button-kind="desktop ? 'ordinary' : 'success'"
 					:button-text="$t(desktop ? 'user.donate.button' : 'global.button.new_event')"
 					:icon-name="desktop ? 'donate' : ''"
 					:link="
@@ -48,7 +48,7 @@ const localePath = useLocalePath();
 		<CommonButton
 			v-if="desktop"
 			class="additional-block__button"
-			button-kind="dark"
+			button-kind="success"
 			:button-text="$t('global.button.new_event')"
 			:link="localePath(`${RoutePathEnum.EVENT_EDIT}new`)"
 		/>

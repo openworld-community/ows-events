@@ -21,10 +21,23 @@ class EventsStateController {
 
 	async getEvents(query?: SearchEventPayload | undefined): Promise<EventDbEntity[]> {
 		const queryObject: FilterQuery<EventOnPoster> = {
-			$and: []
+			$and: [],
+			$expr: {
+				$and: [
+					{
+						$gte: [
+							{
+								$add: ['$date', { $multiply: [1000, '$durationInSeconds'] }]
+							},
+							{
+								$toDouble: '$$NOW'
+							}
+						]
+					}
+				]
+			}
 		};
 		const sortObject: string | Record<string, SortValues> | PipelineStage.Sort['$sort'] = {};
-
 		if (query?.searchLine) {
 			queryObject.$text = { $search: query.searchLine };
 		}
@@ -40,6 +53,21 @@ class EventsStateController {
 			queryObject.$and?.push(cityQuery);
 			sortObject.isOnline = 'ascending';
 		}
+		if (query?.startDate) {
+			const startDateQuery = {
+				$gte: [query.startDate, '$date']
+			};
+			queryObject.$expr.$and.push(startDateQuery);
+		}
+		if (query?.endDate) {
+			const endDateQuery = {
+				$gte: [
+					query.endDate,
+					{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }
+				]
+			};
+			queryObject.$expr.$and.push(endDateQuery);
+		}
 		if (query?.tags && query?.tags.length !== 0) {
 			queryObject.tags = { $in: query?.tags };
 		}
@@ -53,17 +81,7 @@ class EventsStateController {
 		const pipeline = [
 			{
 				$match: {
-					...queryObject,
-					$expr: {
-						$gte: [
-							{
-								$add: ['$date', { $multiply: [1000, '$durationInSeconds'] }]
-							},
-							{
-								$toDouble: '$$NOW'
-							}
-						]
-					}
+					...queryObject
 				}
 			}
 		];

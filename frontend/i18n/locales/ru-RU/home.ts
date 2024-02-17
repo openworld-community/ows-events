@@ -30,7 +30,17 @@ export default {
 			placeholder: 'Тема',
 			title: 'Выберите тему мероприятия',
 			aria: 'Фильтр по теме мероприятия'
-		}
+		},
+		startDate: {
+			placeholder: 'дд.мм.гггг',
+			title: 'Выберите день начала',
+			aria: 'Фильтр по дате начала'
+		},
+		endDate: {
+			placeholder: 'дд.мм.гггг',
+			title: 'Выберите день окончания',
+			aria: 'Фильтр по дате окончания'
+		},
 	},
 	user_location: {
 		not_found: 'Мы не смогли найти вас'

@@ -20,6 +20,8 @@ type FilterStore = {
 		city: City;
 		searchLine: string;
 		tags: Tag[];
+		startDate: number | string,
+		endDate: number | string
 	};
 	filteredEvents: EventOnPoster[];
 };
@@ -38,7 +40,9 @@ export const useFilterStore = defineStore('filter', {
 				tags:
 					getFirstQuery(route.query.tags)
 						.split(', ')
-						.filter((item) => item !== '') ?? []
+						.filter((item) => item !== '') ?? [],
+				startDate: getFirstQuery(route.query.startDate) ?? '',
+				endDate: getFirstQuery(route.query.endDate) ?? '',
 			},
 			filteredEvents: [],
 			modal: {
@@ -56,12 +60,23 @@ export const useFilterStore = defineStore('filter', {
 		async getFilteredEvents() {
 			if (process.server) return;
 
+			// явно приводим к Date
+			const startDate = new Date(this.filters?.startDate)
+			const endDate = new Date(this.filters?.endDate)
+
+			// временный костыль из-за часовых поясов на беке (крутим +1 день)
+			const startDateTS = new Date(new Date(startDate).setDate(startDate.getDate() + 1))
+			const endDateTS = new Date(new Date(endDate).setDate(endDate.getDate() + 1))
+			
 			const { data: posterEvents } = await apiRouter.filters.findEvents.useQuery({
 				data: {
 					query: {
-						...this.filters
+						...this.filters,
+						startDate: startDateTS.getTime() ? startDateTS.getTime() :  null,
+						endDate: endDateTS.getTime() ? endDateTS.getTime() :  null,
 					}
 				}
+				
 			});
 			if (posterEvents) {
 				this.filteredEvents = posterEvents.value;

@@ -85,6 +85,8 @@ class EventsStateController {
 				}
 			}
 		];
+		console.log(`\n queryObject \n`, JSON.stringify(queryObject, null, 2), `\n queryObject end \n`);
+		
 		const futureEvents = await EventModel.aggregate(pipeline).sort(sortObject).exec();
 		return futureEvents;
 	}

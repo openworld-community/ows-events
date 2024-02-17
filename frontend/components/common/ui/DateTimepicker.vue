@@ -13,7 +13,7 @@ const props = defineProps({
 		default: ''
 	},
 	modelValue: {
-		type: [Date, null, Object] as PropType<Date | Time | null>,
+		type: [Date, null, Object, String] as PropType<Date | Time | Date[] | null>,
 		required: true
 	},
 	placeholder: {
@@ -51,6 +51,14 @@ const props = defineProps({
 	required: {
 		type: Boolean,
 		default: false
+	},
+	range: {
+		type: Boolean,
+		default: false
+	},
+	appearance: {
+		type: String as PropType<'no-border' | null>,
+		default: null
 	}
 });
 
@@ -62,6 +70,7 @@ const datepicker = ref<DatePickerInstance>(null);
 
 const handleDate = (modelData: typeof props.modelValue) => {
 	isDateType.value && datepicker.value?.closeMenu();
+
 	emit('update:model-value', modelData);
 };
 
@@ -74,7 +83,7 @@ const timeFormat = (date: Date) => {
 };
 
 const onRemove = () => {
-	emit('update:model-value', null);
+	emit('update:model-value', '');
 };
 </script>
 
@@ -93,6 +102,7 @@ const onRemove = () => {
 		<VueDatePicker
 			ref="datepicker"
 			:model-value="modelValue"
+			:range="props.range"
 			:locale="locale"
 			:name="name"
 			:placeholder="required ? `${placeholder} *` : placeholder"
@@ -170,6 +180,10 @@ const onRemove = () => {
 		color: var(--color-text-main);
 		border: 1px solid var(--color-input-field);
 		font-size: var(--font-size-M);
+
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
 
 		&:hover {
 			border-color: var(--color-input-field);

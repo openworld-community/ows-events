@@ -5,7 +5,7 @@ import { getFilterPlaceholder } from '../../../utils/texts';
 
 defineProps({
 	filterType: {
-		type: String as PropType<'input' | 'select'>,
+		type: String as PropType<'input' | 'select' | 'date'>,
 		required: true
 	},
 	name: {
@@ -70,24 +70,31 @@ const showModal = computed(() => filterStore.modal.show);
 		appearance="no-border"
 		:aria-label="$t(`home.filter.${name}.aria`)"
 	/>
+	<CommonUiDateTimepicker
+		v-else-if="filterType === 'date'"
+		v-model="filterStore.filters[name]"
+		type="date"
+		:class="['filter']"
+		:name="name"
+		:placeholder="$t(`home.filter.${name}.placeholder`)"
+		:aria-label="$t(`home.filter.${name}.aria`)"
+	/>
 	<template v-if="filterType === 'select'">
 		<template v-if="mobile">
 			<CommonButton
 				button-kind="filter"
 				icon-name="container"
-				:button-text="
-					getFilterPlaceholder(
-						multiple,
-						name,
-						list,
-						filterStore.filters[name],
-						showKey,
-						returnKey
-					)
-				"
-				:filled="
-					multiple ? !!filterStore.filters[name].length : !!filterStore.filters[name]
-				"
+				:button-text="getFilterPlaceholder(
+					multiple,
+					name,
+					list,
+					filterStore.filters[name],
+					showKey,
+					returnKey
+				)
+					"
+				:filled="multiple ? !!filterStore.filters[name].length : !!filterStore.filters[name]
+					"
 				:is-disabled="disabled"
 				:alt="$t(`home.filter.${name}.aria`)"
 				class="filter"
@@ -163,24 +170,24 @@ const showModal = computed(() => filterStore.modal.show);
 	.filter:has(input:focus)::before,
 	.filter:has(.button__multiselect:focus)::before,
 	.filter:has(.select__field--green-border)::before,
-		//если поле внутри имеет инпут в фокусе, а в разметке рядом есть еще одно поле
-	.filter:has(input:focus) + .filter::before,
-	.filter:has(.button__multiselect) + .filter::before,
-	.filter:has(.select__field--green-border) + .filter::before,
-		//если поле внутри имеет инпут в фокусе, а в разметке рядом есть враппер с полями, то у первого child
-	.filter:has(input:focus) + .filters__wrapper .filter:first-child::before,
-	.filter:has(.button__multiselect) + .filters__wrapper .filter:first-child::before,
-	.filter:has(.select__field--green-border) + .filters__wrapper .filter:first-child::before,
-		//если враппер имеет последнее child поле с инпутом в фокусе и рядом еще один враппер, то у первого child
-	.filters__wrapper:has(.filter:last-child input:focus) + .filters__wrapper .filter:first-child::before,
-	.filters__wrapper:has(.button__multiselect) + .filters__wrapper .filter:first-child::before,
-	.filters__wrapper:has(.select__field--green-border) + .filters__wrapper .filter:first-child::before,
-		//если враппер имеет последнее child поле с инпутом в фокусе и рядом есть еще одно поле
-	.filters__wrapper:has(.filter:last-child input:focus) + .filter::before,
-	.filters__wrapper:has(.button__multiselect) + .filter::before,
-	.filters__wrapper:has(.select__field--green-border) + .filter::before
-		//псевдоэлементы ::before становятся прозрачными
-	{
+	//если поле внутри имеет инпут в фокусе, а в разметке рядом есть еще одно поле
+	.filter:has(input:focus)+.filter::before,
+	.filter:has(.button__multiselect)+.filter::before,
+	.filter:has(.select__field--green-border)+.filter::before,
+	//если поле внутри имеет инпут в фокусе, а в разметке рядом есть враппер с полями, то у первого child
+	.filter:has(input:focus)+.filters__wrapper .filter:first-child::before,
+	.filter:has(.button__multiselect)+.filters__wrapper .filter:first-child::before,
+	.filter:has(.select__field--green-border)+.filters__wrapper .filter:first-child::before,
+	//если враппер имеет последнее child поле с инпутом в фокусе и рядом еще один враппер, то у первого child
+	.filters__wrapper:has(.filter:last-child input:focus)+.filters__wrapper .filter:first-child::before,
+	.filters__wrapper:has(.button__multiselect)+.filters__wrapper .filter:first-child::before,
+	.filters__wrapper:has(.select__field--green-border)+.filters__wrapper .filter:first-child::before,
+	//если враппер имеет последнее child поле с инпутом в фокусе и рядом есть еще одно поле
+	.filters__wrapper:has(.filter:last-child input:focus)+.filter::before,
+	.filters__wrapper:has(.button__multiselect)+.filter::before,
+	.filters__wrapper:has(.select__field--green-border)+.filter::before //псевдоэлементы ::before становятся прозрачными
+
+		{
 		background-color: transparent;
 	}
 

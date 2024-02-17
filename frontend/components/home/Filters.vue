@@ -28,7 +28,9 @@ watch(
 				search: filters.searchLine || undefined,
 				country: filters.country || undefined,
 				city: filters.city || undefined,
-				tags: filters.tags.join(', ') || undefined
+				tags: filters.tags.join(', ') || undefined,
+				startDate: new Date(filters.startDate).getTime() || undefined,
+				endDate: new Date(filters.endDate).getTime() || undefined,
 			}
 		});
 		if (filters.country) {
@@ -92,17 +94,16 @@ const mobile = inject('mobile');
 				filter-type="select"
 				name="city"
 				:list="filterStore.usedCitiesByCountry[filterStore.filters.country] ?? []"
-				:disabled="
-					!filterStore.filters.country ||
+				:disabled="!filterStore.filters.country ||
 					(!filterStore.usedCitiesByCountry[filterStore.filters.country] &&
 						!filterStore.filters.city)
-				"
+					"
 				@on-filter-button-click="
 					openFilterModal(
 						'city',
 						filterStore.usedCitiesByCountry?.[filterStore.filters.country] ?? []
 					)
-				"
+					"
 			/>
 			<CommonUiFilter
 				:key="mobile ? 'mobile-tags' : 'other-tags'"
@@ -116,10 +117,20 @@ const mobile = inject('mobile');
 				:dropdown-position="tablet ? 'right' : 'left'"
 				@on-filter-button-click="
 					openFilterModal('tags', filterStore.usedTags, true, 'name', 'key')
-				"
+					"
 			/>
 		</div>
 	</section>
+	<div class="date__wrapper">
+		<CommonUiFilter
+			filter-type="date"
+			name="startDate"
+		/>
+		<CommonUiFilter
+			filter-type="date"
+			name="endDate"
+		/>
+	</div>
 </template>
 
 <style scoped lang="less">
@@ -150,6 +161,7 @@ const mobile = inject('mobile');
 		}
 
 		@media (min-width: 768px) {
+
 			&:deep(.filter),
 			&:deep(.button__multiselect) {
 				max-width: 32%;
@@ -167,5 +179,9 @@ const mobile = inject('mobile');
 			}
 		}
 	}
+}
+
+.date__wrapper {
+	display: flex;
 }
 </style>

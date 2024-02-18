@@ -34,7 +34,15 @@ const initTGButton = () => {
 	script.setAttribute('data-radius', '8');
 	script.setAttribute('data-request-access', 'write');
 	script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
-	telegram.value?.appendChild(script);
+	script.addEventListener('load', () => {		
+	// после загрузки скрипта меняем цвет кнопки на активный
+    	const tgicon = document.getElementById('tgicon'); 
+		tgicon.classList.add('tgicon_active');
+  	});
+	
+	const tgauth = document.getElementById('tgauth')
+	tgauth.appendChild(script)
+
 };
 
 
@@ -86,26 +94,32 @@ watch(
 			/>
 
 			<div class="unauthorized__buttons">
-				<div
-					ref="telegram"
-					class="unauthorized__telegram-button"
-					@click="
-						useTrackEvent('login', {
-							method: 'Telegram'
-						})
-						"
-				></div>
-
-				<div style="align-self: center; margin: 10px;">
+				<div class="unauthorized__wrapper">
 					<GoogleSignInButton
 						:login-uri="GOOGLE_OAUTH_URL"
 						ux-mode="redirect"
 						type="icon"
 						logo_alignment="center"
   					></GoogleSignInButton>
-				</div>
 
-				<NuxtLink
+					<div
+						ref="telegram"
+						class="unauthorized__telegram-button"
+						@click="
+						useTrackEvent('login', {
+						method: 'Telegram'
+						})
+						"
+					>
+						<div id="tgauth" class="unauthorized__tgauth">
+							<div id="tgicon" class="unauthorized__tgicon"></div>
+						</div>
+					</div>
+
+				</div>				
+			</div>
+
+			<NuxtLink
 					:to="localePath(RoutePathEnum.HOME)"
 					class="unauthorized__continue"
 				>
@@ -116,8 +130,8 @@ watch(
 						:icon-color="'var(--color-icons)'"
 						:alt="$t('form.global.close')"
 					/>
-				</NuxtLink>
-			</div>
+			</NuxtLink>
+			
 		</div>
 		<p
 			v-if="!mobile"
@@ -227,6 +241,8 @@ watch(
 	}
 
 	&__telegram-button {
+		height: 40px !important;
+		width: 40px !important; 
 		width: 100%;
 		display: flex;
 		justify-content: center;
@@ -270,5 +286,36 @@ watch(
 		color: var(--color-white);
 		opacity: 0.5;
 	}
+
+	&__wrapper {
+		align-self: center;
+		margin: 10px;
+		display: flex;
+		gap: 10px; 
+	}
+
+	&__tgauth {
+	overflow: hidden;
+	border-radius: 4px;
+	height: 38px !important;
+	width: 38px !important;
+	position: absolute;
+	}
+
+	&__tgicon{
+	overflow: hidden;
+	border-radius: 4px;
+	height: 38px !important;
+	width: 38px !important;
+	position: absolute;
+	background-image: url('@/assets/icon/social/telegram_icon_48x48.png');
+	background-size: cover;
+	pointer-events: none;
+	filter: grayscale(100%);
+	}
+		
+}
+.tgicon_active{
+	filter: grayscale(0%);
 }
 </style>

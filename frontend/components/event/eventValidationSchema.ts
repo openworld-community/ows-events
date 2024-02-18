@@ -73,20 +73,20 @@ export const eventValidationSchema = toTypedSchema(
 				schema.shape({
 					val: yup
 						.number()
-						.transform((value) => (isNaN(value) ? undefined : value))
+						.transform((val) => (isNaN(val) ? undefined : val))
+						.test('notAllowed', 'validation.test.price.val', function (val: number) {
+							if (`${val}`.includes('.')) {
+								return false;
+							}
+
+							return true;
+						})
 						.positive()
+						.integer()
+
 						.required(),
 
 					currency: yup.string().required()
-				}),
-			otherwise: (schema) =>
-				schema.shape({
-					val: yup
-						.number()
-						.transform((value) => (isNaN(value) ? undefined : value))
-						.nullable(),
-
-					currency: yup.string()
 				})
 		}),
 

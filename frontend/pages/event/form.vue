@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/**
 import { useLocationStore } from '@/stores/location.store';
 import { useEventStore } from '../../stores/event.store';
 import type { PostEventPayload } from '../../../common/types/event';
@@ -156,9 +157,11 @@ const submitEvent = async () => {
 
 	eventStore.eventData.isLoading = false;
 };
+*/
 </script>
-
+<!--
 <template>
+
 	<div class="event-form">
 		<div class="event-form__title-wrapper">
 			<h1 class="event-form__title">
@@ -435,112 +438,113 @@ const submitEvent = async () => {
 		</div>
 		<ModalClearEventForm v-if="eventStore.showClearFormModal" />
 	</div>
+
 </template>
+-->
+<!--<style scoped lang="less">-->
+<!--.event-form {-->
+<!--	display: flex;-->
+<!--	width: 100%;-->
+<!--	flex-direction: column;-->
+<!--	align-items: center;-->
+<!--	overflow: hidden;-->
+<!--	max-height: 100vh;-->
 
-<style scoped lang="less">
-.event-form {
-	display: flex;
-	width: 100%;
-	flex-direction: column;
-	align-items: center;
-	overflow: hidden;
-	max-height: 100vh;
+<!--	// Для адаптивной height на iOs-->
+<!--	@supports (-webkit-touch-callout: none) {-->
+<!--		max-height: -webkit-fill-available;-->
+<!--	}-->
 
-	// Для адаптивной height на iOs
-	@supports (-webkit-touch-callout: none) {
-		max-height: -webkit-fill-available;
-	}
+<!--	&__title-wrapper {-->
+<!--		display: flex;-->
+<!--		width: 100%;-->
+<!--		justify-content: center;-->
+<!--		background-color: var(&#45;&#45;color-background-secondary);-->
+<!--	}-->
 
-	&__title-wrapper {
-		display: flex;
-		width: 100%;
-		justify-content: center;
-		background-color: var(--color-background-secondary);
-	}
+<!--	&__title {-->
+<!--		width: 100%;-->
+<!--		max-width: 1200px;-->
+<!--		text-align: left;-->
+<!--		font-size: var(&#45;&#45;font-size-XL);-->
+<!--		font-weight: var(&#45;&#45;font-weight-regular);-->
+<!--		padding: 12px var(&#45;&#45;padding-side);-->
 
-	&__title {
-		width: 100%;
-		max-width: 1200px;
-		text-align: left;
-		font-size: var(--font-size-XL);
-		font-weight: var(--font-weight-regular);
-		padding: 12px var(--padding-side);
+<!--		@media (min-width: 768px) {-->
+<!--			padding: 30px var(&#45;&#45;padding-side);-->
+<!--		}-->
+<!--	}-->
 
-		@media (min-width: 768px) {
-			padding: 30px var(--padding-side);
-		}
-	}
+<!--	&__fields-wrapper {-->
+<!--		width: 100%;-->
+<!--		overflow-y: auto;-->
+<!--	}-->
 
-	&__fields-wrapper {
-		width: 100%;
-		overflow-y: auto;
-	}
+<!--	&__fields {-->
+<!--		display: flex;-->
+<!--		width: 100%;-->
+<!--		max-width: 1200px;-->
+<!--		flex-direction: column;-->
+<!--		margin-left: auto;-->
+<!--		margin-right: auto;-->
+<!--		padding: 20px var(&#45;&#45;padding-side);-->
+<!--	}-->
 
-	&__fields {
-		display: flex;
-		width: 100%;
-		max-width: 1200px;
-		flex-direction: column;
-		margin-left: auto;
-		margin-right: auto;
-		padding: 20px var(--padding-side);
-	}
+<!--	&__tags {-->
+<!--		display: flex;-->
+<!--		width: 100%;-->
+<!--		flex-wrap: wrap;-->
+<!--		gap: 10px;-->
+<!--	}-->
 
-	&__tags {
-		display: flex;
-		width: 100%;
-		flex-wrap: wrap;
-		gap: 10px;
-	}
+<!--	&__required {-->
+<!--		font-size: var(&#45;&#45;font-size-XS);-->
+<!--		line-height: 18px;-->
+<!--		color: var(&#45;&#45;color-text-secondary);-->
+<!--		margin-top: var(&#45;&#45;space-unrelated-items);-->
+<!--	}-->
 
-	&__required {
-		font-size: var(--font-size-XS);
-		line-height: 18px;
-		color: var(--color-text-secondary);
-		margin-top: var(--space-unrelated-items);
-	}
+<!--	&__bottom-wrapper {-->
+<!--		display: flex;-->
+<!--		width: 100%;-->
+<!--		justify-content: center;-->
+<!--		background-color: var(&#45;&#45;color-background-secondary);-->
+<!--	}-->
 
-	&__bottom-wrapper {
-		display: flex;
-		width: 100%;
-		justify-content: center;
-		background-color: var(--color-background-secondary);
-	}
+<!--	&__bottom {-->
+<!--		display: flex;-->
+<!--		width: 100%;-->
+<!--		max-width: 1200px;-->
+<!--		justify-content: space-between;-->
+<!--		padding: 12px var(&#45;&#45;padding-side);-->
 
-	&__bottom {
-		display: flex;
-		width: 100%;
-		max-width: 1200px;
-		justify-content: space-between;
-		padding: 12px var(--padding-side);
+<!--		@media (min-width: 768px) {-->
+<!--			padding: 30px var(&#45;&#45;padding-side);-->
+<!--		}-->
+<!--	}-->
 
-		@media (min-width: 768px) {
-			padding: 30px var(--padding-side);
-		}
-	}
+<!--	&__button {-->
+<!--		width: 48%;-->
+<!--	}-->
+<!--}-->
 
-	&__button {
-		width: 48%;
-	}
-}
+<!--.check-location {-->
+<!--	display: flex;-->
+<!--	align-items: center;-->
 
-.check-location {
-	display: flex;
-	align-items: center;
+<!--	&__icon {-->
+<!--		flex-shrink: 0;-->
+<!--		margin-right: 20px;-->
+<!--	}-->
 
-	&__icon {
-		flex-shrink: 0;
-		margin-right: 20px;
-	}
+<!--	&__text {-->
+<!--		font-size: var(&#45;&#45;font-size-XS);-->
+<!--		line-height: 18px;-->
+<!--	}-->
 
-	&__text {
-		font-size: var(--font-size-XS);
-		line-height: 18px;
-	}
-
-	&__link {
-		color: var(--color-link);
-		text-decoration: underline;
-	}
-}
-</style>
+<!--	&__link {-->
+<!--		color: var(&#45;&#45;color-link);-->
+<!--		text-decoration: underline;-->
+<!--	}-->
+<!--}-->
+<!--</style>-->

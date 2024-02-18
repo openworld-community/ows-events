@@ -12,7 +12,7 @@ import {
 } from '../../constants/enums/seo';
 import { useUserStore } from '../../stores/user.store';
 import { apiRouter } from '../../composables/useApiRouter';
-import { useEventStore } from '../../stores/event.store';
+
 import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
 import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
@@ -85,10 +85,7 @@ const deleteCard = async () => {
 };
 
 const onEditButtonClick = async () => {
-	const eventStore = useEventStore();
-	eventStore.setEventData(posterEvent.value);
-	eventStore.createDefaultEventData();
-	await navigateTo(localePath({ path: RoutePathEnum.EVENT_FORM }));
+	await navigateTo(localePath({ path: `${RoutePathEnum.EVENT_EDIT}${id}` }));
 };
 
 // TODO подключить, когда вернемся к проработке регистрации

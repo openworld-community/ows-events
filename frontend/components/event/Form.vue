@@ -18,13 +18,17 @@ onMounted(async () => {
 	await eventStore.getTimezones();
 });
 const props = defineProps({
+	title: {
+		type: String,
+		default: ''
+	},
 	initialValues: {
 		type: Object as PropType<EventFormType>,
 		default: () => {}
 	}
 });
 
-const emit = defineEmits(['createEvent', 'cancelEvent']);
+const emit = defineEmits(['submitEvent', 'cancelEvent']);
 
 const dataFromLocalStorage = (initialValues: EventFormType) => {
 	const parsedData = JSON.parse(localStorage.getItem(LocalStorageEnum.EVENT_DATA));
@@ -48,11 +52,12 @@ const dataFromLocalStorage = (initialValues: EventFormType) => {
 const { values, handleSubmit, setFieldValue } = useForm<EventFormType>({
 	validationSchema: schema,
 	initialValues:
-		JSON.parse(localStorage.getItem(LocalStorageEnum.EVENT_DATA)) !== null
+		localStorage.getItem(LocalStorageEnum.EVENT_DATA) !== null
 			? dataFromLocalStorage(props.initialValues)
 			: props.initialValues
 });
 const isLoading = ref(false);
+
 // Запись в localStorage
 watch(
 	() => values,
@@ -68,9 +73,7 @@ watch(
 	async (country) => {
 		if (
 			!country ||
-			!locationStore._citiesByCountry
-				.get(country)
-				?.includes(eventStore.eventData.location.city)
+			!locationStore._citiesByCountry.get(country)?.includes(values['location']['city'])
 		) {
 			setFieldValue('location.city', '');
 			setFieldValue('location.address', '');
@@ -161,7 +164,8 @@ const onSubmit = handleSubmit(
 		const payload = getEventPayload(values);
 
 		isLoading.value = true;
-		emit('createEvent', payload);
+
+		emit('submitEvent', payload);
 		isLoading.value = false;
 	},
 	() => {
@@ -180,7 +184,7 @@ const onSubmit = handleSubmit(
 	>
 		<div class="event-form__title-wrapper">
 			<h1 class="event-form__title">
-				{{ $t('form.event.title') }}
+				{{ title }}
 			</h1>
 		</div>
 
@@ -216,6 +220,7 @@ const onSubmit = handleSubmit(
 				/>
 			</div>
 		</div>
+		<EventFormModalConfirmChanged v-if="eventStore.showClearFormModal" />
 	</form>
 </template>
 

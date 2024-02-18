@@ -3,7 +3,6 @@ import * as yup from 'yup';
 yup.setLocale({
 	mixed: {
 		required: ({ path }) => ({ key: `validation.required.${path}` }),
-
 		notType: 'validation.notType'
 	},
 	number: {
@@ -29,13 +28,19 @@ const emailRegexp =
 const passwordRegex = /^[a-z,A-Z, 0-9, .,!,?, @,:, ;,*,/,",+,-,,]{6,20}$/;
 
 const linkRegexp =
-	/^(https?|ftp):\/\/(([a-z\d]([a-z\d-]*[a-z\d])?\.)+[a-z]{2,}|localhost)(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/;
+	/^(https?):\/\/(([a-z\d]([a-z\d-]*[a-z\d])?\.)+[a-z]{2,}|localhost)(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/;
 
-// (https?|ftp):\/\/ validate protocol
+//  https://fjhjh.ru/blog/?name=struct-url&topic=expl#h1   example url
 
-//(([a-z\d]([a-z\d-]*[a-z\d])?\.)+[a-z]{2,}|localhost)    validate domain name
+// (https?):\/\/ validate protocol  https://
 
-//(\/[-a-z\d%_.~+]*)*    validate OR ip (v4) address
+//(([a-z\d]([a-z\d-]*[a-z\d])?\.)+[a-z]{2,}|localhost)    validate domain name:  fjhjh.ru/blog
+
+//(\/[-a-z\d%_.~+]*)*       validate path:  /blog
+
+// (\?[;&a-z\d%_.~+=-]*) validate query:  ?name=struct-url&topic=expl
+
+//  ?(#[-a-z\d_]*)?$/  link to the part of the page:  #h1
 
 function isValidLink(this: yup.StringSchema<string, yup.Maybe<yup.AnyObject>, undefined, ''>) {
 	return this.matches(linkRegexp, {

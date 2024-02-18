@@ -4,7 +4,6 @@ import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import { SeoItemTypeEnum } from '../constants/enums/seo';
 import { useUserStore } from '../stores/user.store';
 import { RoutePathEnum } from '../constants/enums/route';
-import { useEventStore } from '../stores/event.store';
 import { useFilterStore } from '../stores/filter.store';
 
 const { t } = useI18n();
@@ -26,9 +25,7 @@ needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
 
 const onButtonClick = async () => {
 	if (userStore.isAuthorized) {
-		const eventStore = useEventStore();
-		eventStore.createDefaultEventData();
-		await navigateTo(localePath({ path: RoutePathEnum.EVENT_FORM }));
+		await navigateTo(localePath(`${RoutePathEnum.EVENT_EDIT}new`));
 	} else {
 		await openNeedAuthorizeModal();
 	}

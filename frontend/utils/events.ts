@@ -37,6 +37,7 @@ export const getInitialEventFormValues = (data?: EventOnPoster): EventFormType =
 			currency: ''
 		},
 		timezone: data && data.timezone ? timezoneToString(data.timezone) : '',
+
 		url: (data && data.url) || '',
 		isFree: data && data.price && data.price.value === 0 ? true : false
 	};
@@ -53,7 +54,7 @@ export const getEventPayload = (data: EventFormType): PostEventPayload => {
 		date: eventStartEpoch,
 		durationInSeconds: Math.floor(Math.max(0, eventEndEpoch - eventStartEpoch) / 1000),
 		isOnline: data.isOnline,
-		location: data.isOnline
+		location: !data.isOnline
 			? {
 					country: data.location.country,
 					city: data.location.city,

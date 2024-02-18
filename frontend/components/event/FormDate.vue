@@ -28,6 +28,7 @@ const endTimeField = useField<Time>(() => 'endTime', {
 					v-model="startDateField.value.value"
 					type="date"
 					name="startDate"
+					:min-date="new Date(roundTime(Date.now(), 10))"
 					:error="
 						startDateField.meta.touched && Boolean(startDateField.errorMessage.value)
 					"

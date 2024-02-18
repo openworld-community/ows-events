@@ -130,16 +130,6 @@ const mobile = inject('mobile');
 			/>
 		</div>
 	</section>
-	<div class="date__wrapper">
-		<CommonUiFilter
-			filter-type="date"
-			name="startDate"
-		/>
-		<CommonUiFilter
-			filter-type="date"
-			name="endDate"
-		/>
-	</div>
 </template>
 
 <style scoped lang="less">
@@ -147,6 +137,8 @@ const mobile = inject('mobile');
 	display: flex;
 	width: 100%;
 	flex-direction: column;
+
+	--gap: 8px;
 
 	@media (min-width: 1440px) {
 		max-width: calc(100% - 2 * var(--padding-side));
@@ -160,19 +152,26 @@ const mobile = inject('mobile');
 	&__wrapper {
 		display: flex;
 		width: 100%;
-		margin-top: 8px;
-		gap: 2%;
+		margin-top: var(--gap);
+		gap: var(--gap);
 
 		@media (max-width: 767px) {
 			&:deep(.button__filter) {
-				max-width: 32.6%;
+				max-width: calc((100% - var(--gap) * 2) / 3);
+			}
+		}
+
+		@media (max-width: 668px) {
+			& {
+				flex-wrap: wrap;
+				row-gap: var(--gap);
 			}
 		}
 
 		@media (min-width: 768px) {
 			&:deep(.filter),
 			&:deep(.button__multiselect) {
-				max-width: 32%;
+				max-width: 20%;
 			}
 		}
 
@@ -183,7 +182,7 @@ const mobile = inject('mobile');
 
 			&:deep(.filter),
 			&:deep(.button__multiselect) {
-				max-width: 34%;
+				max-width: 15%;
 			}
 		}
 	}

@@ -32,12 +32,12 @@ export default {
 			aria: 'Filter by event theme'
 		},
 		startDate: {
-			placeholder: 'dd.mm.yyyy',
+			placeholder: 'Starting day',
 			title: 'Choose a starting day',
 			aria: 'Filter by starting date'
 		},
 		endDate: {
-			placeholder: 'dd.mm.yyyy',
+			placeholder: 'Ending day',
 			title: 'Choose an ending day',
 			aria: 'Filter by ending date'
 		},

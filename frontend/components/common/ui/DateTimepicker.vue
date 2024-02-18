@@ -18,14 +18,14 @@ const props = defineProps({
 	},
 	placeholder: {
 		type: String,
-		default: 'дд.мм.гг'
+		default: 'дд.мм.гггг'
 	},
 	type: {
 		type: String as PropType<'date' | 'time'>,
 		required: true
 	},
 	name: {
-		type: String,
+		type: String as PropType<'startDate' | 'endDate' | string>,
 		required: true
 	},
 	label: {
@@ -85,6 +85,9 @@ const timeFormat = (date: Date) => {
 const onRemove = () => {
 	emit('update:model-value', '');
 };
+
+const today = new Date()
+const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
 </script>
 
 <template>
@@ -106,11 +109,12 @@ const onRemove = () => {
 			:locale="locale"
 			:name="name"
 			:placeholder="required ? `${placeholder} *` : placeholder"
-			:input-class-name="`input input__field ${error ? 'form__error' : ''}`"
+			:input-class-name="`input input__field ${error ? 'form__error' : ''} ${appearance ? 'no-border' : ''}`"
 			:menu-class-name="`${!isDateType ? 'time_picker' : ''}`"
 			mode-height="80"
 			prevent-min-max-navigation
 			auto-apply
+			:keep-action-row="props.name === 'startDate' || props.name === 'endDate' ? true : false"
 			:close-on-auto-apply="!isDateType"
 			partial-flow
 			:flow="['calendar']"
@@ -125,10 +129,30 @@ const onRemove = () => {
 			:disabled="disabled"
 			:required="required"
 			is-24
+			:position="name === 'endDate' ? 'right' : 'left'"
 			:clearable="false"
 			@update:model-value="handleDate"
 			@keydown.enter.capture="datepicker?.closeMenu()"
-		/>
+		>
+			<template #action-row>
+				<CommonButton
+					:button-text="$t('dates.filterDay.today')"
+					button-kind="dark"
+					@click="() => {
+						$emit('update:model-value', today)
+						datepicker.closeMenu()
+					}"
+				/>
+				<CommonButton
+					:button-text="$t('dates.filterDay.tomorrow')"
+					button-kind="dark"
+					@click="() => {
+						$emit('update:model-value', tomorrow)
+						datepicker.closeMenu()
+					}"
+				/>
+			</template>
+		</VueDatePicker>
 		<CommonIcon
 			v-if="!modelValue"
 			:name="isDateType ? 'calendar' : 'clock'"
@@ -151,9 +175,16 @@ const onRemove = () => {
 		background-color: transparent;
 	}
 
+	&__action_row {
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: flex-end;
+		gap: 10px;
+	}
+
 	&__menu {
-		left: unset !important;
-		transform: unset !important;
+		// left: unset !important;
+		// transform: unset !important;
 		overflow: hidden;
 
 		&_inner {
@@ -184,6 +215,10 @@ const onRemove = () => {
 		white-space: nowrap;
 		text-overflow: ellipsis;
 		overflow: hidden;
+
+		&.no-border {
+			border-color: var(--color-white)
+		}
 
 		&:hover {
 			border-color: var(--color-input-field);

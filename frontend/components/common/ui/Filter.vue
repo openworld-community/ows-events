@@ -74,7 +74,8 @@ const showModal = computed(() => filterStore.modal.show);
 		v-else-if="filterType === 'date'"
 		v-model="filterStore.filters[name]"
 		type="date"
-		:class="['filter']"
+		appearance="no-border"
+		class="filter"
 		:name="name"
 		:placeholder="$t(`home.filter.${name}.placeholder`)"
 		:aria-label="$t(`home.filter.${name}.aria`)"
@@ -134,7 +135,7 @@ const showModal = computed(() => filterStore.modal.show);
 .filter {
 	@media (min-width: 1440px) {
 		width: 50%;
-		min-width: 33.3%;
+		min-width: 20%;
 
 		&:deep(.input__button),
 		&:deep(.button__icon),
@@ -143,7 +144,7 @@ const showModal = computed(() => filterStore.modal.show);
 		}
 
 		&:deep(.button__multiselect) {
-			max-width: 33.3%;
+			max-width: 20%;
 		}
 
 		&:deep(.input__field),
@@ -175,7 +176,7 @@ const showModal = computed(() => filterStore.modal.show);
 	.filter:has(.select__field--green-border)::before,
 	//если поле внутри имеет инпут в фокусе, а в разметке рядом есть еще одно поле
 	.filter:has(input:focus)+.filter::before,
-	.filter:has(.button__multiselect)+.filter::before,
+	// .filter:has(.button__multiselect)+.filter::before,
 	.filter:has(.select__field--green-border)+.filter::before,
 	//если поле внутри имеет инпут в фокусе, а в разметке рядом есть враппер с полями, то у первого child
 	.filter:has(input:focus)+.filters__wrapper .filter:first-child::before,

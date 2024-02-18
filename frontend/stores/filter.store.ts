@@ -20,8 +20,8 @@ type FilterStore = {
 		city: City;
 		searchLine: string;
 		tags: Tag[];
-		startDate: number | string,
-		endDate: number | string
+		startDate: number | string;
+		endDate: number | string;
 	};
 	filteredEvents: EventOnPoster[];
 };
@@ -42,7 +42,7 @@ export const useFilterStore = defineStore('filter', {
 						.split(', ')
 						.filter((item) => item !== '') ?? [],
 				startDate: getFirstQuery(route.query.startDate) ?? '',
-				endDate: getFirstQuery(route.query.endDate) ?? '',
+				endDate: getFirstQuery(route.query.endDate) ?? ''
 			},
 			filteredEvents: [],
 			modal: {
@@ -61,22 +61,24 @@ export const useFilterStore = defineStore('filter', {
 			if (process.server) return;
 
 			// явно приводим к Date
-			const startDate = new Date(this.filters?.startDate)
-			const endDate = new Date(this.filters?.endDate)
+			const startDate = new Date(this.filters?.startDate);
+			const endDate = new Date(this.filters?.endDate);
 
-			// временный костыль из-за часовых поясов на беке (крутим +1 день)
-			const startDateTS = new Date(new Date(startDate).setDate(startDate.getDate() + 1))
-			const endDateTS = new Date(new Date(endDate).setDate(endDate.getDate() + 1))
-			
+			//Приводим таймзону времени устройства юзера к миллисекундам
+			const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
+
+			// Перевод в UTC
+			const startDateTS = startDate.getTime() - timezoneOffset;
+			const endDateTS = endDate.getTime() - timezoneOffset;
+
 			const { data: posterEvents } = await apiRouter.filters.findEvents.useQuery({
 				data: {
 					query: {
 						...this.filters,
-						startDate: startDateTS.getTime() ? startDateTS.getTime() :  null,
-						endDate: endDateTS.getTime() ? endDateTS.getTime() :  null,
+						startDate: startDateTS ? startDateTS : null,
+						endDate: endDateTS ? endDateTS : null
 					}
 				}
-				
 			});
 			if (posterEvents) {
 				this.filteredEvents = posterEvents.value;

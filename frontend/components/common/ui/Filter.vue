@@ -78,23 +78,26 @@ const showModal = computed(() => filterStore.modal.show);
 		:name="name"
 		:placeholder="$t(`home.filter.${name}.placeholder`)"
 		:aria-label="$t(`home.filter.${name}.aria`)"
+		:min-time="name === 'startDate' ? { hours: 0, minutes: 0 } : { hours: '23', minutes: '59' }"
 	/>
 	<template v-if="filterType === 'select'">
 		<template v-if="mobile">
 			<CommonButton
 				button-kind="filter"
 				icon-name="container"
-				:button-text="getFilterPlaceholder(
-					multiple,
-					name,
-					list,
-					filterStore.filters[name],
-					showKey,
-					returnKey
-				)
-					"
-				:filled="multiple ? !!filterStore.filters[name].length : !!filterStore.filters[name]
-					"
+				:button-text="
+					getFilterPlaceholder(
+						multiple,
+						name,
+						list,
+						filterStore.filters[name],
+						showKey,
+						returnKey
+					)
+				"
+				:filled="
+					multiple ? !!filterStore.filters[name].length : !!filterStore.filters[name]
+				"
 				:is-disabled="disabled"
 				:alt="$t(`home.filter.${name}.aria`)"
 				class="filter"
@@ -186,8 +189,7 @@ const showModal = computed(() => filterStore.modal.show);
 	.filters__wrapper:has(.filter:last-child input:focus)+.filter::before,
 	.filters__wrapper:has(.button__multiselect)+.filter::before,
 	.filters__wrapper:has(.select__field--green-border)+.filter::before //псевдоэлементы ::before становятся прозрачными
-
-		{
+	{
 		background-color: transparent;
 	}
 

@@ -36,6 +36,7 @@
     "normalize.css": "^8.0.1",
     "nuxt-vue3-google-signin": "^0.0.10",
     "pinia": "2.1.7",
+    "radix-vue": "^1.4.6",
     "sanitize-html": "^2.11.0",
     "uuid": "^9.0.0",
     "vee-validate": "^4.12.4",

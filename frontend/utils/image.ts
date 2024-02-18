@@ -1,5 +1,4 @@
-const ALLOWED_IMAGE_SIZE = 2; //Mb
-const ALLOWED_IMAGE_EXTENSIONS = ['webp', 'png', 'svg', 'jpeg', 'jpg'];
+import { ALLOWED_IMAGE_SIZE, ALLOWED_IMAGE_EXTENSIONS } from '~/constants/defaultValues/validation';
 
 export const isImageTooBig = (count: number) => {
 	const size = count / (1024 * 1024); // in Mb
@@ -10,3 +9,7 @@ export const isImageFormatAllowed = (fileName: string) => {
 	const fileExtension = fileName.slice((Math.max(0, fileName.lastIndexOf('.')) || Infinity) + 1);
 	return ALLOWED_IMAGE_EXTENSIONS.includes(fileExtension);
 };
+
+export const imageAllowedFormats = ALLOWED_IMAGE_EXTENSIONS.join(', ');
+
+export const imageAllowedListForInput = ALLOWED_IMAGE_EXTENSIONS.map((ext) => `.${ext}`).join(', ');

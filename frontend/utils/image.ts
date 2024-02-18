@@ -9,7 +9,3 @@ export const isImageFormatAllowed = (fileName: string) => {
 	const fileExtension = fileName.slice((Math.max(0, fileName.lastIndexOf('.')) || Infinity) + 1);
 	return ALLOWED_IMAGE_EXTENSIONS.includes(fileExtension);
 };
-
-export const imageAllowedFormats = ALLOWED_IMAGE_EXTENSIONS.join(', ');
-
-export const imageAllowedListForInput = ALLOWED_IMAGE_EXTENSIONS.map((ext) => `.${ext}`).join(', ');

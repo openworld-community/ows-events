@@ -19,15 +19,18 @@ const startDate = ref(
 	)
 );
 
-const endDate = ref(
-	convertEventDateToLocaleString(
+const endDate = computed(() => {
+	// проверка на однодневный ивент
+	if (props.eventData.date + props.eventData.durationInSeconds * 1000 === props.eventData.date) {
+		return ''
+	}
+
+	return convertEventDateToLocaleString(
 		props.eventData.date + props.eventData.durationInSeconds * 1000,
 		props.eventData.isOnline,
 		props.eventData.timezone
 	)
-)
-
-console.log(props.eventData);
+})
 </script>
 
 <template>

@@ -4,6 +4,10 @@ import { useFilterStore } from '../../../stores/filter.store';
 import { getFilterPlaceholder } from '../../../utils/texts';
 
 defineProps({
+	// date: {
+	// 	type: Date as PropType<Date>,
+	// 	default: ''
+	// },
 	filterType: {
 		type: String as PropType<'input' | 'select' | 'date'>,
 		required: true

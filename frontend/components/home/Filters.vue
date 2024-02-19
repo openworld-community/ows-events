@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import dayjs from 'dayjs';
 import { useFilterStore } from '../../stores/filter.store';
 import { debouncedWatch } from '@vueuse/core';
 
@@ -17,6 +18,7 @@ onBeforeMount(() => {
 				await filterStore.getUsedCitiesByCountry(filterStore.filters.country);
 		});
 	}
+	//console.log(route.query);
 });
 
 watch(
@@ -29,10 +31,11 @@ watch(
 				country: filters.country || undefined,
 				city: filters.city || undefined,
 				tags: filters.tags.join(', ') || undefined,
-				startDate: new Date(filters.startDate).getTime() || undefined,
-				endDate: new Date(filters.endDate).getTime() || undefined
+				startDate: filters.startDate ? dayjs(filters.startDate).format('DD.MM.YYYY') : undefined,
+				endDate: filters.endDate ? dayjs(filters.endDate).format('DD.MM.YYYY') : undefined
 			}
 		});
+		// console.log(filters.endDate ? dayjs(filters.endDate).format('DD.MM.YYYY') : '')
 		if (filters.country) {
 			await filterStore.getUsedCitiesByCountry(filters.country);
 		}

@@ -5,40 +5,78 @@ import {
 	ScrollAreaThumb,
 	ScrollAreaViewport
 } from 'radix-vue';
+const props = defineProps({
+	type: {
+		type: String as PropType<'always' | 'hover' | 'auto' | 'scroll'>,
+		default: 'auto'
+	},
+	orientation: {
+		type: String as PropType<'vertical' | 'horizontal'>,
+		default: 'vertical'
+	}
+});
 </script>
 
 <template>
 	<ScrollAreaRoot
-		class="w-[200px] h-[225px] rounded overflow-hidden shadow-[0_2px_10px] shadow-blackA7 bg-white"
-		style="--scrollbar-size: 10px"
+		class="scroll-area"
+		:type="type"
 	>
-		<ScrollAreaViewport class="w-full h-full rounded">
-			<div class="py-[15px] px-5">
-				<div class="text-grass11 text-[15px] leading-[18px] font-semibold">Tags</div>
-				<div
-					v-for="tag in tags"
-					:key="tag"
-					class="text-mauve12 text-[13px] leading-[18px] mt-2.5 pt-2.5 border-t border-t-mauve6"
-				>
-					{{ tag }}
-				</div>
-			</div>
+		<ScrollAreaViewport
+			class="scroll-area__viewport"
+			style="width: 100%; height: 100%"
+			as-child
+		>
+			<slot></slot>
 		</ScrollAreaViewport>
 		<ScrollAreaScrollbar
-			class="flex select-none touch-none p-0.5 bg-blackA6 transition-colors duration-[160ms] ease-out hover:bg-blackA8 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
-			orientation="vertical"
+			class="scroll-area__scrollbar"
+			:orientation="orientation"
+			style="width: 10px; padding: 5px 2px"
 		>
-			<ScrollAreaThumb
-				class="flex-1 bg-mauve10 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]"
-			/>
-		</ScrollAreaScrollbar>
-		<ScrollAreaScrollbar
-			class="flex select-none touch-none p-0.5 bg-blackA6 transition-colors duration-[160ms] ease-out hover:bg-blackA8 data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
-			orientation="horizontal"
-		>
-			<ScrollAreaThumb
-				class="flex-1 bg-mauve10 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]"
-			/>
+			<ScrollAreaThumb class="scroll-area__thumb" />
 		</ScrollAreaScrollbar>
 	</ScrollAreaRoot>
 </template>
+
+<style lang="less">
+.scroll-area {
+	width: 100%;
+	height: 200px;
+	border-radius: 4px;
+	display: flex;
+	max-height: 300px;
+
+	&__viewport {
+		width: 100%;
+		height: 100%;
+	}
+	&__scrollbar {
+		width: 4px;
+		padding: 5px 2px;
+		background-color: var(--color-input-icons);
+		user-select: none;
+		touch-action: none;
+
+		&:hover {
+			background-color: var(--color-text-main);
+		}
+	}
+	&__thumb {
+		background: rgba(0, 0, 0, 0.3);
+		border-radius: 3px;
+		flex: 1 1 0%;
+		&::before {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 100%;
+			height: 100%;
+			min-width: 20px;
+			min-height: 20px;
+		}
+	}
+}
+</style>

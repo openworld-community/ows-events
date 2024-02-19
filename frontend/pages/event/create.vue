@@ -1,10 +1,11 @@
 <script setup>
 const model = ref('');
 const mode = ref('');
+const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length - i}`);
 </script>
 
 <template>
-	<div>
+	<div style="padding: 10px">
 		{{ model }}
 		<LibrarySelect
 			v-model="model"
@@ -22,8 +23,22 @@ const mode = ref('');
 			<LibrarySelect
 				v-model="mode"
 				placeholder="Choose fruit"
-				:options="['banana', 'apple', 'orange', 'pinapple']"
+				:options="['banana', 'apple', 'orange']"
 			/>
+		</div>
+		<div style="width: 100px; height: 120px">
+			<LibraryScrollArea>
+				<div class="py-[15px] px-5">
+					<div class="text-grass11 text-[15px] leading-[18px] font-semibold">Tags</div>
+					<div
+						v-for="tag in tags"
+						:key="tag"
+						class="text-mauve12 text-[13px] leading-[18px] mt-2.5 pt-2.5 border-t border-t-mauve6"
+					>
+						{{ tag }}
+					</div>
+				</div>
+			</LibraryScrollArea>
 		</div>
 	</div>
 </template>

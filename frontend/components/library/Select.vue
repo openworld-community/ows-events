@@ -79,21 +79,24 @@ const onRemove = () => {
 				class="select__content"
 				position="popper"
 				:side-offset="5"
+				style="overflow: hidden"
 			>
-				<SelectViewport>
-					<ul>
-						<LibraryUiItemSelect
-							v-for="option in options"
-							:key="typeof option === 'string' ? option : option['value']"
-							:value="typeof option === 'string' ? option : option['value']"
-							side="top"
-							side-offset="5"
-							position="popper"
-							avoid-collisions
-						>
-							{{ typeof option === 'string' ? option : option['label'] }}
-						</LibraryUiItemSelect>
-					</ul>
+				<SelectViewport as-child>
+					<LibraryScrollArea>
+						<ul style="height: 100%; padding: 8px 4px">
+							<LibraryUiItemSelect
+								v-for="option in options"
+								:key="typeof option === 'string' ? option : option['value']"
+								:value="typeof option === 'string' ? option : option['value']"
+								side="top"
+								side-offset="5"
+								position="popper"
+								avoid-collisions
+							>
+								{{ typeof option === 'string' ? option : option['label'] }}
+							</LibraryUiItemSelect>
+						</ul>
+					</LibraryScrollArea>
 				</SelectViewport>
 			</SelectContent>
 		</SelectRoot>
@@ -151,6 +154,11 @@ const onRemove = () => {
 	&__value {
 		color: #7a0d0d;
 	}
+	&__trigger[data-placeholder] {
+		.select__value {
+			color: #2b0e87;
+		}
+	}
 	&__content {
 		min-width: 267px;
 		background-color: #ffffff;
@@ -159,9 +167,9 @@ const onRemove = () => {
 		border-radius: 8px;
 		border: 2px black;
 		width: var(--radix-select-trigger-width);
-		height: auto;
-		padding: 8px 0;
-		min-height: auto;
+		height: 160px;
+
+		min-height: 100px;
 		max-height: 200px;
 	}
 }

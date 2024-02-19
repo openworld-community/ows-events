@@ -79,6 +79,7 @@ const showModal = computed(() => filterStore.modal.show);
 		:name="name"
 		:placeholder="$t(`home.filter.${name}.placeholder`)"
 		:aria-label="$t(`home.filter.${name}.aria`)"
+		:min-date="new Date(roundTime(Date.now(), 10))"
 		:min-time="name === 'startDate' ? { hours: 0, minutes: 0 } : { hours: '23', minutes: '59' }"
 	/>
 	<template v-if="filterType === 'select'">

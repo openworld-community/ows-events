@@ -120,6 +120,7 @@ const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
 			:flow="['calendar']"
 			:time-picker="!isDateType"
 			minutes-increment="10"
+			:month-change-on-arrows="true"
 			:enable-time-picker="!isDateType"
 			:min-date="minDate ?? undefined"
 			:start-date="minDate ?? undefined"

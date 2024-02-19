@@ -6,7 +6,7 @@ const { t } = useI18n()
 
 const inputType = ref<'password' | 'text'>('password')
 
-const { errors, defineField, meta, handleSubmit, handleReset } = useForm({
+const { errors, defineField, handleSubmit, handleReset } = useForm({
     // temporary local validation
     validationSchema: yup.object({
         email: yup

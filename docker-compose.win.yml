@@ -21,7 +21,7 @@ services:
         environment:
             - NODE_ENV=development
             - VITE_API_URL=http://127.0.0.1/api
-            - VITE_BASE_URL=http://localhost
+            - VITE_BASE_URL=http://127.0.0.1
             - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
             - VITE_MODE=development
             - VITE_TELEGRAM_AUTH_BOT_NAME=afisha_oauth_local_bot
@@ -46,7 +46,7 @@ services:
         links:
             - mongo
         environment:
-            - FRONTEND_URL=http://localhost
+            - FRONTEND_URL=http://127.0.0.1
             - MONGO_URI=mongodb://mongo:27017/dev
         ports:
             - '7080:7080'

@@ -6,6 +6,14 @@
   &__wrapper {
     position: relative;
     width: 100%;
+
+    // vue-date-picker фильтр на главной
+    @media (max-width: 668px) {
+      &:has(.dp__main) {
+        // --gap в Filters.vue = 8px
+        max-width: calc((100% - 8px) / 2);
+      }
+    }
   }
 
   &__label {

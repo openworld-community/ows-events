@@ -30,6 +30,7 @@ const startDate = ref(null);
 const endDate = ref(null);
 
 const { data } = await apiRouter.events.get.useQuery({ data: { id } });
+
 if (data.value) {
 	startDate.value = convertEventDateToLocaleString(
 		data.value.date,

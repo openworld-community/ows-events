@@ -348,12 +348,13 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	&__filter {
 		display: flex;
 		width: 50%;
-		height: 36px;
+		// height: 36px;
 		flex-direction: row-reverse;
 		background-color: var(--color-white);
 		border: 1px solid var(--color-white);
 		border-radius: 8px;
-
+		justify-content: space-between;
+		
 		&>.button__content {
 			font-size: var(--font-size-S);
 			line-height: 20px;

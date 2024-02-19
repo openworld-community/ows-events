@@ -31,7 +31,7 @@ const loadImage = async (event: Event) => {
 	const { data } = await apiRouter.events.image.add.useMutation({ data: { image: file } });
 	input.value.value = null;
 	if (!data.value) {
-		errorLoad.value = 'validation.image.problemSrver';
+		errorLoad.value = 'validation.image.problemServer';
 		return;
 	}
 	emit('update:model-value', data.value.path);

@@ -13,6 +13,7 @@ const props = defineProps({
 <style lang="less" scoped>
 .form-error {
 	margin-top: 6px;
+	margin-left: 6px;
 	font-size: 10px;
 	line-height: 12px;
 	color: var(--color-accent-red);

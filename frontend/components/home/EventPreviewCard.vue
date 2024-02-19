@@ -18,20 +18,28 @@ const startDate = ref(
 		props.eventData.timezone
 	)
 );
+
+const endDate = ref(
+	convertEventDateToLocaleString(
+		props.eventData.date + props.eventData.durationInSeconds * 1000,
+		props.eventData.isOnline,
+		props.eventData.timezone
+	)
+)
+
+console.log(props.eventData);
 </script>
 
 <template>
 	<NuxtLink
 		class="card"
 		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
-		:title="
-			trimString(
-				`Afisha: ${
-					eventData.isOnline ? t(`event.tags.${Tags.ONLINE}`) : eventData.location.city
-				}, ${eventData.title}` ?? '',
-				460
-			)
-		"
+		:title="trimString(
+			`Afisha: ${eventData.isOnline ? t(`event.tags.${Tags.ONLINE}`) : eventData.location.city
+			}, ${eventData.title}` ?? '',
+			460
+		)
+			"
 		:itemprop="SeoItempropGlobalEnum.URL"
 	>
 		<div
@@ -42,16 +50,14 @@ const startDate = ref(
 				v-if="eventData.image"
 				class="card__image"
 				:src="getEventImage(eventData)"
-				:alt="
-					trimString(
-						`Afisha: ${
-							eventData.isOnline
-								? t(`event.tags.${Tags.ONLINE}`)
-								: eventData.location.city
-						}, ${eventData.title}` ?? '',
-						460
-					)
-				"
+				:alt="trimString(
+					`Afisha: ${eventData.isOnline
+						? t(`event.tags.${Tags.ONLINE}`)
+						: eventData.location.city
+					}, ${eventData.title}` ?? '',
+					460
+				)
+					"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
 			<img
@@ -97,6 +103,7 @@ const startDate = ref(
 					:is-online="eventData.isOnline"
 					:location="eventData.location"
 					:start-date="startDate"
+					:end-date="endDate"
 				/>
 				<CommonTagList
 					v-if="mobile && eventData.tags"

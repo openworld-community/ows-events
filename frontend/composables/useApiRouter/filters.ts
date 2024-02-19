@@ -6,7 +6,7 @@ import type { EventOnPoster } from '../../../common/types';
 export const filters = {
 	findEvents: defineQuery<
 		(input?: {
-			query: { searchLine?: string; country?: string; city?: string; tags?: Tag[] };
+			query: { searchLine?: string; country?: string; city?: string; tags?: Tag[]; startDate: number; endDate: number };
 		}) => EventOnPoster[]
 	>((input) => {
 		return useBackendFetch('events/find', { body: input?.query ?? {} }, { watch: false });

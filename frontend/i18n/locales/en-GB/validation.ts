@@ -25,7 +25,11 @@ export default {
 	max: {
 		tags: 'Number of tags should be no more then {count}',
 		description: 'Description should be no more then {count} total in length',
-		title: 'Title should be no more then {count} total in length'
+		title: 'Title should be no more then {count} total in length',
+		url: 'Max length of the link should be no more then {count}',
+		price: {
+			val: 'Max price should be no more then {count}'
+		}
 	},
 	positive: {
 		price: {
@@ -41,11 +45,11 @@ export default {
 	},
 	image: {
 		size: 'File size is greater then 2Mb.',
-		problemSever: 'Something wring.'
+		extension: 'Choose {count} file',
+		problemServer: 'Something wrong.'
 	},
 	hints: {
 		tags: 'Number of tags should be no more then 6',
-		image: 'jpg, jpeg, png, webp <= 2Mb',
-		extension: 'Choose jpg, jpeg, png, webp file'
+		image: 'Accepted file format jpeg, jpg, png, svg, webp, size no more then 2Mb'
 	}
 };

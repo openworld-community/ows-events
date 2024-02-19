@@ -13,19 +13,19 @@ const props = defineProps({
 		default: ''
 	},
 	modelValue: {
-		type: [Date, null, Object] as PropType<Date | Time | null>,
+		type: [Date, null, Object, String] as PropType<Date | Time | Date[] | null>,
 		required: true
 	},
 	placeholder: {
 		type: String,
-		default: 'дд.мм.гг'
+		default: 'дд.мм.гггг'
 	},
 	type: {
 		type: String as PropType<'date' | 'time'>,
 		required: true
 	},
 	name: {
-		type: String,
+		type: String as PropType<'startDate' | 'endDate' | string>,
 		required: true
 	},
 	label: {
@@ -51,6 +51,14 @@ const props = defineProps({
 	required: {
 		type: Boolean,
 		default: false
+	},
+	range: {
+		type: Boolean,
+		default: false
+	},
+	appearance: {
+		type: String as PropType<'no-border' | null>,
+		default: null
 	}
 });
 
@@ -62,6 +70,7 @@ const datepicker = ref<DatePickerInstance>(null);
 
 const handleDate = (modelData: typeof props.modelValue) => {
 	isDateType.value && datepicker.value?.closeMenu();
+
 	emit('update:model-value', modelData);
 };
 
@@ -76,6 +85,9 @@ const timeFormat = (date: Date) => {
 const onRemove = () => {
 	emit('update:model-value', null);
 };
+
+const today = new Date()
+const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
 </script>
 
 <template>
@@ -93,14 +105,16 @@ const onRemove = () => {
 		<VueDatePicker
 			ref="datepicker"
 			:model-value="modelValue"
+			:range="props.range"
 			:locale="locale"
 			:name="name"
 			:placeholder="required ? `${placeholder} *` : placeholder"
-			:input-class-name="`input input__field ${error ? 'form__error' : ''}`"
+			:input-class-name="`input input__field ${error ? 'form__error' : ''} ${appearance ? 'no-border' : ''}`"
 			:menu-class-name="`${!isDateType ? 'time_picker' : ''}`"
 			mode-height="80"
 			prevent-min-max-navigation
 			auto-apply
+			:keep-action-row="props.name === 'startDate' || props.name === 'endDate' ? true : false"
 			:close-on-auto-apply="!isDateType"
 			partial-flow
 			:flow="['calendar']"
@@ -115,10 +129,30 @@ const onRemove = () => {
 			:disabled="disabled"
 			:required="required"
 			is-24
+			:position="name === 'endDate' ? 'right' : 'left'"
 			:clearable="false"
 			@update:model-value="handleDate"
 			@keydown.enter.capture="datepicker?.closeMenu()"
-		/>
+		>
+			<template #action-row>
+				<CommonButton
+					:button-text="$t('dates.filterDay.today')"
+					button-kind="dark"
+					@click="() => {
+						$emit('update:model-value', today)
+						datepicker.closeMenu()
+					}"
+				/>
+				<CommonButton
+					:button-text="$t('dates.filterDay.tomorrow')"
+					button-kind="dark"
+					@click="() => {
+						$emit('update:model-value', tomorrow)
+						datepicker.closeMenu()
+					}"
+				/>
+			</template>
+		</VueDatePicker>
 		<CommonIcon
 			v-if="!modelValue"
 			:name="isDateType ? 'calendar' : 'clock'"
@@ -141,9 +175,16 @@ const onRemove = () => {
 		background-color: transparent;
 	}
 
+	&__action_row {
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: flex-end;
+		gap: 10px;
+	}
+
 	&__menu {
-		left: unset !important;
-		transform: unset !important;
+		// left: unset !important;
+		// transform: unset !important;
 		overflow: hidden;
 
 		&_inner {
@@ -170,6 +211,14 @@ const onRemove = () => {
 		color: var(--color-text-main);
 		border: 1px solid var(--color-input-field);
 		font-size: var(--font-size-M);
+
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
+
+		&.no-border {
+			border-color: var(--color-white)
+		}
 
 		&:hover {
 			border-color: var(--color-input-field);

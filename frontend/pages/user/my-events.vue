@@ -54,7 +54,7 @@ if (data.value) myEvents.value = data.value;
 			<div class="my-events__bottom">
 				<CommonButton
 					class="my-events__button"
-					button-kind="dark"
+					button-kind="success"
 					:button-text="$t('global.button.new_event')"
 					:link="localePath(`${RoutePathEnum.EVENT_EDIT}new`)"
 				/>

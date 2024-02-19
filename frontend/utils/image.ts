@@ -1,5 +1,4 @@
-const ALLOWED_IMAGE_SIZE = 2; //Mb
-const ALLOWED_IMAGE_EXTENSIONS = ['webp', 'png', 'svg', 'jpeg', 'jpg'];
+import { ALLOWED_IMAGE_SIZE, ALLOWED_IMAGE_EXTENSIONS } from '~/constants/defaultValues/validation';
 
 export const isImageTooBig = (count: number) => {
 	const size = count / (1024 * 1024); // in Mb

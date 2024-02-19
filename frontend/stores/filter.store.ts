@@ -20,6 +20,8 @@ type FilterStore = {
 		city: City;
 		searchLine: string;
 		tags: Tag[];
+		startDate: number | string;
+		endDate: number | string;
 	};
 	filteredEvents: EventOnPoster[];
 };
@@ -38,7 +40,9 @@ export const useFilterStore = defineStore('filter', {
 				tags:
 					getFirstQuery(route.query.tags)
 						.split(', ')
-						.filter((item) => item !== '') ?? []
+						.filter((item) => item !== '') ?? [],
+				startDate: getFirstQuery(route.query.startDate) ?? '',
+				endDate: getFirstQuery(route.query.endDate) ?? ''
 			},
 			filteredEvents: [],
 			modal: {
@@ -56,10 +60,23 @@ export const useFilterStore = defineStore('filter', {
 		async getFilteredEvents() {
 			if (process.server) return;
 
+			// явно приводим к Date
+			const startDate = new Date(this.filters?.startDate);
+			const endDate = new Date(this.filters?.endDate);
+
+			//Приводим таймзону времени устройства юзера к миллисекундам
+			const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
+
+			// Перевод в UTC
+			const startDateTS = startDate.getTime() - timezoneOffset;
+			const endDateTS = endDate.getTime() - timezoneOffset;
+
 			const { data: posterEvents } = await apiRouter.filters.findEvents.useQuery({
 				data: {
 					query: {
-						...this.filters
+						...this.filters,
+						startDate: startDateTS ? startDateTS : null,
+						endDate: endDateTS ? endDateTS : null
 					}
 				}
 			});

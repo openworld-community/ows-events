@@ -18,7 +18,7 @@ onBeforeMount(() => {
 				await filterStore.getUsedCitiesByCountry(filterStore.filters.country);
 		});
 	}
-	console.log(route.query);
+	//console.log(route.query);
 });
 
 watch(

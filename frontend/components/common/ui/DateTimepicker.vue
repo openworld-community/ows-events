@@ -83,7 +83,7 @@ const timeFormat = (date: Date) => {
 };
 
 const onRemove = () => {
-	emit('update:model-value', '');
+	emit('update:model-value', null);
 };
 
 const today = new Date()

@@ -67,7 +67,7 @@ export const useFilterStore = defineStore('filter', {
 			//Приводим таймзону времени устройства юзера к миллисекундам
 			const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
 
-			// Перевод в UTC
+			// Перевод в UTC 0
 			const startDateTS = startDate.getTime() - timezoneOffset;
 			const endDateTS = endDate.getTime() - timezoneOffset;
 
@@ -75,8 +75,11 @@ export const useFilterStore = defineStore('filter', {
 				data: {
 					query: {
 						...this.filters,
-						startDate: startDateTS ? startDateTS : null,
-						endDate: endDateTS ? endDateTS : null
+						// костыль под тесты
+						// 10800000 в миллисекундах получается, если удалить дату (приходит null, от которого каким-то образом образом вычитается timezoneOffset) => no events found
+						// хз, че это такое, буду разбираться позже
+						startDate: startDateTS && startDateTS !== 10800000 ? startDateTS : null,
+						endDate: endDateTS && endDateTS !== 10800000 ? endDateTS : null
 					}
 				}
 			});

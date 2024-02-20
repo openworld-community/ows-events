@@ -3,7 +3,7 @@ import type { PropType } from 'vue';
 import { useFilterStore } from '../../../stores/filter.store';
 import { getFilterPlaceholder } from '../../../utils/texts';
 
-defineProps({
+const props = defineProps({
 	filterType: {
 		type: String as PropType<'input' | 'select' | 'date'>,
 		required: true
@@ -56,6 +56,14 @@ const mobile = inject('mobile');
 const filterStore = useFilterStore();
 
 const showModal = computed(() => filterStore.modal.show);
+
+const checkNull = (payload: Date | null) => {
+	if (payload === null && props.name === 'endDate') {
+		// для startDate new Date(null) не страшен
+		// для endDate страшен -> будет 01 jan 1970
+		filterStore.filters.endDate = ''
+	}
+}
 </script>
 
 <template>
@@ -81,6 +89,7 @@ const showModal = computed(() => filterStore.modal.show);
 		:aria-label="$t(`home.filter.${name}.aria`)"
 		:min-date="new Date(roundTime(Date.now(), 10))"
 		:min-time="name === 'startDate' ? { hours: 0, minutes: 0 } : { hours: '23', minutes: '59' }"
+		@update:model-value="checkNull"
 	/>
 	<template v-if="filterType === 'select'">
 		<template v-if="mobile">

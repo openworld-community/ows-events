@@ -69,8 +69,6 @@ const isDateType = computed(() => props.type === 'date');
 const datepicker = ref<DatePickerInstance>(null);
 
 const handleDate = (modelData: typeof props.modelValue) => {
-	console.log('modelData', modelData);
-	
 	isDateType.value && datepicker.value?.closeMenu();
 
 	emit('update:model-value', modelData);
@@ -85,9 +83,6 @@ const timeFormat = (date: Date) => {
 };
 
 const onRemove = () => {
-	// очень хотелось бы возвращать отсюда '', тк new Date(null) = new Date(0) = 01 jan 1970
-	// явного косяка нет при отображении, тк в либо VueDatePicker ставит гварды на отображение new Date(null), но в filterStore.filter.endDate/startDate улетает имеенно null -> баги
-	// для этого надо отрефакторить components/event/FormDate на совместимость типов Date | string
 	emit('update:model-value', null);
 };
 

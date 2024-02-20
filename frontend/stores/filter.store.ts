@@ -20,10 +20,8 @@ type FilterStore = {
 		city: City;
 		searchLine: string;
 		tags: Tag[];
-		// если делать union type, то ниже startDate.getTime() будет логаться с ошибкой
-		// можно any, можно ts-ignore
-		startDate: any;
-		endDate: any;
+		startDate: string | null;
+		endDate: string | null;
 	};
 	filteredEvents: EventOnPoster[];
 };
@@ -61,12 +59,6 @@ export const useFilterStore = defineStore('filter', {
 	actions: {
 		async getFilteredEvents() {
 			if (process.server) return;
-
-			// DateTimepicker возвращает onRemove() null (необходимо для создания ивента)
-			// new Date(null) = new Date(0) = 01 jan 1970 -> в случае endDate = no events found 
-			if (this.filters.endDate === null) {
-				this.filters.endDate = ''
-			}
 
 			// явно приводим к Date
 			const startDate = new Date(this.filters?.startDate);

@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import type { PropType } from 'vue';
+
 const { t } = useI18n();
+
 const props = defineProps({
 	error: {
 		type: [String, Object],
@@ -53,7 +56,7 @@ const errorResult = computed({
 			v-if="hint && !(errorResult && touched)"
 			class="form-hint"
 		>
-			{{ $t(hint) }}
+			{{ t(hint) }}
 		</p>
 		<CommonErrorComponent
 			v-if="touched"

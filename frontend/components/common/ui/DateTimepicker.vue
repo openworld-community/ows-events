@@ -13,7 +13,7 @@ const props = defineProps({
 		default: ''
 	},
 	modelValue: {
-		type: [Date, null, Object, String] as PropType<Date | Time | Date[] | null>,
+		type: [Date, null, Object, String] as PropType<Date | Time | string | null>,
 		required: true
 	},
 	placeholder: {

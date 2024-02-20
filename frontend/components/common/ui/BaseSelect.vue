@@ -77,6 +77,10 @@ const props = defineProps({
 	}
 });
 
+console.log({
+	name: props.name
+});
+
 const isOpen = ref(false);
 
 const emit = defineEmits(['update:model-value']);

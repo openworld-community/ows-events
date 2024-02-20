@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useField } from 'vee-validate';
 
-const startDateField = useField<Date>(() => 'startDate', {
+const startDateField = useField<Date >(() => 'startDate', {
 	validateOnModelUpdate: false
 });
 const startTimeField = useField<Time>(() => 'startTime', {

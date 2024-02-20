@@ -20,8 +20,8 @@ type FilterStore = {
 		city: City;
 		searchLine: string;
 		tags: Tag[];
-		startDate: number | string;
-		endDate: number | string;
+		startDate: string | null;
+		endDate: string | null;
 	};
 	filteredEvents: EventOnPoster[];
 };
@@ -65,21 +65,20 @@ export const useFilterStore = defineStore('filter', {
 			const endDate = new Date(this.filters?.endDate);
 
 			//Приводим таймзону времени устройства юзера к миллисекундам
+			// dayjs(startDate).utc(true)
+			// dayjs(endDate).utc(true) можно сделать так, но понятнее не сильно становится
 			const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
 
 			// Перевод в UTC 0
-			const startDateTS = startDate.getTime() - timezoneOffset;
-			const endDateTS = endDate.getTime() - timezoneOffset;
+			const startDateTS = startDate.getTime() ? startDate.getTime() - timezoneOffset : null;
+			const endDateTS = endDate.getTime() ? endDate.getTime() - timezoneOffset : null;
 
 			const { data: posterEvents } = await apiRouter.filters.findEvents.useQuery({
 				data: {
 					query: {
 						...this.filters,
-						// костыль под тесты
-						// 10800000 в миллисекундах получается, если удалить дату (приходит null, от которого каким-то образом образом вычитается timezoneOffset) => no events found
-						// хз, че это такое, буду разбираться позже
-						startDate: startDateTS && startDateTS !== 10800000 ? startDateTS : null,
-						endDate: endDateTS && endDateTS !== 10800000 ? endDateTS : null
+						startDate: startDateTS,
+						endDate: endDateTS
 					}
 				}
 			});

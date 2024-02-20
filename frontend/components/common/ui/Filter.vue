@@ -4,10 +4,6 @@ import { useFilterStore } from '../../../stores/filter.store';
 import { getFilterPlaceholder } from '../../../utils/texts';
 
 defineProps({
-	// date: {
-	// 	type: Date as PropType<Date>,
-	// 	default: ''
-	// },
 	filterType: {
 		type: String as PropType<'input' | 'select' | 'date'>,
 		required: true
@@ -91,19 +87,17 @@ const showModal = computed(() => filterStore.modal.show);
 			<CommonButton
 				button-kind="filter"
 				icon-name="container"
-				:button-text="
-					getFilterPlaceholder(
-						multiple,
-						name,
-						list,
-						filterStore.filters[name],
-						showKey,
-						returnKey
-					)
-				"
-				:filled="
-					multiple ? !!filterStore.filters[name].length : !!filterStore.filters[name]
-				"
+				:button-text="getFilterPlaceholder(
+					multiple,
+					name,
+					list,
+					filterStore.filters[name],
+					showKey,
+					returnKey
+				)
+					"
+				:filled="multiple ? !!filterStore.filters[name].length : !!filterStore.filters[name]
+					"
 				:is-disabled="disabled"
 				:alt="$t(`home.filter.${name}.aria`)"
 				class="filter"
@@ -195,7 +189,8 @@ const showModal = computed(() => filterStore.modal.show);
 	.filters__wrapper:has(.filter:last-child input:focus)+.filter::before,
 	.filters__wrapper:has(.button__multiselect)+.filter::before,
 	.filters__wrapper:has(.select__field--green-border)+.filter::before //псевдоэлементы ::before становятся прозрачными
-	{
+
+		{
 		background-color: transparent;
 	}
 

@@ -21,6 +21,8 @@ export function getFirstParam(param: ReturnType<typeof useRoute>['params'][strin
 	return typeof param === 'string' ? param : param[0];
 }
 export function getFirstQuery(query: ReturnType<typeof useRoute>['query'][string]) {
+	console.log(query);
+	
 	if (!query) return '';
 	return typeof query === 'string' ? query : query[0] ?? '';
 }

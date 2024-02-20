@@ -18,7 +18,6 @@ onBeforeMount(() => {
 				await filterStore.getUsedCitiesByCountry(filterStore.filters.country);
 		});
 	}
-	console.log(route.query);
 });
 
 watch(
@@ -31,11 +30,11 @@ watch(
 				country: filters.country || undefined,
 				city: filters.city || undefined,
 				tags: filters.tags.join(', ') || undefined,
-				startDate: filters.startDate ? dayjs(filters.startDate).format('DD.MM.YYYY') : undefined,
-				endDate: filters.endDate ? dayjs(filters.endDate).format('DD.MM.YYYY') : undefined
+				// может приходить Invalid Date
+				startDate: filters.startDate ? dayjs(filters.startDate).format('YYYY-MM-DD') : undefined,
+				endDate: filters.endDate ? dayjs(filters.endDate).format('YYYY-MM-DD') : undefined
 			}
 		});
-		// console.log(filters.endDate ? dayjs(filters.endDate).format('DD.MM.YYYY') : '')
 		if (filters.country) {
 			await filterStore.getUsedCitiesByCountry(filters.country);
 		}

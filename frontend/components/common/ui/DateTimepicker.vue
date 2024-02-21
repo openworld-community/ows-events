@@ -102,10 +102,12 @@ const isDisabled = computed((): TDisabled => {
 		tomorrow: false
 	}
 	
+	// кнопка сегодня disabled
 	if (isEndDate && today.getTime() <= new Date(props.minDate).getTime()) {
 		result.today = true
 	}
 
+	// обе кнопки disabled
 	if (isEndDate && tomorrow.getTime() <= new Date(props.minDate).getTime()) {
 		result.today = true
 		result.tomorrow = true

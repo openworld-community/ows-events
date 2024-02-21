@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
+import type { TCalendarDisabledButtons } from '../../../../common/types/filters'
 import { useFilterStore } from '../../../stores/filter.store';
 import { getFilterPlaceholder } from '../../../utils/texts';
+
 
 const props = defineProps({
 	filterType: {
@@ -74,6 +76,30 @@ const checkNull = (payload: Date | null) => {
 		filterStore.filters.endDate = ''
 	}
 }
+
+const isDisabledButtons = computed((): TCalendarDisabledButtons => {
+	const isEndDate = props.name === 'endDate'
+	const today = new Date()
+	const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
+	// обе кнопки !disabled
+	const result = {
+		today: false,
+		tomorrow: false
+	}
+	
+	// кнопка сегодня disabled
+	if (isEndDate && today.getTime() <= computedMinDate.value.getTime()) {
+		result.today = true
+	}
+
+	// обе кнопки disabled
+	if (isEndDate && tomorrow.getTime() <= computedMinDate.value.getTime()) {
+		result.today = true
+		result.tomorrow = true
+	}
+
+	return result
+})
 </script>
 
 <template>
@@ -99,6 +125,7 @@ const checkNull = (payload: Date | null) => {
 		:aria-label="$t(`home.filter.${name}.aria`)"
 		:min-date="computedMinDate"
 		:min-time="name === 'startDate' ? { hours: 0, minutes: 0 } : { hours: '23', minutes: '59' }"
+		:disabled-buttons="isDisabledButtons"
 		@update:model-value="checkNull"
 	/>
 	<template v-if="filterType === 'select'">

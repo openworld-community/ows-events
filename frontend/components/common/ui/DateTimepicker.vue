@@ -7,6 +7,11 @@ import type { Time } from '../../../utils/dates';
 
 // https://vue3datepicker.com/props/modes/
 
+type TDisabled = {
+	today: boolean,
+	tomorrow: boolean
+}
+
 const props = defineProps({
 	className: {
 		type: String,
@@ -88,6 +93,27 @@ const onRemove = () => {
 
 const today = new Date()
 const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
+
+const isDisabled = computed((): TDisabled => {
+	const isEndDate = props.name === 'endDate'
+	// обе кнопки !disabled
+	const result = {
+		today: false,
+		tomorrow: false
+	}
+	
+	if (isEndDate && today.getTime() <= new Date(props.minDate).getTime()) {
+		result.today = true
+	}
+
+	if (isEndDate && tomorrow.getTime() <= new Date(props.minDate).getTime()) {
+		result.today = true
+		result.tomorrow = true
+	}
+
+	return result
+})
+
 </script>
 
 <template>
@@ -139,6 +165,7 @@ const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
 				<CommonButton
 					:button-text="$t('dates.filterDay.today')"
 					button-kind="dark"
+					:is-disabled="isDisabled.today"
 					@click="() => {
 						$emit('update:model-value', today)
 						datepicker.closeMenu()
@@ -147,6 +174,7 @@ const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
 				<CommonButton
 					:button-text="$t('dates.filterDay.tomorrow')"
 					button-kind="dark"
+					:is-disabled="isDisabled.tomorrow"
 					@click="() => {
 						$emit('update:model-value', tomorrow)
 						datepicker.closeMenu()

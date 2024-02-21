@@ -57,6 +57,16 @@ const filterStore = useFilterStore();
 
 const showModal = computed(() => filterStore.modal.show);
 
+const computedMinDate = computed(() => {
+	const startDay = new Date(filterStore.filters.startDate)
+	const nextDay = new Date(new Date().setDate(startDay.getDate() + 1))
+	
+	return props.name === 'endDate' 
+		   && filterStore.filters.startDate 
+			  ? nextDay 
+			  : new Date(roundTime(Date.now(), 10))
+})
+
 const checkNull = (payload: Date | null) => {
 	if (payload === null && props.name === 'endDate') {
 		// для startDate new Date(null) не страшен
@@ -87,7 +97,7 @@ const checkNull = (payload: Date | null) => {
 		:name="name"
 		:placeholder="$t(`home.filter.${name}.placeholder`)"
 		:aria-label="$t(`home.filter.${name}.aria`)"
-		:min-date="new Date(roundTime(Date.now(), 10))"
+		:min-date="computedMinDate"
 		:min-time="name === 'startDate' ? { hours: 0, minutes: 0 } : { hours: '23', minutes: '59' }"
 		@update:model-value="checkNull"
 	/>

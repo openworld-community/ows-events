@@ -2,11 +2,11 @@
 import VueDatePicker, { type DatePickerInstance } from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import dayjs from 'dayjs';
+import type { TCalendarDisabledButtons } from '../../../../common/types/filters'
 import type { PropType } from 'vue';
 import type { Time } from '../../../utils/dates';
 
 // https://vue3datepicker.com/props/modes/
-
 const props = defineProps({
 	className: {
 		type: String,
@@ -59,6 +59,15 @@ const props = defineProps({
 	appearance: {
 		type: String as PropType<'no-border' | null>,
 		default: null
+	},
+	disabledButtons: {
+		type: Object as PropType<TCalendarDisabledButtons>,
+		default: () => {
+			return {
+				today: false,
+				tomorrow: false
+			}
+		}
 	}
 });
 
@@ -139,6 +148,7 @@ const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
 				<CommonButton
 					:button-text="$t('dates.filterDay.today')"
 					button-kind="dark"
+					:is-disabled="disabledButtons.today"
 					@click="() => {
 						$emit('update:model-value', today)
 						datepicker.closeMenu()
@@ -147,6 +157,7 @@ const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
 				<CommonButton
 					:button-text="$t('dates.filterDay.tomorrow')"
 					button-kind="dark"
+					:is-disabled="disabledButtons.tomorrow"
 					@click="() => {
 						$emit('update:model-value', tomorrow)
 						datepicker.closeMenu()

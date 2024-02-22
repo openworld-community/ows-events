@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
+import type { TCalendarDisabledButtons } from '../../../../common/types/filters'
 import { useFilterStore } from '../../../stores/filter.store';
 import { getFilterPlaceholder } from '../../../utils/texts';
+
 
 const props = defineProps({
 	filterType: {
@@ -57,6 +59,16 @@ const filterStore = useFilterStore();
 
 const showModal = computed(() => filterStore.modal.show);
 
+const computedMinDate = computed(() => {
+	const startDay = new Date(filterStore.filters.startDate)
+	const nextDay = new Date(new Date().setDate(startDay.getDate() + 1))
+	
+	return props.name === 'endDate' 
+		   && filterStore.filters.startDate 
+			  ? nextDay 
+			  : new Date(roundTime(Date.now(), 10))
+})
+
 const checkNull = (payload: Date | null) => {
 	if (payload === null && props.name === 'endDate') {
 		// для startDate new Date(null) не страшен
@@ -64,6 +76,30 @@ const checkNull = (payload: Date | null) => {
 		filterStore.filters.endDate = ''
 	}
 }
+
+const isDisabledButtons = computed((): TCalendarDisabledButtons => {
+	const isEndDate = props.name === 'endDate'
+	const today = new Date()
+	const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
+	// обе кнопки !disabled
+	const result = {
+		today: false,
+		tomorrow: false
+	}
+	
+	// кнопка сегодня disabled
+	if (isEndDate && today.getTime() <= computedMinDate.value.getTime()) {
+		result.today = true
+	}
+
+	// обе кнопки disabled
+	if (isEndDate && tomorrow.getTime() <= computedMinDate.value.getTime()) {
+		result.today = true
+		result.tomorrow = true
+	}
+
+	return result
+})
 </script>
 
 <template>
@@ -87,8 +123,9 @@ const checkNull = (payload: Date | null) => {
 		:name="name"
 		:placeholder="$t(`home.filter.${name}.placeholder`)"
 		:aria-label="$t(`home.filter.${name}.aria`)"
-		:min-date="new Date(roundTime(Date.now(), 10))"
+		:min-date="computedMinDate"
 		:min-time="name === 'startDate' ? { hours: 0, minutes: 0 } : { hours: '23', minutes: '59' }"
+		:disabled-buttons="isDisabledButtons"
 		@update:model-value="checkNull"
 	/>
 	<template v-if="filterType === 'select'">

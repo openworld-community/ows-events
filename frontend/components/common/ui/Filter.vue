@@ -88,12 +88,12 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 	}
 	
 	// кнопка сегодня disabled
-	if (isEndDate && today.getTime() <= computedMinDate.value.getTime()) {
+	if (isEndDate && today.getTime() < computedMinDate.value.getTime()) {
 		result.today = true
 	}
 
 	// обе кнопки disabled
-	if (isEndDate && tomorrow.getTime() <= computedMinDate.value.getTime()) {
+	if (isEndDate && tomorrow.getTime() < computedMinDate.value.getTime()) {
 		result.today = true
 		result.tomorrow = true
 	}

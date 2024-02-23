@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useForm } from 'vee-validate'
+import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup';
 import { SUPPORT_TG_URL } from '~/constants/url';
 
@@ -7,10 +7,11 @@ const { t } = useI18n()
 
 const inputType = ref<'password' | 'text'>('password')
 
-const { errors, defineField, handleSubmit, handleReset } = useForm({
+const { meta, handleSubmit, handleReset } = useForm({
     validationSchema: yup.object({
         email: yup
             .string()
+            // подробности по регексу в ~/components/event/eventValidationSchema
             .matches(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, {
                 excludeEmptyString: true,
                 message: t('errors.INVALID_EMAIL')
@@ -25,18 +26,17 @@ const { errors, defineField, handleSubmit, handleReset } = useForm({
     })
 });
 
-const [email, emailAttr] = defineField('email', {
-    validateOnModelUpdate: false,
-    validateOnBlur: true
-})
-const [password, passwordAttr] = defineField('password', {
-    validateOnModelUpdate: false,
-    validateOnBlur: true
-})
+const emailField = useField<string>(() => 'email', {
+    validateOnModelUpdate: false
+});
+const passwordField = useField<string>(() => inputType.value, {
+    validateOnModelUpdate: false
+});
 
 const onSubmit = handleSubmit(async values => {
     try {
         const { email, password } = values
+
         const { error, data } = await apiRouter.auth.login.useQuery({ data: { email, password } })
         if (error.value) {
             console.log('error', error.value);
@@ -49,10 +49,6 @@ const onSubmit = handleSubmit(async values => {
         handleReset()
     }
 });
-
-const notEmptyFields = computed(() => {
-    return email.value && password.value ? true : false
-})
 </script>
 
 <template>
@@ -61,34 +57,45 @@ const notEmptyFields = computed(() => {
         @submit.prevent="onSubmit"
     >
         <fieldset class="signin__fieldset">
-            <CommonUiBaseInput
-                v-model="email"
-                v-bind="emailAttr"
-                class="signin__fieldset--input"
-                name="email"
-                type="email"
-                autocomplete="true"
-                placeholder="E-mail"
+            <CommonFormField
+                :error="emailField.errorMessage.value"
+                :touched="emailField.meta.touched"
                 :error-label="true"
-                :error="errors.email"
-            />
-            <CommonUiBaseInput
-                v-model="password"
-                v-bind="passwordAttr"
-                class="signin__fieldset--input"
-                name="password"
-                :type="inputType"
-                autocomplete="true"
-                :show-password="true"
-                :error="errors.password"
+            >
+                <CommonUiBaseInput
+                    v-model="emailField.value.value"
+                    :placeholder="$t('form.form.email')"
+                    class="signin__fieldset--input"
+                    autocomplete="true"
+                    name="email"
+                    type="email"
+                    :error="emailField.meta.touched && Boolean(emailField.errorMessage.value)
+                        ? emailField.errorMessage.value
+                        : false"
+                />
+            </CommonFormField>
+            <CommonFormField
+                :error="passwordField.errorMessage.value"
+                :touched="passwordField.meta.touched"
                 :error-label="true"
-                placeholder="Password"
-            />
+            >
+                <CommonUiBaseInput
+                    v-model="passwordField.value.value"
+                    :placeholder="$t('form.form.password')"
+                    class="signin__fieldset--input"
+                    name="password"
+                    :type="inputType"
+                    :show-password="true"
+                    :error="passwordField.meta.touched && Boolean(passwordField.errorMessage.value)
+                        ? emailField.errorMessage.value
+                        : false"
+                />
+            </CommonFormField>
         </fieldset>
         <CommonButton
             class="signin__submit"
-            :is-disabled="!notEmptyFields"
             button-kind="dark"
+            :is-disabled="!meta.touched && !meta.valid"
             :button-text="$t('form.form.login')"
             type="submit"
         />

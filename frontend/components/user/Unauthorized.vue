@@ -4,14 +4,14 @@ import { useUserStore } from '@/stores/user.store';
 import { TELEGRAM_AUTH_BOT_NAME } from '@/constants/url';
 import { BASE_URL } from '@/constants/url';
 import { CookieNameEnum } from '@/constants/enums/common';
-import {GoogleSignInButton, type CredentialResponse,} from "vue3-google-signin";
-import {GOOGLE_OAUTH_URL} from '@/constants/url';
+import { GoogleSignInButton } from "vue3-google-signin";
+import { GOOGLE_OAUTH_URL } from '@/constants/url';
 
 type TFormType = 'login' | 'signup'
 
 const userStore = useUserStore();
 const mobile = inject('mobile');
-const desktop = inject('desktop');
+// const desktop = inject('desktop');
 const localePath = useLocalePath();
 const tokenCookie = useCookie<string | null>(CookieNameEnum.TOKEN);
 
@@ -34,12 +34,12 @@ const initTGButton = () => {
 	script.setAttribute('data-radius', '8');
 	script.setAttribute('data-request-access', 'write');
 	script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
-	script.addEventListener('load', () => {		
-	// после загрузки скрипта меняем цвет кнопки на активный
-    	const tgicon = document.getElementById('tgicon'); 
+	script.addEventListener('load', () => {
+		// после загрузки скрипта меняем цвет кнопки на активный
+		const tgicon = document.getElementById('tgicon');
 		tgicon.classList.add('tgicon_active');
-  	});
-	
+	});
+
 	const tgauth = document.getElementById('tgauth')
 	tgauth.appendChild(script)
 
@@ -100,38 +100,42 @@ watch(
 						ux-mode="redirect"
 						type="icon"
 						logo_alignment="center"
-  					></GoogleSignInButton>
+					/>
 
 					<div
 						ref="telegram"
 						class="unauthorized__telegram-button"
 						@click="
-						useTrackEvent('login', {
-						method: 'Telegram'
-						})
-						"
+							useTrackEvent('login', {
+								method: 'Telegram'
+							})
+							"
 					>
-						<div id="tgauth" class="unauthorized__tgauth">
-							<div id="tgicon" class="unauthorized__tgicon"></div>
+						<div
+							id="tgauth"
+							class="unauthorized__tgauth"
+						>
+							<div
+								id="tgicon"
+								class="unauthorized__tgicon"
+							></div>
 						</div>
 					</div>
-
-				</div>				
+				</div>
 			</div>
 
 			<NuxtLink
-					:to="localePath(RoutePathEnum.HOME)"
-					class="unauthorized__continue"
-				>
-					<CommonButton
-						v-if="desktop"
-						:is-icon="true"
-						icon-name="close"
-						:icon-color="'var(--color-icons)'"
-						:alt="$t('form.global.close')"
-					/>
+				:to="localePath(RoutePathEnum.HOME)"
+				class="unauthorized__continue"
+			>
+				<CommonButton
+					v-if="!mobile"
+					:is-icon="true"
+					icon-name="close"
+					:icon-color="'var(--color-icons)'"
+					:alt="$t('form.global.close')"
+				/>
 			</NuxtLink>
-			
 		</div>
 		<p
 			v-if="!mobile"
@@ -242,7 +246,7 @@ watch(
 
 	&__telegram-button {
 		height: 40px !important;
-		width: 40px !important; 
+		width: 40px !important;
 		width: 100%;
 		display: flex;
 		justify-content: center;
@@ -291,31 +295,32 @@ watch(
 		align-self: center;
 		margin: 10px;
 		display: flex;
-		gap: 10px; 
+		gap: 10px;
 	}
 
 	&__tgauth {
-	overflow: hidden;
-	border-radius: 4px;
-	height: 38px !important;
-	width: 38px !important;
-	position: absolute;
+		overflow: hidden;
+		border-radius: 4px;
+		height: 38px !important;
+		width: 38px !important;
+		position: absolute;
 	}
 
-	&__tgicon{
-	overflow: hidden;
-	border-radius: 4px;
-	height: 38px !important;
-	width: 38px !important;
-	position: absolute;
-	background-image: url('@/assets/icon/social/telegram_icon_48x48.png');
-	background-size: cover;
-	pointer-events: none;
-	filter: grayscale(100%);
+	&__tgicon {
+		overflow: hidden;
+		border-radius: 4px;
+		height: 38px !important;
+		width: 38px !important;
+		position: absolute;
+		background-image: url('@/assets/icon/social/telegram_icon_48x48.png');
+		background-size: cover;
+		pointer-events: none;
+		filter: grayscale(100%);
 	}
-		
+
 }
-.tgicon_active{
+
+.tgicon_active {
 	filter: grayscale(0%);
 }
 </style>

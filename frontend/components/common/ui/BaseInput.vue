@@ -59,10 +59,6 @@ const props = defineProps({
 		type: [String, Boolean],
 		default: ''
 	},
-	errorLabel: {
-		type: Boolean,
-		defualy: false
-	},
 	autocomplete: {
 		type: String,
 		default: 'off'
@@ -100,7 +96,6 @@ const props = defineProps({
 // выносим проп в отдельный реф
 // если не применяется логика отображения пароля, то он ведет себе как обычный props.type
 const writableType = ref<string>(props.type);
-//
 
 const emit = defineEmits(['update:model-value']);
 const updateValue = (event: Event) => {
@@ -110,14 +105,6 @@ const updateValue = (event: Event) => {
 const onRemove = () => {
 	emit('update:model-value', '');
 };
-
-const isVisible = ref(false);
-
-const toggleLabel = () => {
-	isVisible.value = !isVisible.value;
-};
-
-const mobile = inject('mobile');
 </script>
 
 <template>
@@ -209,7 +196,7 @@ const mobile = inject('mobile');
 					writableType === 'password'
 						? (writableType = 'text')
 						: (writableType = 'password')
-				"
+					"
 			/>
 		</div>
 
@@ -219,41 +206,6 @@ const mobile = inject('mobile');
 			class="input__value-icon"
 			:name="`${name}/${modelValue}`"
 		/>
-
-		<span
-			v-if="error && mobile"
-			class="form__error"
-		>
-			{{ error }}
-		</span>
-
-		<div
-			v-else-if="error && errorLabel && !mobile"
-			class="form__error--wrapper"
-		>
-			<!-- почему-то на CommonIcon не вешаются ивенты :( -->
-			<div
-				class="flex"
-				@mouseenter="toggleLabel"
-				@mouseleave="toggleLabel"
-			>
-				<CommonIcon
-					name="error"
-					color="var(--color-accent-red)"
-				/>
-			</div>
-			<div
-				:class="[
-					'form__error',
-					'form__error--label',
-					{ 'form__error--label--show': isVisible }
-				]"
-			>
-				<div class="form__error--content">
-					{{ error }}
-				</div>
-			</div>
-		</div>
 	</div>
 </template>
 

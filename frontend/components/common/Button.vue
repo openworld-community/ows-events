@@ -194,7 +194,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		}
 
 		&:hover,
-		&:focus,
+		&:focus-visible,
 		&:active {
 			background-color: var(--color-dark);
 			border-color: var(--color-dark);

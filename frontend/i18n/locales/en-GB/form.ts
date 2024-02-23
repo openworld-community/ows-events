@@ -38,6 +38,9 @@ export default {
 	form: {
 		signup: 'Sing up',
 		login: 'Sign in',
-		forgotPassword: 'Forgot password'
+		forgotPassword: 'Forgot password',
+		email: 'Email',
+		password: 'Password',
+		confirmPassword: 'Confirm password'
 	}
 };

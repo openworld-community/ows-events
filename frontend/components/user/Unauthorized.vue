@@ -152,17 +152,17 @@ watch(
 	justify-content: center;
 	padding-left: var(--padding-side);
 	padding-right: var(--padding-side);
-	padding-bottom: 30px;
+	padding-bottom: 30px;	
 
 	@media (min-width: 768px) {
 		padding: 0;
 		position: relative;
-		background: url(@/assets/img/user/unauthorized-background@1x.png) 0 0 no-repeat;
+		background: url(@/assets/img/user/unauthorized-background.svg) 0 0 no-repeat;
 		background-size: cover;
 
 		@media (-webkit-min-device-pixel-ratio: 2),
 		(min-resolution: 192dpi) {
-			background-image: url(@/assets/img/user/unauthorized-background@2x.png);
+			background-image: url(@/assets/img/user/unauthorized-background.svg);			
 		}
 	}
 

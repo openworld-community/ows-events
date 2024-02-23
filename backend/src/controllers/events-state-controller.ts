@@ -55,16 +55,18 @@ class EventsStateController {
 		}
 		if (query?.startDate) {
 			const startDateQuery = {
-				$gte: [query.startDate, '$date']
+				$lte: [
+					query.startDate,
+					{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }
+				]
 			};
+			queryObject.$expr.$and.push(startDateQuery);
+		}
 			queryObject.$expr.$and.push(startDateQuery);
 		}
 		if (query?.endDate) {
 			const endDateQuery = {
-				$gte: [
-					query.endDate,
-					{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }
-				]
+				$gte: [query.endDate, '$date']
 			};
 			queryObject.$expr.$and.push(endDateQuery);
 		}
@@ -85,6 +87,7 @@ class EventsStateController {
 				}
 			}
 		];
+		
 		const futureEvents = await EventModel.aggregate(pipeline).sort(sortObject).exec();
 		return futureEvents;
 	}

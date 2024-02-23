@@ -55,6 +55,12 @@ const onButtonClick = async () => {
 					<HomeEventPreviewCard :event-data="event" />
 					<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
 				</li>
+				<li
+					v-if="!filterStore.filteredEvents.length"
+					class="no-results"
+				>
+					<span>{{ t('event.filteredEvents.no_events_found') }}</span>
+				</li>
 			</ul>
 
 			<CommonButton
@@ -73,6 +79,15 @@ const onButtonClick = async () => {
 </template>
 
 <style lang="less" scoped>
+
+.no-results {
+	display: flex;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+
+	font-size: 24px;
+}
 .main-page {
 	@media (min-width: 768px) {
 		padding-top: 0;
@@ -83,11 +98,9 @@ const onButtonClick = async () => {
 		width: 100%;
 		align-items: center;
 		flex-direction: column;
-		background: linear-gradient(
-			90deg,
-			var(--color-accent-background) 0%,
-			var(--color-accent-green-main) 100%
-		);
+		background: linear-gradient(90deg,
+				var(--color-accent-background) 0%,
+				var(--color-accent-green-main) 100%);
 		margin-top: 12px;
 		margin-bottom: 32px;
 		padding-left: var(--padding-side);

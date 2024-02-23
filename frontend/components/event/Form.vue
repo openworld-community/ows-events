@@ -212,7 +212,7 @@ const onSubmit = handleSubmit(
 				/>
 				<CommonButton
 					class="event-form__button"
-					button-kind="dark"
+					button-kind="success"
 					:button-text="$t('global.button.save')"
 					:is-loading="isLoading"
 					:is-disabled="false"

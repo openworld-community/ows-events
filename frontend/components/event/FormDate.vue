@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useField } from 'vee-validate';
 
-const startDateField = useField<Date>(() => 'startDate', {
+const startDateField = useField<Date >(() => 'startDate', {
 	validateOnModelUpdate: false
 });
 const startTimeField = useField<Time>(() => 'startTime', {
@@ -27,7 +27,7 @@ const endTimeField = useField<Time>(() => 'endTime', {
 				<CommonUiDateTimepicker
 					v-model="startDateField.value.value"
 					type="date"
-					name="startDate"
+					name="startDateEvent"
 					:min-date="new Date(roundTime(Date.now(), 10))"
 					:error="
 						startDateField.meta.touched && Boolean(startDateField.errorMessage.value)
@@ -43,7 +43,7 @@ const endTimeField = useField<Time>(() => 'endTime', {
 				<CommonUiDateTimepicker
 					v-model="startTimeField.value.value"
 					type="time"
-					name="startTime"
+					name="startTimeEvent"
 					:error="
 						startTimeField.meta.touched && Boolean(startTimeField.errorMessage.value)
 					"
@@ -67,7 +67,7 @@ const endTimeField = useField<Time>(() => 'endTime', {
 				<CommonUiDateTimepicker
 					v-model="endDateField.value.value"
 					type="date"
-					name="endDate"
+					name="endDateEvent"
 					:error="endDateField.meta.touched && Boolean(endDateField.errorMessage.value)"
 					:placeholder="$t('form.event.fields.date_placeholder')"
 					:min-date="startDateField.value.value ?? undefined"
@@ -81,7 +81,7 @@ const endTimeField = useField<Time>(() => 'endTime', {
 				<CommonUiDateTimepicker
 					v-model="endTimeField.value.value"
 					type="time"
-					name="endTime"
+					name="endTimeEvent"
 					:error="endTimeField.meta.touched && Boolean(endTimeField.errorMessage.value)"
 					placeholder="--:--"
 					:disabled="!endDateField.value.value"

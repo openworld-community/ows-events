@@ -6,7 +6,7 @@ const { t } = useI18n()
 
 const inputType = ref<'password' | 'text'>('password')
 
-const { errors, defineField, meta, handleSubmit, handleReset } = useForm({
+const { errors, defineField, handleSubmit, handleReset } = useForm({
     // temporary local validation
     validationSchema: yup.object({
         email: yup
@@ -60,6 +60,10 @@ const onSubmit = handleSubmit(async values => {
         handleReset()
     }
 });
+
+const notEmptyFields = computed(() => {
+    return email.value && password.value && confirmPassword.value ? true : false
+})
 </script>
  
 <template>
@@ -105,7 +109,7 @@ const onSubmit = handleSubmit(async values => {
         </fieldset>
         <CommonButton
             class="signup__submit"
-            :is-disabled="!meta.valid"
+            :is-disabled="!notEmptyFields"
             button-kind="dark"
             :button-text="$t('form.form.signup')"
             type="submit"

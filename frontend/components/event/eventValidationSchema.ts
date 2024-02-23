@@ -1,6 +1,7 @@
 import * as yup from '../../yup';
 import { toTypedSchema } from '@vee-validate/yup';
 import { type Time } from '../../../common/types/event';
+import { LINK_MAX_LENGTH, PRICE_MAX_VALUE } from '~/constants/defaultValues/validation';
 
 export const eventValidationSchema = toTypedSchema(
 	yup.object().shape({
@@ -83,7 +84,7 @@ export const eventValidationSchema = toTypedSchema(
 						})
 						.positive()
 						.integer()
-
+						.max(PRICE_MAX_VALUE)
 						.required(),
 
 					currency: yup.string().required()
@@ -91,7 +92,7 @@ export const eventValidationSchema = toTypedSchema(
 		}),
 
 		timezone: yup.string().required(),
-		url: yup.string().isValidLink().required(),
+		url: yup.string().isValidLink().max(LINK_MAX_LENGTH).required(),
 		isFree: yup.boolean()
 	})
 );

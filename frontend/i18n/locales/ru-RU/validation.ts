@@ -25,7 +25,11 @@ export default {
 	max: {
 		tags: 'Можно выбрать не более {count} тэгов',
 		description: 'Длина должна быть не более {count} символов',
-		title: 'Длина должна быть не более {count} символов'
+		title: 'Длина должна быть не более {count} символов',
+		url: 'Максимальное количество символов не должно превышать {count}',
+		price: {
+			val: 'Максимальное значение не должно превышать {count}'
+		}
 	},
 	positive: {
 		price: {
@@ -41,11 +45,11 @@ export default {
 	},
 	image: {
 		size: 'Файл превышает допустимый размер 2Mb.',
-		problemSever: 'Что-то пошло не так.'
+		problemServer: 'Что-то пошло не так.',
+		extension: 'Выберите файл jpg, jpeg, png, webp формата'
 	},
 	hints: {
 		tags: 'Можно выбрать не более 6 тэгов',
-		image: 'jpg, jpeg, png, webp <= 2Mb',
-		extension: 'Выберите файл jpg, jpeg, png, webp формата'
+		image: 'Принимаются файлы формата jpg, jpeg, png, svg, webp, размером не боле 2Mb'
 	}
 };

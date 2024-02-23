@@ -160,10 +160,10 @@ watch(
 		background: url(@/assets/img/user/unauthorized-background.svg) 0 0 no-repeat;
 		background-size: cover;
 
-		@media (-webkit-min-device-pixel-ratio: 2),
-		(min-resolution: 192dpi) {
-			background-image: url(@/assets/img/user/unauthorized-background.svg);			
-		}
+		// @media (-webkit-min-device-pixel-ratio: 2),
+		// (min-resolution: 192dpi) {
+		// 	background-image: url(@/assets/img/user/unauthorized-background.svg);			
+		// }
 	}
 
 	&__image-container {

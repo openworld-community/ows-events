@@ -5,6 +5,10 @@ import { RoutePathEnum } from '~/constants/enums/route';
 import { SeoItempropUserEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 import { CookieNameEnum } from '~/constants/enums/common';
 
+definePageMeta({
+	layout: 'profile'
+});
+
 const { t } = useI18n();
 const localePath = useLocalePath();
 const mobile = inject('mobile');
@@ -20,10 +24,6 @@ const userCookie = useCookie(CookieNameEnum.TG_USER);
 
 const userData = computed(() => userStore.userInfo);
 
-const openEditProfileModal = () => {
-	userStore.$patch({ showEditModal: true });
-};
-
 const logout = () => {
 	tokenCookie.value = null;
 	userCookie.value = null;
@@ -32,99 +32,16 @@ const logout = () => {
 
 // const isGoBack = computed(() => {
 
-// }) 
+// })
 </script>
 
 <template>
-	<div class="root">
-		<HeaderCommon
-			v-if="mobile || userStore.isAuthorized"
-			:has-back-button="true"
-		/>
-		<main
-			v-if="userStore.isAuthorized"
-			class="user-page"
-			itemscope
-			:itemtype="SeoItemTypeEnum.USER"
-		>
-			<div class="user-page__wrapper">
-				<div class="user-page__info user-info">
-					<div class="user-info__wrapper">
-						<h1 class="user-info__name">
-							{{ $t('user.greeting') }},
-							<span :itemprop="SeoItempropUserEnum.name">{{
-								`${getUserName()}!`
-							}}</span>
-						</h1>
-						<p
-							v-if="userData?.nickname"
-							class="user-info__nickname"
-							:itemprop="SeoItempropUserEnum.nickname"
-						>
-							{{ `@${userData?.nickname}` }}
-						</p>
-						<p class="user-info__password">
-							********
-						</p>
-						<p
-							v-if="userData?.company"
-							class="user-info__organizer"
-							:itemprop="SeoItempropUserEnum.company"
-						>
-							{{ userData?.company }}
-						</p>
-					</div>
-					<CommonButton
-						v-if="userData"
-						class="user-info__edit-button"
-						button-kind="ordinary"
-						:no-border="!mobile"
-						:button-text="$t('global.button.edit_profile')"
-						icon-name="edit"
-						@click="openEditProfileModal"
-					/>
-				</div>
-				<div
-					v-if="userData"
-					class="user-page__link link"
-				>
-					<CommonButton
-						:link="localePath(RoutePathEnum.USER_MY_EVENTS)"
-						:button-text="$t('user.my_events.title')"
-						icon-name="notebook"
-						button-kind="ordinary"
-						no-border
-						class="link__item"
-					/>
-					<CommonButton
-						:link="localePath(RoutePathEnum.USER_FAVOURITES)"
-						:button-text="$t('user.favourites.title')"
-						icon-name="heart"
-						button-kind="ordinary"
-						no-border
-						class="link__item"
-					/>
-				</div>
-				<UserAdditionalBlock v-if="userData && mobile" />
-				<CommonButton
-					class="user-page__logout-button"
-					button-kind="warning"
-					no-border
-					:button-text="$t('global.button.logout')"
-					icon-name="logout"
-					@click="logout()"
-				/>
-			</div>
-			<UserAdditionalBlock v-if="userData && !mobile" />
-		</main>
-		<UserUnauthorized v-else />
+	<div>
+		<UserMobileNavigationMenu v-if="mobile">
+			<UserAdditionalBlock />
+		</UserMobileNavigationMenu>
 
-		<ModalEditProfile
-			v-if="userStore.showEditModal"
-			:data-for-edit="userData"
-		/>
-
-		<FooterCommon v-if="!mobile && userStore.isAuthorized" />
+		<UserAdditionalBlock v-if="!mobile" />
 	</div>
 </template>
 

@@ -3,6 +3,10 @@ import { SeoItemTypeEnum } from '~/constants/enums/seo';
 import type { EventOnPoster } from '../../../common/types';
 import { RoutePathEnum } from '../../constants/enums/route';
 
+definePageMeta({
+	layout: 'profile'
+});
+
 const mobile = inject<boolean>('mobile');
 const localePath = useLocalePath();
 
@@ -13,55 +17,48 @@ if (data.value) myEvents.value = data.value;
 </script>
 
 <template>
-	<div class="root">
-		<HeaderCommon
-			:has-back-button="mobile"
-			:title-on-mobile="$t('user.my_events.title')"
-		/>
-		<main class="my-events">
-			<div
-				v-if="!mobile"
-				class="my-events__title-wrapper"
-			>
-				<h1 class="my-events__title">
-					{{ $t('user.my_events.title') }}
-				</h1>
-			</div>
-			<div
-				v-if="myEvents.length"
-				class="my-events__list-wrapper"
-			>
-				<ul class="my-events__list">
-					<li
-						v-for="event in myEvents"
-						:key="event.id"
-						itemscope
-						:itemtype="SeoItemTypeEnum.EVENT"
-					>
-						<UserEventCard :event-data="event" />
-					</li>
-				</ul>
-			</div>
-			<div
-				v-else
-				class="my-events__empty empty"
-			>
-				<div class="empty__image" />
-				<p class="empty__text">
-					{{ $t('user.my_events.no_my_events') }}
-				</p>
-			</div>
-			<div class="my-events__bottom">
-				<CommonButton
-					class="my-events__button"
-					button-kind="success"
-					:button-text="$t('global.button.new_event')"
-					:link="localePath(`${RoutePathEnum.EVENT_EDIT}new`)"
-				/>
-			</div>
-		</main>
-		<FooterCommon v-if="!mobile" />
-	</div>
+	<main class="my-events">
+		<div
+			v-if="!mobile"
+			class="my-events__title-wrapper"
+		>
+			<h1 class="my-events__title">
+				{{ $t('user.my_events.title') }}
+			</h1>
+		</div>
+		<div
+			v-if="myEvents.length"
+			class="my-events__list-wrapper"
+		>
+			<ul class="my-events__list">
+				<li
+					v-for="event in myEvents"
+					:key="event.id"
+					itemscope
+					:itemtype="SeoItemTypeEnum.EVENT"
+				>
+					<UserEventCard :event-data="event" />
+				</li>
+			</ul>
+		</div>
+		<div
+			v-else
+			class="my-events__empty empty"
+		>
+			<div class="empty__image" />
+			<p class="empty__text">
+				{{ $t('user.my_events.no_my_events') }}
+			</p>
+		</div>
+		<div class="my-events__bottom">
+			<CommonButton
+				class="my-events__button"
+				button-kind="success"
+				:button-text="$t('global.button.new_event')"
+				:link="localePath(`${RoutePathEnum.EVENT_EDIT}new`)"
+			/>
+		</div>
+	</main>
 </template>
 
 <style scoped lang="less">

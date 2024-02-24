@@ -8,6 +8,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits(['update:model-value']);
+const { t } = useI18n();
 
 const input = ref<HTMLInputElement>();
 const errorLoad = ref('');
@@ -20,14 +21,18 @@ const loadImage = async (event: Event) => {
 	if (!target.files || !target.files[0])
 		return console.warn('Load Image Event targed to has no files');
 	const file = target.files[0];
+	console.warn('load1', event.target);
+
 	if (!isImageFormatAllowed(file.name)) {
-		return 'validation.image.extension';
+		errorLoad.value = 'validation.image.extension';
+		return;
 	}
 
 	if (isImageTooBig(file.size)) {
 		errorLoad.value = 'validation.image.size';
 		return console.warn('Too big');
 	}
+
 	const { data } = await apiRouter.events.image.add.useMutation({ data: { image: file } });
 	input.value.value = null;
 	if (!data.value) {

@@ -3,6 +3,10 @@ import { apiRouter } from '~/composables/useApiRouter';
 import { SeoItemTypeEnum } from '~/constants/enums/seo';
 import type { EventOnPoster } from '../../../common/types';
 
+definePageMeta({
+	layout: 'profile'
+});
+
 const mobile = inject<boolean>('mobile');
 const favourites = ref<EventOnPoster[] | []>([]);
 
@@ -11,44 +15,37 @@ if (data.value) favourites.value = data.value;
 </script>
 
 <template>
-	<div class="root">
-		<HeaderCommon
-			:has-back-button="mobile"
-			:title-on-mobile="$t('user.favourites.title')"
-		/>
-		<main class="favourites">
-			<h1
-				v-if="!mobile"
-				class="favourites__title"
-			>
-				{{ $t('user.favourites.title') }}
-			</h1>
+	<main class="favourites">
+		<h1
+			v-if="!mobile"
+			class="favourites__title"
+		>
+			{{ $t('user.favourites.title') }}
+		</h1>
 
-			<ul
-				v-if="favourites.length"
-				class="favourites__list"
+		<ul
+			v-if="favourites.length"
+			class="favourites__list"
+		>
+			<li
+				v-for="event in favourites"
+				:key="event.id"
+				itemscope
+				:itemtype="SeoItemTypeEnum.EVENT"
 			>
-				<li
-					v-for="event in favourites"
-					:key="event.id"
-					itemscope
-					:itemtype="SeoItemTypeEnum.EVENT"
-				>
-					<UserEventCard :event-data="event" />
-				</li>
-			</ul>
-			<div
-				v-else
-				class="favourites__empty empty"
-			>
-				<div class="empty__image" />
-				<p class="empty__text">
-					{{ $t('user.favourites.no_favourites') }}
-				</p>
-			</div>
-		</main>
-		<FooterCommon v-if="!mobile" />
-	</div>
+				<UserEventCard :event-data="event" />
+			</li>
+		</ul>
+		<div
+			v-else
+			class="favourites__empty empty"
+		>
+			<div class="empty__image" />
+			<p class="empty__text">
+				{{ $t('user.favourites.no_favourites') }}
+			</p>
+		</div>
+	</main>
 </template>
 
 <style scoped lang="less">

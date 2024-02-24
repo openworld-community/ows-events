@@ -38,7 +38,7 @@ useHead({
 if (process.client) {
 	const route = useRoute();
 	const { gtag } = useGtag();
-	const pageTitle = getRouteName(route.name as string)
+	const pageTitle = getRouteName(route.name as string);
 	gtag('event', 'page_view', {
 		page_title: pageTitle
 	});
@@ -51,7 +51,9 @@ onMounted(() => localStorage.removeItem(LocalStorageEnum.TIMEZONES));
 </script>
 <template>
 	<ModalsContainer />
-	<NuxtPage />
+	<NuxtLayout>
+		<NuxtPage />
+	</NuxtLayout>
 </template>
 
 <style lang="less" scoped>

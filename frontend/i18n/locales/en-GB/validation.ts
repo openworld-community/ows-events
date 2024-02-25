@@ -44,8 +44,8 @@ export default {
 		}
 	},
 	image: {
-		size: 'File size is greater then 2Mb.',
-		extension: 'Choose {count} file',
+		size: 'File size is greater then {count}Mb.',
+		extension: 'Choose file {name}',
 		problemServer: 'Something wrong.'
 	},
 	hints: {

@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { BASE_URL } from '@/constants/url';
-import { isImageFormatAllowed, isImageTooBig } from '../../utils/image';
+import { allowedFormatsToString, isImageFormatAllowed, isImageTooBig } from '../../utils/image';
+import { ALLOWED_IMAGE_EXTENSIONS, ALLOWED_IMAGE_SIZE } from '~/constants/defaultValues/validation';
 
 export type ImageLoaderFile = File | null | 'DELETED';
+
 const props = defineProps<{
 	externalImage?: string;
 }>();
-
+const { t } = useI18n();
 const emit = defineEmits(['update:model-value']);
 
 const input = ref<HTMLInputElement>();
@@ -21,17 +23,20 @@ const loadImage = async (event: Event) => {
 		return console.warn('Load Image Event targed to has no files');
 	const file = target.files[0];
 	if (!isImageFormatAllowed(file.name)) {
-		return 'validation.image.extension';
+		errorLoad.value = t('validation.image.extension', {
+			name: allowedFormatsToString(ALLOWED_IMAGE_EXTENSIONS)
+		});
+		return;
 	}
 
 	if (isImageTooBig(file.size)) {
-		errorLoad.value = 'validation.image.size';
+		errorLoad.value = t('validation.image.size', { count: ALLOWED_IMAGE_SIZE });
 		return console.warn('Too big');
 	}
 	const { data } = await apiRouter.events.image.add.useMutation({ data: { image: file } });
 	input.value.value = null;
 	if (!data.value) {
-		errorLoad.value = 'validation.image.problemServer';
+		errorLoad.value = t('validation.image.problemServer');
 		return;
 	}
 	emit('update:model-value', data.value.path);

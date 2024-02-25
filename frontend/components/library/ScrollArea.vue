@@ -5,7 +5,7 @@ import {
 	ScrollAreaThumb,
 	ScrollAreaViewport
 } from 'radix-vue';
-const props = defineProps({
+defineProps({
 	type: {
 		type: String as PropType<'always' | 'hover' | 'auto' | 'scroll'>,
 		default: 'auto'
@@ -24,7 +24,6 @@ const props = defineProps({
 	>
 		<ScrollAreaViewport
 			class="scroll-area__viewport"
-			style="width: 100%; height: 100%"
 			as-child
 		>
 			<slot></slot>
@@ -42,9 +41,10 @@ const props = defineProps({
 <style lang="less">
 .scroll-area {
 	width: 100%;
-	height: 200px;
+	height: 160px;
 	border-radius: 4px;
 	display: flex;
+	min-height: 100px;
 	max-height: 300px;
 
 	&__viewport {

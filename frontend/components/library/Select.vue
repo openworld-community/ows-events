@@ -20,12 +20,20 @@ const props = defineProps({
 		type: String,
 		default: ''
 	},
+	optionAsIcon: {
+		type: Boolean,
+		default: false
+	},
 	disabled: {
 		type: Boolean,
 		default: false
 	},
 
 	required: {
+		type: Boolean,
+		default: false
+	},
+	error: {
 		type: Boolean,
 		default: false
 	}
@@ -62,6 +70,7 @@ const onRemove = () => {
 				tabindex="1"
 				as="div"
 				class="select__trigger"
+				:data-error="error"
 			>
 				<SelectValue
 					:placeholder="placeholder"
@@ -79,36 +88,47 @@ const onRemove = () => {
 				class="select__content"
 				position="popper"
 				:side-offset="5"
-				style="overflow: hidden"
 			>
 				<SelectViewport as-child>
 					<LibraryScrollArea>
-						<ul style="height: 100%; padding: 8px 4px">
+						<ul style="height: auto; padding: 8px 4px">
 							<LibraryUiItemSelect
 								v-for="option in options"
 								:key="typeof option === 'string' ? option : option['value']"
 								:value="typeof option === 'string' ? option : option['value']"
+								:icon-name="optionAsIcon ? `${name}/${option}` : ''"
 								side="top"
 								side-offset="5"
 								position="popper"
 								avoid-collisions
 							>
-								{{ typeof option === 'string' ? option : option['label'] }}
+								<span style="display: flex; align-items: center; gap: 4px">
+									<CommonIcon
+										v-if="optionAsIcon"
+										:name="`${name}/${option}`"
+									/>
+									{{ typeof option === 'string' ? option : option['label'] }}
+								</span>
 							</LibraryUiItemSelect>
 						</ul>
 					</LibraryScrollArea>
 				</SelectViewport>
 			</SelectContent>
 		</SelectRoot>
-		<span
+		<button
 			v-if="model"
-			style="position: absolute; z-index: 10; top: 8px; right: 12px"
+			type="button"
+			class="select__clear-button"
+			aria-label="clear"
+			tabindex="1"
 			@click="onRemove"
+			@click.enter="onRemove"
 		>
 			<CommonIcon
 				name="close"
 				color="var(--color-input-icons)"
-		/></span>
+			/>
+		</button>
 	</div>
 </template>
 
@@ -116,11 +136,7 @@ const onRemove = () => {
 .select {
 	width: 100%;
 	min-width: 100%;
-	//remove?
-	&:focus {
-		outline: 1px solid var(--color-accent-green-main);
-		border-radius: 6px;
-	}
+
 	&__trigger {
 		width: 100%;
 		min-width: 100%;
@@ -130,9 +146,6 @@ const onRemove = () => {
 		border: 1px solid #dbdbdb;
 		border-radius: 8px;
 		background-color: #ffffff;
-		font-family: var(--font-family-main);
-		font-size: var(--font-size-M);
-		color: var(--color-text-main);
 		padding: 8px 12px 8px 12px;
 		transition: border-color 0.3s ease;
 		cursor: pointer;
@@ -143,7 +156,6 @@ const onRemove = () => {
 
 		&:focus {
 			outline: 1px solid var(--color-accent-green-main);
-			border-color: var(--color-accent-green-main);
 		}
 
 		&:hover {
@@ -152,13 +164,26 @@ const onRemove = () => {
 	}
 
 	&__value {
-		color: #7a0d0d;
+		font-family: var(--font-family-main);
+		font-size: var(--font-size-M);
+		color: var(--color-text-main);
 	}
 	&__trigger[data-placeholder] {
 		.select__value {
-			color: #2b0e87;
+			font-family: var(--font-family-main);
+			font-size: var(--font-size-M);
+			color: var(--color-input-icons);
 		}
 	}
+
+	&__trigger[data-disabled] {
+		border-color: var(--color-input-field);
+		opacity: 0.4;
+	}
+	&__trigger[data-error='true'] {
+		border-color: var(--color-accent-red);
+	}
+
 	&__content {
 		min-width: 267px;
 		background-color: #ffffff;
@@ -168,9 +193,47 @@ const onRemove = () => {
 		border: 2px black;
 		width: var(--radix-select-trigger-width);
 		height: 160px;
-
 		min-height: 100px;
 		max-height: 200px;
+	}
+	&__clear-button {
+		position: absolute;
+		z-index: 10;
+		top: 8px;
+		right: 12px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid transparent;
+		border-color: 4px;
+
+		&:deep(svg) {
+			color: var(--color-accent-green-main);
+		}
+		&:focus-within {
+			outline: var(--color-accent-green-main);
+			border-color: var(--color-accent-green-main);
+			border-radius: 4px;
+
+			&:deep(svg) {
+				color: var(--color-accent-green-main);
+			}
+		}
+
+		&:focus {
+			outline: var(--color-accent-green-main);
+			border-radius: 4px;
+			&:deep(svg) {
+				color: var(--color-accent-green-main);
+			}
+		}
+		&:hover {
+			border-color: var(--color-accent-green-main);
+
+			&:deep(svg) {
+				color: var(--color-accent-green-main);
+			}
+		}
 	}
 }
 </style>

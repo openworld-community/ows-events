@@ -97,6 +97,7 @@ const addressField = useField<string>(() => 'location.address');
 					name="address"
 					:error="addressField.meta.touched && Boolean(addressField.errorMessage.value)"
 					:placeholder="$t('form.event.fields.address_placeholder')"
+					:required="!isOnlineField.value.value"
 					:disabled="
 						!(countryField.value.value && cityField.value.value) ||
 						isOnlineField.value.value

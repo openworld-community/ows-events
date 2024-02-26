@@ -11,7 +11,7 @@ type TFormType = 'login' | 'signup';
 
 const userStore = useUserStore();
 const mobile = inject('mobile');
-const desktop = inject('desktop');
+// const desktop = inject('desktop');
 const localePath = useLocalePath();
 const tokenCookie = useCookie<string | null>(CookieNameEnum.TOKEN);
 
@@ -135,7 +135,7 @@ watch(
 				class="unauthorized__continue"
 			>
 				<CommonButton
-					v-if="desktop"
+					v-if="!mobile"
 					:is-icon="true"
 					icon-name="close"
 					:icon-color="'var(--color-icons)'"
@@ -167,12 +167,13 @@ watch(
 	@media (min-width: 768px) {
 		padding: 0;
 		position: relative;
-		background: url(@/assets/img/user/unauthorized-background@1x.png) 0 0 no-repeat;
+		background: url(@/assets/img/user/unauthorized-background.svg) 0 0 no-repeat;
 		background-size: cover;
 
-		@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-			background-image: url(@/assets/img/user/unauthorized-background@2x.png);
-		}
+		// @media (-webkit-min-device-pixel-ratio: 2),
+		// (min-resolution: 192dpi) {
+		// 	background-image: url(@/assets/img/user/unauthorized-background.svg);
+		// }
 	}
 
 	&__image-container {

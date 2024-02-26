@@ -137,7 +137,7 @@ const endDate = computed(() => {
 
 	&__image-container {
 		display: flex;
-		width: calc(100% + 2px);
+		width: 100%;
 		aspect-ratio: 2 / 1.33;
 		height: auto;
 		max-height: 400px;
@@ -145,9 +145,6 @@ const endDate = computed(() => {
 		background-color: var(--color-input-field);
 		background-size: cover;
 		line-height: 0;
-		margin-top: -1px;
-		margin-left: -1px;
-		margin-right: -1px;
 
 		@media (min-width: 768px) {
 			aspect-ratio: 2 / 1.25;

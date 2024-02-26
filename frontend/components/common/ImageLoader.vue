@@ -70,11 +70,13 @@ const removeImage = async () => {
 				:alt="$t('form.event.image')"
 			/>
 			<button
+				type="button"
 				class="delete-button"
 				:aria-label="$t('form.event.remove_image')"
 				@click="removeImage"
 			>
 				<CommonIcon
+					type="button"
 					name="delete"
 					color="var(--color-accent-red-dark)"
 				/>

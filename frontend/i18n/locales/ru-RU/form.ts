@@ -38,6 +38,9 @@ export default {
 	form: {
 		signup: 'Зарегистрироваться',
 		login: 'Войти',
-		forgotPassword: 'Забыл пароль'
+		forgotPassword: 'Забыл пароль',
+		email: 'Почта',
+		password: 'Пароль',
+		confirmPassword: 'Подтвердите пароль'
 	}
 };

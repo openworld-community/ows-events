@@ -44,9 +44,9 @@ export default {
 		}
 	},
 	image: {
-		size: 'Файл превышает допустимый размер 2Mb.',
+		size: 'Файл превышает допустимый размер {count}Mb.',
 		problemServer: 'Что-то пошло не так.',
-		extension: 'Выберите файл jpg, jpeg, png, webp формата'
+		extension: 'Выберите файл {name} формата'
 	},
 	hints: {
 		tags: 'Можно выбрать не более 6 тэгов',

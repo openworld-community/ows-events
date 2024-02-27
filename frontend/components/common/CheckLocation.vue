@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Location } from '../../../common/types/address';
 
-const props = defineProps({
+defineProps({
 	isShow: {
 		type: Boolean,
 		default: false

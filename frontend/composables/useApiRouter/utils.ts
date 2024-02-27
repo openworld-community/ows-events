@@ -188,7 +188,7 @@ export function useBackendFetch<T>(
 				const errorMessage = data.error.value.data.message;
 
 				const { $errorToast, $i18n } = useNuxtApp();
-				$errorToast($i18n.t(`error.${errorMessage}`));
+				$errorToast($i18n.t(`errors.${errorMessage}`));
 			} else {
 				console.error(data.error.value);
 			}

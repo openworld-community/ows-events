@@ -51,6 +51,9 @@ const goBack = () => {
 		navigateTo(localePath({ path: RoutePathEnum.HOME }));
 	}
 };
+
+console.log(localePath(route.path));
+
 </script>
 
 <template>
@@ -66,7 +69,7 @@ const goBack = () => {
 		>
 			<div class="header__left">
 				<CommonButton
-					v-if="hasBackButton"
+					v-if="hasBackButton && (localePath(route.path)) !== localePath({ path: RoutePathEnum.USER_PAGE })"
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"

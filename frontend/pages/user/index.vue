@@ -32,7 +32,7 @@ const logout = () => {
 
 // const isGoBack = computed(() => {
 
-// }) 
+// })
 </script>
 
 <template>
@@ -62,9 +62,6 @@ const logout = () => {
 							:itemprop="SeoItempropUserEnum.nickname"
 						>
 							{{ `@${userData?.nickname}` }}
-						</p>
-						<p class="user-info__password">
-							********
 						</p>
 						<p
 							v-if="userData?.company"

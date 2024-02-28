@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores/user.store';
 import { TELEGRAM_AUTH_BOT_NAME } from '@/constants/url';
 import { BASE_URL } from '@/constants/url';
 import { CookieNameEnum } from '@/constants/enums/common';
-import { GoogleSignInButton, type CredentialResponse } from 'vue3-google-signin';
+import { GoogleSignInButton } from 'vue3-google-signin';
 import { GOOGLE_OAUTH_URL } from '@/constants/url';
 
 type TFormType = 'login' | 'signup';
@@ -106,7 +106,7 @@ watch(
 						ux-mode="redirect"
 						type="icon"
 						logo_alignment="center"
-					></GoogleSignInButton>
+					/>
 
 					<div
 						ref="telegram"
@@ -324,6 +324,7 @@ watch(
 		filter: grayscale(100%);
 	}
 }
+
 .tgicon_active {
 	filter: grayscale(0%);
 }

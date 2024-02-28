@@ -17,7 +17,7 @@ if (data.value) myEvents.value = data.value;
 </script>
 
 <template>
-	<main class="my-events">
+	<div class="my-events">
 		<div
 			v-if="!mobile"
 			class="my-events__title-wrapper"
@@ -26,21 +26,21 @@ if (data.value) myEvents.value = data.value;
 				{{ $t('user.my_events.title') }}
 			</h1>
 		</div>
-		<div
+
+		<ul
 			v-if="myEvents.length"
-			class="my-events__list-wrapper"
+			class="my-events__list"
 		>
-			<ul class="my-events__list">
-				<li
-					v-for="event in myEvents"
-					:key="event.id"
-					itemscope
-					:itemtype="SeoItemTypeEnum.EVENT"
-				>
-					<UserEventCard :event-data="event" />
-				</li>
-			</ul>
-		</div>
+			<li
+				v-for="event in myEvents"
+				:key="event.id"
+				itemscope
+				:itemtype="SeoItemTypeEnum.EVENT"
+			>
+				<UserEventCard :event-data="event" />
+			</li>
+		</ul>
+
 		<div
 			v-else
 			class="my-events__empty empty"
@@ -58,30 +58,26 @@ if (data.value) myEvents.value = data.value;
 				:link="localePath(`${RoutePathEnum.EVENT_EDIT}new`)"
 			/>
 		</div>
-	</main>
+	</div>
 </template>
 
 <style scoped lang="less">
 .my-events {
-	display: flex;
 	width: 100%;
 	height: 100%;
-	min-height: calc(100vh - var(--header-height));
+	display: flex;
 	flex-direction: column;
 	align-items: center;
-	position: relative;
+	padding-left: var(--padding-side);
+	padding-right: var(--padding-side);
 	padding-bottom: var(--padding-vertical);
 
-	//Для адаптивной height на iOs
-	@supports (-webkit-touch-callout: none) {
-		min-height: -webkit-fill-available;
-	}
-
 	@media (min-width: 768px) {
-		justify-content: space-between;
-		min-height: unset;
+		justify-content: center;
+		//height: unset;
+		padding-left: 5px;
+		padding-right: 0;
 		padding-top: 20px;
-		padding-bottom: 20px;
 	}
 
 	&__title-wrapper {
@@ -123,11 +119,14 @@ if (data.value) myEvents.value = data.value;
 			max-height: unset;
 			overflow-y: unset;
 			justify-content: center;
+			padding-left: 10px;
+			padding-right: 0;
 		}
 	}
 
 	&__list {
 		width: 100%;
+		flex-grow: 1;
 
 		@media (min-width: 768px) {
 			max-width: 820px;

@@ -15,7 +15,7 @@ if (data.value) favourites.value = data.value;
 </script>
 
 <template>
-	<main class="favourites">
+	<div class="favourites">
 		<h1
 			v-if="!mobile"
 			class="favourites__title"
@@ -45,7 +45,7 @@ if (data.value) favourites.value = data.value;
 				{{ $t('user.favourites.no_favourites') }}
 			</p>
 		</div>
-	</main>
+	</div>
 </template>
 
 <style scoped lang="less">
@@ -53,6 +53,7 @@ if (data.value) favourites.value = data.value;
 	display: flex;
 	width: 100%;
 	height: 100%;
+	display: flex;
 	flex-direction: column;
 	align-items: center;
 	padding-left: var(--padding-side);
@@ -61,8 +62,10 @@ if (data.value) favourites.value = data.value;
 
 	@media (min-width: 768px) {
 		justify-content: center;
-		height: unset;
-		padding-top: 40px;
+		//height: unset;
+		padding-left: 5px;
+		padding-right: 0;
+		padding-top: 20px;
 	}
 
 	&__title {
@@ -84,6 +87,7 @@ if (data.value) favourites.value = data.value;
 
 	&__list {
 		width: 100%;
+		flex-grow: 1;
 
 		@media (min-width: 768px) {
 			max-width: 820px;

@@ -36,9 +36,9 @@ const logout = () => {
 </script>
 
 <template>
-	<div>
+	<div class="user-content">
 		<UserMobileNavigationMenu v-if="mobile">
-			<UserAdditionalBlock />
+			<UserAdditionalBlock v-if="mobile" />
 		</UserMobileNavigationMenu>
 
 		<UserAdditionalBlock v-if="!mobile" />
@@ -46,6 +46,15 @@ const logout = () => {
 </template>
 
 <style scoped lang="less">
+.user-content {
+	width: 100%;
+	height: 100%;
+	@media (min-width: 768px) {
+		flex-grow: 1;
+		display: flex;
+		justify-content: end;
+	}
+}
 .user-page {
 	display: flex;
 	flex-direction: column;
@@ -111,75 +120,9 @@ const logout = () => {
 	}
 }
 
-.user-info {
-	display: flex;
+.sidebar {
 	width: 100%;
-	flex-direction: column;
-	align-items: center;
-	margin-bottom: 24px;
-
-	@media (min-width: 768px) {
-		align-items: flex-start;
-		margin-bottom: 4px;
-	}
-
-	&__wrapper {
-		display: flex;
-		width: 100%;
-		flex-direction: column;
-		margin-bottom: 18px;
-
-		@media (min-width: 768px) {
-			padding-left: 18px;
-			margin-bottom: 12px;
-		}
-	}
-
-	&__name {
-		font-size: var(--font-size-ML);
-		font-weight: var(--font-weight-regular);
-		line-height: 24px;
-		margin-bottom: 6px;
-
-		@media (min-width: 768px) {
-			font-size: var(--font-size-L);
-			margin-bottom: 8px;
-		}
-	}
-
-	&__nickname {
-		font-size: var(--font-size-S);
-		line-height: 20px;
-		color: var(--color-text-secondary);
-
-		&:not(:last-child) {
-			margin-bottom: 6px;
-		}
-
-		@media (min-width: 1440px) {
-			font-size: var(--font-size-XS);
-			line-height: 20px;
-			margin-bottom: 8px;
-		}
-	}
-
-	&__organizer {
-		font-size: var(--font-size-S);
-		line-height: 16px;
-
-		@media (min-width: 1440px) {
-			font-size: var(--font-size-XS);
-			line-height: 16px;
-		}
-	}
-
-	&__edit-button {
-		width: 100%;
-
-		@media (min-width: 768px) {
-			width: max-content;
-		}
-	}
+	height: 100%;
 }
 
 .link {

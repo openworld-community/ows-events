@@ -49,7 +49,7 @@ const updateUserData = async () => {
 </script>
 
 <template>
-	<div>
+	<div class="edit-profile">
 		<div class="edit-profile__fields">
 			<ModalUiModalSection
 				:label="$t('modal.edit_profile.fields.name')"
@@ -88,26 +88,35 @@ const updateUserData = async () => {
 				</template>
 			</ModalUiModalSection>
 		</div>
-
-		<CommonButton
-			class="edit-profile__button"
-			button-kind="ordinary"
-			:button-text="$t('global.button.cancel')"
-			@click="closeEditProfileModal"
-		/>
-		<CommonButton
-			class="edit-profile__button"
-			button-kind="dark"
-			:button-text="$t('global.button.save')"
-			:is-disabled="!checkFormFilling"
-			:is-loading="isLoading"
-			@click="updateUserData"
-		/>
+		<div class="edit-profile__buttons">
+			<CommonButton
+				class="edit-profile__button"
+				button-kind="ordinary"
+				:button-text="$t('global.button.cancel')"
+				@click="closeEditProfileModal"
+			/>
+			<CommonButton
+				class="edit-profile__button"
+				button-kind="dark"
+				:button-text="$t('global.button.save')"
+				:is-disabled="!checkFormFilling"
+				:is-loading="isLoading"
+				@click="updateUserData"
+			/>
+		</div>
 	</div>
 </template>
 
 <style scoped lang="less">
 .edit-profile {
+	width: 100%;
+	height: 100%;
+	padding-left: var(--padding-side);
+	padding-right: var(--padding-side);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 20px;
 	&__fields {
 		width: 100%;
 
@@ -115,10 +124,19 @@ const updateUserData = async () => {
 			max-width: 540px;
 		}
 	}
+	&__buttons {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		gap: 10px;
+
+		@media (min-width: 768px) {
+			max-width: 540px;
+		}
+	}
 
 	&__button {
-		width: 25%;
-		min-width: max-content;
+		width: calc(50% - 10px);
 	}
 }
 </style>

@@ -4,8 +4,10 @@ const mobile = inject('mobile');
 
 <template>
 	<div class="root">
-		<HeaderCommon :has-back-button="mobile" />
-
+		<HeaderCommon
+			v-if="mobile"
+			:has-back-button="mobile"
+		/>
 		<UserUnauthorized />
 	</div>
 </template>

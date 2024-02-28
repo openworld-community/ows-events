@@ -50,8 +50,8 @@ useCookie(CookieNameEnum.LOCALE, { maxAge: TOKEN_MAX_AGE_SECONDS }).value = loca
 onMounted(() => localStorage.removeItem(LocalStorageEnum.TIMEZONES));
 </script>
 <template>
-	<ModalsContainer />
 	<NuxtLayout>
+		<ModalsContainer />
 		<NuxtPage />
 	</NuxtLayout>
 </template>

@@ -6,18 +6,9 @@ const mobile = inject('mobile');
 <template>
 	<div class="root">
 		<HeaderCommon :has-back-button="mobile" />
-		<main
-			class="user-page"
-			itemscope
-			:itemtype="SeoItemTypeEnum.USER"
-		>
-			<div class="sidebar">
-				<UserProfileInfo />
-				<UserNavigationMenu v-if="!mobile" />
-			</div>
 
-			<slot />
-		</main>
+		<slot />
+
 		<FooterCommon v-if="!mobile" />
 	</div>
 </template>
@@ -54,10 +45,5 @@ const mobile = inject('mobile');
 		justify-content: flex-start;
 		align-items: flex-start;
 	}
-}
-
-.sidebar {
-	width: 100%;
-	height: 100%;
 }
 </style>

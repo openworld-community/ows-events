@@ -20,7 +20,6 @@ const userData = userStore.userInfo;
 		>
 			{{ `@${userData?.nickname}` }}
 		</p>
-		<p class="user-info__password">********</p>
 		<p
 			v-if="userData?.company"
 			class="user-info__organizer"
@@ -30,22 +29,26 @@ const userData = userStore.userInfo;
 		</p>
 	</div>
 </template>
-<style>
+<style scoped lang="less">
 .user-info {
 	display: flex;
 	width: 100%;
-
 	flex-direction: column;
-	padding-top: 18px;
+	padding-top: 12px;
+	margin-bottom: 8px;
 
 	@media (min-width: 768px) {
 		width: 40%;
 		margin-right: 30px;
+		padding-left: 18px;
+		margin-bottom: 12px;
 	}
 
 	@media (min-width: 1440px) {
 		width: 32%;
-		padding-top: 44px;
+		padding-top: 18px;
+		padding-left: 18px;
+		margin-bottom: 12px;
 	}
 
 	&__name {
@@ -53,6 +56,7 @@ const userData = userStore.userInfo;
 		font-weight: var(--font-weight-regular);
 		line-height: 24px;
 		margin-bottom: 6px;
+		display: flex;
 
 		@media (min-width: 768px) {
 			font-size: var(--font-size-L);

@@ -7,5 +7,9 @@ export const isImageTooBig = (count: number) => {
 
 export const isImageFormatAllowed = (fileName: string) => {
 	const fileExtension = fileName.slice((Math.max(0, fileName.lastIndexOf('.')) || Infinity) + 1);
-	return ALLOWED_IMAGE_EXTENSIONS.includes(fileExtension);
+	return ALLOWED_IMAGE_EXTENSIONS.includes(fileExtension.toLowerCase());
+};
+
+export const allowedFormatsToString = (arr: string[]) => {
+	return arr.join(', ');
 };

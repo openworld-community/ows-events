@@ -106,24 +106,6 @@ if (data.value) myEvents.value = data.value;
 		}
 	}
 
-	&__list-wrapper {
-		display: flex;
-		width: 100%;
-		max-height: calc(100vh - var(--header-height) - 76px);
-		overflow-y: auto;
-		padding-left: var(--padding-side);
-		padding-right: var(--padding-side);
-
-		@media (min-width: 768px) {
-			height: 100%;
-			max-height: unset;
-			overflow-y: unset;
-			justify-content: center;
-			padding-left: 10px;
-			padding-right: 0;
-		}
-	}
-
 	&__list {
 		width: 100%;
 		flex-grow: 1;

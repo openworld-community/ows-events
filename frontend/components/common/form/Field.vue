@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { PropType } from 'vue';
-
 const { t } = useI18n();
 
 const props = defineProps({
@@ -15,6 +13,10 @@ const props = defineProps({
 	touched: {
 		type: Boolean,
 		default: false
+	},
+	errorLabel: {
+		type: Boolean,
+		defualt: false
 	}
 });
 
@@ -61,6 +63,7 @@ const errorResult = computed({
 		<CommonErrorComponent
 			v-if="touched"
 			:error="errorResult"
+			:error-label="errorLabel"
 		/>
 	</div>
 </template>
@@ -68,6 +71,7 @@ const errorResult = computed({
 <style lang="less" scoped>
 .form-field {
 	width: 100%;
+	position: relative;
 }
 .form-hint {
 	margin-top: 10px;

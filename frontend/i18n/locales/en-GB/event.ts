@@ -27,5 +27,8 @@ export default {
 		[Tags.STANDUP]: 'Stand-up',
 		[Tags.THEATER]: 'Theatre',
 		[Tags.TOURISM]: 'Tourism'
+	},
+	filteredEvents: {
+		no_events_found: 'No events found'
 	}
 };

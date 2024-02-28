@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import dayjs from 'dayjs';
 import { useFilterStore } from '../../stores/filter.store';
 import { debouncedWatch } from '@vueuse/core';
 
@@ -29,8 +30,9 @@ watch(
 				country: filters.country || undefined,
 				city: filters.city || undefined,
 				tags: filters.tags.join(', ') || undefined,
-				startDate: new Date(filters.startDate).getTime() || undefined,
-				endDate: new Date(filters.endDate).getTime() || undefined
+				// может приходить Invalid Date
+				startDate: filters.startDate ? dayjs(filters.startDate).format('YYYY-MM-DD') : undefined,
+				endDate: filters.endDate ? dayjs(filters.endDate).format('YYYY-MM-DD') : undefined
 			}
 		});
 		if (filters.country) {

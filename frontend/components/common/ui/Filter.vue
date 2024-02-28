@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
+import type { TCalendarDisabledButtons } from '../../../../common/types/filters'
 import { useFilterStore } from '../../../stores/filter.store';
 import { getFilterPlaceholder } from '../../../utils/texts';
 
-defineProps({
+
+const props = defineProps({
 	filterType: {
 		type: String as PropType<'input' | 'select' | 'date'>,
 		required: true
@@ -56,6 +58,48 @@ const mobile = inject('mobile');
 const filterStore = useFilterStore();
 
 const showModal = computed(() => filterStore.modal.show);
+
+const computedMinDate = computed(() => {
+	const startDay = new Date(filterStore.filters.startDate)
+	const nextDay = new Date(new Date().setDate(startDay.getDate() + 1))
+	
+	return props.name === 'endDate' 
+		   && filterStore.filters.startDate 
+			  ? nextDay 
+			  : new Date(roundTime(Date.now(), 10))
+})
+
+const checkNull = (payload: Date | null) => {
+	if (payload === null && props.name === 'endDate') {
+		// для startDate new Date(null) не страшен
+		// для endDate страшен -> будет 01 jan 1970
+		filterStore.filters.endDate = ''
+	}
+}
+
+const isDisabledButtons = computed((): TCalendarDisabledButtons => {
+	const isEndDate = props.name === 'endDate'
+	const today = new Date()
+	const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
+	// обе кнопки !disabled
+	const result = {
+		today: false,
+		tomorrow: false
+	}
+	
+	// кнопка сегодня disabled
+	if (isEndDate && today.getTime() < computedMinDate.value.getTime()) {
+		result.today = true
+	}
+
+	// обе кнопки disabled
+	if (isEndDate && tomorrow.getTime() < computedMinDate.value.getTime()) {
+		result.today = true
+		result.tomorrow = true
+	}
+
+	return result
+})
 </script>
 
 <template>
@@ -79,26 +123,27 @@ const showModal = computed(() => filterStore.modal.show);
 		:name="name"
 		:placeholder="$t(`home.filter.${name}.placeholder`)"
 		:aria-label="$t(`home.filter.${name}.aria`)"
+		:min-date="computedMinDate"
 		:min-time="name === 'startDate' ? { hours: 0, minutes: 0 } : { hours: '23', minutes: '59' }"
+		:disabled-buttons="isDisabledButtons"
+		@update:model-value="checkNull"
 	/>
 	<template v-if="filterType === 'select'">
 		<template v-if="mobile">
 			<CommonButton
 				button-kind="filter"
 				icon-name="container"
-				:button-text="
-					getFilterPlaceholder(
-						multiple,
-						name,
-						list,
-						filterStore.filters[name],
-						showKey,
-						returnKey
-					)
-				"
-				:filled="
-					multiple ? !!filterStore.filters[name].length : !!filterStore.filters[name]
-				"
+				:button-text="getFilterPlaceholder(
+					multiple,
+					name,
+					list,
+					filterStore.filters[name],
+					showKey,
+					returnKey
+				)
+					"
+				:filled="multiple ? !!filterStore.filters[name].length : !!filterStore.filters[name]
+					"
 				:is-disabled="disabled"
 				:alt="$t(`home.filter.${name}.aria`)"
 				class="filter"
@@ -191,7 +236,8 @@ const showModal = computed(() => filterStore.modal.show);
 	.filters__wrapper:has(.filter:last-child input:focus)+.filter::before,
 	.filters__wrapper:has(.button__multiselect)+.filter::before,
 	.filters__wrapper:has(.select__field--green-border)+.filter::before //псевдоэлементы ::before становятся прозрачными
-	{
+
+		{
 		background-color: transparent;
 	}
 

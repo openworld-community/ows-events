@@ -51,6 +51,9 @@ const goBack = () => {
 		navigateTo(localePath({ path: RoutePathEnum.HOME }));
 	}
 };
+
+console.log(localePath(route.path));
+
 </script>
 
 <template>
@@ -66,7 +69,7 @@ const goBack = () => {
 		>
 			<div class="header__left">
 				<CommonButton
-					v-if="hasBackButton"
+					v-if="hasBackButton && (localePath(route.path)) !== localePath({ path: RoutePathEnum.USER_PAGE })"
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"
@@ -75,6 +78,7 @@ const goBack = () => {
 				/>
 				<component
 					:is="logoComponentIs"
+					v-else
 					class="header__logo"
 					:title="
 						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
@@ -132,9 +136,7 @@ const goBack = () => {
 			</ul>
 			<div class="header__right">
 				<!-- v-if="!hasBackButton" -->
-				<HeaderLanguageSelector
-					class="header__language-selector"
-				/>
+				<HeaderLanguageSelector class="header__language-selector" />
 				<HeaderNavigationBurger
 					v-if="mobile"
 					ref="navigationBurger"
@@ -203,10 +205,6 @@ const goBack = () => {
 		display: flex;
 		height: 100%;
 		align-items: center;
-		// 41рх - 1/2 ширины лого
-		// костыль
-		width: calc(50% + 41px);
-		justify-content: space-between;
 
 		@media (min-width: 768px) {
 			width: auto;

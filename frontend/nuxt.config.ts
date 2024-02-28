@@ -3,13 +3,16 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import path from 'path';
 import { fileURLToPath, URL } from 'node:url';
 import { searchForWorkspaceRoot } from 'vite';
+import { BASE_URL, VITE_GOOGLE_OAUTH_KEY } from './constants/url';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+	// @ts-ignore
 	devtools: {
 		enabled: true // or false to disable
 	},
 	modules: [
+		'nuxt-vue3-google-signin',
 		'@nuxtjs/i18n',
 		'@pinia/nuxt',
 		'@vueuse/nuxt',
@@ -26,8 +29,9 @@ export default defineNuxtConfig({
 			}
 		]
 	],
+
 	routeRules: {
-		'/': { redirect: '/ru', ssr: true }
+		'/': { redirect: '/ru', ssr: true },
 	},
 	i18n: {
 		debug: false,
@@ -105,5 +109,8 @@ export default defineNuxtConfig({
 	// appManifest:
 	// Почему-то при билде накст генерит разные buildId для appManifest и entry, пробую отключить
 	// (могут сломаться редиректы по языкам)
-	experimental: { watcher: 'chokidar', appManifest: false }
+	experimental: { watcher: 'chokidar', appManifest: false },
+	googleSignIn: {
+		clientId: VITE_GOOGLE_OAUTH_KEY
+	}
 });

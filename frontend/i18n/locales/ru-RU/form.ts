@@ -1,6 +1,7 @@
 export default {
 	global: {
-		required: '* поля, обязательные для заполнения'
+		required: '* поля, обязательные для заполнения',
+		close: 'Закрыть'
 	},
 	event: {
 		title: 'Создание мероприятия',
@@ -33,5 +34,13 @@ export default {
 			url_to_registration: 'Ссылка для связи',
 			url_placeholder: 'https://example.com'
 		}
+	},
+	form: {
+		signup: 'Зарегистрироваться',
+		login: 'Войти',
+		forgotPassword: 'Забыл пароль',
+		email: 'Почта',
+		password: 'Пароль',
+		confirmPassword: 'Подтвердите пароль'
 	}
 };

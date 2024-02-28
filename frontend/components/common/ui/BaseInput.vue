@@ -2,7 +2,7 @@
 import { type PropType } from 'vue';
 import type { IconName } from '../Icon.vue';
 
-defineProps({
+const props = defineProps({
 	className: {
 		type: String,
 		default: ''
@@ -31,6 +31,7 @@ defineProps({
 			| 'email'
 			| 'phone'
 			| 'search'
+			| 'password'
 		>,
 		default: 'text'
 	},
@@ -55,7 +56,7 @@ defineProps({
 		default: false
 	},
 	error: {
-		type: String,
+		type: [String, Boolean],
 		default: ''
 	},
 	autocomplete: {
@@ -84,8 +85,17 @@ defineProps({
 	hasValueIcon: {
 		type: Boolean,
 		default: false
+	},
+	// для отображения пассворда по клику на иконку (password <--> text)
+	showPassword: {
+		type: Boolean,
+		default: false
 	}
 });
+
+// выносим проп в отдельный реф
+// если не применяется логика отображения пароля, то он ведет себе как обычный props.type
+const writableType = ref<string>(props.type);
 
 const emit = defineEmits(['update:model-value']);
 const updateValue = (event: Event) => {
@@ -113,10 +123,10 @@ const onRemove = () => {
 				{ 'input__field--cursor-pointer': inputReadonly && !modelValue },
 				{ 'input__field--without-cursor': inputReadonly && modelValue },
 				{ 'input__field--shifted': hasValueIcon && modelValue },
-				{ form__error: error }
+				{ form__error: Boolean(error) }
 			]"
 			:name="name"
-			:type="type"
+			:type="writableType"
 			:value="modelValue"
 			:maxlength="maxLength ? maxLength : undefined"
 			:disabled="disabled"
@@ -147,14 +157,48 @@ const onRemove = () => {
 
 		<!-- кнопка очистки инпута-->
 		<CommonButton
-			v-else-if="(modelValue || modelValue === 0) && !disabled"
-			class="input__button input__button--clear"
+			v-else-if="(modelValue || modelValue === 0) && !disabled && !showPassword"
 			is-icon
+			class="input__button input__button--clear input__button--wrapper"
 			:interactive="false"
 			icon-name="close"
 			:alt="$t('global.button.delete')"
 			@click="onRemove"
 		/>
+
+		<!-- блок для пассворд инпута
+		оставляем кнопку для очистки + кнопка раскрытия во флекс контейнере -->
+		<div
+			v-else-if="!disabled && showPassword"
+			:class="[
+				'input__button',
+				'input__button--clear',
+				'input__button--wrapper',
+				{ 'password-shown': showPassword && writableType === 'text' }
+			]"
+		>
+			<CommonButton
+				v-if="(modelValue || modelValue === 0) && !disabled"
+				is-icon
+				:interactive="false"
+				icon-name="close"
+				:alt="$t('global.button.delete')"
+				@click="onRemove"
+			/>
+			<!-- конпка отображения пароля (password <-> text) -->
+			<CommonButton
+				is-icon
+				:interactive="false"
+				icon-name="password"
+				:alt="$t('global.button.delete')"
+				:class="{ 'pw-show': writableType === 'text' }"
+				@click="
+					writableType === 'password'
+						? (writableType = 'text')
+						: (writableType = 'password')
+					"
+			/>
+		</div>
 
 		<!--    иконка слева (для селектов) -->
 		<CommonIcon
@@ -162,12 +206,11 @@ const onRemove = () => {
 			class="input__value-icon"
 			:name="`${name}/${modelValue}`"
 		/>
-
-		<span
-			v-if="error"
-			class="form__error"
-		>
-			{{ error }}
-		</span>
 	</div>
 </template>
+
+<style lang="less" scoped>
+.flex {
+	display: flex;
+}
+</style>

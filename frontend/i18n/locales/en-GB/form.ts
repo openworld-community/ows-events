@@ -1,6 +1,7 @@
 export default {
 	global: {
-		required: '* required fields'
+		required: '* required fields',
+		close: 'Close'
 	},
 	event: {
 		title: 'Create Event',
@@ -31,7 +32,15 @@ export default {
 			currency_placeholder: 'Currency',
 			price_free: 'Free',
 			url_to_registration: 'Link for contact',
-			url_placeholder: 'https://example.com'
+			url_placeholder: 'https://example.com',
 		}
+	},
+	form: {
+		signup: 'Sing up',
+		login: 'Sign in',
+		forgotPassword: 'Forgot password',
+		email: 'Email',
+		password: 'Password',
+		confirmPassword: 'Confirm password'
 	}
 };

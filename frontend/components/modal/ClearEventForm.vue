@@ -5,8 +5,8 @@ const eventStore = useEventStore();
 
 const clearForm = async () => {
 	eventStore.$patch({
-		showClearFormModal: false,
-		clearForm: true
+		//	showClearFormModal: false,
+		//	clearForm: true
 	});
 	await navigateTo({ path: eventStore.navTo });
 	eventStore.resetEventData();

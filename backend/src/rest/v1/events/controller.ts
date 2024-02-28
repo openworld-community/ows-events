@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import { EventOnPoster } from '@common/types';
 import { CommonErrorsEnum } from '../../../../../common/const';
 import { EventTypes } from '../../../../../common/const/eventTypes';
@@ -12,16 +11,17 @@ import {
 	IGetMyEventsHandler,
 	IUpdateEventHandler
 } from './type';
-import { ITokenData } from '../../types';
-import { vars } from '../../../config/vars';
+import { JWTController } from '../../../controllers/JWT-controller';
+import { UserTokenController } from '../../../controllers/user-token-controller';
 
 export const addEvent: IAddEventHandler = async (request) => {
 	const { event } = request.body;
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
-	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+	const isTokenValid = await UserTokenController.checkAccessToken(token);
+	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+	const jwtData = JWTController.decodeToken(token);
 
 	event.creatorId = jwtData.id;
 
@@ -56,8 +56,9 @@ export const getMyEvents: IGetMyEventsHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
-	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+	const isTokenValid = await UserTokenController.checkAccessToken(token);
+	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+	const jwtData = JWTController.decodeToken(token);
 
 	const events = await eventsStateController.getUserEvents(jwtData.id);
 	return events;
@@ -75,8 +76,9 @@ export const deleteEvent: IDeleteEventHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
-	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+	const isTokenValid = await UserTokenController.checkAccessToken(token);
+	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+	const jwtData = JWTController.decodeToken(token);
 
 	const oldEvent = await eventsStateController.getEvent(request.body.id);
 	const isAuthor = oldEvent?.creatorId === String(jwtData.id);
@@ -90,8 +92,9 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 	const token = request.headers.authorization;
 	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const jwtData = jwt.verify(token, vars.secret) as ITokenData;
-	if (!jwtData.id) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+	const isTokenValid = await UserTokenController.checkAccessToken(token);
+	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
+	const jwtData = JWTController.decodeToken(token);
 
 	const oldEvent = await eventsStateController.getEvent(request.body.event.id);
 	const isAuthor = oldEvent?.creatorId === String(jwtData.id);
@@ -104,8 +107,6 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 };
 
 export const findEvents: IFindEventHandler = async (request) => {
-	const { searchLine, country, city, tags } = request.body;
-
-	const events = await eventsStateController.getEvents({ searchLine, country, city, tags });
+	const events = await eventsStateController.getEvents(request.body);
 	return events;
 };

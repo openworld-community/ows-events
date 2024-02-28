@@ -19,16 +19,15 @@ const isFreeField = useField<boolean>(() => 'isFree');
 					:error="currencyField.errorMessage.value"
 					:touched="currencyField.meta.touched"
 				>
-					<CommonUiBaseSelect
+					<LibrarySelect
 						v-model="currencyField.value.value"
 						name="currency"
 						:placeholder="$t('form.event.fields.currency_placeholder')"
-						:list="locationStore.currencies"
+						:options="locationStore.currencies"
 						has-icon-items
 						:error="
 							currencyField.meta.touched && Boolean(currencyField.errorMessage.value)
 						"
-						input-readonly
 						:required="!isFreeField.value.value"
 						:disabled="isFreeField.value.value"
 					/>

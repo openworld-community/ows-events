@@ -83,37 +83,38 @@ const onRemove = () => {
 					color="var(--color-input-icons)"
 				/>
 			</SelectTrigger>
-
-			<SelectContent
-				class="select__content"
-				position="popper"
-				:side-offset="5"
-			>
-				<SelectViewport as-child>
-					<LibraryScrollArea>
-						<ul style="height: auto; padding: 8px 4px">
-							<LibraryUiItemSelect
-								v-for="option in options"
-								:key="typeof option === 'string' ? option : option['value']"
-								:value="typeof option === 'string' ? option : option['value']"
-								:icon-name="optionAsIcon ? `${name}/${option}` : ''"
-								side="top"
-								side-offset="5"
-								position="popper"
-								avoid-collisions
-							>
-								<span style="display: flex; align-items: center; gap: 4px">
-									<CommonIcon
-										v-if="optionAsIcon"
-										:name="`${name}/${option}`"
-									/>
-									{{ typeof option === 'string' ? option : option['label'] }}
-								</span>
-							</LibraryUiItemSelect>
-						</ul>
-					</LibraryScrollArea>
-				</SelectViewport>
-			</SelectContent>
+			<Transition name="fade">
+				<SelectContent
+					class="select__content"
+					position="popper"
+					:side-offset="5"
+				>
+					<SelectViewport as-child>
+						<LibraryScrollArea>
+							<ul style="height: auto; padding: 8px 4px">
+								<LibraryUiItemSelect
+									v-for="option in options"
+									:key="typeof option === 'string' ? option : option['value']"
+									:value="typeof option === 'string' ? option : option['value']"
+									:icon-name="optionAsIcon ? `${name}/${option}` : ''"
+									side="top"
+									side-offset="5"
+									position="popper"
+									avoid-collisions
+								>
+									<span style="display: flex; align-items: center; gap: 4px">
+										<CommonIcon
+											v-if="optionAsIcon"
+											:name="`${name}/${option}`"
+										/>
+										{{ typeof option === 'string' ? option : option['label'] }}
+									</span>
+								</LibraryUiItemSelect>
+							</ul>
+						</LibraryScrollArea>
+					</SelectViewport>
+				</SelectContent>
+			</Transition>
 		</SelectRoot>
 		<button
 			v-if="model"
@@ -133,6 +134,15 @@ const onRemove = () => {
 </template>
 
 <style lang="less">
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+	opacity: 0;
+}
 .select {
 	width: 100%;
 	min-width: 100%;

@@ -1,4 +1,4 @@
-import { BASE_URL, DEFAULT_IMAGE_URL } from '../constants/url';
+import { DEFAULT_IMAGE_URL, VITE_DOMAIN } from '../constants/url';
 
 type MetaData = {
 	title: string | undefined;
@@ -23,7 +23,7 @@ export const getMeta = (meta: MetaData) => {
 		ogImage: (meta.image as string) ?? DEFAULT_IMAGE_URL,
 		ogImageWidth: 1200,
 		ogImageHeight: 630,
-		ogUrl: BASE_URL + route.path,
+		ogUrl: VITE_DOMAIN + route.path,
 		twitterCard: 'summary_large_image',
 		twitterImage: meta.image ?? DEFAULT_IMAGE_URL,
 		twitterTitle: meta.title as string,

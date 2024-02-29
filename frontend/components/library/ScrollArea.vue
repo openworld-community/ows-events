@@ -5,6 +5,7 @@ import {
 	ScrollAreaThumb,
 	ScrollAreaViewport
 } from 'radix-vue';
+import type { PropType } from 'vue';
 const props = defineProps({
 	type: {
 		type: String as PropType<'always' | 'hover' | 'auto' | 'scroll'>,

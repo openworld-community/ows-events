@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
 const model = ref('');
 const mode = ref('');
 const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length - i}`);
 </script>
 
 <template>
-	<div style="padding: 10px">
+	<div style="padding: 10px; height: 100dvh; display: flex; flex-direction: column; gap: 20px;">
 		{{ model }}
 		<LibrarySelect
 			v-model="model"
@@ -26,19 +26,24 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 				:options="['banana', 'apple', 'orange']"
 			/>
 		</div>
-		<div style="width: 100px; height: 120px">
+		<div style="width: 100px">
 			<LibraryScrollArea>
-				<div class="py-[15px] px-5">
-					<div class="text-grass11 text-[15px] leading-[18px] font-semibold">Tags</div>
+				<div>
+					<div>Tags</div>
 					<div
 						v-for="tag in tags"
 						:key="tag"
-						class="text-mauve12 text-[13px] leading-[18px] mt-2.5 pt-2.5 border-t border-t-mauve6"
 					>
 						{{ tag }}
 					</div>
 				</div>
 			</LibraryScrollArea>
+		</div>
+		<div style="width: 33%;">
+			<LibraryUiItemAutocomplete :no-border="true" />
+		</div>
+		<div style="width: 33%;">
+			<LibraryUiItemAutocomplete />
 		</div>
 	</div>
 </template>

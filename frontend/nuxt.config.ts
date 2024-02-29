@@ -18,6 +18,9 @@ export default defineNuxtConfig({
 		'@vueuse/nuxt',
 		'nuxt-gtag',
 		'@nuxtjs/robots',
+		//+ resolver?
+		'radix-vue/nuxt',
+		// 
 		[
 			'nuxt-viewport',
 			{

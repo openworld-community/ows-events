@@ -22,7 +22,6 @@ const loadImage = async (event: Event) => {
 	if (!target.files || !target.files[0])
 		return console.warn('Load Image Event targed to has no files');
 	const file = target.files[0];
-	console.warn('load1', event.target);
 
 	if (!isImageFormatAllowed(file.name)) {
 		errorLoad.value = t('validation.image.extension', {

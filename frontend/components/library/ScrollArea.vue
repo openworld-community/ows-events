@@ -41,15 +41,14 @@ defineProps({
 <style lang="less">
 .scroll-area {
 	width: 100%;
-	height: 160px;
+	// height: 100%;
+	overflow: hidden;
 	border-radius: 4px;
 	display: flex;
-	min-height: 100px;
-	max-height: 300px;
-
+	
 	&__viewport {
 		width: 100%;
-		height: 100%;
+		max-height: 200px;
 	}
 	&__scrollbar {
 		width: 4px;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ComboboxAnchor, ComboboxContent, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxItemIndicator, ComboboxLabel, ComboboxRoot, ComboboxTrigger, ComboboxViewport, ComboboxCancel } from 'radix-vue'
+import { ComboboxContent, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxItemIndicator, ComboboxRoot, ComboboxTrigger, ComboboxViewport, ComboboxCancel } from 'radix-vue'
 import { vOnClickOutside } from '@vueuse/components';
 
 defineProps({
@@ -8,15 +8,19 @@ defineProps({
         type: Boolean,
         default: false
     },
-    // for managing multiple components open-state
-    open: {
-        type: Boolean,
-        default: false
+    list: {
+        type: Array,
+        default: () => ['Apple', 'Banana', 'Grape', 'Cucumber', 'Tomato']
+    },
+    // передавать в виде ключа i18n
+    // i.e. 'form.event.fields.price_placeholder'
+    placeholder: {
+        type: String,
+        required: true
     }
 })
 
 const model = ref('')
-const options = ['Apple', 'Banana', 'Blueberry', 'Grapes', 'Pineapple']
 
 const isOpen = ref<boolean>(false)
 
@@ -26,6 +30,7 @@ const handleOpen = () => {
 
 const clearModel = () => {
     model.value = ''
+    isOpen.value = false
 }
 </script>
         
@@ -33,56 +38,70 @@ const clearModel = () => {
     <ComboboxRoot
         v-model="model"
         :open="isOpen"
-        class="cb__root"
-        @click="handleOpen"
     >
-        <div class="cb__wrapper">
+        <div
+            v-on-click-outside="() => isOpen = false"
+            class="cb__wrapper"
+        >
             <ComboboxInput
-                v-on-click-outside="() => isOpen = false"
                 :class="['cb__input', { 'no-border': noBorder }]"
-                placeholder="placeholder"
+                :placeholder="$t(placeholder)"
+                @click="handleOpen"
             />
             <div class="cb__input--actions">
-                <ComboboxTrigger class="cb__trigger">
+                <ComboboxTrigger
+                    v-if="!model.length"
+                    class="cb__trigger"
+                    @click="handleOpen"
+                >
                     <CommonButton
-                        v-if="!model.length"
                         button-kind="multiselect"
                         :class="['cb__trigger--expand', { 'cb__trigger--expand--opened': isOpen }]"
                     />
                 </ComboboxTrigger>
-                <ComboboxCancel class="cb__cancel">
+                <ComboboxCancel
+                    v-if="model.length"
+                    class="cb__cancel"
+                    @click="clearModel"
+                >
                     <CommonButton
-                        v-if="model.length"
                         is-icon
                         icon-name="close"
                         :interactive="false"
                         class="cb__cancel--icon"
-                        @click="clearModel"
                     />
                 </ComboboxCancel>
             </div>
 
             <ComboboxContent class="cb__content">
                 <ComboboxViewport>
-                    <ComboboxGroup
-                        as="ul"
-                        class="cb__content--list"
-                    >
-                        <ComboboxItem
-                            v-for="(option, index) in options"
-                            :key="index"
-                            as="li"
-                            :value="option"
-                            @click="handleOpen"
+                    <LibraryScrollArea>
+                        <ComboboxGroup
+                            as="ul"
+                            class="cb__content--list"
                         >
-                            <!-- <ComboboxItemIndicator>
-                                <CommonIcon name="check" />
-                            </ComboboxItemIndicator> -->
-                            <span>
-                                {{ option }}
-                            </span>
-                        </ComboboxItem>
-                    </ComboboxGroup>
+                            <ComboboxItem
+                                v-for="(option, index) in list"
+                                :key="index"
+                                as="li"
+                                class="cb__content--list--item"
+                                :value="option"
+                                style="display: flex; justify-content: space-between;"
+                                @click="handleOpen"
+                            >
+                                <span>
+                                    {{ option }}
+                                </span>
+                                <ComboboxItemIndicator>
+                                    <CommonIcon
+                                        name="check"
+                                        color="var(--color-accent-green-main)"
+                                        style="display: flex; align-items: center; justify-content: center;"
+                                    />
+                                </ComboboxItemIndicator>
+                            </ComboboxItem>
+                        </ComboboxGroup>
+                    </LibraryScrollArea>
                 </ComboboxViewport>
             </ComboboxContent>
         </div>
@@ -90,18 +109,18 @@ const clearModel = () => {
 </template>
 
 <style scoped lang="less">
-.cb__root {
-    position: relative;
-}
-
 .cb__wrapper {
-    // display: flex;
     position: relative;
 }
-
 .cb__input {
     width: 100%;
     padding: 8px 35px 8px 12px;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+
+    &::placeholder {
+        color: var(--color-input-icons);
+    }
 
     &.no-border {
         border-color: transparent;
@@ -111,15 +130,18 @@ const clearModel = () => {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding-right: 5px;
 
         position: absolute;
         top: 50%;
         right: 0;
+        z-index: 10;
         transform: translateY(-50%);
     }
 }
 
+.cb__cancel {
+    padding-right: 2px;
+}
 .cb__trigger {
     display: flex;
     justify-content: center;
@@ -152,19 +174,36 @@ const clearModel = () => {
     position: absolute;
     top: calc(100% + 5px);
     left: 0;
-    z-index: 10;
+    z-index: 20;
 
     background-color: #fff;
     width: 100%;
-    border: 1px solid black;
+    border: 1px solid #dbdbdb;
     border-radius: 8px;
 
-    padding: 8px;
+    padding-block: 4px;
 
     &--list {
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        // gap: 5px;
+
+        &--item {
+            display: flex;
+            justify-content: space-between;
+            padding: 2px 0 2px 10px;
+
+            &:focus-visible,
+            &:active {
+                background-color: var(--color-accent-green-main-10);
+            }
+
+            &:hover {
+                @media (hover: hover) {
+                    background-color: var(--color-accent-green-main-10);
+                }
+            }
+        }
     }
 }
 </style>

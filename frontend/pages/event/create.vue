@@ -39,7 +39,7 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 				option-as-icon
 			/>
 		</div>
-		<div style="width: 100px; height: 120px">
+		<div style="width: 100px;">
 			<LibraryScrollArea>
 				<div>
 					<div>Tags</div>
@@ -52,11 +52,16 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 				</div>
 			</LibraryScrollArea>
 		</div>
-		<div style="width: 33%;">
-			<LibraryUiItemAutocomplete :no-border="true" />
+		<div>
+			---------separator----------
 		</div>
-		<div style="width: 33%;">
-			<LibraryUiItemAutocomplete />
+		<div style="width: 20%;">
+			<LibraryUiItemAutocomplete
+				:no-border="true"
+				placeholder="placeholder"
+			/>
 		</div>
-	</div>
-</template>
+		<div style="width: 20%;">
+			<LibraryUiItemAutocomplete placeholder="placeholder" />
+		</div>
+	</div></template>

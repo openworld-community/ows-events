@@ -61,7 +61,7 @@ const errorResult = computed({
 			{{ t(hint) }}
 		</p>
 		<CommonErrorComponent
-			v-if="touched"
+			v-if="touched && errorResult"
 			:error="errorResult"
 			:error-label="errorLabel"
 		/>

@@ -40,17 +40,16 @@ const addressField = useField<string>(() => 'location.address');
 					:error="countryField.errorMessage.value"
 					:touched="countryField.meta.touched"
 				>
-					<CommonUiBaseSelect
+					<LibrarySelect
 						v-model="countryField.value.value"
 						name="country"
 						:placeholder="$t('global.country')"
-						:list="locationStore.countries"
+						:options="locationStore.countries"
 						:disabled="isOnlineField.value.value"
 						input-readonly
 						:required="!isOnlineField.value.value"
 						:error="
-							countryField.errorMessage.value &&
-							Boolean(countryField.errorMessage.value)
+							countryField.meta.touched && Boolean(countryField.errorMessage.value)
 						"
 					/>
 				</CommonFormField>
@@ -58,14 +57,13 @@ const addressField = useField<string>(() => 'location.address');
 					:error="cityField.errorMessage.value"
 					:touched="cityField.meta.touched"
 				>
-					<CommonUiBaseSelect
+					<LibrarySelect
 						v-model="cityField.value.value"
 						name="city"
 						:disabled="!countryField.value.value || isOnlineField.value.value"
 						:error="cityField.meta.touched && Boolean(cityField.errorMessage.value)"
 						:placeholder="$t('global.city')"
-						:list="locationStore.getCitiesByCountry(countryField.value.value)"
-						input-readonly
+						:options="locationStore.getCitiesByCountry(countryField.value.value)"
 						:required="!isOnlineField.value.value"
 					/>
 				</CommonFormField>
@@ -73,12 +71,11 @@ const addressField = useField<string>(() => 'location.address');
 					:error="timeZoneField.errorMessage.value"
 					:touched="timeZoneField.meta.touched"
 				>
-					<CommonUiBaseSelect
+					<LibrarySelect
 						v-model="timeZoneField.value.value"
 						name="timezone"
 						:placeholder="$t('global.timezone')"
-						:list="eventStore.allTimezones"
-						input-readonly
+						:options="eventStore.allTimezones"
 						:error="
 							timeZoneField.meta.touched && Boolean(timeZoneField.errorMessage.value)
 						"
@@ -97,6 +94,7 @@ const addressField = useField<string>(() => 'location.address');
 					name="address"
 					:error="addressField.meta.touched && Boolean(addressField.errorMessage.value)"
 					:placeholder="$t('form.event.fields.address_placeholder')"
+					:required="!isOnlineField.value.value"
 					:disabled="
 						!(countryField.value.value && cityField.value.value) ||
 						isOnlineField.value.value

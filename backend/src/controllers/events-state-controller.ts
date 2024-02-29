@@ -85,7 +85,7 @@ class EventsStateController {
 				}
 			}
 		];
-
+		
 		const futureEvents = await EventModel.aggregate(pipeline).sort(sortObject).exec();
 		return futureEvents;
 	}

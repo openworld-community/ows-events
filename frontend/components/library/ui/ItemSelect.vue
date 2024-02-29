@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { SelectItem, SelectItemIndicator, type SelectItemProps, SelectItemText } from 'radix-vue';
-
 const props = defineProps<SelectItemProps>();
 </script>
 
@@ -9,7 +8,7 @@ const props = defineProps<SelectItemProps>();
 		v-bind="props"
 		class="select-item"
 	>
-		<SelectItemText>
+		<SelectItemText as-child>
 			<slot />
 		</SelectItemText>
 		<SelectItemIndicator>

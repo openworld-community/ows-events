@@ -29,5 +29,8 @@ export default {
 		[Tags.STANDUP]: 'Стендап',
 		[Tags.THEATER]: 'Театр',
 		[Tags.TOURISM]: 'Туризм'
+	},
+	filteredEvents: {
+		no_events_found: 'Мероприятий не найдено'
 	}
 };

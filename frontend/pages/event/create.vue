@@ -1,6 +1,10 @@
-<script setup lang="ts">
+<script setup>
+import { useLocationStore } from '@/stores/location.store';
+
+const locationStore = useLocationStore();
 const model = ref('');
 const mode = ref('');
+const currency = ref('');
 const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length - i}`);
 </script>
 
@@ -26,7 +30,16 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 				:options="['banana', 'apple', 'orange']"
 			/>
 		</div>
-		<div style="width: 100px">
+		<div style="margin: 40px">
+			<LibrarySelect
+				v-model="currency"
+				placeholder="Choose fruit"
+				:options="locationStore.currencies"
+				name="currency"
+				option-as-icon
+			/>
+		</div>
+		<div style="width: 100px; height: 120px">
 			<LibraryScrollArea>
 				<div>
 					<div>Tags</div>

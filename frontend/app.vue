@@ -38,7 +38,7 @@ useHead({
 if (process.client) {
 	const route = useRoute();
 	const { gtag } = useGtag();
-	const pageTitle = getRouteName(route.name as string)
+	const pageTitle = getRouteName(route.name as string);
 	gtag('event', 'page_view', {
 		page_title: pageTitle
 	});
@@ -50,8 +50,10 @@ useCookie(CookieNameEnum.LOCALE, { maxAge: TOKEN_MAX_AGE_SECONDS }).value = loca
 onMounted(() => localStorage.removeItem(LocalStorageEnum.TIMEZONES));
 </script>
 <template>
-	<ModalsContainer />
-	<NuxtPage />
+	<NuxtLayout>
+		<ModalsContainer />
+		<NuxtPage />
+	</NuxtLayout>
 </template>
 
 <style lang="less" scoped>

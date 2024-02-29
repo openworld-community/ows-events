@@ -49,8 +49,7 @@ const addressField = useField<string>(() => 'location.address');
 						input-readonly
 						:required="!isOnlineField.value.value"
 						:error="
-							countryField.errorMessage.value &&
-							Boolean(countryField.errorMessage.value)
+							countryField.meta.touched && Boolean(countryField.errorMessage.value)
 						"
 					/>
 				</CommonFormField>

@@ -10,15 +10,12 @@ const router = useRouter();
 const localePath = useLocalePath();
 const userStore = useUserStore();
 const mobile = inject('mobile');
+const { t } = useI18n();
 
 defineProps({
 	hasBackButton: {
 		type: Boolean,
 		default: false
-	},
-	titleOnMobile: {
-		type: String,
-		default: ''
 	}
 });
 
@@ -37,6 +34,18 @@ const logoComponentIs = computed(() => {
 	if (isAtHome.value) return 'button';
 	else return defineNuxtLink({});
 });
+const titleOnMobile = computed(() => {
+	if (localePath(route.path) === localePath({ path: RoutePathEnum.USER_FAVOURITES })) {
+		return t('user.favourites.title');
+	}
+	if (localePath(route.path) === localePath({ path: RoutePathEnum.USER_MY_EVENTS })) {
+		return t('user.my_events.title');
+	}
+	if (localePath(route.path) === localePath({ path: RoutePathEnum.USER_PROFILE })) {
+		return t('user.profile.title');
+	}
+	return '';
+});
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
 const goBack = () => {
@@ -53,7 +62,6 @@ const goBack = () => {
 };
 
 console.log(localePath(route.path));
-
 </script>
 
 <template>
@@ -69,7 +77,10 @@ console.log(localePath(route.path));
 		>
 			<div class="header__left">
 				<CommonButton
-					v-if="hasBackButton && (localePath(route.path)) !== localePath({ path: RoutePathEnum.USER_PAGE })"
+					v-if="
+						hasBackButton &&
+						localePath(route.path) !== localePath({ path: RoutePathEnum.USER_PAGE })
+					"
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"

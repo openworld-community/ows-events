@@ -22,6 +22,7 @@ const loadImage = async (event: Event) => {
 	if (!target.files || !target.files[0])
 		return console.warn('Load Image Event targed to has no files');
 	const file = target.files[0];
+
 	if (!isImageFormatAllowed(file.name)) {
 		errorLoad.value = t('validation.image.extension', {
 			name: allowedFormatsToString(ALLOWED_IMAGE_EXTENSIONS)
@@ -33,6 +34,7 @@ const loadImage = async (event: Event) => {
 		errorLoad.value = t('validation.image.size', { count: ALLOWED_IMAGE_SIZE });
 		return console.warn('Too big');
 	}
+
 	const { data } = await apiRouter.events.image.add.useMutation({ data: { image: file } });
 	input.value.value = null;
 	if (!data.value) {

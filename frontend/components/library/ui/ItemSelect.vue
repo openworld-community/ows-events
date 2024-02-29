@@ -1,12 +1,6 @@
 <script setup lang="ts">
 import { SelectItem, SelectItemIndicator, type SelectItemProps, SelectItemText } from 'radix-vue';
-
-const props = defineProps({
-	iconName: {
-		type: String,
-		default: ''
-	}
-});
+const props = defineProps<SelectItemProps>();
 </script>
 
 <template>

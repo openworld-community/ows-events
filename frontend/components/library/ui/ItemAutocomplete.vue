@@ -86,7 +86,6 @@ const clearModel = () => {
                                 as="li"
                                 class="cb__content--list--item"
                                 :value="option"
-                                style="display: flex; justify-content: space-between;"
                                 @click="handleOpen"
                             >
                                 <span>

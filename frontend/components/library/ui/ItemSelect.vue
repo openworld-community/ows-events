@@ -7,6 +7,7 @@ const props = defineProps<SelectItemProps>();
 	<SelectItem
 		v-bind="props"
 		class="select-item"
+		tabindex="1"
 	>
 		<SelectItemText as-child>
 			<slot />

@@ -194,7 +194,7 @@ const onRemove = () => {
 		border-radius: 8px;
 		border: 2px black;
 		width: var(--radix-select-trigger-width);
-		height: 160px;
+		height: auto;
 		min-height: 100px;
 		max-height: 200px;
 	}

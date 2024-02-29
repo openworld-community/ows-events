@@ -5,6 +5,7 @@ import {
 	ScrollAreaThumb,
 	ScrollAreaViewport
 } from 'radix-vue';
+import { number } from 'yup';
 defineProps({
 	type: {
 		type: String as PropType<'always' | 'hover' | 'auto' | 'scroll'>,
@@ -13,6 +14,10 @@ defineProps({
 	orientation: {
 		type: String as PropType<'vertical' | 'horizontal'>,
 		default: 'vertical'
+	},
+	height: {
+		type: number,
+		default: 200
 	}
 });
 </script>
@@ -30,6 +35,7 @@ defineProps({
 		</ScrollAreaViewport>
 		<ScrollAreaScrollbar
 			class="scroll-area__scrollbar"
+			:style="{ heght: `${height}px` }"
 			:orientation="orientation"
 			style="width: 10px; padding: 5px 2px"
 		>
@@ -49,7 +55,6 @@ defineProps({
 
 	&__viewport {
 		width: 100%;
-		height: 100%;
 	}
 	&__scrollbar {
 		width: 4px;

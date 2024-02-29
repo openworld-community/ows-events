@@ -4,10 +4,10 @@ import { useUserStore } from '@/stores/user.store';
 import { TELEGRAM_AUTH_BOT_NAME } from '@/constants/url';
 import { BASE_URL } from '@/constants/url';
 import { CookieNameEnum } from '@/constants/enums/common';
-import { GoogleSignInButton } from "vue3-google-signin";
+import { GoogleSignInButton } from 'vue3-google-signin';
 import { GOOGLE_OAUTH_URL } from '@/constants/url';
 
-type TFormType = 'login' | 'signup'
+type TFormType = 'login' | 'signup';
 
 const userStore = useUserStore();
 const mobile = inject('mobile');
@@ -15,11 +15,11 @@ const mobile = inject('mobile');
 const localePath = useLocalePath();
 const tokenCookie = useCookie<string | null>(CookieNameEnum.TOKEN);
 
-const login = ref<TFormType>('login')
+const login = ref<TFormType>('login');
 
 const changeFormType = () => {
-	login.value === 'login' ? login.value = 'signup' : login.value = 'login'
-}
+	login.value === 'login' ? (login.value = 'signup') : (login.value = 'login');
+};
 
 const telegram = ref<HTMLElement | null>(null);
 
@@ -40,11 +40,9 @@ const initTGButton = () => {
 		tgicon.classList.add('tgicon_active');
 	});
 
-	const tgauth = document.getElementById('tgauth')
-	tgauth.appendChild(script)
-
+	const tgauth = document.getElementById('tgauth');
+	tgauth.appendChild(script);
 };
-
 
 onMounted(() => {
 	if (!userStore.isAuthorized) {
@@ -81,7 +79,11 @@ watch(
 				{{ $t('user.unauthorized.title') }}
 			</h1>
 			<p class="unauthorized__text">
-				{{ login === 'login' ? $t('user.unauthorized.loginText') : $t('user.unauthorized.signupText') }}
+				{{
+					login === 'login'
+						? $t('user.unauthorized.loginText')
+						: $t('user.unauthorized.signupText')
+				}}
 			</p>
 
 			<UserLogin v-if="login === 'login'" />
@@ -89,7 +91,11 @@ watch(
 			<UserSignUp v-else />
 
 			<CommonButton
-				:button-text="login === 'login' ? $t('user.unauthorized.signup') : $t('user.unauthorized.login')"
+				:button-text="
+					login === 'login'
+						? $t('user.unauthorized.signup')
+						: $t('user.unauthorized.login')
+				"
 				@click="changeFormType"
 			/>
 
@@ -109,7 +115,7 @@ watch(
 							useTrackEvent('login', {
 								method: 'Telegram'
 							})
-							"
+						"
 					>
 						<div
 							id="tgauth"
@@ -156,7 +162,7 @@ watch(
 	justify-content: center;
 	padding-left: var(--padding-side);
 	padding-right: var(--padding-side);
-	padding-bottom: 30px;	
+	padding-bottom: 30px;
 
 	@media (min-width: 768px) {
 		padding: 0;
@@ -166,7 +172,7 @@ watch(
 
 		// @media (-webkit-min-device-pixel-ratio: 2),
 		// (min-resolution: 192dpi) {
-		// 	background-image: url(@/assets/img/user/unauthorized-background.svg);			
+		// 	background-image: url(@/assets/img/user/unauthorized-background.svg);
 		// }
 	}
 
@@ -317,7 +323,6 @@ watch(
 		pointer-events: none;
 		filter: grayscale(100%);
 	}
-
 }
 
 .tgicon_active {

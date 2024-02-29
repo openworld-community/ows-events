@@ -5,7 +5,7 @@ export default {
 		signupText: 'Please sign up to access additional features',
 		continue: 'Continue without authorization',
 		login: 'Already have an account',
-		signup: 'Don\'t have an account yet',
+		signup: "Don't have an account yet"
 	},
 	greeting: 'Hello',
 	user: 'User',
@@ -16,6 +16,9 @@ export default {
 	favourites: {
 		title: 'Favourites',
 		no_favourites: 'You haven\'t added anything to your "Favourites" yet'
+	},
+	profile: {
+		title: 'Edit profile'
 	},
 	donate: {
 		title: 'Become a part of our project!',

@@ -3,6 +3,10 @@ import { apiRouter } from '~/composables/useApiRouter';
 import { SeoItemTypeEnum } from '~/constants/enums/seo';
 import type { EventOnPoster } from '../../../common/types';
 
+definePageMeta({
+	layout: 'profile'
+});
+
 const mobile = inject<boolean>('mobile');
 const favourites = ref<EventOnPoster[] | []>([]);
 
@@ -11,43 +15,36 @@ if (data.value) favourites.value = data.value;
 </script>
 
 <template>
-	<div class="root">
-		<HeaderCommon
-			:has-back-button="mobile"
-			:title-on-mobile="$t('user.favourites.title')"
-		/>
-		<main class="favourites">
-			<h1
-				v-if="!mobile"
-				class="favourites__title"
-			>
-				{{ $t('user.favourites.title') }}
-			</h1>
+	<div class="favourites">
+		<h1
+			v-if="!mobile"
+			class="favourites__title"
+		>
+			{{ $t('user.favourites.title') }}
+		</h1>
 
-			<ul
-				v-if="favourites.length"
-				class="favourites__list"
+		<ul
+			v-if="favourites.length"
+			class="favourites__list"
+		>
+			<li
+				v-for="event in favourites"
+				:key="event.id"
+				itemscope
+				:itemtype="SeoItemTypeEnum.EVENT"
 			>
-				<li
-					v-for="event in favourites"
-					:key="event.id"
-					itemscope
-					:itemtype="SeoItemTypeEnum.EVENT"
-				>
-					<UserEventCard :event-data="event" />
-				</li>
-			</ul>
-			<div
-				v-else
-				class="favourites__empty empty"
-			>
-				<div class="empty__image" />
-				<p class="empty__text">
-					{{ $t('user.favourites.no_favourites') }}
-				</p>
-			</div>
-		</main>
-		<FooterCommon v-if="!mobile" />
+				<UserEventCard :event-data="event" />
+			</li>
+		</ul>
+		<div
+			v-else
+			class="favourites__empty empty"
+		>
+			<div class="empty__image" />
+			<p class="empty__text">
+				{{ $t('user.favourites.no_favourites') }}
+			</p>
+		</div>
 	</div>
 </template>
 
@@ -56,6 +53,7 @@ if (data.value) favourites.value = data.value;
 	display: flex;
 	width: 100%;
 	height: 100%;
+	display: flex;
 	flex-direction: column;
 	align-items: center;
 	padding-left: var(--padding-side);
@@ -64,8 +62,10 @@ if (data.value) favourites.value = data.value;
 
 	@media (min-width: 768px) {
 		justify-content: center;
-		height: unset;
-		padding-top: 40px;
+		//height: unset;
+		padding-left: 5px;
+		padding-right: 0;
+		padding-top: 20px;
 	}
 
 	&__title {
@@ -87,6 +87,7 @@ if (data.value) favourites.value = data.value;
 
 	&__list {
 		width: 100%;
+		flex-grow: 1;
 
 		@media (min-width: 768px) {
 			max-width: 820px;

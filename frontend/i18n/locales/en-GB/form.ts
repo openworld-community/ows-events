@@ -8,7 +8,7 @@ export default {
 		title_edit: 'Edit Event',
 		add_image: 'Add image',
 		remove_image: 'Remove image',
-		image: 'Изображение мероприятия',
+		image: 'Event image',
 		fields: {
 			online: 'Online',
 			location: 'Location',

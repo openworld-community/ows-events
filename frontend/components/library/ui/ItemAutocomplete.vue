@@ -9,7 +9,10 @@ defineProps({
         default: false
     },
     list: {
-        type: Array,
+        type: [Array, String, Set] as PropType<
+			string | string[] | { [key: string]: string }[] | Set<string>
+		>,
+		// required: true,
         default: () => ['Apple', 'Banana', 'Grape', 'Cucumber', 'Tomato']
     },
     // передавать в виде ключа i18n

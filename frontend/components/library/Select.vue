@@ -83,38 +83,37 @@ const onRemove = () => {
 					color="var(--color-input-icons)"
 				/>
 			</SelectTrigger>
-			<Transition name="fade">
-				<SelectContent
-					class="select__content"
-					position="popper"
-					:side-offset="5"
-				>
-					<SelectViewport as-child>
-						<LibraryScrollArea>
-							<ul style="height: auto; padding: 8px 4px">
-								<LibraryUiItemSelect
-									v-for="option in options"
-									:key="typeof option === 'string' ? option : option['value']"
-									:value="typeof option === 'string' ? option : option['value']"
-									:icon-name="optionAsIcon ? `${name}/${option}` : ''"
-									side="top"
-									side-offset="5"
-									position="popper"
-									avoid-collisions
-								>
-									<span style="display: flex; align-items: center; gap: 4px">
-										<CommonIcon
-											v-if="optionAsIcon"
-											:name="`${name}/${option}`"
-										/>
-										{{ typeof option === 'string' ? option : option['label'] }}
-									</span>
-								</LibraryUiItemSelect>
-							</ul>
-						</LibraryScrollArea>
-					</SelectViewport>
-				</SelectContent>
-			</Transition>
+
+			<SelectContent
+				class="select__content"
+				position="popper"
+				:side-offset="5"
+			>
+				<SelectViewport as-child>
+					<LibraryScrollArea>
+						<ul style="height: auto; padding: 8px 4px">
+							<LibraryUiItemSelect
+								v-for="option in options"
+								:key="typeof option === 'string' ? option : option['value']"
+								:value="typeof option === 'string' ? option : option['value']"
+								:icon-name="optionAsIcon ? `${name}/${option}` : ''"
+								side="top"
+								side-offset="5"
+								position="popper"
+								avoid-collisions
+							>
+								<span style="display: flex; align-items: center; gap: 4px">
+									<CommonIcon
+										v-if="optionAsIcon"
+										:name="`${name}/${option}`"
+									/>
+									{{ typeof option === 'string' ? option : option['label'] }}
+								</span>
+							</LibraryUiItemSelect>
+						</ul>
+					</LibraryScrollArea>
+				</SelectViewport>
+			</SelectContent>
 		</SelectRoot>
 		<button
 			v-if="model"
@@ -134,15 +133,6 @@ const onRemove = () => {
 </template>
 
 <style lang="less">
-.fade-enter-active,
-.fade-leave-active {
-	transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-	opacity: 0;
-}
 .select {
 	width: 100%;
 	min-width: 100%;
@@ -161,11 +151,13 @@ const onRemove = () => {
 		cursor: pointer;
 
 		&:focus-within {
+			outline: none;
 			border-color: var(--color-accent-green-main);
 		}
 
 		&:focus {
-			outline: 1px solid var(--color-accent-green-main);
+			outline: none;
+			border-color: var(--color-accent-green-main);
 		}
 
 		&:hover {
@@ -217,11 +209,11 @@ const onRemove = () => {
 		border: 1px solid transparent;
 		border-color: 4px;
 
-		&:deep(svg) {
+		&__svg {
 			color: var(--color-accent-green-main);
 		}
 		&:focus-within {
-			outline: var(--color-accent-green-main);
+			outline: none;
 			border-color: var(--color-accent-green-main);
 			border-radius: 4px;
 
@@ -231,8 +223,9 @@ const onRemove = () => {
 		}
 
 		&:focus {
-			outline: var(--color-accent-green-main);
+			outline: none;
 			border-radius: 4px;
+			border-color: var(--color-accent-green-main);
 			&:deep(svg) {
 				color: var(--color-accent-green-main);
 			}
@@ -240,7 +233,7 @@ const onRemove = () => {
 		&:hover {
 			border-color: var(--color-accent-green-main);
 
-			&:deep(svg) {
+			&:svg {
 				color: var(--color-accent-green-main);
 			}
 		}

@@ -3,6 +3,10 @@ import { SeoItemTypeEnum } from '~/constants/enums/seo';
 import type { EventOnPoster } from '../../../common/types';
 import { RoutePathEnum } from '../../constants/enums/route';
 
+definePageMeta({
+	layout: 'profile'
+});
+
 const mobile = inject<boolean>('mobile');
 const localePath = useLocalePath();
 
@@ -13,78 +17,67 @@ if (data.value) myEvents.value = data.value;
 </script>
 
 <template>
-	<div class="root">
-		<HeaderCommon
-			:has-back-button="mobile"
-			:title-on-mobile="$t('user.my_events.title')"
-		/>
-		<main class="my-events">
-			<div
-				v-if="!mobile"
-				class="my-events__title-wrapper"
+	<div class="my-events">
+		<div
+			v-if="!mobile"
+			class="my-events__title-wrapper"
+		>
+			<h1 class="my-events__title">
+				{{ $t('user.my_events.title') }}
+			</h1>
+		</div>
+
+		<ul
+			v-if="myEvents.length"
+			class="my-events__list"
+		>
+			<li
+				v-for="event in myEvents"
+				:key="event.id"
+				itemscope
+				:itemtype="SeoItemTypeEnum.EVENT"
 			>
-				<h1 class="my-events__title">
-					{{ $t('user.my_events.title') }}
-				</h1>
-			</div>
-			<div
-				v-if="myEvents.length"
-				class="my-events__list-wrapper"
-			>
-				<ul class="my-events__list">
-					<li
-						v-for="event in myEvents"
-						:key="event.id"
-						itemscope
-						:itemtype="SeoItemTypeEnum.EVENT"
-					>
-						<UserEventCard :event-data="event" />
-					</li>
-				</ul>
-			</div>
-			<div
-				v-else
-				class="my-events__empty empty"
-			>
-				<div class="empty__image" />
-				<p class="empty__text">
-					{{ $t('user.my_events.no_my_events') }}
-				</p>
-			</div>
-			<div class="my-events__bottom">
-				<CommonButton
-					class="my-events__button"
-					button-kind="success"
-					:button-text="$t('global.button.new_event')"
-					:link="localePath(`${RoutePathEnum.EVENT_EDIT}new`)"
-				/>
-			</div>
-		</main>
-		<FooterCommon v-if="!mobile" />
+				<UserEventCard :event-data="event" />
+			</li>
+		</ul>
+
+		<div
+			v-else
+			class="my-events__empty empty"
+		>
+			<div class="empty__image" />
+			<p class="empty__text">
+				{{ $t('user.my_events.no_my_events') }}
+			</p>
+		</div>
+		<div class="my-events__bottom">
+			<CommonButton
+				class="my-events__button"
+				button-kind="success"
+				:button-text="$t('global.button.new_event')"
+				:link="localePath(`${RoutePathEnum.EVENT_EDIT}new`)"
+			/>
+		</div>
 	</div>
 </template>
 
 <style scoped lang="less">
 .my-events {
-	display: flex;
 	width: 100%;
 	height: 100%;
-	min-height: calc(100vh - var(--header-height));
+	display: flex;
 	flex-direction: column;
 	align-items: center;
-	position: relative;
+	padding-left: var(--padding-side);
+	padding-right: var(--padding-side);
 	padding-bottom: var(--padding-vertical);
 
-	//Для адаптивной height на iOs
-	@supports (-webkit-touch-callout: none) {
-		min-height: -webkit-fill-available;
-	}
-
 	@media (min-width: 768px) {
-		justify-content: space-between;
-		min-height: unset;
+		justify-content: center;
+		//height: unset;
+		padding-left: 5px;
+		padding-right: 0;
 		padding-top: 20px;
-		padding-bottom: 20px;
 	}
 
 	&__title-wrapper {
@@ -113,24 +106,9 @@ if (data.value) myEvents.value = data.value;
 		}
 	}
 
-	&__list-wrapper {
-		display: flex;
-		width: 100%;
-		max-height: calc(100vh - var(--header-height) - 76px);
-		overflow-y: auto;
-		padding-left: var(--padding-side);
-		padding-right: var(--padding-side);
-
-		@media (min-width: 768px) {
-			height: 100%;
-			max-height: unset;
-			overflow-y: unset;
-			justify-content: center;
-		}
-	}
-
 	&__list {
 		width: 100%;
+		flex-grow: 1;
 
 		@media (min-width: 768px) {
 			max-width: 820px;

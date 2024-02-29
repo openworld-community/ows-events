@@ -1,7 +1,7 @@
 export enum RoutePathEnum {
 	HOME = '/',
 	EVENT = '/event',
-	//EVENT_FORM = '/event/form',
+	AUTH = '/auth',
 	EVENT_EDIT = '/event/edit-',
 	ABOUT = '/about',
 	DONATION = '/donate',
@@ -9,13 +9,14 @@ export enum RoutePathEnum {
 	LIMITATION_OF_LIABILITY = '/limitation-of-liability',
 	USER_PAGE = '/user',
 	USER_FAVOURITES = '/user/favourites',
-	USER_MY_EVENTS = '/user/my-events'
+	USER_MY_EVENTS = '/user/my-events',
+	USER_PROFILE = '/user/profile'
 }
 
 export enum RouteNameEnum {
 	HOME = 'index',
 	EVENT = 'event-id',
-	//EVENT_FORM = 'event-form',
+	AUTH = 'auth',
 	ABOUT = 'about',
 	DONATION = 'donate',
 	PAYMENT_INFO = 'payment-eventId',
@@ -23,5 +24,6 @@ export enum RouteNameEnum {
 	USER_PAGE = 'user',
 	USER_FAVOURITES = 'user-favourites',
 	USER_MY_EVENTS = 'user-my-events',
-	EVENT_EDIT = 'event-edit-editId'
+	EVENT_EDIT = 'event-edit-editId',
+	USER_PROFILE = 'user-profile'
 }

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useLocationStore } from '@/stores/location.store';
 
 const locationStore = useLocationStore();

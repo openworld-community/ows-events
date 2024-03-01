@@ -5,7 +5,7 @@ import {
 	ScrollAreaThumb,
 	ScrollAreaViewport
 } from 'radix-vue';
-import { number } from 'yup';
+
 defineProps({
 	type: {
 		type: String as PropType<'always' | 'hover' | 'auto' | 'scroll'>,
@@ -16,7 +16,7 @@ defineProps({
 		default: 'vertical'
 	},
 	height: {
-		type: number,
+		type: Number,
 		default: 200
 	}
 });

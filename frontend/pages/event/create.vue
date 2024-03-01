@@ -16,6 +16,7 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 		{{ model }}
 		<LibrarySelect
 			v-model="model"
+			:max-height="50"
 			placeholder="Choose fruit"
 			:options="[
 				{ label: 'banana', value: 'valBanana' },
@@ -29,6 +30,7 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 		<div style="margin: 40px">
 			<LibrarySelect
 				v-model="mode"
+				:max-height="100"
 				placeholder="Choose fruit"
 				:options="['banana', 'apple', 'orange']"
 			/>
@@ -36,6 +38,7 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 		<div style="margin: 40px">
 			<LibrarySelect
 				v-model="currency"
+				:max-height="200"
 				placeholder="Choose fruit"
 				:options="locationStore.currencies"
 				name="currency"
@@ -43,7 +46,7 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 			/>
 		</div>
 		<div style="width: 100px">
-			<LibraryScrollArea>
+			<LibraryScrollArea :max-height="100">
 				<div>
 					<div>Tags</div>
 					<div
@@ -59,6 +62,7 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 		<div style="width: 20%">
 			<LibraryAutocomplete
 				v-model="autocomplete"
+				:max-height="100"
 				disabled
 				placeholder="placeholder"
 				:options="[
@@ -73,6 +77,7 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 		<div style="width: 20%">
 			<LibraryAutocomplete
 				v-model="autocomplete1"
+				:max-height="100"
 				placeholder="placeholder"
 				error
 				:options="[
@@ -88,6 +93,7 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 		<div style="width: 20%">
 			<LibraryAutocomplete
 				v-model="autocomplete2"
+				:max-height="100"
 				placeholder="placeholder"
 				:options="locationStore.currencies"
 				name="currency"

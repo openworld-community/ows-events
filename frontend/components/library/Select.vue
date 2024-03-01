@@ -37,18 +37,17 @@ const props = defineProps({
 	error: {
 		type: Boolean,
 		default: false
-	}
+	},
+	maxHeight: {
+		type: Number,
+		default: 200
+	},
 });
 
 const emit = defineEmits(['update:model-value']);
 
 const model = ref(props.modelValue)
-const height = ref(200);
-const computedHeight = computed(() => {
-	return {
-		'max-height': height.value + 'px'
-	};
-});
+
 const onRemove = () => {
 	emit('update:model-value', '');
 };
@@ -85,12 +84,12 @@ const onRemove = () => {
 
 			<SelectContent
 				class="select__content"
-				:style="computedHeight"
 				position="popper"
+				style="max-height: maxHeight;"
 				:side-offset="5"
 			>
-				<SelectViewport as-child>
-					<LibraryScrollArea :height="height">
+				<SelectViewport>
+					<LibraryScrollArea :max-height="maxHeight">
 						<ul style="height: auto; padding: 8px 4px">
 							<LibraryUiItemSelect
 								v-for="option in options"
@@ -170,6 +169,7 @@ const onRemove = () => {
 		font-size: var(--font-size-M);
 		color: var(--color-text-main);
 	}
+
 	&__trigger[data-placeholder] {
 		.select__value {
 			font-family: var(--font-family-main);
@@ -182,6 +182,7 @@ const onRemove = () => {
 		border-color: var(--color-input-field);
 		opacity: 0.4;
 	}
+
 	&__trigger[data-error='true'] {
 		border-color: var(--color-accent-red);
 	}
@@ -194,9 +195,8 @@ const onRemove = () => {
 		border-radius: 8px;
 		border: 2px black;
 		width: var(--radix-select-trigger-width);
-		height: auto;
-		min-height: 100px;
 	}
+
 	&__clear-button {
 		position: absolute;
 		z-index: 10;
@@ -226,14 +226,16 @@ const onRemove = () => {
 		align-items: center;
 		gap: 4px;
 	}
+
 	&__clear-button:hover svg {
 		color: var(--color-accent-green-main);
 	}
+
 	&__clear-button:focus svg {
 		color: var(--color-accent-green-main);
 	}
+
 	&__clear-button:focus-withn svg {
 		color: var(--color-accent-green-main);
 	}
-}
-</style>
+}</style>

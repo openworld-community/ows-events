@@ -15,9 +15,9 @@ defineProps({
 		type: String as PropType<'vertical' | 'horizontal'>,
 		default: 'vertical'
 	},
-	height: {
+	maxHeight: {
 		type: Number,
-		default: 200
+		required: true
 	}
 });
 </script>
@@ -25,11 +25,11 @@ defineProps({
 <template>
 	<ScrollAreaRoot
 		class="scroll-area"
-		:style="{ height: `${height}px` }"
 		:type="type"
 	>
 		<ScrollAreaViewport
 			class="scroll-area__viewport"
+			:style="{ maxHeight: `${maxHeight}px` }"
 			as-child
 		>
 			<slot></slot>
@@ -50,25 +50,30 @@ defineProps({
 	// height: 160px;
 	border-radius: 4px;
 	display: flex;
-	min-height: 100px;
-	max-height: 300px;
+	// min-height: 100px;
+	// max-height: 300px;
+
 	&__viewport {
 		width: 100%;
 	}
+
 	&__scrollbar {
 		width: 4px;
 		padding: 5px 2px;
 		background-color: var(--color-input-icons);
 		user-select: none;
 		touch-action: none;
+
 		&:hover {
 			background-color: var(--color-text-main);
 		}
 	}
+
 	&__thumb {
 		background: rgba(0, 0, 0, 0.3);
 		border-radius: 3px;
 		flex: 1 1 0%;
+
 		&::before {
 			content: '';
 			position: absolute;
@@ -81,5 +86,4 @@ defineProps({
 			min-height: 20px;
 		}
 	}
-}
-</style>
+}</style>

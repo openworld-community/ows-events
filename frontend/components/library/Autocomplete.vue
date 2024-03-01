@@ -44,7 +44,6 @@ const props = defineProps({
 		type: Boolean,
 		default: false
 	},
-	// а оно вообще надо?
 	error: {
 		type: Boolean,
 		default: false
@@ -54,6 +53,10 @@ const props = defineProps({
 	label: {
 		type: String,
 		default: ''
+	},
+	maxHeight: {
+		type: Number,
+		required: true
 	},
 	required: {
 		type: Boolean,
@@ -124,7 +127,7 @@ const clearModel = () => {
 				tabindex="1"
 			>
 				<ComboboxViewport>
-					<LibraryScrollArea :height="100">
+					<LibraryScrollArea :maxHeight="maxHeight">
 						<ComboboxEmpty class="cb__empty">
 							{{ $t('global.notFound') }}
 						</ComboboxEmpty>
@@ -302,30 +305,6 @@ const clearModel = () => {
 	&--list {
 		display: flex;
 		flex-direction: column;
-
-		&--item {
-			display: flex;
-			justify-content: space-between;
-			padding: 2px 0 2px 10px;
-			cursor: pointer;
-
-			&:active,
-			&:focus-visible {
-				background-color: var(--color-accent-green-main-10);
-			}
-
-			&:hover {
-				@media (hover: hover) {
-					background-color: var(--color-accent-green-main-10);
-				}
-			}
-		}
-
-		&--item {
-			&:focus-visible {
-				background-color: var(--color-accent-green-main-10);
-			}
-		}
 	}
 }
 

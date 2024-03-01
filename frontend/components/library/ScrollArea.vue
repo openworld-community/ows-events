@@ -6,7 +6,7 @@ import {
 	ScrollAreaViewport
 } from 'radix-vue';
 
-defineProps({
+const props = defineProps({
 	type: {
 		type: String as PropType<'always' | 'hover' | 'auto' | 'scroll'>,
 		default: 'auto'
@@ -20,6 +20,12 @@ defineProps({
 		default: 200
 	}
 });
+
+const computedHeight = computed(() => {
+	return {
+		'max-height': props.height + 'px'
+	};
+});
 </script>
 
 <template>
@@ -29,13 +35,13 @@ defineProps({
 	>
 		<ScrollAreaViewport
 			class="scroll-area__viewport"
+			:style="computedHeight"
 			as-child
 		>
 			<slot></slot>
 		</ScrollAreaViewport>
 		<ScrollAreaScrollbar
 			class="scroll-area__scrollbar"
-			:style="{ heght: `${height}px` }"
 			:orientation="orientation"
 			style="width: 10px; padding: 5px 2px"
 		>

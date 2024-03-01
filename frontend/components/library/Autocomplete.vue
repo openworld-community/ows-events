@@ -300,8 +300,6 @@ const clearModel = () => {
 	border: 1px solid #dbdbdb;
 	border-radius: 8px;
 
-	padding-block: 4px;
-
 	&--list {
 		display: flex;
 		flex-direction: column;

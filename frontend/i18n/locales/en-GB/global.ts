@@ -27,5 +27,6 @@ export default {
 		save: 'Save',
 		search: 'Search',
 		share: 'Share'
-	}
+	},
+	notFound: 'Nothing found'
 };

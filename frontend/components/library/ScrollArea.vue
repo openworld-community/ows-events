@@ -25,6 +25,7 @@ defineProps({
 <template>
 	<ScrollAreaRoot
 		class="scroll-area"
+		:style="{ height: `${height}px` }"
 		:type="type"
 	>
 		<ScrollAreaViewport
@@ -35,7 +36,6 @@ defineProps({
 		</ScrollAreaViewport>
 		<ScrollAreaScrollbar
 			class="scroll-area__scrollbar"
-			:style="{ heght: `${height}px` }"
 			:orientation="orientation"
 			style="width: 10px; padding: 5px 2px"
 		>
@@ -47,11 +47,11 @@ defineProps({
 <style lang="less">
 .scroll-area {
 	width: 100%;
-	// height: 100%;
-	overflow: hidden;
+	// height: 160px;
 	border-radius: 4px;
 	display: flex;
-	
+	min-height: 100px;
+	max-height: 300px;
 	&__viewport {
 		width: 100%;
 	}
@@ -61,7 +61,6 @@ defineProps({
 		background-color: var(--color-input-icons);
 		user-select: none;
 		touch-action: none;
-
 		&:hover {
 			background-color: var(--color-text-main);
 		}

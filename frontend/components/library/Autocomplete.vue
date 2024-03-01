@@ -4,16 +4,18 @@ import {
 	ComboboxContent,
 	ComboboxGroup,
 	ComboboxInput,
-	ComboboxItem,
-	ComboboxItemIndicator,
 	ComboboxRoot,
 	ComboboxTrigger,
 	ComboboxViewport,
 	ComboboxCancel
 } from 'radix-vue';
-import { vOnClickOutside } from '@vueuse/components';
+import type { PropType } from 'vue';
 
-defineProps({
+const props = defineProps({
+	modelValue: {
+		type: String,
+		required: true
+	},
 	name: {
 		type: String,
 		default: ''
@@ -22,44 +24,58 @@ defineProps({
 		type: Boolean,
 		default: false
 	},
-	list: {
+	options: {
 		type: [Array, String, Set] as PropType<
-			string | string[] | { [key: string]: string }[] | Set<string>
+			string | string[] | { [key: string]: string }[]
 		>,
-		// required: true,
-		default: () => ['Apple', 'Banana', 'Grape', 'Cucumber', 'Tomato']
+		required: true,
+	},
+	optionAsIcon: {
+		type: Boolean,
+		default: false
 	},
 	// передавать в виде ключа i18n
 	// i.e. 'form.event.fields.price_placeholder'
 	placeholder: {
 		type: String,
-		required: true
+		default: ''
 	},
 	disabled: {
 		type: Boolean,
 		default: false
 	},
+	// а оно вообще надо?
 	error: {
 		type: Boolean,
 		default: false
-	}
+	},
+	// передавать в виде ключа i18n
+	// i.e. 'form.event.fields.price_placeholder'
+	label: {
+		type: String,
+		default: ''
+	},
+	required: {
+		type: Boolean,
+		default: false
+	},
 });
 
-const model = ref('');
-
-//const isOpen = ref<boolean>(false)
-
-//const handleOpen = () => {
-// return isOpen.value === true ? isOpen.value = false : isOpen.value = true
-//}
+const model = ref(props.modelValue);
 
 const clearModel = () => {
 	model.value = '';
-	// isOpen.value = false
 };
 </script>
 
 <template>
+	<label
+		v-if="label"
+		for="search"
+		class="cb__label"
+	>
+		{{ required ? `${$t(label)} *` : $t(label) }}
+	</label>
 	<ComboboxRoot
 		v-model="model"
 		as-child
@@ -70,8 +86,10 @@ const clearModel = () => {
 			<ComboboxInput
 				:class="['cb__input', { 'no-border': noBorder }]"
 				:disabled="disabled"
+				name="search"
 				tabindex="1"
 				:placeholder="$t(placeholder)"
+				:data-error="error"
 			/>
 			<div class="cb__input--actions">
 				<ComboboxTrigger
@@ -82,7 +100,7 @@ const clearModel = () => {
 				>
 					<CommonButton
 						button-kind="multiselect"
-						:class="['cb__trigger--expand']"
+						class="cb__trigger--expand"
 					/>
 				</ComboboxTrigger>
 				<ComboboxCancel
@@ -106,20 +124,27 @@ const clearModel = () => {
 				tabindex="1"
 			>
 				<ComboboxViewport>
-					<ComboboxEmpty class="cb__empty" />
-
-					<LibraryScrollArea>
+					<LibraryScrollArea :height="100">
+						<ComboboxEmpty class="cb__empty">
+							{{ $t('global.notFound') }}
+						</ComboboxEmpty>
 						<ComboboxGroup
 							as="ul"
 							class="cb__content--list"
 						>
 							<LibraryUiItemSearch
-								v-for="(option, index) in list"
-								:key="index"
-								:value="option"
+								v-for="option in options"
+								:key="typeof option === 'string' ? option : option['value']"
+								:value="typeof option === 'string' ? option : option['value']"
+								:icon-name="optionAsIcon ? `${name}/${option}` : ''"
+								avoid-collisions
 							>
-								<span>
-									{{ option }}
+								<span class="search-item">
+									<CommonIcon
+										v-if="optionAsIcon"
+										:name="`${name}/${option}`"
+									/>
+									{{ typeof option === 'string' ? option : option['label'] }}
 								</span>
 							</LibraryUiItemSearch>
 						</ComboboxGroup>
@@ -133,7 +158,15 @@ const clearModel = () => {
 <style scoped lang="less">
 .cb__wrapper {
 	position: relative;
+	font-family: var(--font-family-main);
+	font-size: var(--font-size-M);
 }
+
+.cb__label {
+	display: block;
+	margin-bottom: 3px;
+}
+
 .cb__input {
 	width: 100%;
 	padding: 8px 35px 8px 12px;
@@ -144,18 +177,24 @@ const clearModel = () => {
 		color: var(--color-input-icons);
 	}
 
+	&[data-error="true"] {
+		border-color: var(--color-accent-red);
+	}
+
 	&.no-border {
 		border-color: transparent;
 	}
 
 	&:hover {
-		border-color: crimson;
+		border-color: var(--color-accent-green-main);
 	}
+
 	&:focus {
-		border-color: crimson;
+		border-color: var(--color-accent-green-main);
 	}
+
 	&:focus-within {
-		border-color: crimson;
+		border-color: var(--color-accent-green-main);
 	}
 
 	&--actions {
@@ -166,6 +205,7 @@ const clearModel = () => {
 		position: absolute;
 		top: 50%;
 		right: 0;
+		height: 100%;
 		z-index: 10;
 		transform: translateY(-50%);
 	}
@@ -173,25 +213,41 @@ const clearModel = () => {
 
 .cb__cancel {
 	padding-right: 2px;
+	height: 100%;
+
+	&:deep(svg) {
+		position: static;
+		transition: rotate 0.15s ease-in-out, color 0.15s ease-in-out;
+	}
+
+	&:hover {
+		background-color: var(--color-accent-green-main-10);
+
+		&:deep(svg) {
+			color: var(--color-accent-green-main);
+		}
+	}
+
+	&:focus-visible {
+		background-color: var(--color-accent-green-main-10);
+	}
 }
+
 .cb__trigger {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 
-	&:hover {
-		background-color: crimson;
+	&:hover:deep(svg) {
+		color: var(--color-accent-green-main);
 	}
-	&:focus {
-		background-color: crimson;
-	}
-	&:focus-within {
-		background-color: crimson;
+
+	&:focus-visible {
+		background-color: var(--color-accent-green-main-10);
 	}
 
 	&--expand {
 		padding: 0;
-		// padding-right: 5px;
 		background-color: transparent;
 		border-color: transparent;
 
@@ -200,7 +256,7 @@ const clearModel = () => {
 			transition: rotate 0.15s ease-in-out, color 0.15s ease-in-out;
 		}
 
-		&--opened:deep(svg) {
+		&[aria-expanded="true"]:deep(svg) {
 			rotate: 180deg;
 			color: var(--color-accent-green-main);
 		}
@@ -213,18 +269,20 @@ const clearModel = () => {
 }
 
 .cb__empty {
-	padding-left: 8px;
-	padding-right: 8px;
+	padding-inline: 8px;
 }
 
 .cb__content {
+	width: 100%;
+	height: auto;
+	min-height: 100px;
+
 	position: absolute;
 	top: calc(100% + 5px);
 	left: 0;
 	z-index: 20;
 
 	background-color: #fff;
-	width: 100%;
 	border: 1px solid #dbdbdb;
 	border-radius: 8px;
 
@@ -233,7 +291,6 @@ const clearModel = () => {
 	&--list {
 		display: flex;
 		flex-direction: column;
-		// gap: 5px;
 
 		&--item {
 			display: flex;
@@ -241,14 +298,8 @@ const clearModel = () => {
 			padding: 2px 0 2px 10px;
 			cursor: pointer;
 
-			&:active {
-				background-color: var(--color-accent-green-main-10);
-			}
-
+			&:active,
 			&:focus-visible {
-				background-color: var(--color-accent-green-main-10);
-			}
-			&:focus {
 				background-color: var(--color-accent-green-main-10);
 			}
 
@@ -258,21 +309,17 @@ const clearModel = () => {
 				}
 			}
 		}
-		&--list--item {
+
+		&--item {
 			&:focus-visible {
 				background-color: var(--color-accent-green-main-10);
 			}
-			&:focus {
-				background-color: var(--color-accent-green-main-10);
-			}
-		}
-		&__ilist--tem[data-highlighted] {
-			background-color: red;
 		}
 	}
 }
-
-.itop:focus {
-	background-color: var(--color-accent-green-main-10);
+.search-item {
+	display: flex;
+	align-items: center;
+	gap: 4px;
 }
 </style>

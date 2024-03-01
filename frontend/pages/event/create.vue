@@ -5,6 +5,9 @@ const locationStore = useLocationStore();
 const model = ref('');
 const mode = ref('');
 const currency = ref('');
+const autocomplete = ref('')
+const autocomplete1 = ref('')
+const autocomplete2 = ref('')
 const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length - i}`);
 </script>
 
@@ -55,12 +58,43 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 		<div>---------separator----------</div>
 		<div style="width: 20%">
 			<LibraryAutocomplete
-				:no-border="true"
+				v-model="autocomplete"
+				no-border
 				placeholder="placeholder"
+				:options="[
+					'apple',
+					'banana',
+					'cucumber',
+					'tomato',
+					'onion',
+				]"
 			/>
 		</div>
 		<div style="width: 20%">
-			<LibraryAutocomplete placeholder="placeholder" />
+			<LibraryAutocomplete
+				v-model="autocomplete1"
+				placeholder="placeholder"
+				error
+				:options="[
+					{ label: 'banana', value: 'valBanana' },
+					{ label: 'apple', value: 'valapple' },
+					{ label: 'orange', value: 'valorange' },
+					{ label: 'pinapple', value: 'valpinapple' },
+					{ label: 'apricot', value: 'valapricot' },
+					{ label: 'peach', value: 'valpeach' }
+				]"
+			/>
+		</div>
+		<div style="width: 20%">
+			<LibraryAutocomplete
+				v-model="autocomplete2"
+				placeholder="placeholder"
+				:options="locationStore.currencies"
+				name="currency"
+				option-as-icon
+				required
+				label="form.event.fields.currency_placeholder"
+			/>
 		</div>
 	</div>
 </template>

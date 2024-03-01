@@ -21,7 +21,7 @@ const props = defineProps<ComboboxItemProps>();
 		</ComboboxItemIndicator>
 	</ComboboxItem>
 </template>
-<style scoped>
+<style scoped lang="less">
 .search-item {
 	display: flex;
 	width: 100%;
@@ -49,6 +49,6 @@ const props = defineProps<ComboboxItemProps>();
 	}
 }
 .search-item[data-highlighted] {
-	background-color: red;
+	background-color: var(--color-accent-green-main-50);
 }
 </style>

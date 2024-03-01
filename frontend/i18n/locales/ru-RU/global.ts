@@ -27,5 +27,6 @@ export default {
 		save: 'Сохранить',
 		search: 'Поиск',
 		share: 'Поделиться'
-	}
+	},
+	notFound: 'Ничего не найдено'
 };

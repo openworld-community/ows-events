@@ -30,7 +30,6 @@ const props = defineProps({
 		type: Boolean,
 		default: false
 	},
-
 	required: {
 		type: Boolean,
 		default: false
@@ -43,14 +42,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:model-value']);
 
-const model = computed({
-	get() {
-		return props.modelValue;
-	},
-	set(value) {
-		emit('update:model-value', value);
-	}
-});
+const model = ref(props.modelValue)
 const height = ref(200);
 const computedHeight = computed(() => {
 	return {
@@ -80,7 +72,7 @@ const onRemove = () => {
 				:data-error="error"
 			>
 				<SelectValue
-					:placeholder="placeholder"
+					:placeholder="$t(placeholder)"
 					class="select__value"
 				/>
 

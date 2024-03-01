@@ -85,7 +85,7 @@ class EventsStateController {
 				}
 			}
 		];
-		
+
 		const futureEvents = await EventModel.aggregate(pipeline).sort(sortObject).exec();
 		return futureEvents;
 	}
@@ -138,7 +138,12 @@ class EventsStateController {
 	}
 
 	async findUsedTags() {
-		const tags = await EventModel.distinct('tags', { date: { $gt: Date.now() } });
+		const tags = await EventModel.distinct('tags', {
+			'meta.moderation.status': { $nin: ['declined', 'in-progress'] },
+			$expr: {
+				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]
+			}
+		});
 
 		return tags;
 	}

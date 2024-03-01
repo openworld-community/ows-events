@@ -20,6 +20,11 @@ const props = defineProps({
 		type: String,
 		default: ''
 	},
+	//type of trigger - without border
+	noBorder: {
+		type: Boolean,
+		default: false
+	},
 	optionAsIcon: {
 		type: Boolean,
 		default: false
@@ -50,11 +55,7 @@ const model = computed({
 	}
 });
 const height = ref(200);
-const computedHeight = computed(() => {
-	return {
-		'max-height': height.value + 'px'
-	};
-});
+
 const onRemove = () => {
 	emit('update:model-value', '');
 };
@@ -78,7 +79,7 @@ const onRemove = () => {
 				:data-error="error"
 			>
 				<SelectValue
-					:placeholder="placeholder"
+					:placeholder="required ? `${placeholder} *` : placeholder"
 					class="select__value"
 				/>
 
@@ -91,7 +92,7 @@ const onRemove = () => {
 
 			<SelectContent
 				class="select__content"
-				:style="computedHeight"
+				:style="{ maxHeight: `${height}px` }"
 				position="popper"
 				:side-offset="5"
 			>
@@ -156,6 +157,10 @@ const onRemove = () => {
 		transition: border-color 0.3s ease;
 		cursor: pointer;
 
+		&--no-border {
+			border-color: transparent;
+		}
+
 		&:focus-within {
 			outline: none;
 			border-color: var(--color-accent-green-main);
@@ -200,7 +205,7 @@ const onRemove = () => {
 		border-radius: 8px;
 		border: 2px black;
 		width: var(--radix-select-trigger-width);
-		height: auto;
+		//	height: auto;
 		min-height: 100px;
 	}
 	&__clear-button {

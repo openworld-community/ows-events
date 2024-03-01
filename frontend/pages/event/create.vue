@@ -14,6 +14,7 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 		<LibrarySelect
 			v-model="model"
 			placeholder="Choose fruit"
+			required
 			:options="[
 				{ label: 'banana', value: 'valBanana' },
 				{ label: 'apple', value: 'valapple' },
@@ -39,8 +40,11 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 				option-as-icon
 			/>
 		</div>
-		<div style="width: 100px; height: 120px">
-			<LibraryScrollArea>
+		<div style="width: 200px; height: 120px">
+			<LibraryScrollArea
+				height="120"
+				width="200"
+			>
 				<div class="py-[15px] px-5">
 					<div class="text-grass11 text-[15px] leading-[18px] font-semibold">Tags</div>
 					<div

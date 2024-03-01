@@ -17,22 +17,20 @@ const props = defineProps({
 	},
 	height: {
 		type: Number,
-		default: 200
+		default: undefined
+	},
+	width: {
+		type: Number,
+		default: undefined
 	}
-});
-
-const computedHeight = computed(() => {
-	return {
-		height: props.height + 'px'
-	};
 });
 </script>
 
 <template>
 	<ScrollAreaRoot
 		class="scroll-area"
-		:style="computedHeight"
 		:type="type"
+		:style="{ height: height ? `${height}px` : '100%', width: width ? `${width}px` : '100%' }"
 	>
 		<ScrollAreaViewport
 			class="scroll-area__viewport"
@@ -52,11 +50,9 @@ const computedHeight = computed(() => {
 
 <style lang="less">
 .scroll-area {
-	width: 100%;
 	border-radius: 4px;
 	display: flex;
-	min-height: 100px;
-	max-height: 300px;
+	overflow: hidden;
 
 	&__viewport {
 		width: 100%;
@@ -76,6 +72,7 @@ const computedHeight = computed(() => {
 		background: rgba(0, 0, 0, 0.3);
 		border-radius: 3px;
 		flex: 1 1 0%;
+
 		&::before {
 			content: '';
 			position: absolute;

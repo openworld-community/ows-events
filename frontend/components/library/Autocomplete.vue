@@ -127,7 +127,7 @@ const clearModel = () => {
 				tabindex="1"
 			>
 				<ComboboxViewport>
-					<LibraryScrollArea :maxHeight="maxHeight">
+					<LibraryScrollArea :max-height="maxHeight">
 						<ComboboxEmpty class="cb__empty">
 							{{ $t('global.notFound') }}
 						</ComboboxEmpty>

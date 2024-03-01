@@ -9,7 +9,7 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 </script>
 
 <template>
-	<div style="padding: 10px; height: 100dvh; display: flex; flex-direction: column; gap: 20px;">
+	<div style="padding: 10px; height: 100dvh; display: flex; flex-direction: column; gap: 20px">
 		{{ model }}
 		<LibrarySelect
 			v-model="model"
@@ -39,7 +39,7 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 				option-as-icon
 			/>
 		</div>
-		<div style="width: 100px;">
+		<div style="width: 100px">
 			<LibraryScrollArea>
 				<div>
 					<div>Tags</div>
@@ -52,16 +52,15 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 				</div>
 			</LibraryScrollArea>
 		</div>
-		<div>
-			---------separator----------
-		</div>
-		<div style="width: 20%;">
-			<LibraryUiItemAutocomplete
+		<div>---------separator----------</div>
+		<div style="width: 20%">
+			<LibraryAutocomplete
 				:no-border="true"
 				placeholder="placeholder"
 			/>
 		</div>
-		<div style="width: 20%;">
-			<LibraryUiItemAutocomplete placeholder="placeholder" />
+		<div style="width: 20%">
+			<LibraryAutocomplete placeholder="placeholder" />
 		</div>
-	</div></template>
+	</div>
+</template>

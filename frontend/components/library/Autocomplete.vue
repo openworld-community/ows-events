@@ -85,7 +85,7 @@ const clearModel = () => {
 		<div class="cb__wrapper">
 			<ComboboxInput
 				:class="['cb__input', { 'no-border': noBorder }]"
-				:disabled="disabled"
+				:data-disabled="disabled"
 				name="search"
 				tabindex="1"
 				:placeholder="$t(placeholder)"
@@ -181,6 +181,12 @@ const clearModel = () => {
 		border-color: var(--color-accent-red);
 	}
 
+	&[data-disabled="true"] {
+		border-color: var(--color-input-field);
+		opacity: 0.4;
+		pointer-events: none;
+	}
+
 	&.no-border {
 		border-color: transparent;
 	}
@@ -237,6 +243,11 @@ const clearModel = () => {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+
+	&[data-disabled] {
+		pointer-events: none;
+		opacity: 0.4;
+	}
 
 	&:hover:deep(svg) {
 		color: var(--color-accent-green-main);
@@ -317,6 +328,7 @@ const clearModel = () => {
 		}
 	}
 }
+
 .search-item {
 	display: flex;
 	align-items: center;

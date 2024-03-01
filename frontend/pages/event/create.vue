@@ -59,7 +59,7 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 		<div style="width: 20%">
 			<LibraryAutocomplete
 				v-model="autocomplete"
-				no-border
+				disabled
 				placeholder="placeholder"
 				:options="[
 					'apple',

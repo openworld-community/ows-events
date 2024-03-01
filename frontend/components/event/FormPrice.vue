@@ -24,7 +24,7 @@ const isFreeField = useField<boolean>(() => 'isFree');
 						name="currency"
 						:placeholder="$t('form.event.fields.currency_placeholder')"
 						:options="locationStore.currencies"
-						has-icon-items
+						option-as-icon
 						:error="
 							currencyField.meta.touched && Boolean(currencyField.errorMessage.value)
 						"

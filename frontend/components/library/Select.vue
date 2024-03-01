@@ -51,7 +51,12 @@ const model = computed({
 		emit('update:model-value', value);
 	}
 });
-
+const height = ref(200);
+const computedHeight = computed(() => {
+	return {
+		'max-height': height.value + 'px'
+	};
+});
 const onRemove = () => {
 	emit('update:model-value', '');
 };
@@ -69,7 +74,7 @@ const onRemove = () => {
 			:required="required"
 		>
 			<SelectTrigger
-				tabindex="1"
+				tabindex="0"
 				as="div"
 				class="select__trigger"
 				:data-error="error"
@@ -88,11 +93,12 @@ const onRemove = () => {
 
 			<SelectContent
 				class="select__content"
+				:style="computedHeight"
 				position="popper"
 				:side-offset="5"
 			>
 				<SelectViewport as-child>
-					<LibraryScrollArea>
+					<LibraryScrollArea :height="height">
 						<ul style="height: auto; padding: 8px 4px">
 							<LibraryUiItemSelect
 								v-for="option in options"
@@ -104,7 +110,7 @@ const onRemove = () => {
 								position="popper"
 								avoid-collisions
 							>
-								<span style="display: flex; align-items: center; gap: 4px">
+								<span class="select__item-content">
 									<CommonIcon
 										v-if="optionAsIcon"
 										:name="`${name}/${option}`"
@@ -121,8 +127,8 @@ const onRemove = () => {
 			v-if="model"
 			type="button"
 			class="select__clear-button"
-			aria-label="clear"
-			tabindex="1"
+			:aria-label="$t('global.button.clear')"
+			tabindex="0"
 			@click="onRemove"
 			@click.enter="onRemove"
 		>
@@ -196,9 +202,8 @@ const onRemove = () => {
 		border-radius: 8px;
 		border: 2px black;
 		width: var(--radix-select-trigger-width);
-		height: 160px;
+		height: auto;
 		min-height: 100px;
-		max-height: 200px;
 	}
 	&__clear-button {
 		position: absolute;
@@ -211,34 +216,32 @@ const onRemove = () => {
 		border: 1px solid transparent;
 		border-color: 4px;
 
-		&__svg {
-			color: var(--color-accent-green-main);
-		}
 		&:focus-within {
 			outline: none;
 			border-color: var(--color-accent-green-main);
 			border-radius: 4px;
-
-			&:deep(svg) {
-				color: var(--color-accent-green-main);
-			}
 		}
 
 		&:focus {
 			outline: none;
 			border-radius: 4px;
 			border-color: var(--color-accent-green-main);
-			&:deep(svg) {
-				color: var(--color-accent-green-main);
-			}
 		}
-		&:hover {
-			border-color: var(--color-accent-green-main);
+	}
 
-			&:svg {
-				color: var(--color-accent-green-main);
-			}
-		}
+	&__item-content {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+	&__clear-button:hover svg {
+		color: var(--color-accent-green-main);
+	}
+	&__clear-button:focus svg {
+		color: var(--color-accent-green-main);
+	}
+	&__clear-button:focus-withn svg {
+		color: var(--color-accent-green-main);
 	}
 }
 </style>

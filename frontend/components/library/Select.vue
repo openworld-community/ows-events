@@ -85,7 +85,6 @@ const onRemove = () => {
 			<SelectContent
 				class="select__content"
 				position="popper"
-				style="max-height: maxHeight;"
 				:side-offset="5"
 			>
 				<SelectViewport>

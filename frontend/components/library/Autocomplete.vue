@@ -17,7 +17,7 @@ import type { PropType } from 'vue';
 const props = defineProps({
 	modelValue: {
 		type: String,
-		required: true
+		default: ''
 	},
 	name: {
 		type: String,
@@ -86,6 +86,7 @@ const clearModel = () => {
 		v-model="model"
 		:name="name"
 		:disabled="disabled"
+		:display-value="(value) => typeof value === 'string' ? value : value['label']"
 	>
 		<div class="cb__wrapper">
 			<ComboboxInput
@@ -141,7 +142,7 @@ const clearModel = () => {
 							<LibraryUiItemSearch
 								v-for="option in options"
 								:key="typeof option === 'string' ? option : option['value']"
-								:value="typeof option === 'string' ? option : option['value']"
+								:value="option"
 								:icon-name="optionAsIcon ? `${name}/${option}` : ''"
 								avoid-collisions
 							>

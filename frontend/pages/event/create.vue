@@ -7,7 +7,6 @@ const mode = ref('');
 const currency = ref('');
 const autocomplete = ref('')
 const autocomplete1 = ref('')
-const autocomplete2 = ref('')
 const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length - i}`);
 </script>
 
@@ -107,7 +106,6 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 		</div>
 		<div style="width: 20%">
 			<LibraryAutocomplete
-				v-model="autocomplete2"
 				placeholder="placeholder"
 				:options="locationStore.currencies"
 				name="currency"

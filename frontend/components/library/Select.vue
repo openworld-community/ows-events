@@ -75,7 +75,7 @@ const onRemove = () => {
 			<SelectTrigger
 				tabindex="0"
 				as="div"
-				class="select__trigger"
+				:class="['select__trigger', { 'select__trigger--no-border': noBorder }]"
 				:data-error="error"
 			>
 				<SelectValue
@@ -142,7 +142,7 @@ const onRemove = () => {
 <style lang="less">
 .select {
 	width: 100%;
-	min-width: 100%;
+	min-width: 10%;
 
 	&__trigger {
 		width: 100%;
@@ -211,7 +211,7 @@ const onRemove = () => {
 	&__clear-button {
 		position: absolute;
 		z-index: 10;
-		top: 8px;
+		top: 16%;
 		right: 12px;
 		display: flex;
 		align-items: center;

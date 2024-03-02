@@ -40,7 +40,7 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 				option-as-icon
 			/>
 		</div>
-		<div style="width: 200px; height: 120px">
+		<div style="width: 200px; height: 120px; margin-bottom: 20px">
 			<LibraryScrollArea
 				height="120"
 				width="200"
@@ -57,5 +57,20 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 				</div>
 			</LibraryScrollArea>
 		</div>
+		<LibraryScrollArea
+			height="120"
+			width="200"
+		>
+			<div class="py-[15px] px-5">
+				<div class="text-grass11 text-[15px] leading-[18px] font-semibold">Tags</div>
+				<div
+					v-for="tag in tags"
+					:key="tag"
+					class="text-mauve12 text-[13px] leading-[18px] mt-2.5 pt-2.5 border-t border-t-mauve6"
+				>
+					{{ tag }}
+				</div>
+			</div>
+		</LibraryScrollArea>
 	</div>
 </template>

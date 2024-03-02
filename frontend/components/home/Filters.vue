@@ -31,7 +31,9 @@ watch(
 				city: filters.city || undefined,
 				tags: filters.tags.join(', ') || undefined,
 				// может приходить Invalid Date
-				startDate: filters.startDate ? dayjs(filters.startDate).format('YYYY-MM-DD') : undefined,
+				startDate: filters.startDate
+					? dayjs(filters.startDate).format('YYYY-MM-DD')
+					: undefined,
 				endDate: filters.endDate ? dayjs(filters.endDate).format('YYYY-MM-DD') : undefined
 			}
 		});

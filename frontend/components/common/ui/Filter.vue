@@ -112,6 +112,7 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 		appearance="no-border"
 		:aria-label="$t(`home.filter.${name}.aria`)"
 	/>
+
 	<CommonUiDateTimepicker
 		v-else-if="filterType === 'date'"
 		v-model="filterStore.filters[name]"

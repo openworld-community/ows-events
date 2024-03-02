@@ -68,10 +68,6 @@ const props = defineProps({
 });
 
 const model = ref(props.modelValue);
-
-const clearModel = () => {
-	model.value = '';
-};
 </script>
 
 <template>
@@ -113,7 +109,6 @@ const clearModel = () => {
 					v-if="model.length"
 					as-child
 					class="cb__cancel"
-					@click="clearModel"
 				>
 					<CommonButton
 						is-icon

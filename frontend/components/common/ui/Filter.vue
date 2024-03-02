@@ -7,7 +7,7 @@ import { getFilterPlaceholder } from '../../../utils/texts';
 
 const props = defineProps({
 	filterType: {
-		type: String as PropType<'input' | 'select' | 'date'>,
+		type: String as PropType<'input' | 'select' | 'date' | 'librarySelect'>,
 		required: true
 	},
 	name: {
@@ -128,7 +128,7 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 		:disabled-buttons="isDisabledButtons"
 		@update:model-value="checkNull"
 	/>
-	<template v-if="filterType === 'select'">
+	<template v-if="filterType === 'select' || filterType === 'librarySelect'">
 		<template v-if="mobile">
 			<CommonButton
 				button-kind="filter"
@@ -158,7 +158,20 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 				:show-key="filterStore.modal.showKey"
 			/>
 		</template>
-
+		<LibrarySelect
+			v-else-if="filterType === 'librarySelect'"
+			v-model="filterStore.filters[name]"
+			:show-key="showKey"
+			:return-key="returnKey"
+			:class="['filter', { 'filter--no-separator': noSeparator }]"
+			:name="name"
+			:placeholder="$t(`home.filter.${name}.placeholder`)"
+			:options="list"
+			:disabled="disabled"
+			:no-border="'no-border' ? true : false"
+			:dropdown-position="dropdownPosition"
+			:aria-label="$t(`home.filter.${name}.aria`)"
+		/>
 		<CommonUiBaseSelect
 			v-else
 			v-model="filterStore.filters[name]"
@@ -179,6 +192,9 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 
 <style scoped lang="less">
 .filter {
+	&:deep(.select__trigger--no-border) {
+		max-width: 50%;
+	}
 	@media (min-width: 1440px) {
 		width: 50%;
 		min-width: 20%;
@@ -186,6 +202,10 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 		&:deep(.input__button),
 		&:deep(.button__icon),
 		&:deep(.select__clear-button) {
+			top: 25px;
+		}
+
+		&:deep(.select__clear-btn) {
 			top: 25px;
 		}
 

@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+	setup
+	lang="ts"
+>
 import { ref } from 'vue';
 import {
 	ComboboxContent,
@@ -81,7 +84,6 @@ const clearModel = () => {
 	</label>
 	<ComboboxRoot
 		v-model="model"
-		as-child
 		:name="name"
 		:disabled="disabled"
 	>
@@ -97,9 +99,9 @@ const clearModel = () => {
 			<div class="cb__input--actions">
 				<ComboboxTrigger
 					v-if="!model.length"
-					as-child
 					tabindex="1"
 					class="cb__trigger"
+					as-child
 				>
 					<CommonButton
 						button-kind="multiselect"
@@ -127,7 +129,7 @@ const clearModel = () => {
 				tabindex="1"
 				:style="{ maxHeight: `${height}px` }"
 			>
-				<ComboboxViewport as-child>
+				<ComboboxViewport>
 					<LibraryScrollArea :height="height">
 						<ComboboxEmpty class="cb__empty">
 							{{ $t('global.notFound') }}
@@ -159,7 +161,10 @@ const clearModel = () => {
 	</ComboboxRoot>
 </template>
 
-<style scoped lang="less">
+<style
+	scoped
+	lang="less"
+>
 .cb__wrapper {
 	position: relative;
 	font-family: var(--font-family-main);

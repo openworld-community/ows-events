@@ -118,6 +118,7 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 		v-else-if="filterType === 'date'"
 		v-model="filterStore.filters[name]"
 		type="date"
+		is-filter
 		appearance="no-border"
 		class="filter"
 		:name="name"
@@ -233,11 +234,14 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 		position: absolute;
 		top: 10%;
 		left: -1px;
+
+		transition: backround-color, .15s ease-in-out;
 	}
 
 	// Скрытие сепараторов при фокусе (в т.ч. псевдоэлементов соседнего компонента)
 	//если поле внутри имеет инпут в фокусе
 	.filter:has(input:focus)::before,
+	.filter:has(input:hover)::before,
 	.filter:has(.button__multiselect:focus)::before,
 	.filter:has(.select__field--green-border)::before,
 	//если поле внутри имеет инпут в фокусе, а в разметке рядом есть еще одно поле

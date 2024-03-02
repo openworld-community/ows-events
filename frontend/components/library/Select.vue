@@ -161,11 +161,11 @@ const onRemove = () => {
 		&--no-border[data-state='open'] {
 			border-color: var(--color-accent-green-main);
 		}
-		&:focus-within {
-			outline: none;
-			border-color: var(--color-accent-green-main);
-		}
-		&:focus {
+		// &:focus-within {
+		// 	outline: none;
+		// 	border-color: var(--color-accent-green-main);
+		// }
+		&:focus-visible {
 			outline: none;
 			border-color: var(--color-accent-green-main);
 		}

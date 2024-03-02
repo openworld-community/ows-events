@@ -125,7 +125,7 @@ const onRemove = () => {
 		<button
 			v-if="model"
 			type="button"
-			class="select__clear-button"
+			class="select__clear-btn"
 			:aria-label="$t('global.button.clear')"
 			tabindex="0"
 			@click="onRemove"
@@ -149,6 +149,7 @@ const onRemove = () => {
 		min-width: 100%;
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
 		height: 40px;
 		border: 1px solid #dbdbdb;
 		border-radius: 8px;
@@ -159,6 +160,13 @@ const onRemove = () => {
 
 		&--no-border {
 			border-color: transparent;
+			@media (min-width: 1440px) {
+				height: 72px;
+			}
+		}
+
+		&--no-border[data-state='open'] {
+			border-color: var(--color-accent-green-main);
 		}
 
 		&:focus-within {
@@ -208,7 +216,7 @@ const onRemove = () => {
 		//	height: auto;
 		min-height: 100px;
 	}
-	&__clear-button {
+	&__clear-btn {
 		position: absolute;
 		z-index: 10;
 		top: 16%;

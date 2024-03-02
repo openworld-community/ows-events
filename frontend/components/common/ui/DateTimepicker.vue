@@ -262,7 +262,7 @@ onMounted(() => {
 		}
 
 		&.filter:hover {
-			border-color: var(--color-accent-green-main);
+			border-color: transparent;
 		}
 
 		&:active,

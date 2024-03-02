@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+	setup
+	lang="ts"
+>
 import { SelectContent, SelectRoot, SelectTrigger, SelectValue, SelectViewport } from 'radix-vue';
 const props = defineProps({
 	options: {
@@ -138,6 +141,7 @@ const onRemove = () => {
 .select {
 	width: 100%;
 	min-width: 10%;
+
 	&__trigger {
 		width: 100%;
 		min-width: 100%;
@@ -151,33 +155,43 @@ const onRemove = () => {
 		padding: 8px 12px 8px 12px;
 		transition: border-color 0.3s ease;
 		cursor: pointer;
+		
+		&--no-border[data-state='open'] {
+			border-color: var(--color-accent-green-main);
+		}
+		
+		&:focus-within {
+			outline: none;
+			border-color: var(--color-accent-green-main);
+		}
+		&:focus {
+			outline: none;
+			border-color: var(--color-accent-green-main);
+		}
+		
+		&:hover {
+			border-color: var(--color-accent-green-main);
+		}
+
 		&--no-border {
 			border-color: transparent;
+
+			&:hover {
+				border-color: transparent;
+			}
+
 			@media (min-width: 1440px) {
 				height: 72px;
 			}
 		}
-
-		&--no-border[data-state='open'] {
-			border-color: var(--color-accent-green-main);
-		}
-		// &:focus-within {
-		// 	outline: none;
-		// 	border-color: var(--color-accent-green-main);
-		// }
-		&:focus-visible {
-			outline: none;
-			border-color: var(--color-accent-green-main);
-		}
-		&:hover {
-			border-color: var(--color-accent-green-main);
-		}
 	}
+
 	&__value {
 		font-family: var(--font-family-main);
 		font-size: var(--font-size-M);
 		color: var(--color-text-main);
 	}
+
 	&__trigger[data-placeholder] {
 		.select__value {
 			font-family: var(--font-family-main);
@@ -185,13 +199,21 @@ const onRemove = () => {
 			color: var(--color-input-icons);
 		}
 	}
+
 	&__trigger[data-disabled] {
+		pointer-events: none;
 		border-color: var(--color-input-field);
 		opacity: 0.4;
+
+		&.select__trigger--no-border {
+			border-color: transparent !important;
+		}
 	}
+
 	&__trigger[data-error='true'] {
 		border-color: var(--color-accent-red);
 	}
+
 	&__content {
 		min-width: 267px;
 		background-color: #ffffff;
@@ -203,6 +225,7 @@ const onRemove = () => {
 		//	height: auto;
 		min-height: 100px;
 	}
+
 	&__clear-btn {
 		position: absolute;
 		z-index: 10;
@@ -213,28 +236,34 @@ const onRemove = () => {
 		justify-content: center;
 		border: 1px solid transparent;
 		border-color: 4px;
+
 		&:focus-within {
 			outline: none;
 			border-color: var(--color-accent-green-main);
 			border-radius: 4px;
 		}
+
 		&:focus {
 			outline: none;
 			border-radius: 4px;
 			border-color: var(--color-accent-green-main);
 		}
 	}
+
 	&__item-content {
 		display: flex;
 		align-items: center;
 		gap: 4px;
 	}
+
 	&__clear-button:hover svg {
 		color: var(--color-accent-green-main);
 	}
+
 	&__clear-button:focus svg {
 		color: var(--color-accent-green-main);
 	}
+
 	&__clear-button:focus-withn svg {
 		color: var(--color-accent-green-main);
 	}

@@ -12,12 +12,12 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 </script>
 
 <template>
-	<div style="padding: 10px; height: 100dvh; display: flex; flex-direction: column; gap: 20px">
+	<div style="padding: 10px">
 		{{ model }}
 		<LibrarySelect
 			v-model="model"
-			:max-height="50"
 			placeholder="Choose fruit"
+			required
 			:options="[
 				{ label: 'banana', value: 'valBanana' },
 				{ label: 'apple', value: 'valapple' },
@@ -30,7 +30,6 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 		<div style="margin: 40px">
 			<LibrarySelect
 				v-model="mode"
-				:max-height="100"
 				placeholder="Choose fruit"
 				:options="['banana', 'apple', 'orange']"
 			/>
@@ -38,32 +37,48 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 		<div style="margin: 40px">
 			<LibrarySelect
 				v-model="currency"
-				:max-height="200"
 				placeholder="Choose fruit"
 				:options="locationStore.currencies"
 				name="currency"
 				option-as-icon
 			/>
 		</div>
-		<div style="width: 100px">
-			<LibraryScrollArea :max-height="100">
-				<div>
-					<div>Tags</div>
+		<div style="width: 200px; height: 120px; margin-bottom: 20px">
+			<LibraryScrollArea
+				:height="120"
+				:width="200"
+			>
+				<div class="py-[15px] px-5">
+					<div class="text-grass11 text-[15px] leading-[18px] font-semibold">Tags</div>
 					<div
 						v-for="tag in tags"
 						:key="tag"
+						class="text-mauve12 text-[13px] leading-[18px] mt-2.5 pt-2.5 border-t border-t-mauve6"
 					>
 						{{ tag }}
 					</div>
 				</div>
 			</LibraryScrollArea>
 		</div>
+		<LibraryScrollArea
+			:height="120"
+			:width="200"
+		>
+			<div class="py-[15px] px-5">
+				<div class="text-grass11 text-[15px] leading-[18px] font-semibold">Tags</div>
+				<div
+					v-for="tag in tags"
+					:key="tag"
+					class="text-mauve12 text-[13px] leading-[18px] mt-2.5 pt-2.5 border-t border-t-mauve6"
+				>
+					{{ tag }}
+				</div>
+			</div>
+		</LibraryScrollArea>
 		<div>---------separator----------</div>
 		<div style="width: 20%">
 			<LibraryAutocomplete
 				v-model="autocomplete"
-				:max-height="100"
-				disabled
 				placeholder="placeholder"
 				:options="[
 					'apple',
@@ -77,7 +92,7 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 		<div style="width: 20%">
 			<LibraryAutocomplete
 				v-model="autocomplete1"
-				:max-height="100"
+				:height="100"
 				placeholder="placeholder"
 				error
 				:options="[
@@ -93,7 +108,6 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 		<div style="width: 20%">
 			<LibraryAutocomplete
 				v-model="autocomplete2"
-				:max-height="100"
 				placeholder="placeholder"
 				:options="locationStore.currencies"
 				name="currency"

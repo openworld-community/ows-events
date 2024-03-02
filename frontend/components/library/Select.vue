@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
 import { SelectContent, SelectRoot, SelectTrigger, SelectValue, SelectViewport } from 'radix-vue';
-
 const props = defineProps({
 	options: {
 		type: [Array, String, Set] as PropType<
@@ -21,6 +19,11 @@ const props = defineProps({
 		type: String,
 		default: ''
 	},
+	//type of trigger - without border
+	noBorder: {
+		type: Boolean,
+		default: false
+	},
 	optionAsIcon: {
 		type: Boolean,
 		default: false
@@ -36,17 +39,18 @@ const props = defineProps({
 	error: {
 		type: Boolean,
 		default: false
-	},
-	maxHeight: {
-		type: Number,
-		default: 200
-	},
+	}
 });
-
 const emit = defineEmits(['update:model-value']);
-
-const model = ref(props.modelValue)
-
+const model = computed({
+	get() {
+		return props.modelValue;
+	},
+	set(value) {
+		emit('update:model-value', value);
+	}
+});
+const height = ref(200);
 const onRemove = () => {
 	emit('update:model-value', '');
 };
@@ -66,11 +70,11 @@ const onRemove = () => {
 			<SelectTrigger
 				tabindex="0"
 				as="div"
-				class="select__trigger"
+				:class="['select__trigger', { 'select__trigger--no-border': noBorder }]"
 				:data-error="error"
 			>
 				<SelectValue
-					:placeholder="$t(placeholder)"
+					:placeholder="required ? `${placeholder} *` : placeholder"
 					class="select__value"
 				/>
 
@@ -83,11 +87,12 @@ const onRemove = () => {
 
 			<SelectContent
 				class="select__content"
+				:style="{ maxHeight: `${height}px` }"
 				position="popper"
 				:side-offset="5"
 			>
-				<SelectViewport>
-					<LibraryScrollArea :max-height="maxHeight">
+				<SelectViewport as-child>
+					<LibraryScrollArea :height="height">
 						<ul style="height: auto; padding: 8px 4px">
 							<LibraryUiItemSelect
 								v-for="option in options"
@@ -132,8 +137,7 @@ const onRemove = () => {
 <style lang="less">
 .select {
 	width: 100%;
-	min-width: 100%;
-
+	min-width: 10%;
 	&__trigger {
 		width: 100%;
 		min-width: 100%;
@@ -146,28 +150,26 @@ const onRemove = () => {
 		padding: 8px 12px 8px 12px;
 		transition: border-color 0.3s ease;
 		cursor: pointer;
-
+		&--no-border {
+			border-color: transparent;
+		}
 		&:focus-within {
 			outline: none;
 			border-color: var(--color-accent-green-main);
 		}
-
 		&:focus {
 			outline: none;
 			border-color: var(--color-accent-green-main);
 		}
-
 		&:hover {
 			border-color: var(--color-accent-green-main);
 		}
 	}
-
 	&__value {
 		font-family: var(--font-family-main);
 		font-size: var(--font-size-M);
 		color: var(--color-text-main);
 	}
-
 	&__trigger[data-placeholder] {
 		.select__value {
 			font-family: var(--font-family-main);
@@ -175,16 +177,13 @@ const onRemove = () => {
 			color: var(--color-input-icons);
 		}
 	}
-
 	&__trigger[data-disabled] {
 		border-color: var(--color-input-field);
 		opacity: 0.4;
 	}
-
 	&__trigger[data-error='true'] {
 		border-color: var(--color-accent-red);
 	}
-
 	&__content {
 		min-width: 267px;
 		background-color: #ffffff;
@@ -193,47 +192,43 @@ const onRemove = () => {
 		border-radius: 8px;
 		border: 2px black;
 		width: var(--radix-select-trigger-width);
+		//	height: auto;
+		min-height: 100px;
 	}
-
 	&__clear-button {
 		position: absolute;
 		z-index: 10;
-		top: 8px;
+		top: 16%;
 		right: 12px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		border: 1px solid transparent;
 		border-color: 4px;
-
 		&:focus-within {
 			outline: none;
 			border-color: var(--color-accent-green-main);
 			border-radius: 4px;
 		}
-
 		&:focus {
 			outline: none;
 			border-radius: 4px;
 			border-color: var(--color-accent-green-main);
 		}
 	}
-
 	&__item-content {
 		display: flex;
 		align-items: center;
 		gap: 4px;
 	}
-
 	&__clear-button:hover svg {
 		color: var(--color-accent-green-main);
 	}
-
 	&__clear-button:focus svg {
 		color: var(--color-accent-green-main);
 	}
-
 	&__clear-button:focus-withn svg {
 		color: var(--color-accent-green-main);
 	}
-}</style>
+}
+</style>

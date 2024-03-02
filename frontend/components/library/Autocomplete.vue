@@ -54,9 +54,9 @@ const props = defineProps({
 		type: String,
 		default: ''
 	},
-	maxHeight: {
+	height: {
 		type: Number,
-		required: true
+		default: 200
 	},
 	required: {
 		type: Boolean,
@@ -125,9 +125,10 @@ const clearModel = () => {
 				class="cb__content"
 				as-child
 				tabindex="1"
+				:style="{ maxHeight: `${height}px` }"
 			>
-				<ComboboxViewport>
-					<LibraryScrollArea :max-height="maxHeight">
+				<ComboboxViewport as-child>
+					<LibraryScrollArea :height="height">
 						<ComboboxEmpty class="cb__empty">
 							{{ $t('global.notFound') }}
 						</ComboboxEmpty>

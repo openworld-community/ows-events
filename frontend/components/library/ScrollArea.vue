@@ -5,8 +5,7 @@ import {
 	ScrollAreaThumb,
 	ScrollAreaViewport
 } from 'radix-vue';
-
-defineProps({
+const props = defineProps({
 	type: {
 		type: String as PropType<'always' | 'hover' | 'auto' | 'scroll'>,
 		default: 'auto'
@@ -15,9 +14,13 @@ defineProps({
 		type: String as PropType<'vertical' | 'horizontal'>,
 		default: 'vertical'
 	},
-	maxHeight: {
+	height: {
 		type: Number,
-		required: true
+		default: undefined
+	},
+	width: {
+		type: Number,
+		default: undefined
 	}
 });
 </script>
@@ -26,10 +29,10 @@ defineProps({
 	<ScrollAreaRoot
 		class="scroll-area"
 		:type="type"
+		:style="{ height: height ? `${height}px` : '100%', width: width ? `${width}px` : '100%' }"
 	>
 		<ScrollAreaViewport
 			class="scroll-area__viewport"
-			:style="{ maxHeight: `${maxHeight}px` }"
 			as-child
 		>
 			<slot></slot>
@@ -46,34 +49,26 @@ defineProps({
 
 <style lang="less">
 .scroll-area {
-	width: 100%;
-	// height: 160px;
 	border-radius: 4px;
 	display: flex;
-	// min-height: 100px;
-	// max-height: 300px;
-
+	overflow: hidden;
 	&__viewport {
 		width: 100%;
 	}
-
 	&__scrollbar {
 		width: 4px;
 		padding: 5px 2px;
 		background-color: var(--color-input-icons);
 		user-select: none;
 		touch-action: none;
-
 		&:hover {
 			background-color: var(--color-text-main);
 		}
 	}
-
 	&__thumb {
 		background: rgba(0, 0, 0, 0.3);
 		border-radius: 3px;
 		flex: 1 1 0%;
-
 		&::before {
 			content: '';
 			position: absolute;
@@ -86,4 +81,5 @@ defineProps({
 			min-height: 20px;
 		}
 	}
-}</style>
+}
+</style>

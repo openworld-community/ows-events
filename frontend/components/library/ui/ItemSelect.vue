@@ -32,13 +32,11 @@ const props = defineProps<SelectItemProps>();
 	padding-right: 8px;
 	padding-top: 6px;
 	padding-bottom: 6px;
-
 	&:focus {
 		background-color: var(--color-accent-green-main-50);
 		outline: 1px solid var(--color-accent-green-main-50);
 		border-radius: 2px;
 	}
-
 	&:hover {
 		background-color: var(--color-accent-green-main-50);
 	}

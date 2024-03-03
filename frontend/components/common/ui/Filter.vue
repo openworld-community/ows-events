@@ -238,6 +238,8 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 
 	// Скрытие сепараторов при фокусе (в т.ч. псевдоэлементов соседнего компонента)
 	//если поле внутри имеет инпут в фокусе
+	.filter:has(.select__trigger[data-state='open'])::before,
+	.filter:has(.select__trigger:focus)::before,
 	.filter:has(input:focus)::before,
 	.filter:has(.button__multiselect:focus)::before,
 	.filter:has(.select__field--green-border)::before,
@@ -256,8 +258,9 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 	//если враппер имеет последнее child поле с инпутом в фокусе и рядом есть еще одно поле
 	.filters__wrapper:has(.filter:last-child input:focus)+.filter::before,
 	.filters__wrapper:has(.button__multiselect)+.filter::before,
-	.filters__wrapper:has(.select__field--green-border)+.filter::before //псевдоэлементы ::before становятся прозрачными
-	{
+	.filters__wrapper:has(.select__field--green-border)+.filter::before, //псевдоэлементы ::before становятся прозрачными
+	.filter:has(.select__trigger:focus)+.filter::before,
+	.filter:has(.select__trigger[data-state='open'])+.filter::before {
 		background-color: transparent;
 	}
 

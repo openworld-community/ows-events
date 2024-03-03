@@ -20,7 +20,15 @@ const props = defineProps({
 		type: String,
 		default: ''
 	},
-	//type of trigger - without border
+	align: {
+		type: String as PropType<'start' | 'center' | 'end'>,
+		default: 'start'
+	},
+	side: {
+		type: String as PropType<'top' | 'right' | 'bottom' | 'left'>,
+		default: 'bottom'
+	},
+	//type of trigger - without border for main page
 	noBorder: {
 		type: Boolean,
 		default: false
@@ -95,6 +103,8 @@ const onRemove = () => {
 				:style="{ maxHeight: `${height}px` }"
 				position="popper"
 				:side-offset="5"
+				:align="align"
+				:side="side"
 			>
 				<SelectViewport as-child>
 					<LibraryScrollArea :height="height">
@@ -245,13 +255,13 @@ const onRemove = () => {
 		align-items: center;
 		gap: 4px;
 	}
-	&__clear-button:hover svg {
+	&__clear-btn:hover svg {
 		color: var(--color-accent-green-main);
 	}
-	&__clear-button:focus svg {
+	&__clear-btn:focus svg {
 		color: var(--color-accent-green-main);
 	}
-	&__clear-button:focus-withn svg {
+	&__clear-btn:focus-withn svg {
 		color: var(--color-accent-green-main);
 	}
 }

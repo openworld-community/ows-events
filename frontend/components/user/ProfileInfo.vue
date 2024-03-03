@@ -4,14 +4,21 @@ import { getUserName } from '~/utils/user';
 import { SeoItempropUserEnum } from '~/constants/enums/seo';
 
 const userStore = useUserStore();
-const userData = userStore.userInfo;
+
+//const userData = userStore.userInfo;
+const userData = computed(() => userStore.userInfo);
 </script>
 
 <template>
 	<div class="user-info">
-		<h1 class="user-info__name">
-			{{ $t('user.greeting') }},
-			<span :itemprop="SeoItempropUserEnum.name">{{ `${getUserName()}!` }}</span>
+		<h1
+			:itemprop="SeoItempropUserEnum.name"
+			class="user-info__name"
+		>
+			<span> {{ $t('user.greeting') }}, </span>
+
+			<span>{{ `${getUserName(userData.first_name)}!` }}</span>
+			<span v-if="userData.last_name">{{ `${getLastName(userData.last_name)}!` }}</span>
 		</h1>
 		<p
 			v-if="userData?.nickname"
@@ -33,19 +40,20 @@ const userData = userStore.userInfo;
 .user-info {
 	display: flex;
 	width: 100%;
+	width: 268px;
+	max-width: 268px;
 	flex-direction: column;
 	padding-top: 12px;
 	margin-bottom: 8px;
+	overflow: hidden;
 
 	@media (min-width: 768px) {
-		width: 40%;
 		margin-right: 30px;
 		padding-left: 18px;
 		margin-bottom: 12px;
 	}
 
 	@media (min-width: 1440px) {
-		width: 32%;
 		padding-top: 18px;
 		padding-left: 18px;
 		margin-bottom: 12px;
@@ -57,6 +65,8 @@ const userData = userStore.userInfo;
 		line-height: 24px;
 		margin-bottom: 6px;
 		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
 
 		@media (min-width: 768px) {
 			font-size: var(--font-size-L);

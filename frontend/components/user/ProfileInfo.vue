@@ -15,10 +15,7 @@ const userData = computed(() => userStore.userInfo);
 			:itemprop="SeoItempropUserEnum.name"
 			class="user-info__name"
 		>
-			<span> {{ $t('user.greeting') }}, </span>
-
-			<span>{{ `${getUserName(userData.first_name)}!` }}</span>
-			<span v-if="userData.last_name">{{ `${getLastName(userData.last_name)}!` }}</span>
+			{{ `${getUserName(userData.first_name, userData.last_name)}!` }}
 		</h1>
 		<p
 			v-if="userData?.nickname"
@@ -45,7 +42,6 @@ const userData = computed(() => userStore.userInfo);
 	flex-direction: column;
 	padding-top: 12px;
 	margin-bottom: 8px;
-	overflow: hidden;
 
 	@media (min-width: 768px) {
 		margin-right: 30px;
@@ -64,9 +60,9 @@ const userData = computed(() => userStore.userInfo);
 		font-weight: var(--font-weight-regular);
 		line-height: 24px;
 		margin-bottom: 6px;
-		display: flex;
-		gap: 8px;
-		flex-wrap: wrap;
+		width: 100%;
+		white-space: normal;
+		overflow: hidden;
 
 		@media (min-width: 768px) {
 			font-size: var(--font-size-L);

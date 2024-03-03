@@ -1,13 +1,12 @@
-import { useUserStore } from '../stores/user.store';
-
-export const getUserName = () => {
-	const userStore = useUserStore();
+export const getUserName = (name: string) => {
 	const { t } = useI18n();
-	if (userStore.userInfo?.first_name && userStore.userInfo?.last_name) {
-		return `${userStore.userInfo.first_name} ${userStore.userInfo.last_name}`;
-	} else if (userStore.userInfo?.first_name) {
-		return userStore.userInfo.first_name;
-	} else if (userStore.userInfo?.last_name) {
-		return userStore.userInfo.last_name;
+	if (name) {
+		return `${name}`;
 	} else return t('user.user');
+};
+
+export const getLastName = (lastName: string) => {
+	if (lastName) {
+		return `${lastName}`;
+	}
 };

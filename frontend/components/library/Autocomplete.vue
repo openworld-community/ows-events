@@ -5,7 +5,6 @@
 import { ref } from 'vue';
 import {
 	ComboboxAnchor,
-	ComboboxPortal,
 	ComboboxContent,
 	ComboboxGroup,
 	ComboboxInput,
@@ -93,14 +92,14 @@ const model = ref(props.modelValue);
 					:class="['cb__input', { 'no-border': noBorder }]"
 					:data-disabled="disabled"
 					name="search"
-					tabindex="1"
+					tabindex="0"
 					:placeholder="$t(placeholder)"
 					:data-error="error"
 				/>
 				<div class="cb__input--actions">
 					<ComboboxTrigger
 						v-if="!model.length"
-						tabindex="1"
+						tabindex="0"
 						class="cb__trigger"
 						as-child
 					>
@@ -125,7 +124,7 @@ const model = ref(props.modelValue);
 			</ComboboxAnchor>
 			<ComboboxContent
 				class="cb__content"
-				tabindex="1"
+				tabindex="0"
 				:style="{ maxHeight: `${height}px` }"
 				position="popper"
 				:side-offset="5"

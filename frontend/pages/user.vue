@@ -1,34 +1,18 @@
 <script setup lang="ts">
-import { useUserStore } from '~/stores/user.store';
-import { getUserName } from '~/utils/user';
-import { RoutePathEnum } from '~/constants/enums/route';
-import { SeoItempropUserEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
-import { CookieNameEnum } from '~/constants/enums/common';
+import { SeoItemTypeEnum } from '~/constants/enums/seo';
 
 definePageMeta({
 	layout: 'profile'
 });
 
 const { t } = useI18n();
-const localePath = useLocalePath();
+
 const mobile = inject('mobile');
 
 getMeta({
 	title: t('meta.user.info.title'),
 	description: t('meta.user.info.description')
 });
-
-const userStore = useUserStore();
-const tokenCookie = useCookie<string | null>(CookieNameEnum.TOKEN);
-const userCookie = useCookie(CookieNameEnum.TG_USER);
-
-const userData = computed(() => userStore.userInfo);
-
-const logout = () => {
-	tokenCookie.value = null;
-	userCookie.value = null;
-	userStore.$patch({ userInfo: null });
-};
 
 // const isGoBack = computed(() => {
 

@@ -31,7 +31,9 @@ watch(
 				city: filters.city || undefined,
 				tags: filters.tags.join(', ') || undefined,
 				// может приходить Invalid Date
-				startDate: filters.startDate ? dayjs(filters.startDate).format('YYYY-MM-DD') : undefined,
+				startDate: filters.startDate
+					? dayjs(filters.startDate).format('YYYY-MM-DD')
+					: undefined,
 				endDate: filters.endDate ? dayjs(filters.endDate).format('YYYY-MM-DD') : undefined
 			}
 		});
@@ -85,7 +87,7 @@ const mobile = inject('mobile');
 		<div class="filters__wrapper">
 			<CommonUiFilter
 				:key="mobile ? 'mobile-country' : 'other-country'"
-				filter-type="select"
+				filter-type="librarySelect"
 				name="country"
 				:list="filterStore.usedCountries"
 				:disabled="!filterStore.usedCountries.length"
@@ -159,6 +161,9 @@ const mobile = inject('mobile');
 
 		@media (max-width: 767px) {
 			&:deep(.button__filter) {
+				max-width: calc((100% - var(--gap) * 2) / 3);
+			}
+			&:deep(.select) {
 				max-width: calc((100% - var(--gap) * 2) / 3);
 			}
 		}

@@ -60,8 +60,6 @@ const goBack = () => {
 		navigateTo(localePath({ path: RoutePathEnum.HOME }));
 	}
 };
-
-console.log(localePath(route.path));
 </script>
 
 <template>

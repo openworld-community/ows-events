@@ -4,13 +4,15 @@
 >
 import { ref } from 'vue';
 import {
+	ComboboxAnchor,
+	ComboboxPortal,
 	ComboboxContent,
 	ComboboxGroup,
 	ComboboxInput,
 	ComboboxRoot,
 	ComboboxTrigger,
 	ComboboxViewport,
-	ComboboxCancel
+	ComboboxCancel,
 } from 'radix-vue';
 import type { PropType } from 'vue';
 
@@ -83,47 +85,50 @@ const model = ref(props.modelValue);
 		:name="name"
 		:disabled="disabled"
 		:display-value="(value) => typeof value === 'string' ? value : value['label']"
+		as-child
 	>
 		<div class="cb__wrapper">
-			<ComboboxInput
-				:class="['cb__input', { 'no-border': noBorder }]"
-				:data-disabled="disabled"
-				name="search"
-				tabindex="1"
-				:placeholder="$t(placeholder)"
-				:data-error="error"
-			/>
-			<div class="cb__input--actions">
-				<ComboboxTrigger
-					v-if="!model.length"
+			<ComboboxAnchor>
+				<ComboboxInput
+					:class="['cb__input', { 'no-border': noBorder }]"
+					:data-disabled="disabled"
+					name="search"
 					tabindex="1"
-					class="cb__trigger"
-					as-child
-				>
-					<CommonButton
-						button-kind="multiselect"
-						class="cb__trigger--expand"
-					/>
-				</ComboboxTrigger>
-				<ComboboxCancel
-					v-if="model.length"
-					as-child
-					class="cb__cancel"
-				>
-					<CommonButton
-						is-icon
-						icon-name="close"
-						:interactive="false"
-						class="cb__cancel--icon"
-					/>
-				</ComboboxCancel>
-			</div>
-
+					:placeholder="$t(placeholder)"
+					:data-error="error"
+				/>
+				<div class="cb__input--actions">
+					<ComboboxTrigger
+						v-if="!model.length"
+						tabindex="1"
+						class="cb__trigger"
+						as-child
+					>
+						<CommonButton
+							button-kind="multiselect"
+							class="cb__trigger--expand"
+						/>
+					</ComboboxTrigger>
+					<ComboboxCancel
+						v-if="model.length"
+						as-child
+						class="cb__cancel"
+					>
+						<CommonButton
+							is-icon
+							icon-name="close"
+							:interactive="false"
+							class="cb__cancel--icon"
+						/>
+					</ComboboxCancel>
+				</div>
+			</ComboboxAnchor>
 			<ComboboxContent
 				class="cb__content"
-				as-child
 				tabindex="1"
 				:style="{ maxHeight: `${height}px` }"
+				position="popper"
+				:side-offset="5"
 			>
 				<ComboboxViewport>
 					<LibraryScrollArea :height="height">
@@ -165,6 +170,16 @@ const model = ref(props.modelValue);
 	position: relative;
 	font-family: var(--font-family-main);
 	font-size: var(--font-size-M);
+
+	&>div[data-radix-popper-content-wrapper] {
+		/* у поппера обертки инлайн стили, веса по тегу не хватает */
+		box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
+		position: absolute !important;
+		width: 100% !important;
+		max-width: 100% !important;
+		min-width: 200px !important;
+		z-index: 20 !important;
+	}
 }
 
 .cb__label {
@@ -215,7 +230,7 @@ const model = ref(props.modelValue);
 
 		position: absolute;
 		top: 50%;
-		right: 0;
+		right: 8px;
 		height: 100%;
 		z-index: 10;
 		transform: translateY(-50%);
@@ -293,12 +308,10 @@ const model = ref(props.modelValue);
 	height: auto;
 	min-height: 100px;
 
-	position: absolute;
-	top: calc(100% + 5px);
-	left: 0;
-	z-index: 20;
+	/* position: absolute;
+	z-index: 20; */
 
-	background-color: #fff;
+	background-color: var(--backround-color);
 	border: 1px solid #dbdbdb;
 	border-radius: 8px;
 
@@ -306,11 +319,5 @@ const model = ref(props.modelValue);
 		display: flex;
 		flex-direction: column;
 	}
-}
-
-.search-item {
-	display: flex;
-	align-items: center;
-	gap: 4px;
 }
 </style>

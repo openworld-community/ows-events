@@ -248,7 +248,7 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 		transition: backround-color, .15s ease-in-out;
 	}
 
-	// прозраные сепараторы при ховере/фокусе
+	// прозраные сепараторы при фокусе
 	.filter:focus-within::before,
 	.filter:focus-within+.filter::before,
 	.filter:has(.input__field:focus)+.filters__wrapper>.filter:first-child::before {

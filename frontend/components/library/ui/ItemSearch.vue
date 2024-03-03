@@ -23,15 +23,13 @@ const props = defineProps<ComboboxItemProps>();
 </template>
 <style scoped lang="less">
 .search-item {
+	background-color: var(--color-white);
 	display: flex;
 	width: 100%;
 	cursor: pointer;
 	justify-content: space-between;
 	align-items: center;
-	padding-left: 8px;
-	padding-right: 8px;
-	padding-top: 6px;
-	padding-bottom: 6px;
+	padding: 8px 6px;
 
 	&:focus-visible {
 		background-color: var(--color-accent-green-main-50);

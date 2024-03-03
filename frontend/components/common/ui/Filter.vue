@@ -206,7 +206,7 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 			top: 25px;
 		}
 
-		&:deep(.select__clear-btn) {
+		&:deep(.select__clear-select) {
 			top: 25px;
 		}
 

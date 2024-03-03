@@ -135,7 +135,7 @@ const onRemove = () => {
 		<button
 			v-if="model"
 			type="button"
-			class="select__clear-btn"
+			class="select__clear-select"
 			:aria-label="$t('global.button.clear')"
 			tabindex="0"
 			@click="onRemove"
@@ -223,10 +223,10 @@ const onRemove = () => {
 		border-radius: 8px;
 		border: 2px black;
 		width: var(--radix-select-trigger-width);
-		//	height: auto;
+		height: auto;
 		min-height: 100px;
 	}
-	&__clear-btn {
+	&__clear-select {
 		position: absolute;
 		z-index: 10;
 		top: 16%;
@@ -234,19 +234,15 @@ const onRemove = () => {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		border: 1px solid transparent;
+
 		border-color: 4px;
 
 		&:focus-within {
 			outline: none;
-			border-color: var(--color-accent-green-main);
-			border-radius: 4px;
 		}
 
 		&:focus {
 			outline: none;
-			border-radius: 4px;
-			border-color: var(--color-accent-green-main);
 		}
 	}
 
@@ -255,13 +251,13 @@ const onRemove = () => {
 		align-items: center;
 		gap: 4px;
 	}
-	&__clear-btn:hover svg {
+	&__clear-select:hover svg {
 		color: var(--color-accent-green-main);
 	}
-	&__clear-btn:focus svg {
+	&__clear-select:focus svg {
 		color: var(--color-accent-green-main);
 	}
-	&__clear-btn:focus-withn svg {
+	&__clear-select:focus-withn svg {
 		color: var(--color-accent-green-main);
 	}
 }

@@ -13,10 +13,6 @@ getMeta({
 	title: t('meta.user.info.title'),
 	description: t('meta.user.info.description')
 });
-
-// const isGoBack = computed(() => {
-
-// })
 </script>
 
 <template>

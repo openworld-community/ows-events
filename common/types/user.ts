@@ -1,3 +1,5 @@
+import { UserRoles } from '@common/const/userRoles';
+
 export type UserDbEntity = {
 	telegram: {
 		id: string;
@@ -31,6 +33,7 @@ export type UserDbEntity = {
 	token: string;
 
 	favorites: string[];
+	role: UserRoles;
 };
 
 export type TGUser = UserDbEntity['telegram'];
@@ -41,8 +44,9 @@ export type TGUserInfo = Omit<TGUser, 'auth_date'>;
 
 export type UserInfo = UserDbEntity['userInfo'];
 
-export type UserInfoWithId = UserInfo & {
+export type UserCookieInfo = UserInfo & {
 	id: string;
+	role: UserRoles;
 };
 
 export type LocalAuthInfo = Omit<UserDbEntity['localAuth'], 'salt'>;

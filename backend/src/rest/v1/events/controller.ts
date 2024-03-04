@@ -13,6 +13,8 @@ import {
 } from './type';
 import { JWTController } from '../../../controllers/JWT-controller';
 import { UserTokenController } from '../../../controllers/user-token-controller';
+import { userController } from '../../../controllers/user-controller';
+import { UserRoles } from '../../../../../common/const/userRoles';
 
 export const addEvent: IAddEventHandler = async (request) => {
 	const { event } = request.body;
@@ -82,7 +84,8 @@ export const deleteEvent: IDeleteEventHandler = async (request) => {
 
 	const oldEvent = await eventsStateController.getEvent(request.body.id);
 	const isAuthor = oldEvent?.creatorId === String(jwtData.id);
-	if (!isAuthor) throw new Error(CommonErrorsEnum.FORBIDDEN);
+	const hasRights = await userController.validatePermission(jwtData.id, [UserRoles.ADMIN]);
+	if (!isAuthor && !hasRights) throw new Error(CommonErrorsEnum.FORBIDDEN);
 
 	await eventsStateController.deleteEvent(request.body.id);
 	return undefined;
@@ -97,8 +100,15 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 	const jwtData = JWTController.decodeToken(token);
 
 	const oldEvent = await eventsStateController.getEvent(request.body.event.id);
+	if (!oldEvent) throw new Error(CommonErrorsEnum.EVENT_NOT_FOUND);
+
 	const isAuthor = oldEvent?.creatorId === String(jwtData.id);
-	if (!isAuthor) throw new Error(CommonErrorsEnum.FORBIDDEN);
+	const hasRights = await userController.validatePermission(jwtData.id, [
+		UserRoles.ADMIN,
+		UserRoles.MODERATOR
+	]);
+	if (!isAuthor && !hasRights) throw new Error(CommonErrorsEnum.FORBIDDEN);
+
 	const isEventInPast = oldEvent?.date < Date.now();
 	if (isEventInPast) throw new Error(CommonErrorsEnum.FORBIDDEN);
 

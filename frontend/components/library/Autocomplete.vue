@@ -2,7 +2,6 @@
 	setup
 	lang="ts"
 >
-import { ref } from 'vue';
 import {
 	ComboboxAnchor,
 	ComboboxContent,
@@ -13,6 +12,7 @@ import {
 	ComboboxCancel,
 } from 'radix-vue';
 import type { PropType } from 'vue';
+import { vOnClickOutside } from '@vueuse/components';
 
 const props = defineProps({
 	modelValue: {
@@ -67,7 +67,22 @@ const props = defineProps({
 	},
 });
 
-const model = ref(props.modelValue);
+const emit = defineEmits(['update:model-value'])
+
+const isOpen = ref(false)
+const model = computed({
+	get() {
+		return props.modelValue
+	},
+	set(value) {
+		return emit('update:model-value', value)
+	}
+});
+
+const handleOpen = () => {
+	isOpen.value === false ? isOpen.value = true : isOpen.value = false
+}
+const clearModel = () => emit('update:model-value', '')
 </script>
 
 <template>
@@ -83,23 +98,29 @@ const model = ref(props.modelValue);
 		:name="name"
 		:disabled="disabled"
 		:display-value="(value) => typeof value === 'string' ? value : value['label']"
+		:open="isOpen"
 		as-child
 	>
-		<div class="cb__wrapper">
+		<div
+			v-on-click-outside="() => isOpen = false"
+			class="cb__wrapper"
+		>
 			<ComboboxAnchor>
 				<ComboboxInput
 					:class="['cb__input', { 'no-border': noBorder }]"
 					:data-disabled="disabled"
 					name="search"
-					tabindex="0"
 					:placeholder="$t(placeholder)"
 					:data-error="error"
+					autocomplete="off"
+					@click="handleOpen"
 				/>
 				<div class="cb__input--actions">
 					<ComboboxTrigger
-						v-if="!model.length"
+						v-if="!model"
 						class="cb__trigger"
 						as-child
+						@click="handleOpen"
 					>
 						<CommonButton
 							tabindex="0"
@@ -108,9 +129,10 @@ const model = ref(props.modelValue);
 						/>
 					</ComboboxTrigger>
 					<ComboboxCancel
-						v-if="model.length"
+						v-if="model"
 						as-child
 						class="cb__cancel"
+						@click="clearModel(); () => isOpen = false"
 					>
 						<CommonButton
 							tabindex="0"
@@ -130,6 +152,7 @@ const model = ref(props.modelValue);
 				position="popper"
 				:side-offset="5"
 				style="background-color: #fff;"
+				@click="handleOpen"
 			>
 				<ComboboxViewport>
 					<LibraryScrollArea :height="height">
@@ -250,7 +273,6 @@ const model = ref(props.modelValue);
 			color: var(--color-accent-green-main);
 		}
 	}
-
 }
 
 .cb__trigger {
@@ -263,12 +285,11 @@ const model = ref(props.modelValue);
 		opacity: 0.4;
 	}
 
-	&:hover:deep(svg) {
-		color: var(--color-accent-green-main);
-	}
-
+	&:hover,
 	&:focus-visible {
-		background-color: var(--color-accent-green-main-10);
+		&:deep(svg) {
+			color: var(--color-accent-green-main);
+		}
 	}
 
 	&--expand {

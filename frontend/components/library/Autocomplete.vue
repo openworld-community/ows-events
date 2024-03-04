@@ -1,12 +1,8 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { ref } from 'vue';
 import {
 	ComboboxAnchor,
 	ComboboxContent,
-	ComboboxGroup,
 	ComboboxInput,
 	ComboboxRoot,
 	ComboboxTrigger,
@@ -122,22 +118,21 @@ const model = ref(props.modelValue);
 					</ComboboxCancel>
 				</div>
 			</ComboboxAnchor>
+			<!-- ComboboxContent мерджится с popper wrapper и стиль по классу не применяется -->
 			<ComboboxContent
 				class="cb__content"
 				tabindex="0"
 				:style="{ maxHeight: `${height}px` }"
 				position="popper"
 				:side-offset="5"
+				style="background-color: #fff;"
 			>
 				<ComboboxViewport>
 					<LibraryScrollArea :height="height">
 						<ComboboxEmpty class="cb__empty">
 							{{ $t('global.notFound') }}
 						</ComboboxEmpty>
-						<ComboboxGroup
-							as="ul"
-							class="cb__content--list"
-						>
+						<ul class="cb__content--list">
 							<LibraryUiItemSearch
 								v-for="option in options"
 								:key="typeof option === 'string' ? option : option['value']"
@@ -153,7 +148,7 @@ const model = ref(props.modelValue);
 									{{ typeof option === 'string' ? option : option['label'] }}
 								</span>
 							</LibraryUiItemSearch>
-						</ComboboxGroup>
+						</ul>
 					</LibraryScrollArea>
 				</ComboboxViewport>
 			</ComboboxContent>
@@ -161,10 +156,7 @@ const model = ref(props.modelValue);
 	</ComboboxRoot>
 </template>
 
-<style
-	scoped
-	lang="less"
->
+<style scoped lang="less">
 .cb__wrapper {
 	position: relative;
 	font-family: var(--font-family-main);
@@ -307,10 +299,6 @@ const model = ref(props.modelValue);
 	height: auto;
 	min-height: 100px;
 
-	/* position: absolute;
-	z-index: 20; */
-
-	background-color: var(--backround-color);
 	border: 1px solid #dbdbdb;
 	border-radius: 8px;
 

@@ -18,10 +18,10 @@ const isOnlineField = useField<boolean>(() => 'isOnline');
 const cityField = useField<string>(() => 'location.city');
 const addressField = useField<string>(() => 'location.address');
 
-// была ошибка, когда в pages/edit-[editid] стор не отрабатывал
-// onBeforeMount(async () => {
-// 	await eventStore.getTimezones()
-// })
+// иногда появляется ошибка, когда в pages/edit-[editid] стор не отрабатывает вовремя
+onBeforeMount(async () => {
+	await eventStore.getTimezones()
+})
 </script>
 
 <template>

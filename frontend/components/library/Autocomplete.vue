@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+	setup
+	lang="ts"
+>
 import { ref } from 'vue';
 import {
 	ComboboxAnchor,
@@ -95,11 +98,11 @@ const model = ref(props.modelValue);
 				<div class="cb__input--actions">
 					<ComboboxTrigger
 						v-if="!model.length"
-						tabindex="0"
 						class="cb__trigger"
 						as-child
 					>
 						<CommonButton
+							tabindex="0"
 							button-kind="multiselect"
 							class="cb__trigger--expand"
 						/>
@@ -110,6 +113,7 @@ const model = ref(props.modelValue);
 						class="cb__cancel"
 					>
 						<CommonButton
+							tabindex="0"
 							is-icon
 							icon-name="close"
 							:interactive="false"
@@ -156,7 +160,10 @@ const model = ref(props.modelValue);
 	</ComboboxRoot>
 </template>
 
-<style scoped lang="less">
+<style
+	scoped
+	lang="less"
+>
 .cb__wrapper {
 	position: relative;
 	font-family: var(--font-family-main);
@@ -237,17 +244,13 @@ const model = ref(props.modelValue);
 		transition: rotate 0.15s ease-in-out, color 0.15s ease-in-out;
 	}
 
-	&:hover {
-		background-color: var(--color-accent-green-main-10);
-
+	&:hover,
+	&:focus-visible {
 		&:deep(svg) {
 			color: var(--color-accent-green-main);
 		}
 	}
 
-	&:focus-visible {
-		background-color: var(--color-accent-green-main-10);
-	}
 }
 
 .cb__trigger {

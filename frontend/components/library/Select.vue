@@ -22,7 +22,15 @@ const props = defineProps({
 		type: String,
 		default: ''
 	},
-	//type of trigger - without border
+	align: {
+		type: String as PropType<'start' | 'center' | 'end'>,
+		default: 'start'
+	},
+	side: {
+		type: String as PropType<'top' | 'right' | 'bottom' | 'left'>,
+		default: 'bottom'
+	},
+	//type of trigger - without border for main page
 	noBorder: {
 		type: Boolean,
 		default: false
@@ -93,6 +101,8 @@ const onRemove = () => {
 				:style="{ maxHeight: `${height}px` }"
 				position="popper"
 				:side-offset="5"
+				:align="align"
+				:side="side"
 			>
 				<SelectViewport as-child>
 					<LibraryScrollArea :height="height">
@@ -123,7 +133,7 @@ const onRemove = () => {
 		<button
 			v-if="model"
 			type="button"
-			class="select__clear-btn"
+			class="select__clear-select"
 			:aria-label="$t('global.button.clear')"
 			tabindex="0"
 			@click="onRemove"
@@ -222,31 +232,27 @@ const onRemove = () => {
 		border-radius: 8px;
 		border: 2px black;
 		width: var(--radix-select-trigger-width);
-		//	height: auto;
+		height: auto;
 		min-height: 100px;
 	}
-
-	&__clear-btn {
+	&__clear-select {
 		position: absolute;
 		z-index: 10;
-		top: 16%;
+		top: 0;
 		right: 12px;
+		height: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		border: 1px solid transparent;
+
 		border-color: 4px;
 
 		&:focus-within {
 			outline: none;
-			border-color: var(--color-accent-green-main);
-			border-radius: 4px;
 		}
 
 		&:focus {
 			outline: none;
-			border-radius: 4px;
-			border-color: var(--color-accent-green-main);
 		}
 	}
 
@@ -255,16 +261,13 @@ const onRemove = () => {
 		align-items: center;
 		gap: 4px;
 	}
-
-	&__clear-button:hover svg {
+	&__clear-select:hover svg {
 		color: var(--color-accent-green-main);
 	}
-
-	&__clear-button:focus svg {
+	&__clear-select:focus svg {
 		color: var(--color-accent-green-main);
 	}
-
-	&__clear-button:focus-withn svg {
+	&__clear-select:focus-within svg {
 		color: var(--color-accent-green-main);
 	}
 }

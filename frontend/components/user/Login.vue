@@ -58,7 +58,9 @@ const onSubmit = handleSubmit(async values => {
     >
         <fieldset class="signin__fieldset">
             <CommonFormField
-                :error="emailField.errorMessage.value"
+                :error="emailField.meta.touched && Boolean(emailField.errorMessage.value)
+                    ? emailField.errorMessage.value
+                    : ''"
                 :touched="emailField.meta.touched"
                 :error-label="true"
             >
@@ -69,13 +71,12 @@ const onSubmit = handleSubmit(async values => {
                     autocomplete="true"
                     name="email"
                     type="email"
-                    :error="emailField.meta.touched && Boolean(emailField.errorMessage.value)
-                        ? emailField.errorMessage.value
-                        : false"
                 />
             </CommonFormField>
             <CommonFormField
-                :error="passwordField.errorMessage.value"
+                :error="passwordField.meta.touched && Boolean(passwordField.errorMessage.value)
+                    ? emailField.errorMessage.value
+                    : ''"
                 :touched="passwordField.meta.touched"
                 :error-label="true"
             >
@@ -86,9 +87,6 @@ const onSubmit = handleSubmit(async values => {
                     name="password"
                     :type="inputType"
                     :show-password="true"
-                    :error="passwordField.meta.touched && Boolean(passwordField.errorMessage.value)
-                        ? emailField.errorMessage.value
-                        : false"
                 />
             </CommonFormField>
         </fieldset>

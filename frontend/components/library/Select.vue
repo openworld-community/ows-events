@@ -1,6 +1,8 @@
-<script setup lang="ts">
+<script
+	setup
+	lang="ts"
+>
 import { SelectContent, SelectRoot, SelectTrigger, SelectValue, SelectViewport } from 'radix-vue';
-
 const props = defineProps({
 	options: {
 		type: [Array, String, Set] as PropType<
@@ -41,7 +43,6 @@ const props = defineProps({
 		type: Boolean,
 		default: false
 	},
-
 	required: {
 		type: Boolean,
 		default: false
@@ -51,9 +52,7 @@ const props = defineProps({
 		default: false
 	}
 });
-
 const emit = defineEmits(['update:model-value']);
-
 const model = computed({
 	get() {
 		return props.modelValue;
@@ -63,7 +62,6 @@ const model = computed({
 	}
 });
 const height = ref(200);
-
 const onRemove = () => {
 	emit('update:model-value', '');
 };
@@ -167,30 +165,34 @@ const onRemove = () => {
 		padding: 8px 12px 8px 12px;
 		transition: border-color 0.3s ease;
 		cursor: pointer;
-
-		&--no-border {
-			border-color: transparent;
-			@media (min-width: 1440px) {
-				height: 72px;
-			}
-		}
-
+		
 		&--no-border[data-state='open'] {
 			border-color: var(--color-accent-green-main);
 		}
-
+		
 		&:focus-within {
 			outline: none;
 			border-color: var(--color-accent-green-main);
 		}
-
 		&:focus {
 			outline: none;
 			border-color: var(--color-accent-green-main);
 		}
-
+		
 		&:hover {
 			border-color: var(--color-accent-green-main);
+		}
+
+		&--no-border {
+			border-color: transparent;
+
+			&:hover {
+				border-color: transparent;
+			}
+
+			@media (min-width: 1440px) {
+				height: 72px;
+			}
 		}
 	}
 
@@ -199,6 +201,7 @@ const onRemove = () => {
 		font-size: var(--font-size-M);
 		color: var(--color-text-main);
 	}
+
 	&__trigger[data-placeholder] {
 		.select__value {
 			font-family: var(--font-family-main);
@@ -208,9 +211,15 @@ const onRemove = () => {
 	}
 
 	&__trigger[data-disabled] {
+		pointer-events: none;
 		border-color: var(--color-input-field);
 		opacity: 0.4;
+
+		&.select__trigger--no-border {
+			border-color: transparent !important;
+		}
 	}
+
 	&__trigger[data-error='true'] {
 		border-color: var(--color-accent-red);
 	}
@@ -229,8 +238,9 @@ const onRemove = () => {
 	&__clear-select {
 		position: absolute;
 		z-index: 10;
-		top: 16%;
+		top: 0;
 		right: 12px;
+		height: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -257,7 +267,7 @@ const onRemove = () => {
 	&__clear-select:focus svg {
 		color: var(--color-accent-green-main);
 	}
-	&__clear-select:focus-withn svg {
+	&__clear-select:focus-within svg {
 		color: var(--color-accent-green-main);
 	}
 }

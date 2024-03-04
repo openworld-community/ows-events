@@ -6,7 +6,7 @@ import {
 	ScrollAreaViewport
 } from 'radix-vue';
 
-const props = defineProps({
+defineProps({
 	type: {
 		type: String as PropType<'always' | 'hover' | 'auto' | 'scroll'>,
 		default: 'auto'
@@ -57,6 +57,7 @@ const props = defineProps({
 	&__viewport {
 		width: 100%;
 	}
+
 	&__scrollbar {
 		width: 4px;
 		padding: 5px 2px;
@@ -68,6 +69,7 @@ const props = defineProps({
 			background-color: var(--color-text-main);
 		}
 	}
+
 	&__thumb {
 		background: rgba(0, 0, 0, 0.3);
 		border-radius: 3px;

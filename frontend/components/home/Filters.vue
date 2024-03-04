@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+	setup
+	lang="ts"
+>
 import dayjs from 'dayjs';
 import { useFilterStore } from '../../stores/filter.store';
 import { debouncedWatch } from '@vueuse/core';
@@ -31,9 +34,7 @@ watch(
 				city: filters.city || undefined,
 				tags: filters.tags.join(', ') || undefined,
 				// может приходить Invalid Date
-				startDate: filters.startDate
-					? dayjs(filters.startDate).format('YYYY-MM-DD')
-					: undefined,
+				startDate: filters.startDate ? dayjs(filters.startDate).format('YYYY-MM-DD') : undefined,
 				endDate: filters.endDate ? dayjs(filters.endDate).format('YYYY-MM-DD') : undefined
 			}
 		});
@@ -95,20 +96,19 @@ const mobile = inject('mobile');
 			/>
 			<CommonUiFilter
 				:key="mobile ? 'mobile-city' : 'other-city'"
-				filter-type="select"
+				filter-type="librarySelect"
 				name="city"
 				:list="filterStore.usedCitiesByCountry[filterStore.filters.country] ?? []"
-				:disabled="
-					!filterStore.filters.country ||
+				:disabled="!filterStore.filters.country ||
 					(!filterStore.usedCitiesByCountry[filterStore.filters.country] &&
 						!filterStore.filters.city)
-				"
+					"
 				@on-filter-button-click="
 					openFilterModal(
 						'city',
 						filterStore.usedCitiesByCountry?.[filterStore.filters.country] ?? []
 					)
-				"
+					"
 			/>
 			<CommonUiFilter
 				:key="mobile ? 'mobile-tags' : 'other-tags'"
@@ -122,7 +122,7 @@ const mobile = inject('mobile');
 				:dropdown-position="tablet ? 'right' : 'left'"
 				@on-filter-button-click="
 					openFilterModal('tags', filterStore.usedTags, true, 'name', 'key')
-				"
+					"
 			/>
 			<CommonUiFilter
 				filter-type="date"
@@ -136,7 +136,10 @@ const mobile = inject('mobile');
 	</section>
 </template>
 
-<style scoped lang="less">
+<style
+	scoped
+	lang="less"
+>
 .filters {
 	display: flex;
 	width: 100%;
@@ -158,11 +161,13 @@ const mobile = inject('mobile');
 		width: 100%;
 		margin-top: var(--gap);
 		gap: var(--gap);
+		height: 100%;
 
 		@media (max-width: 767px) {
 			&:deep(.button__filter) {
 				max-width: calc((100% - var(--gap) * 2) / 3);
 			}
+
 			&:deep(.select) {
 				max-width: calc((100% - var(--gap) * 2) / 3);
 			}
@@ -176,6 +181,7 @@ const mobile = inject('mobile');
 		}
 
 		@media (min-width: 768px) {
+
 			&:deep(.filter),
 			&:deep(.button__multiselect) {
 				max-width: 20%;

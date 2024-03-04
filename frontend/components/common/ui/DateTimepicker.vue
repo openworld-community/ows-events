@@ -1,4 +1,7 @@
-<script lang="ts" setup>
+<script
+	lang="ts"
+	setup
+>
 import VueDatePicker, { type DatePickerInstance } from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import dayjs from 'dayjs';
@@ -60,6 +63,10 @@ const props = defineProps({
 		type: String as PropType<'no-border' | null>,
 		default: null
 	},
+	isFilter: {
+		type: Boolean,
+		default: false
+	},
 	disabledButtons: {
 		type: Object as PropType<TCalendarDisabledButtons>,
 		default: () => {
@@ -76,6 +83,8 @@ const { locale } = useI18n();
 const emit = defineEmits(['update:model-value']);
 const isDateType = computed(() => props.type === 'date');
 const datepicker = ref<DatePickerInstance>(null);
+const wrapper = ref(null)
+const input = ref(null)
 
 const handleDate = (modelData: typeof props.modelValue) => {
 	isDateType.value && datepicker.value?.closeMenu();
@@ -95,12 +104,26 @@ const onRemove = () => {
 	emit('update:model-value', null);
 };
 
+const setFocus = () => {
+	input.value.focus()
+}
+
+const removeFocus = () => {
+	input.value.blur()
+}
+
 const today = new Date()
 const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
+
+onMounted(() => {
+	// datepicker криво ставит фокус класс (при откртии фокуса нет, при закрытии есть)
+	input.value = wrapper.value.querySelector('.dp__input')
+})
 </script>
 
 <template>
 	<div
+		ref="wrapper"
 		class="input__wrapper"
 		:class="{ [className ?? '']: className }"
 	>
@@ -118,7 +141,7 @@ const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
 			:locale="locale"
 			:name="name"
 			:placeholder="required ? `${placeholder} *` : placeholder"
-			:input-class-name="`input input__field ${error ? 'form__error' : ''} ${appearance ? 'no-border' : ''}`"
+			:input-class-name="`input input__field ${error ? 'form__error' : ''} ${appearance ? 'no-border' : ''} ${isFilter ? 'filter' : ''}`"
 			:menu-class-name="`${!isDateType ? 'time_picker' : ''}`"
 			mode-height="80"
 			prevent-min-max-navigation
@@ -143,6 +166,8 @@ const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
 			:clearable="false"
 			@update:model-value="handleDate"
 			@keydown.enter.capture="datepicker?.closeMenu()"
+			@open="setFocus"
+			@closed="removeFocus"
 		>
 			<template #action-row>
 				<CommonButton
@@ -150,18 +175,18 @@ const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
 					button-kind="dark"
 					:is-disabled="disabledButtons.today"
 					@click="() => {
-						$emit('update:model-value', today)
-						datepicker.closeMenu()
-					}"
+			$emit('update:model-value', today)
+			datepicker.closeMenu()
+		}"
 				/>
 				<CommonButton
 					:button-text="$t('dates.filterDay.tomorrow')"
 					button-kind="dark"
 					:is-disabled="disabledButtons.tomorrow"
 					@click="() => {
-						$emit('update:model-value', tomorrow)
-						datepicker.closeMenu()
-					}"
+			$emit('update:model-value', tomorrow)
+			datepicker.closeMenu()
+		}"
 				/>
 			</template>
 		</VueDatePicker>
@@ -236,8 +261,12 @@ const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
 			border-color: var(--color-input-field);
 		}
 
+		&.filter:hover {
+			border-color: transparent;
+		}
+
 		&:active,
-		&:focus {
+		&:focus-visible {
 			outline: none;
 			border: 1px solid #48c78e;
 			box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);

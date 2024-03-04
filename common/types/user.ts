@@ -1,4 +1,4 @@
-import { UserRoles } from '@common/const/userRoles';
+import { UserRoles } from '../const/userRoles';
 
 export type UserDbEntity = {
 	telegram: {

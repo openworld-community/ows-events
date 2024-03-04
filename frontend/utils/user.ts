@@ -1,12 +1,12 @@
-export const getUserName = (name: string) => {
+export const getUserName = (name: string, lastName: string) => {
 	const { t } = useI18n();
-	if (name) {
-		return `${name}`;
-	} else return t('user.user');
-};
-
-export const getLastName = (lastName: string) => {
-	if (lastName) {
-		return `${lastName}`;
+	if (name && lastName) {
+		return `${t('user.greeting')}, ${name} ${lastName}`;
 	}
+	if (name && !lastName) {
+		return `${t('user.greeting')}, ${name}`;
+	}
+	if (!name && lastName) {
+		return `${t('user.greeting')}, ${lastName}`;
+	} else return `${t('user.greeting')}, ${t('user.user')}`;
 };

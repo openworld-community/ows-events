@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+	setup
+	lang="ts"
+>
 import { ComboboxItem, type ComboboxItemProps } from 'radix-vue';
 
 const props = defineProps<ComboboxItemProps>();
@@ -21,6 +24,7 @@ const props = defineProps<ComboboxItemProps>();
 		</ComboboxItemIndicator>
 	</ComboboxItem>
 </template>
+
 <style scoped lang="less">
 .search-item {
 	background-color: var(--color-white);
@@ -29,19 +33,10 @@ const props = defineProps<ComboboxItemProps>();
 	cursor: pointer;
 	justify-content: space-between;
 	align-items: center;
-	padding: 8px 6px;
+	padding: 6px 14px 6px 8px;
 
-	&:focus-visible {
-		background-color: var(--color-accent-green-main-50);
-		outline: 1px solid var(--color-accent-green-main-50);
-		border-radius: 2px;
-	}
-
-	&:hover {
+	&[data-highlighted] {
 		background-color: var(--color-accent-green-main-50);
 	}
-}
-.search-item[data-highlighted] {
-	background-color: var(--color-accent-green-main-50);
 }
 </style>

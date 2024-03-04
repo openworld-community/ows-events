@@ -82,6 +82,9 @@ const model = computed({
 const handleOpen = () => {
 	isOpen.value === false ? isOpen.value = true : isOpen.value = false
 }
+const close = () => {
+	isOpen.value = false
+}
 const clearModel = () => emit('update:model-value', '')
 </script>
 
@@ -102,7 +105,7 @@ const clearModel = () => emit('update:model-value', '')
 		as-child
 	>
 		<div
-			v-on-click-outside="() => isOpen = false"
+			v-on-click-outside="close"
 			class="cb__wrapper"
 		>
 			<ComboboxAnchor>
@@ -132,7 +135,7 @@ const clearModel = () => emit('update:model-value', '')
 						v-if="model"
 						as-child
 						class="cb__cancel"
-						@click="clearModel(); () => isOpen = false"
+						@click="clearModel(); close()"
 					>
 						<CommonButton
 							tabindex="0"

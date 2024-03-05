@@ -77,6 +77,7 @@ watch(
 		) {
 			setFieldValue('location.city', '');
 			setFieldValue('location.address', '');
+			setFieldValue('timezone', '');
 		}
 		if (country) {
 			if (!values['isFree']) {

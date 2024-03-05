@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { useField } from 'vee-validate';
 import { useLocationStore } from '@/stores/location.store';
 import { useEventStore } from '../../stores/event.store';
@@ -20,8 +17,8 @@ const addressField = useField<string>(() => 'location.address');
 
 // иногда появляется ошибка, когда в pages/edit-[editid] стор не отрабатывает вовремя
 onBeforeMount(async () => {
-	await eventStore.getTimezones()
-})
+	await eventStore.getTimezones();
+});
 </script>
 
 <template>
@@ -57,8 +54,9 @@ onBeforeMount(async () => {
 						:disabled="isOnlineField.value.value"
 						input-readonly
 						:required="!isOnlineField.value.value"
-						:error="countryField.meta.touched && Boolean(countryField.errorMessage.value)
-			"
+						:error="
+							countryField.meta.touched && Boolean(countryField.errorMessage.value)
+						"
 					/>
 				</CommonFormField>
 				<CommonFormField
@@ -84,8 +82,9 @@ onBeforeMount(async () => {
 						name="timezone"
 						:placeholder="$t('global.timezone')"
 						:options="eventStore.allTimezones"
-						:error="timeZoneField.meta.touched && Boolean(timeZoneField.errorMessage.value)
-			"
+						:error="
+							timeZoneField.meta.touched && Boolean(timeZoneField.errorMessage.value)
+						"
 						required
 						:disabled="!countryField.value.value && !isOnlineField.value.value"
 					/>
@@ -102,19 +101,20 @@ onBeforeMount(async () => {
 					:error="addressField.meta.touched && Boolean(addressField.errorMessage.value)"
 					:placeholder="$t('form.event.fields.address_placeholder')"
 					:required="!isOnlineField.value.value"
-					:disabled="!(countryField.value.value && cityField.value.value) ||
-			isOnlineField.value.value
-			"
+					:disabled="
+						!(countryField.value.value && cityField.value.value) ||
+						isOnlineField.value.value
+					"
 				/>
 			</CommonFormField>
 
 			<CommonCheckLocation
 				:is-show="!!(countryField.value.value && cityField.value.value)"
 				:location="{
-			city: cityField.value.value,
-			country: countryField.value.value,
-			address: addressField.value.value
-		}"
+					city: cityField.value.value,
+					country: countryField.value.value,
+					address: addressField.value.value
+				}"
 			/>
 		</template>
 	</ModalUiModalLocationSection>

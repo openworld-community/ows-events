@@ -211,7 +211,8 @@ const showInputValueIcon = computed(() => {
 
 	&__clear-button {
 		position: absolute;
-		top: 8px;
+		top: 50%;
+		transform: translateY(-50%);
 		right: 12px;
 	}
 

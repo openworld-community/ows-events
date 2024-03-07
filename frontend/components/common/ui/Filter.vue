@@ -210,16 +210,6 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 		width: 50%;
 		min-width: 20%;
 
-		&:deep(.input__button),
-		&:deep(.button__icon),
-		&:deep(.select__clear-button) {
-			top: 25px;
-		}
-
-		&:deep(.select__clear-select) {
-			top: 25px;
-		}
-
 		&:deep(.button__multiselect) {
 			max-width: 20%;
 		}

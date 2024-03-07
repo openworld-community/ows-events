@@ -9,7 +9,7 @@ import { SUPPORT_TG_URL } from '../../constants/url';
 import { useUserStore } from '../../stores/user.store';
 
 const route = useRoute();
-const router = useRouter();
+// const router = useRouter();
 const localePath = useLocalePath();
 const userStore = useUserStore();
 const mobile = inject('mobile');

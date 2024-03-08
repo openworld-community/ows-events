@@ -16,7 +16,7 @@ type FilterStore = {
 		returnKey: string;
 	};
 	filters: {
-		country: Country;
+		// country: Country;
 		city: City;
 		searchLine: string;
 		tags: Tag[];
@@ -34,7 +34,7 @@ export const useFilterStore = defineStore('filter', {
 			usedCitiesByCountry: {},
 			usedTags: [],
 			filters: {
-				country: getFirstQuery(route.query.country) ?? '',
+				// country: getFirstQuery(route.query.country) ?? '',
 				city: getFirstQuery(route.query.city) ?? '',
 				searchLine: getFirstQuery(route.query.search) ?? '',
 				tags:

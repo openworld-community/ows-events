@@ -7,7 +7,6 @@ import type { TCalendarDisabledButtons } from '../../../../common/types/filters'
 import { useFilterStore } from '../../../stores/filter.store';
 import { getFilterPlaceholder } from '../../../utils/texts';
 
-
 const props = defineProps({
 	filterType: {
 		type: String as PropType<'input' | 'select' | 'date' | 'librarySelect'>,

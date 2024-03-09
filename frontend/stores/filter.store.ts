@@ -6,6 +6,7 @@ import type { Tag } from '../../common/const/tags';
 type FilterStore = {
 	usedCountries: Country[];
 	usedCitiesByCountry: { [key: string]: City[] };
+	usedCities: City[];
 	usedTags: { name: string; key: Tag }[];
 	modal: {
 		show: boolean;
@@ -32,6 +33,7 @@ export const useFilterStore = defineStore('filter', {
 		return {
 			usedCountries: [],
 			usedCitiesByCountry: {},
+			usedCities: [],
 			usedTags: [],
 			filters: {
 				// country: getFirstQuery(route.query.country) ?? '',
@@ -91,6 +93,9 @@ export const useFilterStore = defineStore('filter', {
 			// получение usedCountries
 			const { data: usedCountries } = await apiRouter.filters.getUsedCountries.useQuery({});
 			if (usedCountries.value?.length) this.usedCountries = usedCountries.value;
+			//получение usedCities
+			const { data: usedCities } = await apiRouter.filters.getUsedCities.useQuery({});
+			if (usedCities.value?.length) this.usedCities = usedCities.value;
 			// получение usedTags
 			const { data: usedTags } = await apiRouter.filters.getUsedTags.useQuery({});
 			if (usedTags.value?.length) {
@@ -103,7 +108,7 @@ export const useFilterStore = defineStore('filter', {
 		async getUsedCitiesByCountry(country: Country) {
 			if (process.server) return;
 			if (!country || this.usedCitiesByCountry[country]) return;
-			const { data } = await apiRouter.filters.getUsedCities.useQuery({
+			const { data } = await apiRouter.filters.getUsedCitiesByCountry.useQuery({
 				data: { country }
 			});
 			if (!data.value) return;

@@ -21,3 +21,8 @@ type IGetMetaRouteProps = {
 	} & Timezone;
 };
 type IGetMetaHandlerProps = IRouteHandler<IGetMetaRouteProps>;
+
+type IGetUsedCitiesRouteProps = {
+	Body: { country: string };
+};
+type IGetUsedCitiesHandlerProps = IRouteHandler<IGetUsedCitiesRouteProps>;

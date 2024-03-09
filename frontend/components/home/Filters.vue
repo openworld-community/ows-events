@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import dayjs from 'dayjs';
 import { useFilterStore } from '../../stores/filter.store';
 import { debouncedWatch } from '@vueuse/core';
@@ -34,7 +31,9 @@ watch(
 				city: filters.city || undefined,
 				tags: filters.tags.join(', ') || undefined,
 				// может приходить Invalid Date
-				startDate: filters.startDate ? dayjs(filters.startDate).format('YYYY-MM-DD') : undefined,
+				startDate: filters.startDate
+					? dayjs(filters.startDate).format('YYYY-MM-DD')
+					: undefined,
 				endDate: filters.endDate ? dayjs(filters.endDate).format('YYYY-MM-DD') : undefined
 			}
 		});
@@ -77,15 +76,6 @@ const openFilterModal = (
 const mobile = inject('mobile');
 
 // const city = ref<string>('')
-
-const citiesMockup = [
-	'city1',
-	'city2',
-	'city3',
-	'city4',
-	'city5',
-	'city6',
-]
 </script>
 
 <template>
@@ -101,7 +91,9 @@ const citiesMockup = [
 				:key="mobile ? 'mobile-city' : 'other-city'"
 				filter-type="librarySelect"
 				name="city"
-				:list="citiesMockup"
+				:list="filterStore.usedCities"
+				:disabled="!filterStore.usedCountries.length"
+				@on-filter-button-click="openFilterModal('city', filterStore.usedCities)"
 			/>
 			<CommonUiFilter
 				:key="mobile ? 'mobile-tags' : 'other-tags'"
@@ -115,7 +107,7 @@ const citiesMockup = [
 				:dropdown-position="tablet ? 'right' : 'left'"
 				@on-filter-button-click="
 					openFilterModal('tags', filterStore.usedTags, true, 'name', 'key')
-					"
+				"
 			/>
 			<CommonUiFilter
 				filter-type="date"
@@ -129,10 +121,7 @@ const citiesMockup = [
 	</section>
 </template>
 
-<style
-	scoped
-	lang="less"
->
+<style scoped lang="less">
 .filters {
 	display: flex;
 	width: 100%;
@@ -174,7 +163,6 @@ const citiesMockup = [
 		}
 
 		@media (min-width: 768px) {
-
 			&:deep(.filter),
 			&:deep(.button__multiselect) {
 				max-width: 20%;

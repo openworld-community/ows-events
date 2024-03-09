@@ -4,7 +4,8 @@ import { countriesAndCitiesController } from '../../../controllers/countries-and
 import {
 	IGetCitiesByCountryHandlerProps,
 	IGetCountriesHandlerProps,
-	IGetMetaHandlerProps
+	IGetMetaHandlerProps,
+	IGetUsedCitiesHandlerProps
 } from './type';
 import { CommonErrorsEnum } from '../../../../../common/const';
 
@@ -54,7 +55,10 @@ export const getCitiesByCountry: IGetCitiesByCountryHandlerProps = async (reques
 export const getUsedCountries: IGetCountriesHandlerProps = async () =>
 	countriesAndCitiesController.getUsedCountries();
 
-export const getUsedCities: IGetCitiesByCountryHandlerProps = async (request) => {
+export const getUsedCitiesByCountry: IGetCitiesByCountryHandlerProps = async (request) => {
 	const { country } = request.params;
-	return countriesAndCitiesController.getUsedCities(country);
+	return countriesAndCitiesController.getUsedCitiesByCountry(country);
 };
+
+export const getUsedCities: IGetUsedCitiesHandlerProps = async () =>
+	countriesAndCitiesController.getUsedCities();

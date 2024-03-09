@@ -1,11 +1,9 @@
 import { defineStore } from 'pinia';
-import type { Country, City } from '../../common/types/location';
+import type { City } from '../../common/types/location';
 import type { EventOnPoster } from '../../common/types/event';
 import type { Tag } from '../../common/const/tags';
 
 type FilterStore = {
-	usedCountries: Country[];
-	usedCitiesByCountry: { [key: string]: City[] };
 	usedCities: City[];
 	usedTags: { name: string; key: Tag }[];
 	modal: {
@@ -17,7 +15,6 @@ type FilterStore = {
 		returnKey: string;
 	};
 	filters: {
-		// country: Country;
 		city: City;
 		searchLine: string;
 		tags: Tag[];
@@ -31,12 +28,9 @@ export const useFilterStore = defineStore('filter', {
 	state: (): FilterStore => {
 		const route = useRoute();
 		return {
-			usedCountries: [],
-			usedCitiesByCountry: {},
 			usedCities: [],
 			usedTags: [],
 			filters: {
-				// country: getFirstQuery(route.query.country) ?? '',
 				city: getFirstQuery(route.query.city) ?? '',
 				searchLine: getFirstQuery(route.query.search) ?? '',
 				tags:
@@ -90,14 +84,11 @@ export const useFilterStore = defineStore('filter', {
 		},
 		async getUsedFilters() {
 			if (process.server) return;
-			// получение usedCountries
-			const { data: usedCountries } = await apiRouter.filters.getUsedCountries.useQuery({});
-			if (usedCountries.value?.length) this.usedCountries = usedCountries.value;
-			//получение usedCities
 			const { data: usedCities } = await apiRouter.filters.getUsedCities.useQuery({});
+
 			if (usedCities.value?.length) this.usedCities = usedCities.value;
-			// получение usedTags
 			const { data: usedTags } = await apiRouter.filters.getUsedTags.useQuery({});
+			
 			if (usedTags.value?.length) {
 				const { $i18n } = useNuxtApp();
 				this.usedTags = usedTags.value.map((elem: string) => {
@@ -105,14 +96,5 @@ export const useFilterStore = defineStore('filter', {
 				});
 			}
 		},
-		async getUsedCitiesByCountry(country: Country) {
-			if (process.server) return;
-			if (!country || this.usedCitiesByCountry[country]) return;
-			const { data } = await apiRouter.filters.getUsedCitiesByCountry.useQuery({
-				data: { country }
-			});
-			if (!data.value) return;
-			this.usedCitiesByCountry[country] = data.value;
-		}
 	}
 });

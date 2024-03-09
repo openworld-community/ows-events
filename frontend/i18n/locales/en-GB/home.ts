@@ -12,11 +12,6 @@ export default {
 		aria: 'You are in'
 	},
 	filter: {
-		country: {
-			placeholder: 'Country',
-			title: 'Select a country',
-			aria: 'Filter by country'
-		},
 		city: {
 			placeholder: 'City',
 			title: 'Select a city',
@@ -31,15 +26,10 @@ export default {
 			title: 'Select an event theme',
 			aria: 'Filter by event theme'
 		},
-		startDate: {
-			placeholder: 'Starting day',
-			title: 'Choose a starting day',
-			aria: 'Filter by starting date'
-		},
-		endDate: {
-			placeholder: 'Ending day',
-			title: 'Choose an ending day',
-			aria: 'Filter by ending date'
+		date: {
+			placeholder: 'When do we go?',
+			title: 'When do we go?',
+			aria: 'Filter by date'
 		},
 	},
 	user_location: {

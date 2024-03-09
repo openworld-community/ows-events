@@ -100,7 +100,7 @@ const mobile = inject('mobile');
 			/>
 			<CommonUiFilter
 				filter-type="date"
-				name="startDate"
+				name="date"
 				:range="true"
 			/>
 		</div>

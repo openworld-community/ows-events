@@ -76,6 +76,7 @@ server.register(Static, {
 });
 
 // eventsApi is a plugin
+server.decorateRequest('userId', '');
 server.register(manualModerationApi, { prefix: '/api/moderation' });
 server.register(authApi, { prefix: '/api/auth' });
 server.register(eventsApi, { prefix: '/api/events' });

@@ -18,14 +18,8 @@ import { UserRoles } from '../../../../../common/const/userRoles';
 
 export const addEvent: IAddEventHandler = async (request) => {
 	const { event } = request.body;
-	const token = request.headers.authorization;
-	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 
-	const isTokenValid = await UserTokenController.checkAccessToken(token);
-	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
-	const jwtData = JWTController.decodeToken(token);
-
-	event.creatorId = jwtData.id;
+	event.creatorId = request.userId;
 
 	if (event.creatorId === 'parser') {
 		event.type = EventTypes.PARSED;
@@ -55,14 +49,7 @@ export const getEvents: IGetEventsHandler = async (): Promise<EventOnPoster[]> =
 	(await eventsStateController.getEvents()).slice(0, 100);
 
 export const getMyEvents: IGetMyEventsHandler = async (request) => {
-	const token = request.headers.authorization;
-	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
-
-	const isTokenValid = await UserTokenController.checkAccessToken(token);
-	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
-	const jwtData = JWTController.decodeToken(token);
-
-	const events = await eventsStateController.getUserEvents(jwtData.id);
+	const events = await eventsStateController.getUserEvents(request.userId);
 	return events;
 };
 
@@ -75,17 +62,9 @@ export const getEvent: IGetEventHandler = async (request) => {
 };
 
 export const deleteEvent: IDeleteEventHandler = async (request) => {
-	const token = request.headers.authorization;
-	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
-
-	const isTokenValid = await UserTokenController.checkAccessToken(token);
-	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
-	const jwtData = JWTController.decodeToken(token);
-
 	const oldEvent = await eventsStateController.getEvent(request.body.id);
-	const isAuthor = oldEvent?.creatorId === String(jwtData.id);
-	const hasRights = await userController.validatePermission(jwtData.id, [UserRoles.ADMIN]);
-	if (!isAuthor && !hasRights) throw new Error(CommonErrorsEnum.FORBIDDEN);
+	const isAuthor = oldEvent?.creatorId === String(request.userId);
+	if (!isAuthor) throw new Error(CommonErrorsEnum.FORBIDDEN);
 
 	await eventsStateController.deleteEvent(request.body.id);
 	return undefined;

@@ -6,6 +6,14 @@ const model = ref('');
 const mode = ref('');
 const currency = ref('');
 const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length - i}`);
+
+const titleText = "Logout";
+const descriptionText = "Are you're shure that you want to leave us?";
+const handleDialogClose = () => {
+  // Ваша логика при закрытии диалога
+  console.log('Dialog closed!');
+};
+
 </script>
 
 <template>
@@ -65,8 +73,13 @@ const tags = Array.from({ length: 50 }).map((_, i, a) => `v1.2.0-beta.${a.length
 			<LibraryUiItemAutocomplete placeholder="placeholder" />
 		</div>
 		<div>
-			---------------------------------
+		-------------Dialog--------------------
 		</div>
-		<LibraryDialog></LibraryDialog>
+		<div style="width: 100px; height: 20px; background-color: brown;">
+			<LibraryDialog
+			:dialogTitleText="titleText"
+      		:dialogDescriptionText="descriptionText"
+			:dialogCustomFunction=handleDialogClose
+    	/></div>
 
 	</div></template>

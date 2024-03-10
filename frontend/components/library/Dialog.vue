@@ -9,27 +9,49 @@ import {
 	DialogTitle,
 	DialogTrigger
 } from 'radix-vue';
-const customDialogTrigger = "<div>lalala</div>"
+
+const props = defineProps(
+	{
+		dialogTitleText: {
+			type: String,
+			required: true
+		},
+		dialogDescriptionText: {
+			type: String,
+			default: ''
+		},
+		dialogCustomFunction:{
+			type: Function,
+			required:true, 
+		},
+		dialogCustomFunctionDescription:{
+			type: String,
+			default: '', 
+		},
+	}
+)
+
 </script>
 
 <template>
 	<DialogRoot>
-		<DialogTrigger class="dialog-trigger"> {{customDialogTrigger}}</DialogTrigger>
+		<DialogTrigger class="dialog-trigger">
+			<slot/>
+		</DialogTrigger>
 		<DialogPortal>
 			<DialogOverlay class="dialog-overlay" />
 			<DialogContent class="dialog-content">
-				<DialogTitle class="dialog-title"> Dialog Title </DialogTitle>
+				<DialogTitle class="dialog-title">
+					{{props.dialogTitleText}}
+				</DialogTitle>
 				<DialogDescription class="dialog-description">
-					Dialog Description
+					{{props.dialogDescriptionText}}
 				</DialogDescription>
 				
 				
 				<div class="dialog-buttons">
 					<DialogClose as-child>
-						<button class="dialog-button">Stay</button>
-					</DialogClose>
-                    <DialogClose as-child>
-						<button class="dialog-button">Away</button>
+						<button class="dialog-button" @click="props.dialogCustomFunction">{{props.dialogCustomFunctionDescription}}</button>
 					</DialogClose>
 				</div>
 				<DialogClose class="ui-dialog-close"
@@ -49,6 +71,8 @@ const customDialogTrigger = "<div>lalala</div>"
 <style>
 
 .dialog-trigger {
+	height: 100%;
+	width: 100%;
 	/* color: #59a2fc;
 	font-weight: 600;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -62,9 +86,9 @@ const customDialogTrigger = "<div>lalala</div>"
 	transition: background-color 0.3s ease; */
 }
 
-.dialog-trigger:hover {
-	background-color: #f5f0ff;
-}
+/* .dialog-trigger:focus {
+	box-shadow: 0 0 0 1px #22c55e;
+} */
 
 .dialog-overlay {
 	background-color: rgba(0, 0, 0, 0.6);

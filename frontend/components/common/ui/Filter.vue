@@ -107,7 +107,7 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 	return result
 })
 
-const date = ref<Date | Date[] | string>('')
+const date = ref<Date | Date[] | string>(null)
 
 watch(date, (value) => {
 	filterStore.filters.startDate = null

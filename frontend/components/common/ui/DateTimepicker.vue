@@ -122,8 +122,8 @@ const onOpen = () => {
 
 const onClose = () => {
 	input.value.blur()
-	emit('update:model-value', displayValue.value)
 	input.value.classList.remove('active')
+	emit('update:model-value', displayValue.value)
 }
 
 const today = new Date()
@@ -203,6 +203,7 @@ onMounted(() => {
 					readonly
 					:placeholder="placeholder"
 					:value="dateFormat(displayValue as Date | Date[] | string)"
+					@keyup.enter="datepicker.openMenu()"
 				/>
 			</template>
 			<template #action-row>
@@ -244,10 +245,11 @@ onMounted(() => {
 
 	&.no-border {
 		border-color: transparent;
-	}
-
-	&.active {
-		border-color: var(--color-accent-green-main);
+	
+		&:focus-visible,
+		&.active {
+			border-color: var(--color-accent-green-main);
+		}
 	}
 }
 

@@ -27,17 +27,17 @@ export default {
 		[Tags.STANDUP]: 'Stand-up',
 		[Tags.THEATER]: 'Theatre',
 		[Tags.TOURISM]: 'Tourism',
-		[Tags.FESTIVALS]: 'Festival',
-		[Tags.EXHIBITIONS]: 'Exhibition',
-		[Tags.LECTIONS_AND_MASTERCLASSESS]: 'Lecture and masterclass',
+		[Tags.FESTIVALS]: 'Festivals',
+		[Tags.EXHIBITIONS]: 'Exhibitions',
+		[Tags.LECTIONS_AND_MASTERCLASSESS]: 'Lectures and masterclasses',
 		[Tags.PARTIES]: 'Parties',
 		[Tags.BUSINESS_AND_NETWORKING]: 'Business and networking',
-		[Tags.TOURISM_AND_EXCURSION]: 'Tourism and excursion',
-		[Tags.BOARD_GAMES_AND_QIZZE]: 'Board games and quizze',
+		[Tags.TOURISM_AND_EXCURSION]: 'Tourism and excursions',
+		[Tags.BOARD_GAMES_AND_QIZZE]: 'Board games and quizzes',
 		[Tags.TASTINGS]: 'Tastings',
-		[Tags.RESTOURANT]: 'Restaurant',
+		[Tags.RESTOURANT]: 'Restaurants',
 		[Tags.FAIRS_AND_CITY_EVENTS]: 'Fairs and city events',
-		[Tags.CONCERT_AND__SHOW]: 'Concert and show'
+		[Tags.CONCERT_AND__SHOW]: 'Concerts and show'
 	},
 	filteredEvents: {
 		no_events_found: 'No events found'

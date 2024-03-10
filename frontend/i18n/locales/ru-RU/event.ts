@@ -30,7 +30,7 @@ export default {
 		[Tags.TOURISM]: 'Туризм',
 		[Tags.FESTIVALS]: 'Фестивали',
 		[Tags.EXHIBITIONS]: 'Выставки',
-		[Tags.LECTIONS_AND_MASTERCLASSESS]: 'Лекции и мастерклассы',
+		[Tags.LECTIONS_AND_MASTERCLASSESS]: 'Лекции и мастер-классы',
 		[Tags.PARTIES]: 'Вечеринки',
 		[Tags.BUSINESS_AND_NETWORKING]: 'Бизнес и Нетворкинг',
 		[Tags.TOURISM_AND_EXCURSION]: 'Туры и Экскурсии',

@@ -1,9 +1,9 @@
 import { defineMutation, defineQuery, useBackendFetch } from './utils';
-import type { PostUserInfo, UserInfoWithId } from '~/../common/types/user';
+import type { PostUserInfo, UserCookieInfo } from '~/../common/types/user';
 import type { EventOnPoster } from '../../../common/types';
 
 export const user = {
-	get: defineQuery<(input: { userToken: string }) => UserInfoWithId>((input) => {
+	get: defineQuery<(input: { userToken: string }) => UserCookieInfo>((input) => {
 		return useBackendFetch(`user/info/user`, { query: { token: input.userToken } });
 	}),
 	update: defineMutation<(input: { userInfo: PostUserInfo }) => { id: string }>((input) => {

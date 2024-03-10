@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RoutePathEnum } from '~/constants/enums/route';
 import { TOKEN_MAX_AGE_SECONDS } from '../../constants/defaultValues/time';
-import type { UserInfoWithId } from '../../../common/types/user';
+import type { UserCookieInfo } from '../../../common/types/user';
 import { CookieNameEnum } from '../../constants/enums/common';
 
 defineI18nRoute(false);
@@ -17,7 +17,7 @@ definePageMeta({
 			console.error('No user data retrieved');
 			return;
 		}
-		useCookie<UserInfoWithId | null>(CookieNameEnum.TG_USER, {
+		useCookie<UserCookieInfo | null>(CookieNameEnum.TG_USER, {
 			maxAge: TOKEN_MAX_AGE_SECONDS
 		}).value = user.value;
 	}

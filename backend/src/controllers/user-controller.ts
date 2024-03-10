@@ -7,6 +7,7 @@ import { EventModel } from '../models/event.model';
 import { JWTController } from './JWT-controller';
 import { UserTokenController } from './user-token-controller';
 import { getTimestamp, TimestampTypesEnum } from '../utils/get-timestamp';
+import { UserRoles } from '../../../common/const/userRoles';
 
 export type FindEventParams = {
 	searchLine?: string;
@@ -144,7 +145,7 @@ class UserController {
 		const userEntity = await UserModel.findOne({ id }, { token: 0, telegram: 0 });
 		if (!userEntity) throw new Error(CommonErrorsEnum.USER_DOES_NOT_EXIST);
 
-		return { id, ...userEntity.userInfo };
+		return { id, ...userEntity.userInfo, role: userEntity.role };
 	}
 
 	async changeUserInfo(id: string, userInfo: UserInfo) {
@@ -179,6 +180,13 @@ class UserController {
 			}
 		).exec();
 		return favoriteEvents.map((event) => event.toObject());
+	}
+
+	async validatePermission(id: string, roles: UserRoles[]) {
+		const user = await UserModel.findOne({ id });
+		if (!user) throw new Error(CommonErrorsEnum.USER_DOES_NOT_EXIST);
+		if (!roles.includes(user.role)) throw new Error(CommonErrorsEnum.FORBIDDEN);
+		return true;
 	}
 }
 

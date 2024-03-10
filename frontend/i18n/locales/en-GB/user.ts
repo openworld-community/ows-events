@@ -27,5 +27,9 @@ export default {
 	},
 	new_event: {
 		title: 'Create your own unique event!'
-	}
+	}, 
+	logout:	{
+		title: 'Log out',
+		text: 'Are you sure you want to leave the page?',
+	},
 };

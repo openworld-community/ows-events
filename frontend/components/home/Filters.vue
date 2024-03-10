@@ -11,16 +11,14 @@ const filterStore = useFilterStore();
 const route = useRoute();
 const tablet = inject('tablet');
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
 	//TODO костыль, иначе при ините страницы не достается value из запроса
-	if (process.client) {
-		setTimeout(async () => {
-			await filterStore.getFilteredEvents();
-			await filterStore.getUsedFilters();
-			if (filterStore.filters.country)
-				await filterStore.getUsedCitiesByCountry(filterStore.filters.country);
-		});
-	}
+	if (process.server) return
+
+	setTimeout(async () => {
+		await filterStore.getFilteredEvents();
+		await filterStore.getUsedFilters();
+	});
 });
 
 watch(
@@ -30,22 +28,15 @@ watch(
 			query: {
 				...route.query,
 				search: filters.searchLine || undefined,
-				country: filters.country || undefined,
 				city: filters.city || undefined,
 				tags: filters.tags.join(', ') || undefined,
 				// может приходить Invalid Date
-				startDate: filters.startDate ? dayjs(filters.startDate).format('YYYY-MM-DD') : undefined,
+				startDate: filters.startDate
+					? dayjs(filters.startDate).format('YYYY-MM-DD')
+					: undefined,
 				endDate: filters.endDate ? dayjs(filters.endDate).format('YYYY-MM-DD') : undefined
 			}
 		});
-		if (filters.country) {
-			await filterStore.getUsedCitiesByCountry(filters.country);
-		}
-		if (
-			!filters.country ||
-			!filterStore.usedCitiesByCountry[filters.country].includes(filters.city)
-		)
-			filterStore.filters.city = '';
 	},
 	{ deep: true }
 );
@@ -75,6 +66,9 @@ const openFilterModal = (
 	}
 };
 const mobile = inject('mobile');
+
+console.log();
+
 </script>
 
 <template>
@@ -87,28 +81,11 @@ const mobile = inject('mobile');
 		/>
 		<div class="filters__wrapper">
 			<CommonUiFilter
-				:key="mobile ? 'mobile-country' : 'other-country'"
-				filter-type="librarySelect"
-				name="country"
-				:list="filterStore.usedCountries"
-				:disabled="!filterStore.usedCountries.length"
-				@on-filter-button-click="openFilterModal('country', filterStore.usedCountries)"
-			/>
-			<CommonUiFilter
 				:key="mobile ? 'mobile-city' : 'other-city'"
 				filter-type="librarySelect"
 				name="city"
-				:list="filterStore.usedCitiesByCountry[filterStore.filters.country] ?? []"
-				:disabled="!filterStore.filters.country ||
-					(!filterStore.usedCitiesByCountry[filterStore.filters.country] &&
-						!filterStore.filters.city)
-					"
-				@on-filter-button-click="
-					openFilterModal(
-						'city',
-						filterStore.usedCitiesByCountry?.[filterStore.filters.country] ?? []
-					)
-					"
+				:list="filterStore.usedCities"
+				:disabled="!filterStore.usedCities.length"
 			/>
 			<CommonUiFilter
 				:key="mobile ? 'mobile-tags' : 'other-tags'"

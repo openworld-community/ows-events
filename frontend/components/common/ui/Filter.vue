@@ -7,7 +7,6 @@ import type { TCalendarDisabledButtons } from '../../../../common/types/filters'
 import { useFilterStore } from '../../../stores/filter.store';
 import { getFilterPlaceholder } from '../../../utils/texts';
 
-
 const props = defineProps({
 	filterType: {
 		type: String as PropType<'input' | 'select' | 'date' | 'librarySelect'>,
@@ -200,18 +199,12 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 		max-width: 50%;
 	}
 
-	/* &:hover:deep(.input__field) {
-		@media(hover: hover) {
-			border-color: var(--color-accent-green-main)
-		}
-	} */
-
 	@media (min-width: 1440px) {
 		width: 50%;
-		min-width: 20%;
+		min-width: 25%;
 
 		&:deep(.button__multiselect) {
-			max-width: 20%;
+			max-width: 25%;
 		}
 
 		&:deep(.input__field),

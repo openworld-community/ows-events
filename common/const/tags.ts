@@ -30,6 +30,7 @@ export enum TagsNew {
 	CHILDREN = 'children',
 	ADULT = 'adult'
 }
+
 export const Tags = { ...TagsNew, ...TagsOld }; // this is for translation purposes until events with old tags exist then remove this
 export type AllTags = typeof Tags; // this is for translation purposes until events with old tags exist then remove this
 

@@ -245,10 +245,10 @@ onMounted(() => {
 
 	&.no-border {
 		border-color: transparent;
-	
+
 		&:focus-visible,
 		&.active {
-			border-color: var(--color-accent-green-main);
+			border-color: var(--color-accent-green-main) !important;
 		}
 	}
 }

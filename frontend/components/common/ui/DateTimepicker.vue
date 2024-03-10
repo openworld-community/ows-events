@@ -204,6 +204,9 @@ onMounted(() => {
 					:placeholder="placeholder"
 					:value="dateFormat(displayValue as Date | Date[] | string)"
 					@keyup.enter="datepicker.openMenu()"
+					@keyup.space="datepicker.openMenu()"
+					@keyup.delete="datepicker.closeMenu()"
+					@keyup.esc="datepicker.closeMenu()"
 				/>
 			</template>
 			<template #action-row>

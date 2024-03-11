@@ -66,9 +66,6 @@ const openFilterModal = (
 	}
 };
 const mobile = inject('mobile');
-
-console.log();
-
 </script>
 
 <template>
@@ -86,6 +83,9 @@ console.log();
 				name="city"
 				:list="filterStore.usedCities"
 				:disabled="!filterStore.usedCities.length"
+				@on-filter-button-click="
+					openFilterModal('tags', filterStore.usedTags, true, 'name', 'key')
+					"
 			/>
 			<CommonUiFilter
 				:key="mobile ? 'mobile-tags' : 'other-tags'"
@@ -104,10 +104,7 @@ console.log();
 			<CommonUiFilter
 				filter-type="date"
 				name="startDate"
-			/>
-			<CommonUiFilter
-				filter-type="date"
-				name="endDate"
+				:range="true"
 			/>
 		</div>
 	</section>
@@ -150,18 +147,30 @@ console.log();
 			}
 		}
 
-		@media (max-width: 668px) {
+		@media (max-width: 550px) {
 			& {
 				flex-wrap: wrap;
 				row-gap: var(--gap);
 			}
-		}
-
-		@media (min-width: 768px) {
 
 			&:deep(.filter),
 			&:deep(.button__multiselect) {
-				max-width: 20%;
+				max-width: calc((100% - var(--gap)) / 2);
+			}
+
+			&:deep(.calendar) {
+				max-width: 100%;
+			}
+		}
+
+		@media (min-width: 768px) {
+			&:deep(.filter),
+			&:deep(.button__multiselect) {
+				max-width: 27.5%;
+			}
+
+			&:deep(.calendar) {
+				max-width: 45%;
 			}
 		}
 

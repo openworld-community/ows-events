@@ -84,7 +84,7 @@ const mobile = inject('mobile');
 				:list="filterStore.usedCities"
 				:disabled="!filterStore.usedCities.length"
 				@on-filter-button-click="
-					openFilterModal('tags', filterStore.usedTags, true, 'name', 'key')
+					openFilterModal('tags', filterStore.usedCities, true, 'name', 'key')
 					"
 			/>
 			<CommonUiFilter

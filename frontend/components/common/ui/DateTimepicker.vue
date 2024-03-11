@@ -116,14 +116,18 @@ const onRemove = () => {
 };
 
 const onOpen = () => {
-	input.value.focus()
-	input.value.classList.add('active')
+	if (props.isFilter) {
+		input.value.focus()
+		input.value.classList.add('active')
+	}
 }
 
 const onClose = () => {
-	input.value.blur()
-	input.value.classList.remove('active')
-	emit('update:model-value', displayValue.value)
+	if (props.isFilter) {
+		input.value.blur()
+		input.value.classList.remove('active')
+		emit('update:model-value', displayValue.value)
+	}
 }
 
 const today = new Date()

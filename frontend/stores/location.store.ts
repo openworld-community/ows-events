@@ -55,7 +55,7 @@ export const useLocationStore = defineStore('location', {
 			// return state._countries;
 
 			// Сейчас добавляем страны вручную
-			const countries = ['Montenegro', 'Kyrgyzstan', 'Serbia'];
+			const countries = ['Montenegro', 'Serbia'];
 
 			state._countries = new Set(countries);
 			return state._countries;

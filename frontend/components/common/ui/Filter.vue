@@ -51,6 +51,10 @@ const props = defineProps({
 	dropdownPosition: {
 		type: String as PropType<'left' | 'right'>,
 		default: 'left'
+	},
+	range: {
+		type: Boolean,
+		default: false
 	}
 });
 
@@ -102,6 +106,22 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 
 	return result
 })
+
+const date = ref<Date | Date[] | string>(null)
+
+watch(date, (value) => {
+	filterStore.filters.startDate = null
+	filterStore.filters.endDate = null
+
+	if (!value) return
+
+	if (Array.isArray(value)) {
+		filterStore.filters.startDate = value[0].toString()
+		filterStore.filters.endDate = value[1]?.toString()
+	} else {
+		filterStore.filters.startDate = value.toString()
+	}
+})
 </script>
 
 <template>
@@ -118,8 +138,9 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 	/>
 	<CommonUiDateTimepicker
 		v-else-if="filterType === 'date'"
-		v-model="filterStore.filters[name]"
+		v-model="date"
 		type="date"
+		:range="range"
 		is-filter
 		appearance="no-border"
 		class="filter"
@@ -201,10 +222,10 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 
 	@media (min-width: 1440px) {
 		width: 50%;
-		min-width: 25%;
+		min-width: calc(100% / 3);
 
 		&:deep(.button__multiselect) {
-			max-width: 25%;
+			max-width: calc(100% / 3);
 		}
 
 		&:deep(.input__field),

@@ -76,7 +76,7 @@ export type SearchEventPayload = {
 	city?: string;
 	startDate?: number;
 	endDate?: number;
-	tags?: Tags[];
+	tags?: (typeof Tags)[];
 };
 
 export type EventPrice = {

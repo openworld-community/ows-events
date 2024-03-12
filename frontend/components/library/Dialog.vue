@@ -9,7 +9,6 @@ const props = defineProps({
 	}
 });
 const open = ref(false);
-
 const model = computed({
 	get() {
 		if (props.opendialog) {
@@ -18,8 +17,8 @@ const model = computed({
 			return open.value;
 		}
 	},
-
 	set(value) {
+		open.value = value;
 		return value;
 	}
 });

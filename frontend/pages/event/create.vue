@@ -49,6 +49,8 @@ const success = () => {
 			:open-dialog="open"
 			title="Success!"
 			description-text="Event successfuly created"
-		/>
+		>
+			<span style="color: black"> open </span>
+		</LibrarySuccess>
 	</div>
 </template>

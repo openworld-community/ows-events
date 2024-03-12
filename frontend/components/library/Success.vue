@@ -16,7 +16,6 @@ const props = defineProps({
 	}
 });
 const open = ref(false);
-
 const model = computed({
 	get() {
 		if (props.openDialog) {
@@ -25,8 +24,8 @@ const model = computed({
 			return open.value;
 		}
 	},
-
 	set(value) {
+		open.value = value;
 		return value;
 	}
 });
@@ -34,6 +33,7 @@ const model = computed({
 
 <template>
 	<DialogRoot v-model:open="model">
+		<DialogTrigger><slot></slot></DialogTrigger>
 		<LibraryUiModalDialogContent>
 			<DialogTitle>{{ title }}</DialogTitle>
 			<DialogDescription>{{ descriptionText }}</DialogDescription>

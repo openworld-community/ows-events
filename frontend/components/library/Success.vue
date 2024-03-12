@@ -12,8 +12,7 @@ const props = defineProps({
 	},
 	openDialog: {
 		type: Boolean,
-		default: false,
-		required: false
+		default: false
 	}
 });
 const open = ref(false);

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const open = ref(true);
+const open = ref(false);
 const titleText = 'Logout';
 const descriptionText = "Are you're shure that you want to leave us?";
 const handleDialogClose = () => {
@@ -16,7 +16,7 @@ const success = () => {
 	open.value = true;
 	setTimeout(() => {
 		open.value = false;
-	}, 4000);
+	}, 2000);
 };
 </script>
 
@@ -47,8 +47,8 @@ const success = () => {
 		/>
 		<LibrarySuccess
 			:open-dialog="open"
-			title="Are you shure?"
-			description-text="You are going to logout"
+			title="Success!"
+			description-text="Event successfuly created"
 		/>
 	</div>
 </template>

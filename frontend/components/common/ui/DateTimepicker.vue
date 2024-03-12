@@ -5,7 +5,6 @@
 import VueDatePicker, { type DatePickerInstance } from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import dayjs from 'dayjs';
-import type { TCalendarDisabledButtons } from '../../../../common/types/filters'
 import type { PropType } from 'vue';
 import type { Time } from '../../../utils/dates';
 
@@ -16,7 +15,7 @@ const props = defineProps({
 		default: ''
 	},
 	modelValue: {
-		type: [Date, null, Object, String] as PropType<Date | Date[] | Time | string | null>,
+		type: [Date, null, Object, String] as PropType<Date | Date[] | Time | string | string[] | null>,
 		required: true
 	},
 	placeholder: {
@@ -67,18 +66,10 @@ const props = defineProps({
 		type: Boolean,
 		default: false
 	},
-	disabledButtons: {
-		type: Object as PropType<TCalendarDisabledButtons>,
-		default: () => {
-			return {
-				today: false,
-				tomorrow: false
-			}
-		}
-	}
 });
 
 const { locale } = useI18n();
+const route = useRoute()
 
 const emit = defineEmits(['update:model-value']);
 const isDateType = computed(() => props.type === 'date');
@@ -111,7 +102,10 @@ const timeFormat = (date: Date) => {
 };
 
 const onRemove = () => {
-	emit('update:model-value', null);
+	// filterStore.filters.date - массив, ему null не подойдет
+	// дейт пикер в форме принимает null | Date, поэтому его и поднимаем в эмите
+	// TODO: унифицировать форму под фильтр стор
+	props.range ? emit('update:model-value', ['', '']) : emit('update:model-value', null);
 };
 
 const onOpen = () => {
@@ -128,6 +122,13 @@ const onClose = () => {
 		emit('update:model-value', displayValue.value)
 	}
 }
+
+const hasValue = computed(() => {
+	// тут хз как привязать очистку для !modelValue && !modelValue.length
+	// типизация не дает
+	// если есть как минимум startDate. то фильтр хотя бы частично заполнен
+	return props.range ? !!getFirstQuery(route.query.startDate) : !!props.modelValue
+})
 
 const today = new Date()
 const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
@@ -211,7 +212,6 @@ onMounted(() => {
 				<CommonButton
 					:button-text="$t('dates.filterDay.today')"
 					button-kind="dark"
-					:is-disabled="disabledButtons.today"
 					@click="() => {
 			selectDate({ value: today, current: true });
 			displayValue = today
@@ -220,7 +220,6 @@ onMounted(() => {
 				<CommonButton
 					:button-text="$t('dates.filterDay.tomorrow')"
 					button-kind="dark"
-					:is-disabled="disabledButtons.tomorrow"
 					@click="() => {
 			selectDate({ value: tomorrow, current: true });
 			displayValue = tomorrow
@@ -229,7 +228,7 @@ onMounted(() => {
 			</template>
 		</VueDatePicker>
 		<CommonIcon
-			v-if="!modelValue"
+			v-if="!hasValue"
 			:name="isDateType ? 'calendar' : 'clock'"
 			:class="['input__button', { 'input__button--disabled': disabled }]"
 		/>

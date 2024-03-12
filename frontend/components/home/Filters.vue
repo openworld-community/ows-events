@@ -31,10 +31,10 @@ watch(
 				city: filters.city || undefined,
 				tags: filters.tags.join(', ') || undefined,
 				// может приходить Invalid Date
-				startDate: filters.startDate
-					? dayjs(filters.startDate).format('YYYY-MM-DD')
+				startDate: filters.date[0]
+					? dayjs(filters.date[0]).format('YYYY-MM-DD')
 					: undefined,
-				endDate: filters.endDate ? dayjs(filters.endDate).format('YYYY-MM-DD') : undefined
+				endDate: filters.date[1] ? dayjs(filters.date[1]).format('YYYY-MM-DD') : undefined
 			}
 		});
 	},
@@ -103,7 +103,7 @@ const mobile = inject('mobile');
 			/>
 			<CommonUiFilter
 				filter-type="date"
-				name="startDate"
+				name="date"
 				:range="true"
 			/>
 		</div>

@@ -290,7 +290,6 @@ onMounted(() => {
 	}
 
 	&__menu {
-		top: calc(100% + 5px) !important;
 		overflow: hidden;
 
 		&_inner {

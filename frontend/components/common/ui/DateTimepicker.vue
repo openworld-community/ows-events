@@ -95,7 +95,7 @@ const handleDate = (modelData: typeof props.modelValue) => {
 };
 
 const dateFormat = (date: Date | Date[] | string) => {
-	if (!date) return
+	if (!date) return ''
 
 	if (Array.isArray(date)) {
 		return !date[1]
@@ -111,7 +111,6 @@ const timeFormat = (date: Date) => {
 };
 
 const onRemove = () => {
-	displayValue.value = ''
 	emit('update:model-value', null);
 };
 
@@ -134,14 +133,6 @@ const today = new Date()
 const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
 
 const displayValue = ref()
-const updatedisplayValue = (date: Date[] | null) => {
-	if (date) displayValue.value = date
-}
-
-const onActionRowButtonsClick = (date) => {
-	displayValue.value = date
-	datepicker.value.closeMenu()
-}
 
 onMounted(() => {
 	// datepicker криво ставит фокус класс (при откртии фокуса нет, при закрытии есть)
@@ -171,9 +162,10 @@ onMounted(() => {
 			:input-class-name="`input input__field ${error ? 'form__error' : ''} ${appearance ? 'no-border' : ''} ${isFilter ? 'filter' : ''}`"
 			:menu-class-name="`${!isDateType ? 'time_picker' : ''}`"
 			mode-height="80"
+			arrow-navigation
 			prevent-min-max-navigation
 			:auto-apply="true"
-			:keep-action-row="name === 'startDate' || name === 'endDate' ? true : false"
+			:keep-action-row="false"
 			:close-on-auto-apply="isDateType"
 			partial-flow
 			:flow="['calendar']"
@@ -189,13 +181,12 @@ onMounted(() => {
 			:disabled="disabled"
 			:required="required"
 			is-24
-			:position="name === 'endDate' ? 'right' : 'left'"
 			:clearable="false"
 			@keydown.enter.capture="datepicker?.closeMenu()"
 			@open="onOpen"
 			@closed="onClose"
 			@update:model-value="handleDate"
-			@internal-model-change="updatedisplayValue"
+			@internal-model-change="(date) => displayValue = date"
 		>
 			<template
 				v-if="range"
@@ -213,18 +204,27 @@ onMounted(() => {
 					@keyup.esc="datepicker.closeMenu()"
 				/>
 			</template>
-			<template #action-row>
+			<template
+				v-if="isFilter"
+				#left-sidebar="{ selectDate }"
+			>
 				<CommonButton
 					:button-text="$t('dates.filterDay.today')"
 					button-kind="dark"
 					:is-disabled="disabledButtons.today"
-					@click="onActionRowButtonsClick(today)"
+					@click="() => {
+			selectDate({ value: today, current: true });
+			displayValue = today
+		}"
 				/>
 				<CommonButton
 					:button-text="$t('dates.filterDay.tomorrow')"
 					button-kind="dark"
 					:is-disabled="disabledButtons.tomorrow"
-					@click="onActionRowButtonsClick(tomorrow)"
+					@click="() => {
+			selectDate({ value: tomorrow, current: true });
+			displayValue = tomorrow
+		}"
 				/>
 			</template>
 		</VueDatePicker>
@@ -279,17 +279,17 @@ onMounted(() => {
 		background-color: transparent;
 	}
 
-	&__action_row {
+	&__sidebar_left {
 		display: flex;
 		flex-wrap: nowrap;
 		justify-content: flex-end;
 		gap: 10px;
 		padding: 0;
 		padding: 0 19px 20px;
+		order: 1;
 	}
 
 	&__menu {
-		transform: translate(0, 0) !important;
 		top: calc(100% + 5px) !important;
 		overflow: hidden;
 
@@ -299,6 +299,15 @@ onMounted(() => {
 
 		&.time_picker {
 			right: 0 !important;
+		}
+
+		&_content_wrapper {
+			flex-direction: column;
+			flex-wrap: nowrap;
+			// justify-content: flex-end;
+			// gap: 10px;
+			// padding: 0;
+			// padding: 0 19px 20px;
 		}
 	}
 
@@ -413,8 +422,8 @@ onMounted(() => {
 			color: var(--color-text-main);
 			font-size: var(--font-size-XS);
 			font-weight: 500;
-			height: 32px;
-			width: 32px;
+			height: 24px;
+			width: 24px;
 
 			&:hover {
 				border-radius: 50%;

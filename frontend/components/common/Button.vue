@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+	setup
+	lang="ts"
+>
 import { computed, type PropType } from 'vue';
 import NuxtLink from '#app/components/nuxt-link';
 import { IconDefaultParams } from '@/constants/defaultValues/icon';
@@ -147,7 +150,10 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	</component>
 </template>
 
-<style lang="less" scoped>
+<style
+	lang="less"
+	scoped
+>
 .button {
 	display: flex;
 	justify-content: center;
@@ -193,11 +199,17 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			color: var(--color-white);
 		}
 
-		&:hover,
 		&:focus-visible,
 		&:active {
 			background-color: var(--color-dark);
 			border-color: var(--color-dark);
+		}
+
+		&:hover {
+			@media (hover: hover) {
+				background-color: var(--color-dark);
+				border-color: var(--color-dark);
+			}
 		}
 
 		&--disabled {
@@ -354,7 +366,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		border: 1px solid var(--color-white);
 		border-radius: 8px;
 		justify-content: space-between;
-		
+
 		&>.button__content {
 			font-size: var(--font-size-S);
 			line-height: 20px;

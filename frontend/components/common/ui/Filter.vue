@@ -122,6 +122,16 @@ watch(date, (value) => {
 		filterStore.filters.startDate = value.toString()
 	}
 })
+
+onMounted(() => {
+	if (filterStore.filters.startDate) {
+		date.value = new Date(filterStore.filters.startDate)
+
+		if (filterStore.filters.endDate) {
+			date.value = [new Date(filterStore.filters.startDate), new Date(filterStore.filters.endDate)]
+		}
+	}
+})
 </script>
 
 <template>

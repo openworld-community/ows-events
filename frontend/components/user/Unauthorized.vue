@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+	setup
+	lang="ts"
+>
 import { RoutePathEnum } from '@/constants/enums/route';
 import { useUserStore } from '@/stores/user.store';
 import { TELEGRAM_AUTH_BOT_NAME } from '@/constants/url';
@@ -91,11 +94,10 @@ watch(
 			<UserSignUp v-else />
 
 			<CommonButton
-				:button-text="
-					login === 'login'
-						? $t('user.unauthorized.signup')
-						: $t('user.unauthorized.login')
-				"
+				:button-text="login === 'login'
+					? $t('user.unauthorized.signup')
+					: $t('user.unauthorized.login')
+					"
 				@click="changeFormType"
 			/>
 
@@ -112,10 +114,10 @@ watch(
 						ref="telegram"
 						class="unauthorized__telegram-button"
 						@click="
-							useTrackEvent('login', {
-								method: 'Telegram'
-							})
-						"
+					useTrackEvent('login', {
+						method: 'Telegram'
+					})
+					"
 					>
 						<div
 							id="tgauth"
@@ -202,6 +204,7 @@ watch(
 		width: 100%;
 		height: 100%;
 		flex-direction: column;
+		align-items: center;
 
 		@media (min-width: 768px) {
 			width: 55%;

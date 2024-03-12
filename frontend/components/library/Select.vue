@@ -1,8 +1,8 @@
-<script setup lang="ts">
-import { computed } from 'vue'
-import type { PropType } from 'vue'
+<script
+	setup
+	lang="ts"
+>
 import { SelectContent, SelectRoot, SelectTrigger, SelectValue, SelectViewport } from 'radix-vue';
-
 const props = defineProps({
 	options: {
 		type: [Array, String, Set] as PropType<
@@ -22,6 +22,19 @@ const props = defineProps({
 		type: String,
 		default: ''
 	},
+	align: {
+		type: String as PropType<'start' | 'center' | 'end'>,
+		default: 'start'
+	},
+	side: {
+		type: String as PropType<'top' | 'right' | 'bottom' | 'left'>,
+		default: 'bottom'
+	},
+	//type of trigger - without border for main page
+	noBorder: {
+		type: Boolean,
+		default: false
+	},
 	optionAsIcon: {
 		type: Boolean,
 		default: false
@@ -30,7 +43,6 @@ const props = defineProps({
 		type: Boolean,
 		default: false
 	},
-
 	required: {
 		type: Boolean,
 		default: false
@@ -40,9 +52,7 @@ const props = defineProps({
 		default: false
 	}
 });
-
 const emit = defineEmits(['update:model-value']);
-
 const model = computed({
 	get() {
 		return props.modelValue;
@@ -51,7 +61,7 @@ const model = computed({
 		emit('update:model-value', value);
 	}
 });
-
+const height = ref(200);
 const onRemove = () => {
 	emit('update:model-value', '');
 };
@@ -69,13 +79,13 @@ const onRemove = () => {
 			:required="required"
 		>
 			<SelectTrigger
-				tabindex="1"
+				tabindex="0"
 				as="div"
-				class="select__trigger"
+				:class="['select__trigger', { 'select__trigger--no-border': noBorder }]"
 				:data-error="error"
 			>
 				<SelectValue
-					:placeholder="placeholder"
+					:placeholder="required ? `${placeholder} *` : placeholder"
 					class="select__value"
 				/>
 
@@ -88,11 +98,14 @@ const onRemove = () => {
 
 			<SelectContent
 				class="select__content"
+				:style="{ maxHeight: `${height}px` }"
 				position="popper"
 				:side-offset="5"
+				:align="align"
+				:side="side"
 			>
 				<SelectViewport as-child>
-					<LibraryScrollArea>
+					<LibraryScrollArea :height="height">
 						<ul style="height: auto; padding: 8px 4px">
 							<LibraryUiItemSelect
 								v-for="option in options"
@@ -104,7 +117,7 @@ const onRemove = () => {
 								position="popper"
 								avoid-collisions
 							>
-								<span style="display: flex; align-items: center; gap: 4px">
+								<span class="select__item-content">
 									<CommonIcon
 										v-if="optionAsIcon"
 										:name="`${name}/${option}`"
@@ -120,9 +133,9 @@ const onRemove = () => {
 		<button
 			v-if="model"
 			type="button"
-			class="select__clear-button"
-			aria-label="clear"
-			tabindex="1"
+			class="select__clear-select"
+			:aria-label="$t('global.button.clear')"
+			tabindex="0"
 			@click="onRemove"
 			@click.enter="onRemove"
 		>
@@ -137,13 +150,14 @@ const onRemove = () => {
 <style lang="less">
 .select {
 	width: 100%;
-	min-width: 100%;
+	min-width: 10%;
 
 	&__trigger {
 		width: 100%;
 		min-width: 100%;
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
 		height: 40px;
 		border: 1px solid #dbdbdb;
 		border-radius: 8px;
@@ -151,19 +165,34 @@ const onRemove = () => {
 		padding: 8px 12px 8px 12px;
 		transition: border-color 0.3s ease;
 		cursor: pointer;
-
+		
+		&--no-border[data-state='open'] {
+			border-color: var(--color-accent-green-main);
+		}
+		
 		&:focus-within {
 			outline: none;
 			border-color: var(--color-accent-green-main);
 		}
-
 		&:focus {
 			outline: none;
 			border-color: var(--color-accent-green-main);
 		}
-
+		
 		&:hover {
 			border-color: var(--color-accent-green-main);
+		}
+
+		&--no-border {
+			border-color: transparent;
+
+			&:hover {
+				border-color: transparent;
+			}
+
+			@media (min-width: 1440px) {
+				height: 72px;
+			}
 		}
 	}
 
@@ -172,6 +201,7 @@ const onRemove = () => {
 		font-size: var(--font-size-M);
 		color: var(--color-text-main);
 	}
+
 	&__trigger[data-placeholder] {
 		.select__value {
 			font-family: var(--font-family-main);
@@ -181,9 +211,15 @@ const onRemove = () => {
 	}
 
 	&__trigger[data-disabled] {
+		pointer-events: none;
 		border-color: var(--color-input-field);
 		opacity: 0.4;
+
+		&.select__trigger--no-border {
+			border-color: transparent !important;
+		}
 	}
+
 	&__trigger[data-error='true'] {
 		border-color: var(--color-accent-red);
 	}
@@ -196,49 +232,39 @@ const onRemove = () => {
 		border-radius: 8px;
 		border: 2px black;
 		width: var(--radix-select-trigger-width);
-		height: 160px;
+		height: auto;
 		min-height: 100px;
-		max-height: 200px;
 	}
-	&__clear-button {
+	&__clear-select {
 		position: absolute;
 		z-index: 10;
-		top: 8px;
+		top: 0;
 		right: 12px;
+		height: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		border: 1px solid transparent;
+
 		border-color: 4px;
 
-		&__svg {
-			color: var(--color-accent-green-main);
-		}
 		&:focus-within {
 			outline: none;
-			border-color: var(--color-accent-green-main);
-			border-radius: 4px;
-
-			&:deep(svg) {
-				color: var(--color-accent-green-main);
-			}
 		}
 
 		&:focus {
 			outline: none;
-			border-radius: 4px;
-			border-color: var(--color-accent-green-main);
-			&:deep(svg) {
-				color: var(--color-accent-green-main);
-			}
 		}
-		&:hover {
-			border-color: var(--color-accent-green-main);
+	}
 
-			&:svg {
-				color: var(--color-accent-green-main);
-			}
-		}
+	&__item-content {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+	&__clear-select:hover svg,
+	&__clear-select:focus svg,
+	&__clear-select:focus-within svg {
+		color: var(--color-accent-green-main);
 	}
 }
 </style>

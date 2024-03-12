@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+	setup
+	lang="ts"
+>
 import { SelectItem, SelectItemIndicator, type SelectItemProps, SelectItemText } from 'radix-vue';
 const props = defineProps<SelectItemProps>();
 </script>
@@ -7,6 +10,7 @@ const props = defineProps<SelectItemProps>();
 	<SelectItem
 		v-bind="props"
 		class="select-item"
+		tabindex="0"
 	>
 		<SelectItemText as-child>
 			<slot />
@@ -16,10 +20,12 @@ const props = defineProps<SelectItemProps>();
 				class="checkbox-row__icon"
 				name="check"
 				color="var(--color-accent-green-main)"
+				style="display: flex; align-items: center; justify-content: center"
 			/>
 		</SelectItemIndicator>
 	</SelectItem>
 </template>
+
 <style scoped>
 .select-item {
 	display: flex;
@@ -38,7 +44,7 @@ const props = defineProps<SelectItemProps>();
 		border-radius: 2px;
 	}
 
-	&:hover {
+	&[data-highlighted] {
 		background-color: var(--color-accent-green-main-50);
 	}
 }

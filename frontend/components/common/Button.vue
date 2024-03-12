@@ -419,7 +419,8 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 		&:deep(svg) {
 			position: absolute;
-			top: 8px;
+			top: 50%;
+			transform: translateY(-50%);
 			right: 12px;
 			margin-right: 0;
 			width: 26px;

@@ -1,29 +1,43 @@
 <script setup lang="ts">
-import { DialogRoot, DialogTrigger } from 'radix-vue';
+import { DialogClose, DialogDescription, DialogTitle } from 'radix-vue';
 
-const props = defineProps({
-	modelValue: {
-		type: Boolean,
-		required: false
+defineProps({
+	title: {
+		type: String,
+		required: true
+	},
+	descriptionText: {
+		type: String,
+		default: ''
 	}
 });
-const open = ref(false);
-
-computed(() => {
-	if (props.modelValue) open.value = props.modelValue;
-	else {
-		return open.value;
-	}
-});
+const emit = defineEmits(['onConfirm']);
 </script>
 
 <template>
-	<DialogRoot v-model:open="open">
-		<DialogTrigger>
-			<slot name="trigger"></slot>
-		</DialogTrigger>
-		<LibraryUiModalDialogContent>
-			<slot name="content"></slot>
-		</LibraryUiModalDialogContent>
-	</DialogRoot>
+	<LibraryDialog>
+		<template #trigger>
+			<slot></slot>
+		</template>
+
+		<template #content>
+			<DialogTitle>{{ title }}</DialogTitle>
+			<DialogDescription>{{ descriptionText }}</DialogDescription>
+			<DialogClose as-child>
+				<CommonButton
+					:button-text="$t('global.button.cancel')"
+					class="event-form__button"
+					button-kind="ordinary"
+				/>
+			</DialogClose>
+			<DialogClose as-child>
+				<CommonButton
+					button-text="Yes"
+					class="event-form__button"
+					button-kind="success"
+					@click="emit('onConfirm')"
+				/>
+			</DialogClose>
+		</template>
+	</LibraryDialog>
 </template>

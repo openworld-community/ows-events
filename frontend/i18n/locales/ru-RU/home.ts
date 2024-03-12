@@ -12,11 +12,6 @@ export default {
 		aria: 'Вы находитесь в'
 	},
 	filter: {
-		country: {
-			placeholder: 'Страна',
-			title: 'Выберите страну',
-			aria: 'Фильтр по стране'
-		},
 		city: {
 			placeholder: 'Город',
 			title: 'Выберите город',
@@ -32,14 +27,9 @@ export default {
 			aria: 'Фильтр по теме мероприятия'
 		},
 		startDate: {
-			placeholder: 'Начало',
-			title: 'Выберите день начала',
-			aria: 'Фильтр по дате начала'
-		},
-		endDate: {
-			placeholder: 'Окончание',
-			title: 'Выберите день окончания',
-			aria: 'Фильтр по дате окончания'
+			placeholder: 'Когда пойдем?',
+			title: 'Когда пойдем?',
+			aria: 'Фильтр по дате'
 		},
 	},
 	user_location: {

@@ -79,7 +79,7 @@ const onRemove = () => {
 			:required="required"
 		>
 			<SelectTrigger
-				tabindex="0"
+				:tabindex="disabled ? -1 : 0"
 				as="div"
 				:class="['select__trigger', { 'select__trigger--no-border': noBorder }]"
 				:data-error="error"

@@ -289,8 +289,8 @@ onMounted(() => {
 	}
 
 	&__menu {
-		// left: unset !important;
-		// transform: unset !important;
+		transform: translate(0, 0) !important;
+		top: calc(100% + 5px) !important;
 		overflow: hidden;
 
 		&_inner {

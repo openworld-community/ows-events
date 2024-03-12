@@ -102,10 +102,8 @@ const timeFormat = (date: Date) => {
 };
 
 const onRemove = () => {
-	// filterStore.filters.date - массив, ему null не подойдет
-	// дейт пикер в форме принимает null | Date, поэтому его и поднимаем в эмите
-	// TODO: унифицировать форму под фильтр стор
-	props.range ? emit('update:model-value', ['', '']) : emit('update:model-value', null);
+	// filterStore.filters.date - массив
+	props.range ? emit('update:model-value', []) : emit('update:model-value', null);
 };
 
 const onOpen = () => {
@@ -124,7 +122,7 @@ const onClose = () => {
 }
 
 const hasValue = computed(() => {
-	// тут хз как привязать очистку для !modelValue && !modelValue.length
+	// тут хз как привязать иконку очистки для !modelValue и !modelValue.length
 	// типизация не дает
 	// если есть как минимум startDate. то фильтр хотя бы частично заполнен
 	return props.range ? !!getFirstQuery(route.query.startDate) : !!props.modelValue

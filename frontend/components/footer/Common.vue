@@ -16,6 +16,8 @@ const logoComponentIs = computed(() => {
 	else return defineNuxtLink({});
 });
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+const currentYear = new Date().getFullYear()
 </script>
 
 <template>
@@ -104,7 +106,7 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 				</ul>
 			</div>
 		</div>
-		<p class="footer__copyright copyright">© Peredelano Startups 2023</p>
+		<p class="footer__copyright copyright">© Peredelano Startups {{ currentYear }}</p>
 	</footer>
 </template>
 

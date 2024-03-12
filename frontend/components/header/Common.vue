@@ -66,7 +66,10 @@ const goBack = () => {
 		>
 			<div class="header__left">
 				<CommonButton
-					v-if="hasBackButton"
+					v-if="
+						hasBackButton &&
+						localePath(route.path) !== localePath({ path: RoutePathEnum.USER_PAGE })
+					"
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"
@@ -132,10 +135,8 @@ const goBack = () => {
 				</li>
 			</ul>
 			<div class="header__right">
-				<HeaderLanguageSelector
-					v-if="!hasBackButton"
-					class="header__language-selector"
-				/>
+				<!-- v-if="!hasBackButton" -->
+				<HeaderLanguageSelector class="header__language-selector" />
 				<HeaderNavigationBurger
 					v-if="mobile"
 					ref="navigationBurger"
@@ -204,6 +205,11 @@ const goBack = () => {
 		display: flex;
 		height: 100%;
 		align-items: center;
+
+		@media (min-width: 768px) {
+			width: auto;
+			justify-content: start;
+		}
 	}
 
 	&__right {

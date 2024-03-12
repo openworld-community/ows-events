@@ -15,7 +15,7 @@ export const openApiOptions: FastifyDynamicSwaggerOptions = {
 					name: 'Authorization',
 					in: 'header',
 					type: 'apiKey',
-					description: 'Для авторизации вставте JWT токен'
+					description: 'Insert JWT token to authorize'
 				}
 			}
 		}

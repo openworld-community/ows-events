@@ -12,6 +12,7 @@ services:
             context: .
             dockerfile: ./frontend/Dockerfile.dev
         logging: *default-logging
+        command: rm -rf /tmp/nitro/worker-*; npm run dev
         ports:
             - '80:80'
             - '24678:24678'
@@ -28,6 +29,7 @@ services:
             - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
             - VITE_MODE=development
             - VITE_TELEGRAM_AUTH_BOT_NAME=afisha_oauth_local_bot
+            - VITE_GOOGLE_OAUTH_KEY
 
     backend:
         build:
@@ -42,6 +44,7 @@ services:
             - MODE=dev
             - FRONTEND_URL=http://127.0.0.1
             - MONGO_URI=mongodb://mongo:27017/dev
+            - VITE_GOOGLE_OAUTH_KEY
         ports:
             - '7080:7080'
         volumes:

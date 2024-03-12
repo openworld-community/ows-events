@@ -9,7 +9,8 @@ import { getRouteName } from '../utils';
 const pagesWithAuth: string[] = [
 	RouteNameEnum.USER_FAVOURITES,
 	RouteNameEnum.USER_MY_EVENTS,
-	RouteNameEnum.EVENT_FORM
+	//RouteNameEnum.EVENT_FORM,
+	RouteNameEnum.EVENT_EDIT
 ];
 
 export default defineNuxtRouteMiddleware(async (to) => {
@@ -32,6 +33,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 		if (!userData) {
 			token.value = null;
 			userCookie.value = null;
+
 			if (to.name && pagesWithAuth.includes(getRouteName(to.name as string))) {
 				return (to.path = localePath(RoutePathEnum.USER_PAGE));
 			}

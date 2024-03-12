@@ -3,6 +3,7 @@ import { API_URL } from '~/constants/url';
 import { useUserStore } from '../../stores/user.store';
 import { CookieNameEnum } from '../../constants/enums/common';
 import { v4 as uuid } from 'uuid';
+import { CommonErrorsEnum } from '../../../common/const/common-errors';
 
 type ApiRouter = {
 	[K in string]: ApiRouter | ReturnType<typeof defineQuery> | ReturnType<typeof defineMutation>;
@@ -130,7 +131,13 @@ export function defineMutation<T extends ((data: any) => any) | void = void>(
 export function useBackendFetch<T>(
 	request: Parameters<typeof useFetch>[0],
 	opts: UseFetchOptions<T> = {},
-	modifiers: { auth?: boolean; noDefaults?: boolean; uuid?: boolean; watch?: boolean; immediate?:boolean } = {}
+	modifiers: {
+		auth?: boolean;
+		noDefaults?: boolean;
+		uuid?: boolean;
+		watch?: boolean;
+		immediate?: boolean;
+	} = {}
 ) {
 	if (modifiers.noDefaults)
 		return (opts_: UseFetchOptions<T> = {}) => useFetch(request, Object.assign(opts, opts_));
@@ -138,21 +145,21 @@ export function useBackendFetch<T>(
 	opts.baseURL ??= API_URL;
 
 	if (modifiers?.watch === false) {
-		opts.watch = false
+		opts.watch = false;
 	}
 
 	if (modifiers?.immediate === false) {
-		opts.immediate = false
+		opts.immediate = false;
 	}
 
 	if (modifiers.auth) {
 		const userStore = useUserStore();
 		if (!userStore.isAuthorized) {
-			throw new Error('You are not authorized');
+			throw new Error(CommonErrorsEnum.UNAUTHORIZED);
 		}
 		const token = useCookie(CookieNameEnum.TOKEN).value;
 		if (!token) {
-			throw new Error('Token not found');
+			throw new Error(CommonErrorsEnum.WRONG_TOKEN);
 		}
 		opts.headers
 			? Object.assign(opts.headers, { Authorization: token })
@@ -181,7 +188,7 @@ export function useBackendFetch<T>(
 				const errorMessage = data.error.value.data.message;
 
 				const { $errorToast, $i18n } = useNuxtApp();
-				$errorToast($i18n.t(`error.${errorMessage}`));
+				$errorToast($i18n.t(`errors.${errorMessage}`));
 			} else {
 				console.error(data.error.value);
 			}

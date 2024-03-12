@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { FilterQuery } from 'mongoose';
+import { FilterQuery, PipelineStage, SortValues } from 'mongoose';
 import { EventDbEntity, EventOnPoster, SearchEventPayload } from '@common/types/event';
 import { EventModel } from '../models/event.model';
 import { imageController } from './image-controller';
@@ -16,39 +16,15 @@ class EventsStateController {
 			// eslint-disable-next-line no-console
 			console.error(e);
 		});
-		return id;
+		return newEvent.id;
 	}
 
 	async getEvents(query?: SearchEventPayload | undefined): Promise<EventDbEntity[]> {
 		const queryObject: FilterQuery<EventOnPoster> = {
-			$and: []
-		};
-		if (query?.searchLine) {
-			queryObject.$text = { $search: query.searchLine };
-		}
-		if (query?.country) {
-			const countryQuery = {
-				$or: [{ 'location.country': query?.country }, { isOnline: true }]
-			};
-			queryObject.$and?.push(countryQuery);
-		}
-		if (query?.city) {
-			const cityQuery = { $or: [{ 'location.city': query?.city }, { isOnline: true }] };
-			queryObject.$and?.push(cityQuery);
-		}
-		if (query?.tags && query?.tags.length !== 0) {
-			queryObject.tags = { $in: query?.tags };
-		}
-		if (queryObject.$and?.length === 0) {
-			delete queryObject.$and;
-		}
-		queryObject['meta.moderation.status'] = { $nin: ['declined', 'in-progress'] };
-
-		const pipeline = [
-			{
-				$match: {
-					...queryObject,
-					$expr: {
+			$and: [],
+			$expr: {
+				$and: [
+					{
 						$gte: [
 							{
 								$add: ['$date', { $multiply: [1000, '$durationInSeconds'] }]
@@ -58,12 +34,59 @@ class EventsStateController {
 							}
 						]
 					}
+				]
+			}
+		};
+		const sortObject: string | Record<string, SortValues> | PipelineStage.Sort['$sort'] = {};
+		if (query?.searchLine) {
+			queryObject.$text = { $search: query.searchLine };
+		}
+		if (query?.country) {
+			const countryQuery = {
+				$or: [{ 'location.country': query?.country }, { isOnline: true }]
+			};
+			queryObject.$and?.push(countryQuery);
+			sortObject.isOnline = 'ascending';
+		}
+		if (query?.city) {
+			const cityQuery = { $or: [{ 'location.city': query?.city }, { isOnline: true }] };
+			queryObject.$and?.push(cityQuery);
+			sortObject.isOnline = 'ascending';
+		}
+		if (query?.startDate) {
+			const startDateQuery = {
+				$lte: [
+					query.startDate,
+					{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }
+				]
+			};
+			queryObject.$expr.$and.push(startDateQuery);
+		}
+		if (query?.endDate) {
+			const endDateQuery = {
+				$gte: [query.endDate, '$date']
+			};
+			queryObject.$expr.$and.push(endDateQuery);
+		}
+		if (query?.tags && query?.tags.length !== 0) {
+			queryObject.tags = { $in: query?.tags };
+		}
+		if (queryObject.$and?.length === 0) {
+			delete queryObject.$and;
+		}
+		queryObject['meta.moderation.status'] = { $nin: ['declined', 'in-progress'] };
+
+		sortObject.date = 'ascending';
+
+		const pipeline = [
+			{
+				$match: {
+					...queryObject
 				}
 			}
 		];
-		const futureEvents = await EventModel.aggregate(pipeline)
-			.sort({ isOnline: 'ascending', date: 'ascending' })
-			.exec();
+
+		const futureEvents = await EventModel.aggregate(pipeline).sort(sortObject).exec();
 		return futureEvents;
 	}
 
@@ -115,7 +138,12 @@ class EventsStateController {
 	}
 
 	async findUsedTags() {
-		const tags = await EventModel.distinct('tags', { date: { $gt: Date.now() } });
+		const tags = await EventModel.distinct('tags', {
+			'meta.moderation.status': { $nin: ['declined', 'in-progress'] },
+			$expr: {
+				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]
+			}
+		});
 
 		return tags;
 	}

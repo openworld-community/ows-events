@@ -26,7 +26,7 @@ export default {
 			title: 'Выберите тему мероприятия',
 			aria: 'Фильтр по теме мероприятия'
 		},
-		startDate: {
+		date: {
 			placeholder: 'Когда пойдем?',
 			title: 'Когда пойдем?',
 			aria: 'Фильтр по дате'

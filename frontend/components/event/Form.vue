@@ -56,7 +56,7 @@ const { values, handleSubmit, setFieldValue } = useForm<EventFormType>({
 			? dataFromLocalStorage(props.initialValues)
 			: props.initialValues
 });
-const isLoading = ref(false);
+const isLoading = ref(true);
 
 // Запись в localStorage
 watch(

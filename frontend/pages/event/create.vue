@@ -23,13 +23,6 @@ const success = () => {
 <template>
 	<div style="padding: 10px; height: 100dvh; display: flex; flex-direction: column; gap: 20px">
 		<div>-------------Dialog--------------------</div>
-		<div style="width: 100px; height: 20px; background-color: brown">
-			<LibraryDialog2
-				:dialogTitleText="titleText"
-				:dialogDescriptionText="descriptionText"
-				:dialogCustomFunction="handleDialogClose"
-			/>
-		</div>
 
 		<LibraryAlert
 			title="Are you shure?"
@@ -52,5 +45,28 @@ const success = () => {
 		>
 			<span style="color: black"> open </span>
 		</LibrarySuccess>
+
+		<LibraryDownsheet>
+			<template #trigger><span style="color: black"> press </span></template>
+			<template #content>
+				<DialogTitle>jhbbkjb</DialogTitle>
+				<DialogDescription>jhgjkggjk</DialogDescription>
+				<DialogClose as-child>
+					<CommonButton
+						:button-text="$t('global.button.cancel')"
+						class="event-form__button"
+						button-kind="ordinary"
+					/>
+				</DialogClose>
+				<DialogClose as-child>
+					<CommonButton
+						button-text="Yes"
+						class="event-form__button"
+						button-kind="success"
+						@click="emit('onConfirm')"
+					/>
+				</DialogClose>
+			</template>
+		</LibraryDownsheet>
 	</div>
 </template>

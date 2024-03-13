@@ -13,21 +13,27 @@ const props = defineProps<DialogContentProps>();
 const emits = defineEmits<DialogContentEmits>();
 
 const emitsAsProps = useEmitAsProps(emits);
+//aria-describedby="undefined" - to remove description if we not use it
+//<VisuallyHidden as-child> - to remove title if we not use it (radix docs)
 </script>
 
 <template>
 	<DialogPortal>
-		<DialogOverlay class="dialog-overlay">
+		<DialogOverlay class="downsheet-overlay">
 			<DialogContent
 				v-bind="{ ...props, ...emitsAsProps }"
-				class="dialog-content"
+				class="downsheet-content"
+				aria-describedby="undefined"
 			>
+				<VisuallyHidden as-child>
+					<DialogTitle />
+				</VisuallyHidden>
 				<slot />
 
 				<DialogClose as-child>
 					<button
 						type="button"
-						class="dialog-close"
+						class="downsheet-close"
 						:aria-label="$t('global.button.clear')"
 						tabindex="0"
 					>
@@ -43,7 +49,7 @@ const emitsAsProps = useEmitAsProps(emits);
 </template>
 
 <style scoped lang="less">
-@keyframes overlayshow {
+@keyframes overlaydownsheetshow {
 	from {
 		opacity: 0;
 	}
@@ -53,38 +59,39 @@ const emitsAsProps = useEmitAsProps(emits);
 	}
 }
 
-@keyframes contentshow {
+@keyframes contentdownsheetshow {
 	from {
-		transform: translate(-50%, -48%) scale(0.96);
+		transform: translate(0, 100%) scale(0.96);
 		opacity: 0;
 	}
 
 	to {
-		transform: translate(-50%, -50%) scale(1);
+		transform: translate(0, 5%) scale(1);
 		opacity: 1;
 	}
 }
-.dialog-overlay {
+.downsheet-overlay {
 	background-color: var(--color-white-semitransparent);
 	position: fixed;
 	inset: 0;
 	z-index: 30;
 }
-.dialog-content {
+.downsheet-content {
 	z-index: 100;
 	background-color: var(--color-white);
 	position: fixed;
-	top: 50%;
-	left: 50%;
-	max-height: 85vh;
-	transform: translate(-50%, -50%);
+	bottom: 0%;
+	min-height: 5vh;
+	max-height: 60%;
+	width: 100%;
+	max-width: 100%;
 	border-radius: 6px;
 	padding: 25px;
 	box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
 	outline: none;
 }
 
-.dialog-close {
+.downsheet-close {
 	position: absolute;
 	top: 10px;
 	right: 10px;
@@ -93,11 +100,11 @@ const emitsAsProps = useEmitAsProps(emits);
 	}
 }
 
-.dialog-content[data-state='open'] {
-	animation: contentshow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+.downsheet-content[data-state='open'] {
+	animation: contentdownsheetshow 150ms ease-in;
 }
 
-.dialog-overlay[data-state='open'] {
-	animation: overlayshow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+.downsheet-overlay[data-state='open'] {
+	animation: overlaydownsheetshow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 </style>

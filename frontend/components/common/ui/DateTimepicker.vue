@@ -160,6 +160,7 @@ onMounted(() => {
 			:placeholder="required ? `${placeholder} *` : placeholder"
 			:input-class-name="`input input__field ${error ? 'form__error' : ''} ${appearance ? 'no-border' : ''} ${isFilter ? 'filter' : ''}`"
 			:menu-class-name="`${!isDateType ? 'time_picker' : ''}`"
+			position="left"
 			mode-height="80"
 			arrow-navigation
 			prevent-min-max-navigation

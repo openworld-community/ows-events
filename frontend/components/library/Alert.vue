@@ -28,14 +28,14 @@ const emit = defineEmits(['onConfirm']);
 					<DialogClose as-child>
 						<CommonButton
 							:button-text="$t('global.button.cancel')"
-							class="event-form__button"
+							class="button__ordinary--filled"
 							button-kind="ordinary"
 						/>
 					</DialogClose>
 					<DialogClose as-child>
 						<CommonButton
 							button-text="Yes"
-							class="event-form__button"
+							class="button__success--filled"
 							button-kind="success"
 							@click="emit('onConfirm')"
 						/>

@@ -14,7 +14,6 @@ const isOnlineField = useField<boolean>(() => 'isOnline');
 
 const cityField = useField<string>(() => 'location.city');
 const addressField = useField<string>(() => 'location.address');
-
 // иногда появляется ошибка, когда в pages/edit-[editid] стор не отрабатывает вовремя
 onBeforeMount(async () => {
 	await eventStore.getTimezones();
@@ -28,6 +27,17 @@ onBeforeMount(async () => {
 	>
 		<template #child>
 			<div>
+				<CommonFormField
+					:error="isOnlineField.errorMessage.value"
+					:touched="isOnlineField.meta.touched"
+				>
+					<LibraryCheckbox
+					v-model="isOnlineField.value.value"
+					value="isOnline" 
+					:label="$t('form.event.fields.online')"
+					/>
+				</CommonFormField>
+				
 				<CommonFormField
 					:error="isOnlineField.errorMessage.value"
 					:touched="isOnlineField.meta.touched"

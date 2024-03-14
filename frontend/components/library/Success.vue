@@ -53,11 +53,15 @@ const model = computed({
 
 <style lang="less" scoped>
 .success-content {
-	min-width: 200px;
+	min-width: calc(var(--width-mobile) - 2 * var(--padding-side));
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
 	align-items: center;
+
+	@media (min-width: 768px) {
+		width: 360px;
+	}
 }
 .success-icon {
 	height: 40px;

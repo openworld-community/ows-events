@@ -51,7 +51,7 @@ const emit = defineEmits(['onConfirm']);
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-	min-width: 200px;
+	width: calc(var(--width-mobile) - 2 * var(--padding-side));
 
 	@media (min-width: 768px) {
 		width: 400px;
@@ -59,6 +59,7 @@ const emit = defineEmits(['onConfirm']);
 }
 .alert-footer {
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-end;
+	gap: 12px;
 }
 </style>

@@ -23,7 +23,7 @@ const emitsAsProps = useEmitAsProps(emits);
 			<DialogContent
 				v-bind="{ ...props, ...emitsAsProps }"
 				class="downsheet-content"
-				aria-describedby="undefined"
+				:aria-describedby="undefined"
 			>
 				<VisuallyHidden as-child>
 					<DialogTitle />
@@ -82,13 +82,17 @@ const emitsAsProps = useEmitAsProps(emits);
 	position: fixed;
 	bottom: 0%;
 	min-height: 5vh;
-	max-height: 60%;
+	max-height: 100vh;
+	height: 60%;
 	width: 100%;
 	max-width: 100%;
-	border-radius: 6px;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
 	padding: 25px;
 	box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
 	outline: none;
+	overflow-y: scroll;
+	scrollbar-width: none;
 }
 
 .downsheet-close {

@@ -14,9 +14,6 @@ const eventStore = useEventStore();
 
 const schema = eventValidationSchema;
 
-onMounted(async () => {
-	await eventStore.getTimezones();
-});
 const props = defineProps({
 	title: {
 		type: String,
@@ -56,7 +53,7 @@ const { values, handleSubmit, setFieldValue } = useForm<EventFormType>({
 			? dataFromLocalStorage(props.initialValues)
 			: props.initialValues
 });
-const isLoading = ref(true);
+const isLoading = ref(false);
 
 // Запись в localStorage
 watch(

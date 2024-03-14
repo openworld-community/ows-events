@@ -2,36 +2,32 @@
 import { ref, computed } from 'vue';
 import { CheckboxIndicator, CheckboxRoot } from 'radix-vue';
 const props = defineProps({
-	isChecked:{
+	modelValue: {
 		type: Boolean,
-		default: false,
-		required: true,
+		required: true
 	},
 	label: {
 		type: String,
 		default: ''
 	},
-	value: {
+	name: {
 		type: String,
 		required: true
-	},	
+	},
 	isReversed: {
 		type: Boolean,
 		default: false
-	},
+	}
 });
-const checked = ref(false);
+
+const emit = defineEmits(['update:model-value']);
+
 const model = computed({
 	get() {
-		if (props.isChecked) {
-			return props.isChecked;
-		} else {
-			return checked.value;
-		}
+		return props.modelValue;
 	},
 	set(value) {
-		checked.value = value;
-		return value;
+		emit('update:model-value', value);
 	}
 });
 </script>
@@ -39,18 +35,19 @@ const model = computed({
 <template>
 	<div class="сheckbox-label">
 		<label class="сheckbox-label checkbox-hover">
-			<CheckboxRoot			
+			<CheckboxRoot
 				v-model:checked="model"
-				class="checkbox-root"              
+				class="checkbox-root"
+				:name="name"
 			>
 				<CheckboxIndicator class="checkbox-indicator">
 					<CommonIcon
-					name="check"
-					class="checkbox__icon"
-					color="white"
-					width="18px"
-					height="18px"
-				/>
+						name="check"
+						class="checkbox__icon"
+						color="white"
+						width="18px"
+						height="18px"
+					/>
 				</CheckboxIndicator>
 			</CheckboxRoot>
 			<span class="select-none text-white">{{ props.label }}</span>
@@ -60,9 +57,9 @@ const model = computed({
 
 <style>
 .сheckbox-label {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
 .checkbox-root {

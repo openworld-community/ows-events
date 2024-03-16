@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import dayjs from 'dayjs';
 import { useFilterStore } from '../../stores/filter.store';
 import { debouncedWatch } from '@vueuse/core';
@@ -13,7 +10,7 @@ const tablet = inject('tablet');
 
 onBeforeMount(async () => {
 	//TODO костыль, иначе при ините страницы не достается value из запроса
-	if (process.server) return
+	if (process.server) return;
 
 	setTimeout(async () => {
 		await filterStore.getFilteredEvents();
@@ -83,9 +80,7 @@ const mobile = inject('mobile');
 				name="city"
 				:list="filterStore.usedCities"
 				:disabled="!filterStore.usedCities.length"
-				@on-filter-button-click="
-					openFilterModal('tags', filterStore.usedTags, true, 'name', 'key')
-					"
+				@on-filter-button-click="openFilterModal('city', filterStore.usedCities ?? [])"
 			/>
 			<CommonUiFilter
 				:key="mobile ? 'mobile-tags' : 'other-tags'"
@@ -99,7 +94,7 @@ const mobile = inject('mobile');
 				:dropdown-position="tablet ? 'right' : 'left'"
 				@on-filter-button-click="
 					openFilterModal('tags', filterStore.usedTags, true, 'name', 'key')
-					"
+				"
 			/>
 			<CommonUiFilter
 				filter-type="date"
@@ -110,10 +105,7 @@ const mobile = inject('mobile');
 	</section>
 </template>
 
-<style
-	scoped
-	lang="less"
->
+<style scoped lang="less">
 .filters {
 	display: flex;
 	width: 100%;
@@ -141,9 +133,16 @@ const mobile = inject('mobile');
 			&:deep(.button__filter) {
 				max-width: calc((100% - var(--gap) * 2) / 3);
 			}
+			&:deep(.mobile-filter) {
+				max-width: calc((100% - var(--gap) * 2) / 3);
+			}
 
 			&:deep(.select) {
 				max-width: calc((100% - var(--gap) * 2) / 3);
+			}
+
+			&:deep(.calendar) {
+				max-width: 42%;
 			}
 		}
 
@@ -156,6 +155,9 @@ const mobile = inject('mobile');
 			&:deep(.filter),
 			&:deep(.button__multiselect) {
 				max-width: calc((100% - var(--gap)) / 2);
+			}
+			&:deep(.mobile-filter) {
+				min-width: calc((100% - var(--gap)) / 2);
 			}
 
 			&:deep(.calendar) {

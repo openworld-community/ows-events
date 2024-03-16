@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const input = ref('');
 const open = ref(false);
 const titleText = 'Logout';
 const descriptionText = "Are you're shure that you want to leave us?";
@@ -6,7 +7,7 @@ const handleDialogClose = () => {
 	// Ваша логика при закрытии диалога
 	console.log('Dialog closed!');
 };
-
+console.log('input', input);
 const alert = () => {
 	// Ваша логика при закрытии диалога
 	console.log('Alert closed!');
@@ -72,5 +73,11 @@ const success = () => {
 				minus cum voluptas at nam consequuntur, aperiam natus dolorum? Voluptas.
 			</template>
 		</LibraryDownsheet>
+		<LibraryMobileSelect
+			v-model="input"
+			name="jhj"
+			placeholder="Privet"
+			:options="['banana', 'apple', 'pinapple', 'peach', 'orange', 'blueberry']"
+		/>
 	</div>
 </template>

@@ -6,6 +6,14 @@ const props = defineProps({
 		type: Boolean,
 		default: false,
 		required: false
+	},
+	title: {
+		type: String,
+		default: ''
+	},
+	description: {
+		type: String,
+		default: ''
 	}
 });
 const open = ref(false);
@@ -30,6 +38,19 @@ const model = computed({
 			<slot name="trigger"></slot>
 		</DialogTrigger>
 		<LibraryUiModalDownsheetContent>
+			<VisuallyHidden
+				v-if="!title"
+				as-child
+			>
+				<DialogTitle />
+			</VisuallyHidden>
+
+			<VisuallyHidden
+				v-if="!description"
+				as-child
+			>
+				<DialogDescription />
+			</VisuallyHidden>
 			<slot name="content"></slot>
 		</LibraryUiModalDownsheetContent>
 	</DialogRoot>

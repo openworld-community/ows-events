@@ -23,11 +23,7 @@ const emitsAsProps = useEmitAsProps(emits);
 			<DialogContent
 				v-bind="{ ...props, ...emitsAsProps }"
 				class="downsheet-content"
-				:aria-describedby="undefined"
 			>
-				<VisuallyHidden as-child>
-					<DialogTitle />
-				</VisuallyHidden>
 				<slot />
 
 				<DialogClose as-child>
@@ -39,6 +35,7 @@ const emitsAsProps = useEmitAsProps(emits);
 					>
 						<CommonIcon
 							name="close"
+							aria-hidden
 							color="var(--color-input-icons)"
 						/>
 					</button>
@@ -83,12 +80,10 @@ const emitsAsProps = useEmitAsProps(emits);
 	bottom: 0%;
 	min-height: 5vh;
 	max-height: 100vh;
-	height: 60%;
 	width: 100%;
 	max-width: 100%;
 	border-top-left-radius: 8px;
 	border-top-right-radius: 8px;
-	padding: 25px;
 	box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
 	outline: none;
 	overflow-y: scroll;

@@ -184,7 +184,7 @@ watch(date, (value) => {
 		<LibraryMobileSelect
 			v-else-if="mobile && name === 'city'"
 			v-model="filterStore.filters[name]"
-			:title="filterStore.modal.type"
+			:title="name"
 			:name="name"
 			:placeholder="$t(`home.filter.${name}.placeholder`)"
 			:options="list"

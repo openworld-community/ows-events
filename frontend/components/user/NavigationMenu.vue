@@ -36,22 +36,19 @@ const onLogoutPress = () => {
 			class="navigation-menu__button"
 		/>
 
-		<LibraryDialog
-			class="navigation-menu__button"
-			button-kind="warning"
-			:dialogTitleText="$t('user.logout.title')"
-      		:dialogDescriptionText="$t('user.logout.text')"
-			:dialogCustomFunction=onLogoutPress
-			:dialogCustomFunctionDescription="$t('user.logout.title')"
-    	>
+		<LibraryAlert
+			:title="$t('user.logout.title')"
+			:description-text="$t('user.logout.text')"
+			@on-confirm="onLogoutPress"
+		>
 			<CommonButton
-			class="navigation-menu__button"
-			button-kind="warning"
-			no-border
-			:button-text="$t('global.button.logout')"
-			icon-name="logout"
+				class="navigation-menu__button"
+				button-kind="warning"
+				no-border
+				:button-text="$t('global.button.logout')"
+				icon-name="logout"
 			/>
-		</LibraryDialog>
+		</LibraryAlert>
 	</div>
 </template>
 

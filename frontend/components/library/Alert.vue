@@ -34,7 +34,7 @@ const emit = defineEmits(['onConfirm']);
 					</DialogClose>
 					<DialogClose as-child>
 						<CommonButton
-							button-text="Yes"
+							:button-text="$t('global.button.yes')"
 							class="button__success--filled"
 							button-kind="success"
 							@click="emit('onConfirm')"

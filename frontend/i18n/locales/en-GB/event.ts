@@ -11,7 +11,7 @@ export default {
 		to: 'To'
 	},
 	tags: {
-		[Tags.ADULT]: 'For adults',
+		[Tags.ADULT]: '18+',
 		[Tags.CHILDREN]: 'For children',
 		[Tags.CONCERT]: 'Concert',
 		[Tags.CONFERENCE]: 'Conference',

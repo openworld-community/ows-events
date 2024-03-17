@@ -91,6 +91,9 @@ const emitsAsProps = useEmitAsProps(emits);
 	&:hover svg {
 		color: var(--color-accent-green-main-50);
 	}
+	&:focus:deep svg {
+		color: var(--color-accent-green-main);
+	}
 }
 
 .dialog-content[data-state='open'] {

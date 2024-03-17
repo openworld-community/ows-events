@@ -3,7 +3,7 @@ import type { City } from '../../common/types/location';
 import type { EventOnPoster } from '../../common/types/event';
 import type { Tag } from '../../common/const/tags';
 
-type FilterStore = {
+export interface FilterStore {
 	usedCities: City[];
 	usedTags: { name: string; key: Tag }[];
 	modal: {
@@ -18,11 +18,10 @@ type FilterStore = {
 		city: City;
 		searchLine: string;
 		tags: Tag[];
-
-		date: string[] | null
+		date: string[]
 	};
 	filteredEvents: EventOnPoster[];
-};
+}
 
 export const useFilterStore = defineStore('filter', {
 	state: (): FilterStore => {
@@ -55,18 +54,20 @@ export const useFilterStore = defineStore('filter', {
 		async getFilteredEvents() {
 			if (process.server) return;
 
-			// явно приводим к Date
-			const startDate = new Date(this.filters?.date[0]);
-			const endDate = new Date(this.filters?.date[1]);
-
+			// явно приводим к Date и ставим точное время для каждой из дат
+			// начало ивента считаем от 00:00:00, конец от 23:59:59
+			// Date.setHours(hours: number, min?: number, sec?: number, ms?: number): number
+			const startDate = new Date(this.filters?.date[0]).setHours(0, 0, 0);
+			const endDate = new Date(this.filters?.date[1]).setHours(23, 59, 59);
+			
 			//Приводим таймзону времени устройства юзера к миллисекундам
 			// dayjs(startDate).utc(true)
 			// dayjs(endDate).utc(true) можно сделать так, но понятнее не сильно становится
 			const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
 
 			// Перевод в UTC 0
-			const startDateTS = startDate.getTime() ? startDate.getTime() - timezoneOffset : null;
-			const endDateTS = endDate.getTime() ? endDate.getTime() - timezoneOffset : null;
+			const startDateTS = startDate ? startDate - timezoneOffset : null;
+			const endDateTS = endDate ? endDate - timezoneOffset : null;
 
 			const { data: posterEvents } = await apiRouter.filters.findEvents.useQuery({
 				data: {

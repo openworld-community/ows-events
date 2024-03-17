@@ -91,6 +91,7 @@ const showModal = computed(() => filterStore.modal.show);
 		:min-date="new Date(roundTime(Date.now(), 10))"
 		:min-time="name === 'startDate' ? { hours: 0, minutes: 0 } : { hours: '23', minutes: '59' }"
 	/>
+	<!-- TODO: перенести :min-time в стор при emit() через dayjs().set('hour', 5).set('minute', 55).set('second', 15)   -->
 	<template v-if="filterType === 'select' || filterType === 'librarySelect'">
 		<template v-if="mobile">
 			<CommonButton

@@ -7,6 +7,7 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import dayjs from 'dayjs';
 import type { PropType } from 'vue';
 import type { Time } from '../../../utils/dates';
+import type { FilterStore } from '~/stores/filter.store';
 
 // https://vue3datepicker.com/props/modes/
 const props = defineProps({
@@ -74,7 +75,7 @@ const route = useRoute()
 const emit = defineEmits(['update:model-value']);
 const isDateType = computed(() => props.type === 'date');
 const datepicker = ref<DatePickerInstance>(null);
-const input = ref(null)
+const input = ref<HTMLInputElement>(null)
 
 const handleDate = (modelData: typeof props.modelValue) => {
 	isDateType.value && datepicker.value?.closeMenu();
@@ -85,7 +86,7 @@ const handleDate = (modelData: typeof props.modelValue) => {
 	}
 };
 
-const dateFormat = (date: Date | Date[] | string) => {
+const dateFormat = (date: Date | Date[] | string | string[]) => {
 	if (!date) return ''
 
 	if (Array.isArray(date)) {
@@ -117,7 +118,7 @@ const onClose = () => {
 	if (props.isFilter) {
 		input.value.blur()
 		input.value.classList.remove('active')
-		emit('update:model-value', displayValue.value)
+		emit('update:model-value', displayValue.value ?? '')
 	}
 }
 
@@ -131,7 +132,7 @@ const hasValue = computed(() => {
 const today = new Date()
 const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
 
-const displayValue = ref()
+const displayValue = ref<FilterStore['filters']['date']>([''])
 
 onMounted(() => {
 	// datepicker криво ставит фокус класс (при откртии фокуса нет, при закрытии есть)
@@ -162,8 +163,8 @@ onMounted(() => {
 			:menu-class-name="`${!isDateType ? 'time_picker' : ''}`"
 			position="left"
 			mode-height="80"
-			arrow-navigation
 			prevent-min-max-navigation
+			arrow-navigation
 			:auto-apply="true"
 			:keep-action-row="false"
 			:close-on-auto-apply="isDateType"
@@ -182,7 +183,8 @@ onMounted(() => {
 			:required="required"
 			is-24
 			:clearable="false"
-			@keydown.enter.capture="datepicker?.closeMenu()"
+			:space-confirm="false"
+			@keydown.space.prevent
 			@open="onOpen"
 			@closed="onClose"
 			@update:model-value="handleDate"
@@ -197,32 +199,28 @@ onMounted(() => {
 					type="text"
 					readonly
 					:placeholder="placeholder"
-					:value="dateFormat(displayValue as Date | Date[] | string)"
+					:value="dateFormat(displayValue)"
 					@keyup.enter="datepicker.openMenu()"
-					@keyup.space="datepicker.openMenu()"
+					@keyup.space.prevent="datepicker.openMenu()"
 					@keyup.delete="datepicker.closeMenu()"
 					@keyup.esc="datepicker.closeMenu()"
 				/>
 			</template>
 			<template
 				v-if="isFilter"
-				#left-sidebar="{ selectDate }"
+				#left-sidebar
 			>
 				<CommonButton
 					:button-text="$t('dates.filterDay.today')"
+					:aria-label="$t('dates.filterDay.today')"
 					button-kind="dark"
-					@click="() => {
-			selectDate({ value: today, current: true });
-			displayValue = today
-		}"
+					@click="() => { displayValue = [today.toString(), today.toString()]; datepicker.closeMenu() }"
 				/>
 				<CommonButton
 					:button-text="$t('dates.filterDay.tomorrow')"
+					:aria-label="$t('dates.filterDay.tomorrow')"
 					button-kind="dark"
-					@click="() => {
-			selectDate({ value: tomorrow, current: true });
-			displayValue = tomorrow
-		}"
+					@click="() => { displayValue = [tomorrow.toString(), tomorrow.toString()]; datepicker.closeMenu() }"
 				/>
 			</template>
 		</VueDatePicker>

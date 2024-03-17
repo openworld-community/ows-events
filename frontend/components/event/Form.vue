@@ -49,14 +49,14 @@ const dataFromLocalStorage = (initialValues: EventFormType) => {
 	return copy;
 };
 
-const { values, handleSubmit, setFieldValue } = useForm<EventFormType>({
+const { meta, values, handleSubmit, setFieldValue } = useForm<EventFormType>({
 	validationSchema: schema,
 	initialValues:
 		localStorage.getItem(LocalStorageEnum.EVENT_DATA) !== null
 			? dataFromLocalStorage(props.initialValues)
 			: props.initialValues
 });
-const isLoading = ref(true);
+const isLoading = ref(false);
 
 // Запись в localStorage
 watch(
@@ -216,7 +216,7 @@ const onSubmit = handleSubmit(
 					button-kind="success"
 					:button-text="$t('global.button.save')"
 					:is-loading="isLoading"
-					:is-disabled="false"
+					:is-disabled="!meta.dirty"
 					type="submit"
 				/>
 			</div>

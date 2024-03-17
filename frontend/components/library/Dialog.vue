@@ -26,7 +26,7 @@ const model = computed({
 
 <template>
 	<DialogRoot v-model:open="model">
-		<DialogTrigger>
+		<DialogTrigger as-child>
 			<slot name="trigger"></slot>
 		</DialogTrigger>
 		<LibraryUiModalDialogContent>

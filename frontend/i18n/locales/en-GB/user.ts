@@ -30,6 +30,6 @@ export default {
 	}, 
 	logout:	{
 		title: 'Log out',
-		text: 'Are you sure you want to leave the page?',
+		text: 'Are you sure you want to log out?',
 	},
 };

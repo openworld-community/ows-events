@@ -193,11 +193,17 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			color: var(--color-white);
 		}
 
-		&:hover,
 		&:focus-visible,
 		&:active {
 			background-color: var(--color-dark);
 			border-color: var(--color-dark);
+		}
+
+		&:hover {
+			@media (hover: hover) {
+				background-color: var(--color-dark);
+				border-color: var(--color-dark);
+			}
 		}
 
 		&--disabled {

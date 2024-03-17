@@ -26,7 +26,7 @@ export default {
 			title: 'Select an event theme',
 			aria: 'Filter by event theme'
 		},
-		startDate: {
+		date: {
 			placeholder: 'When do we go?',
 			title: 'When do we go?',
 			aria: 'Filter by date'

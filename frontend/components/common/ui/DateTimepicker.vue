@@ -5,7 +5,6 @@
 import VueDatePicker, { type DatePickerInstance } from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import dayjs from 'dayjs';
-import type { TCalendarDisabledButtons } from '../../../../common/types/filters'
 import type { PropType } from 'vue';
 import type { Time } from '../../../utils/dates';
 
@@ -16,7 +15,7 @@ const props = defineProps({
 		default: ''
 	},
 	modelValue: {
-		type: [Date, null, Object, String] as PropType<Date | Date[] | Time | string | null>,
+		type: [Date, null, Object, String] as PropType<Date | Date[] | Time | string | string[] | null>,
 		required: true
 	},
 	placeholder: {
@@ -67,18 +66,10 @@ const props = defineProps({
 		type: Boolean,
 		default: false
 	},
-	disabledButtons: {
-		type: Object as PropType<TCalendarDisabledButtons>,
-		default: () => {
-			return {
-				today: false,
-				tomorrow: false
-			}
-		}
-	}
 });
 
 const { locale } = useI18n();
+const route = useRoute()
 
 const emit = defineEmits(['update:model-value']);
 const isDateType = computed(() => props.type === 'date');
@@ -95,11 +86,11 @@ const handleDate = (modelData: typeof props.modelValue) => {
 };
 
 const dateFormat = (date: Date | Date[] | string) => {
-	if (!date) return
+	if (!date) return ''
 
 	if (Array.isArray(date)) {
 		return !date[1]
-			? dayjs(date[0]).format('DD.MM.YYYY')
+			? `${dayjs(date[0]).format('DD.MM.YYYY')} -`
 			: `${dayjs(date[0]).format('DD.MM.YYYY')} - ${dayjs(date[1]).format('DD.MM.YYYY')}`
 	} else {
 		return dayjs(date).format('DD.MM.YYYY')
@@ -111,8 +102,8 @@ const timeFormat = (date: Date) => {
 };
 
 const onRemove = () => {
-	displayValue.value = ''
-	emit('update:model-value', null);
+	// filterStore.filters.date - массив
+	props.range ? emit('update:model-value', []) : emit('update:model-value', null);
 };
 
 const onOpen = () => {
@@ -130,18 +121,17 @@ const onClose = () => {
 	}
 }
 
+const hasValue = computed(() => {
+	// тут хз как привязать иконку очистки для !modelValue и !modelValue.length
+	// типизация не дает
+	// если есть как минимум startDate. то фильтр хотя бы частично заполнен
+	return props.range ? !!getFirstQuery(route.query.startDate) : !!props.modelValue
+})
+
 const today = new Date()
 const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
 
 const displayValue = ref()
-const updatedisplayValue = (date: Date[] | null) => {
-	if (date) displayValue.value = date
-}
-
-const onActionRowButtonsClick = (date) => {
-	displayValue.value = date
-	datepicker.value.closeMenu()
-}
 
 onMounted(() => {
 	// datepicker криво ставит фокус класс (при откртии фокуса нет, при закрытии есть)
@@ -170,10 +160,12 @@ onMounted(() => {
 			:placeholder="required ? `${placeholder} *` : placeholder"
 			:input-class-name="`input input__field ${error ? 'form__error' : ''} ${appearance ? 'no-border' : ''} ${isFilter ? 'filter' : ''}`"
 			:menu-class-name="`${!isDateType ? 'time_picker' : ''}`"
+			position="left"
 			mode-height="80"
+			arrow-navigation
 			prevent-min-max-navigation
 			:auto-apply="true"
-			:keep-action-row="name === 'startDate' || name === 'endDate' ? true : false"
+			:keep-action-row="false"
 			:close-on-auto-apply="isDateType"
 			partial-flow
 			:flow="['calendar']"
@@ -189,13 +181,12 @@ onMounted(() => {
 			:disabled="disabled"
 			:required="required"
 			is-24
-			:position="name === 'endDate' ? 'right' : 'left'"
 			:clearable="false"
 			@keydown.enter.capture="datepicker?.closeMenu()"
 			@open="onOpen"
 			@closed="onClose"
 			@update:model-value="handleDate"
-			@internal-model-change="updatedisplayValue"
+			@internal-model-change="(date) => displayValue = date"
 		>
 			<template
 				v-if="range"
@@ -213,23 +204,30 @@ onMounted(() => {
 					@keyup.esc="datepicker.closeMenu()"
 				/>
 			</template>
-			<template #action-row>
+			<template
+				v-if="isFilter"
+				#left-sidebar="{ selectDate }"
+			>
 				<CommonButton
 					:button-text="$t('dates.filterDay.today')"
 					button-kind="dark"
-					:is-disabled="disabledButtons.today"
-					@click="onActionRowButtonsClick(today)"
+					@click="() => {
+			selectDate({ value: today, current: true });
+			displayValue = today
+		}"
 				/>
 				<CommonButton
 					:button-text="$t('dates.filterDay.tomorrow')"
 					button-kind="dark"
-					:is-disabled="disabledButtons.tomorrow"
-					@click="onActionRowButtonsClick(tomorrow)"
+					@click="() => {
+			selectDate({ value: tomorrow, current: true });
+			displayValue = tomorrow
+		}"
 				/>
 			</template>
 		</VueDatePicker>
 		<CommonIcon
-			v-if="!modelValue"
+			v-if="!hasValue"
 			:name="isDateType ? 'calendar' : 'clock'"
 			:class="['input__button', { 'input__button--disabled': disabled }]"
 		/>
@@ -279,18 +277,17 @@ onMounted(() => {
 		background-color: transparent;
 	}
 
-	&__action_row {
+	&__sidebar_left {
 		display: flex;
 		flex-wrap: nowrap;
 		justify-content: flex-end;
 		gap: 10px;
 		padding: 0;
 		padding: 0 19px 20px;
+		order: 1;
 	}
 
 	&__menu {
-		// left: unset !important;
-		// transform: unset !important;
 		overflow: hidden;
 
 		&_inner {
@@ -299,6 +296,15 @@ onMounted(() => {
 
 		&.time_picker {
 			right: 0 !important;
+		}
+
+		&_content_wrapper {
+			flex-direction: column;
+			flex-wrap: nowrap;
+			// justify-content: flex-end;
+			// gap: 10px;
+			// padding: 0;
+			// padding: 0 19px 20px;
 		}
 	}
 
@@ -413,8 +419,8 @@ onMounted(() => {
 			color: var(--color-text-main);
 			font-size: var(--font-size-XS);
 			font-weight: 500;
-			height: 32px;
-			width: 32px;
+			height: 24px;
+			width: 24px;
 
 			&:hover {
 				border-radius: 50%;

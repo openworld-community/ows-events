@@ -301,7 +301,10 @@ const clearModel = () => emit('update:model-value', '')
 		border-color: transparent;
 
 		&:deep(svg) {
-			position: static;
+			position: relative;
+			top: 0;
+			right: 0;
+			transform: none;
 			transition: rotate 0.15s ease-in-out, color 0.15s ease-in-out;
 		}
 

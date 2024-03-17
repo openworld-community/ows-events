@@ -7,6 +7,7 @@ import { RouteNameEnum, RoutePathEnum } from '../../constants/enums/route';
 import { getRouteName } from '../../utils';
 import { SUPPORT_TG_URL } from '../../constants/url';
 import { useUserStore } from '../../stores/user.store';
+import { useFilterStore } from '~/stores/filter.store';
 
 const route = useRoute();
 // const router = useRouter();
@@ -64,6 +65,17 @@ const goBack = () => {
 		navigateTo(localePath({ path: RoutePathEnum.HOME }));
 	}
 };
+
+const filterStore = useFilterStore()
+
+const clearFilters = () => {
+	filterStore.filters = {
+		city: '',
+		searchLine: '',
+		date: [],
+		tags: []
+	}
+}
 </script>
 
 <template>
@@ -98,7 +110,7 @@ const goBack = () => {
 			"
 					:to="!isAtHome ? localePath(RoutePathEnum.HOME) : undefined"
 					:itemprop="SeoItempropNavEnum.URL"
-					@click="isAtHome && scrollToTop()"
+					@click="isAtHome && scrollToTop(); isAtHome && clearFilters()"
 				>
 					<CommonIcon
 						name="afisha-logo-light"

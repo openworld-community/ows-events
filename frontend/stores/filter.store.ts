@@ -18,8 +18,8 @@ type FilterStore = {
 		city: City;
 		searchLine: string;
 		tags: Tag[];
-		startDate: string | null;
-		endDate: string | null;
+
+		date: string[] | null
 	};
 	filteredEvents: EventOnPoster[];
 };
@@ -37,8 +37,7 @@ export const useFilterStore = defineStore('filter', {
 					getFirstQuery(route.query.tags)
 						.split(', ')
 						.filter((item) => item !== '') ?? [],
-				startDate: getFirstQuery(route.query.startDate) ?? '',
-				endDate: getFirstQuery(route.query.endDate) ?? ''
+				date: [getFirstQuery(route.query.startDate) ?? '', getFirstQuery(route.query.endDate) ?? '']
 			},
 			filteredEvents: [],
 			modal: {
@@ -57,8 +56,8 @@ export const useFilterStore = defineStore('filter', {
 			if (process.server) return;
 
 			// явно приводим к Date
-			const startDate = new Date(this.filters?.startDate);
-			const endDate = new Date(this.filters?.endDate);
+			const startDate = new Date(this.filters?.date[0]);
+			const endDate = new Date(this.filters?.date[1]);
 
 			//Приводим таймзону времени устройства юзера к миллисекундам
 			// dayjs(startDate).utc(true)

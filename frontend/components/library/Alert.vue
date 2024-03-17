@@ -51,7 +51,7 @@ const emit = defineEmits(['onConfirm']);
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-	width: calc(var(--width-mobile) - 2 * var(--padding-side));
+	width: calc(var(--width-mobile) - var(--padding-side)*4);
 
 	@media (min-width: 768px) {
 		width: 400px;

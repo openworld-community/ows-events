@@ -139,7 +139,7 @@ export const parsePeredelano = () => {
 				durationInSeconds: 0,
 				id: `Peredelanoconf-${place.name}-${eventDate.toISOString().split('T')[0]}`,
 				image: eventImg,
-				tags: [Tags.CONFERENCE]
+				tags: [Tags.BUSINESS_AND_NETWORKING]
 			};
 			const newEvent = new EventModel(eventData);
 			await newEvent.save().catch((e) => {

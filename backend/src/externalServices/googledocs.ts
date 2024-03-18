@@ -5,7 +5,7 @@ import cityTimezones from 'city-timezones';
 import { EventOnPoster } from '@common/types';
 import { countriesAndCitiesController } from '../controllers/countries-and-cities.controller';
 import { EventTypes, PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
-import { TagsNew } from '../../../common/const/tags';
+import { Tags } from '../../../common/const/tags';
 import { translatePeredelanoPlaceName } from './translationForParser';
 import { vars } from '../config/vars';
 import { EventModel } from '../models/event.model';
@@ -139,7 +139,7 @@ export const parsePeredelano = () => {
 				durationInSeconds: 0,
 				id: `Peredelanoconf-${place.name}-${eventDate.toISOString().split('T')[0]}`,
 				image: eventImg,
-				tags: [TagsNew.BUSINESS_AND_NETWORKING]
+				tags: [Tags.BUSINESS_AND_NETWORKING]
 			};
 			const newEvent = new EventModel(eventData);
 			await newEvent.save().catch((e) => {

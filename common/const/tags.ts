@@ -1,19 +1,4 @@
-export enum TagsOld {
-	CONFERENCE = 'conference', // not remove and not in new tags(peredelano)
-	FESTIVAL = 'festival', // remove
-	EXHIBITION = 'exhibition', // remove
-	STANDUP = 'standup', // remove
-	EXCURSION = 'excursion', // remove
-	LECTURE = 'lecture', // remove
-	PARTY = 'party', // remove
-	MASTERCLASS = 'masterclass', // remove
-	TOURISM = 'tourism', // remove
-	HOLIDAY = 'holiday', // remove
-	CONCERT = 'concert', // remove
-	ONLINE = 'online'
-}
-
-export enum TagsNew {
+export enum Tags {
 	CONCERT_AND__SHOW = 'concert-and-show',
 	FESTIVALS = 'festivals',
 	EXHIBITIONS = 'exhibitions',
@@ -28,13 +13,13 @@ export enum TagsNew {
 	FAIRS_AND_CITY_EVENTS = 'fairs-and-cities-events',
 	SPORT = 'sport',
 	CHILDREN = 'children',
-	ADULT = 'adult'
+	ADULT = 'adult',
+	ONLINE = 'online'
 }
 
-export const Tags = { ...TagsNew, ...TagsOld }; // this is for translation purposes until events with old tags exist then remove this
-export type AllTags = typeof Tags; // this is for translation purposes until events with old tags exist then remove this
+export type AllTags = typeof Tags;
 
-export const TagsArray: string[] = Object.values(TagsNew);
+export const TagsArray: string[] = Object.values(Tags);
 
 export type TagList = typeof TagsArray;
 export type Tag = (typeof TagsArray)[number];

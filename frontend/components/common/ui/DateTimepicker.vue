@@ -80,7 +80,7 @@ const input = ref<HTMLInputElement>(null)
 const handleDate = (modelData: typeof props.modelValue) => {
 	isDateType.value && datepicker.value?.closeMenu();
 	if (props.range && !modelData[1]) {
-		emit('update:model-value', modelData[0])
+		emit('update:model-value', [modelData[0], modelData[0]])
 	} else {
 		emit('update:model-value', modelData)
 	}
@@ -118,6 +118,10 @@ const onClose = () => {
 	if (props.isFilter) {
 		input.value.blur()
 		input.value.classList.remove('active')
+		// если выбрана только 1 дата и календарь закрыли, то автоматически проставляется та же дата на вторую позицию
+		if (!displayValue.value[1]) {
+			displayValue.value = [...displayValue.value, ...displayValue.value]
+		}
 		emit('update:model-value', displayValue.value ?? '')
 	}
 }

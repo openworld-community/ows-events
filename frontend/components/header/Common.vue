@@ -68,13 +68,15 @@ const goBack = () => {
 
 const filterStore = useFilterStore()
 
-const clearFilters = () => {
-	filterStore.filters = {
-		city: '',
-		searchLine: '',
-		date: [],
-		tags: []
-	}
+const clearFilters = async () => {
+	filterStore.$patch({
+		filters: {
+			city: '',
+			searchLine: '',
+			date: [],
+			tags: []
+		}
+	})
 }
 </script>
 
@@ -177,8 +179,8 @@ const clearFilters = () => {
 					button-kind="ordinary"
 					icon-name="user"
 					:button-text="userStore.isAuthorized
-				? $t('header.navigation.user')
-				: $t('header.navigation.authorize')
+			? $t('header.navigation.user')
+			: $t('header.navigation.authorize')
 			"
 				/>
 			</div>

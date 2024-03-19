@@ -14,11 +14,10 @@ const isOnlineField = useField<boolean>(() => 'isOnline');
 
 const cityField = useField<string>(() => 'location.city');
 const addressField = useField<string>(() => 'location.address');
-
 // иногда появляется ошибка, когда в pages/edit-[editid] стор не отрабатывает вовремя
-onBeforeMount(async () => {
-	await eventStore.getTimezones();
-});
+//onBeforeMount(async () => {
+//	await eventStore.getTimezones();
+//});
 </script>
 
 <template>
@@ -32,11 +31,11 @@ onBeforeMount(async () => {
 					:error="isOnlineField.errorMessage.value"
 					:touched="isOnlineField.meta.touched"
 				>
-					<CommonUiBaseCheckbox
+					<LibraryCheckbox
 						v-model="isOnlineField.value.value"
-						value="isOnline"
-						:label="$t('form.event.fields.online')"
+						name="isOnline"
 						is-reversed
+						:label="$t('form.event.fields.online')"
 					/>
 				</CommonFormField>
 			</div>

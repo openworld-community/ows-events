@@ -128,6 +128,7 @@ const onRemove = () => {
 				{ 'input__field--without-cursor': inputReadonly && modelValue },
 				{ 'input__field--shifted': hasValueIcon && modelValue },
 				{ 'input__field--mobile': mobileSelect && modelValue },
+				{ 'input__field--pw': showPassword && modelValue },
 				{ form__error: Boolean(error) }
 			]"
 			:name="name"

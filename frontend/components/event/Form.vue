@@ -14,9 +14,6 @@ const eventStore = useEventStore();
 
 const schema = eventValidationSchema;
 
-onMounted(async () => {
-	await eventStore.getTimezones();
-});
 const props = defineProps({
 	title: {
 		type: String,

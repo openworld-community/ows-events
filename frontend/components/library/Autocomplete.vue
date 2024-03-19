@@ -113,7 +113,7 @@ const clearModel = () => emit('update:model-value', '')
 					:class="['cb__input', { 'no-border': noBorder }]"
 					:data-disabled="disabled"
 					name="search"
-					:placeholder="$t(placeholder)"
+					:placeholder="placeholder"
 					:data-error="error"
 					autocomplete="off"
 					@click="handleOpen"

@@ -17,6 +17,10 @@ const props = defineProps({
 	isReversed: {
 		type: Boolean,
 		default: false
+	},
+	isDisabled: {
+		type: Boolean,
+		default: false
 	}
 });
 
@@ -30,15 +34,22 @@ const model = computed({
 		emit('update:model-value', value);
 	}
 });
+const disabledClass = computed(() => {
+  return props.isDisabled ? 'checkbox-root checkbox-root__disabled' : 'checkbox-root';
+});
+const reversedClass = computed(() => {
+  return props.isReversed ? 'сheckbox-label сheckbox-label__reversed': 'сheckbox-label';
+});
 </script>
 
 <template>
-	<div class="сheckbox-label">
-		<label class="сheckbox-label checkbox-hover">
+	<div>
+		<label :class="reversedClass">
 			<CheckboxRoot
 				v-model:checked="model"
-				class="checkbox-root"
+				:class="disabledClass"
 				:name="name"
+				:disabled="isDisabled"
 			>
 				<CheckboxIndicator class="checkbox-indicator">
 					<CommonIcon
@@ -50,7 +61,7 @@ const model = computed({
 					/>
 				</CheckboxIndicator>
 			</CheckboxRoot>
-			<span class="select-none text-white">{{ props.label }}</span>
+			<span class="checkbox-text">{{ props.label }}</span>
 		</label>
 	</div>
 </template>
@@ -62,11 +73,15 @@ const model = computed({
 	align-items: center;
 }
 
+.сheckbox-label__reversed {
+	flex-direction: row-reverse;
+	gap: var(--space-unrelated-items);
+}
+
 .checkbox-root {
 	width: 18px;
 	height: 18px;
 	border: 1px solid var(--color-input-field);
-	background-color: white;
 	outline: none;
 	display: flex;
 	align-items: center;
@@ -75,7 +90,13 @@ const model = computed({
 	border-radius: 4px;
 	background-color: var(--color-background-secondary);
 	margin-right: var(--space-unrelated-items);
+
 }
+
+.checkbox-root__disabled {
+	background-color: var(--color-input-icons);
+}
+
 
 .checkbox-root:focus-within {
 	border-color: var(--color-accent-green-main);

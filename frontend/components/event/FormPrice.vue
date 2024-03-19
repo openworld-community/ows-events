@@ -52,9 +52,9 @@ const isFreeField = useField<boolean>(() => 'isFree');
 				:error="isFreeField.errorMessage.value"
 				:touched="isFreeField.meta.touched"
 			>
-				<CommonUiBaseCheckbox
+				<LibraryCheckbox
 					v-model="isFreeField.value.value"
-					value="isFree"
+					name="isFree"
 					:label="$t('form.event.fields.price_free')"
 					is-reversed
 				/>

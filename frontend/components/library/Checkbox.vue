@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { CheckboxIndicator, CheckboxRoot } from 'radix-vue';
 const props = defineProps({
 	modelValue: {
@@ -34,24 +34,21 @@ const model = computed({
 		emit('update:model-value', value);
 	}
 });
-const disabledClass = computed(() => {
-  return props.isDisabled ? 'checkbox-root checkbox-root__disabled' : 'checkbox-root';
-});
-const reversedClass = computed(() => {
-  return props.isReversed ? 'сheckbox-label сheckbox-label__reversed': 'сheckbox-label';
-});
 </script>
 
 <template>
-	<div>
-		<label :class="reversedClass">
+	<div class="checkbox__wrapper">
+		<label
+			:class="['checkbox', { 'checkbox--reversed': isReversed }]"
+			:data-disabled="isDisabled"
+		>
 			<CheckboxRoot
 				v-model:checked="model"
-				:class="disabledClass"
+				class="checkbox-root"
 				:name="name"
 				:disabled="isDisabled"
 			>
-				<CheckboxIndicator class="checkbox-indicator">
+				<CheckboxIndicator class="checkbox-root__indicator">
 					<CommonIcon
 						name="check"
 						class="checkbox__icon"
@@ -61,54 +58,88 @@ const reversedClass = computed(() => {
 					/>
 				</CheckboxIndicator>
 			</CheckboxRoot>
-			<span class="checkbox-text">{{ props.label }}</span>
+			<span
+				class="checkbox__text"
+				:data-disabled="isDisabled"
+			>
+				{{ props.label }}
+			</span>
 		</label>
 	</div>
 </template>
 
-<style>
-.сheckbox-label {
+<style scoped lang="less">
+.checkbox {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-}
-
-.сheckbox-label__reversed {
-	flex-direction: row-reverse;
-	gap: var(--space-unrelated-items);
-}
-
-.checkbox-root {
-	width: 18px;
-	height: 18px;
-	border: 1px solid var(--color-input-field);
-	outline: none;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	cursor: pointer;
-	border-radius: 4px;
-	background-color: var(--color-background-secondary);
-	margin-right: var(--space-unrelated-items);
+	gap: var(--space-unrelated-items);
 
+	&--reversed {
+		flex-direction: row-reverse;
+	}
+	&__wrapper {
+		display: flex;
+		width: 100%;
+	}
+	&[data-disabled='true'] {
+		cursor: not-allowed;
+	}
 }
 
-.checkbox-root__disabled {
-	background-color: var(--color-input-icons);
-}
+:deep(.checkbox) {
+	&-root {
+		outline: none;
+		width: 18px;
+		height: 18px;
+		border: 1px solid var(--color-input-field);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		border-radius: 4px;
+		background-color: 'red';
 
+		&__[data-disabled] {
+			opacity: 0.4;
+		}
+		&__span[data-disabled] > {
+			opacity: 0.4;
 
-.checkbox-root:focus-within {
-	border-color: var(--color-accent-green-main);
-}
+			pointer-events: none;
+		}
 
-.checkbox-indicator {
-	background-color: var(--color-accent-green-main);
-	border-color: var(--color-accent-green-main);
-	color: var(--color-white);
-	border-radius: 4px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+		&:focus-within {
+			border-color: var(--color-accent-green-main);
+		}
+		&__indicator {
+			border: 1px solid 'transparent';
+			color: var(--color-white);
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			&[data-state='checked'] {
+				background-color: var(--color-accent-green-main);
+				border-color: var(--color-accent-green-main);
+			}
+			&[data-state='unchecked'] {
+				border-color: var(--color-input-field);
+				background-color: var(--color-background-secondary);
+			}
+		}
+	}
+
+	&__text {
+		font-size: var(--font-size-M);
+		line-height: 24px;
+	}
+
+	&[data-disabled='true'] {
+		opacity: 0.4;
+	}
 }
 </style>

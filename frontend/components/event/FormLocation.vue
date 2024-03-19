@@ -34,6 +34,7 @@ const addressField = useField<string>(() => 'location.address');
 					<LibraryCheckbox
 						v-model="isOnlineField.value.value"
 						name="isOnline"
+						is-reversed
 						:label="$t('form.event.fields.online')"
 					/>
 				</CommonFormField>

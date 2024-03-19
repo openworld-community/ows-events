@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { CheckboxIndicator, CheckboxRoot } from 'radix-vue';
 const props = defineProps({
 	modelValue: {
@@ -15,6 +15,10 @@ const props = defineProps({
 		required: true
 	},
 	isReversed: {
+		type: Boolean,
+		default: false
+	},
+	isDisabled: {
 		type: Boolean,
 		default: false
 	}
@@ -33,14 +37,18 @@ const model = computed({
 </script>
 
 <template>
-	<div class="сheckbox-label">
-		<label class="сheckbox-label checkbox-hover">
+	<div class="checkbox__wrapper">
+		<label
+			:class="['checkbox', { 'checkbox--reversed': isReversed }]"
+			:data-disabled="isDisabled"
+		>
 			<CheckboxRoot
 				v-model:checked="model"
 				class="checkbox-root"
 				:name="name"
+				:disabled="isDisabled"
 			>
-				<CheckboxIndicator class="checkbox-indicator">
+				<CheckboxIndicator class="checkbox-root__indicator">
 					<CommonIcon
 						name="check"
 						class="checkbox__icon"
@@ -50,44 +58,88 @@ const model = computed({
 					/>
 				</CheckboxIndicator>
 			</CheckboxRoot>
-			<span class="select-none text-white">{{ props.label }}</span>
+			<span
+				class="checkbox__text"
+				:data-disabled="isDisabled"
+			>
+				{{ props.label }}
+			</span>
 		</label>
 	</div>
 </template>
 
-<style>
-.сheckbox-label {
+<style scoped lang="less">
+.checkbox {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-}
-
-.checkbox-root {
-	width: 18px;
-	height: 18px;
-	border: 1px solid var(--color-input-field);
-	background-color: white;
-	outline: none;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	cursor: pointer;
-	border-radius: 4px;
-	background-color: var(--color-background-secondary);
-	margin-right: var(--space-unrelated-items);
+	gap: var(--space-unrelated-items);
+
+	&--reversed {
+		flex-direction: row-reverse;
+	}
+	&__wrapper {
+		display: flex;
+		width: 100%;
+	}
+	&[data-disabled='true'] {
+		cursor: not-allowed;
+	}
 }
 
-.checkbox-root:focus-within {
-	border-color: var(--color-accent-green-main);
-}
+:deep(.checkbox) {
+	&-root {
+		outline: none;
+		width: 18px;
+		height: 18px;
+		border: 1px solid var(--color-input-field);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		border-radius: 4px;
+		background-color: 'red';
 
-.checkbox-indicator {
-	background-color: var(--color-accent-green-main);
-	border-color: var(--color-accent-green-main);
-	color: var(--color-white);
-	border-radius: 4px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+		&__[data-disabled] {
+			opacity: 0.4;
+		}
+		&__span[data-disabled] > {
+			opacity: 0.4;
+
+			pointer-events: none;
+		}
+
+		&:focus-within {
+			border-color: var(--color-accent-green-main);
+		}
+		&__indicator {
+			border: 1px solid 'transparent';
+			color: var(--color-white);
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			&[data-state='checked'] {
+				background-color: var(--color-accent-green-main);
+				border-color: var(--color-accent-green-main);
+			}
+			&[data-state='unchecked'] {
+				border-color: var(--color-input-field);
+				background-color: var(--color-background-secondary);
+			}
+		}
+	}
+
+	&__text {
+		font-size: var(--font-size-M);
+		line-height: 24px;
+	}
+
+	&[data-disabled='true'] {
+		opacity: 0.4;
+	}
 }
 </style>

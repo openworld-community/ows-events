@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import type { PropType } from 'vue';
 import { useFilterStore } from '../../../stores/filter.store';
 import { getFilterPlaceholder } from '../../../utils/texts';
@@ -92,21 +89,23 @@ const showModal = computed(() => filterStore.modal.show);
 		:min-time="name === 'startDate' ? { hours: 0, minutes: 0 } : { hours: '23', minutes: '59' }"
 	/>
 	<template v-if="filterType === 'select' || filterType === 'librarySelect'">
-		<template v-if="mobile">
+		<template v-if="mobile && name !== 'city'">
 			<CommonButton
 				button-kind="filter"
 				icon-name="container"
-				:button-text="getFilterPlaceholder(
-			multiple,
-			name,
-			list,
-			filterStore.filters[name],
-			showKey,
-			returnKey
-		)
-			"
-				:filled="multiple ? !!filterStore.filters[name].length : !!filterStore.filters[name]
-			"
+				:button-text="
+					getFilterPlaceholder(
+						multiple,
+						name,
+						list,
+						filterStore.filters[name],
+						showKey,
+						returnKey
+					)
+				"
+				:filled="
+					multiple ? !!filterStore.filters[name].length : !!filterStore.filters[name]
+				"
 				:is-disabled="disabled"
 				:alt="$t(`home.filter.${name}.aria`)"
 				class="filter"
@@ -121,6 +120,17 @@ const showModal = computed(() => filterStore.modal.show);
 				:show-key="filterStore.modal.showKey"
 			/>
 		</template>
+
+		<LibraryMobileSelect
+			v-else-if="mobile && name === 'city'"
+			v-model="filterStore.filters[name]"
+			:title="name"
+			:name="name"
+			:placeholder="$t(`home.filter.${name}.placeholder`)"
+			:options="list"
+			:disabled="disabled"
+		/>
+
 		<LibrarySelect
 			v-else-if="filterType === 'librarySelect'"
 			v-model="filterStore.filters[name]"
@@ -150,10 +160,7 @@ const showModal = computed(() => filterStore.modal.show);
 	</template>
 </template>
 
-<style
-	scoped
-	lang="less"
->
+<style scoped lang="less">
 .filter {
 	&:deep(.select__trigger--no-border) {
 		max-width: 50%;
@@ -188,13 +195,13 @@ const showModal = computed(() => filterStore.modal.show);
 		top: 10%;
 		left: -1px;
 
-		transition: backround-color, .15s ease-in-out;
+		transition: backround-color, 0.15s ease-in-out;
 	}
 
 	// прозраные сепараторы при фокусе
 	.filter:focus-within::before,
-	.filter:focus-within+.filter::before,
-	.filter:has(.input__field:focus)+.filters__wrapper>.filter:first-child::before {
+	.filter:focus-within + .filter::before,
+	.filter:has(.input__field:focus) + .filters__wrapper > .filter:first-child::before {
 		background-color: transparent;
 	}
 }

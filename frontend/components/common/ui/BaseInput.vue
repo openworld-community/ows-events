@@ -90,6 +90,10 @@ const props = defineProps({
 	showPassword: {
 		type: Boolean,
 		default: false
+	},
+	mobileSelect: {
+		type: Boolean,
+		default: false
 	}
 });
 
@@ -123,6 +127,7 @@ const onRemove = () => {
 				{ 'input__field--cursor-pointer': inputReadonly && !modelValue },
 				{ 'input__field--without-cursor': inputReadonly && modelValue },
 				{ 'input__field--shifted': hasValueIcon && modelValue },
+				{ 'input__field--mobile': mobileSelect && modelValue },
 				{ form__error: Boolean(error) }
 			]"
 			:name="name"
@@ -140,7 +145,7 @@ const onRemove = () => {
 
 		<!--    иконка справа-->
 		<CommonIcon
-			v-if="iconName && !modelValue"
+			v-if="(iconName && !modelValue) || mobileSelect"
 			:name="iconName"
 			:class="['input__button', { 'input__button--disabled': disabled }]"
 			color="var(--color-input-icons)"
@@ -157,7 +162,9 @@ const onRemove = () => {
 
 		<!-- кнопка очистки инпута-->
 		<CommonButton
-			v-else-if="(modelValue || modelValue === 0) && !disabled && !showPassword"
+			v-else-if="
+				(modelValue || modelValue === 0) && !disabled && !showPassword && !mobileSelect
+			"
 			is-icon
 			class="input__button input__button--clear input__button--wrapper"
 			:interactive="false"
@@ -196,7 +203,7 @@ const onRemove = () => {
 					writableType === 'password'
 						? (writableType = 'text')
 						: (writableType = 'password')
-					"
+				"
 			/>
 		</div>
 

@@ -22,27 +22,30 @@ const startDate = ref(
 const endDate = computed(() => {
 	// проверка на однодневный ивент
 	if (props.eventData.date + props.eventData.durationInSeconds * 1000 === props.eventData.date) {
-		return ''
+		return '';
 	}
 
 	return convertEventDateToLocaleString(
 		props.eventData.date + props.eventData.durationInSeconds * 1000,
 		props.eventData.isOnline,
 		props.eventData.timezone
-	)
-})
+	);
+});
 </script>
 
 <template>
 	<NuxtLink
 		class="card"
+		:prefetch="false"
 		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
-		:title="trimString(
-			`Afisha: ${eventData.isOnline ? t(`event.tags.${Tags.ONLINE}`) : eventData.location.city
-			}, ${eventData.title}` ?? '',
-			460
-		)
-			"
+		:title="
+			trimString(
+				`Afisha: ${
+					eventData.isOnline ? t(`event.tags.${Tags.ONLINE}`) : eventData.location.city
+				}, ${eventData.title}` ?? '',
+				460
+			)
+		"
 		:itemprop="SeoItempropGlobalEnum.URL"
 	>
 		<div
@@ -53,14 +56,16 @@ const endDate = computed(() => {
 				v-if="eventData.image"
 				class="card__image"
 				:src="getEventImage(eventData)"
-				:alt="trimString(
-					`Afisha: ${eventData.isOnline
-						? t(`event.tags.${Tags.ONLINE}`)
-						: eventData.location.city
-					}, ${eventData.title}` ?? '',
-					460
-				)
-					"
+				:alt="
+					trimString(
+						`Afisha: ${
+							eventData.isOnline
+								? t(`event.tags.${Tags.ONLINE}`)
+								: eventData.location.city
+						}, ${eventData.title}` ?? '',
+						460
+					)
+				"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
 			<img

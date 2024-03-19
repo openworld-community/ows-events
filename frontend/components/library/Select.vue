@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { SelectContent, SelectRoot, SelectTrigger, SelectValue, SelectViewport } from 'radix-vue';
 const props = defineProps({
 	options: {
@@ -151,6 +148,7 @@ const onRemove = () => {
 .select {
 	width: 100%;
 	min-width: 10%;
+	position: relative;
 
 	&__trigger {
 		width: 100%;
@@ -161,15 +159,15 @@ const onRemove = () => {
 		height: 40px;
 		border: 1px solid #dbdbdb;
 		border-radius: 8px;
-		background-color: #ffffff;
+		background-color: var(--color-white);
 		padding: 8px 12px 8px 12px;
 		transition: border-color 0.3s ease;
 		cursor: pointer;
-		
+
 		&--no-border[data-state='open'] {
 			border-color: var(--color-accent-green-main);
 		}
-		
+
 		&:focus-within {
 			outline: none;
 			border-color: var(--color-accent-green-main);
@@ -178,7 +176,7 @@ const onRemove = () => {
 			outline: none;
 			border-color: var(--color-accent-green-main);
 		}
-		
+
 		&:hover {
 			border-color: var(--color-accent-green-main);
 		}
@@ -228,7 +226,8 @@ const onRemove = () => {
 		min-width: 267px;
 		background-color: #ffffff;
 		box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
-		z-index: 99;
+		position: absolute;
+		z-index: 100;
 		border-radius: 8px;
 		border: 2px black;
 		width: var(--radix-select-trigger-width);

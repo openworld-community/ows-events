@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { computed, type PropType } from 'vue';
 import NuxtLink from '#app/components/nuxt-link';
 import { IconDefaultParams } from '@/constants/defaultValues/icon';
@@ -150,10 +147,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	</component>
 </template>
 
-<style
-	lang="less"
-	scoped
->
+<style lang="less" scoped>
 .button {
 	display: flex;
 	justify-content: center;
@@ -367,7 +361,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		border-radius: 8px;
 		justify-content: space-between;
 
-		&>.button__content {
+		& > .button__content {
 			font-size: var(--font-size-S);
 			line-height: 20px;
 			margin-right: 10px;
@@ -405,7 +399,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 				color: var(--color-text-secondary);
 			}
 
-			&>.button__content {
+			& > .button__content {
 				margin-right: 0;
 			}
 		}
@@ -419,7 +413,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		border: 1px solid var(--color-white);
 		padding-right: 40px;
 
-		&>.button__content {
+		& > .button__content {
 			font-size: var(--font-size-M);
 			color: var(--color-input-icons);
 
@@ -441,7 +435,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		}
 
 		&--filled {
-			&>.button__content {
+			& > .button__content {
 				color: var(--color-text-main);
 			}
 		}
@@ -485,7 +479,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		color: var(--color-accent-green-main);
 	}
 
-	&+.icon {
+	& + .icon {
 		margin-left: 20px;
 	}
 
@@ -525,7 +519,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 }
 
 .no-interactive {
-
 	&:hover,
 	&:focus,
 	&:active {

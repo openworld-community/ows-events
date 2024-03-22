@@ -55,7 +55,7 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 const goBack = () => {
 	// if (router.options.history.state.back) {
 	// 	router.back();
-	// } 
+	// }
 	if (
 		getRouteName(route.name as string).includes(RouteNameEnum.USER_FAVOURITES) ||
 		getRouteName(route.name as string).includes(RouteNameEnum.USER_MY_EVENTS)

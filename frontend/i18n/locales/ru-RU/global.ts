@@ -26,6 +26,8 @@ export default {
 		reset: 'Сбросить',
 		save: 'Сохранить',
 		search: 'Поиск',
-		share: 'Поделиться'
-	}
+		share: 'Поделиться',
+		yes: 'Да',
+	},
+	notFound: 'Ничего не найдено'
 };

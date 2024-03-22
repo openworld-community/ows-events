@@ -62,11 +62,14 @@ const localePath = useLocalePath();
 	flex-direction: column;
 
 	@media (min-width: 768px) {
-		width: 60%;
+		width: 96%;
+	}
+	@media (min-width: 1000px) {
+		width: 80%;
 	}
 
 	@media (min-width: 1440px) {
-		width: 67%;
+		width: 80%;
 	}
 
 	&__wrapper {

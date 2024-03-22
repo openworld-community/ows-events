@@ -13,6 +13,10 @@ const endDateField = useField<Date>(() => 'endDate', {
 const endTimeField = useField<Time>(() => 'endTime', {
 	validateOnModelUpdate: false
 });
+
+watch(() => startDateField, value => {
+	console.log(value.value);
+})
 </script>
 <template>
 	<ModalUiModalSection

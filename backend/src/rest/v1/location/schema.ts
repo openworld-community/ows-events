@@ -81,3 +81,15 @@ export const getUsedCitiesByCountrySchema = {
 		}
 	}
 };
+
+export const getUsedCitiesSchema = {
+	description: 'get used cities (in Serbia and Montenegro)',
+	tags: ['Location'],
+	summary: 'Get used cities',
+	response: {
+		200: {
+			type: 'array',
+			items: { type: 'string' }
+		}
+	}
+};

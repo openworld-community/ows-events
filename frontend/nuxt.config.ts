@@ -20,7 +20,7 @@ export default defineNuxtConfig({
 		'@nuxtjs/robots',
 		//+ resolver?
 		'radix-vue/nuxt',
-		// 
+		//
 		[
 			'nuxt-viewport',
 			{
@@ -34,7 +34,7 @@ export default defineNuxtConfig({
 	],
 
 	routeRules: {
-		'/': { redirect: '/ru', ssr: true },
+		'/': { redirect: '/ru', ssr: true }
 	},
 	i18n: {
 		debug: false,

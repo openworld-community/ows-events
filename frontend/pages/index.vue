@@ -44,24 +44,8 @@ const onButtonClick = async () => {
 				/> -->
 				<HomeFilters class="main-page__filter" />
 			</div>
-			<ul class="main-page__card-list">
-				<li
-					v-for="event in filterStore.filteredEvents"
-					:key="event.id"
-					class="main-page__card-item"
-					itemscope
-					:itemtype="SeoItemTypeEnum.EVENT"
-				>
-					<HomeEventPreviewCard :event-data="event" />
-					<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
-				</li>
-				<li
-					v-if="!filterStore.filteredEvents.length"
-					class="no-results"
-				>
-					<span>{{ t('event.filteredEvents.no_events_found') }}</span>
-				</li>
-			</ul>
+
+			<HomeCardList />
 
 			<CommonButton
 				class="add-event-button"
@@ -79,7 +63,6 @@ const onButtonClick = async () => {
 </template>
 
 <style lang="less" scoped>
-
 .no-results {
 	display: flex;
 	width: 100%;
@@ -98,9 +81,11 @@ const onButtonClick = async () => {
 		width: 100%;
 		align-items: center;
 		flex-direction: column;
-		background: linear-gradient(90deg,
-				var(--color-accent-background) 0%,
-				var(--color-accent-green-main) 100%);
+		background: linear-gradient(
+			90deg,
+			var(--color-accent-background) 0%,
+			var(--color-accent-green-main) 100%
+		);
 		margin-top: 12px;
 		margin-bottom: 32px;
 		padding-left: var(--padding-side);

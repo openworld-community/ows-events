@@ -16,7 +16,7 @@ export const filters = {
 			};
 		}) => EventOnPoster[]
 	>((input) => {
-		return useBackendFetch('events/find', { body: input?.query ?? {} }, { watch: false });
+		return useBackendFetch('events/find', { body: input?.query ?? {} }, { watch: true });
 	}),
 	getUsedCountries: defineQuery<() => Country[]>(() => useBackendFetch('location/usedCountries')),
 	getUsedCitiesByCountry: defineQuery<(input: { country: Country }) => City[]>((input) =>

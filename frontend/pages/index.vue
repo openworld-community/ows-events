@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
-import { SeoItemTypeEnum } from '../constants/enums/seo';
+
 import { useUserStore } from '../stores/user.store';
 import { RoutePathEnum } from '../constants/enums/route';
-import { useFilterStore } from '../stores/filter.store';
 
 const { t } = useI18n();
 
@@ -13,7 +12,7 @@ getMeta({
 });
 
 const userStore = useUserStore();
-const filterStore = useFilterStore();
+
 const localePath = useLocalePath();
 
 const {
@@ -72,6 +71,7 @@ const onButtonClick = async () => {
 	font-size: 24px;
 }
 .main-page {
+	position: relative;
 	@media (min-width: 768px) {
 		padding-top: 0;
 	}
@@ -87,14 +87,13 @@ const onButtonClick = async () => {
 			var(--color-accent-green-main) 100%
 		);
 		margin-top: 12px;
-		margin-bottom: 32px;
+
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
 
 		@media (min-width: 768px) {
 			padding-top: 65px;
 			margin-top: 0;
-			margin-bottom: 80px;
 		}
 
 		@media (min-width: 1440px) {

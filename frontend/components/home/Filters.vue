@@ -41,7 +41,9 @@ watch(
 debouncedWatch(
 	filterStore.filters,
 	async () => {
+		filterStore.$patch({ loading: true });
 		await filterStore.getFilteredEvents();
+		filterStore.$patch({ loading: false });
 	},
 	{ debounce: 700, maxWait: 1000 }
 );

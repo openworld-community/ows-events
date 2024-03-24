@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { SeoItemTypeEnum } from '../../constants/enums/seo';
 const { t } = useI18n();
+const mobile = inject('mobile');
 const filterStore = useFilterStore();
 
 import { useFilterStore } from '~/stores/filter.store';
@@ -13,7 +14,7 @@ import { useFilterStore } from '~/stores/filter.store';
 		>
 			<CommonUiLoadSpinner
 				color="#48c78e"
-				size="big"
+				:size="mobile ? 'middle' : 'big'"
 			/>
 		</div>
 		<div
@@ -107,6 +108,7 @@ import { useFilterStore } from '~/stores/filter.store';
 	position: absolute;
 	top: 0px;
 	left: 0px;
+	z-index: 10;
 	@media (min-width: 768px) {
 		top: 8px;
 	}

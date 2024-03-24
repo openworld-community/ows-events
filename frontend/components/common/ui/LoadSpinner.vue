@@ -7,7 +7,7 @@ defineProps({
 		default: 'var(--color-white)'
 	},
 	size: {
-		type: String as PropType<'small' | 'big'>,
+		type: String as PropType<'small' | 'big' | 'middle'>,
 		default: 'small'
 	}
 });
@@ -18,7 +18,8 @@ defineProps({
 		:class="[
 			'lds-spinner',
 			{ 'spinner-big': size === 'big' },
-			{ 'spinner-small': size === 'small' }
+			{ 'spinner-small': size === 'small' },
+			{ 'spinner-middle': size === 'middle' }
 		]"
 	>
 		<div
@@ -47,6 +48,11 @@ defineProps({
 	height: 40px;
 }
 
+.spinner-middle {
+	width: 30px;
+	height: 30px;
+}
+
 .lds-spinner div {
 	animation: lds-spinner 0.8s linear infinite;
 }
@@ -56,6 +62,10 @@ defineProps({
 }
 .spinner-big div {
 	transform-origin: 20px 20px;
+}
+
+.spinner-middle div {
+	transform-origin: 15px 15px;
 }
 
 .lds-spinner div:after {
@@ -79,6 +89,13 @@ defineProps({
 	left: 18px;
 	width: 3.5px;
 	height: 11.5px;
+}
+
+.spinner-middle div:after {
+	top: 4px;
+	left: 14px;
+	width: 2.5px;
+	height: 8.5px;
 }
 
 @keyframes lds-spinner {

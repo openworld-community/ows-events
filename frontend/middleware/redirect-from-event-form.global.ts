@@ -21,9 +21,11 @@ export default defineNuxtRouteMiddleware((to, from) => {
 				navTo: to.path,
 				showClearFormModal: true
 			});
+			console.log("redirect from global FALSE")
 			return false;
 		}
 	} else {
+		console.log("redirect from global true")
 		return true;
 	}
 });

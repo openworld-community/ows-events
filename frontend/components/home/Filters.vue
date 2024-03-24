@@ -14,7 +14,9 @@ onBeforeMount(async () => {
 
 	setTimeout(async () => {
 		await filterStore.getFilteredEvents();
+		filterStore.$patch({ loading: true });
 		await filterStore.getUsedFilters();
+		filterStore.$patch({ loading: false });
 	});
 });
 

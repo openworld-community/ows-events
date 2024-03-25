@@ -26,20 +26,20 @@ const openSuccess = ref(false);
 const successCreateEvent = (eventId: string) => {
 	openSuccess.value = true;
 	setTimeout(async () => {
-		openSuccess.value = false;
 		eventStore.navTo
 			? await navigateTo(localePath(`${eventStore.navTo}`))
 			: await navigateTo(localePath(`${RoutePathEnum.EVENT}/${eventId}`));
+		openSuccess.value = false;
 	}, 1000);
 };
 
 const successEditEvent = (eventId: string) => {
 	openSuccess.value = true;
 	setTimeout(() => {
-		openSuccess.value = false;
 		eventStore.navTo
 			? navigateTo(localePath(`${eventStore.navTo}`))
 			: navigateTo(localePath(`${RoutePathEnum.EVENT}/${eventId}`));
+		openSuccess.value = false;
 	}, 1000);
 };
 

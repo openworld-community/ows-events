@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { SeoItempropNavEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
 import { RouteNameEnum, RoutePathEnum } from '../../constants/enums/route';
 import { getRouteName } from '../../utils';
@@ -66,7 +63,7 @@ const goBack = () => {
 	}
 };
 
-const filterStore = useFilterStore()
+const filterStore = useFilterStore();
 
 const clearFilters = async () => {
 	filterStore.$patch({
@@ -76,8 +73,8 @@ const clearFilters = async () => {
 			date: [],
 			tags: []
 		}
-	})
-}
+	});
+};
 </script>
 
 <template>
@@ -93,9 +90,10 @@ const clearFilters = async () => {
 		>
 			<div class="header__left">
 				<CommonButton
-					v-if="hasBackButton &&
-			localePath(route.path) !== localePath({ path: RoutePathEnum.USER_PAGE })
-			"
+					v-if="
+						hasBackButton &&
+						localePath(route.path) !== localePath({ path: RoutePathEnum.USER_PAGE })
+					"
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"
@@ -106,13 +104,18 @@ const clearFilters = async () => {
 					:is="logoComponentIs"
 					v-else
 					class="header__logo"
-					:title="$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
-			"
-					:aria-label="$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
-			"
+					:title="
+						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
+					"
+					:aria-label="
+						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
+					"
 					:to="!isAtHome ? localePath(RoutePathEnum.HOME) : undefined"
 					:itemprop="SeoItempropNavEnum.URL"
-					@click="isAtHome && scrollToTop(); isAtHome && clearFilters()"
+					@click="
+						isAtHome && scrollToTop();
+						isAtHome && clearFilters();
+					"
 				>
 					<CommonIcon
 						name="afisha-logo-light"
@@ -135,6 +138,7 @@ const clearFilters = async () => {
 				<li class="header__nav-item">
 					<NuxtLink
 						:to="localePath(RoutePathEnum.ABOUT)"
+						:prefetch="false"
 						class="header__nav-link"
 					>
 						{{ $t('header.navigation.about') }}
@@ -178,20 +182,18 @@ const clearFilters = async () => {
 					:link="localePath(RoutePathEnum.USER_PAGE)"
 					button-kind="ordinary"
 					icon-name="user"
-					:button-text="userStore.isAuthorized
-			? $t('header.navigation.user')
-			: $t('header.navigation.authorize')
-			"
+					:button-text="
+						userStore.isAuthorized
+							? $t('header.navigation.user')
+							: $t('header.navigation.authorize')
+					"
 				/>
 			</div>
 		</nav>
 	</header>
 </template>
 
-<style
-	scoped
-	lang="less"
->
+<style scoped lang="less">
 .header {
 	width: 100%;
 	height: var(--header-height);

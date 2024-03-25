@@ -1,0 +1,116 @@
+<script setup lang="ts">
+import { SeoItemTypeEnum } from '../../constants/enums/seo';
+const { t } = useI18n();
+const mobile = inject('mobile');
+const filterStore = useFilterStore();
+
+import { useFilterStore } from '~/stores/filter.store';
+</script>
+<template>
+	<div class="cards">
+		<div
+			v-if="filterStore.loading"
+			class="loader"
+		>
+			<CommonUiLoadSpinner
+				color="#48c78e"
+				:size="mobile ? 'middle' : 'big'"
+			/>
+		</div>
+		<div
+			v-if="
+				filterStore.filteredEvents &&
+				filterStore.filteredEvents.length === 0 &&
+				!filterStore.loading
+			"
+			class="no-results"
+		>
+			<span>{{ t('event.filteredEvents.no_events_found') }}</span>
+		</div>
+		<ul
+			v-if="filterStore.filteredEvents && filterStore.filteredEvents.length"
+			class="cards__list"
+		>
+			<li
+				v-for="event in filterStore.filteredEvents"
+				:key="event.id"
+				class="cards__list-item"
+				itemscope
+				:itemtype="SeoItemTypeEnum.EVENT"
+			>
+				<HomeEventPreviewCard :event-data="event" />
+				<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
+			</li>
+		</ul>
+	</div>
+</template>
+<style lang="less" scoped>
+.no-results {
+	display: flex;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+
+	font-size: 24px;
+}
+
+.cards {
+	position: relative;
+	padding-top: 32px;
+	@media (min-width: 768px) {
+		padding-top: 80px;
+	}
+
+	&__list {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+
+		@media (min-width: 768px) {
+			flex-direction: row;
+			flex-wrap: wrap;
+			padding-left: var(--padding-side);
+			padding-right: var(--padding-side);
+		}
+
+		&-item {
+			@media (min-width: 768px) {
+				display: flex;
+				width: 49.2%;
+				height: auto;
+				margin-bottom: 5%;
+				margin-right: 1.5%;
+
+				&:nth-child(2n) {
+					margin-right: 0;
+				}
+			}
+
+			@media (min-width: 1440px) {
+				display: flex;
+				width: 32.3%;
+				min-height: 100%;
+				margin-right: 0;
+
+				&:not(:nth-child(3n)) {
+					margin-right: 1.5%;
+				}
+			}
+		}
+	}
+}
+.loader {
+	display: flex;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 10;
+	@media (min-width: 768px) {
+		top: 8px;
+	}
+}
+</style>

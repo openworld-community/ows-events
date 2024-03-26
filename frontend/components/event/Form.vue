@@ -46,7 +46,7 @@ const dataFromLocalStorage = (initialValues: EventFormType) => {
 	return copy;
 };
 
-const { meta, values, handleSubmit, setFieldValue } = useForm<EventFormType>({
+const { meta, values, handleSubmit, setFieldValue, handleReset } = useForm<EventFormType>({
 	validationSchema: schema,
 	initialValues:
 		localStorage.getItem(LocalStorageEnum.EVENT_DATA) !== null
@@ -164,6 +164,7 @@ const onSubmit = handleSubmit(
 		isLoading.value = true;
 
 		emit('submitEvent', payload);
+		handleReset();
 		isLoading.value = false;
 	},
 	() => {

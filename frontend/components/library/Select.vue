@@ -157,6 +157,7 @@ const onRemove = () => {
 		width: var(--radix-select-trigger-width);
 		height: auto;
 		min-height: 100px;
+		max-width: 300px;
 	}
 }
 .select {
@@ -239,18 +240,6 @@ const onRemove = () => {
 		border-color: var(--color-accent-red);
 	}
 
-	&__content {
-		min-width: 267px;
-		background-color: #ffffff;
-		box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
-		position: absolute;
-		z-index: 100;
-		border-radius: 8px;
-		border: 2px black;
-		width: var(--radix-select-trigger-width);
-		height: auto;
-		min-height: 100px;
-	}
 	&__clear-select {
 		position: absolute;
 		z-index: 10;

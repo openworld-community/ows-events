@@ -162,11 +162,10 @@ const showModal = computed(() => filterStore.modal.show);
 </template>
 
 <style scoped lang="less">
+.filter.select {
+	width: 100%;
+}
 .filter {
-	&:deep(.select__trigger--no-border) {
-		max-width: 50%;
-	}
-
 	@media (min-width: 1440px) {
 		width: 50%;
 		min-width: calc(100% / 3);

@@ -141,10 +141,6 @@ const mobile = inject('mobile');
 				max-width: calc((100% - var(--gap) * 2) / 3);
 			}
 
-			&:deep(.select) {
-				max-width: calc((100% - var(--gap) * 2) / 3);
-			}
-
 			&:deep(.calendar) {
 				max-width: 42%;
 			}

@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+	setup
+	lang="ts"
+>
 import dayjs from 'dayjs';
 import { useFilterStore } from '../../stores/filter.store';
 import { debouncedWatch } from '@vueuse/core';
@@ -6,7 +9,10 @@ import { debouncedWatch } from '@vueuse/core';
 const filterStore = useFilterStore();
 
 const route = useRoute();
-const tablet = inject('tablet');
+
+// от инжекта можно избавиться, если переделать модалку города на мобилке
+const mobile = inject('mobile')
+const { width } = useWindowSize()
 
 onBeforeMount(async () => {
 	//TODO костыль, иначе при ините страницы не достается value из запроса
@@ -62,117 +68,93 @@ const openFilterModal = (
 		filterStore.$patch({ modal: { show: true } });
 	}
 };
-const mobile = inject('mobile');
 </script>
 
 <template>
 	<section class="filters">
-		<CommonUiFilter
-			filter-type="input"
-			name="searchLine"
-			icon-name="search"
-			no-separator
-		/>
 		<div class="filters__wrapper">
 			<CommonUiFilter
-				:key="mobile ? 'mobile-city' : 'other-city'"
-				filter-type="librarySelect"
-				name="city"
-				:list="filterStore.usedCities"
-				:disabled="!filterStore.usedCities.length"
-				@on-filter-button-click="openFilterModal('city', filterStore.usedCities ?? [])"
+				filter-type="input"
+				name="searchLine"
+				icon-name="search"
+				no-separator
 			/>
-			<CommonUiFilter
-				:key="mobile ? 'mobile-tags' : 'other-tags'"
-				filter-type="select"
-				name="tags"
-				:list="filterStore.usedTags"
-				multiple
-				show-key="name"
-				return-key="key"
-				:disabled="!filterStore.usedTags.length"
-				:dropdown-position="tablet ? 'right' : 'left'"
-				@on-filter-button-click="
-					openFilterModal('tags', filterStore.usedTags, true, 'name', 'key')
-				"
-			/>
-			<CommonUiFilter
-				filter-type="date"
-				name="date"
-				:range="true"
-			/>
+
+			<div class="filters__wrapper--mobile">
+				<CommonUiFilter
+					:key="mobile ? 'mobile-city' : 'other-city'"
+					filter-type="librarySelect"
+					name="city"
+					:list="filterStore.usedCities"
+					:disabled="!filterStore.usedCities.length"
+					@on-filter-button-click="openFilterModal('city', filterStore.usedCities ?? [])"
+				/>
+				<CommonUiFilter
+					filter-type="date"
+					name="date"
+					:range="true"
+				/>
+			</div>
 		</div>
+		<ul class="filters__tags">
+			<li
+				v-for="(tag, index) in filterStore.usedTags"
+				:key="index"
+			>
+				<CommonUiFilter
+					name="tags"
+					:tag="tag"
+					filter-type="tag"
+				/>
+			</li>
+		</ul>
 	</section>
 </template>
 
-<style scoped lang="less">
+<style
+	scoped
+	lang="less"
+>
 .filters {
-	display: flex;
-	width: 100%;
-	flex-direction: column;
-
 	--gap: 8px;
 
-	@media (min-width: 1440px) {
-		max-width: calc(100% - 2 * var(--padding-side));
-		flex-direction: row;
-		align-items: center;
-		background-color: var(--color-white);
-		box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
-		border-radius: 8px;
+	display: grid;
+	grid-template-rows: auto auto;
+	grid-template-columns: 1fr 1fr 1fr;
+	column-gap: var(--gap);
+	row-gap: calc(var(--gap) * 3);
+
+	margin-bottom: calc(var(--gap) * 4);
+
+	@media (max-width: 550px) {
+		grid-template-rows: repeat(3, auto);
+		row-gap: 0;
+
+		&:deep(.filters__search) {
+			margin-bottom: 8px;
+			grid-column: span 3;
+		}
 	}
 
 	&__wrapper {
-		display: flex;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
 		width: 100%;
-		margin-top: var(--gap);
+		grid-column: span 3;
 		gap: var(--gap);
-		height: 100%;
 
-		@media (max-width: 767px) {
-			&:deep(.button__filter) {
-				max-width: calc((100% - var(--gap) * 2) / 3);
-			}
-			&:deep(.mobile-filter) {
-				max-width: calc((100% - var(--gap) * 2) / 3);
-			}
-
-			&:deep(.select) {
-				max-width: calc((100% - var(--gap) * 2) / 3);
-			}
-
-			&:deep(.calendar) {
-				max-width: 42%;
-			}
+		@media (min-width: 1440px) {
+			background-color: var(--color-white);
+			box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
+			border-radius: 8px;
 		}
 
 		@media (max-width: 550px) {
 			& {
+				align-items: flex-start;
 				flex-wrap: wrap;
-				row-gap: var(--gap);
-			}
-
-			&:deep(.filter),
-			&:deep(.button__multiselect) {
-				max-width: calc((100% - var(--gap)) / 2);
-			}
-			&:deep(.mobile-filter) {
-				min-width: calc((100% - var(--gap)) / 2);
-			}
-
-			&:deep(.calendar) {
-				max-width: 100%;
-			}
-		}
-
-		@media (min-width: 768px) {
-			&:deep(.filter),
-			&:deep(.button__multiselect) {
-				max-width: 27.5%;
-			}
-
-			&:deep(.calendar) {
-				max-width: 45%;
+				gap: 0;
+				margin-bottom: calc(var(--gap) * 4);
 			}
 		}
 
@@ -180,12 +162,36 @@ const mobile = inject('mobile');
 			align-items: center;
 			margin-top: 0;
 			gap: 0;
+		}
 
-			&:deep(.filter),
-			&:deep(.button__multiselect) {
-				max-width: 15%;
+		&--mobile {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			grid-column: span 2;
+			gap: var(--gap);
+
+			@media (max-width: 668px) {
+				&:deep(.calendar) {
+					max-width: unset;
+				}
+			}
+
+			@media (max-width: 550px) {
+				grid-column: span 3;
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				column-gap: var(--gap);
 			}
 		}
+	}
+
+	&__tags {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 5px;
+
+		grid-column: span 3;
 	}
 }
 

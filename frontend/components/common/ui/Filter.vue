@@ -1,11 +1,19 @@
-<script setup lang="ts">
+<script
+	setup
+	lang="ts"
+>
 import type { PropType } from 'vue';
 import { useFilterStore } from '../../../stores/filter.store';
 import { getFilterPlaceholder } from '../../../utils/texts';
+import Tag from './Tag.vue';
 
-defineProps({
+const props = defineProps({
+	tag: {
+		type: Object as PropType<{ name: string, key: string }>,
+		default: () => { }
+	},
 	filterType: {
-		type: String as PropType<'input' | 'select' | 'date' | 'librarySelect'>,
+		type: String as PropType<'input' | 'select' | 'date' | 'librarySelect' | 'tag'>,
 		required: true
 	},
 	name: {
@@ -60,13 +68,31 @@ const mobile = inject('mobile');
 const filterStore = useFilterStore();
 
 const showModal = computed(() => filterStore.modal.show);
+
+const isActive = ref<boolean>(false)
+
+const handleTag = () => {
+	if (isActive.value === false) {
+		filterStore.filters.tags.push(props.tag.key)
+	} else {
+		filterStore.filters.tags = filterStore.filters.tags.filter(item => item !== props.tag.key)
+	}
+
+	isActive.value = !isActive.value
+}
+
+onMounted(() => {
+	if (filterStore.filters.tags.includes(props.tag?.key)) {
+		isActive.value = true
+	}
+})
 </script>
 
 <template>
 	<CommonUiBaseInput
 		v-if="filterType === 'input'"
 		v-model="filterStore.filters[name]"
-		:class="['filter', { 'filter--no-separator': noSeparator }]"
+		:class="['filter', 'filters__search', { 'filter--no-separator': noSeparator }]"
 		:name="name"
 		:placeholder="$t(`home.filter.${name}.placeholder`)"
 		:disabled="disabled"
@@ -88,25 +114,22 @@ const showModal = computed(() => filterStore.modal.show);
 		:min-date="new Date(roundTime(Date.now(), 10))"
 		:min-time="name === 'startDate' ? { hours: 0, minutes: 0 } : { hours: '23', minutes: '59' }"
 	/>
-	<!-- TODO: перенести :min-time в стор при emit() через dayjs().set('hour', 5).set('minute', 55).set('second', 15)   -->
 	<template v-if="filterType === 'select' || filterType === 'librarySelect'">
 		<template v-if="mobile && name !== 'city'">
 			<CommonButton
 				button-kind="filter"
 				icon-name="container"
-				:button-text="
-					getFilterPlaceholder(
-						multiple,
-						name,
-						list,
-						filterStore.filters[name],
-						showKey,
-						returnKey
-					)
-				"
-				:filled="
-					multiple ? !!filterStore.filters[name].length : !!filterStore.filters[name]
-				"
+				:button-text="getFilterPlaceholder(
+			multiple,
+			name,
+			list,
+			filterStore.filters[name],
+			showKey,
+			returnKey
+		)
+			"
+				:filled="multiple ? !!filterStore.filters[name].length : !!filterStore.filters[name]
+			"
 				:is-disabled="disabled"
 				:alt="$t(`home.filter.${name}.aria`)"
 				class="filter"
@@ -143,38 +166,26 @@ const showModal = computed(() => filterStore.modal.show);
 			:no-border="'no-border' ? true : false"
 			:aria-label="$t(`home.filter.${name}.aria`)"
 		/>
-		<CommonUiBaseSelect
-			v-else
-			v-model="filterStore.filters[name]"
-			:show-key="showKey"
-			:return-key="returnKey"
-			:class="['filter', { 'filter--no-separator': noSeparator }]"
-			:name="name"
-			:placeholder="$t(`home.filter.${name}.placeholder`)"
-			:list="list"
-			:multiple="multiple"
-			:disabled="disabled"
-			appearance="no-border"
-			:dropdown-position="dropdownPosition"
-			:aria-label="$t(`home.filter.${name}.aria`)"
-		/>
 	</template>
+	<CommonButton
+		v-if="filterType === 'tag'"
+		:button-kind="isActive ? 'dark' : 'ordinary'"
+		:button-text="tag.name"
+		:class="['filter', { 'filter--no-separator': noSeparator }]"
+		@click="handleTag"
+	/>
 </template>
 
-<style scoped lang="less">
+<style
+	scoped
+	lang="less"
+>
 .filter {
 	&:deep(.select__trigger--no-border) {
 		max-width: 50%;
 	}
 
 	@media (min-width: 1440px) {
-		width: 50%;
-		min-width: calc(100% / 3);
-
-		&:deep(.button__multiselect) {
-			max-width: calc(100% / 3);
-		}
-
 		&:deep(.input__field),
 		&:deep(.button__multiselect) {
 			height: 72px;
@@ -201,8 +212,8 @@ const showModal = computed(() => filterStore.modal.show);
 
 	// прозраные сепараторы при фокусе
 	.filter:focus-within::before,
-	.filter:focus-within + .filter::before,
-	.filter:has(.input__field:focus) + .filters__wrapper > .filter:first-child::before {
+	.filter:focus-within+.filter::before,
+	.filter:has(.input__field:focus)+.filters__wrapper--mobile>.filter:first-child::before {
 		background-color: transparent;
 	}
 }

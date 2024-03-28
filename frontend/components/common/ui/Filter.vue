@@ -5,7 +5,6 @@
 import type { PropType } from 'vue';
 import { useFilterStore } from '../../../stores/filter.store';
 import { getFilterPlaceholder } from '../../../utils/texts';
-import Tag from './Tag.vue';
 
 const props = defineProps({
 	tag: {
@@ -172,6 +171,7 @@ onMounted(() => {
 		:button-kind="isActive ? 'dark' : 'ordinary'"
 		:button-text="tag.name"
 		:class="['filter', { 'filter--no-separator': noSeparator }]"
+		:aria-label="tag.name"
 		@click="handleTag"
 	/>
 </template>

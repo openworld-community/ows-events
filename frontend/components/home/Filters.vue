@@ -12,7 +12,6 @@ const route = useRoute();
 
 // от инжекта можно избавиться, если переделать модалку города на мобилке
 const mobile = inject('mobile')
-const { width } = useWindowSize()
 
 onBeforeMount(async () => {
 	//TODO костыль, иначе при ините страницы не достается value из запроса

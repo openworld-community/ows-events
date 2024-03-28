@@ -48,7 +48,7 @@ defineProps({
 	</ScrollAreaRoot>
 </template>
 
-<style lang="less">
+<style scoped lang="less">
 .scroll-area {
 	border-radius: 4px;
 	display: flex;
@@ -66,7 +66,7 @@ defineProps({
 		touch-action: none;
 
 		&:hover {
-			background-color: var(--color-text-main);
+			opacity: 0.8;
 		}
 	}
 

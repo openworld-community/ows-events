@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { SelectItem, SelectItemIndicator, type SelectItemProps, SelectItemText } from 'radix-vue';
 const props = defineProps<SelectItemProps>();
 </script>

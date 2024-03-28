@@ -176,15 +176,12 @@ onMounted(() => {
 	/>
 </template>
 
-<style
-	scoped
-	lang="less"
->
-.filter {
-	&:deep(.select__trigger--no-border) {
-		max-width: 50%;
-	}
+<style scoped lang="less">
+.filter.select {
+	width: 100%;
+}
 
+.filter {
 	@media (min-width: 1440px) {
 		&:deep(.input__field),
 		&:deep(.button__multiselect) {

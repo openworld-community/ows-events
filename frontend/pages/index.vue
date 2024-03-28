@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
-import { SeoItemTypeEnum } from '../constants/enums/seo';
+
 import { useUserStore } from '../stores/user.store';
 import { RoutePathEnum } from '../constants/enums/route';
-import { useFilterStore } from '../stores/filter.store';
 
 const { t } = useI18n();
 
@@ -13,7 +12,7 @@ getMeta({
 });
 
 const userStore = useUserStore();
-const filterStore = useFilterStore();
+
 const localePath = useLocalePath();
 
 const {
@@ -44,24 +43,8 @@ const onButtonClick = async () => {
 				/> -->
 				<HomeFilters class="main-page__filter" />
 			</div>
-			<ul class="main-page__card-list">
-				<li
-					v-for="event in filterStore.filteredEvents"
-					:key="event.id"
-					class="main-page__card-item"
-					itemscope
-					:itemtype="SeoItemTypeEnum.EVENT"
-				>
-					<HomeEventPreviewCard :event-data="event" />
-					<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
-				</li>
-				<li
-					v-if="!filterStore.filteredEvents.length"
-					class="no-results"
-				>
-					<span>{{ t('event.filteredEvents.no_events_found') }}</span>
-				</li>
-			</ul>
+
+			<HomeCardList />
 
 			<CommonButton
 				class="add-event-button"
@@ -79,7 +62,6 @@ const onButtonClick = async () => {
 </template>
 
 <style lang="less" scoped>
-
 .no-results {
 	display: flex;
 	width: 100%;
@@ -89,6 +71,7 @@ const onButtonClick = async () => {
 	font-size: 24px;
 }
 .main-page {
+	position: relative;
 	@media (min-width: 768px) {
 		padding-top: 0;
 	}
@@ -98,18 +81,19 @@ const onButtonClick = async () => {
 		width: 100%;
 		align-items: center;
 		flex-direction: column;
-		background: linear-gradient(90deg,
-				var(--color-accent-background) 0%,
-				var(--color-accent-green-main) 100%);
+		background: linear-gradient(
+			90deg,
+			var(--color-accent-background) 0%,
+			var(--color-accent-green-main) 100%
+		);
 		margin-top: 12px;
-		margin-bottom: 32px;
+
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
 
 		@media (min-width: 768px) {
 			padding-top: 32px;
 			margin-top: 0;
-			margin-bottom: 80px;
 		}
 
 		@media (min-width: 1440px) {

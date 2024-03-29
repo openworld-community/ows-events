@@ -7,6 +7,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
 	const userStore = useUserStore();
 
 	if (
+		from &&
+		from.name &&
 		from.name.toString().includes(RouteNameEnum.EVENT_EDIT) &&
 		!to.name.toString().includes(RouteNameEnum.EVENT_EDIT) &&
 		userStore.isAuthorized
@@ -21,11 +23,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
 				navTo: to.path,
 				showClearFormModal: true
 			});
-			console.log("redirect from global FALSE")
-			return false;
 		}
 	} else {
-		console.log("redirect from global true")
 		return true;
 	}
 });

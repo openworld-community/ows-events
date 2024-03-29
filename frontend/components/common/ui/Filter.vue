@@ -132,6 +132,7 @@ onMounted(() => {
 .filter.select {
 	width: 100%;
 }
+
 .filter {
 	@media (min-width: 1440px) {
 		&:deep(.input__field),

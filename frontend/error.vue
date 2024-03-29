@@ -42,8 +42,7 @@ await navigateTo(localePath(RoutePathEnum.HOME, langCookie.value ?? 'ru')) //nav
 		<div class="service-error">
 			<template v-if="error.statusCode === 404">
 				<div class="page-error"></div>
-				<h1>404 ERROR!</h1>
-				<p><strong>Error code: {{ error.statusCode }}{{ error.message }}</strong></p>
+				<p><strong>Error code: {{ error.statusCode }}</strong></p>
 								
 			</template>
 			<template v-else>
@@ -53,7 +52,7 @@ await navigateTo(localePath(RoutePathEnum.HOME, langCookie.value ?? 'ru')) //nav
 				</p>
 			</template>
 			<p>
-				<NuxtLink @click="handleError">{{$t('errors.ERROR_PAGE_GO_HOME')}}</NuxtLink>
+				<NuxtLink @click="handleError" class="go-home">{{$t('errors.ERROR_PAGE_GO_HOME')}}</NuxtLink>
 			</p>
 			<!-- <CommonButton
 			
@@ -83,5 +82,9 @@ await navigateTo(localePath(RoutePathEnum.HOME, langCookie.value ?? 'ru')) //nav
     background-size: contain; /* изображение будет масштабироваться, чтобы покрыть всю область фона блока */
     background-repeat: no-repeat;
 
- }
+}
+.go-home{
+	color: forestgreen;
+	font-weight: 500;
+}
 </style>

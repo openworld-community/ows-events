@@ -6,7 +6,7 @@ import { CookieNameEnum } from './constants/enums/common';
 // import { TOKEN_MAX_AGE_SECONDS } from './constants/defaultValues/time';
 const langCookie = useCookie(CookieNameEnum.LOCALE);
 
-var magic = navigator.language.substring(0, 2);
+const magic = navigator.language.substring(0, 2);
 
 const localePath = useLocalePath();
 

@@ -48,4 +48,8 @@ export default {
 	[CommonErrorsEnum.PASSWORD_MISMATCH]: 'Password doesn\'t match',
 	[CommonErrorsEnum.INVALID_EMAIL]: 'Enter a valid email address',
 	[CommonErrorsEnum.REQUIRED_FIELD]: 'This field is required',
+	[CommonErrorsEnum.ERROR_PAGE_ERROR]: 'Error',
+	[CommonErrorsEnum.ERROR_PAGE_PAGE]: 'Page',
+	[CommonErrorsEnum.ERROR_PAGE_NOT_FOUND]: 'Not Found',
+	[CommonErrorsEnum.ERROR_PAGE_GO_HOME]: 'Back To Home',
 };

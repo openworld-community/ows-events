@@ -19,6 +19,9 @@ const tagsFields = useField<String[]>(() => 'tags');
 				:tag-key="tag"
 				is-checkbox
 				size="small"
+				:is-disabled="
+					tagsFields.value.value.length >= 6 && !tagsFields.value.value.includes(tag)
+				"
 			/>
 		</div>
 	</CommonFormField>

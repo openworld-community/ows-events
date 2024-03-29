@@ -16,7 +16,9 @@ onBeforeMount(async () => {
 
 	setTimeout(async () => {
 		await filterStore.getFilteredEvents();
+		filterStore.$patch({ loading: true });
 		await filterStore.getUsedFilters();
+		filterStore.$patch({ loading: false });
 	});
 });
 
@@ -43,7 +45,9 @@ watch(
 debouncedWatch(
 	filterStore.filters,
 	async () => {
+		filterStore.$patch({ loading: true });
 		await filterStore.getFilteredEvents();
+		filterStore.$patch({ loading: false });
 	},
 	{ debounce: 700, maxWait: 1000 }
 );
@@ -145,6 +149,10 @@ debouncedWatch(
 			grid-template-columns: 1fr 1fr;
 			grid-column: span 2;
 			gap: var(--gap);
+
+			@media (min-width: 1440px) {
+				gap: 0;
+			}
 
 			@media (max-width: 668px) {
 				&:deep(.calendar) {

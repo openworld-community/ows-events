@@ -10,9 +10,6 @@ const filterStore = useFilterStore();
 
 const route = useRoute();
 
-// от инжекта можно избавиться, если переделать модалку города на мобилке
-const mobile = inject('mobile')
-
 onBeforeMount(async () => {
 	//TODO костыль, иначе при ините страницы не достается value из запроса
 	if (process.server) return;
@@ -50,23 +47,6 @@ debouncedWatch(
 	},
 	{ debounce: 700, maxWait: 1000 }
 );
-
-const openFilterModal = (
-	type: string,
-	list: string[] | { [key: string]: string }[],
-	multiple = false,
-	showKey?: string,
-	returnKey?: string
-) => {
-	if (list.length) {
-		filterStore.modal.list = list;
-		filterStore.modal.multiple = multiple;
-		filterStore.modal.type = type;
-		filterStore.modal.showKey = showKey;
-		filterStore.modal.returnKey = returnKey;
-		filterStore.$patch({ modal: { show: true } });
-	}
-};
 </script>
 
 <template>
@@ -78,15 +58,12 @@ const openFilterModal = (
 				icon-name="search"
 				no-separator
 			/>
-
 			<div class="filters__wrapper--mobile">
 				<CommonUiFilter
-					:key="mobile ? 'mobile-city' : 'other-city'"
 					filter-type="librarySelect"
 					name="city"
 					:list="filterStore.usedCities"
 					:disabled="!filterStore.usedCities.length"
-					@on-filter-button-click="openFilterModal('city', filterStore.usedCities ?? [])"
 				/>
 				<CommonUiFilter
 					filter-type="date"

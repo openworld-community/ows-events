@@ -4,7 +4,6 @@
 >
 import type { PropType } from 'vue';
 import { useFilterStore } from '../../../stores/filter.store';
-import { getFilterPlaceholder } from '../../../utils/texts';
 
 const props = defineProps({
 	tag: {
@@ -23,20 +22,6 @@ const props = defineProps({
 	list: {
 		type: Array as PropType<string[] | { [key: string]: string }[]>,
 		default: () => []
-	},
-	multiple: {
-		type: Boolean,
-		default: false
-	},
-	returnKey: {
-		// для объектов: ключ значения, которое нужно возвращать
-		type: String,
-		default: ''
-	},
-	showKey: {
-		// для объектов: ключ значения, которое нужно показывать в списке
-		type: String,
-		default: ''
 	},
 	disabled: {
 		type: Boolean,
@@ -61,12 +46,9 @@ const props = defineProps({
 	}
 });
 
-const emit = defineEmits(['onFilterButtonClick']);
 
 const mobile = inject('mobile');
 const filterStore = useFilterStore();
-
-const showModal = computed(() => filterStore.modal.show);
 
 const isActive = ref<boolean>(false)
 
@@ -113,39 +95,9 @@ onMounted(() => {
 		:min-date="new Date(roundTime(Date.now(), 10))"
 		:min-time="name === 'startDate' ? { hours: 0, minutes: 0 } : { hours: '23', minutes: '59' }"
 	/>
-	<template v-if="filterType === 'select' || filterType === 'librarySelect'">
-		<template v-if="mobile && name !== 'city'">
-			<CommonButton
-				button-kind="filter"
-				icon-name="container"
-				:button-text="getFilterPlaceholder(
-			multiple,
-			name,
-			list,
-			filterStore.filters[name],
-			showKey,
-			returnKey
-		)
-			"
-				:filled="multiple ? !!filterStore.filters[name].length : !!filterStore.filters[name]
-			"
-				:is-disabled="disabled"
-				:alt="$t(`home.filter.${name}.aria`)"
-				class="filter"
-				@click="emit('onFilterButtonClick')"
-			/>
-			<ModalFilter
-				v-if="showModal"
-				:filter-list="filterStore.modal.list"
-				:filter-type="filterStore.modal.type"
-				:multiple="filterStore.modal.multiple"
-				:return-key="filterStore.modal.returnKey"
-				:show-key="filterStore.modal.showKey"
-			/>
-		</template>
-
+	<template v-if="filterType === 'librarySelect'">
 		<LibraryMobileSelect
-			v-else-if="mobile && name === 'city'"
+			v-if="mobile && name === 'city'"
 			v-model="filterStore.filters[name]"
 			:title="name"
 			:name="name"
@@ -153,7 +105,6 @@ onMounted(() => {
 			:options="list"
 			:disabled="disabled"
 		/>
-
 		<LibrarySelect
 			v-else-if="filterType === 'librarySelect'"
 			v-model="filterStore.filters[name]"
@@ -168,6 +119,7 @@ onMounted(() => {
 	</template>
 	<CommonButton
 		v-if="filterType === 'tag'"
+		style="font-weight: 500;"
 		:button-kind="isActive ? 'dark' : 'ordinary'"
 		:button-text="tag.name"
 		:class="['filter', { 'filter--no-separator': noSeparator }]"

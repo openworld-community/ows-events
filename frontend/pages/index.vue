@@ -114,7 +114,7 @@ const onButtonClick = async () => {
 
 		@media (min-width: 1440px) {
 			position: relative;
-			padding-top: 99px;
+			padding-top: 60px;
 			margin-bottom: 100px;
 		}
 	}
@@ -141,7 +141,7 @@ const onButtonClick = async () => {
 			max-width: 900px;
 			font-size: 70px;
 			line-height: 80px;
-			margin-bottom: 120px;
+			margin-bottom: 60px;
 		}
 	}
 

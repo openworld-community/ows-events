@@ -30,6 +30,9 @@ const handleError = () =>
 // 		}).value = user.value;
 // 	}
 // });
+await navigateTo(localePath(RoutePathEnum.HOME, langCookie.value ?? 'ru')) //navigateTo(localePath(RoutePathEnum.HOME, userLanguage));
+
+
 </script>
 <template>
 	<NuxtLayout>
@@ -79,8 +82,9 @@ const handleError = () =>
 	width: 500px;
 	height: 500px;
 	background-image: url(@/assets/img/error/error-404.png); /* путь к изображению */
-	background-size: contain; /* изображение будет масштабироваться, чтобы покрыть всю область фона блока */
-	background-repeat: no-repeat;
+    background-size: contain; /* изображение будет масштабироваться, чтобы покрыть всю область фона блока */
+    background-repeat: no-repeat;
+
 }
 
 .go-home {

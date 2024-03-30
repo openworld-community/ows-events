@@ -11,7 +11,7 @@ const props = defineProps({
 		default: () => { }
 	},
 	filterType: {
-		type: String as PropType<'input' | 'select' | 'date' | 'librarySelect' | 'tag'>,
+		type: String as PropType<'input' | 'select' | 'date' | 'tag'>,
 		required: true
 	},
 	name: {
@@ -95,7 +95,7 @@ onMounted(() => {
 		:min-date="new Date(roundTime(Date.now(), 10))"
 		:min-time="name === 'startDate' ? { hours: 0, minutes: 0 } : { hours: '23', minutes: '59' }"
 	/>
-	<template v-if="filterType === 'librarySelect'">
+	<template v-if="filterType === 'select'">
 		<LibraryMobileSelect
 			v-if="mobile && name === 'city'"
 			v-model="filterStore.filters[name]"
@@ -106,7 +106,7 @@ onMounted(() => {
 			:disabled="disabled"
 		/>
 		<LibrarySelect
-			v-else-if="filterType === 'librarySelect'"
+			v-else
 			v-model="filterStore.filters[name]"
 			:class="['filter', { 'filter--no-separator': noSeparator }]"
 			:name="name"

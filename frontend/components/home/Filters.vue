@@ -64,7 +64,7 @@ debouncedWatch(
 			/>
 			<div class="filters__wrapper--mobile">
 				<CommonUiFilter
-					filter-type="librarySelect"
+					filter-type="select"
 					name="city"
 					:list="filterStore.usedCities"
 					:disabled="!filterStore.usedCities.length"

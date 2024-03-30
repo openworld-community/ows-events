@@ -99,7 +99,6 @@ const onButtonClick = async () => {
 		@media (min-width: 1440px) {
 			position: relative;
 			padding-top: 60px;
-			margin-bottom: 100px;
 		}
 	}
 

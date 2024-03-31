@@ -8,13 +8,12 @@ const langCookie = useCookie(CookieNameEnum.LOCALE);
 const localePath = useLocalePath();
 const langCookieValue = langCookie.value ?? 'ru';
 const homepath = '/' + langCookieValue;
-console.log(homepath);
 
 const props = defineProps({
 	error: Object as () => NuxtError
 });
-
-const handleError = () => clearError({ redirect: localePath(RoutePathEnum.HOME, langCookieValue) });
+// если работаем с линком то хендлер не нужен. что скажете какой вариант оставить?
+// const handleError = () => clearError({ redirect: localePath(RoutePathEnum.HOME, langCookieValue) });
 
 const $i18n = useI18n();
 onMounted(() => {
@@ -29,22 +28,21 @@ onMounted(() => {
 			</template>
 			<template v-else> ERROR 500 HERE </template>
 			<div class="go-home-wrapper">
-				<!-- <button
+				<!-- РЕАЛИЗАЦИЯ С ХЕНДЛЕРОМ -->
+				<!--  <button
 					@click="handleError"
 					class="go-home"
 					tabindex="0"
 				>
 					{{ $t('errors.ERROR_PAGE_GO_HOME') }}
 				</button> -->
-				<a
-					@click="handleError"
+				<NuxtLink
 					class="go-home"
 					tabindex="0"
-					:href="homepath"
-					>{{ $t('errors.ERROR_PAGE_GO_HOME') }}</a
-				>
+					:to="homepath"
+					>{{ $t('errors.ERROR_PAGE_GO_HOME') }}
+				</NuxtLink>
 			</div>
-			<!-- <a :href=homepath>{{ $t('errors.ERROR_PAGE_GO_HOME') }}</a> -->
 		</div>
 	</NuxtLayout>
 </template>

@@ -30,14 +30,14 @@ onMounted(() => {
 			<template v-else> ERROR 500 HERE </template>
 			<div class="go-home-wrapper">
 				<!-- <button
-					@click.native="handleError"
+					@click="handleError"
 					class="go-home"
 					tabindex="0"
 				>
 					{{ $t('errors.ERROR_PAGE_GO_HOME') }}
 				</button> -->
 				<a
-					@click.native="handleError"
+					@click="handleError"
 					class="go-home"
 					tabindex="0"
 					:href="homepath"

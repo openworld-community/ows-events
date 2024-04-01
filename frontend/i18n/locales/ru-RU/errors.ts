@@ -52,4 +52,5 @@ export default {
 	[CommonErrorsEnum.ERROR_PAGE_PAGE]: 'Страница',
 	[CommonErrorsEnum.ERROR_PAGE_NOT_FOUND]: 'не найдена',
 	[CommonErrorsEnum.ERROR_PAGE_GO_HOME]: 'Вернуться на Главную',
+	[CommonErrorsEnum.ERROR_PAGE_SERVER_ERROR]: 'Неизвестная Ошибка Сервера',	
 };

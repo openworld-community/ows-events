@@ -52,4 +52,5 @@ export default {
 	[CommonErrorsEnum.ERROR_PAGE_PAGE]: 'Page',
 	[CommonErrorsEnum.ERROR_PAGE_NOT_FOUND]: 'Not Found',
 	[CommonErrorsEnum.ERROR_PAGE_GO_HOME]: 'Back To Home',
+	[CommonErrorsEnum.ERROR_PAGE_SERVER_ERROR]: 'Unknown Server Error',
 };

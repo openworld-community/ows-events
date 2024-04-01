@@ -27,7 +27,7 @@ onMounted(() => {
 			<template v-if="error.statusCode === 404">
 				<Error404 />
 			</template>
-			<template v-else> 
+			<template v-else>
 				<Error500 />
 			</template>
 			<div class="error-go-home-wrapper">
@@ -63,10 +63,14 @@ onMounted(() => {
 }
 .error-go-home {
 	color: var(--color-accent-green-main);
-	font-weight: 500;
+	font-weight: 400;
+	font-size: 24px;
 	text-decoration: underline;
 	padding: 5px 5px 8px 5px;
 	border-radius: 10px;
+	@media (max-width: 768px) {
+		font-size: 16px;
+	}
 
 	&:focus {
 		outline: none;

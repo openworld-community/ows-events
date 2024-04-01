@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="error-page">			
+		<div class="error-page">
 			<div class="error-image"></div>
 		</div>
 		<div class="error-message-text error-message-text--padding">

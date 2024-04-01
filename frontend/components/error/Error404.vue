@@ -19,9 +19,9 @@
 .error-message-text {
 	/* --font-family-error импортируется в nuxt.config.ts в самом низу ориентир rel:stylesheet */
 	font-family: var(--font-family-error);
-	font-size: 30px;
+	font-size: 32px;
 	@media (max-width: 768px) {
-		font-size: 20px;
+		font-size: 22px;
 		font-weight: 600;
 	}
 	&--padding {

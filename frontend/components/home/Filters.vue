@@ -54,7 +54,10 @@ debouncedWatch(
 </script>
 
 <template>
-	<section class="filters">
+	<section
+		class="filters"
+		:style="{ rowGap: filterStore.usedTags.length ? 'calc(var(--gap)* 3)' : 'unset' }"
+	>
 		<div class="filters__wrapper">
 			<CommonUiFilter
 				filter-type="input"
@@ -76,7 +79,10 @@ debouncedWatch(
 				/>
 			</div>
 		</div>
-		<ul class="filters__tags">
+		<ul
+			v-if="filterStore.usedTags.length"
+			class="filters__tags"
+		>
 			<li
 				v-for="(tag, index) in filterStore.usedTags"
 				:key="index"
@@ -99,10 +105,10 @@ debouncedWatch(
 	--gap: 8px;
 
 	display: grid;
+	width: 100%;
 	grid-template-rows: auto auto;
 	grid-template-columns: 1fr 1fr 1fr;
 	column-gap: var(--gap);
-	row-gap: calc(var(--gap) * 3);
 
 	margin-bottom: calc(var(--gap) * 4);
 

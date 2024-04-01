@@ -11,7 +11,13 @@ const langCookieValue = langCookie.value ?? 'ru';
 const homepath = '/' + langCookieValue;
 
 const props = defineProps({
-	error: Object as () => NuxtError
+	error: {
+    type: Object as () => NuxtError,
+    default: () => ({
+      statusCode: 404,
+      message: "Not Found",
+    })
+  }
 });
 // если работаем с линком то хендлер не нужен. что скажете какой вариант оставить?
 // const handleError = () => clearError({ redirect: localePath(RoutePathEnum.HOME, langCookieValue) });
@@ -24,7 +30,7 @@ onMounted(() => {
 <template>
 	<NuxtLayout>
 		<div class="service-error">
-			<template v-if="error.statusCode === 404">
+			<template v-if="props.error.statusCode === 404">
 				<Error404 />
 			</template>
 			<template v-else>
@@ -43,7 +49,8 @@ onMounted(() => {
 					class="error-go-home"
 					tabindex="0"
 					:to="homepath"
-					>{{ $t('errors.ERROR_PAGE_GO_HOME') }}
+					>
+					{{ $t('errors.ERROR_PAGE_GO_HOME') }}
 				</NuxtLink>
 			</div>
 		</div>

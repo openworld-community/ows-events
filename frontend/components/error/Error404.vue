@@ -2,10 +2,8 @@
 	<div>
 		<div class="error-page">
 			<div class="error-page-not-found">
-				<div class="error-page-not-found--styling">
-					<div class="error-message-text">{{ $t('errors.ERROR_PAGE_PAGE') }}</div>
-					<div class="error-message-text">{{ $t('errors.ERROR_PAGE_NOT_FOUND') }}</div>
-				</div>
+				<div class="error-message-text">{{ $t('errors.ERROR_PAGE_PAGE') }}</div>
+				<div class="error-message-text">{{ $t('errors.ERROR_PAGE_NOT_FOUND') }}</div>
 			</div>
 
 			<div class="error-image"></div>
@@ -55,19 +53,15 @@
 }
 .error-page-not-found {
 	position: fixed;
+	width: 550px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 10px;
 	margin-bottom: 205px;
 	@media (max-width: 768px) {
+		width: 340px;
 		margin-bottom: 130px;
-	}
-	&--styling {
-		width: 550px;
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		padding: 10px;
-		@media (max-width: 768px) {
-			width: 340px;
-		}
 	}
 }
 </style>

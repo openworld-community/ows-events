@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app';
-import { RoutePathEnum } from '~/constants/enums/route';
+// import { RoutePathEnum } from '~/constants/enums/route';
+// const localePath = useLocalePath();
 import { CookieNameEnum } from './constants/enums/common';
 import Error404 from './components/error/Error404.vue';
+import Error500 from './components/error/Error500.vue';
 
 const langCookie = useCookie(CookieNameEnum.LOCALE);
-const localePath = useLocalePath();
 const langCookieValue = langCookie.value ?? 'ru';
 const homepath = '/' + langCookieValue;
 
@@ -26,8 +27,10 @@ onMounted(() => {
 			<template v-if="error.statusCode === 404">
 				<Error404 />
 			</template>
-			<template v-else> ERROR 500 HERE </template>
-			<div class="go-home-wrapper">
+			<template v-else> 
+				<Error500 />
+			</template>
+			<div class="error-go-home-wrapper">
 				<!-- РЕАЛИЗАЦИЯ С ХЕНДЛЕРОМ -->
 				<!--  <button
 					@click="handleError"
@@ -37,7 +40,7 @@ onMounted(() => {
 					{{ $t('errors.ERROR_PAGE_GO_HOME') }}
 				</button> -->
 				<NuxtLink
-					class="go-home"
+					class="error-go-home"
 					tabindex="0"
 					:to="homepath"
 					>{{ $t('errors.ERROR_PAGE_GO_HOME') }}
@@ -55,10 +58,10 @@ onMounted(() => {
 	align-items: center;
 	justify-content: center;
 }
-.go-home-wrapper {
+.error-go-home-wrapper {
 	padding: 40px;
 }
-.go-home {
+.error-go-home {
 	color: var(--color-accent-green-main);
 	font-weight: 500;
 	text-decoration: underline;

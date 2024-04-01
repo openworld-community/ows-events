@@ -5,7 +5,7 @@ export default {
 		signupText: 'Please sign up to access additional features',
 		continue: 'Continue without authorization',
 		login: 'Already have an account',
-		signup: 'Don\'t have an account yet',
+		signup: "Don't have an account yet"
 	},
 	greeting: 'Hello',
 	user: 'User',
@@ -17,6 +17,9 @@ export default {
 		title: 'Favourites',
 		no_favourites: 'You haven\'t added anything to your "Favourites" yet'
 	},
+	profile: {
+		title: 'Edit profile'
+	},
 	donate: {
 		title: 'Become a part of our project!',
 		text: 'We invite you to join our creative family and create something special together',
@@ -24,5 +27,9 @@ export default {
 	},
 	new_event: {
 		title: 'Create your own unique event!'
-	}
+	}, 
+	logout:	{
+		title: 'Log out',
+		text: 'Are you sure you want to log out?',
+	},
 };

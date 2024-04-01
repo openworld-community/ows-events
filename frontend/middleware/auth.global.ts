@@ -10,6 +10,7 @@ const pagesWithAuth: string[] = [
 	RouteNameEnum.USER_FAVOURITES,
 	RouteNameEnum.USER_MY_EVENTS,
 	//RouteNameEnum.EVENT_FORM,
+	RouteNameEnum.USER_PAGE,
 	RouteNameEnum.EVENT_EDIT
 ];
 
@@ -35,7 +36,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 			userCookie.value = null;
 
 			if (to.name && pagesWithAuth.includes(getRouteName(to.name as string))) {
-				return (to.path = localePath(RoutePathEnum.USER_PAGE));
+				return (to.path = localePath(RoutePathEnum.AUTH));
 			}
 		} else {
 			userStore.$patch({ userInfo: userData });

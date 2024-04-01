@@ -193,11 +193,17 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			color: var(--color-white);
 		}
 
-		&:hover,
 		&:focus-visible,
 		&:active {
 			background-color: var(--color-dark);
 			border-color: var(--color-dark);
+		}
+
+		&:hover {
+			@media (hover: hover) {
+				background-color: var(--color-dark);
+				border-color: var(--color-dark);
+			}
 		}
 
 		&--disabled {
@@ -354,8 +360,8 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		border: 1px solid var(--color-white);
 		border-radius: 8px;
 		justify-content: space-between;
-		
-		&>.button__content {
+
+		& > .button__content {
 			font-size: var(--font-size-S);
 			line-height: 20px;
 			margin-right: 10px;
@@ -393,7 +399,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 				color: var(--color-text-secondary);
 			}
 
-			&>.button__content {
+			& > .button__content {
 				margin-right: 0;
 			}
 		}
@@ -407,7 +413,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		border: 1px solid var(--color-white);
 		padding-right: 40px;
 
-		&>.button__content {
+		& > .button__content {
 			font-size: var(--font-size-M);
 			color: var(--color-input-icons);
 
@@ -419,7 +425,8 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 		&:deep(svg) {
 			position: absolute;
-			top: 8px;
+			top: 50%;
+			transform: translateY(-50%);
 			right: 12px;
 			margin-right: 0;
 			width: 26px;
@@ -428,7 +435,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		}
 
 		&--filled {
-			&>.button__content {
+			& > .button__content {
 				color: var(--color-text-main);
 			}
 		}
@@ -472,7 +479,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		color: var(--color-accent-green-main);
 	}
 
-	&+.icon {
+	& + .icon {
 		margin-left: 20px;
 	}
 
@@ -512,7 +519,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 }
 
 .no-interactive {
-
 	&:hover,
 	&:focus,
 	&:active {

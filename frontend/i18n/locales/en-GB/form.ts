@@ -1,14 +1,17 @@
 export default {
 	global: {
 		required: '* required fields',
-		close: 'Close'
+		close: 'Close',
+		success: 'Success!',
+		successCreate: 'Event successfuly created.',
+		successEdit: 'Event successfuly edited.'
 	},
 	event: {
 		title: 'Create Event',
 		title_edit: 'Edit Event',
 		add_image: 'Add image',
 		remove_image: 'Remove image',
-		image: 'Изображение мероприятия',
+		image: 'Event image',
 		fields: {
 			online: 'Online',
 			location: 'Location',
@@ -32,7 +35,7 @@ export default {
 			currency_placeholder: 'Currency',
 			price_free: 'Free',
 			url_to_registration: 'Link for contact',
-			url_placeholder: 'https://example.com',
+			url_placeholder: 'https://example.com'
 		}
 	},
 	form: {

@@ -19,16 +19,15 @@ const isFreeField = useField<boolean>(() => 'isFree');
 					:error="currencyField.errorMessage.value"
 					:touched="currencyField.meta.touched"
 				>
-					<CommonUiBaseSelect
+					<LibrarySelect
 						v-model="currencyField.value.value"
 						name="currency"
 						:placeholder="$t('form.event.fields.currency_placeholder')"
-						:list="locationStore.currencies"
-						has-icon-items
+						:options="locationStore.currencies"
+						option-as-icon
 						:error="
 							currencyField.meta.touched && Boolean(currencyField.errorMessage.value)
 						"
-						input-readonly
 						:required="!isFreeField.value.value"
 						:disabled="isFreeField.value.value"
 					/>
@@ -53,9 +52,9 @@ const isFreeField = useField<boolean>(() => 'isFree');
 				:error="isFreeField.errorMessage.value"
 				:touched="isFreeField.meta.touched"
 			>
-				<CommonUiBaseCheckbox
+				<LibraryCheckbox
 					v-model="isFreeField.value.value"
-					value="isFree"
+					name="isFree"
 					:label="$t('form.event.fields.price_free')"
 					is-reversed
 				/>

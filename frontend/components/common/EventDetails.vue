@@ -47,36 +47,38 @@ const component = computed(() => {
 <template>
 	<ul class="details">
 		<!--	Дата	-->
-		<li
-			v-if="startDate"
-			class="details__item"
-			:itemtype="SeoItemTypeEnum.DATE"
-		>
-			<CommonIcon
-				name="calendar"
-				class="details__icon"
-				color="var(--color-accent-green-main)"
-			/>
-			<span
-				class="details__text"
-				:itemprop="SeoItempropEventEnum.START_DATE"
+		<ClientOnly>
+			<li
+				v-if="startDate"
+				class="details__item"
+				:itemtype="SeoItemTypeEnum.DATE"
 			>
-				{{ startDate }}
-			</span>
-			<span
-				v-if="endDate"
-				class="details__text"
-			>
-				&nbsp;-&nbsp;
-			</span>
-			<span
-				v-if="endDate"
-				class="details__text"
-				:itemprop="SeoItempropEventEnum.END_DATE"
-			>
-				{{ endDate }}
-			</span>
-		</li>
+				<CommonIcon
+					name="calendar"
+					class="details__icon"
+					color="var(--color-accent-green-main)"
+				/>
+				<span
+					class="details__text"
+					:itemprop="SeoItempropEventEnum.START_DATE"
+				>
+					{{ startDate }}
+				</span>
+				<span
+					v-if="endDate"
+					class="details__text"
+				>
+					&nbsp;-&nbsp;
+				</span>
+				<span
+					v-if="endDate"
+					class="details__text"
+					:itemprop="SeoItempropEventEnum.END_DATE"
+				>
+					{{ endDate }}
+				</span>
+			</li>
+		</ClientOnly>
 
 		<!-- Цена -->
 		<li class="details__item">

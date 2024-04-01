@@ -14,9 +14,6 @@ const eventStore = useEventStore();
 
 const schema = eventValidationSchema;
 
-onMounted(async () => {
-	await eventStore.getTimezones();
-});
 const props = defineProps({
 	title: {
 		type: String,
@@ -49,7 +46,7 @@ const dataFromLocalStorage = (initialValues: EventFormType) => {
 	return copy;
 };
 
-const { values, handleSubmit, setFieldValue } = useForm<EventFormType>({
+const { meta, values, handleSubmit, setFieldValue, handleReset } = useForm<EventFormType>({
 	validationSchema: schema,
 	initialValues:
 		localStorage.getItem(LocalStorageEnum.EVENT_DATA) !== null
@@ -77,6 +74,7 @@ watch(
 		) {
 			setFieldValue('location.city', '');
 			setFieldValue('location.address', '');
+			setFieldValue('timezone', '');
 		}
 		if (country) {
 			if (!values['isFree']) {
@@ -166,6 +164,7 @@ const onSubmit = handleSubmit(
 		isLoading.value = true;
 
 		emit('submitEvent', payload);
+		handleReset();
 		isLoading.value = false;
 	},
 	() => {
@@ -215,7 +214,7 @@ const onSubmit = handleSubmit(
 					button-kind="success"
 					:button-text="$t('global.button.save')"
 					:is-loading="isLoading"
-					:is-disabled="false"
+					:is-disabled="!meta.dirty"
 					type="submit"
 				/>
 			</div>

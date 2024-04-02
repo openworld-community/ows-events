@@ -57,7 +57,7 @@ import { useFilterStore } from '~/stores/filter.store';
 .cards {
 	position: relative;
 	padding-top: 32px;
-	@media (min-width: 768px) {
+		@media (min-width: 768px) {
 			padding-top: 60px;
 		}
 

@@ -13,8 +13,8 @@ onBeforeMount(async () => {
 	if (process.server) return;
 
 	setTimeout(async () => {
-		await filterStore.getFilteredEvents();
 		filterStore.$patch({ loading: true });
+		await filterStore.getFilteredEvents();
 		await filterStore.getUsedFilters();
 		filterStore.$patch({ loading: false });
 	});

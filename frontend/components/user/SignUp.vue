@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+    setup
+    lang="ts"
+>
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup';
 
@@ -6,7 +9,7 @@ const { t } = useI18n()
 
 const inputType = ref<'password' | 'text'>('password')
 
-const { meta, handleSubmit, handleReset } = useForm({
+const { handleSubmit, handleReset, values } = useForm({
     validationSchema: yup.object({
         email: yup
             .string()
@@ -21,7 +24,7 @@ const { meta, handleSubmit, handleReset } = useForm({
             .string()
             .required(t('errors.REQUIRED_FIELD'))
             .min(4, t('errors.PASSWORD_TOO_SHORT'))
-            .max(24, t('errors.PASSWORD_TOO_LONG')),
+            .max(30, t('errors.PASSWORD_TOO_LONG')),
         confirmPassword: yup
             .string()
             .required(t('errors.REQUIRED_FIELD'))
@@ -42,6 +45,14 @@ const passwordConfField = useField<string>(() => 'confirmPassword', {
     validateOnModelUpdate: false
 });
 
+const hasValue = computed(() => {
+    let bool = true
+    Object.values(values).map(item => {
+        if (!item) bool = false
+    })
+    return bool
+})
+
 const onSubmit = handleSubmit(async values => {
     try {
         const { email, password } = values
@@ -58,7 +69,7 @@ const onSubmit = handleSubmit(async values => {
     }
 });
 </script>
- 
+
 <template>
     <form
         class="signup"
@@ -67,7 +78,7 @@ const onSubmit = handleSubmit(async values => {
         <fieldset class="signup__fieldset">
             <CommonFormField
                 :error="emailField.errorMessage.value"
-                :touched="emailField.meta.touched"
+                :touched="emailField.meta.touched && !!emailField.value.value"
                 :error-label="true"
             >
                 <CommonUiBaseInput
@@ -75,16 +86,16 @@ const onSubmit = handleSubmit(async values => {
                     :placeholder="$t('form.form.email')"
                     class="signup__fieldset--input"
                     autocomplete="true"
-                    name="email"
-                    type="email"
-                    :error="emailField.meta.touched && Boolean(emailField.errorMessage.value)
+                    name="text"
+                    type="text"
+                    :error="emailField.meta.touched && !!emailField.errorMessage.value && !!emailField.value.value
                         ? emailField.errorMessage.value
                         : false"
-                />
+                    />
             </CommonFormField>
             <CommonFormField
                 :error="passwordField.errorMessage.value"
-                :touched="passwordField.meta.touched"
+                :touched="passwordField.meta.touched && !!passwordField.value.value"
                 :error-label="true"
             >
                 <CommonUiBaseInput
@@ -94,14 +105,14 @@ const onSubmit = handleSubmit(async values => {
                     name="password"
                     :type="inputType"
                     :show-password="true"
-                    :error="passwordField.meta.touched && Boolean(passwordField.errorMessage.value)
-                        ? passwordField.errorMessage.value
-                        : false"
+                    :error="passwordField.meta.touched && !!passwordField.errorMessage.value && !!passwordField.value.value
+            ? passwordField.errorMessage.value
+            : false"
                 />
             </CommonFormField>
             <CommonFormField
                 :error="passwordConfField.errorMessage.value"
-                :touched="passwordConfField.meta.touched"
+                :touched="passwordConfField.meta.touched && !!passwordConfField.value.value"
                 :error-label="true"
             >
                 <CommonUiBaseInput
@@ -111,23 +122,26 @@ const onSubmit = handleSubmit(async values => {
                     name="password"
                     :type="inputType"
                     :show-password="true"
-                    :error="passwordConfField.meta.touched && Boolean(passwordConfField.errorMessage.value)
-                        ? passwordConfField.errorMessage.value
-                        : false"
+                    :error="passwordConfField.meta.touched && !!passwordConfField.errorMessage.value && !!passwordConfField.value.value
+            ? passwordConfField.errorMessage.value
+            : false"
                 />
             </CommonFormField>
         </fieldset>
         <CommonButton
             class="signup__submit"
-            :is-disabled="!meta.touched && !meta.valid"
             button-kind="dark"
+            :is-disabled="!hasValue"
             :button-text="$t('form.form.signup')"
             type="submit"
         />
     </form>
 </template>
 
-<style lang="less" scoped>
+<style
+    lang="less"
+    scoped
+>
 .signup {
     display: flex;
     flex-direction: column;

@@ -48,6 +48,7 @@ const props = defineProps({
 
 
 const mobile = inject('mobile');
+const desktop = inject('desktop')
 const filterStore = useFilterStore();
 
 const isActive = ref<boolean>(false)
@@ -120,6 +121,15 @@ onMounted(() => {
 	<CommonButton
 		v-if="filterType === 'tag'"
 		style="font-weight: 500;"
+		:font-size="mobile 
+			? '11px' 
+			: '' 
+		"
+		:line-height="mobile 
+			? '17.6px' 
+			: 'inherit' 
+		"
+		:padding="!desktop ? '3px 10px' : '7px 14px'"
 		:button-kind="isActive ? 'dark' : 'ordinary'"
 		:button-text="tag.name"
 		:class="['filter', { 'filter--no-separator': noSeparator }]"
@@ -128,13 +138,17 @@ onMounted(() => {
 	/>
 </template>
 
-<style scoped lang="less">
+<style
+	scoped
+	lang="less"
+>
 .filter.select {
 	width: 100%;
 }
 
 .filter {
 	@media (min-width: 1440px) {
+
 		&:deep(.input__field),
 		&:deep(.button__multiselect) {
 			height: 72px;

@@ -6,6 +6,8 @@ import dayjs from 'dayjs';
 import { useFilterStore } from '../../stores/filter.store';
 import { debouncedWatch } from '@vueuse/core';
 
+const desktop = inject('desktop')
+
 const filterStore = useFilterStore();
 
 const route = useRoute();
@@ -56,7 +58,7 @@ debouncedWatch(
 <template>
 	<section
 		class="filters"
-		:style="{ rowGap: filterStore.usedTags.length ? 'calc(var(--gap)* 3)' : 'unset' }"
+		:style="filterStore.usedTags.length ? { rowGap: desktop ? 'calc((var(--gap) * 3)' : 'var(--gap)' } : null"
 	>
 		<div class="filters__wrapper">
 			<CommonUiFilter
@@ -102,23 +104,25 @@ debouncedWatch(
 	lang="less"
 >
 .filters {
-	--gap: 8px;
+	--gap: 10px;
 
 	display: grid;
 	width: 100%;
+	max-width: 1200px;
 	grid-template-rows: auto auto;
 	grid-template-columns: 1fr 1fr 1fr;
 	column-gap: var(--gap);
 
-	margin-bottom: calc(var(--gap) * 4);
+	margin-bottom: calc(var(--gap) * 2);
 
-	@media (max-width: 550px) {
-		grid-template-rows: repeat(3, auto);
+	@media (max-width: 768px) {
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: repeat(2, auto);
 		row-gap: 0;
+		column-gap: 0;
 
 		&:deep(.filters__search) {
-			margin-bottom: 8px;
-			grid-column: span 3;
+			grid-column: span 2;
 		}
 	}
 
@@ -135,12 +139,11 @@ debouncedWatch(
 			border-radius: 8px;
 		}
 
-		@media (max-width: 550px) {
+		@media (max-width: 768px) {
 			& {
-				align-items: flex-start;
-				flex-wrap: wrap;
 				gap: 0;
-				margin-bottom: calc(var(--gap) * 4);
+				row-gap: var(--gap);
+				grid-template-columns: 1fr 1fr;
 			}
 		}
 
@@ -160,6 +163,10 @@ debouncedWatch(
 				gap: 0;
 			}
 
+			@media (max-width: 768px) {
+				grid-column: span 3;
+			}
+
 			@media (max-width: 668px) {
 				&:deep(.calendar) {
 					max-width: unset;
@@ -169,7 +176,7 @@ debouncedWatch(
 			@media (max-width: 550px) {
 				grid-column: span 3;
 				display: grid;
-				grid-template-columns: 1fr 1fr;
+				grid-template-columns: 1fr;
 				column-gap: var(--gap);
 			}
 		}
@@ -178,8 +185,8 @@ debouncedWatch(
 	&__tags {
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: center;
-		gap: 5px;
+		justify-content: flex-start;
+		gap: calc(var(--gap));
 
 		grid-column: span 3;
 	}

@@ -81,7 +81,8 @@ export const useFilterStore = defineStore('filter', {
 
 			if (usedTags.value?.length) {
 				const { $i18n } = useNuxtApp();
-				this.usedTags = usedTags.value.map((elem: string) => {
+				usedTags.value.sort((a, b) => b.length - a.length)
+				this.usedTags = usedTags.value.map((elem) => {
 					return { key: elem, name: $i18n.t(`event.tags.${elem}`) };
 				});
 			}

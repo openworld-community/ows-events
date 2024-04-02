@@ -1,12 +1,10 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { SeoItempropNavEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
 import { RouteNameEnum, RoutePathEnum } from '../../constants/enums/route';
 import { getRouteName } from '../../utils';
 import { SUPPORT_TG_URL } from '../../constants/url';
 import { useUserStore } from '../../stores/user.store';
+import { useFilterStore } from '~/stores/filter.store';
 
 const route = useRoute();
 // const router = useRouter();
@@ -54,7 +52,7 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 const goBack = () => {
 	// if (router.options.history.state.back) {
 	// 	router.back();
-	// } 
+	// }
 	if (
 		getRouteName(route.name as string).includes(RouteNameEnum.USER_FAVOURITES) ||
 		getRouteName(route.name as string).includes(RouteNameEnum.USER_MY_EVENTS)
@@ -63,6 +61,19 @@ const goBack = () => {
 	} else {
 		navigateTo(localePath({ path: RoutePathEnum.HOME }));
 	}
+};
+
+const filterStore = useFilterStore();
+
+const clearFilters = async () => {
+	filterStore.$patch({
+		filters: {
+			city: '',
+			searchLine: '',
+			date: [],
+			tags: []
+		}
+	});
 };
 </script>
 
@@ -79,9 +90,10 @@ const goBack = () => {
 		>
 			<div class="header__left">
 				<CommonButton
-					v-if="hasBackButton &&
-			localePath(route.path) !== localePath({ path: RoutePathEnum.USER_PAGE })
-			"
+					v-if="
+						hasBackButton &&
+						localePath(route.path) !== localePath({ path: RoutePathEnum.USER_PAGE })
+					"
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"
@@ -92,13 +104,18 @@ const goBack = () => {
 					:is="logoComponentIs"
 					v-else
 					class="header__logo"
-					:title="$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
-			"
-					:aria-label="$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
-			"
+					:title="
+						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
+					"
+					:aria-label="
+						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
+					"
 					:to="!isAtHome ? localePath(RoutePathEnum.HOME) : undefined"
 					:itemprop="SeoItempropNavEnum.URL"
-					@click="isAtHome && scrollToTop()"
+					@click="
+						isAtHome && scrollToTop();
+						isAtHome && clearFilters();
+					"
 				>
 					<CommonIcon
 						name="afisha-logo-light"
@@ -121,6 +138,7 @@ const goBack = () => {
 				<li class="header__nav-item">
 					<NuxtLink
 						:to="localePath(RoutePathEnum.ABOUT)"
+						:prefetch="false"
 						class="header__nav-link"
 					>
 						{{ $t('header.navigation.about') }}
@@ -164,20 +182,18 @@ const goBack = () => {
 					:link="localePath(RoutePathEnum.USER_PAGE)"
 					button-kind="ordinary"
 					icon-name="user"
-					:button-text="userStore.isAuthorized
-				? $t('header.navigation.user')
-				: $t('header.navigation.authorize')
-			"
+					:button-text="
+						userStore.isAuthorized
+							? $t('header.navigation.user')
+							: $t('header.navigation.authorize')
+					"
 				/>
 			</div>
 		</nav>
 	</header>
 </template>
 
-<style
-	scoped
-	lang="less"
->
+<style scoped lang="less">
 .header {
 	width: 100%;
 	height: var(--header-height);

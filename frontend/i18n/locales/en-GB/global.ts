@@ -5,7 +5,7 @@ export default {
 	button: {
 		authorize: 'Authorize',
 		add_to_favourites: 'Add to Favorites',
-		apply: 'Применить',
+		apply: 'Apply',
 		back: 'Back',
 		cancel: 'Cancel',
 		close: 'Close',
@@ -23,10 +23,11 @@ export default {
 		new_event: 'Create new event',
 		register: 'Register',
 		remove_from_favourites: 'Remove from Favorites',
-		reset: 'Сбросить',
+		reset: 'Reset',
 		save: 'Save',
 		search: 'Search',
-		share: 'Share'
+		share: 'Share',
+		yes: 'Yes',
 	},
 	notFound: 'Nothing found'
 };

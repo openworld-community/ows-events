@@ -5,9 +5,9 @@
 import VueDatePicker, { type DatePickerInstance } from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import dayjs from 'dayjs';
-import type { TCalendarDisabledButtons } from '../../../../common/types/filters'
 import type { PropType } from 'vue';
 import type { Time } from '../../../utils/dates';
+import type { FilterStore } from '~/stores/filter.store';
 
 // https://vue3datepicker.com/props/modes/
 const props = defineProps({
@@ -16,7 +16,7 @@ const props = defineProps({
 		default: ''
 	},
 	modelValue: {
-		type: [Date, null, Object, String] as PropType<Date | Date[] | Time | string | null>,
+		type: [Date, null, Object, String] as PropType<Date | Date[] | Time | string | string[] | null>,
 		required: true
 	},
 	placeholder: {
@@ -67,39 +67,31 @@ const props = defineProps({
 		type: Boolean,
 		default: false
 	},
-	disabledButtons: {
-		type: Object as PropType<TCalendarDisabledButtons>,
-		default: () => {
-			return {
-				today: false,
-				tomorrow: false
-			}
-		}
-	}
 });
 
 const { locale } = useI18n();
+const route = useRoute()
 
 const emit = defineEmits(['update:model-value']);
 const isDateType = computed(() => props.type === 'date');
 const datepicker = ref<DatePickerInstance>(null);
-const input = ref(null)
+const input = ref<HTMLInputElement>(null)
 
 const handleDate = (modelData: typeof props.modelValue) => {
 	isDateType.value && datepicker.value?.closeMenu();
 	if (props.range && !modelData[1]) {
-		emit('update:model-value', modelData[0])
+		emit('update:model-value', [modelData[0], modelData[0]])
 	} else {
 		emit('update:model-value', modelData)
 	}
 };
 
-const dateFormat = (date: Date | Date[] | string) => {
-	if (!date) return
+const dateFormat = (date: Date | Date[] | string | string[]) => {
+	if (!date) return ''
 
 	if (Array.isArray(date)) {
 		return !date[1]
-			? dayjs(date[0]).format('DD.MM.YYYY')
+			? `${dayjs(date[0]).format('DD.MM.YYYY')} -`
 			: `${dayjs(date[0]).format('DD.MM.YYYY')} - ${dayjs(date[1]).format('DD.MM.YYYY')}`
 	} else {
 		return dayjs(date).format('DD.MM.YYYY')
@@ -111,8 +103,8 @@ const timeFormat = (date: Date) => {
 };
 
 const onRemove = () => {
-	displayValue.value = ''
-	emit('update:model-value', null);
+	// filterStore.filters.date - массив
+	props.range ? emit('update:model-value', []) : emit('update:model-value', null);
 };
 
 const onOpen = () => {
@@ -126,22 +118,25 @@ const onClose = () => {
 	if (props.isFilter) {
 		input.value.blur()
 		input.value.classList.remove('active')
-		emit('update:model-value', displayValue.value)
+		// если выбрана только 1 дата и календарь закрыли, то автоматически проставляется та же дата на вторую позицию
+		if (!displayValue.value[1]) {
+			displayValue.value = [...displayValue.value, ...displayValue.value]
+		}
+		emit('update:model-value', displayValue.value ?? '')
 	}
 }
+
+const hasValue = computed(() => {
+	// тут хз как привязать иконку очистки для !modelValue и !modelValue.length
+	// типизация не дает
+	// если есть как минимум startDate. то фильтр хотя бы частично заполнен
+	return props.range ? !!getFirstQuery(route.query.startDate) : !!props.modelValue
+})
 
 const today = new Date()
 const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
 
-const displayValue = ref()
-const updatedisplayValue = (date: Date[] | null) => {
-	if (date) displayValue.value = date
-}
-
-const onActionRowButtonsClick = (date) => {
-	displayValue.value = date
-	datepicker.value.closeMenu()
-}
+const displayValue = ref<FilterStore['filters']['date']>([''])
 
 onMounted(() => {
 	// datepicker криво ставит фокус класс (при откртии фокуса нет, при закрытии есть)
@@ -170,10 +165,12 @@ onMounted(() => {
 			:placeholder="required ? `${placeholder} *` : placeholder"
 			:input-class-name="`input input__field ${error ? 'form__error' : ''} ${appearance ? 'no-border' : ''} ${isFilter ? 'filter' : ''}`"
 			:menu-class-name="`${!isDateType ? 'time_picker' : ''}`"
+			position="left"
 			mode-height="80"
 			prevent-min-max-navigation
+			arrow-navigation
 			:auto-apply="true"
-			:keep-action-row="name === 'startDate' || name === 'endDate' ? true : false"
+			:keep-action-row="false"
 			:close-on-auto-apply="isDateType"
 			partial-flow
 			:flow="['calendar']"
@@ -189,13 +186,13 @@ onMounted(() => {
 			:disabled="disabled"
 			:required="required"
 			is-24
-			:position="name === 'endDate' ? 'right' : 'left'"
 			:clearable="false"
-			@keydown.enter.capture="datepicker?.closeMenu()"
+			:space-confirm="false"
+			@keydown.space.prevent
 			@open="onOpen"
 			@closed="onClose"
 			@update:model-value="handleDate"
-			@internal-model-change="updatedisplayValue"
+			@internal-model-change="(date) => displayValue = date"
 		>
 			<template
 				v-if="range"
@@ -206,30 +203,33 @@ onMounted(() => {
 					type="text"
 					readonly
 					:placeholder="placeholder"
-					:value="dateFormat(displayValue as Date | Date[] | string)"
+					:value="dateFormat(displayValue)"
 					@keyup.enter="datepicker.openMenu()"
-					@keyup.space="datepicker.openMenu()"
+					@keyup.space.prevent="datepicker.openMenu()"
 					@keyup.delete="datepicker.closeMenu()"
 					@keyup.esc="datepicker.closeMenu()"
 				/>
 			</template>
-			<template #action-row>
+			<template
+				v-if="isFilter"
+				#left-sidebar
+			>
 				<CommonButton
 					:button-text="$t('dates.filterDay.today')"
+					:aria-label="$t('dates.filterDay.today')"
 					button-kind="dark"
-					:is-disabled="disabledButtons.today"
-					@click="onActionRowButtonsClick(today)"
+					@click="() => { displayValue = [today.toString(), today.toString()]; datepicker.closeMenu() }"
 				/>
 				<CommonButton
 					:button-text="$t('dates.filterDay.tomorrow')"
+					:aria-label="$t('dates.filterDay.tomorrow')"
 					button-kind="dark"
-					:is-disabled="disabledButtons.tomorrow"
-					@click="onActionRowButtonsClick(tomorrow)"
+					@click="() => { displayValue = [tomorrow.toString(), tomorrow.toString()]; datepicker.closeMenu() }"
 				/>
 			</template>
 		</VueDatePicker>
 		<CommonIcon
-			v-if="!modelValue"
+			v-if="!hasValue"
 			:name="isDateType ? 'calendar' : 'clock'"
 			:class="['input__button', { 'input__button--disabled': disabled }]"
 		/>
@@ -279,18 +279,17 @@ onMounted(() => {
 		background-color: transparent;
 	}
 
-	&__action_row {
+	&__sidebar_left {
 		display: flex;
 		flex-wrap: nowrap;
 		justify-content: flex-end;
 		gap: 10px;
 		padding: 0;
 		padding: 0 19px 20px;
+		order: 1;
 	}
 
 	&__menu {
-		// left: unset !important;
-		// transform: unset !important;
 		overflow: hidden;
 
 		&_inner {
@@ -299,6 +298,15 @@ onMounted(() => {
 
 		&.time_picker {
 			right: 0 !important;
+		}
+
+		&_content_wrapper {
+			flex-direction: column;
+			flex-wrap: nowrap;
+			// justify-content: flex-end;
+			// gap: 10px;
+			// padding: 0;
+			// padding: 0 19px 20px;
 		}
 	}
 
@@ -413,8 +421,8 @@ onMounted(() => {
 			color: var(--color-text-main);
 			font-size: var(--font-size-XS);
 			font-weight: 500;
-			height: 32px;
-			width: 32px;
+			height: 24px;
+			width: 24px;
 
 			&:hover {
 				border-radius: 50%;

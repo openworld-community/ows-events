@@ -17,7 +17,7 @@ const logoComponentIs = computed(() => {
 });
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
-const currentYear = new Date().getFullYear()
+const currentYear = new Date().getFullYear();
 </script>
 
 <template>
@@ -27,8 +27,12 @@ const currentYear = new Date().getFullYear()
 				<component
 					:is="logoComponentIs"
 					class="logo__link"
-					:title="$t(isAtHome ? 'footer.logo.at_home_aria' : 'footer.logo.other_page_aria')"
-					:aria-label="$t(isAtHome ? 'footer.logo.at_home_aria' : 'footer.logo.other_page_aria')"
+					:title="
+						$t(isAtHome ? 'footer.logo.at_home_aria' : 'footer.logo.other_page_aria')
+					"
+					:aria-label="
+						$t(isAtHome ? 'footer.logo.at_home_aria' : 'footer.logo.other_page_aria')
+					"
 					:to="!isAtHome ? localePath(RoutePathEnum.HOME) : undefined"
 					:itemprop="SeoItempropNavEnum.URL"
 					@click="isAtHome && scrollToTop()"
@@ -74,6 +78,7 @@ const currentYear = new Date().getFullYear()
 					<li class="navigation__item">
 						<NuxtLink
 							:to="localePath(RoutePathEnum.LIMITATION_OF_LIABILITY)"
+							:prefetch="false"
 							class="navigation__link"
 						>
 							{{ $t('footer.navigation.limitation_of_liability') }}

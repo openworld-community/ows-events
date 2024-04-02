@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import dayjs from 'dayjs';
 import { useFilterStore } from '../../stores/filter.store';
 import { debouncedWatch } from '@vueuse/core';
@@ -13,11 +10,13 @@ const tablet = inject('tablet');
 
 onBeforeMount(async () => {
 	//TODO костыль, иначе при ините страницы не достается value из запроса
-	if (process.server) return
+	if (process.server) return;
 
 	setTimeout(async () => {
 		await filterStore.getFilteredEvents();
+		filterStore.$patch({ loading: true });
 		await filterStore.getUsedFilters();
+		filterStore.$patch({ loading: false });
 	});
 });
 
@@ -31,10 +30,10 @@ watch(
 				city: filters.city || undefined,
 				tags: filters.tags.join(', ') || undefined,
 				// может приходить Invalid Date
-				startDate: filters.startDate
-					? dayjs(filters.startDate).format('YYYY-MM-DD')
+				startDate: filters.date[0]
+					? dayjs(filters.date[0]).format('YYYY-MM-DD')
 					: undefined,
-				endDate: filters.endDate ? dayjs(filters.endDate).format('YYYY-MM-DD') : undefined
+				endDate: filters.date[1] ? dayjs(filters.date[1]).format('YYYY-MM-DD') : undefined
 			}
 		});
 	},
@@ -44,7 +43,9 @@ watch(
 debouncedWatch(
 	filterStore.filters,
 	async () => {
+		filterStore.$patch({ loading: true });
 		await filterStore.getFilteredEvents();
+		filterStore.$patch({ loading: false });
 	},
 	{ debounce: 700, maxWait: 1000 }
 );
@@ -83,9 +84,7 @@ const mobile = inject('mobile');
 				name="city"
 				:list="filterStore.usedCities"
 				:disabled="!filterStore.usedCities.length"
-				@on-filter-button-click="
-					openFilterModal('tags', filterStore.usedTags, true, 'name', 'key')
-					"
+				@on-filter-button-click="openFilterModal('city', filterStore.usedCities ?? [])"
 			/>
 			<CommonUiFilter
 				:key="mobile ? 'mobile-tags' : 'other-tags'"
@@ -99,21 +98,18 @@ const mobile = inject('mobile');
 				:dropdown-position="tablet ? 'right' : 'left'"
 				@on-filter-button-click="
 					openFilterModal('tags', filterStore.usedTags, true, 'name', 'key')
-					"
+				"
 			/>
 			<CommonUiFilter
 				filter-type="date"
-				name="startDate"
+				name="date"
 				:range="true"
 			/>
 		</div>
 	</section>
 </template>
 
-<style
-	scoped
-	lang="less"
->
+<style scoped lang="less">
 .filters {
 	display: flex;
 	width: 100%;
@@ -141,9 +137,12 @@ const mobile = inject('mobile');
 			&:deep(.button__filter) {
 				max-width: calc((100% - var(--gap) * 2) / 3);
 			}
-
-			&:deep(.select) {
+			&:deep(.mobile-filter) {
 				max-width: calc((100% - var(--gap) * 2) / 3);
+			}
+
+			&:deep(.calendar) {
+				max-width: 42%;
 			}
 		}
 
@@ -156,6 +155,9 @@ const mobile = inject('mobile');
 			&:deep(.filter),
 			&:deep(.button__multiselect) {
 				max-width: calc((100% - var(--gap)) / 2);
+			}
+			&:deep(.mobile-filter) {
+				min-width: calc((100% - var(--gap)) / 2);
 			}
 
 			&:deep(.calendar) {

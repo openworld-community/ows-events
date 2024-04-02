@@ -22,6 +22,26 @@ onMounted(async () => {
 const id = getFirstParam(route.params.editId);
 
 const event = ref<EventOnPoster>();
+const openSuccess = ref(false);
+const successCreateEvent = (eventId: string) => {
+	openSuccess.value = true;
+	setTimeout(async () => {
+		eventStore.navTo
+			? await navigateTo(localePath(`${eventStore.navTo}`))
+			: await navigateTo(localePath(`${RoutePathEnum.EVENT}/${eventId}`));
+		openSuccess.value = false;
+	}, 1000);
+};
+
+const successEditEvent = (eventId: string) => {
+	openSuccess.value = true;
+	setTimeout(() => {
+		eventStore.navTo
+			? navigateTo(localePath(`${eventStore.navTo}`))
+			: navigateTo(localePath(`${RoutePathEnum.EVENT}/${eventId}`));
+		openSuccess.value = false;
+	}, 1000);
+};
 
 if (id !== 'new') {
 	const { data } = await apiRouter.events.get.useQuery({ data: { id } });
@@ -54,9 +74,7 @@ const submitEvent = async (payload: PostEventPayload) => {
 		});
 		if (!error.value) {
 			localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
-			eventStore.navTo
-				? await navigateTo(localePath(`${eventStore.navTo}`))
-				: await navigateTo(localePath(`${RoutePathEnum.EVENT}/${id}`));
+			successEditEvent(id);
 		}
 	} else {
 		const { data } = await apiRouter.events.add.useMutation({
@@ -66,9 +84,7 @@ const submitEvent = async (payload: PostEventPayload) => {
 		if (data.value) {
 			localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
 
-			eventStore.navTo
-				? await navigateTo(localePath(`${eventStore.navTo}`))
-				: await navigateTo(localePath(`${RoutePathEnum.EVENT}/${data.value.id}`));
+			successCreateEvent(data.value.id);
 		}
 	}
 };
@@ -87,5 +103,13 @@ const cancel = () => {
 			@submit-event="submitEvent"
 			@cancel-event="cancel"
 		/>
+		<LibrarySuccess
+			:open-dialog="openSuccess"
+			:title="$t('form.global.success')"
+			:description-text="
+				id === 'new' ? $t('form.global.successCreate') : $t('form.global.successEdit')
+			"
+		>
+		</LibrarySuccess>
 	</ClientOnly>
 </template>

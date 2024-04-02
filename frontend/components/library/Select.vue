@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { SelectContent, SelectRoot, SelectTrigger, SelectValue, SelectViewport } from 'radix-vue';
 const props = defineProps({
 	options: {
@@ -79,7 +76,7 @@ const onRemove = () => {
 			:required="required"
 		>
 			<SelectTrigger
-				tabindex="0"
+				:tabindex="disabled ? -1 : 0"
 				as="div"
 				:class="['select__trigger', { 'select__trigger--no-border': noBorder }]"
 				:data-error="error"
@@ -106,7 +103,7 @@ const onRemove = () => {
 			>
 				<SelectViewport as-child>
 					<LibraryScrollArea :height="height">
-						<ul style="height: auto; padding: 8px 4px">
+						<ul style="height: auto; padding: 8px 4px; width: 100%">
 							<LibraryUiItemSelect
 								v-for="option in options"
 								:key="typeof option === 'string' ? option : option['value']"
@@ -147,10 +144,29 @@ const onRemove = () => {
 	</div>
 </template>
 
-<style lang="less">
+<style scoped lang="less">
+:deep(.select) {
+	&__content {
+		min-width: 267px;
+		background-color: #ffffff;
+		box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
+		position: absolute;
+		z-index: 100;
+		border-radius: 8px;
+		border: 2px black;
+		width: var(--radix-select-trigger-width);
+		height: auto;
+		min-height: 100px;
+		max-width: 300px;
+	}
+}
 .select {
 	width: 100%;
 	min-width: 10%;
+	position: relative;
+	&:deep(.scroll-area__viewport) {
+		width: 100%;
+	}
 
 	&__trigger {
 		width: 100%;
@@ -161,15 +177,15 @@ const onRemove = () => {
 		height: 40px;
 		border: 1px solid #dbdbdb;
 		border-radius: 8px;
-		background-color: #ffffff;
+		background-color: var(--color-white);
 		padding: 8px 12px 8px 12px;
 		transition: border-color 0.3s ease;
 		cursor: pointer;
-		
+
 		&--no-border[data-state='open'] {
 			border-color: var(--color-accent-green-main);
 		}
-		
+
 		&:focus-within {
 			outline: none;
 			border-color: var(--color-accent-green-main);
@@ -178,7 +194,7 @@ const onRemove = () => {
 			outline: none;
 			border-color: var(--color-accent-green-main);
 		}
-		
+
 		&:hover {
 			border-color: var(--color-accent-green-main);
 		}
@@ -224,17 +240,6 @@ const onRemove = () => {
 		border-color: var(--color-accent-red);
 	}
 
-	&__content {
-		min-width: 267px;
-		background-color: #ffffff;
-		box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
-		z-index: 99;
-		border-radius: 8px;
-		border: 2px black;
-		width: var(--radix-select-trigger-width);
-		height: auto;
-		min-height: 100px;
-	}
 	&__clear-select {
 		position: absolute;
 		z-index: 10;
@@ -257,6 +262,7 @@ const onRemove = () => {
 	}
 
 	&__item-content {
+		width: 100%;
 		display: flex;
 		align-items: center;
 		gap: 4px;

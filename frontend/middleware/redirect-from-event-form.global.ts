@@ -7,6 +7,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
 	const userStore = useUserStore();
 
 	if (
+		from &&
+		from.name &&
 		from.name.toString().includes(RouteNameEnum.EVENT_EDIT) &&
 		!to.name.toString().includes(RouteNameEnum.EVENT_EDIT) &&
 		userStore.isAuthorized
@@ -21,7 +23,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
 				navTo: to.path,
 				showClearFormModal: true
 			});
-			return false;
 		}
 	} else {
 		return true;

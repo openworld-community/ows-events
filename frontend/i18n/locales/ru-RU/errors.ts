@@ -38,7 +38,7 @@ export default {
 	[CommonErrorsEnum.UNAUTHORIZED]: 'У вас нет доступа к данному ресурсу',
 	[CommonErrorsEnum.EVENT_ALREADY_EXISTS]: 'Данное мероприятие	уже существует',
 	[CommonErrorsEnum.EVENT_SENT_ON_MODERATION]: 'Мероприятие отправлено на модерацию',
-	[CommonErrorsEnum.NO_PAYLOAD_PROVIDED]: 'ОТправлен пустой запрос',
+	[CommonErrorsEnum.NO_PAYLOAD_PROVIDED]: 'Отправлен пустой запрос',
 	[CommonErrorsEnum.TIMEZONE_CITY_NOT_FOUND]:
 		'Не удалось найти часовой пояс по указанным параметрам',
 	[CommonErrorsEnum.USER_DOES_NOT_EXIST]: 'Пользователь не найден',
@@ -48,5 +48,9 @@ export default {
 	[CommonErrorsEnum.PASSWORD_MISMATCH]: 'Пароль не совпадает',
 	[CommonErrorsEnum.INVALID_EMAIL]: 'Введите действительный адрес электронной почты',
 	[CommonErrorsEnum.REQUIRED_FIELD]: 'Это поле обязательно',
-
+	[CommonErrorsEnum.ERROR_PAGE_ERROR]: 'Ошибка',
+	[CommonErrorsEnum.ERROR_PAGE_PAGE]: 'Страница',
+	[CommonErrorsEnum.ERROR_PAGE_NOT_FOUND]: 'не найдена',
+	[CommonErrorsEnum.ERROR_PAGE_GO_HOME]: 'Вернуться на Главную',
+	[CommonErrorsEnum.ERROR_PAGE_SERVER_ERROR]: 'Неизвестная Ошибка Сервера',	
 };

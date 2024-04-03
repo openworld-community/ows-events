@@ -115,5 +115,15 @@ export default defineNuxtConfig({
 	experimental: { watcher: 'chokidar', appManifest: false },
 	googleSignIn: {
 		clientId: VITE_GOOGLE_OAUTH_KEY
-	}
+	},
+	app :{
+		head: {
+			link: [
+		  	{
+				rel: "stylesheet",
+				href: "https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap",
+		 	 },
+			],
+	 	 }
+	},
 });

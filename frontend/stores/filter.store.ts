@@ -6,14 +6,6 @@ import type { Tag } from '../../common/const/tags';
 export interface FilterStore {
 	usedCities: City[];
 	usedTags: { name: string; key: Tag }[];
-	modal: {
-		show: boolean;
-		list: string[] | { [key: string]: string }[];
-		multiple: boolean;
-		type: string;
-		showKey: string;
-		returnKey: string;
-	};
 	filters: {
 		city: City;
 		searchLine: string;
@@ -44,14 +36,6 @@ export const useFilterStore = defineStore('filter', {
 			},
 			filteredEvents: undefined,
 			loading: false,
-			modal: {
-				show: false,
-				list: [],
-				multiple: false,
-				type: '',
-				showKey: '',
-				returnKey: ''
-			}
 		};
 	},
 	getters: {},
@@ -97,7 +81,8 @@ export const useFilterStore = defineStore('filter', {
 
 			if (usedTags.value?.length) {
 				const { $i18n } = useNuxtApp();
-				this.usedTags = usedTags.value.map((elem: string) => {
+				usedTags.value.sort((a, b) => b.length - a.length)
+				this.usedTags = usedTags.value.map((elem) => {
 					return { key: elem, name: $i18n.t(`event.tags.${elem}`) };
 				});
 			}

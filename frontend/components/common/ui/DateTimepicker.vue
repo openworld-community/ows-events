@@ -91,8 +91,8 @@ const dateFormat = (date: Date | Date[] | string | string[]) => {
 
 	if (Array.isArray(date)) {
 		return !date[1]
-			? `${dayjs(date[0]).format('DD.MM.YYYY')} -`
-			: `${dayjs(date[0]).format('DD.MM.YYYY')} - ${dayjs(date[1]).format('DD.MM.YYYY')}`
+			? `${dayjs(date[0]).format('DD.MM')} -`
+			: `${dayjs(date[0]).format('DD.MM')} - ${dayjs(date[1]).format('DD.MM.YYYY')}`
 	} else {
 		return dayjs(date).format('DD.MM.YYYY')
 	}

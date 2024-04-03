@@ -92,14 +92,13 @@ const onButtonClick = async () => {
 		padding-right: var(--padding-side);
 
 		@media (min-width: 768px) {
-			padding-top: 65px;
+			padding-top: 32px;
 			margin-top: 0;
 		}
 
 		@media (min-width: 1440px) {
 			position: relative;
-			padding-top: 99px;
-			margin-bottom: 100px;
+			padding-top: 60px;
 		}
 	}
 
@@ -125,24 +124,7 @@ const onButtonClick = async () => {
 			max-width: 900px;
 			font-size: 70px;
 			line-height: 80px;
-			margin-bottom: 120px;
-		}
-	}
-
-	//&__location {
-	//	display: flex;
-	//	width: 100%;
-	//	justify-content: center;
-	//	margin-bottom: 24px;
-	//}
-
-	&__filter {
-		width: 100%;
-		margin-bottom: 24px;
-
-		@media (min-width: 1440px) {
-			position: absolute;
-			bottom: -60px;
+			margin-bottom: 60px;
 		}
 	}
 

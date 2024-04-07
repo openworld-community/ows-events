@@ -36,7 +36,7 @@ export const getInitialEventFormValues = (data?: EventOnPoster): EventFormType =
 			val: null,
 			currency: ''
 		},
-		timezone: data && data.timezone ? timezoneToString(data.timezone) : '',
+		timezone: data && data.timezone ? timezoneToString(data.timezone) : 'Europe/Belgrage +02:00',
 
 		url: (data && data.url) || '',
 		isFree: data && data.price && data.price.value === 0 ? true : false

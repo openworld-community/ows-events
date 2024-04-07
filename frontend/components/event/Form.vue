@@ -21,7 +21,7 @@ const props = defineProps({
 	},
 	initialValues: {
 		type: Object as PropType<EventFormType>,
-		default: () => {}
+		default: () => { }
 	}
 });
 
@@ -74,7 +74,6 @@ watch(
 		) {
 			setFieldValue('location.city', '');
 			setFieldValue('location.address', '');
-			setFieldValue('timezone', '');
 		}
 		if (country) {
 			if (!values['isFree']) {
@@ -91,7 +90,7 @@ watch(
 watch(
 	() => values['location']['city'],
 	async (city) => {
-		if (city) {
+		if (city && values['isOnline']) {
 			const timezone = await getTimezone(values['location']['country'], city);
 			setFieldValue('timezone', timezone);
 		}
@@ -116,7 +115,8 @@ watch(
 			const timeZone = timezoneToString(getUserTimezone());
 			setFieldValue('timezone', timeZone);
 		} else {
-			setFieldValue('timezone', '');
+			const belgrade = await getTimezone('Serbia', 'Belgrade')
+			setFieldValue('timezone', belgrade);
 		}
 	},
 	{ deep: true }
@@ -181,6 +181,7 @@ const onSubmit = handleSubmit(
 		novalidate
 		@submit.prevent="onSubmit"
 	>
+		{{ values['isOnline'] }}
 		<div class="event-form__title-wrapper">
 			<h1 class="event-form__title">
 				{{ title }}

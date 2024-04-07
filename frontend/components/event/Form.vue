@@ -181,7 +181,6 @@ const onSubmit = handleSubmit(
 		novalidate
 		@submit.prevent="onSubmit"
 	>
-		{{ values['isOnline'] }}
 		<div class="event-form__title-wrapper">
 			<h1 class="event-form__title">
 				{{ title }}

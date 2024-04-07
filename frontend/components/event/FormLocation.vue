@@ -80,7 +80,7 @@ const addressField = useField<string>(() => 'location.address');
 						v-model="timeZoneField.value.value"
 						name="timezone"
 						:placeholder="$t('global.timezone')"
-						:options="eventStore.allTimezones"
+						:options="isOnlineField.value.value ? eventStore.allTimezones : []"
 						:error="
 							timeZoneField.meta.touched && Boolean(timeZoneField.errorMessage.value)
 						"

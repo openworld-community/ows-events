@@ -29,6 +29,7 @@ const emit = defineEmits(['submitEvent', 'cancelEvent']);
 
 const dataFromLocalStorage = (initialValues: EventFormType) => {
 	const parsedData = JSON.parse(localStorage.getItem(LocalStorageEnum.EVENT_DATA));
+
 	const copy = { ...initialValues };
 	for (const key in copy) {
 		if (key in parsedData) {

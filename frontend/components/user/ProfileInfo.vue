@@ -15,7 +15,7 @@ const userData = computed(() => userStore.userInfo);
 			:itemprop="SeoItempropUserEnum.name"
 			class="user-info__name"
 		>
-			{{ `${getUserName(userData.first_name, userData.last_name)}!` }}
+			{{ `${getUserName(userData?.first_name, userData?.last_name)}!` }}
 		</h1>
 		<p
 			v-if="userData?.nickname"

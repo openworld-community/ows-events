@@ -3,8 +3,8 @@ import { RoutePathEnum } from '~/constants/enums/route';
 import { useLogout } from '~/composables/useLogout';
 const localePath = useLocalePath();
 const { logout } = useLogout();
-const onLogoutPress = () => {
-	logout();
+const onLogoutPress = async () => {
+	await logout();
 };
 </script>
 

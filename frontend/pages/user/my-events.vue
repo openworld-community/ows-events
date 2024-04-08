@@ -152,12 +152,12 @@ if (data.value) myEvents.value = data.value;
 	display: flex;
 	width: 100%;
 	flex-direction: column;
-	position: absolute;
-	top: 50%;
-	left: 50%;
+	//position: absolute;
+	//top: 50%;
+	//left: 50%;
 	//margin-top: 40%;
 	//margin-top: 50%;
-	transform: translate(-50%, -50%);
+	//transform: translate(-50%, -50%);
 	align-items: center;
 
 	&__image {

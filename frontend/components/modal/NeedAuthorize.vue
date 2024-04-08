@@ -22,7 +22,7 @@ const localePath = useLocalePath();
 			/>
 			<CommonButton
 				button-kind="dark"
-				:link="localePath(RoutePathEnum.USER_PAGE)"
+				:link="localePath(`${RoutePathEnum.EVENT_EDIT}new`)"
 				:button-text="$t('global.button.authorize')"
 			/>
 		</template>

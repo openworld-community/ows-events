@@ -161,6 +161,14 @@ const clearFilters = async () => {
 						{{ $t('header.navigation.donation') }}
 					</NuxtLink>
 				</li>
+				<li class="header__nav-item">
+					<NuxtLink
+						:to="localePath(RoutePathEnum.COOPERATION)"
+						class="header__nav-link"
+					>
+						{{ $t('header.navigation.cooperation') }}
+					</NuxtLink>
+				</li>
 			</ul>
 			<div class="header__right">
 				<!-- v-if="!hasBackButton" -->
@@ -251,7 +259,7 @@ const clearFilters = async () => {
 		@media (min-width: 768px) {
 			display: flex;
 			width: 100%;
-			max-width: 400px;
+			max-width: 480px;
 			justify-content: space-between;
 			align-items: center;
 			margin-left: 7%;

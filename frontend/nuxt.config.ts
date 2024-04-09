@@ -116,14 +116,14 @@ export default defineNuxtConfig({
 	googleSignIn: {
 		clientId: VITE_GOOGLE_OAUTH_KEY
 	},
-	app :{
+	app: {
 		head: {
 			link: [
-		  	{
-				rel: "stylesheet",
-				href: "https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap",
-		 	 },
-			],
-	 	 }
-	},
+				{
+					rel: 'stylesheet',
+					href: 'https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap'
+				}
+			]
+		}
+	}
 });

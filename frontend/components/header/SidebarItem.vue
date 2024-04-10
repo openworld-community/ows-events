@@ -3,6 +3,8 @@ import type { PropType } from 'vue';
 import type { IconName } from '~/components/common/Icon.vue';
 import { SeoItempropNavEnum } from '../../constants/enums/seo';
 
+const localePath = useLocalePath();
+
 type NavItemKind = 'success';
 
 const props = defineProps({
@@ -13,7 +15,7 @@ const props = defineProps({
 	},
 	isExternalLink: {
 		// если необходимо открыть в новом окне
-		type: Boolean as PropType<boolean>,
+		type: Boolean,
 		default: false
 	},
 	text: {
@@ -27,10 +29,6 @@ const props = defineProps({
 	itemKind: {
 		type: String as PropType<NavItemKind | ''>,
 		default: ''
-	},
-	current: {
-		type: Boolean,
-		default: false
 	}
 });
 
@@ -41,10 +39,11 @@ const component = computed(() => {
 </script>
 
 <template>
-	<li :class="['sidebar-item', { 'sidebar-item--current': current }]">
+	<li :class="['sidebar-item']">
 		<component
 			:is="component"
-			:to="linkTo ?? null"
+			:external="isExternalLink"
+			:to="linkTo ? (isExternalLink ? linkTo : localePath(linkTo)) : null"
 			:target="isExternalLink ? '_blank' : null"
 			:class="['sidebar-item__item', itemKind ? `sidebar-item__item--${itemKind}` : '']"
 			:itemprop="SeoItempropNavEnum.URL"
@@ -82,23 +81,13 @@ const component = computed(() => {
 	}
 
 	&:hover,
-	&focus {
+	&:focus,
+	&:focus-visible {
 		background-color: var(--color-background-secondary);
 	}
 
 	&:active {
 		background-color: var(--color-accent-green-main-10);
-	}
-
-	&--current {
-		opacity: 0.7;
-		cursor: default;
-		pointer-events: none;
-
-		& > a > span,
-		& > button > span {
-			text-decoration: underline;
-		}
 	}
 
 	&__item {
@@ -117,6 +106,10 @@ const component = computed(() => {
 				color: var(--color-accent-green-main);
 			}
 		}
+
+		&:focus-visible {
+			background-color: var(--color-background-secondary);
+		}
 	}
 
 	&__text {
@@ -131,6 +124,15 @@ const component = computed(() => {
 	&__icon {
 		min-width: 24px;
 		color: var(--color-text-secondary);
+	}
+}
+
+.router-link-exact-active {
+	opacity: 0.7;
+	cursor: default;
+
+	span {
+		text-decoration: underline;
 	}
 }
 </style>

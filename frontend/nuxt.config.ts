@@ -3,7 +3,7 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 import path from 'path';
 import { fileURLToPath, URL } from 'node:url';
 import { searchForWorkspaceRoot } from 'vite';
-import { BASE_URL, VITE_GOOGLE_OAUTH_KEY } from './constants/url';
+import { VITE_GOOGLE_OAUTH_KEY } from './constants/url';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -18,6 +18,9 @@ export default defineNuxtConfig({
 		'@vueuse/nuxt',
 		'nuxt-gtag',
 		'@nuxtjs/robots',
+		//+ resolver?
+		'radix-vue/nuxt',
+		//
 		[
 			'nuxt-viewport',
 			{
@@ -31,7 +34,7 @@ export default defineNuxtConfig({
 	],
 
 	routeRules: {
-		'/': { redirect: '/ru', ssr: true },
+		'/': { redirect: '/ru', ssr: true }
 	},
 	i18n: {
 		debug: false,
@@ -112,5 +115,15 @@ export default defineNuxtConfig({
 	experimental: { watcher: 'chokidar', appManifest: false },
 	googleSignIn: {
 		clientId: VITE_GOOGLE_OAUTH_KEY
-	}
+	},
+	app :{
+		head: {
+			link: [
+		  	{
+				rel: "stylesheet",
+				href: "https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap",
+		 	 },
+			],
+	 	 }
+	},
 });

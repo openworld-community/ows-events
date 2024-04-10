@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+    setup
+    lang="ts"
+>
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup';
 import { SUPPORT_TG_URL } from '~/constants/url';
@@ -7,7 +10,7 @@ const { t } = useI18n()
 
 const inputType = ref<'password' | 'text'>('password')
 
-const { meta, handleSubmit, handleReset } = useForm({
+const { handleSubmit, handleReset, values } = useForm({
     validationSchema: yup.object({
         email: yup
             .string()
@@ -32,6 +35,14 @@ const emailField = useField<string>(() => 'email', {
 const passwordField = useField<string>(() => inputType.value, {
     validateOnModelUpdate: false
 });
+
+const hasValue = computed(() => {
+    let bool = true
+    Object.values(values).map(item => {
+        if (!item) bool = false
+    })
+    return bool
+})
 
 const onSubmit = handleSubmit(async values => {
     try {
@@ -59,7 +70,7 @@ const onSubmit = handleSubmit(async values => {
         <fieldset class="signin__fieldset">
             <CommonFormField
                 :error="emailField.errorMessage.value"
-                :touched="emailField.meta.touched"
+                :touched="emailField.meta.touched && !!emailField.value.value"
                 :error-label="true"
             >
                 <CommonUiBaseInput
@@ -67,16 +78,16 @@ const onSubmit = handleSubmit(async values => {
                     :placeholder="$t('form.form.email')"
                     class="signin__fieldset--input"
                     autocomplete="true"
-                    name="email"
-                    type="email"
-                    :error="emailField.meta.touched && Boolean(emailField.errorMessage.value)
-                        ? emailField.errorMessage.value
-                        : false"
+                    name="text"
+                    type="text"
+                    :error="emailField.meta.touched && !!emailField.errorMessage.value && !!emailField.value.value
+            ? emailField.errorMessage.value
+            : false"
                 />
             </CommonFormField>
             <CommonFormField
                 :error="passwordField.errorMessage.value"
-                :touched="passwordField.meta.touched"
+                :touched="passwordField.meta.touched && !!passwordField.value.value"
                 :error-label="true"
             >
                 <CommonUiBaseInput
@@ -86,16 +97,16 @@ const onSubmit = handleSubmit(async values => {
                     name="password"
                     :type="inputType"
                     :show-password="true"
-                    :error="passwordField.meta.touched && Boolean(passwordField.errorMessage.value)
-                        ? emailField.errorMessage.value
-                        : false"
+                    :error="passwordField.meta.touched && !!passwordField.errorMessage.value && !!passwordField.value.value
+            ? passwordField.errorMessage.value
+            : false"
                 />
             </CommonFormField>
         </fieldset>
         <CommonButton
             class="signin__submit"
             button-kind="dark"
-            :is-disabled="!meta.touched && !meta.valid"
+            :is-disabled="!hasValue"
             :button-text="$t('form.form.login')"
             type="submit"
         />
@@ -109,7 +120,10 @@ const onSubmit = handleSubmit(async values => {
     </form>
 </template>
 
-<style lang="less" scoped>
+<style
+    lang="less"
+    scoped
+>
 .navigation__link {
     text-align: center;
     font-size: var(--font-size-M);

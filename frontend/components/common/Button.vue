@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+	setup
+	lang="ts"
+>
 import { computed, type PropType } from 'vue';
 import NuxtLink from '#app/components/nuxt-link';
 import { IconDefaultParams } from '@/constants/defaultValues/icon';
@@ -86,6 +89,18 @@ const props = defineProps({
 	isLoading: {
 		type: Boolean,
 		default: false
+	},
+	fontSize: {
+		type: String,
+		default: '',
+	},
+	padding: {
+		type: String,
+		default: '7px 14px'
+	},
+	lineHeight: {
+		type: String,
+		default: 'inherit'
 	}
 });
 
@@ -140,21 +155,24 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		/>
 		<span
 			v-if="!isIcon"
-			class="button__content"
+			:class="['button__content', { 'button__content--custom-font': fontSize }]"
 		>
 			{{ buttonText }}
 		</span>
 	</component>
 </template>
 
-<style lang="less" scoped>
+<style
+	lang="less"
+	scoped
+>
 .button {
 	display: flex;
 	justify-content: center;
-	height: 40px;
 	border-radius: 8px;
-	padding: 7px 14px;
+	padding: v-bind(padding);
 	align-items: center;
+	line-height: v-bind(lineHeight);
 
 	transition-property: background-color, color, border-color;
 	transition-duration: 0.3s;
@@ -171,6 +189,10 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 		@media (min-width: 768px) {
 			font-size: var(--font-size-S);
+		}
+
+		&--custom-font {
+			font-size: v-bind(fontSize);
 		}
 	}
 
@@ -193,11 +215,17 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			color: var(--color-white);
 		}
 
-		&:hover,
 		&:focus-visible,
 		&:active {
 			background-color: var(--color-dark);
 			border-color: var(--color-dark);
+		}
+
+		&:hover {
+			@media (hover: hover) {
+				background-color: var(--color-dark);
+				border-color: var(--color-dark);
+			}
 		}
 
 		&--disabled {
@@ -216,7 +244,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		}
 
 		&:hover,
-		&:focus {
+		&:focus-visible {
 			background-color: var(--color-accent-green-dark);
 			border-color: var(--color-accent-green-dark);
 		}
@@ -241,8 +269,13 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			color: var(--color-text-main);
 		}
 
-		&:hover,
-		&:focus,
+		&:hover {
+			@media (hover: hover) {
+				background-color: var(--color-input-field);
+			}
+		}
+
+		&:focus-visible,
 		&:active {
 			background-color: var(--color-input-field);
 		}
@@ -259,8 +292,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 				color: var(--color-input-field);
 			}
 
-			&:hover,
-			&:focus,
+			&:hover-visible,
 			&:active {
 				background-color: inherit;
 			}
@@ -277,7 +309,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		}
 
 		&:hover,
-		&:focus {
+		&:focus-visible {
 			background-color: var(--color-accent-green-main-30);
 		}
 
@@ -290,7 +322,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			cursor: default;
 
 			&:hover,
-			&:focus,
+			&:focus-visible,
 			&:active {
 				background-color: transparent;
 				border-color: transparent;
@@ -308,7 +340,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		}
 
 		&:hover,
-		&:focus,
+		&:focus-visible,
 		&:active {
 			background-color: var(--color-accent-red-30);
 		}
@@ -321,7 +353,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			}
 
 			&:hover,
-			&:focus,
+			&:focus-visible,
 			&:active {
 				background-color: var(--color-accent-red-30);
 			}
@@ -338,7 +370,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			}
 
 			&:hover,
-			&:focus,
+			&:focus-visible,
 			&:active {
 				background-color: inherit;
 			}
@@ -354,7 +386,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		border: 1px solid var(--color-white);
 		border-radius: 8px;
 		justify-content: space-between;
-		
+
 		&>.button__content {
 			font-size: var(--font-size-S);
 			line-height: 20px;
@@ -419,7 +451,8 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 		&:deep(svg) {
 			position: absolute;
-			top: 8px;
+			top: 50%;
+			transform: translateY(-50%);
 			right: 12px;
 			margin-right: 0;
 			width: 26px;
@@ -433,7 +466,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			}
 		}
 
-		&:focus,
+		&:focus-visible,
 		&:active {
 			border-color: var(--color-accent-green-main);
 		}
@@ -454,7 +487,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	transition-timing-function: ease;
 
 	&:hover,
-	&:focus {
+	&:focus-visible {
 		background-color: var(--color-background-secondary);
 	}
 
@@ -485,7 +518,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		border: 1px solid var(--color-background-secondary);
 
 		&:hover,
-		&:focus {
+		&:focus-visible {
 			&::v-deep(svg) {
 				color: var(--color-accent-green-main-30);
 			}
@@ -514,7 +547,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 .no-interactive {
 
 	&:hover,
-	&:focus,
+	&:focus-visible,
 	&:active {
 		border-color: unset;
 		background-color: unset;

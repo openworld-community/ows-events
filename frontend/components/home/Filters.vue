@@ -1,23 +1,27 @@
-<script setup lang="ts">
+<script
+	setup
+	lang="ts"
+>
 import dayjs from 'dayjs';
 import { useFilterStore } from '../../stores/filter.store';
 import { debouncedWatch } from '@vueuse/core';
 
+const desktop = inject('desktop')
+
 const filterStore = useFilterStore();
 
 const route = useRoute();
-const tablet = inject('tablet');
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
 	//TODO костыль, иначе при ините страницы не достается value из запроса
-	if (process.client) {
-		setTimeout(async () => {
-			await filterStore.getFilteredEvents();
-			await filterStore.getUsedFilters();
-			if (filterStore.filters.country)
-				await filterStore.getUsedCitiesByCountry(filterStore.filters.country);
-		});
-	}
+	if (process.server) return;
+
+	setTimeout(async () => {
+		filterStore.$patch({ loading: true });
+		await filterStore.getFilteredEvents();
+		await filterStore.getUsedFilters();
+		filterStore.$patch({ loading: false });
+	});
 });
 
 watch(
@@ -27,22 +31,15 @@ watch(
 			query: {
 				...route.query,
 				search: filters.searchLine || undefined,
-				country: filters.country || undefined,
 				city: filters.city || undefined,
 				tags: filters.tags.join(', ') || undefined,
 				// может приходить Invalid Date
-				startDate: filters.startDate ? dayjs(filters.startDate).format('YYYY-MM-DD') : undefined,
-				endDate: filters.endDate ? dayjs(filters.endDate).format('YYYY-MM-DD') : undefined
+				startDate: filters.date[0]
+					? dayjs(filters.date[0]).format('YYYY-MM-DD')
+					: undefined,
+				endDate: filters.date[1] ? dayjs(filters.date[1]).format('YYYY-MM-DD') : undefined
 			}
 		});
-		if (filters.country) {
-			await filterStore.getUsedCitiesByCountry(filters.country);
-		}
-		if (
-			!filters.country ||
-			!filterStore.usedCitiesByCountry[filters.country].includes(filters.city)
-		)
-			filterStore.filters.city = '';
 	},
 	{ deep: true }
 );
@@ -50,130 +47,103 @@ watch(
 debouncedWatch(
 	filterStore.filters,
 	async () => {
+		filterStore.$patch({ loading: true });
 		await filterStore.getFilteredEvents();
+		filterStore.$patch({ loading: false });
 	},
 	{ debounce: 700, maxWait: 1000 }
 );
-
-const openFilterModal = (
-	type: string,
-	list: string[] | { [key: string]: string }[],
-	multiple = false,
-	showKey?: string,
-	returnKey?: string
-) => {
-	if (list.length) {
-		filterStore.modal.list = list;
-		filterStore.modal.multiple = multiple;
-		filterStore.modal.type = type;
-		filterStore.modal.showKey = showKey;
-		filterStore.modal.returnKey = returnKey;
-		filterStore.$patch({ modal: { show: true } });
-	}
-};
-const mobile = inject('mobile');
 </script>
 
 <template>
-	<section class="filters">
-		<CommonUiFilter
-			filter-type="input"
-			name="searchLine"
-			icon-name="search"
-			no-separator
-		/>
+	<section
+		class="filters"
+		:style="filterStore.usedTags.length ? { rowGap: desktop ? 'calc((var(--gap) * 3)' : 'var(--gap)' } : null"
+	>
 		<div class="filters__wrapper">
 			<CommonUiFilter
-				:key="mobile ? 'mobile-country' : 'other-country'"
-				filter-type="select"
-				name="country"
-				:list="filterStore.usedCountries"
-				:disabled="!filterStore.usedCountries.length"
-				@on-filter-button-click="openFilterModal('country', filterStore.usedCountries)"
+				filter-type="input"
+				name="searchLine"
+				icon-name="search"
+				no-separator
 			/>
-			<CommonUiFilter
-				:key="mobile ? 'mobile-city' : 'other-city'"
-				filter-type="select"
-				name="city"
-				:list="filterStore.usedCitiesByCountry[filterStore.filters.country] ?? []"
-				:disabled="
-					!filterStore.filters.country ||
-					(!filterStore.usedCitiesByCountry[filterStore.filters.country] &&
-						!filterStore.filters.city)
-				"
-				@on-filter-button-click="
-					openFilterModal(
-						'city',
-						filterStore.usedCitiesByCountry?.[filterStore.filters.country] ?? []
-					)
-				"
-			/>
-			<CommonUiFilter
-				:key="mobile ? 'mobile-tags' : 'other-tags'"
-				filter-type="select"
-				name="tags"
-				:list="filterStore.usedTags"
-				multiple
-				show-key="name"
-				return-key="key"
-				:disabled="!filterStore.usedTags.length"
-				:dropdown-position="tablet ? 'right' : 'left'"
-				@on-filter-button-click="
-					openFilterModal('tags', filterStore.usedTags, true, 'name', 'key')
-				"
-			/>
-			<CommonUiFilter
-				filter-type="date"
-				name="startDate"
-			/>
-			<CommonUiFilter
-				filter-type="date"
-				name="endDate"
-			/>
+			<div class="filters__wrapper--mobile">
+				<CommonUiFilter
+					filter-type="select"
+					name="city"
+					:list="filterStore.usedCities"
+					:disabled="!filterStore.usedCities.length"
+				/>
+				<CommonUiFilter
+					filter-type="date"
+					name="date"
+					:range="true"
+				/>
+			</div>
 		</div>
+		<ul
+			v-if="filterStore.usedTags.length"
+			class="filters__tags"
+		>
+			<li
+				v-for="(tag, index) in filterStore.usedTags"
+				:key="index"
+			>
+				<CommonUiFilter
+					name="tags"
+					:tag="tag"
+					filter-type="tag"
+				/>
+			</li>
+		</ul>
 	</section>
 </template>
 
-<style scoped lang="less">
+<style
+	scoped
+	lang="less"
+>
 .filters {
-	display: flex;
+	--gap: 10px;
+
+	display: grid;
 	width: 100%;
-	flex-direction: column;
+	max-width: 1200px;
+	grid-template-rows: auto auto;
+	grid-template-columns: 1fr 1fr 1fr;
+	column-gap: var(--gap);
 
-	--gap: 8px;
+	margin-bottom: calc(var(--gap) * 2);
 
-	@media (min-width: 1440px) {
-		max-width: calc(100% - 2 * var(--padding-side));
-		flex-direction: row;
-		align-items: center;
-		background-color: var(--color-white);
-		box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
-		border-radius: 8px;
+	@media (max-width: 768px) {
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: repeat(2, auto);
+		row-gap: 0;
+		column-gap: 0;
+
+		&:deep(.filters__search) {
+			grid-column: span 2;
+		}
 	}
 
 	&__wrapper {
-		display: flex;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
 		width: 100%;
-		margin-top: var(--gap);
+		grid-column: span 3;
 		gap: var(--gap);
 
-		@media (max-width: 767px) {
-			&:deep(.button__filter) {
-				max-width: calc((100% - var(--gap) * 2) / 3);
-			}
+		@media (min-width: 1440px) {
+			background-color: var(--color-white);
+			box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
+			border-radius: 8px;
 		}
 
-		@media (max-width: 668px) {
+		@media (max-width: 768px) {
 			& {
-				flex-wrap: wrap;
+				gap: 0;
 				row-gap: var(--gap);
-			}
-		}
-
-		@media (min-width: 768px) {
-			&:deep(.filter),
-			&:deep(.button__multiselect) {
-				max-width: 20%;
+				grid-template-columns: 1fr 1fr;
 			}
 		}
 
@@ -181,12 +151,44 @@ const mobile = inject('mobile');
 			align-items: center;
 			margin-top: 0;
 			gap: 0;
+		}
 
-			&:deep(.filter),
-			&:deep(.button__multiselect) {
-				max-width: 15%;
+		&--mobile {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			grid-column: span 2;
+			gap: var(--gap);
+
+			@media (min-width: 1440px) {
+				gap: 0;
+			}
+
+			@media (max-width: 768px) {
+				grid-column: span 3;
+			}
+
+			@media (max-width: 668px) {
+				&:deep(.calendar) {
+					max-width: unset;
+				}
+			}
+
+			@media (max-width: 550px) {
+				grid-column: span 3;
+				display: grid;
+				grid-template-columns: 1fr;
+				column-gap: var(--gap);
 			}
 		}
+	}
+
+	&__tags {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		gap: calc(var(--gap));
+
+		grid-column: span 3;
 	}
 }
 

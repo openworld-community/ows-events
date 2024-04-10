@@ -4,14 +4,21 @@ import {
 	getCountries,
 	getMeta,
 	getUsedCountries,
+	getUsedCitiesByCountry,
 	getUsedCities
 } from './controller';
-import { IGetCitiesByCountryRouteProps, IGetCountriesRouteProps, IGetMetaRouteProps } from './type';
+import {
+	IGetCitiesByCountryRouteProps,
+	IGetCountriesRouteProps,
+	IGetMetaRouteProps,
+	IGetUsedCitiesRouteProps
+} from './type';
 import {
 	getCitiesByCountrySchema,
 	getCountriesSchema,
 	getMetaSchema,
 	getUsedCitiesByCountrySchema,
+	getUsedCitiesSchema,
 	getUsedCountriesSchema
 } from './schema';
 
@@ -35,8 +42,12 @@ export const locationApi = async (fastify: FastifyInstance) => {
 		schema: getUsedCountriesSchema,
 		handler: getUsedCountries
 	});
+	fastify.get<IGetUsedCitiesRouteProps>('/usedCities', {
+		schema: getUsedCitiesSchema,
+		handler: getUsedCities
+	});
 	fastify.get<IGetCitiesByCountryRouteProps>('/usedCities/:country', {
 		schema: getUsedCitiesByCountrySchema,
-		handler: getUsedCities
+		handler: getUsedCitiesByCountry
 	});
 };

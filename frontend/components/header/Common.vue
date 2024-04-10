@@ -4,9 +4,10 @@ import { RouteNameEnum, RoutePathEnum } from '../../constants/enums/route';
 import { getRouteName } from '../../utils';
 import { SUPPORT_TG_URL } from '../../constants/url';
 import { useUserStore } from '../../stores/user.store';
+import { useFilterStore } from '~/stores/filter.store';
 
 const route = useRoute();
-const router = useRouter();
+// const router = useRouter();
 const localePath = useLocalePath();
 const userStore = useUserStore();
 const mobile = inject('mobile');
@@ -49,9 +50,10 @@ const titleOnMobile = computed(() => {
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
 const goBack = () => {
-	if (router.options.history.state.back) {
-		router.back();
-	} else if (
+	// if (router.options.history.state.back) {
+	// 	router.back();
+	// }
+	if (
 		getRouteName(route.name as string).includes(RouteNameEnum.USER_FAVOURITES) ||
 		getRouteName(route.name as string).includes(RouteNameEnum.USER_MY_EVENTS)
 	) {
@@ -61,7 +63,18 @@ const goBack = () => {
 	}
 };
 
-console.log(localePath(route.path));
+const filterStore = useFilterStore();
+
+const clearFilters = async () => {
+	filterStore.$patch({
+		filters: {
+			city: '',
+			searchLine: '',
+			date: [],
+			tags: []
+		}
+	});
+};
 </script>
 
 <template>
@@ -99,7 +112,10 @@ console.log(localePath(route.path));
 					"
 					:to="!isAtHome ? localePath(RoutePathEnum.HOME) : undefined"
 					:itemprop="SeoItempropNavEnum.URL"
-					@click="isAtHome && scrollToTop()"
+					@click="
+						isAtHome && scrollToTop();
+						isAtHome && clearFilters();
+					"
 				>
 					<CommonIcon
 						name="afisha-logo-light"
@@ -122,6 +138,7 @@ console.log(localePath(route.path));
 				<li class="header__nav-item">
 					<NuxtLink
 						:to="localePath(RoutePathEnum.ABOUT)"
+						:prefetch="false"
 						class="header__nav-link"
 					>
 						{{ $t('header.navigation.about') }}

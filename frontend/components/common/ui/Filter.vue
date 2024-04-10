@@ -1,13 +1,17 @@
-<script setup lang="ts">
+<script
+	setup
+	lang="ts"
+>
 import type { PropType } from 'vue';
-import type { TCalendarDisabledButtons } from '../../../../common/types/filters'
 import { useFilterStore } from '../../../stores/filter.store';
-import { getFilterPlaceholder } from '../../../utils/texts';
-
 
 const props = defineProps({
+	tag: {
+		type: Object as PropType<{ name: string, key: string }>,
+		default: () => { }
+	},
 	filterType: {
-		type: String as PropType<'input' | 'select' | 'date'>,
+		type: String as PropType<'input' | 'select' | 'date' | 'tag'>,
 		required: true
 	},
 	name: {
@@ -18,20 +22,6 @@ const props = defineProps({
 	list: {
 		type: Array as PropType<string[] | { [key: string]: string }[]>,
 		default: () => []
-	},
-	multiple: {
-		type: Boolean,
-		default: false
-	},
-	returnKey: {
-		// для объектов: ключ значения, которое нужно возвращать
-		type: String,
-		default: ''
-	},
-	showKey: {
-		// для объектов: ключ значения, которое нужно показывать в списке
-		type: String,
-		default: ''
 	},
 	disabled: {
 		type: Boolean,
@@ -49,56 +39,34 @@ const props = defineProps({
 	dropdownPosition: {
 		type: String as PropType<'left' | 'right'>,
 		default: 'left'
+	},
+	range: {
+		type: Boolean,
+		default: false
 	}
 });
 
-const emit = defineEmits(['onFilterButtonClick']);
 
 const mobile = inject('mobile');
+const desktop = inject('desktop')
 const filterStore = useFilterStore();
 
-const showModal = computed(() => filterStore.modal.show);
+const isActive = ref<boolean>(false)
 
-const computedMinDate = computed(() => {
-	const startDay = new Date(filterStore.filters.startDate)
-	const nextDay = new Date(new Date().setDate(startDay.getDate() + 1))
-	
-	return props.name === 'endDate' 
-		   && filterStore.filters.startDate 
-			  ? nextDay 
-			  : new Date(roundTime(Date.now(), 10))
-})
-
-const checkNull = (payload: Date | null) => {
-	if (payload === null && props.name === 'endDate') {
-		// для startDate new Date(null) не страшен
-		// для endDate страшен -> будет 01 jan 1970
-		filterStore.filters.endDate = ''
+const handleTag = () => {
+	if (isActive.value === false) {
+		filterStore.filters.tags.push(props.tag.key)
+	} else {
+		filterStore.filters.tags = filterStore.filters.tags.filter(item => item !== props.tag.key)
 	}
+
+	isActive.value = !isActive.value
 }
 
-const isDisabledButtons = computed((): TCalendarDisabledButtons => {
-	const isEndDate = props.name === 'endDate'
-	const today = new Date()
-	const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
-	// обе кнопки !disabled
-	const result = {
-		today: false,
-		tomorrow: false
+onMounted(() => {
+	if (filterStore.filters.tags.includes(props.tag?.key)) {
+		isActive.value = true
 	}
-	
-	// кнопка сегодня disabled
-	if (isEndDate && today.getTime() < computedMinDate.value.getTime()) {
-		result.today = true
-	}
-
-	// обе кнопки disabled
-	if (isEndDate && tomorrow.getTime() < computedMinDate.value.getTime()) {
-		result.today = true
-		result.tomorrow = true
-	}
-
-	return result
 })
 </script>
 
@@ -106,7 +74,7 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 	<CommonUiBaseInput
 		v-if="filterType === 'input'"
 		v-model="filterStore.filters[name]"
-		:class="['filter', { 'filter--no-separator': noSeparator }]"
+		:class="['filter', 'filters__search', { 'filter--no-separator': noSeparator }]"
 		:name="name"
 		:placeholder="$t(`home.filter.${name}.placeholder`)"
 		:disabled="disabled"
@@ -118,79 +86,68 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 		v-else-if="filterType === 'date'"
 		v-model="filterStore.filters[name]"
 		type="date"
+		:range="range"
+		is-filter
 		appearance="no-border"
 		class="filter"
 		:name="name"
 		:placeholder="$t(`home.filter.${name}.placeholder`)"
 		:aria-label="$t(`home.filter.${name}.aria`)"
-		:min-date="computedMinDate"
+		:min-date="new Date(roundTime(Date.now(), 10))"
 		:min-time="name === 'startDate' ? { hours: 0, minutes: 0 } : { hours: '23', minutes: '59' }"
-		:disabled-buttons="isDisabledButtons"
-		@update:model-value="checkNull"
 	/>
 	<template v-if="filterType === 'select'">
-		<template v-if="mobile">
-			<CommonButton
-				button-kind="filter"
-				icon-name="container"
-				:button-text="getFilterPlaceholder(
-					multiple,
-					name,
-					list,
-					filterStore.filters[name],
-					showKey,
-					returnKey
-				)
-					"
-				:filled="multiple ? !!filterStore.filters[name].length : !!filterStore.filters[name]
-					"
-				:is-disabled="disabled"
-				:alt="$t(`home.filter.${name}.aria`)"
-				class="filter"
-				@click="emit('onFilterButtonClick')"
-			/>
-			<ModalFilter
-				v-if="showModal"
-				:filter-list="filterStore.modal.list"
-				:filter-type="filterStore.modal.type"
-				:multiple="filterStore.modal.multiple"
-				:return-key="filterStore.modal.returnKey"
-				:show-key="filterStore.modal.showKey"
-			/>
-		</template>
-		<CommonUiBaseSelect
+		<LibraryMobileSelect
+			v-if="mobile && name === 'city'"
+			v-model="filterStore.filters[name]"
+			:title="name"
+			:name="name"
+			:placeholder="$t(`home.filter.${name}.placeholder`)"
+			:options="list"
+			:disabled="disabled"
+		/>
+		<LibrarySelect
 			v-else
 			v-model="filterStore.filters[name]"
-			:show-key="showKey"
-			:return-key="returnKey"
 			:class="['filter', { 'filter--no-separator': noSeparator }]"
 			:name="name"
 			:placeholder="$t(`home.filter.${name}.placeholder`)"
-			:list="list"
-			:multiple="multiple"
+			:options="list"
 			:disabled="disabled"
-			appearance="no-border"
-			:dropdown-position="dropdownPosition"
+			:no-border="'no-border' ? true : false"
 			:aria-label="$t(`home.filter.${name}.aria`)"
 		/>
 	</template>
+	<CommonButton
+		v-if="filterType === 'tag'"
+		style="font-weight: 500;"
+		:font-size="mobile 
+			? '11px' 
+			: '' 
+		"
+		:line-height="mobile 
+			? '17.6px' 
+			: 'inherit' 
+		"
+		:padding="!desktop ? '3px 10px' : '7px 14px'"
+		:button-kind="isActive ? 'dark' : 'ordinary'"
+		:button-text="tag.name"
+		:class="['filter', { 'filter--no-separator': noSeparator }]"
+		:aria-label="tag.name"
+		@click="handleTag"
+	/>
 </template>
 
-<style scoped lang="less">
+<style
+	scoped
+	lang="less"
+>
+.filter.select {
+	width: 100%;
+}
+
 .filter {
 	@media (min-width: 1440px) {
-		width: 50%;
-		min-width: 20%;
-
-		&:deep(.input__button),
-		&:deep(.button__icon),
-		&:deep(.select__clear-button) {
-			top: 25px;
-		}
-
-		&:deep(.button__multiselect) {
-			max-width: 20%;
-		}
 
 		&:deep(.input__field),
 		&:deep(.button__multiselect) {
@@ -212,34 +169,15 @@ const isDisabledButtons = computed((): TCalendarDisabledButtons => {
 		position: absolute;
 		top: 10%;
 		left: -1px;
+
+		transition: backround-color, 0.15s ease-in-out;
 	}
 
-	// Скрытие сепараторов при фокусе (в т.ч. псевдоэлементов соседнего компонента)
-	//если поле внутри имеет инпут в фокусе
-	.filter:has(input:focus)::before,
-	.filter:has(.button__multiselect:focus)::before,
-	.filter:has(.select__field--green-border)::before,
-	//если поле внутри имеет инпут в фокусе, а в разметке рядом есть еще одно поле
-	.filter:has(input:focus)+.filter::before,
-	// .filter:has(.button__multiselect)+.filter::before,
-	.filter:has(.select__field--green-border)+.filter::before,
-	//если поле внутри имеет инпут в фокусе, а в разметке рядом есть враппер с полями, то у первого child
-	.filter:has(input:focus)+.filters__wrapper .filter:first-child::before,
-	.filter:has(.button__multiselect)+.filters__wrapper .filter:first-child::before,
-	.filter:has(.select__field--green-border)+.filters__wrapper .filter:first-child::before,
-	//если враппер имеет последнее child поле с инпутом в фокусе и рядом еще один враппер, то у первого child
-	.filters__wrapper:has(.filter:last-child input:focus)+.filters__wrapper .filter:first-child::before,
-	.filters__wrapper:has(.button__multiselect)+.filters__wrapper .filter:first-child::before,
-	.filters__wrapper:has(.select__field--green-border)+.filters__wrapper .filter:first-child::before,
-	//если враппер имеет последнее child поле с инпутом в фокусе и рядом есть еще одно поле
-	.filters__wrapper:has(.filter:last-child input:focus)+.filter::before,
-	.filters__wrapper:has(.button__multiselect)+.filter::before,
-	.filters__wrapper:has(.select__field--green-border)+.filter::before //псевдоэлементы ::before становятся прозрачными
-
-		{
+	// прозраные сепараторы при фокусе
+	.filter:focus-within::before,
+	.filter:focus-within+.filter::before,
+	.filter:has(.input__field:focus)+.filters__wrapper--mobile>.filter:first-child::before {
 		background-color: transparent;
 	}
-
-	//При добавлении компонентов четко соблюдать наименования классов и компоновку
 }
 </style>

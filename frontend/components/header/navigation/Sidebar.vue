@@ -50,6 +50,15 @@ const localePath = useLocalePath();
 			
 			<HeaderSidebarItem
 				component-type="link"
+				:link-to="localePath(RoutePathEnum.COOPERATION)"
+				:text="$t('header.navigation.cooperation')"
+				icon-name="cooperation"
+				:current="getRouteName(route.name as string) === RouteNameEnum.COOPERATION"
+				@click="emit('close')"
+			/>
+
+			<HeaderSidebarItem
+				component-type="link"
 				:link-to="localePath(RoutePathEnum.DONATION)"
 				:text="$t('header.navigation.donation')"
 				icon-name="donate"
@@ -63,15 +72,6 @@ const localePath = useLocalePath();
 				:text="$t('header.navigation.limitation_of_liability')"
 				icon-name="privacy"
 				:current="getRouteName(route.name as string) === RouteNameEnum.LIMITATION_OF_LIABILITY"
-				@click="emit('close')"
-			/>
-
-			<HeaderSidebarItem
-				component-type="link"
-				:link-to="localePath(RoutePathEnum.COOPERATION)"
-				:text="$t('header.navigation.cooperation')"
-				icon-name="info"
-				:current="getRouteName(route.name as string) === RouteNameEnum.COOPERATION"
 				@click="emit('close')"
 			/>
 		</ul>

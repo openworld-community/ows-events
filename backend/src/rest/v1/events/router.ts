@@ -1,4 +1,4 @@
-import { FastifyInstance } from 'fastify';
+import { FastifyInstance, FastifyRequest } from 'fastify';
 import {
 	addEvent,
 	deleteEvent,
@@ -26,9 +26,8 @@ import {
 	getMyEventsSchema,
 	updateEventSchema
 } from './schema';
-import { authGenerator } from '../../../plugins/authorization';
 import { UserRoles } from '../../../../../common/const/userRoles';
-import { isUserEventAuthor } from '../../../plugins/authorization/helpers/isUserEventAuthor';
+import { authorizeUserHelper, isUserEventAuthor } from '../../../plugins/authorization';
 
 export const eventsApi = async (fastify: FastifyInstance) => {
 	fastify.get<IGetEventsRoute>('/', {
@@ -42,31 +41,34 @@ export const eventsApi = async (fastify: FastifyInstance) => {
 	});
 
 	fastify.get<IGetMyEventsRoute>('/my', {
-		preHandler: authGenerator({}),
+		preHandler: fastify.auth([authorizeUserHelper()]),
 		schema: getMyEventsSchema,
 		handler: getMyEvents
 	});
 
 	fastify.post<IAddEventRoute>('/add', {
-		preHandler: authGenerator({}),
+		preHandler: fastify.auth([authorizeUserHelper()]),
 		schema: addEventSchema,
 		handler: addEvent
 	});
 
 	fastify.post<IDeleteEventRoute>('/delete', {
-		preHandler: authGenerator({
-			overrideRoleAuth: isUserEventAuthor,
-			roles: [UserRoles.ADMIN]
-		}),
+		preHandler: fastify.auth([
+			authorizeUserHelper([UserRoles.ADMIN]),
+			(req: FastifyRequest<IUpdateEventRoute>) =>
+				isUserEventAuthor(req.headers.authorization, req.body.event.id)
+		]),
+
 		schema: deleteEventSchema,
 		handler: deleteEvent
 	});
 
 	fastify.post<IUpdateEventRoute>('/update', {
-		preHandler: authGenerator({
-			overrideRoleAuth: isUserEventAuthor,
-			roles: [UserRoles.ADMIN, UserRoles.MODERATOR]
-		}),
+		preHandler: fastify.auth([
+			authorizeUserHelper([UserRoles.MODERATOR, UserRoles.ADMIN]),
+			(req: FastifyRequest<IUpdateEventRoute>) =>
+				isUserEventAuthor(req.headers.authorization, req.body.event.id)
+		]),
 		schema: updateEventSchema,
 		handler: updateEvent
 	});

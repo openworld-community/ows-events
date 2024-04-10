@@ -4,7 +4,7 @@ import type { EventOnPoster } from '../../../common/types';
 
 export const user = {
 	get: defineQuery<(input: { userToken: string }) => UserCookieInfo>((input) => {
-		return useBackendFetch(`user/info/user`, { query: { token: input.userToken } });
+		return useBackendFetch(`user/info/user`, { headers: { authorization: input.userToken } });
 	}),
 	update: defineMutation<(input: { userInfo: PostUserInfo }) => { id: string }>((input) => {
 		return useBackendFetch('user/info', { body: input }, { auth: true });

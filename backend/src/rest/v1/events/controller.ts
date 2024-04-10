@@ -11,10 +11,6 @@ import {
 	IGetMyEventsHandler,
 	IUpdateEventHandler
 } from './type';
-import { JWTController } from '../../../controllers/JWT-controller';
-import { UserTokenController } from '../../../controllers/user-token-controller';
-import { userController } from '../../../controllers/user-controller';
-import { UserRoles } from '../../../../../common/const/userRoles';
 
 export const addEvent: IAddEventHandler = async (request) => {
 	const { event } = request.body;
@@ -48,10 +44,8 @@ export const addEvent: IAddEventHandler = async (request) => {
 export const getEvents: IGetEventsHandler = async (): Promise<EventOnPoster[]> =>
 	(await eventsStateController.getEvents()).slice(0, 100);
 
-export const getMyEvents: IGetMyEventsHandler = async (request) => {
-	const events = await eventsStateController.getUserEvents(request.userId);
-	return events;
-};
+export const getMyEvents: IGetMyEventsHandler = async (request) =>
+	eventsStateController.getUserEvents(request.userId);
 
 export const getEvent: IGetEventHandler = async (request) => {
 	const eventId = request.params.id;
@@ -71,22 +65,8 @@ export const deleteEvent: IDeleteEventHandler = async (request) => {
 };
 
 export const updateEvent: IUpdateEventHandler = async (request) => {
-	const token = request.headers.authorization;
-	if (!token) throw new Error(CommonErrorsEnum.UNAUTHORIZED);
-
-	const isTokenValid = await UserTokenController.checkAccessToken(token);
-	if (!isTokenValid) throw new Error(CommonErrorsEnum.WRONG_TOKEN);
-	const jwtData = JWTController.decodeToken(token);
-
 	const oldEvent = await eventsStateController.getEvent(request.body.event.id);
 	if (!oldEvent) throw new Error(CommonErrorsEnum.EVENT_NOT_FOUND);
-
-	const isAuthor = oldEvent?.creatorId === String(jwtData.id);
-	const hasRights = await userController.validatePermission(jwtData.id, [
-		UserRoles.ADMIN,
-		UserRoles.MODERATOR
-	]);
-	if (!isAuthor && !hasRights) throw new Error(CommonErrorsEnum.FORBIDDEN);
 
 	const isEventInPast = oldEvent?.date < Date.now();
 	if (isEventInPast) throw new Error(CommonErrorsEnum.FORBIDDEN);
@@ -95,7 +75,5 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 	return undefined;
 };
 
-export const findEvents: IFindEventHandler = async (request) => {
-	const events = await eventsStateController.getEvents(request.body);
-	return events;
-};
+export const findEvents: IFindEventHandler = async (request) =>
+	eventsStateController.getEvents(request.body);

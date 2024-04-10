@@ -1,6 +1,6 @@
-import { FastifyRequest, preHandlerHookHandler } from 'fastify';
-import { UserRoles } from '../../../../common/const/userRoles';
-import { authorizeUser } from './helpers/authorizeUser';
+import { authorizeUserHelper } from './helpers/authorizeUser';
+import { isUserEventAuthor } from './helpers/isUserEventAuthor';
+import { validateToken } from './helpers/validateToken';
 
 declare module 'fastify' {
 	interface FastifyRequest {
@@ -8,23 +8,4 @@ declare module 'fastify' {
 	}
 }
 
-type IAuthGeneratorArgs = {
-	overrideRoleAuth?: (...args: any[]) => Promise<boolean>;
-	roles?: UserRoles[];
-};
-
-type IAuthGenerator = (config: IAuthGeneratorArgs) => preHandlerHookHandler;
-
-export const defaultOverrideRoleAuth = async () => false;
-export const authGenerator: IAuthGenerator = (config) => async (request: FastifyRequest) => {
-	console.log(config.overrideRoleAuth);
-	const shouldSkipRoleAuth = config.overrideRoleAuth
-		? await config.overrideRoleAuth()
-		: await defaultOverrideRoleAuth();
-	const data = await authorizeUser(
-		request.headers.authorization,
-		config.roles,
-		shouldSkipRoleAuth
-	);
-	request.userId = data.id;
-};
+export { authorizeUserHelper, isUserEventAuthor, validateToken };

@@ -55,7 +55,8 @@ const goBack = () => {
 	// }
 	if (
 		getRouteName(route.name as string).includes(RouteNameEnum.USER_FAVOURITES) ||
-		getRouteName(route.name as string).includes(RouteNameEnum.USER_MY_EVENTS)
+		getRouteName(route.name as string).includes(RouteNameEnum.USER_MY_EVENTS) ||
+		getRouteName(route.name as string).includes(RouteNameEnum.USER_PROFILE)
 	) {
 		navigateTo(localePath({ path: RoutePathEnum.USER_PAGE }));
 	} else {

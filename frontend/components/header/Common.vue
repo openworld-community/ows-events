@@ -4,6 +4,8 @@ import { RouteNameEnum, RoutePathEnum } from '../../constants/enums/route';
 import { getRouteName } from '../../utils';
 import { useUserStore } from '../../stores/user.store';
 import { useFilterStore } from '~/stores/filter.store';
+import { useModal } from 'vue-final-modal';
+import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 
 const route = useRoute();
 // const router = useRouter();
@@ -12,6 +14,7 @@ const userStore = useUserStore();
 const mobile = inject('mobile');
 const desktop = inject('desktop');
 const tablet = inject('tablet');
+
 const { t } = useI18n();
 
 defineProps({
@@ -65,6 +68,21 @@ const goBack = () => {
 };
 
 const filterStore = useFilterStore();
+
+const {
+	open: openNeedAuthorizeModal,
+	close: closeNeedAuthorizeModal,
+	patchOptions: needAuthorizeModalPatch
+} = useModal({ component: NeedAuthorize });
+needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
+
+const onButtonClick = async () => {
+	if (userStore.isAuthorized) {
+		await navigateTo(localePath(`${RoutePathEnum.EVENT_EDIT}new`));
+	} else {
+		await openNeedAuthorizeModal();
+	}
+};
 
 const clearFilters = async () => {
 	filterStore.$patch({
@@ -137,25 +155,13 @@ const clearFilters = async () => {
 			<div class="header__right">
 				<!-- v-if="!hasBackButton" -->
 				<CommonButton
-					v-if="userStore.isAuthorized && !mobile"
-					:link="`${RoutePathEnum.EVENT_EDIT}new`"
+					v-if="!mobile"
 					:button-text="$t('global.button.create_event')"
 					class="button__success--filled"
 					button-kind="success"
+					@click="onButtonClick"
 				/>
-				<LibraryAlert
-					v-if="!userStore.isAuthorized &&!mobile && getRouteName(route.name as string) !== RouteNameEnum.AUTH"
-					:description-text="$t('modal.need_authorize_modal.title')"
-					:link="`${RoutePathEnum.EVENT_EDIT}new`"
-					confirm-button-text="global.button.authorize"
-					cancel-button-text="global.button.close"
-				>
-					<CommonButton
-						:button-text="$t('global.button.create_event')"
-						class="button__success--filled"
-						button-kind="success"
-					/>
-				</LibraryAlert>
+
 				<HeaderLanguageSelector class="header__language-selector" />
 				<HeaderNavigationBurger
 					v-if="!desktop"

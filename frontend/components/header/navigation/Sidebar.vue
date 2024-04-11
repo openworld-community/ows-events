@@ -3,11 +3,30 @@ import { RoutePathEnum } from '@/constants/enums/route';
 import { SUPPORT_TG_URL } from '../../../constants/url';
 import { useUserStore } from '../../../stores/user.store';
 import { RouteNameEnum } from '../../../constants/enums/route';
+import { useModal } from 'vue-final-modal';
+import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
+
+const localePath = useLocalePath();
 
 const mobile = inject('mobile');
 const emit = defineEmits(['close']);
 const route = useRoute();
 const userStore = useUserStore();
+
+const {
+	open: openNeedAuthorizeModal,
+	close: closeNeedAuthorizeModal,
+	patchOptions: needAuthorizeModalPatch
+} = useModal({ component: NeedAuthorize });
+needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
+
+const onButtonClick = async () => {
+	if (userStore.isAuthorized) {
+		await navigateTo(localePath(`${RoutePathEnum.EVENT_EDIT}new`));
+	} else {
+		await openNeedAuthorizeModal();
+	}
+};
 </script>
 
 <template>
@@ -29,25 +48,11 @@ const userStore = useUserStore();
 				@click="emit('close')"
 			/>
 			<HeaderSidebarItem
-				v-if="userStore.isAuthorized && mobile"
-				:link-to="`${RoutePathEnum.EVENT_EDIT}new`"
+				v-if="mobile"
 				:text="$t('global.button.create_event')"
 				icon-name="edit"
-				@click="emit('close')"
+				@click="onButtonClick"
 			/>
-
-			<LibraryAlert
-				v-if="mobile&&!userStore.isAuthorized && getRouteName(route.name as string) !== RouteNameEnum.AUTH"
-				:description-text="$t('modal.need_authorize_modal.title')"
-				:link="`${RoutePathEnum.EVENT_EDIT}new`"
-				confirm-button-text="global.button.authorize"
-				cancel-button-text="global.button.close"
-			>
-				<HeaderSidebarItem
-					:text="$t('global.button.create_event')"
-					icon-name="edit"
-				/>
-			</LibraryAlert>
 
 			<HeaderSidebarItem
 				:link-to="RoutePathEnum.ABOUT"

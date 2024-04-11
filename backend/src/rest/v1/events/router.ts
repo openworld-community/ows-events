@@ -53,22 +53,28 @@ export const eventsApi = async (fastify: FastifyInstance) => {
 	});
 
 	fastify.post<IDeleteEventRoute>('/delete', {
-		preHandler: fastify.auth([
-			authorizeUserHelper([UserRoles.ADMIN]),
-			(req: FastifyRequest<IUpdateEventRoute>) =>
-				isUserEventAuthor(req.headers.authorization, req.body.event.id)
-		]),
+		preHandler: fastify.auth(
+			[
+				authorizeUserHelper([UserRoles.ADMIN]),
+				(req: FastifyRequest<IUpdateEventRoute>) =>
+					isUserEventAuthor(req.headers.authorization, req.body.event.id)
+			],
+			{ relation: 'or' }
+		),
 
 		schema: deleteEventSchema,
 		handler: deleteEvent
 	});
 
 	fastify.post<IUpdateEventRoute>('/update', {
-		preHandler: fastify.auth([
-			authorizeUserHelper([UserRoles.MODERATOR, UserRoles.ADMIN]),
-			(req: FastifyRequest<IUpdateEventRoute>) =>
-				isUserEventAuthor(req.headers.authorization, req.body.event.id)
-		]),
+		preHandler: fastify.auth(
+			[
+				authorizeUserHelper([UserRoles.MODERATOR, UserRoles.ADMIN]),
+				(req: FastifyRequest<IUpdateEventRoute>) =>
+					isUserEventAuthor(req.headers.authorization, req.body.event.id)
+			],
+			{ relation: 'or' }
+		),
 		schema: updateEventSchema,
 		handler: updateEvent
 	});

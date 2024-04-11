@@ -46,7 +46,10 @@ if (data.value) {
 		: null;
 	posterEvent.value = data.value;
 } else {
-	navigateTo(localePath(RoutePathEnum.HOME));
+	throw createError({
+		statusCode: 404,
+		data: { message: t('errors.NOT_FOUND_BY_ID', { id: id }) }
+	});
 }
 
 const eventImage = computed(() => {

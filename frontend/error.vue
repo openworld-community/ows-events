@@ -15,7 +15,8 @@ const props = defineProps({
 		type: Object as () => NuxtError,
 		default: () => ({
 			statusCode: 404,
-			message: 'Not Found'
+			message: '',
+			data: ''
 		})
 	}
 });
@@ -31,7 +32,7 @@ onMounted(() => {
 	<NuxtLayout>
 		<div class="service-error">
 			<template v-if="props.error.statusCode === 404">
-				<Error404 />
+				<Error404 :message="error?.data" />
 			</template>
 			<template v-else>
 				<Error500 />

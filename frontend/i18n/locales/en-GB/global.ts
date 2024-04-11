@@ -21,13 +21,14 @@ export default {
 		in_favourites: 'In Favourites',
 		logout: 'Logout',
 		new_event: 'Create new event',
+		create_event: 'Create event',
 		register: 'Register',
 		remove_from_favourites: 'Remove from Favorites',
 		reset: 'Reset',
 		save: 'Save',
 		search: 'Search',
 		share: 'Share',
-		yes: 'Yes',
+		yes: 'Yes'
 	},
 	notFound: 'Nothing found'
 };

@@ -21,13 +21,14 @@ export default {
 		in_favourites: 'В избранном',
 		logout: 'Выйти из аккаунта',
 		new_event: 'Создать новое мероприятие',
+		create_event: 'Создать мероприятие',
 		register: 'Зарегистрироваться',
 		remove_from_favourites: 'Удалить из избранного',
 		reset: 'Сбросить',
 		save: 'Сохранить',
 		search: 'Поиск',
 		share: 'Поделиться',
-		yes: 'Да',
+		yes: 'Да'
 	},
 	notFound: 'Ничего не найдено'
 };

@@ -8,12 +8,11 @@ import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 
 const route = useRoute();
-// const router = useRouter();
+
 const localePath = useLocalePath();
 const userStore = useUserStore();
 const mobile = inject('mobile');
 const desktop = inject('desktop');
-const tablet = inject('tablet');
 
 const { t } = useI18n();
 

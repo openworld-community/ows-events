@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import {
 	ComboboxAnchor,
 	ComboboxContent,
@@ -135,7 +132,6 @@ const clearModel = () => emit('update:model-value', '')
 						v-if="model"
 						as-child
 						class="cb__cancel"
-						@click="clearModel(); close()"
 					>
 						<CommonButton
 							tabindex="0"
@@ -143,6 +139,8 @@ const clearModel = () => emit('update:model-value', '')
 							icon-name="close"
 							:interactive="false"
 							class="cb__cancel--icon"
+							:is-disabled="disabled"
+							@click="clearModel(); close()"
 						/>
 					</ComboboxCancel>
 				</div>
@@ -186,10 +184,7 @@ const clearModel = () => emit('update:model-value', '')
 	</ComboboxRoot>
 </template>
 
-<style
-	scoped
-	lang="less"
->
+<style scoped lang="less">
 .cb__wrapper {
 	position: relative;
 	font-family: var(--font-family-main);

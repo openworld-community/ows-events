@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { options } from 'sanitize-html';
+import cooperation from '~/i18n/locales/ru-RU/cooperation';
 
 const { t } = useI18n();
 const mobile = inject('mobile');
@@ -9,37 +9,41 @@ const props = defineProps({
 		type: String,
 		default: ''
 	},
-	picture: {
+	image: {
 		type: String,
 		default: ''
 	},
-    option: {
-		type: Array,
+	option: {
+		type: String,
 		default: []
 	},
-    price: {
+	price: {
 		type: String,
 		default: ''
 	},
-    
+	button: {
+		type: String,
+		default: ''
+	}
 });
-
 </script>
 
 <template>
 	<div class="package">
 		<div class="package__main package__kit">
 			<div class="package__header">{{ name }}</div>
-			<div class="package__picture">{{ picture }}</div>
+			<div class="package__image">{{ image }}</div>
 		</div>
 		<div class="package__main package__options">
 			<ul class="package__options__list">
-				<li v-for="item in option" class="package__options__list--item">{{ item }}</li>
+				<li class="package__options__list--item">
+					{{ $t(cooperation.package.basic.option[0].name) }}
+				</li>
 			</ul>
 		</div>
 		<div class="package__main package__button">
-			<div>{{price}}</div>
-			<div>Button</div>
+			<div>{{ price }}</div>
+			<div>{{ button }}</div>
 		</div>
 	</div>
 </template>
@@ -65,7 +69,7 @@ const props = defineProps({
 		font-size: clamp(16px, 1.5vw, 20px);
 		font-weight: 500;
 	}
-	&__picture {
+	&__image {
 		height: 200px;
 		width: 200px;
 	}

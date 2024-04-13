@@ -1,5 +1,5 @@
 export default {
-	hello: {
+	title: {
 		name: 'Join the Balkan event aggregation platform',
 		description: `Our efforts are focused on making the cultural and public space of the Balkans - from Serbia to Montenegro - more accessible and united. We offer the opportunity for event organizers and participants to be part of this transformation through our innovative platform. That's why choosing our startup is a choice in favor of opportunities and advantages:`,
 		advantages: {

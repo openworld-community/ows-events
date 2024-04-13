@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import Package from '../components/common/cooperation/Package.vue';
-import AllAdvantages from '../components/common/cooperation/cooperation-lists/AllAdvantages.vue';
-import AllPackages from '../components/common/cooperation/cooperation-lists/AllPackages.vue';
-import AllAdditionalServices from '../components/common/cooperation/cooperation-lists/AllAdditionalServices.vue';
+import AdvantagesList from '../components/common/cooperation/cooperation-lists/AdvantagesList.vue';
+import PackagesList from '../components/common/cooperation/cooperation-lists/PackagesList.vue';
+import AdditionalsList from '../components/common/cooperation/cooperation-lists/AdditionalsList.vue';
 
 const { t } = useI18n();
 const mobile = inject('mobile');
@@ -12,11 +11,13 @@ const mobile = inject('mobile');
 	<div class="root">
 		<HeaderCommon />
 		<div class="cooperation">
-			<div class="cooperation__hello">{{ $t('cooperation.hello.name') }}</div>
-			<div class="cooperation__description">{{ $t('cooperation.hello.description') }}</div>
-			<AllAdvantages />
-			<AllPackages />
-			<AllAdditionalServices />
+			<div class="cooperation__wrapper">
+				<h1 class="cooperation__title">{{ $t('cooperation.title.name') }}</h1>
+				<p class="cooperation__description">{{ $t('cooperation.title.description') }}</p>
+				<AdvantagesList />
+				<PackagesList />
+				<AdditionalsList />
+			</div>
 		</div>
 		<FooterCommon v-if="!mobile" />
 	</div>
@@ -25,16 +26,33 @@ const mobile = inject('mobile');
 <style lang="less" scoped>
 .cooperation {
 	height: 100%;
-	width: 100vw;
+	width: 100%;
+	display: flex;
+	justify-content: center;
 	padding-left: 5vw;
 	padding-right: 5vw;
-	padding-top: 50px;
-	display: flex;
-	flex-direction: column;
-	gap: 30px;
 	@media (max-width: 768px) {
-		padding-left: 1.5vw;
-		padding-right: 1.5vw;
+		padding-left: 30px;
+		padding-right: 30px;
+	}
+	&__wrapper {
+		max-width: 1440px;
+		padding-top: 50px;
+		display: flex;
+		flex-direction: column;
+		gap: 30px;
+	}
+	&__title {
+		line-height: 1.3;
+		@media (max-width: 768px) {
+			font-size: 24px;
+			font-weight: 600;
+			text-align: center;
+			line-height: 1.4;
+		}
+	}
+	&__description {
+		font-size: --font-size-L;
 	}
 }
 </style>

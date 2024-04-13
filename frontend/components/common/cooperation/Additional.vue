@@ -27,11 +27,15 @@ const props = defineProps({
 	<div class="additional">
 		<div class="additional__image">{{ image }}</div>
 		<div class="additional__text">
-			<div class="additional__text__header">{{ name }}</div>
+			<h3 class="additional__text__header">{{ name }}</h3>
 			<div class="additional__text__description">{{ description }}</div>
 		</div>
 		<div>{{ price }}</div>
-		<div>{{ button }}</div>
+		<CommonButton
+			class="additional__button"
+			button-kind="success"
+			:button-text="button"
+		/>
 	</div>
 </template>
 
@@ -41,5 +45,9 @@ const props = defineProps({
 	justify-content: space-between;
 	padding-top: 10px;
 	padding-bottom: 10px;
+	&__button{
+	padding-top: 0px;
+	padding-bottom: 0px;
+	}
 }
 </style>

@@ -31,7 +31,7 @@ const props = defineProps({
 <template>
 	<div class="package">
 		<div class="package__main package__kit">
-			<div class="package__header">{{ name }}</div>
+			<h2 class="package__header">{{ name }}</h2>
 			<div class="package__image">{{ image }}</div>
 		</div>
 		<div class="package__main package__options">
@@ -41,9 +41,13 @@ const props = defineProps({
 				</li>
 			</ul>
 		</div>
-		<div class="package__main package__button">
-			<div>{{ price }}</div>
-			<div>{{ button }}</div>
+		<div class="package__main package__buy">
+			<h2 class="package__price">{{ price }}</h2>
+			<CommonButton
+				class="event-form__button"
+				button-kind="success"
+				:button-text="button"
+			/>
 		</div>
 	</div>
 </template>
@@ -58,6 +62,11 @@ const props = defineProps({
 	justify-content: space-between;
 	padding-top: 20px;
 	padding-bottom: 20px;
+	@media (max-width: 768px) {
+		flex-direction: column;
+		align-items: center;
+		gap: 10px;
+	}
 	&__main {
 		display: flex;
 		flex-direction: column;
@@ -67,21 +76,35 @@ const props = defineProps({
 
 	&__header {
 		font-size: clamp(16px, 1.5vw, 20px);
-		font-weight: 500;
+		font-weight: 600;
+		@media (max-width: 768px) {
+		}
 	}
 	&__image {
 		height: 200px;
 		width: 200px;
+		@media (max-width: 768px) {
+			height: 0px;
+		}
 	}
 	&__kit {
 		width: 32%;
 		border-right: 2px solid var(--color-input-field);
+		@media (max-width: 768px) {
+			border-right: 0px solid;
+			width: 100%;
+		}
 	}
 	&__options {
 		padding-left: 1.5vw;
 		padding-right: 1.5vw;
 		width: 45%;
 		border-right: 2px solid var(--color-input-field);
+		@media (max-width: 768px) {
+			border-right: 0px solid;
+			width: 100%;
+			align-self: flex-start;
+		}
 		&__list {
 			margin-left: 2vw;
 			&--item {
@@ -90,8 +113,12 @@ const props = defineProps({
 			}
 		}
 	}
-	&__button {
+	&__buy {
 		width: 23%;
+	}
+	&__price {
+		color: black;
+		padding-bottom: 26px;
 	}
 }
 </style>

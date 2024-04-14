@@ -27,12 +27,19 @@ const $i18n = useI18n();
 onMounted(() => {
 	$i18n.setLocale(langCookieValue);
 });
+const resultMessage = computed(() => {
+	if (typeof error?.data === 'string') {
+		return error.data;
+	} else {
+		return '';
+	}
+});
 </script>
 <template>
 	<NuxtLayout>
 		<div class="service-error">
 			<template v-if="props.error.statusCode === 404">
-				<Error404 :message="error?.data" />
+				<Error404 :message="resultMessage" />
 			</template>
 			<template v-else>
 				<Error500 />

@@ -28,8 +28,8 @@ onMounted(() => {
 	$i18n.setLocale(langCookieValue);
 });
 const resultMessage = computed(() => {
-	if (typeof error?.data === 'string') {
-		return error.data;
+	if (typeof props.error.data === 'string') {
+		return props.error.data;
 	} else {
 		return '';
 	}

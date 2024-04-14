@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps({
-	name: {
+	title: {
 		type: String,
 		default: ''
 	},
@@ -10,7 +10,7 @@ const props = defineProps({
 	},
 	image: {
 		type: String,
-		default: '/cooperation/allEvents.png'
+		default: '/img/cooperation/advantage/allEvents.png'
 	},
 	isRevercedHead: {
 		type: String,
@@ -30,7 +30,7 @@ const props = defineProps({
 			class="advantage__image"
 		/>
 		<div :class="isRevercedText">
-			<h2 class="advantage__header">{{ name }}</h2>
+			<h2 class="advantage__header">{{ title }}</h2>
 			<p class="advantage__description">{{ description }}</p>
 		</div>
 	</div>
@@ -55,6 +55,7 @@ const props = defineProps({
 		max-width: 315px;
 		max-height: 255px;
 		@media (max-width: 768px) {
+			margin-bottom: 32px;
 			align-self: center;
 		}
 	}
@@ -80,6 +81,7 @@ const props = defineProps({
 
 	&__description {
 		font-size: var(--font-size-L);
+		line-height: 1.5;
 		@media (max-width: 768px) {
 			display: flex;
 			justify-content: center;

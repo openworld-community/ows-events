@@ -3,38 +3,42 @@ import Package from '../Package.vue';
 </script>
 
 <template>
-	<div class="packageslist">
-		<h1>{{ $t('cooperation.ourServices') }}</h1>
+	<div class="packages-list">
+		<h1 class="packages-list__services">{{ $t('cooperation.ourServices') }}</h1>
 		<Package
-			:name="$t('cooperation.package.basic.name')"
+			:title="$t('cooperation.package.basic.title')"
 			options="cooperation.package.basic.option"
 			:price="$t('cooperation.package.basic.price')"
 			:button="$t('cooperation.package.basic.button')"
-			image="/img/cooperation/basic.png"
+			image="/img/cooperation/package/basic.png"
 		/>
 		<Package
-			:name="$t('cooperation.package.standard.name')"
+			:title="$t('cooperation.package.standard.title')"
 			options="cooperation.package.standard.option"
 			:price="$t('cooperation.package.standard.price')"
 			:button="$t('cooperation.package.standard.button')"
-			image="/img/cooperation/standard.png"
+			image="/img/cooperation/package/standard.png"
 		/>
 		<Package
-			:name="$t('cooperation.package.premium.name')"
+			:title="$t('cooperation.package.premium.title')"
 			options="cooperation.package.premium.option"
 			:price="$t('cooperation.package.premium.price')"
 			:button="$t('cooperation.package.premium.button')"
-			image="/img/cooperation/premium.png"
+			image="/img/cooperation/package/premium.png"
 		/>
 	</div>
 </template>
 <style lang="less" scoped>
-.packageslist {
+.packages-list {
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	gap: 60px;
+	gap: 50px;
 	padding-bottom: 20px;
 	justify-content: center;
+	@media (max-width: 768px) {
+		gap: 30px;
+		padding-bottom: 50px;
+	}
 }
 </style>

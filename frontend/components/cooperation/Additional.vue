@@ -1,12 +1,12 @@
 <script setup lang="ts">
 const props = defineProps({
-	name: {
+	title: {
 		type: String,
 		default: ''
 	},
 	image: {
 		type: String,
-		default: '/cooperation/socialMedia.png'
+		default: '/img/cooperation/additional/socialMedia.png'
 	},
 	description: {
 		type: String,
@@ -30,7 +30,7 @@ const props = defineProps({
 			class="additional__image"
 		/>
 		<div class="additional__text">
-			<h3 class="additional__text__header">{{ name }}</h3>
+			<h3 class="additional__text__header">{{ title }}</h3>
 			<div class="additional__text__description">{{ description }}</div>
 		</div>
 		<div>{{ price }}</div>
@@ -48,7 +48,7 @@ const props = defineProps({
 	justify-content: space-between;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	&__image{
+	&__image {
 		width: 105px;
 		height: 100px;
 	}

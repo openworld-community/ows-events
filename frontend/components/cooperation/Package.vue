@@ -1,17 +1,12 @@
 <script setup lang="ts">
-import { type PropType } from 'vue';
-
-const { t, tm } = useI18n();
-const mobile = inject('mobile');
-
 const props = defineProps({
-	name: {
+	title: {
 		type: String,
 		default: ''
 	},
 	image: {
 		type: String,
-		default: '/cooperation/standard.png'
+		default: '/img/cooperation/package/basic.png'
 	},
 	options: {
 		type: String,
@@ -31,7 +26,7 @@ const props = defineProps({
 <template>
 	<div class="package">
 		<div class="package__main package__kit">
-			<h2 class="package__header">{{ name }}</h2>
+			<h2 class="package__header">{{ title }}</h2>
 			<img
 				:src="image"
 				class="package__image"
@@ -51,7 +46,7 @@ const props = defineProps({
 		<div class="package__main package__buy">
 			<h2 class="package__price">{{ price }}</h2>
 			<CommonButton
-				class="event-form__button"
+				class="package__button"
 				button-kind="success"
 				:button-text="button"
 			/>
@@ -72,7 +67,6 @@ const props = defineProps({
 	@media (max-width: 768px) {
 		flex-direction: column;
 		align-items: center;
-		gap: 10px;
 	}
 	&__main {
 		display: flex;
@@ -82,9 +76,10 @@ const props = defineProps({
 	}
 
 	&__header {
-		font-size: clamp(16px, 1.5vw, 20px);
+		font-size: var(--font-size-L);
 		font-weight: 600;
 		@media (max-width: 768px) {
+			padding-bottom: 40px;
 		}
 	}
 	&__image {
@@ -95,16 +90,23 @@ const props = defineProps({
 		}
 	}
 	&__kit {
+		display: flex;
+		flex-direction: column;
 		width: 32%;
 		border-right: 2px solid var(--color-input-field);
+		justify-content: space-between;
+		@media (max-width: 1200px) {
+			justify-content: center;
+		}
 		@media (max-width: 768px) {
+			justify-content: center;
 			border-right: 0px solid;
 			width: 100%;
 		}
 	}
 	&__options {
-		padding-left: 1.5vw;
-		padding-right: 1.5vw;
+		padding-left: 2.5vw;
+		padding-right: 2.5vw;
 		width: 45%;
 		border-right: 2px solid var(--color-input-field);
 		@media (max-width: 768px) {
@@ -114,9 +116,22 @@ const props = defineProps({
 		}
 		&__list {
 			margin-left: 2vw;
+			@media (max-width: 768px) {
+				padding-bottom: 20px;
+			}
+
 			&--item {
+				line-height: 1.7;
+				font-size: var(--font-size-L);
 				list-style-type: disc;
 				margin-bottom: 10px;
+				@media (max-width: 768px) {
+					margin-left: 4vw;
+				}
+				@media (max-width: 375px) {
+					padding-bottom: 20px;
+					margin-left: 4vw;
+				}
 			}
 		}
 	}
@@ -124,7 +139,7 @@ const props = defineProps({
 		width: 23%;
 	}
 	&__price {
-		color: black;
+		color: var(--color-social-threads);
 		padding-bottom: 26px;
 	}
 }

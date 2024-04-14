@@ -7,19 +7,19 @@ import Package from '../Package.vue';
 		<h1>{{ $t('cooperation.ourServices') }}</h1>
 		<Package
 			:name="$t('cooperation.package.basic.name')"
-			option="basic"
+			:options="$tm('cooperation.package.basic.option')"
 			:price="$t('cooperation.package.basic.price')"
 			:button="$t('cooperation.package.basic.button')"
 		/>
 		<Package
 			:name="$t('cooperation.package.standard.name')"
-			option="standard"
+			:options="$tm('cooperation.package.standard.option')"
 			:price="$t('cooperation.package.standard.price')"
 			:button="$t('cooperation.package.standard.button')"
 		/>
 		<Package
 			:name="$t('cooperation.package.premium.name')"
-			option="premium"
+			:options="$tm('cooperation.package.premium.option')"
 			:price="$t('cooperation.package.premium.price')"
 			:button="$t('cooperation.package.premium.button')"
 		/>

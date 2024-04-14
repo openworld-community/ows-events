@@ -42,15 +42,9 @@ export default {
 			name: 'Basic package',
 			image: 'link',
 			option: [
-				{
-					name: 'Posting an event announcement on the website'
-				},
-				{
-					name: 'Display in the general list of events'
-				},
-				{
-					name: 'Ability to receive feedback and ratings from users'
-				}
+				'Posting an event announcement on the website',
+				'Display in the general list of events',
+				'Ability to receive feedback and ratings from users'
 			],
 			price: 'Free',
 			button: 'Select'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import cooperation from '~/i18n/locales/ru-RU/cooperation';
+import { type PropType } from 'vue';
 
 const { t } = useI18n();
 const mobile = inject('mobile');
@@ -13,9 +13,9 @@ const props = defineProps({
 		type: String,
 		default: ''
 	},
-	option: {
-		type: String,
-		default: []
+	options: {
+		type: Array as PropType<String[]>,
+		default: () => []
 	},
 	price: {
 		type: String,
@@ -36,8 +36,12 @@ const props = defineProps({
 		</div>
 		<div class="package__main package__options">
 			<ul class="package__options__list">
-				<li class="package__options__list--item">
-					{{ $t(cooperation.package.basic.option[0].name) }}
+				<li
+					v-for="option in options"
+					:key="$rt(option)"
+					class="package__options__list--item"
+				>
+					{{ $rt(option) }}
 				</li>
 			</ul>
 		</div>

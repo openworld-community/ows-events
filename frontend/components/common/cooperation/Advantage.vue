@@ -10,7 +10,7 @@ const props = defineProps({
 	},
 	image: {
 		type: String,
-		default: '[]'
+		default: '/cooperation/allEvents.png'
 	},
 	isRevercedHead: {
 		type: String,
@@ -26,7 +26,7 @@ const props = defineProps({
 <template>
 	<div :class="isRevercedHead">
 		<img
-			src="../../../assets/img/cooperation/allEvents.png"
+			:src="image"
 			class="advantage__image"
 		/>
 		<div :class="isRevercedText">

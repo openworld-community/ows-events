@@ -86,8 +86,8 @@ export default {
 			price: '$12000',
 			button: 'Выбрать'
 		},
-		targetedAdverising: {
-			name: 'Targeted advertising:',
+		targetedAdvertising: {
+			name: 'Целевая реклама:',
 			image: 'link',
 			description:
 				'Запуск целевых рекламных кампаний в социальных сетях и на других платформах для привлечения целевой аудитории.',

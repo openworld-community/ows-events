@@ -25,8 +25,6 @@ const mobile = inject('mobile');
 
 <style lang="less" scoped>
 .cooperation {
-	height: 100%;
-	width: 100%;
 	display: flex;
 	justify-content: center;
 	padding-left: 5vw;
@@ -36,6 +34,7 @@ const mobile = inject('mobile');
 		padding-right: 30px;
 	}
 	&__wrapper {
+		width: 100%;
 		max-width: 1440px;
 		padding-top: 50px;
 		display: flex;
@@ -44,6 +43,7 @@ const mobile = inject('mobile');
 	}
 	&__title {
 		line-height: 1.3;
+		text-align: center;
 		@media (max-width: 768px) {
 			font-size: 24px;
 			font-weight: 600;

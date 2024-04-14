@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { type PropType } from 'vue';
 
-const { t } = useI18n();
+const { t, tm } = useI18n();
 const mobile = inject('mobile');
 
 const props = defineProps({
@@ -11,11 +11,11 @@ const props = defineProps({
 	},
 	image: {
 		type: String,
-		default: ''
+		default: '/cooperation/standard.png'
 	},
 	options: {
-		type: Array as PropType<String[]>,
-		default: () => []
+		type: String,
+		default: ''
 	},
 	price: {
 		type: String,
@@ -32,12 +32,15 @@ const props = defineProps({
 	<div class="package">
 		<div class="package__main package__kit">
 			<h2 class="package__header">{{ name }}</h2>
-			<div class="package__image">{{ image }}</div>
+			<img
+				:src="image"
+				class="package__image"
+			/>
 		</div>
 		<div class="package__main package__options">
 			<ul class="package__options__list">
 				<li
-					v-for="option in options"
+					v-for="option in $tm(options)"
 					:key="$rt(option)"
 					class="package__options__list--item"
 				>

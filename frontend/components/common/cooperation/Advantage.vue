@@ -83,7 +83,6 @@ const props = defineProps({
 		@media (max-width: 768px) {
 			display: flex;
 			justify-content: center;
-			text-align: justify;
 		}
 	}
 }

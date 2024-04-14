@@ -78,28 +78,28 @@ export default {
 		socialMedia: {
 			name: 'Social Media:',
 			image: 'link',
-			text: `Creating and posting posts about the event on the platform's social networks.`,
+			description: `Creating and posting posts about the event on the platform's social networks.`,
 			price: '$12000',
 			button: 'Select'
 		},
-		targetedAdverising: {
+		targetedAdvertising: {
 			name: 'Targeted advertising:',
 			image: 'link',
-			text: 'Launch targeted advertising campaigns on social networks and other platforms to attract the target audience.',
+			description: 'Launch targeted advertising campaigns on social networks and other platforms to attract the target audience.',
 			price: '$12000',
 			button: 'Select'
 		},
 		videoContent: {
 			name: 'Video content:',
 			image: 'link',
-			text: 'Production and placement of promotional video of the event on the website and social networks.',
+			description: 'Production and placement of promotional video of the event on the website and social networks.',
 			price: '$12000',
 			button: 'Select'
 		},
 		interactiveElements: {
 			name: 'Interactive elements:',
 			image: 'link',
-			text: 'Organizing online voting, surveys, or competitions to increase engagement.',
+			description: 'Organizing online voting, surveys, or competitions to increase engagement.',
 			price: '$12000',
 			button: 'Select'
 		}

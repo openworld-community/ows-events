@@ -6,7 +6,7 @@ const props = defineProps({
 	},
 	image: {
 		type: String,
-		default: ''
+		default: '/cooperation/socialMedia.png'
 	},
 	description: {
 		type: String,
@@ -25,7 +25,10 @@ const props = defineProps({
 
 <template>
 	<div class="additional">
-		<div class="additional__image">{{ image }}</div>
+		<img
+			:src="image"
+			class="additional__image"
+		/>
 		<div class="additional__text">
 			<h3 class="additional__text__header">{{ name }}</h3>
 			<div class="additional__text__description">{{ description }}</div>
@@ -45,9 +48,12 @@ const props = defineProps({
 	justify-content: space-between;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	&__button{
-	padding-top: 0px;
-	padding-bottom: 0px;
+	&__image{
+		width: 105px;
+		height: 100px;
+	}
+	&__button {
+		height: 40px;
 	}
 }
 </style>

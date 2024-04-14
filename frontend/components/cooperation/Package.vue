@@ -62,8 +62,8 @@ const props = defineProps({
 	border-radius: 8px;
 	display: flex;
 	justify-content: space-between;
-	padding-top: 20px;
-	padding-bottom: 20px;
+	padding-top: 14px;
+	padding-bottom: 14px;
 	@media (max-width: 768px) {
 		flex-direction: column;
 		align-items: center;
@@ -85,8 +85,9 @@ const props = defineProps({
 	&__image {
 		height: 200px;
 		width: 200px;
+		margin-top:15px;
 		@media (max-width: 768px) {
-			height: 0px;
+			display: none;
 		}
 	}
 	&__kit {
@@ -116,7 +117,10 @@ const props = defineProps({
 		}
 		&__list {
 			margin-left: 2vw;
+			margin-top: 20px;
+			margin-bottom: 20px;
 			@media (max-width: 768px) {
+				margin-top: 0px;
 				padding-bottom: 20px;
 			}
 

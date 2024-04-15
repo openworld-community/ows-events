@@ -1,0 +1,25 @@
+version: '3.7'
+
+x-logging: &default-logging
+    driver: json-file
+    options:
+        max-size: '10m'
+        max-file: '5'
+
+networks:
+    traefikpublic:
+        external:
+            name: ows-events_traefikpublic
+
+services:
+    support-bot:
+        image: bostrot/telegram-support-bot:latest
+        logging: *default-logging
+        container_name: 'support-bot'
+        restart: always
+        volumes:
+            - ./supportbot:/bot/config
+        networks:
+            - traefikpublic
+        ports:
+            - '10080:8080'

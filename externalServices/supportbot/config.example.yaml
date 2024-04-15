@@ -1,0 +1,131 @@
+# rename file to config.yaml after settings change
+# bot settings
+bot_token: "bot_token" # support bot token
+staffchat_id: "staffchat_id" # eg. -123456789
+owner_id: "owner_id"
+spam_time: 30000 # time (in MS) in which user may send 5 messages
+spam_cant_msg: 10
+
+parse_mode: "Markdown" # Experimental. Do not change unless you know what you are doing. Options: Markdown/MarkdownV2/HTML
+
+allow_private: true # Allow / disallow option for staff to chat privately
+direct_reply: true # Set this to true to just forward staff users to a user chat when allow_private
+auto_close_tickets: false # Close tickets after answering
+anonymous_tickets: true # Include userid in tickets or not
+anonymous_replies: true # Include staff member name in response
+show_auto_replied: false # Send auto replied msgs to staff chat
+show_user_ticket: false # Show ticket id to user
+autoreply_confirmation: true # Reply with language.confirmationMessage on each incoming message
+clean_replies: false # Remove footer and header from response
+pass_start: false # Pass /start command to support directly
+
+signal_enabled: false # Enable/disable signal
+signal_number: "+12345689" # Your signal number / account
+
+web_server: false # Enable/disable web server
+web_server_port: 8080 # Port for web server
+
+dev_mode: false # Enable/disable dev mode
+#ССЫЛКИ ДОБАВЛЯТЬ ВОТ В ТАКОМ ФОРМАТЕ [afisha.peredelano.com/faq](https://github.com/bostrot/telegram-support-bot)
+# customize your language
+language:
+    startCommandText: "Добро пожаловать в поддержку Afisha Peredelano.
+        Чтобы получить ответы на часто задаваемые вопросы отправьте /faq.
+        Если вы не нашли ответ на вопрос, задайте вопрос здесь. Пожалуйста используйте не более 5 сообщений оператору за раз,
+        Иначе может сработать защита от спама.
+        \n
+        \n
+        Welcome to support Afisha Peredelano.
+        To get answers to frequently asked questions, send /faq.
+        If you haven't found the answer to your question, ask your question here.
+        Please use no more than 5 messages to the operator at a time,
+        Otherwise, anti-spam protection may work."
+    faqCommandText: "Мы работаем над FAQ, сейчас более эффективно справшивать у службы поддержки"
+    helpCommandText: "*Возможные команды:* \n /help \n /faq \n /id
+        \n
+        *Available commands:* \n /help \n /faq \n /id"
+    helpCommandStaffText: "*Available commands:*\n
+        /start - Получить стартовое приветствие \n
+        /faq - Показатать сообщение с FAQ \n
+        /open - *Staff* Показывает список открытых Тикетов \n
+        /reopen - *Staff* Открыть заново закрытый тикет \n
+        /close - *Staff* Ответить на тикет чтобы закрыть его и разбанить
+        \n
+        # Reply to a ticket with this to close and unban
+        /clear - *Staff* Закрыть все тикеты \n
+        /ban - *Staff* Забанить пользователя из чата \n
+        /unban - *Staff* Разбанить пользователя"
+    confirmationMessage: "Спасибо что пользуетесь Afisha Peredelano. Мы постараемся ответить вам как можно скорее"
+    blockedSpam: "You sent quite a number of questions in the last while. Please calm down and wait until staff reviews them."
+    ticket: "Ticket"
+    closed: "Закрыт"
+    acceptedBy: "был одобрен"
+    dear: "Привет"
+    regards: "С уважением,"
+    from: "от"
+    language: "Язык"
+    msg_sent: "Сообщение отправлено пользователю"
+    file_sent: "Файл отправлен пользователю"
+    usr_with_ticket: "Пользователь с тикетом"
+    banned: "Забанен"
+    replyPrivate: "Reply in private"
+    services: "Select a service from the list below"
+    customer: "customer"
+    msgForwarding: "You messages will now be forwarded to vendors of the group: "
+    back: "Go back"
+    whatSubCategory: "Which subcategory describes your needs the best? "
+    prvChatEnded: "Приватный чат завершен \nPrivate chat ended."
+    prvChatOpened: "Приватный чат открыт поддержкой. \nPrivate Chat opened with customer."
+    prvChatEnd: "Завершить приватный чат"
+    prvChatOpenedCustomer: "Открыт приватный чат"
+    instructionsSent: "Инструкции были отправлены в приватный чат"
+    openTickets: "Открытые Тикеты"
+    support: "Поддержка"
+    prvChatOnly: "Эта команда может быть использована только в приватном чате"
+    ticketClosed: "Ваш тикет был закыт нашей службой поддержки. Вы можете открыть новый тикет в любое время. \nYour ticket was closed by our staff. You can open a new ticket at any time."
+    links: "Direct support links"
+    textFirst: "Пожалуйста отправльте нам сообщение перед тем как отправлять картинку, так мы сможем помочь лучше.\nPlease send us a message before sending an image so that we can help you better."
+    ticketClosedError: "Вы не можете отвечать на закрытый тикет"
+    automatedReply: "Это автмоатический ответ. \nThis is an automated reply."
+    automatedReplyAuthor: "AfishaPeredelanoBot."
+    doesntHelp: "This does not help."
+    automatedReplySent: "Автоматический ответ отправлен пользователю."
+    ticketReopened: "Тикет открыт заново."
+    regardsGroup: "Afisha Peredelano"
+
+autoreply:
+    - question: "install"
+      answer: "If you want to install the bot, you can use the following link: \
+          [Getting Started](https://github.com/bostrot/telegram-support-bot/wiki/Getting-started)  \
+          Alternatively you can also use our one-click setup & hosting service: \
+          [Botspace](https://botspace.bostrot.com/)"
+    - question: "are you sure?"
+      answer: "Yes."
+# categories:
+#  - name: "Category1"
+#    subgroups:
+#    - name: "Sub1"
+#      group_id: "-12345678910"
+#    - name: "Sub2"
+#      group_id: "-12345678910"
+#    - name: "Sub3"
+#      group_id: "-12345678910"
+#  - name: "Category2"
+#    subgroups:
+#    - name: "Sub4"
+#      group_id: "-12345678910"
+#    - name: "Sub5"
+#      group_id: "-12345678910"
+#    - name: "Sub6"
+#      group_id: "-12345678910"
+#  - name: "Category with no subcategories"
+#    group_id: "-12345678910"
+#  - name: "Admin Chat"
+#    group_id: "-12345678910"
+#  - name: "Other issues"
+#    tag: "#other"
+#    msg: "Please specify your order number and describe the problem in as much detail as possible"
+#    group_id: "-12345678910"
+#  - name: "Contact"
+#    msg: "Check out our Website"
+

@@ -16,6 +16,7 @@ const router = useRouter();
 const localePath = useLocalePath();
 const route = useRoute();
 const eventStore = useEventStore();
+const { t } = useI18n();
 
 onMounted(async () => {
 	await eventStore.getTimezones();
@@ -49,12 +50,10 @@ if (id !== 'new') {
 	if (data.value) {
 		event.value = data.value;
 	} else {
-		router.back();
-		//throw error after create error page and remove router.back()
-		//	throw createError({
-		//		statusCode:404,
-		//		message: t('notFound')
-		//	})
+		throw createError({
+			statusCode: 404,
+			data: { message: t('errors.NOT_FOUND_BY_ID', { id: id }) }
+		});
 	}
 }
 

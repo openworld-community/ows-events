@@ -15,7 +15,8 @@ const props = defineProps({
 		type: Object as () => NuxtError,
 		default: () => ({
 			statusCode: 404,
-			message: 'Not Found'
+			message: '',
+			data: ''
 		})
 	}
 });
@@ -26,12 +27,19 @@ const $i18n = useI18n();
 onMounted(() => {
 	$i18n.setLocale(langCookieValue);
 });
+const resultMessage = computed(() => {
+	if (typeof props.error.data === 'string') {
+		return props.error.data;
+	} else {
+		return '';
+	}
+});
 </script>
 <template>
 	<NuxtLayout>
 		<div class="service-error">
 			<template v-if="props.error.statusCode === 404">
-				<Error404 />
+				<Error404 :message="resultMessage" />
 			</template>
 			<template v-else>
 				<Error500 />

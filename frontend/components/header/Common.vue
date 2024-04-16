@@ -249,7 +249,7 @@ const clearFilters = async () => {
 		@media (min-width: 768px) {
 			display: flex;
 			width: 100%;
-			max-width: 400px;
+			max-width: 480px;
 			justify-content: space-between;
 			align-items: center;
 			margin-left: 7%;

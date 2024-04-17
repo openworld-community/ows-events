@@ -160,6 +160,7 @@ export const useEventStore = defineStore('event', {
 		//		JSON.stringify(this.eventData)
 		//	);
 		//},
+
 		resetEventData() {
 			//	const userStore = useUserStore();
 			this.allTimezones = [];

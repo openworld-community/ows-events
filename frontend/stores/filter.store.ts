@@ -6,21 +6,14 @@ import type { Tag } from '../../common/const/tags';
 export interface FilterStore {
 	usedCities: City[];
 	usedTags: { name: string; key: Tag }[];
-	modal: {
-		show: boolean;
-		list: string[] | { [key: string]: string }[];
-		multiple: boolean;
-		type: string;
-		showKey: string;
-		returnKey: string;
-	};
 	filters: {
 		city: City;
 		searchLine: string;
 		tags: Tag[];
-		date: string[]
+		date: string[];
 	};
 	filteredEvents: EventOnPoster[];
+	loading: boolean;
 }
 
 export const useFilterStore = defineStore('filter', {
@@ -36,17 +29,13 @@ export const useFilterStore = defineStore('filter', {
 					getFirstQuery(route.query.tags)
 						.split(', ')
 						.filter((item) => item !== '') ?? [],
-				date: [getFirstQuery(route.query.startDate) ?? '', getFirstQuery(route.query.endDate) ?? '']
+				date: [
+					getFirstQuery(route.query.startDate) ?? '',
+					getFirstQuery(route.query.endDate) ?? ''
+				]
 			},
-			filteredEvents: [],
-			modal: {
-				show: false,
-				list: [],
-				multiple: false,
-				type: '',
-				showKey: '',
-				returnKey: ''
-			}
+			filteredEvents: undefined,
+			loading: false,
 		};
 	},
 	getters: {},
@@ -59,7 +48,7 @@ export const useFilterStore = defineStore('filter', {
 			// Date.setHours(hours: number, min?: number, sec?: number, ms?: number): number
 			const startDate = new Date(this.filters?.date[0]).setHours(0, 0, 0);
 			const endDate = new Date(this.filters?.date[1]).setHours(23, 59, 59);
-			
+
 			//Приводим таймзону времени устройства юзера к миллисекундам
 			// dayjs(startDate).utc(true)
 			// dayjs(endDate).utc(true) можно сделать так, но понятнее не сильно становится
@@ -78,6 +67,7 @@ export const useFilterStore = defineStore('filter', {
 					}
 				}
 			});
+
 			if (posterEvents) {
 				this.filteredEvents = posterEvents.value;
 			}
@@ -88,13 +78,14 @@ export const useFilterStore = defineStore('filter', {
 
 			if (usedCities.value?.length) this.usedCities = usedCities.value;
 			const { data: usedTags } = await apiRouter.filters.getUsedTags.useQuery({});
-			
+
 			if (usedTags.value?.length) {
 				const { $i18n } = useNuxtApp();
-				this.usedTags = usedTags.value.map((elem: string) => {
+				usedTags.value.sort((a, b) => b.length - a.length)
+				this.usedTags = usedTags.value.map((elem) => {
 					return { key: elem, name: $i18n.t(`event.tags.${elem}`) };
 				});
 			}
-		},
+		}
 	}
 });

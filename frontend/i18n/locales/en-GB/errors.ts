@@ -45,7 +45,13 @@ export default {
 	[CommonErrorsEnum.USER_ALREADY_EXIST]: 'User already exists',
 	[CommonErrorsEnum.PASSWORD_TOO_SHORT]: 'Password must be longer than 4 symbols',
 	[CommonErrorsEnum.PASSWORD_TOO_LONG]: 'Password must be no longer than 24 symbols',
-	[CommonErrorsEnum.PASSWORD_MISMATCH]: 'Password doesn\'t match',
+	[CommonErrorsEnum.PASSWORD_MISMATCH]: "Password doesn't match",
 	[CommonErrorsEnum.INVALID_EMAIL]: 'Enter a valid email address',
 	[CommonErrorsEnum.REQUIRED_FIELD]: 'This field is required',
+	[CommonErrorsEnum.ERROR_DEFAULT_MESSAGE]: 'Error',
+	[CommonErrorsEnum.ERROR_PAGE_PAGE]: 'Page',
+	[CommonErrorsEnum.ERROR_PAGE_NOT_FOUND]: 'Not Found',
+	[CommonErrorsEnum.ERROR_PAGE_GO_HOME]: 'Back To Home',
+	[CommonErrorsEnum.ERROR_PAGE_SERVER_ERROR]: 'Unknown Server Error',
+	[CommonErrorsEnum.NOT_FOUND_BY_ID]: 'Event with ID {id} not found'
 };

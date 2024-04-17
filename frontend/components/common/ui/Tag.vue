@@ -136,7 +136,7 @@ const model = computed({
 			background-color: var(--color-input-icons);
 		}
 
-		&:has(.tag__checkbox:focus) {
+		&:has(.tag__checkbox:focus-visible) {
 			border-color: var(--color-text-main);
 		}
 
@@ -146,11 +146,13 @@ const model = computed({
 			color: var(--color-white);
 
 			&:hover {
-				background-color: var(--color-text-secondary);
-				color: var(--color-text-main);
+				@media (hover:hover) {
+					background-color: var(--color-text-secondary);
+					color: var(--color-text-main);
+				}
 			}
 
-			&:has(.tag__checkbox:focus) {
+			&:has(.tag__checkbox:focus-visible) {
 				color: var(--color-input-field);
 				border-color: var(--color-input-field);
 			}
@@ -161,7 +163,9 @@ const model = computed({
 			cursor: default;
 
 			&:hover {
-				background-color: var(--color-input-field);
+				@media (hover:hover) {
+					background-color: var(--color-input-field);
+				}
 			}
 		}
 	}

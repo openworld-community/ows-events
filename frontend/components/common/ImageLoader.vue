@@ -112,11 +112,16 @@ const removeImage = async () => {
 
 	.image {
 		min-width: unset;
-		width: 69px;
-		height: 56px;
+		width: 248px;
+		aspect-ratio: 2/1.33;
 		overflow: hidden;
 		object-fit: cover;
 		border-radius: 4px;
+
+		@media (min-width: 768px) {
+			width: 248px;
+			aspect-ratio: 2 / 1.25;
+		}
 	}
 
 	.delete-button {

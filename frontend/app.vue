@@ -45,7 +45,7 @@ useHead({
 if (process.client) {
 	const route = useRoute();
 	const { gtag } = useGtag();
-	const pageTitle = getRouteName(route.name as string);
+	const pageTitle = getRouteName((route.name as string) ?? `UnknownPage: path ${route.path}`);
 	gtag('event', 'page_view', {
 		page_title: pageTitle
 	});

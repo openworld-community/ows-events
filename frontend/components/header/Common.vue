@@ -1,19 +1,19 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { SeoItempropNavEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
 import { RouteNameEnum, RoutePathEnum } from '../../constants/enums/route';
 import { getRouteName } from '../../utils';
-import { SUPPORT_TG_URL } from '../../constants/url';
 import { useUserStore } from '../../stores/user.store';
 import { useFilterStore } from '~/stores/filter.store';
+import { useModal } from 'vue-final-modal';
+import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 
 const route = useRoute();
-// const router = useRouter();
+
 const localePath = useLocalePath();
 const userStore = useUserStore();
 const mobile = inject('mobile');
+const desktop = inject('desktop');
+
 const { t } = useI18n();
 
 defineProps({
@@ -58,7 +58,8 @@ const goBack = () => {
 	// }
 	if (
 		getRouteName(route.name as string).includes(RouteNameEnum.USER_FAVOURITES) ||
-		getRouteName(route.name as string).includes(RouteNameEnum.USER_MY_EVENTS)
+		getRouteName(route.name as string).includes(RouteNameEnum.USER_MY_EVENTS) ||
+		getRouteName(route.name as string).includes(RouteNameEnum.USER_PROFILE)
 	) {
 		navigateTo(localePath({ path: RoutePathEnum.USER_PAGE }));
 	} else {
@@ -66,7 +67,22 @@ const goBack = () => {
 	}
 };
 
-const filterStore = useFilterStore()
+const filterStore = useFilterStore();
+
+const {
+	open: openNeedAuthorizeModal,
+	close: closeNeedAuthorizeModal,
+	patchOptions: needAuthorizeModalPatch
+} = useModal({ component: NeedAuthorize });
+needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
+
+const onButtonClick = async () => {
+	if (userStore.isAuthorized) {
+		await navigateTo(localePath(`${RoutePathEnum.EVENT_EDIT}new`));
+	} else {
+		await openNeedAuthorizeModal();
+	}
+};
 
 const clearFilters = async () => {
 	filterStore.$patch({
@@ -76,8 +92,8 @@ const clearFilters = async () => {
 			date: [],
 			tags: []
 		}
-	})
-}
+	});
+};
 </script>
 
 <template>
@@ -93,9 +109,10 @@ const clearFilters = async () => {
 		>
 			<div class="header__left">
 				<CommonButton
-					v-if="hasBackButton &&
-			localePath(route.path) !== localePath({ path: RoutePathEnum.USER_PAGE })
-			"
+					v-if="
+						hasBackButton &&
+						localePath(route.path) !== localePath({ path: RoutePathEnum.USER_PAGE })
+					"
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"
@@ -106,13 +123,18 @@ const clearFilters = async () => {
 					:is="logoComponentIs"
 					v-else
 					class="header__logo"
-					:title="$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
-			"
-					:aria-label="$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
-			"
+					:title="
+						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
+					"
+					:aria-label="
+						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
+					"
 					:to="!isAtHome ? localePath(RoutePathEnum.HOME) : undefined"
 					:itemprop="SeoItempropNavEnum.URL"
-					@click="isAtHome && scrollToTop(); isAtHome && clearFilters()"
+					@click="
+						isAtHome && scrollToTop();
+						isAtHome && clearFilters();
+					"
 				>
 					<CommonIcon
 						name="afisha-logo-light"
@@ -128,70 +150,48 @@ const clearFilters = async () => {
 			>
 				{{ titleOnMobile }}
 			</h1>
-			<ul
-				v-if="!mobile"
-				class="header__center"
-			>
-				<li class="header__nav-item">
-					<NuxtLink
-						:to="localePath(RoutePathEnum.ABOUT)"
-						class="header__nav-link"
-					>
-						{{ $t('header.navigation.about') }}
-					</NuxtLink>
-				</li>
-				<li class="header__nav-item">
-					<NuxtLink
-						:to="SUPPORT_TG_URL"
-						target="_blank"
-						class="header__nav-link"
-					>
-						{{ $t('header.navigation.support') }}
-					</NuxtLink>
-				</li>
-				<li class="header__nav-item">
-					<NuxtLink
-						:to="localePath(RoutePathEnum.DONATION)"
-						class="header__nav-link"
-					>
-						{{ $t('header.navigation.donation') }}
-					</NuxtLink>
-				</li>
-			</ul>
+			<HeaderNavigationMain v-if="desktop" />
+
 			<div class="header__right">
 				<!-- v-if="!hasBackButton" -->
+				<CommonButton
+					v-if="!mobile"
+					:button-text="$t('global.button.create_event')"
+					class="button__success--filled"
+					button-kind="success"
+					@click="onButtonClick"
+				/>
+
 				<HeaderLanguageSelector class="header__language-selector" />
 				<HeaderNavigationBurger
-					v-if="mobile"
+					v-if="!desktop"
 					ref="navigationBurger"
 					:is-cross="isNavbarOpen"
 					:aria-label="$t(isNavbarOpen ? 'header.burger.close' : 'header.burger.open')"
 					@click="navbarToggle"
 				/>
 				<HeaderNavigationSidebar
-					v-if="mobile && isNavbarOpen"
+					v-if="!desktop && isNavbarOpen"
 					ref="sidebar"
 					@close="navbarToggle"
 				/>
 				<CommonButton
-					v-if="!mobile"
-					:link="localePath(RoutePathEnum.USER_PAGE)"
+					v-if="desktop"
+					:link="RoutePathEnum.USER_PAGE"
 					button-kind="ordinary"
 					icon-name="user"
-					:button-text="userStore.isAuthorized
-			? $t('header.navigation.user')
-			: $t('header.navigation.authorize')
-			"
+					:button-text="
+						userStore.isAuthorized
+							? $t('header.navigation.user')
+							: $t('header.navigation.authorize')
+					"
 				/>
 			</div>
 		</nav>
 	</header>
 </template>
 
-<style
-	scoped
-	lang="less"
->
+<style scoped lang="less">
 .header {
 	width: 100%;
 	height: var(--header-height);
@@ -241,7 +241,7 @@ const clearFilters = async () => {
 	&__right {
 		display: flex;
 		justify-content: flex-end;
-		text-align: center;
+		align-items: center;
 		position: relative;
 	}
 
@@ -297,9 +297,11 @@ const clearFilters = async () => {
 
 	&__language-selector {
 		margin-right: var(--space-inner);
+		margin-left: var(--space-inner);
 
 		@media (min-width: 1440px) {
 			margin-right: 32px;
+			margin-left: 32px;
 		}
 	}
 }

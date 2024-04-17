@@ -21,7 +21,7 @@ const props = defineProps({
 	},
 	initialValues: {
 		type: Object as PropType<EventFormType>,
-		default: () => {}
+		default: () => { }
 	}
 });
 
@@ -29,6 +29,7 @@ const emit = defineEmits(['submitEvent', 'cancelEvent']);
 
 const dataFromLocalStorage = (initialValues: EventFormType) => {
 	const parsedData = JSON.parse(localStorage.getItem(LocalStorageEnum.EVENT_DATA));
+
 	const copy = { ...initialValues };
 	for (const key in copy) {
 		if (key in parsedData) {
@@ -74,7 +75,6 @@ watch(
 		) {
 			setFieldValue('location.city', '');
 			setFieldValue('location.address', '');
-			setFieldValue('timezone', '');
 		}
 		if (country) {
 			if (!values['isFree']) {
@@ -91,7 +91,7 @@ watch(
 watch(
 	() => values['location']['city'],
 	async (city) => {
-		if (city) {
+		if (city && values['isOnline']) {
 			const timezone = await getTimezone(values['location']['country'], city);
 			setFieldValue('timezone', timezone);
 		}
@@ -116,7 +116,8 @@ watch(
 			const timeZone = timezoneToString(getUserTimezone());
 			setFieldValue('timezone', timeZone);
 		} else {
-			setFieldValue('timezone', '');
+			const belgrade = await getTimezone('Serbia', 'Belgrade')
+			setFieldValue('timezone', belgrade);
 		}
 	},
 	{ deep: true }

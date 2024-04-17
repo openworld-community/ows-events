@@ -3,7 +3,7 @@ import { computed, type PropType } from 'vue';
 import NuxtLink from '#app/components/nuxt-link';
 import { IconDefaultParams } from '@/constants/defaultValues/icon';
 import type { IconName } from './Icon.vue';
-
+const localePath = useLocalePath();
 const emit = defineEmits(['click']);
 
 type LinkObjectType = {
@@ -86,6 +86,18 @@ const props = defineProps({
 	isLoading: {
 		type: Boolean,
 		default: false
+	},
+	fontSize: {
+		type: String,
+		default: ''
+	},
+	padding: {
+		type: String,
+		default: '7px 14px'
+	},
+	lineHeight: {
+		type: String,
+		default: 'inherit'
 	}
 });
 
@@ -106,7 +118,8 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	<component
 		:is="link ? NuxtLink : 'button'"
 		:type="link ? null : 'button'"
-		:to="link ? link : null"
+		:external="isExternalLink"
+		:to="link ? (isExternalLink ? link : localePath(link)) : null"
 		:target="isExternalLink ? '_blank' : null"
 		:disabled="!link && isDisabled"
 		:class="[
@@ -140,7 +153,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		/>
 		<span
 			v-if="!isIcon"
-			class="button__content"
+			:class="['button__content', { 'button__content--custom-font': fontSize }]"
 		>
 			{{ buttonText }}
 		</span>
@@ -151,10 +164,10 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 .button {
 	display: flex;
 	justify-content: center;
-	height: 40px;
 	border-radius: 8px;
-	padding: 7px 14px;
+	padding: v-bind(padding);
 	align-items: center;
+	line-height: v-bind(lineHeight);
 
 	transition-property: background-color, color, border-color;
 	transition-duration: 0.3s;
@@ -171,6 +184,10 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 		@media (min-width: 768px) {
 			font-size: var(--font-size-S);
+		}
+
+		&--custom-font {
+			font-size: v-bind(fontSize);
 		}
 	}
 
@@ -222,7 +239,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		}
 
 		&:hover,
-		&:focus {
+		&:focus-visible {
 			background-color: var(--color-accent-green-dark);
 			border-color: var(--color-accent-green-dark);
 		}
@@ -247,8 +264,13 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			color: var(--color-text-main);
 		}
 
-		&:hover,
-		&:focus,
+		&:hover {
+			@media (hover: hover) {
+				background-color: var(--color-input-field);
+			}
+		}
+
+		&:focus-visible,
 		&:active {
 			background-color: var(--color-input-field);
 		}
@@ -265,8 +287,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 				color: var(--color-input-field);
 			}
 
-			&:hover,
-			&:focus,
+			&:hover-visible,
 			&:active {
 				background-color: inherit;
 			}
@@ -283,7 +304,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		}
 
 		&:hover,
-		&:focus {
+		&:focus-visible {
 			background-color: var(--color-accent-green-main-30);
 		}
 
@@ -296,7 +317,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			cursor: default;
 
 			&:hover,
-			&:focus,
+			&:focus-visible,
 			&:active {
 				background-color: transparent;
 				border-color: transparent;
@@ -314,7 +335,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		}
 
 		&:hover,
-		&:focus,
+		&:focus-visible,
 		&:active {
 			background-color: var(--color-accent-red-30);
 		}
@@ -327,7 +348,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			}
 
 			&:hover,
-			&:focus,
+			&:focus-visible,
 			&:active {
 				background-color: var(--color-accent-red-30);
 			}
@@ -344,7 +365,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			}
 
 			&:hover,
-			&:focus,
+			&:focus-visible,
 			&:active {
 				background-color: inherit;
 			}
@@ -440,7 +461,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			}
 		}
 
-		&:focus,
+		&:focus-visible,
 		&:active {
 			border-color: var(--color-accent-green-main);
 		}
@@ -461,7 +482,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	transition-timing-function: ease;
 
 	&:hover,
-	&:focus {
+	&:focus-visible {
 		background-color: var(--color-background-secondary);
 	}
 
@@ -492,7 +513,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		border: 1px solid var(--color-background-secondary);
 
 		&:hover,
-		&:focus {
+		&:focus-visible {
 			&::v-deep(svg) {
 				color: var(--color-accent-green-main-30);
 			}
@@ -520,7 +541,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 .no-interactive {
 	&:hover,
-	&:focus,
+	&:focus-visible,
 	&:active {
 		border-color: unset;
 		background-color: unset;

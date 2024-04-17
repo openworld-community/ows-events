@@ -20,7 +20,7 @@ export default defineNuxtConfig({
 		'@nuxtjs/robots',
 		//+ resolver?
 		'radix-vue/nuxt',
-		// 
+		//
 		[
 			'nuxt-viewport',
 			{
@@ -34,7 +34,7 @@ export default defineNuxtConfig({
 	],
 
 	routeRules: {
-		'/': { redirect: '/ru', ssr: true },
+		'/': { redirect: '/ru', ssr: true }
 	},
 	i18n: {
 		debug: false,
@@ -115,5 +115,15 @@ export default defineNuxtConfig({
 	experimental: { watcher: 'chokidar', appManifest: false },
 	googleSignIn: {
 		clientId: VITE_GOOGLE_OAUTH_KEY
+	},
+	app: {
+		head: {
+			link: [
+				{
+					rel: 'stylesheet',
+					href: 'https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap'
+				}
+			]
+		}
 	}
 });

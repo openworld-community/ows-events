@@ -11,7 +11,7 @@ export const useLogout = () => {
 		tokenCookie.value = null;
 		userCookie.value = null;
 		userStore.$patch({ userInfo: null });
-		await navigateTo(localePath(`${RoutePathEnum.AUTH}`));
+		await navigateTo(localePath(`${RoutePathEnum.HOME}`));
 	};
 	return { logout };
 };

@@ -16,7 +16,7 @@ const emitsAsProps = useEmitAsProps(emits);
 </script>
 
 <template>
-	<DialogPortal>
+	<DialogPortal to="body">
 		<DialogOverlay class="dialog-overlay">
 			<DialogContent
 				v-bind="{ ...props, ...emitsAsProps }"
@@ -69,6 +69,7 @@ const emitsAsProps = useEmitAsProps(emits);
 	position: fixed;
 	inset: 0;
 	z-index: 30;
+	width: 100%;
 }
 .dialog-content {
 	z-index: 100;

@@ -43,6 +43,11 @@ const props = defineProps({
 		type: Boolean,
 		default: false
 	},
+	prefetch: {
+		// если необходимо открыть в новом окне
+		type: Boolean,
+		default: false
+	},
 	isRound: {
 		// если кнопка круглая
 		type: Boolean,
@@ -119,6 +124,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		:is="link ? NuxtLink : 'button'"
 		:type="link ? null : 'button'"
 		:external="isExternalLink"
+		:prefetch="prefetch"
 		:to="link ? (isExternalLink ? link : localePath(link)) : null"
 		:target="isExternalLink ? '_blank' : null"
 		:disabled="!link && isDisabled"

@@ -5,12 +5,18 @@ import { fileURLToPath, URL } from 'node:url';
 import { searchForWorkspaceRoot } from 'vite';
 import { VITE_GOOGLE_OAUTH_KEY } from './constants/url';
 
+const isTest = import.meta.env.VITE_STAGE == 'test' || process.env.VITE_STAGE == 'test';
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	// @ts-ignore
 	devtools: {
-		enabled: true // or false to disable
+		enabled: isTest // or false to disable
 	},
+	build: {
+		analyze: isTest
+	},
+	logLevel: isTest ? 'verbose' : 'info',
+	debug: isTest,
 	modules: [
 		'nuxt-vue3-google-signin',
 		'@nuxtjs/i18n',
@@ -19,7 +25,6 @@ export default defineNuxtConfig({
 		'nuxt-gtag',
 		'@nuxtjs/robots',
 		//+ resolver?
-		'radix-vue/nuxt',
 		//
 		[
 			'nuxt-viewport',

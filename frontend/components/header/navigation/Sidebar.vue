@@ -71,7 +71,7 @@ const onButtonClick = async () => {
 			
 			<HeaderSidebarItem
 				component-type="link"
-				:link-to="localePath(RoutePathEnum.COOPERATION)"
+				:link-to="RoutePathEnum.COOPERATION"
 				:text="$t('header.navigation.cooperation')"
 				icon-name="cooperation"
 				:current="getRouteName(route.name as string) === RouteNameEnum.COOPERATION"

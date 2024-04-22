@@ -2,10 +2,10 @@
 	<div class="why-us">
 		<h2 class="why-us__title">{{ $t('cooperation.whyUs.title') }}</h2>
 		<p class="why-us__description">
-			{{ $t('cooperation.whyUs.description1') }}
+			{{ $t('cooperation.whyUs.description.ourGoal') }}
 		</p>
 		<p class="why-us__description">
-			{{ $t('cooperation.whyUs.description2') }}
+			{{ $t('cooperation.whyUs.description.ourMission') }}
 		</p>
 	</div>
 </template>

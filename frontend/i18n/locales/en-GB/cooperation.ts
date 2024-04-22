@@ -36,12 +36,14 @@ export default {
 	},
 	whyUs: {
 		title: 'Why choose us?',
-		description1:
-			'Choosing our startup is not only about access to a unique event aggregation platform. This is your contribution to the creation of a connecting cultural space in the Balkans, where every event becomes accessible and meaningful. We strive to advance culture and society through technology, inviting you to join our movement.',
-		description2: `Be part of our mission. Let's work together to make the cultural and public space of the Balkans more open and integrated. Join us today!`
+		description: {
+			ourGoal:
+				'Choosing our startup is not only about access to a unique event aggregation platform. This is your contribution to the creation of a connecting cultural space in the Balkans, where every event becomes accessible and meaningful. We strive to advance culture and society through technology, inviting you to join our movement.',
+			ourMission: `Be part of our mission. Let's work together to make the cultural and public space of the Balkans more open and integrated. Join us today!`
+		}
 	},
 	ourServices: 'Our services',
-	package: {
+	service: {
 		basic: {
 			title: 'Basic package',
 			image: 'link',
@@ -110,5 +112,6 @@ export default {
 			price: '$12000',
 			button: 'Select'
 		}
-	}
+	},
+	freePrice: 'Free'
 };

@@ -1,33 +1,40 @@
 <script setup lang="ts">
 import type { Services } from '.';
+import { COOPERATION_PRICING } from '~/constants/defaultValues/cooperation-pricing';
 
-defineProps<Services>()
+defineProps<Services>();
 </script>
 
 <template>
-	<div class="package">
-		<div class="package__main package__kit">
-			<h2 class="package__header">{{ $t(title) }}</h2>
+	<div class="service">
+		<div class="service__main service__kit">
+			<h2 class="service__header">{{ $t(title) }}</h2>
 			<img
 				:src="image"
-				class="package__image"
+				class="service__image"
 			/>
 		</div>
-		<div class="package__main package__options">
-			<ul class="package__options__list">
+		<div class="service__main service__options">
+			<ul class="service__options__list">
 				<li
 					v-for="option in $tm(options)"
 					:key="$rt(option)"
-					class="package__options__list--item"
+					class="service__options__list--item"
 				>
 					{{ $rt(option) }}
 				</li>
 			</ul>
 		</div>
-		<div class="package__main package__buy">
-			<h2 class="package__price">{{ $t(price) }}</h2>
+		<div class="service__main service__buy">
+			<h2 class="service__price">
+				{{
+					price === 0
+						? $t('cooperation.freePrice')
+						: COOPERATION_PRICING.currencySign + price
+				}}
+			</h2>
 			<CommonButton
-				class="package__button"
+				class="service__button"
 				button-kind="success"
 				:button-text="$t(button)"
 			/>
@@ -36,9 +43,9 @@ defineProps<Services>()
 </template>
 
 <style scoped lang="less">
-.package {
+.service {
 	width: 100%;
-    min-height: 267px;
+	min-height: 267px;
 	border: 2px solid var(--color-accent-green-main);
 	border-radius: 8px;
 	display: flex;
@@ -67,7 +74,7 @@ defineProps<Services>()
 	&__image {
 		height: 200px;
 		width: 200px;
-		margin-top:15px;
+		margin-top: 15px;
 		@media (max-width: 950px) {
 			display: none;
 		}
@@ -98,7 +105,7 @@ defineProps<Services>()
 			align-self: flex-start;
 		}
 		&__list {
-            list-style: disc;
+			list-style: disc;
 
 			@media (max-width: 950px) {
 				padding-bottom: 20px;

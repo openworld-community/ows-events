@@ -39,12 +39,12 @@ const mobile = inject('mobile')
 			</CommonNavLink>
 		</li>
 		<li class="header__nav-item">
-			<NuxtLink
-				:to="localePath(RoutePathEnum.COOPERATION)"
-				class="header__nav-link"
+			<CommonNavLink
+				:to="RoutePathEnum.COOPERATION"
+				class="navigation-list__nav-link"
 			>
 				{{ $t('header.navigation.cooperation') }}
-			</NuxtLink>
+			</CommonNavLink>
 		</li>
 	</ul>
 </template>

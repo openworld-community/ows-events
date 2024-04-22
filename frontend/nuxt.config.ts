@@ -8,15 +8,16 @@ import { VITE_GOOGLE_OAUTH_KEY } from './constants/url';
 const isTest = import.meta.env.VITE_STAGE == 'test' || process.env.VITE_STAGE == 'test';
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	// @ts-ignore
 	devtools: {
-		enabled: isTest // or false to disable
+		enabled: isTest
 	},
 	build: {
 		analyze: isTest
 	},
 	logLevel: isTest ? 'verbose' : 'info',
 	debug: isTest,
+	// TODO: Update modules later
+	// @ts-ignore
 	modules: [
 		'nuxt-vue3-google-signin',
 		'@nuxtjs/i18n',
@@ -24,8 +25,6 @@ export default defineNuxtConfig({
 		'@vueuse/nuxt',
 		'nuxt-gtag',
 		'@nuxtjs/robots',
-		//+ resolver?
-		//
 		[
 			'nuxt-viewport',
 			{

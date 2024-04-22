@@ -34,7 +34,6 @@ export default defineNuxtConfig({
 			}
 		]
 	],
-	build: { analyze: true },
 	routeRules: {
 		'/': { redirect: '/ru', ssr: true }
 	},

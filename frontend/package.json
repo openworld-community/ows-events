@@ -76,7 +76,7 @@
     "nuxt-gtag": "^1.1.1",
     "nuxt-viewport": "^2.0.6",
     "prettier": "^2.8.8",
-    "typescript": "5.0.4",
+    "typescript": "5.4.5",
     "vite": "^4.3.5",
     "vite-plugin-svg-icons": "^2.0.1",
     "vitest": "^0.31.0",

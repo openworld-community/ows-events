@@ -16,8 +16,6 @@ export default defineNuxtConfig({
 	},
 	logLevel: isTest ? 'verbose' : 'info',
 	debug: isTest,
-	// TODO: Update modules later
-	// @ts-ignore
 	modules: [
 		'nuxt-vue3-google-signin',
 		'@nuxtjs/i18n',
@@ -107,6 +105,7 @@ export default defineNuxtConfig({
 				inject: 'body-first'
 			})
 		],
+		logLevel: isTest ? 'info' : 'warn',
 		resolve: { alias: { '@common': fileURLToPath(new URL('../common', import.meta.url)) } }
 	},
 	// watcher:

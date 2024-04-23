@@ -60,21 +60,21 @@ export const services: Record<string, Services> = {
 		title: 'cooperation.service.basic.title',
 		options: 'cooperation.service.basic.option',
 		price: COOPERATION_PRICING.services.basic.price,
-		button: 'cooperation.service.basic.button',
+		button: 'cooperation.button',
 		image: '/img/cooperation/service/basic.png'
 	},
 	standard: {
 		title: 'cooperation.service.standard.title',
 		options: 'cooperation.service.standard.option',
 		price: COOPERATION_PRICING.services.standard.price,
-		button: 'cooperation.service.standard.button',
+		button: 'cooperation.button',
 		image: '/img/cooperation/service/standard.png'
 	},
 	premium: {
 		title: 'cooperation.service.premium.title',
 		options: 'cooperation.service.premium.option',
 		price: COOPERATION_PRICING.services.premium.price,
-		button: 'cooperation.service.premium.button',
+		button: 'cooperation.button',
 		image: '/img/cooperation/service/premium.png'
 	}
 };
@@ -84,28 +84,28 @@ export const additional: Record<string, Additional> = {
 		title: 'cooperation.additionalServices.socialMedia.title',
 		description: 'cooperation.additionalServices.socialMedia.description',
 		price: COOPERATION_PRICING.additionalServices.social.price,
-		button: 'cooperation.additionalServices.socialMedia.button',
+		button: 'cooperation.button',
 		image: '/img/cooperation/additional/socialMedia.png'
 	},
 	target: {
 		title: 'cooperation.additionalServices.targetedAdvertising.title',
 		description: 'cooperation.additionalServices.targetedAdvertising.description',
 		price: COOPERATION_PRICING.additionalServices.target.price,
-		button: 'cooperation.additionalServices.targetedAdvertising.button',
+		button: 'cooperation.button',
 		image: '/img/cooperation/additional/targetedAdvertising.png'
 	},
 	video: {
 		title: 'cooperation.additionalServices.videoContent.title',
 		description: 'cooperation.additionalServices.videoContent.description',
 		price: COOPERATION_PRICING.additionalServices.video.price,
-		button: 'cooperation.additionalServices.videoContent.button',
+		button: 'cooperation.button',
 		image: '/img/cooperation/additional/videoContent.png'
 	},
 	interactive: {
 		title: 'cooperation.additionalServices.interactiveElements.title',
 		description: 'cooperation.additionalServices.interactiveElements.description',
 		price: COOPERATION_PRICING.additionalServices.interactive.price,
-		button: 'cooperation.additionalServices.interactiveElements.button',
+		button: 'cooperation.button',
 		image: '/img/cooperation/additional/interactiveElements.png'
 	}
 };

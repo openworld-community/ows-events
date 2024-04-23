@@ -51,9 +51,7 @@ export default {
 				'Posting an event announcement on the website',
 				'Display in the general list of events',
 				'Ability to receive feedback and ratings from users'
-			],
-			price: 'Free',
-			button: 'Select'
+			]
 		},
 		standard: {
 			title: 'Standard Package',
@@ -62,9 +60,7 @@ export default {
 				'All services of the Basic package',
 				'Access to detailed event analytics (views, clicks, visitor demographics)',
 				`Placement of the organizer's contact information for direct communication with visitors`
-			],
-			price: '$12000',
-			button: 'Select'
+			]
 		},
 		premium: {
 			title: 'Premium Package',
@@ -74,9 +70,7 @@ export default {
 				'Promoting an event to the top search results on the website through an advertising auction system',
 				'Integration with the online ticket booking system on the platform',
 				'Placement in rotation on the main page of the site and in priority categories'
-			],
-			price: '$12000',
-			button: 'Select'
+			]
 		}
 	},
 	additionalServices: {
@@ -84,34 +78,27 @@ export default {
 		socialMedia: {
 			title: 'Social Media:',
 			image: 'link',
-			description: `Creating and posting posts about the event on the platform's social networks.`,
-			price: '$12000',
-			button: 'Select'
+			description: `Creating and posting posts about the event on the platform's social networks.`
 		},
 		targetedAdvertising: {
 			title: 'Targeted advertising:',
 			image: 'link',
 			description:
-				'Launch targeted advertising campaigns on social networks and other platforms to attract the target audience.',
-			price: '$12000',
-			button: 'Select'
+				'Launch targeted advertising campaigns on social networks and other platforms to attract the target audience.'
 		},
 		videoContent: {
 			title: 'Video content:',
 			image: 'link',
 			description:
-				'Production and placement of promotional video of the event on the website and social networks.',
-			price: '$12000',
-			button: 'Select'
+				'Production and placement of promotional video of the event on the website and social networks.'
 		},
 		interactiveElements: {
 			title: 'Interactive elements:',
 			image: 'link',
 			description:
-				'Organizing online voting, surveys, or competitions to increase engagement.',
-			price: '$12000',
-			button: 'Select'
+				'Organizing online voting, surveys, or competitions to increase engagement.'
 		}
 	},
-	freePrice: 'Free'
+	freePrice: 'Free',
+	button: 'Select'
 };

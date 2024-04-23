@@ -24,7 +24,7 @@ defineProps<Additional>();
 		<div class="additional__right">
 			<span class="additional__right--price">{{
 				price === 0
-					? $t('cooperation.freePrice.title')
+					? $t('cooperation.freePrice')
 					: COOPERATION_PRICING.currencySign + price
 			}}</span>
 			<CommonButton

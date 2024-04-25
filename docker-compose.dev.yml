@@ -24,6 +24,7 @@ services:
             - backend
         environment:
             - NODE_ENV=development
+            - VITE_STAGE=test
             - VITE_API_URL=http://127.0.0.1/api
             - VITE_BASE_URL=http://127.0.0.1
             - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4

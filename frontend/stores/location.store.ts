@@ -61,7 +61,7 @@ export const useLocationStore = defineStore('location', {
 			return state._countries;
 		},
 		currencies(state): LocationStore['_currencies'] {
-			state._currencies = ['USD', 'EUR', 'RSD', 'KGS', 'BTC', 'USDT', 'USDC', 'ETH'];
+			state._currencies = ['USD', 'EUR', 'RSD', 'BTC', 'USDT', 'USDC', 'ETH'];
 			return state._currencies;
 		}
 	},

@@ -89,7 +89,7 @@ const props = defineProps({
 	<span>
 		<nuxt-icon
 			:name="props.name"
-			filled="filled"
+			:filled="true"
 			aria-hidden="true"
 			:width="props.width"
 			:height="props.height"

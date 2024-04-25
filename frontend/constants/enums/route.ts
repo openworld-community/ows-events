@@ -10,7 +10,8 @@ export enum RoutePathEnum {
 	USER_PAGE = '/user',
 	USER_FAVOURITES = '/user/favourites',
 	USER_MY_EVENTS = '/user/my-events',
-	USER_PROFILE = '/user/profile'
+	USER_PROFILE = '/user/profile',
+	SUPPORT = '/support'
 }
 
 export enum RouteNameEnum {
@@ -25,5 +26,6 @@ export enum RouteNameEnum {
 	USER_FAVOURITES = 'user-favourites',
 	USER_MY_EVENTS = 'user-my-events',
 	EVENT_EDIT = 'event-edit-editId',
-	USER_PROFILE = 'user-profile'
+	USER_PROFILE = 'user-profile',
+	SUPPORT = 'support'
 }

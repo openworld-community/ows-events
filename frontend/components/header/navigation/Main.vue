@@ -19,8 +19,7 @@ import { SUPPORT_TG_URL } from '../../../constants/url';
 		</li>
 		<li class="header__nav-item">
 			<CommonNavLink
-				:to="SUPPORT_TG_URL"
-				is-external-link
+				:to="RoutePathEnum.SUPPORT"
 				class="navigation-list__nav-link"
 			>
 				{{ $t('header.navigation.support') }}

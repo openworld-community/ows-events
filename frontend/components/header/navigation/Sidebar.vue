@@ -62,9 +62,8 @@ const onButtonClick = async () => {
 			/>
 
 			<HeaderSidebarItem
-				:link-to="SUPPORT_TG_URL"
+				:link-to="RoutePathEnum.SUPPORT"
 				:text="$t('header.navigation.support')"
-				is-external-link
 				icon-name="contact-tg"
 				@click="emit('close')"
 			/>

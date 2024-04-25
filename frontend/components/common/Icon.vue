@@ -67,7 +67,7 @@ import type { PropType } from 'vue';
 
 const props = defineProps({
 	name: {
-		type: String as PropType<IconName>,
+		type: String as PropType<string>,
 		required: true
 	},
 	color: {
@@ -83,22 +83,22 @@ const props = defineProps({
 		default: IconDefaultParams.HEIGHT
 	}
 });
-
-const symbolId = computed(() => `#${props.name}`);
 </script>
 
 <template>
-	<svg
-		aria-hidden="true"
-		:width="props.width"
-		:height="props.height"
-	>
-		<use :href="symbolId" />
-	</svg>
+	<span>
+		<nuxt-icon
+			:name="props.name"
+			filled="filled"
+			aria-hidden="true"
+			:width="props.width"
+			:height="props.height"
+		/>
+	</span>
 </template>
 
 <style scoped lang="less">
-svg {
+.nuxt-icon:deep(svg) {
 	pointer-events: none;
 	color: v-bind('color');
 }

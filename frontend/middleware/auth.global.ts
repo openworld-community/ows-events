@@ -15,7 +15,7 @@ const pagesWithAuth: string[] = [
 	RouteNameEnum.EVENT_EDIT
 ];
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware(async (to) => {
 	const localePath = useNuxtApp().$localePath;
 	const userStore = useUserStore();
 

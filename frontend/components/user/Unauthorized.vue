@@ -318,8 +318,9 @@ watch(
 		border-radius: 4px;
 		height: 38px !important;
 		width: 38px !important;
+		width: 38px !important;
 		position: absolute;
-		background-image: url('@/assets/icon/social/telegram_icon_48x48.png');
+		background-image: url('@/assets/icons/social/telegram_icon_48x48.png');
 		background-size: cover;
 		pointer-events: none;
 		filter: grayscale(100%);

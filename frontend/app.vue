@@ -2,7 +2,6 @@
 import './assets/less/app.less';
 import 'vue-final-modal/style.css';
 import 'vue-toastification/dist/index.css';
-import 'virtual:svg-icons-register';
 import { ModalsContainer } from 'vue-final-modal';
 import { CookieNameEnum, LocalStorageEnum } from './constants/enums/common';
 import { TOKEN_MAX_AGE_SECONDS } from './constants/defaultValues/time';

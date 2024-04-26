@@ -1,6 +1,4 @@
 import vueJsx from '@vitejs/plugin-vue-jsx';
-import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
-import path from 'path';
 import { fileURLToPath, URL } from 'node:url';
 import { searchForWorkspaceRoot } from 'vite';
 import { VITE_GOOGLE_OAUTH_KEY } from './constants/url';
@@ -17,11 +15,13 @@ export default defineNuxtConfig({
 	logLevel: isTest ? 'verbose' : 'info',
 	debug: isTest,
 	modules: [
+		'nuxt-icons',
 		'nuxt-vue3-google-signin',
 		'@nuxtjs/i18n',
 		'@pinia/nuxt',
 		'@vueuse/nuxt',
 		'nuxt-gtag',
+		'radix-vue/nuxt',
 		'@nuxtjs/robots',
 		'radix-vue/nuxt',
 		[
@@ -98,12 +98,7 @@ export default defineNuxtConfig({
 			// плагин выдает ошибку из-за компонента /node_modules/nuxt/dist/app/components/nuxt-root.vue
 			// убрал пока не пойму нужен ли он вообще на самом деле
 			// vue(),
-			vueJsx(),
-			createSvgIconsPlugin({
-				iconDirs: [path.resolve(process.cwd(), 'assets/icon')],
-				symbolId: '[name]',
-				inject: 'body-first'
-			})
+			vueJsx()
 		],
 		logLevel: isTest ? 'info' : 'warn',
 		resolve: { alias: { '@common': fileURLToPath(new URL('../common', import.meta.url)) } }

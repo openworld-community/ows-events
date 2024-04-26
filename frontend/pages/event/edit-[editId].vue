@@ -21,6 +21,9 @@ const { t } = useI18n();
 onMounted(async () => {
 	await eventStore.getTimezones();
 });
+definePageMeta({
+	layout: false
+});
 const id = getFirstParam(route.params.editId);
 
 const event = ref<EventOnPoster>();

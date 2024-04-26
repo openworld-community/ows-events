@@ -89,13 +89,13 @@ const onButtonClick = async () => {
 		<!--            :aria-label="translate('modal.header.event.manage')"-->
 		<!--          >-->
 		<!--            <img-->
-		<!--              src="@/assets/img/icon/edit.svg"-->
+		<!--              src="@/assets/img/icons/edit.svg"-->
 		<!--              width="24"-->
 		<!--              height="24"-->
 		<!--              :alt="translate('event.button.edit')"-->
 		<!--            />-->
 		<!--            <img-->
-		<!--              src="@/assets/img/icon/share.svg"-->
+		<!--              src="@/assets/img/icons/share.svg"-->
 		<!--              width="24"-->
 		<!--              height="24"-->
 		<!--              :alt="translate('global.button.share')"-->

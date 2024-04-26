@@ -8,7 +8,6 @@ import { Tags } from '../../../common/const/tags';
 
 const props = defineProps<{ eventData: EventOnPoster }>();
 const { t } = useI18n();
-const localePath = useLocalePath();
 const mobile = inject('mobile');
 
 const startDate = ref(
@@ -34,10 +33,10 @@ const endDate = computed(() => {
 </script>
 
 <template>
-	<NuxtLink
+	<CommonNavLink
 		class="card"
 		:prefetch="false"
-		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
+		:to="`${RoutePathEnum.EVENT}/${eventData.id}`"
 		:title="
 			trimString(
 				`Afisha: ${
@@ -120,7 +119,7 @@ const endDate = computed(() => {
 				/>
 			</div>
 		</div>
-	</NuxtLink>
+	</CommonNavLink>
 </template>
 
 <style scoped lang="less">

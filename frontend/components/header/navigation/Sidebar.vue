@@ -37,7 +37,7 @@ const onButtonClick = async () => {
 		<ul>
 			<HeaderSidebarItem
 				v-if="getRouteName(route.name as string) !== RouteNameEnum.AUTH"
-				:link-to="RoutePathEnum.USER_PAGE"
+				:link-to="localePath(RoutePathEnum.USER_PAGE)"
 				:text="
 					userStore.isAuthorized
 						? $t('header.navigation.user')
@@ -55,7 +55,7 @@ const onButtonClick = async () => {
 			/>
 
 			<HeaderSidebarItem
-				:link-to="RoutePathEnum.ABOUT"
+				:link-to="localePath(RoutePathEnum.ABOUT)"
 				:text="$t('header.navigation.about')"
 				icon-name="info"
 				@click="emit('close')"
@@ -70,14 +70,14 @@ const onButtonClick = async () => {
 			/>
 
 			<HeaderSidebarItem
-				:link-to="RoutePathEnum.DONATION"
+				:link-to="localePath(RoutePathEnum.DONATION)"
 				:text="$t('header.navigation.donation')"
 				icon-name="donate"
 				@click="emit('close')"
 			/>
 
 			<HeaderSidebarItem
-				:link-to="RoutePathEnum.LIMITATION_OF_LIABILITY"
+				:link-to="localePath(RoutePathEnum.LIMITATION_OF_LIABILITY)"
 				:text="$t('header.navigation.limitation_of_liability')"
 				icon-name="privacy"
 				@click="emit('close')"

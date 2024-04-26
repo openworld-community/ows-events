@@ -1,7 +1,7 @@
 <script setup>
 import { RoutePathEnum } from '~/constants/enums/route';
 import { useLogout } from '~/composables/useLogout';
-const localePath = useLocalePath();
+
 const { logout } = useLogout();
 const onLogoutPress = async () => {
 	await logout();
@@ -12,7 +12,7 @@ const onLogoutPress = async () => {
 	<div class="menu-wrapper">
 		<div class="navigation-menu-mobile">
 			<CommonButton
-				:link="localePath(RoutePathEnum.USER_PROFILE)"
+				:link="RoutePathEnum.USER_PROFILE"
 				class="navigation-menu-mobile__edit-button"
 				button-kind="ordinary"
 				:button-text="$t('global.button.edit_profile')"
@@ -20,7 +20,7 @@ const onLogoutPress = async () => {
 			/>
 
 			<CommonButton
-				:link="localePath(RoutePathEnum.USER_MY_EVENTS)"
+				:link="RoutePathEnum.USER_MY_EVENTS"
 				:button-text="$t('user.my_events.title')"
 				icon-name="notebook"
 				button-kind="ordinary"
@@ -28,7 +28,7 @@ const onLogoutPress = async () => {
 				class="navigation-menu-mobile__button"
 			/>
 			<CommonButton
-				:link="localePath(RoutePathEnum.USER_FAVOURITES)"
+				:link="RoutePathEnum.USER_FAVOURITES"
 				:button-text="$t('user.favourites.title')"
 				icon-name="heart"
 				button-kind="ordinary"

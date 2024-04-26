@@ -12,7 +12,7 @@ type TFormType = 'login' | 'signup';
 const userStore = useUserStore();
 const mobile = inject('mobile');
 // const desktop = inject('desktop');
-const localePath = useLocalePath();
+
 const tokenCookie = useCookie<string | null>(CookieNameEnum.TOKEN);
 
 const login = ref<TFormType>('login');
@@ -130,8 +130,8 @@ watch(
 				</div>
 			</div>
 
-			<NuxtLink
-				:to="localePath(RoutePathEnum.HOME)"
+			<CommonNavLink
+				:to="RoutePathEnum.HOME"
 				class="unauthorized__continue"
 			>
 				<CommonButton
@@ -141,7 +141,7 @@ watch(
 					:icon-color="'var(--color-icons)'"
 					:alt="$t('form.global.close')"
 				/>
-			</NuxtLink>
+			</CommonNavLink>
 		</div>
 		<p
 			v-if="!mobile"

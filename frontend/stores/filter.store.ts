@@ -10,7 +10,7 @@ export interface FilterStore {
 		city: City;
 		searchLine: string;
 		tags: Tag[];
-		date: string[];
+		date: Date[];
 	};
 	filteredEvents: EventOnPoster[];
 	loading: boolean;
@@ -30,12 +30,12 @@ export const useFilterStore = defineStore('filter', {
 						.split(', ')
 						.filter((item) => item !== '') ?? [],
 				date: [
-					getFirstQuery(route.query.startDate) ?? '',
-					getFirstQuery(route.query.endDate) ?? ''
+					getDateFromQuery(getFirstQuery(route.query.startDate)) ?? undefined,
+					getDateFromQuery(getFirstQuery(route.query.endDate)) ?? undefined
 				]
 			},
 			filteredEvents: undefined,
-			loading: false,
+			loading: false
 		};
 	},
 	getters: {},
@@ -81,7 +81,7 @@ export const useFilterStore = defineStore('filter', {
 
 			if (usedTags.value?.length) {
 				const { $i18n } = useNuxtApp();
-				usedTags.value.sort((a, b) => b.length - a.length)
+				usedTags.value.sort((a, b) => b.length - a.length);
 				this.usedTags = usedTags.value.map((elem) => {
 					return { key: elem, name: $i18n.t(`event.tags.${elem}`) };
 				});

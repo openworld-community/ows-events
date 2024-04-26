@@ -1,14 +1,11 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import type { PropType } from 'vue';
 import { useFilterStore } from '../../../stores/filter.store';
 
 const props = defineProps({
 	tag: {
-		type: Object as PropType<{ name: string, key: string }>,
-		default: () => { }
+		type: Object as PropType<{ name: string; key: string }>,
+		default: () => {}
 	},
 	filterType: {
 		type: String as PropType<'input' | 'select' | 'date' | 'tag'>,
@@ -46,28 +43,29 @@ const props = defineProps({
 	}
 });
 
-
 const mobile = inject('mobile');
-const desktop = inject('desktop')
+const desktop = inject('desktop');
 const filterStore = useFilterStore();
 
-const isActive = ref<boolean>(false)
+const isActive = ref<boolean>(false);
 
 const handleTag = () => {
 	if (isActive.value === false) {
-		filterStore.filters.tags.push(props.tag.key)
+		filterStore.filters.tags.push(props.tag.key);
 	} else {
-		filterStore.filters.tags = filterStore.filters.tags.filter(item => item !== props.tag.key)
+		filterStore.filters.tags = filterStore.filters.tags.filter(
+			(item) => item !== props.tag.key
+		);
 	}
 
-	isActive.value = !isActive.value
-}
+	isActive.value = !isActive.value;
+};
 
 onMounted(() => {
 	if (filterStore.filters.tags.includes(props.tag?.key)) {
-		isActive.value = true
+		isActive.value = true;
 	}
-})
+});
 </script>
 
 <template>
@@ -120,15 +118,9 @@ onMounted(() => {
 	</template>
 	<CommonButton
 		v-if="filterType === 'tag'"
-		style="font-weight: 500;"
-		:font-size="mobile 
-			? '11px' 
-			: '' 
-		"
-		:line-height="mobile 
-			? '17.6px' 
-			: 'inherit' 
-		"
+		style="font-weight: 500"
+		:font-size="mobile ? '11px' : ''"
+		:line-height="mobile ? '17.6px' : 'inherit'"
 		:padding="!desktop ? '3px 10px' : '7px 14px'"
 		:button-kind="isActive ? 'dark' : 'ordinary'"
 		:button-text="tag.name"
@@ -138,17 +130,13 @@ onMounted(() => {
 	/>
 </template>
 
-<style
-	scoped
-	lang="less"
->
+<style scoped lang="less">
 .filter.select {
 	width: 100%;
 }
 
 .filter {
 	@media (min-width: 1440px) {
-
 		&:deep(.input__field),
 		&:deep(.button__multiselect) {
 			height: 72px;
@@ -175,8 +163,8 @@ onMounted(() => {
 
 	// прозраные сепараторы при фокусе
 	.filter:focus-within::before,
-	.filter:focus-within+.filter::before,
-	.filter:has(.input__field:focus)+.filters__wrapper--mobile>.filter:first-child::before {
+	.filter:focus-within + .filter::before,
+	.filter:has(.input__field:focus) + .filters__wrapper--mobile > .filter:first-child::before {
 		background-color: transparent;
 	}
 }

@@ -3,11 +3,30 @@ import { RoutePathEnum } from '@/constants/enums/route';
 import { SUPPORT_TG_URL } from '../../../constants/url';
 import { useUserStore } from '../../../stores/user.store';
 import { RouteNameEnum } from '../../../constants/enums/route';
+import { useModal } from 'vue-final-modal';
+import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 
+const localePath = useLocalePath();
+
+const mobile = inject('mobile');
 const emit = defineEmits(['close']);
 const route = useRoute();
 const userStore = useUserStore();
-const localePath = useLocalePath();
+
+const {
+	open: openNeedAuthorizeModal,
+	close: closeNeedAuthorizeModal,
+	patchOptions: needAuthorizeModalPatch
+} = useModal({ component: NeedAuthorize });
+needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
+
+const onButtonClick = async () => {
+	if (userStore.isAuthorized) {
+		await navigateTo(localePath(`${RoutePathEnum.EVENT_EDIT}new`));
+	} else {
+		await openNeedAuthorizeModal();
+	}
+};
 </script>
 
 <template>
@@ -17,8 +36,8 @@ const localePath = useLocalePath();
 	>
 		<ul>
 			<HeaderSidebarItem
-				component-type="link"
-				:link-to="localePath(RoutePathEnum.USER_PAGE)"
+				v-if="getRouteName(route.name as string) !== RouteNameEnum.AUTH"
+				:link-to="RoutePathEnum.USER_PAGE"
 				:text="
 					userStore.isAuthorized
 						? $t('header.navigation.user')
@@ -26,21 +45,23 @@ const localePath = useLocalePath();
 				"
 				:item-kind="userStore.isAuthorized ? 'success' : ''"
 				icon-name="user"
-				:current="getRouteName(route.name as string) === RouteNameEnum.USER_PAGE"
 				@click="emit('close')"
+			/>
+			<HeaderSidebarItem
+				v-if="mobile"
+				:text="$t('global.button.create_event')"
+				icon-name="edit"
+				@click="onButtonClick"
 			/>
 
 			<HeaderSidebarItem
-				component-type="link"
-				:link-to="localePath(RoutePathEnum.ABOUT)"
+				:link-to="RoutePathEnum.ABOUT"
 				:text="$t('header.navigation.about')"
 				icon-name="info"
-				:current="getRouteName(route.name as string) === RouteNameEnum.ABOUT"
 				@click="emit('close')"
 			/>
 
 			<HeaderSidebarItem
-				component-type="link"
 				:link-to="SUPPORT_TG_URL"
 				:text="$t('header.navigation.support')"
 				is-external-link
@@ -49,20 +70,16 @@ const localePath = useLocalePath();
 			/>
 
 			<HeaderSidebarItem
-				component-type="link"
-				:link-to="localePath(RoutePathEnum.DONATION)"
+				:link-to="RoutePathEnum.DONATION"
 				:text="$t('header.navigation.donation')"
 				icon-name="donate"
-				:current="getRouteName(route.name as string) === RouteNameEnum.DONATION"
 				@click="emit('close')"
 			/>
 
 			<HeaderSidebarItem
-				component-type="link"
-				:link-to="localePath(RoutePathEnum.LIMITATION_OF_LIABILITY)"
+				:link-to="RoutePathEnum.LIMITATION_OF_LIABILITY"
 				:text="$t('header.navigation.limitation_of_liability')"
 				icon-name="privacy"
-				:current="getRouteName(route.name as string) === RouteNameEnum.LIMITATION_OF_LIABILITY"
 				@click="emit('close')"
 			/>
 		</ul>
@@ -102,5 +119,10 @@ const localePath = useLocalePath();
 
 	transition: transform 0.3s ease;
 	transform: translateY(var(--header-height));
+
+	@media (min-width: 768px) {
+		top: -45px;
+		right: 0;
+	}
 }
 </style>

@@ -3,8 +3,8 @@ import { RoutePathEnum } from '~/constants/enums/route';
 import { useLogout } from '~/composables/useLogout';
 const localePath = useLocalePath();
 const { logout } = useLogout();
-const onLogoutPress = () => {
-	logout();
+const onLogoutPress = async () => {
+	await logout();
 };
 </script>
 
@@ -71,11 +71,11 @@ const onLogoutPress = () => {
 }
 
 .router-link-exact-active {
-	color: var(--color-accent-green-main);
-	background-color: var(--color-input-field);
+	color: var(--color-white);
+	background-color: var(--color-accent-green-main);
 
 	&:deep(svg) {
-		color: var(--color-accent-green-main);
+		color: var(--color-white);
 	}
 }
 </style>

@@ -5,9 +5,9 @@ import { LINK_MAX_LENGTH, PRICE_MAX_VALUE } from '~/constants/defaultValues/vali
 
 export const eventValidationSchema = toTypedSchema(
 	yup.object().shape({
-		title: yup.string().required(),
-		organizer: yup.string(),
-		description: yup.string().required(),
+		title: yup.string().required().max(255),
+		organizer: yup.string().max(255),
+		description: yup.string().required().max(255),
 		tags: yup.array().max(6),
 		startDate: yup.date().required(),
 		startTime: yup.object().required(),
@@ -57,7 +57,7 @@ export const eventValidationSchema = toTypedSchema(
 				schema.shape({
 					country: yup.string().required(),
 					city: yup.string().required(),
-					address: yup.string().required()
+					address: yup.string().required().max(255)
 				}),
 			otherwise: (schema) =>
 				schema.shape({

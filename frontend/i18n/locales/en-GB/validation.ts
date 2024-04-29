@@ -26,7 +26,11 @@ export default {
 		tags: 'Number of tags should be no more then {count}',
 		description: 'Description should be no more then {count} total in length',
 		title: 'Title should be no more then {count} total in length',
+		organizer: 'This field should be no more then {count} total in length',
 		url: 'Max length of the link should be no more then {count}',
+		location: {
+			address: 'This field should be no more then {count} total in length'
+		},
 		price: {
 			val: 'Max price should be no more then {count}'
 		}

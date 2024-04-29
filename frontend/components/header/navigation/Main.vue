@@ -21,7 +21,7 @@ const mobile = inject('mobile')
 				{{ $t('header.navigation.about') }}
 			</CommonNavLink>
 		</li>
-		<li class="header__nav-item">
+		<li class="navigation-list__nav-item">
 			<CommonNavLink
 				:to="SUPPORT_TG_URL"
 				is-external-link
@@ -30,7 +30,7 @@ const mobile = inject('mobile')
 				{{ $t('header.navigation.support') }}
 			</CommonNavLink>
 		</li>
-		<li class="header__nav-item">
+		<li class="navigation-list__nav-item">
 			<CommonNavLink
 				:to="RoutePathEnum.DONATION"
 				class="navigation-list__nav-link"
@@ -38,7 +38,7 @@ const mobile = inject('mobile')
 				{{ $t('header.navigation.donation') }}
 			</CommonNavLink>
 		</li>
-		<li class="header__nav-item">
+		<li class="navigation-list__nav-item">
 			<CommonNavLink
 				:to="RoutePathEnum.COOPERATION"
 				class="navigation-list__nav-link"
@@ -50,6 +50,7 @@ const mobile = inject('mobile')
 </template>
 
 <style scoped lang="less">
+
 .navigation-list {
 	@media (min-width: 768px) {
 		display: grid;
@@ -62,8 +63,13 @@ const mobile = inject('mobile')
 		margin-left: auto;
 		margin-right: auto;
 	}
+	&__nav-item{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 
-	&__nav-link {
+	&__nav-link { 
 		@media (min-width: 768px) {
 			font-size: var(--font-size-S);
 		}

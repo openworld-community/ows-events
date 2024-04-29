@@ -5,20 +5,18 @@ const { width } = useWindowSize()
 </script>
 
 <template>
-	<div class="root"> 
-		<HeaderCommon :has-back-button="width > 900 ? false : true" />
+
 		<div class="cooperation">
 			<div class="cooperation__wrapper">
 				<h1 class="cooperation__title">{{ $t('cooperation.header.title') }}</h1>
 				<p class="cooperation__description">{{ $t('cooperation.header.description') }}</p>
 				<CooperationAdvantage />
 				<CooperationWhyUs />
-				<CooperationServices />
-				<CooperationAdditional />
+				<!-- <CooperationServices />
+				<CooperationAdditional /> -->
 			</div>
 		</div>
-		<FooterCommon v-if="!mobile" />
-	</div>
+
 </template>
 
 <style lang="less" scoped>

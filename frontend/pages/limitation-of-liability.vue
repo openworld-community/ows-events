@@ -10,9 +10,11 @@ import { RoutePathEnum } from '../constants/enums/route';
 <template>
 	<main class="privacy">
 		<h1 class="privacy__main-title">{{ $t('limitation_of_liability.title') }}</h1>
-		<p class="privacy__paragraph">
-			{{ $t('limitation_of_liability.last_change') }} {{ $d(Date.parse('2023-06-25')) }}
-		</p>
+		<ClientOnly>
+			<p class="privacy__paragraph">
+				{{ $t('limitation_of_liability.last_change') }} {{ $d(Date.parse('2023-06-25')) }}
+			</p>
+		</ClientOnly>
 
 		<ol
 			class="privacy__list"

@@ -6,14 +6,14 @@ import { SeoItempropNavEnum } from '../../constants/enums/seo';
 import { getRouteName } from '../../utils';
 
 const route = useRoute();
-const localePath = useLocalePath();
+const CommonNavLink = resolveComponent('CommonNavLink');
 
 const mobile = inject('mobile');
 
 const isAtHome = computed(() => getRouteName(route.name as string) === RouteNameEnum.HOME);
 const logoComponentIs = computed(() => {
 	if (isAtHome.value) return 'button';
-	else return defineNuxtLink({});
+	else return CommonNavLink;
 });
 const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -33,7 +33,7 @@ const currentYear = new Date().getFullYear();
 					:aria-label="
 						$t(isAtHome ? 'footer.logo.at_home_aria' : 'footer.logo.other_page_aria')
 					"
-					:to="!isAtHome ? localePath(RoutePathEnum.HOME) : undefined"
+					:to="!isAtHome ? RoutePathEnum.HOME : undefined"
 					:itemprop="SeoItempropNavEnum.URL"
 					@click="isAtHome && scrollToTop()"
 				>
@@ -49,40 +49,41 @@ const currentYear = new Date().getFullYear();
 			<div class="footer__navigation navigation">
 				<ul class="navigation__item-container">
 					<li class="navigation__item">
-						<NuxtLink
-							:to="localePath(RoutePathEnum.ABOUT)"
+						<CommonNavLink
+							:to="RoutePathEnum.ABOUT"
 							class="navigation__link"
 						>
 							{{ $t('footer.navigation.about') }}
-						</NuxtLink>
+						</CommonNavLink>
 					</li>
 					<li class="navigation__item">
-						<NuxtLink
+						<CommonNavLink
 							:to="SUPPORT_TG_URL"
+							is-external-link
 							target="_blank"
 							class="navigation__link"
 						>
 							{{ $t('footer.navigation.support') }}
-						</NuxtLink>
+						</CommonNavLink>
 					</li>
 				</ul>
 				<ul class="navigation__item-container">
 					<li class="navigation__item">
-						<NuxtLink
-							:to="localePath(RoutePathEnum.DONATION)"
+						<CommonNavLink
+							:to="RoutePathEnum.DONATION"
 							class="navigation__link"
 						>
 							{{ $t('footer.navigation.donate') }}
-						</NuxtLink>
+						</CommonNavLink>
 					</li>
 					<li class="navigation__item">
-						<NuxtLink
-							:to="localePath(RoutePathEnum.LIMITATION_OF_LIABILITY)"
+						<CommonNavLink
+							:to="RoutePathEnum.LIMITATION_OF_LIABILITY"
 							:prefetch="false"
 							class="navigation__link"
 						>
 							{{ $t('footer.navigation.limitation_of_liability') }}
-						</NuxtLink>
+						</CommonNavLink>
 					</li>
 				</ul>
 			</div>

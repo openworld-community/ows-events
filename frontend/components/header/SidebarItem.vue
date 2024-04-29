@@ -3,8 +3,6 @@ import type { PropType } from 'vue';
 import type { IconName } from '~/components/common/Icon.vue';
 import { SeoItempropNavEnum } from '../../constants/enums/seo';
 
-const localePath = useLocalePath();
-
 type NavItemKind = 'success';
 
 const props = defineProps({
@@ -43,7 +41,7 @@ const component = computed(() => {
 		<component
 			:is="component"
 			:external="isExternalLink"
-			:to="linkTo ? (isExternalLink ? linkTo : localePath(linkTo)) : null"
+			:to="linkTo ? linkTo : null"
 			:target="isExternalLink ? '_blank' : null"
 			:class="['sidebar-item__item', itemKind ? `sidebar-item__item--${itemKind}` : '']"
 			:itemprop="SeoItempropNavEnum.URL"

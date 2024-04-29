@@ -3,8 +3,6 @@ import dayjs from 'dayjs';
 import { useFilterStore } from '../../stores/filter.store';
 import { debouncedWatch } from '@vueuse/core';
 
-const desktop = inject('desktop');
-
 const filterStore = useFilterStore();
 
 const route = useRoute();
@@ -27,7 +25,7 @@ watch(
 		navigateTo({
 			query: {
 				...route.query,
-				search: filters.searchLine || undefined,
+				//	search: filters.searchLine || undefined,
 				city: filters.city || undefined,
 				tags: filters.tags.join(', ') || undefined,
 				// может приходить Invalid Date
@@ -67,11 +65,14 @@ debouncedWatch(
 				:range="true"
 			/>
 		</div>
-		<div class="filters__tags">
+		<div
+			v-if="filterStore.usedTags.length !== 0"
+			class="filters__tags"
+		>
 			<CommonUiFilter
 				name="tags"
 				filter-type="tag"
-				:list="filterStore.usedTags.map((it) => it.key)"
+				:list="filterStore.usedTags"
 			/>
 		</div>
 	</section>
@@ -90,6 +91,7 @@ debouncedWatch(
 		width: 100%;
 		grid-column: span 3;
 		gap: var(--gap);
+		margin-bottom: 20px;
 
 		@media (min-width: 768px) {
 			box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
@@ -106,39 +108,10 @@ debouncedWatch(
 		@media (min-width: 1440px) {
 			background-color: var(--color-white);
 		}
-
-		&--mobile {
-			display: grid;
-			grid-template-columns: 1fr 1fr;
-			grid-column: span 2;
-			gap: var(--gap);
-
-			@media (min-width: 1440px) {
-				gap: 0;
-			}
-
-			@media (max-width: 768px) {
-				grid-column: span 3;
-			}
-
-			//@media (max-width: 668px) {
-			//	&:deep(.calendar) {
-			//		max-width: unset;
-			//	}
-			//}
-		}
 	}
 
 	&__tags {
 		width: 100%;
-		margin-top: 10px;
-		margin-bottom: 10px;
-		//	display: flex;
-		//	flex-wrap: wrap;
-		//	justify-content: flex-start;
-		//	gap: calc(var(--gap));
-
-		//	grid-column: span 3;
 	}
 }
 </style>

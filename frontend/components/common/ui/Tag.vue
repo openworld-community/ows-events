@@ -55,7 +55,7 @@ const model = computed({
 			{
 				[`tag--${size}`]: size !== 'standard',
 				[`tag--${appearance}`]: appearance !== 'primary',
-				tag__check: isCheckbox
+				tag__check: isCheckbox && appearance !== 'filter'
 			}
 		]"
 	>
@@ -130,6 +130,39 @@ const model = computed({
 	&--filter {
 		background-color: var(--color-white);
 		border-color: var(--color-white);
+		font-weight: 500;
+
+		@media (min-width: 1440px) {
+			padding: 7px 14px;
+		}
+
+		&:has(.tag__checkbox:focus-visible) {
+			background-color: var(--color-input-field);
+			border-color: var(--color-input-field);
+		}
+		&:has(.tag__checkbox:hover) {
+			background-color: var(--color-input-field);
+			border-color: var(--color-input-field);
+		}
+		&:has(.tag__checkbox:checked) {
+			background-color: var(--color-text-main);
+			border-color: var(--color-text-main);
+			color: var(--color-white);
+			&:hover {
+				@media (hover: hover) {
+					background-color: black;
+					border-color: black;
+
+					color: var(--color-white);
+				}
+			}
+
+			&:has(.tag__checkbox:focus-visible) {
+				color: var(--color-white);
+				background-color: black;
+				border-color: black;
+			}
+		}
 	}
 
 	// CHECK
@@ -139,6 +172,7 @@ const model = computed({
 
 		&:hover {
 			background-color: var(--color-input-icons);
+			border-color: var(--color-input-icons);
 		}
 
 		&:has(.tag__checkbox:focus-visible) {
@@ -170,6 +204,7 @@ const model = computed({
 			&:hover {
 				@media (hover: hover) {
 					background-color: var(--color-input-field);
+					border-color: var(--color-text-main);
 				}
 			}
 		}

@@ -93,22 +93,25 @@ onMounted(() => {
 			:aria-label="$t(`home.filter.${name}.aria`)"
 		/>
 	</template>
-
-	<div
-		v-if="filterType === 'tag'"
-		class="filter-tags"
-	>
-		<CommonUiTag
-			v-for="tagElem in filterStore.usedTags.map((it) => it.key)"
-			:key="tagElem"
-			v-model="filterStore.filters.tags"
-			name="tags"
-			:tag-key="tagElem"
-			is-checkbox
-			:size="mobile ? 'small' : 'standard'"
-			appearance="filter"
-		/>
-	</div>
+	<HomeCollapsible v-if="filterType === 'tag'">
+		<template #tags>
+			<div>
+				<div class="filter-tags">
+					<CommonUiTag
+						v-for="tagElem in filterStore.usedTags"
+						:key="tagElem"
+						v-model="filterStore.filters.tags"
+						name="tags"
+						:tag-key="tagElem"
+						is-checkbox
+						:size="mobile ? 'small' : 'standard'"
+						appearance="filter"
+						:aria-label="$t(`home.filter.${name}.aria`)"
+					/>
+				</div>
+			</div>
+		</template>
+	</HomeCollapsible>
 </template>
 
 <style scoped lang="less">
@@ -135,6 +138,7 @@ onMounted(() => {
 	align-items: center;
 	flex-wrap: wrap;
 	gap: 8px;
+	padding-bottom: 24px;
 
 	@media (min-width: 1440px) {
 		gap: 12px;

@@ -26,5 +26,6 @@ export function getFirstQuery(query: ReturnType<typeof useRoute>['query'][string
 }
 
 export const getRouteName = (fullRouteName: string) => {
-	return fullRouteName.split('___')[0]
-}
+	if (!fullRouteName) return;
+	return fullRouteName.split('___')[0];
+};

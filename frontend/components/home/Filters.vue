@@ -1,12 +1,9 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import dayjs from 'dayjs';
 import { useFilterStore } from '../../stores/filter.store';
 import { debouncedWatch } from '@vueuse/core';
 
-const desktop = inject('desktop')
+const desktop = inject('desktop');
 
 const filterStore = useFilterStore();
 
@@ -56,101 +53,58 @@ debouncedWatch(
 </script>
 
 <template>
-	<section
-		class="filters"
-		:style="filterStore.usedTags.length ? { rowGap: desktop ? 'calc((var(--gap) * 3)' : 'var(--gap)' } : null"
-	>
+	<section class="filters">
 		<div class="filters__wrapper">
 			<CommonUiFilter
-				filter-type="input"
-				name="searchLine"
-				icon-name="search"
-				no-separator
+				filter-type="select"
+				name="city"
+				:list="filterStore.usedCities"
+				:disabled="!filterStore.usedCities.length"
 			/>
-			<div class="filters__wrapper--mobile">
-				<CommonUiFilter
-					filter-type="select"
-					name="city"
-					:list="filterStore.usedCities"
-					:disabled="!filterStore.usedCities.length"
-				/>
-				<CommonUiFilter
-					filter-type="date"
-					name="date"
-					:range="true"
-				/>
-			</div>
+			<CommonUiFilter
+				filter-type="date"
+				name="date"
+				:range="true"
+			/>
 		</div>
-		<ul
-			v-if="filterStore.usedTags.length"
-			class="filters__tags"
-		>
-			<li
-				v-for="(tag, index) in filterStore.usedTags"
-				:key="index"
-			>
-				<CommonUiFilter
-					name="tags"
-					:tag="tag"
-					filter-type="tag"
-				/>
-			</li>
-		</ul>
+		<div class="filters__tags">
+			<CommonUiFilter
+				name="tags"
+				filter-type="tag"
+				:list="filterStore.usedTags.map((it) => it.key)"
+			/>
+		</div>
 	</section>
 </template>
 
-<style
-	scoped
-	lang="less"
->
+<style scoped lang="less">
 .filters {
-	--gap: 10px;
-
-	display: grid;
+	//display: grid;
 	width: 100%;
 	max-width: 1200px;
-	grid-template-rows: auto auto;
-	grid-template-columns: 1fr 1fr 1fr;
-	column-gap: var(--gap);
-
-	margin-bottom: calc(var(--gap) * 2);
-
-	@media (max-width: 768px) {
-		grid-template-columns: 1fr 1fr;
-		grid-template-rows: repeat(2, auto);
-		row-gap: 0;
-		column-gap: 0;
-
-		&:deep(.filters__search) {
-			grid-column: span 2;
-		}
-	}
 
 	&__wrapper {
+		--gap: 10px;
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-columns: 1fr;
 		width: 100%;
 		grid-column: span 3;
 		gap: var(--gap);
 
-		@media (min-width: 1440px) {
-			background-color: var(--color-white);
+		@media (min-width: 768px) {
 			box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
 			border-radius: 8px;
-		}
-
-		@media (max-width: 768px) {
-			& {
-				gap: 0;
-				row-gap: var(--gap);
-				grid-template-columns: 1fr 1fr;
-			}
-		}
-
-		@media (min-width: 1440px) {
 			align-items: center;
 			margin-top: 0;
-			gap: 0;
+			gap: var(--gap);
+			grid-template-columns: 1fr 1fr;
+
+			&:deep(.calendar) {
+				max-width: 100%;
+			}
+		}
+		@media (min-width: 1440px) {
+			background-color: var(--color-white);
 		}
 
 		&--mobile {
@@ -167,32 +121,24 @@ debouncedWatch(
 				grid-column: span 3;
 			}
 
-			@media (max-width: 668px) {
-				&:deep(.calendar) {
-					max-width: unset;
-				}
-			}
-
-			@media (max-width: 550px) {
-				grid-column: span 3;
-				display: grid;
-				grid-template-columns: 1fr;
-				column-gap: var(--gap);
-			}
+			//@media (max-width: 668px) {
+			//	&:deep(.calendar) {
+			//		max-width: unset;
+			//	}
+			//}
 		}
 	}
 
 	&__tags {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: flex-start;
-		gap: calc(var(--gap));
+		width: 100%;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		//	display: flex;
+		//	flex-wrap: wrap;
+		//	justify-content: flex-start;
+		//	gap: calc(var(--gap));
 
-		grid-column: span 3;
+		//	grid-column: span 3;
 	}
-}
-
-.date__wrapper {
-	display: flex;
 }
 </style>

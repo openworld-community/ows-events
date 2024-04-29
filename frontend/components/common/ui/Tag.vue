@@ -17,7 +17,7 @@ const props = defineProps({
 		default: 'standard'
 	},
 	appearance: {
-		type: String as PropType<'primary' | 'accent'>,
+		type: String as PropType<'primary' | 'accent' | 'filter'>,
 		default: 'primary'
 	},
 	isCheckbox: {
@@ -127,6 +127,11 @@ const model = computed({
 		color: var(--color-white);
 	}
 
+	&--filter {
+		background-color: var(--color-white);
+		border-color: var(--color-white);
+	}
+
 	// CHECK
 
 	&__check {
@@ -146,7 +151,7 @@ const model = computed({
 			color: var(--color-white);
 
 			&:hover {
-				@media (hover:hover) {
+				@media (hover: hover) {
 					background-color: var(--color-text-secondary);
 					color: var(--color-text-main);
 				}
@@ -163,7 +168,7 @@ const model = computed({
 			cursor: default;
 
 			&:hover {
-				@media (hover:hover) {
+				@media (hover: hover) {
 					background-color: var(--color-input-field);
 				}
 			}

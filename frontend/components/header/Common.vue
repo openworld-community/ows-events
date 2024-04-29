@@ -91,7 +91,7 @@ const clearFilters = async () => {
 	filterStore.$patch({
 		filters: {
 			city: '',
-			searchLine: '',
+			//searchLine: '',
 			date: [],
 			tags: []
 		}

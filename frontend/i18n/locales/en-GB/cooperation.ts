@@ -2,7 +2,7 @@ import event from './event';
 export default {
 	header: {
 		title: 'Join the Balkan event aggregation platform',
-		description: `Our efforts are focused on making the cultural and public space of the Balkans - from Serbia to Montenegro - more accessible and united. We offer the opportunity for event organizers and participants to be part of this transformation through our innovative platform. That's why choosing our startup is a choice in favor of opportunities and advantages:`
+		description: `Our efforts are focused on making the cultural and public space of the Balkans - from Serbia to Montenegro - more accessible and united. We offer event organizers and participants the opportunity to participate in this transformation through our innovative platform. That's why choosing our startup is a choice in favor of opportunities and advantages:`
 	},
 	advantages: {
 		allEvents: {
@@ -16,17 +16,17 @@ export default {
 		simpleCreating: {
 			title: 'Easy to create and promote events',
 			description:
-				'We offer intuitive tools for quickly and easily creating events of any format. This allows organizers to easily share information about their events and attract more participants.'
+				'We offer intuitive tools for quickly and easily creating events of any format. This allows organizers to easily share event information and attract more participants.'
 		},
 		individualSearch: {
 			title: 'Individual approaches to search',
 			description:
-				'Using our convenient filters by topic/tag, country and city, users can easily find events that match their interests and preferences.'
+				'Users can easily find events that match their interests and preferences using our convenient filters by topic/tag, country, and city.'
 		},
 		ourSupport: {
 			title: 'Support and care at every step',
 			description:
-				'Our caring support team is always available to help with any questions or concerns. We value every user and strive to provide the best user experience.'
+				'Our caring support team is always available to help with questions or concerns. We value every user and strive to provide the best user experience.'
 		},
 		eventPages: {
 			title: 'Event Detail Pages',
@@ -38,15 +38,14 @@ export default {
 		title: 'Why choose us?',
 		description: {
 			ourGoal:
-				'Choosing our startup is not only about access to a unique event aggregation platform. This is your contribution to the creation of a connecting cultural space in the Balkans, where every event becomes accessible and meaningful. We strive to advance culture and society through technology, inviting you to join our movement.',
-			ourMission: `Be part of our mission. Let's work together to make the cultural and public space of the Balkans more open and integrated. Join us today!`
+				'Choosing our startup is not only about access to a unique event aggregation platform. It is your contribution to creating a connecting cultural space in the Balkans where every event becomes accessible and meaningful. We strive to advance culture and society through technology and invite you to join our movement.',
+			ourMission: `Join us today to be part of our mission. Let's work together to make the Balkans' cultural and public spaces more open and integrated.`
 		}
 	},
 	ourServices: 'Our services',
 	service: {
 		basic: {
 			title: 'Basic package',
-			image: 'link',
 			option: [
 				'Posting an event announcement on the website',
 				'Display in the general list of events',
@@ -55,7 +54,6 @@ export default {
 		},
 		standard: {
 			title: 'Standard Package',
-			image: 'link',
 			option: [
 				'All services of the Basic package',
 				'Access to detailed event analytics (views, clicks, visitor demographics)',
@@ -64,7 +62,6 @@ export default {
 		},
 		premium: {
 			title: 'Premium Package',
-			image: 'link',
 			option: [
 				'All services of the Standard package',
 				'Promoting an event to the top search results on the website through an advertising auction system',
@@ -77,24 +74,20 @@ export default {
 		title: 'Additional services',
 		socialMedia: {
 			title: 'Social Media:',
-			image: 'link',
-			description: `Creating and posting posts about the event on the platform's social networks.`
+			description: `Create and post posts about the event on the platform's social networks.`
 		},
 		targetedAdvertising: {
 			title: 'Targeted advertising:',
-			image: 'link',
 			description:
 				'Launch targeted advertising campaigns on social networks and other platforms to attract the target audience.'
 		},
 		videoContent: {
 			title: 'Video content:',
-			image: 'link',
 			description:
-				'Production and placement of promotional video of the event on the website and social networks.'
+				'Production and placement of promotional videos of the event on the website and social networks.'
 		},
 		interactiveElements: {
 			title: 'Interactive elements:',
-			image: 'link',
 			description:
 				'Organizing online voting, surveys, or competitions to increase engagement.'
 		}

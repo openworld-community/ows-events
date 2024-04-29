@@ -41,9 +41,9 @@ const alignSelf = computed(() => props.isRevercedText ? 'flex-end' : 'flex-start
     &__image {
         width: 315px;
         height: 255px;
-
+        align-self: v-bind(alignSelf);
         @media (max-width: 900px) {
-            align-self: v-bind(alignSelf);
+            align-self: center;
         }
     }
 

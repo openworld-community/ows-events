@@ -8,7 +8,6 @@ definePageMeta({
 });
 
 const mobile = inject<boolean>('mobile');
-const localePath = useLocalePath();
 
 const myEvents = ref<EventOnPoster[] | []>([]);
 
@@ -55,7 +54,7 @@ if (data.value) myEvents.value = data.value;
 				class="my-events__button"
 				button-kind="success"
 				:button-text="$t('global.button.new_event')"
-				:link="localePath(`${RoutePathEnum.EVENT_EDIT}new`)"
+				:link="`${RoutePathEnum.EVENT_EDIT}new`"
 			/>
 		</div>
 	</div>

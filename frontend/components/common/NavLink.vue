@@ -14,6 +14,10 @@ defineProps({
 		// если необходимо открыть в новом окне
 		type: Boolean,
 		default: false
+	},
+	prefetch: {
+		type: Boolean,
+		default: false
 	}
 });
 </script>
@@ -22,6 +26,7 @@ defineProps({
 		:external="isExternalLink"
 		:to="to ? (isExternalLink ? to : localePath(to)) : null"
 		:target="isExternalLink ? '_blank' : null"
+		:prefetch="prefetch"
 	>
 		<slot />
 	</NuxtLink>

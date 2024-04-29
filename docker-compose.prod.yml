@@ -18,6 +18,7 @@ services:
             dockerfile: ./frontend/Dockerfile
             args:
                 - NODE_ENV=production
+                - VITE_STAGE=prod
                 - VITE_API_URL=https://api.afisha.peredelano.com/api
                 - VITE_BASE_URL=https://api.afisha.peredelano.com
                 - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4

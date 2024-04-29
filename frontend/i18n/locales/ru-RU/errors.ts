@@ -48,9 +48,10 @@ export default {
 	[CommonErrorsEnum.PASSWORD_MISMATCH]: 'Пароль не совпадает',
 	[CommonErrorsEnum.INVALID_EMAIL]: 'Введите действительный адрес электронной почты',
 	[CommonErrorsEnum.REQUIRED_FIELD]: 'Это поле обязательно',
-	[CommonErrorsEnum.ERROR_PAGE_ERROR]: 'Ошибка',
+	[CommonErrorsEnum.ERROR_DEFAULT_MESSAGE]: 'Ошибка',
 	[CommonErrorsEnum.ERROR_PAGE_PAGE]: 'Страница',
 	[CommonErrorsEnum.ERROR_PAGE_NOT_FOUND]: 'не найдена',
 	[CommonErrorsEnum.ERROR_PAGE_GO_HOME]: 'Вернуться на Главную',
-	[CommonErrorsEnum.ERROR_PAGE_SERVER_ERROR]: 'Неизвестная Ошибка Сервера',	
+	[CommonErrorsEnum.ERROR_PAGE_SERVER_ERROR]: 'Неизвестная Ошибка Сервера',
+	[CommonErrorsEnum.NOT_FOUND_BY_ID]: 'Мероприятие с ID {id} не найдено'
 };

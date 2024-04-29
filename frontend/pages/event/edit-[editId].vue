@@ -16,9 +16,13 @@ const router = useRouter();
 const localePath = useLocalePath();
 const route = useRoute();
 const eventStore = useEventStore();
+const { t } = useI18n();
 
 onMounted(async () => {
 	await eventStore.getTimezones();
+});
+definePageMeta({
+	layout: false
 });
 const id = getFirstParam(route.params.editId);
 
@@ -49,25 +53,23 @@ if (id !== 'new') {
 	if (data.value) {
 		event.value = data.value;
 	} else {
-		router.back();
-		//throw error after create error page and remove router.back()
-		//	throw createError({
-		//		statusCode:404,
-		//		message: t('notFound')
-		//	})
+		throw createError({
+			statusCode: 404,
+			data: { message: t('errors.NOT_FOUND_BY_ID', { id: id }) }
+		});
 	}
 }
 
-const initialValues = computed(() =>{
+const initialValues = computed(() => {
 	const init = getInitialEventFormValues(event.value);
 	if (!event.value) {
 		getTimezone('Serbia', 'Belgrade')
-			.then(r => init.timezone = r)
+			.then((r) => (init.timezone = r))
 			// если по какой-то причине сервер не отдаст, то ставим просто "Центральную Европу"
-			.catch(() => init.timezone = 'CET')
+			.catch(() => (init.timezone = 'Europe/Belgrade +02:00'));
 	}
 
-	return init
+	return init;
 });
 
 const submitEvent = async (payload: PostEventPayload) => {

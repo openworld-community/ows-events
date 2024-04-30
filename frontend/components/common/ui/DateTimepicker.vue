@@ -69,7 +69,6 @@ const props = defineProps({
 });
 
 const { locale } = useI18n();
-const route = useRoute();
 
 const emit = defineEmits(['update:model-value']);
 const isDateType = computed(() => props.type === 'date');
@@ -126,16 +125,13 @@ const onClose = () => {
 };
 
 const hasValue = computed(() => {
-	// тут хз как привязать иконку очистки для !modelValue и !modelValue.length
-	// типизация не дает
-	// если есть как минимум startDate. то фильтр хотя бы частично заполнен
-	return props.range ? !!getFirstQuery(route.query.startDate) : !!props.modelValue;
+	return props.range ? props.modelValue[0] || props.modelValue[0] : !!props.modelValue;
 });
 
 const today = new Date();
 const tomorrow = new Date(new Date().setDate(today.getDate() + 1));
 
-const displayValue = ref<FilterStore['filters']['date']>(['']);
+const displayValue = ref();
 
 onMounted(() => {
 	// datepicker криво ставит фокус класс (при откртии фокуса нет, при закрытии есть)
@@ -221,7 +217,7 @@ onMounted(() => {
 					button-kind="dark"
 					@click="
 						() => {
-							displayValue = [today.toString(), today.toString()];
+							displayValue = [today, today];
 							datepicker.closeMenu();
 						}
 					"
@@ -232,25 +228,25 @@ onMounted(() => {
 					button-kind="dark"
 					@click="
 						() => {
-							displayValue = [tomorrow.toString(), tomorrow.toString()];
+							displayValue = [tomorrow, tomorrow];
 							datepicker.closeMenu();
 						}
 					"
 				/>
 			</template>
 		</VueDatePicker>
-		<CommonIcon
-			v-if="!hasValue"
-			:name="isDateType ? 'calendar' : 'clock'"
-			:class="['input__button', { 'input__button--disabled': disabled }]"
-		/>
 		<CommonButton
-			v-else
+			v-if="hasValue"
 			is-icon
 			:interactive="false"
 			icon-name="close"
 			class="input__button"
 			@click="onRemove"
+		/>
+		<CommonIcon
+			v-else
+			:name="isDateType ? 'calendar' : 'clock'"
+			:class="['input__button', { 'input__button--disabled': disabled }]"
 		/>
 	</div>
 </template>

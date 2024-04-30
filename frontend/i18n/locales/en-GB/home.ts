@@ -31,6 +31,11 @@ export default {
 			title: 'When do we go?',
 			aria: 'Filter by date'
 		},
+		tags_button: {
+			aria: 'Choose theme',
+			open: 'Themes',
+			close: 'Hide'
+		}
 	},
 	user_location: {
 		not_found: "We couldn't find your location"

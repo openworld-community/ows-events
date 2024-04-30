@@ -9,6 +9,8 @@ const mobile = inject('mobile');
 	<div class="root">
 		<HeaderCommon :has-back-button="getRouteName(route.name) === RouteNameEnum.EVENT" />
 		<slot> </slot>
-		<FooterCommon v-if="!mobile && getRouteName(route.name) !== RouteNameEnum.HOME" />
+		<FooterCommon
+			v-if="!mobile || (mobile && getRouteName(route.name) === RouteNameEnum.HOME)"
+		/>
 	</div>
 </template>

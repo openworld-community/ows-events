@@ -1,22 +1,16 @@
-<script setup lang="ts">
-const mobile = inject('mobile');
-
-const { width } = useWindowSize()
-</script>
+<script setup lang="ts"></script>
 
 <template>
-
-		<div class="cooperation">
-			<div class="cooperation__wrapper">
-				<h1 class="cooperation__title">{{ $t('cooperation.header.title') }}</h1>
-				<p class="cooperation__description">{{ $t('cooperation.header.description') }}</p>
-				<CooperationAdvantage />
-				<CooperationWhyUs />
-				<!-- <CooperationServices />
+	<div class="cooperation">
+		<div class="cooperation__wrapper">
+			<h1 class="cooperation__title">{{ $t('cooperation.header.title') }}</h1>
+			<p class="cooperation__description">{{ $t('cooperation.header.description') }}</p>
+			<CooperationAdvantage />
+			<CooperationWhyUs />
+			<!-- <CooperationServices />
 				<CooperationAdditional /> -->
-			</div>
 		</div>
-
+	</div>
 </template>
 
 <style lang="less" scoped>
@@ -64,7 +58,7 @@ const { width } = useWindowSize()
 		font-size: var(--font-size-L);
 		line-height: 1.5;
 	}
-	
+
 	&__advantage,
 	&__services {
 		display: flex;

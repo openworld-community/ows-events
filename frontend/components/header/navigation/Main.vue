@@ -1,9 +1,5 @@
 <script setup lang="ts">
 import { RoutePathEnum } from '../../../constants/enums/route';
-import { SUPPORT_TG_URL } from '../../../constants/url';
-
-const localePath = useLocalePath()
-
 const mobile = inject('mobile')
 </script>
 

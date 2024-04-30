@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { RoutePathEnum } from '@/constants/enums/route';
-import { SUPPORT_TG_URL } from '../../../constants/url';
 import { useUserStore } from '../../../stores/user.store';
 import { RouteNameEnum } from '../../../constants/enums/route';
 import { useModal } from 'vue-final-modal';
@@ -62,7 +61,7 @@ const onButtonClick = async () => {
 			/>			
 
 			<HeaderSidebarItem
-				:link-to="RoutePathEnum.SUPPORT"
+				:link-to="localePath(RoutePathEnum.SUPPORT)"
 				:text="$t('header.navigation.support')"
 				icon-name="contact-tg"
 				@click="emit('close')"
@@ -70,7 +69,7 @@ const onButtonClick = async () => {
 			
 			<HeaderSidebarItem
 				component-type="link"
-				:link-to="RoutePathEnum.COOPERATION"
+				:link-to="localePath(RoutePathEnum.COOPERATION)"
 				:text="$t('header.navigation.cooperation')"
 				icon-name="cooperation"
 				:current="getRouteName(route.name as string) === RouteNameEnum.COOPERATION"

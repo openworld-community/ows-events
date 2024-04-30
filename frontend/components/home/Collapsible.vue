@@ -1,9 +1,8 @@
 <script setup>
 import { CollapsibleTrigger } from 'radix-vue';
-const open = ref(false);
 </script>
 <template>
-	<LibraryCollapsible :open-collapsible="open">
+	<LibraryCollapsible>
 		<template #content><slot name="tags" /></template>
 		<template #trigger-reversed="opened">
 			<div class="trigger">

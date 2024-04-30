@@ -107,6 +107,7 @@ debouncedWatch(
 		}
 		@media (min-width: 1440px) {
 			background-color: var(--color-white);
+			margin-bottom: 40px;
 		}
 	}
 

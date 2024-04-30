@@ -1,10 +1,7 @@
 import { defineStore } from 'pinia';
-import { LocalStorageEnum } from '../constants/enums/common';
-import { useUserStore } from './user.store';
-import { getCurrencyByCountry } from '../utils/prices';
-import { getAllTimezones, getUserTimezone } from '../services/timezone.services';
+
+import { getAllTimezones } from '../services/timezone.services';
 import { timezoneToString } from '../.nuxt/imports';
-import { roundTime } from '../utils/dates';
 
 export const useEventStore = defineStore('event', {
 	state: () => {

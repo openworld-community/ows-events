@@ -2,7 +2,7 @@
 import type { PropType } from 'vue';
 
 type Type = 'column' | 'row';
-const props = defineProps({
+defineProps({
 	type: {
 		type: String as PropType<Type>,
 		default: 'column'

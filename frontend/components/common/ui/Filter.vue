@@ -8,7 +8,7 @@ const props = defineProps({
 		default: () => {}
 	},
 	filterType: {
-		type: String as PropType<'input' | 'select' | 'date' | 'tag'>,
+		type: String as PropType<'select' | 'date' | 'tag'>,
 		required: true
 	},
 	name: {
@@ -49,18 +49,6 @@ const filterStore = useFilterStore();
 
 const isActive = ref<boolean>(false);
 
-const handleTag = () => {
-	if (isActive.value === false) {
-		filterStore.filters.tags.push(props.tag.key);
-	} else {
-		filterStore.filters.tags = filterStore.filters.tags.filter(
-			(item) => item !== props.tag.key
-		);
-	}
-
-	isActive.value = !isActive.value;
-};
-
 onMounted(() => {
 	if (filterStore.filters.tags.includes(props.tag?.key)) {
 		isActive.value = true;
@@ -69,19 +57,8 @@ onMounted(() => {
 </script>
 
 <template>
-	<CommonUiBaseInput
-		v-if="filterType === 'input'"
-		v-model="filterStore.filters[name]"
-		:class="['filter', 'filters__search', { 'filter--no-separator': noSeparator }]"
-		:name="name"
-		:placeholder="$t(`home.filter.${name}.placeholder`)"
-		:disabled="disabled"
-		:icon-name="iconName"
-		appearance="no-border"
-		:aria-label="$t(`home.filter.${name}.aria`)"
-	/>
 	<CommonUiDateTimepicker
-		v-else-if="filterType === 'date'"
+		v-if="filterType === 'date'"
 		v-model="filterStore.filters[name]"
 		type="date"
 		:range="range"
@@ -116,18 +93,25 @@ onMounted(() => {
 			:aria-label="$t(`home.filter.${name}.aria`)"
 		/>
 	</template>
-	<CommonButton
-		v-if="filterType === 'tag'"
-		style="font-weight: 500"
-		:font-size="mobile ? '11px' : ''"
-		:line-height="mobile ? '17.6px' : 'inherit'"
-		:padding="!desktop ? '3px 10px' : '7px 14px'"
-		:button-kind="isActive ? 'dark' : 'ordinary'"
-		:button-text="tag.name"
-		:class="['filter', { 'filter--no-separator': noSeparator }]"
-		:aria-label="tag.name"
-		@click="handleTag"
-	/>
+	<HomeCollapsible v-if="filterType === 'tag'">
+		<template #tags>
+			<div>
+				<div class="filter-tags">
+					<CommonUiTag
+						v-for="tagElem in filterStore.usedTags"
+						:key="tagElem"
+						v-model="filterStore.filters.tags"
+						name="tags"
+						:tag-key="tagElem"
+						is-checkbox
+						:size="mobile ? 'small' : 'standard'"
+						appearance="filter"
+						:aria-label="$t(`home.filter.${name}.aria`)"
+					/>
+				</div>
+			</div>
+		</template>
+	</HomeCollapsible>
 </template>
 
 <style scoped lang="less">
@@ -145,6 +129,19 @@ onMounted(() => {
 
 	&.button__filter {
 		transition: unset;
+	}
+}
+
+.filter-tags {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 8px;
+	padding-bottom: 24px;
+
+	@media (min-width: 1440px) {
+		gap: 12px;
 	}
 }
 

@@ -31,6 +31,11 @@ export default {
 			title: 'Когда пойдем?',
 			aria: 'Фильтр по дате'
 		},
+		tags_button: {
+			aria: 'Выбор категории мероприятия',
+			open: 'Категории',
+			close: 'Свернуть'
+		}
 	},
 	user_location: {
 		not_found: 'Мы не смогли найти вас'

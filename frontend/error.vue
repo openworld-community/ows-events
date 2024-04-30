@@ -71,9 +71,11 @@ const resultMessage = computed(() => {
 	align-items: center;
 	justify-content: center;
 }
+
 .error-go-home-wrapper {
 	padding: 40px;
 }
+
 .error-go-home {
 	color: var(--color-accent-green-main);
 	font-weight: 400;

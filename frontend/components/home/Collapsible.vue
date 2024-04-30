@@ -13,8 +13,8 @@ import { CollapsibleTrigger } from 'radix-vue';
 				>
 					<span class="trigger__text">{{
 						opened.isOpen
-							? $t(`home.filter.tags_button.open`)
-							: $t(`home.filter.tags_button.close`)
+							? $t(`home.filter.tags_button.close`)
+							: $t(`home.filter.tags_button.open`)
 					}}</span>
 					<CommonIcon
 						name="container"

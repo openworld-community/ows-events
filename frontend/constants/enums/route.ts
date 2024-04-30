@@ -13,7 +13,6 @@ export enum RoutePathEnum {
 	USER_PROFILE = '/user/profile',
 	SUPPORT = '/support',
 	COOPERATION = '/cooperation',
-
 }
 
 export enum RouteNameEnum {

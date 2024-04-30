@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { SUPPORT_TG_URL, SUPPORT_EMAIL_URL } from '~/constants/url';
-const SUPORT_TG_BOT_NAME="@afisha_peredelano_support_bot"
-const SUPORT_EMAIL_NAME="email:support@afisha.peredelano.com"
+const SUPORT_TG_BOT_NAME = '@afisha_peredelano_support_bot';
+const SUPORT_EMAIL_NAME = 'email:support@afisha.peredelano.com';
 </script>
 
 <template>
@@ -60,7 +60,7 @@ const SUPORT_EMAIL_NAME="email:support@afisha.peredelano.com"
 		width: 500px;
 		@media (max-width: 900px) {
 			width: 400px;
-			}
+		}
 		@media (max-width: 768px) {
 			width: auto;
 		}

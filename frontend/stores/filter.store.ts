@@ -5,12 +5,12 @@ import type { Tag } from '../../common/const/tags';
 
 export interface FilterStore {
 	usedCities: City[];
-	usedTags: { name: string; key: Tag }[];
+	usedTags: string[];
 	filters: {
 		city: City;
-		searchLine: string;
+		//searchLine: string;
 		tags: Tag[];
-		date: string[];
+		date: Date[];
 	};
 	filteredEvents: EventOnPoster[];
 	loading: boolean;
@@ -24,18 +24,18 @@ export const useFilterStore = defineStore('filter', {
 			usedTags: [],
 			filters: {
 				city: getFirstQuery(route.query.city) ?? '',
-				searchLine: getFirstQuery(route.query.search) ?? '',
+				//	searchLine: getFirstQuery(route.query.search) ?? '',
 				tags:
 					getFirstQuery(route.query.tags)
 						.split(', ')
 						.filter((item) => item !== '') ?? [],
 				date: [
-					getFirstQuery(route.query.startDate) ?? '',
-					getFirstQuery(route.query.endDate) ?? ''
+					getDateFromQuery(getFirstQuery(route.query.startDate)) ?? undefined,
+					getDateFromQuery(getFirstQuery(route.query.endDate)) ?? undefined
 				]
 			},
 			filteredEvents: undefined,
-			loading: false,
+			loading: false
 		};
 	},
 	getters: {},
@@ -80,11 +80,9 @@ export const useFilterStore = defineStore('filter', {
 			const { data: usedTags } = await apiRouter.filters.getUsedTags.useQuery({});
 
 			if (usedTags.value?.length) {
-				const { $i18n } = useNuxtApp();
-				usedTags.value.sort((a, b) => b.length - a.length)
-				this.usedTags = usedTags.value.map((elem) => {
-					return { key: elem, name: $i18n.t(`event.tags.${elem}`) };
-				});
+				usedTags.value.sort((a, b) => b.length - a.length);
+				console.log(usedTags.value);
+				this.usedTags = usedTags.value;
 			}
 		}
 	}

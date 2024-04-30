@@ -1,6 +1,7 @@
 <script setup>
 import { RoutePathEnum } from '../../../constants/enums/route';
 import { SUPPORT_TG_URL } from '../../../constants/url';
+const mobile = inject('mobile');
 </script>
 
 <template>

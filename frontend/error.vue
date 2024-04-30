@@ -36,33 +36,31 @@ const resultMessage = computed(() => {
 });
 </script>
 <template>
-	<NuxtLayout>
-		<div class="service-error">
-			<template v-if="props.error.statusCode === 404">
-				<Error404 :message="resultMessage" />
-			</template>
-			<template v-else>
-				<Error500 />
-			</template>
-			<div class="error-go-home-wrapper">
-				<!-- РЕАЛИЗАЦИЯ С ХЕНДЛЕРОМ -->
-				<!--  <button
+	<div class="service-error">
+		<template v-if="props.error.statusCode === 404">
+			<Error404 :message="resultMessage" />
+		</template>
+		<template v-else>
+			<Error500 />
+		</template>
+		<div class="error-go-home-wrapper">
+			<!-- РЕАЛИЗАЦИЯ С ХЕНДЛЕРОМ -->
+			<!--  <button
 					@click="handleError"
 					class="go-home"
 					tabindex="0"
 				>
 					{{ $t('errors.ERROR_PAGE_GO_HOME') }}
 				</button> -->
-				<NuxtLink
-					class="error-go-home"
-					tabindex="0"
-					:to="homepath"
-				>
-					{{ $t('errors.ERROR_PAGE_GO_HOME') }}
-				</NuxtLink>
-			</div>
+			<NuxtLink
+				class="error-go-home"
+				tabindex="0"
+				:to="homepath"
+			>
+				{{ $t('errors.ERROR_PAGE_GO_HOME') }}
+			</NuxtLink>
 		</div>
-	</NuxtLayout>
+	</div>
 </template>
 <style scoped lang="less">
 .service-error {

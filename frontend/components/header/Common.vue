@@ -40,6 +40,7 @@ const logoComponentIs = computed(() => {
 	if (isAtHome.value) return 'button';
 	else return CommonNavLink;
 });
+
 const titleOnMobile = computed(() => {
 	if (localePath(route.path) === localePath({ path: RoutePathEnum.USER_FAVOURITES })) {
 		return t('user.favourites.title');
@@ -90,7 +91,7 @@ const clearFilters = async () => {
 	filterStore.$patch({
 		filters: {
 			city: '',
-			searchLine: '',
+			//searchLine: '',
 			date: [],
 			tags: []
 		}

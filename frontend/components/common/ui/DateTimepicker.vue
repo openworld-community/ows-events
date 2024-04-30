@@ -1,7 +1,4 @@
-<script
-	lang="ts"
-	setup
->
+<script lang="ts" setup>
 import VueDatePicker, { type DatePickerInstance } from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import dayjs from 'dayjs';
@@ -16,7 +13,9 @@ const props = defineProps({
 		default: ''
 	},
 	modelValue: {
-		type: [Date, null, Object, String] as PropType<Date | Date[] | Time | string | string[] | null>,
+		type: [Date, null, Object, String] as PropType<
+			Date | Date[] | Time | string | string[] | null
+		>,
 		required: true
 	},
 	placeholder: {
@@ -66,35 +65,35 @@ const props = defineProps({
 	isFilter: {
 		type: Boolean,
 		default: false
-	},
+	}
 });
 
 const { locale } = useI18n();
-const route = useRoute()
+const route = useRoute();
 
 const emit = defineEmits(['update:model-value']);
 const isDateType = computed(() => props.type === 'date');
 const datepicker = ref<DatePickerInstance>(null);
-const input = ref<HTMLInputElement>(null)
+const input = ref<HTMLInputElement>(null);
 
 const handleDate = (modelData: typeof props.modelValue) => {
 	isDateType.value && datepicker.value?.closeMenu();
 	if (props.range && !modelData[1]) {
-		emit('update:model-value', [modelData[0], modelData[0]])
+		emit('update:model-value', [modelData[0], modelData[0]]);
 	} else {
-		emit('update:model-value', modelData)
+		emit('update:model-value', modelData);
 	}
 };
 
 const dateFormat = (date: Date | Date[] | string | string[]) => {
-	if (!date) return ''
+	if (!date) return '';
 
 	if (Array.isArray(date)) {
 		return !date[1]
-			? `${dayjs(date[0]).format('DD.MM')} -`
-			: `${dayjs(date[0]).format('DD.MM')} - ${dayjs(date[1]).format('DD.MM.YYYY')}`
+			? `${dayjs(date[0]).format('DD.MM.YYYY')} -`
+			: `${dayjs(date[0]).format('DD.MM.YYYY')} - ${dayjs(date[1]).format('DD.MM.YYYY')}`;
 	} else {
-		return dayjs(date).format('DD.MM.YYYY')
+		return dayjs(date).format('DD.MM.YYYY');
 	}
 };
 
@@ -109,39 +108,39 @@ const onRemove = () => {
 
 const onOpen = () => {
 	if (props.isFilter) {
-		input.value.focus()
-		input.value.classList.add('active')
+		input.value.focus();
+		input.value.classList.add('active');
 	}
-}
+};
 
 const onClose = () => {
 	if (props.isFilter) {
-		input.value.blur()
-		input.value.classList.remove('active')
+		input.value.blur();
+		input.value.classList.remove('active');
 		// если выбрана только 1 дата и календарь закрыли, то автоматически проставляется та же дата на вторую позицию
 		if (!displayValue.value[1]) {
-			displayValue.value = [...displayValue.value, ...displayValue.value]
+			displayValue.value = [...displayValue.value, ...displayValue.value];
 		}
-		emit('update:model-value', displayValue.value ?? '')
+		emit('update:model-value', displayValue.value ?? '');
 	}
-}
+};
 
 const hasValue = computed(() => {
 	// тут хз как привязать иконку очистки для !modelValue и !modelValue.length
 	// типизация не дает
 	// если есть как минимум startDate. то фильтр хотя бы частично заполнен
-	return props.range ? !!getFirstQuery(route.query.startDate) : !!props.modelValue
-})
+	return props.range ? !!getFirstQuery(route.query.startDate) : !!props.modelValue;
+});
 
-const today = new Date()
-const tomorrow = new Date(new Date().setDate(today.getDate() + 1))
+const today = new Date();
+const tomorrow = new Date(new Date().setDate(today.getDate() + 1));
 
-const displayValue = ref<FilterStore['filters']['date']>([''])
+const displayValue = ref<FilterStore['filters']['date']>(['']);
 
 onMounted(() => {
 	// datepicker криво ставит фокус класс (при откртии фокуса нет, при закрытии есть)
-	input.value = document.querySelector('.custom__input')
-})
+	input.value = document.querySelector('.custom__input');
+});
 </script>
 
 <template>
@@ -163,7 +162,9 @@ onMounted(() => {
 			:locale="locale"
 			:name="name"
 			:placeholder="required ? `${placeholder} *` : placeholder"
-			:input-class-name="`input input__field ${error ? 'form__error' : ''} ${appearance ? 'no-border' : ''} ${isFilter ? 'filter' : ''}`"
+			:input-class-name="`input input__field ${error ? 'form__error' : ''} ${
+				appearance ? 'no-border' : ''
+			} ${isFilter ? 'filter' : ''}`"
 			:menu-class-name="`${!isDateType ? 'time_picker' : ''}`"
 			position="left"
 			mode-height="80"
@@ -192,7 +193,7 @@ onMounted(() => {
 			@open="onOpen"
 			@closed="onClose"
 			@update:model-value="handleDate"
-			@internal-model-change="(date) => displayValue = date"
+			@internal-model-change="(date) => (displayValue = date)"
 		>
 			<template
 				v-if="range"
@@ -218,13 +219,23 @@ onMounted(() => {
 					:button-text="$t('dates.filterDay.today')"
 					:aria-label="$t('dates.filterDay.today')"
 					button-kind="dark"
-					@click="() => { displayValue = [today.toString(), today.toString()]; datepicker.closeMenu() }"
+					@click="
+						() => {
+							displayValue = [today.toString(), today.toString()];
+							datepicker.closeMenu();
+						}
+					"
 				/>
 				<CommonButton
 					:button-text="$t('dates.filterDay.tomorrow')"
 					:aria-label="$t('dates.filterDay.tomorrow')"
 					button-kind="dark"
-					@click="() => { displayValue = [tomorrow.toString(), tomorrow.toString()]; datepicker.closeMenu() }"
+					@click="
+						() => {
+							displayValue = [tomorrow.toString(), tomorrow.toString()];
+							datepicker.closeMenu();
+						}
+					"
 				/>
 			</template>
 		</VueDatePicker>
@@ -262,7 +273,6 @@ onMounted(() => {
 
 .dp {
 	&__range {
-
 		&_start,
 		&_between,
 		&_end {
@@ -331,7 +341,7 @@ onMounted(() => {
 		overflow: hidden;
 
 		&.no-border {
-			border-color: var(--color-white)
+			border-color: var(--color-white);
 		}
 
 		&:hover {

@@ -74,6 +74,7 @@ const props = defineProps({
 		type: String as PropType<string>,
 		default: 'var(--color-input-icons)'
 	},
+
 	width: {
 		type: [String, Number] as PropType<string | number>,
 		default: IconDefaultParams.WIDTH

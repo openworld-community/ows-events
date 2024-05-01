@@ -191,9 +191,12 @@ onMounted(() => {
 			@update:model-value="handleDate"
 			@internal-model-change="(date) => (displayValue = date)"
 		>
-			<template #dp-input>
+			<template
+				v-if="range"
+				#dp-input
+			>
 				<input
-					:class="['custom__input input__field', { 'no-border filter': no - border }]"
+					class="custom__input input__field no-border filter"
 					type="text"
 					readonly
 					:placeholder="placeholder"
@@ -202,11 +205,6 @@ onMounted(() => {
 					@keyup.space.prevent="datepicker.openMenu()"
 					@keyup.delete="datepicker.closeMenu()"
 					@keyup.esc="datepicker.closeMenu()"
-				/>
-				<CommonIcon
-					v-if="!hasValue"
-					:name="isDateType ? 'calendar' : 'clock'"
-					:class="['input__button', { 'input__button--disabled': disabled }]"
 				/>
 			</template>
 			<template
@@ -234,6 +232,12 @@ onMounted(() => {
 							datepicker.closeMenu();
 						}
 					"
+				/>
+			</template>
+			<template #input-icon>
+				<CommonIcon
+					v-if="!hasValue"
+					:name="isDateType ? 'calendar' : 'clock'"
 				/>
 			</template>
 		</VueDatePicker>
@@ -362,8 +366,18 @@ onMounted(() => {
 			color: var(--color-input-icons);
 		}
 
-		&_icon {
-			display: none;
+		&_wrap {
+			& div {
+				position: absolute;
+				right: 6px;
+				top: 50%;
+				transform: translateY(-50%);
+				width: 30px;
+				height: 30px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
 		}
 	}
 

@@ -81,8 +81,8 @@
    &::-webkit-inner-spin-button,
     &::-webkit-calendar-picker-indicator {
       position: absolute;
-      top: 10px;
-    right: 14px;
+    //  top: 10px;
+   // right: 14px;
      opacity: 0;
       z-index: 1;
     }
@@ -134,17 +134,24 @@
     top: 50%;
     right: 12px;
     transform: translateY(-50%);
-   
+    cursor: pointer;
 
-
+   &:hover svg,
+   &:focus-within svg{
+    color: var(--color-accent-green-main)
+   }
+  
     &--clear {
       z-index: 1;
     }
 
     &--disabled {
       opacity: 0.4;
+     
     }
   }
+
+ 
 
  
 

@@ -267,9 +267,10 @@ const onRemove = () => {
 		align-items: center;
 		gap: 4px;
 	}
-	&__clear-select:hover svg,
-	&__clear-select:focus svg,
-	&__clear-select:focus-within svg {
+
+	&__clear-select:hover :deep(svg),
+	&__clear-select:focus :deep(svg),
+	&__clear-select:focus-within :deep(svg) {
 		color: var(--color-accent-green-main);
 	}
 }

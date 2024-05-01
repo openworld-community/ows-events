@@ -191,12 +191,9 @@ onMounted(() => {
 			@update:model-value="handleDate"
 			@internal-model-change="(date) => (displayValue = date)"
 		>
-			<template
-				v-if="range"
-				#dp-input
-			>
+			<template #dp-input>
 				<input
-					class="custom__input input__field no-border filter"
+					:class="['custom__input input__field', { 'no-border filter': no - border }]"
 					type="text"
 					readonly
 					:placeholder="placeholder"
@@ -205,6 +202,11 @@ onMounted(() => {
 					@keyup.space.prevent="datepicker.openMenu()"
 					@keyup.delete="datepicker.closeMenu()"
 					@keyup.esc="datepicker.closeMenu()"
+				/>
+				<CommonIcon
+					v-if="!hasValue"
+					:name="isDateType ? 'calendar' : 'clock'"
+					:class="['input__button', { 'input__button--disabled': disabled }]"
 				/>
 			</template>
 			<template
@@ -242,11 +244,6 @@ onMounted(() => {
 			icon-name="close"
 			class="input__button"
 			@click="onRemove"
-		/>
-		<CommonIcon
-			v-else
-			:name="isDateType ? 'calendar' : 'clock'"
-			:class="['input__button', { 'input__button--disabled': disabled }]"
 		/>
 	</div>
 </template>

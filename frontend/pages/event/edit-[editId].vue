@@ -62,12 +62,12 @@ if (id !== 'new') {
 
 const initialValues = computed(() => {
 	const init = getInitialEventFormValues(event.value);
-	if (!event.value) {
-		getTimezone('Serbia', 'Belgrade')
-			.then((r) => (init.timezone = r))
-			// если по какой-то причине сервер не отдаст, то ставим просто "Центральную Европу"
-			.catch(() => (init.timezone = 'Europe/Belgrade +02:00'));
-	}
+	//if (!event.value) {
+	//	getTimezone('Serbia', 'Belgrade')
+	//		.then((r) => (init.timezone = r))
+	//		// если по какой-то причине сервер не отдаст, то ставим просто "Центральную Европу"
+	//		.catch(() => (init.timezone = 'Europe/Belgrade +02:00'));
+	//}
 
 	return init;
 });

@@ -42,13 +42,13 @@ const logoComponentIs = computed(() => {
 });
 
 const titleOnMobile = computed(() => {
-	if (localePath(route.path) === localePath({ path: RoutePathEnum.USER_FAVOURITES })) {
+	if (getRouteName(route.path) === RoutePathEnum.USER_FAVOURITES) {
 		return t('user.favourites.title');
 	}
-	if (localePath(route.path) === localePath({ path: RoutePathEnum.USER_MY_EVENTS })) {
+	if (getRouteName(route.path) === RoutePathEnum.USER_MY_EVENTS) {
 		return t('user.my_events.title');
 	}
-	if (localePath(route.path) === localePath({ path: RoutePathEnum.USER_PROFILE })) {
+	if (getRouteName(route.path) === RoutePathEnum.USER_PROFILE) {
 		return t('user.profile.title');
 	}
 	return '';
@@ -112,10 +112,7 @@ const clearFilters = async () => {
 		>
 			<div class="header__left">
 				<CommonButton
-					v-if="
-						hasBackButton &&
-						localePath(route.path) !== localePath({ path: RoutePathEnum.USER_PAGE })
-					"
+					v-if="hasBackButton && getRouteName(route.path) !== RoutePathEnum.USER_PAGE"
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"

@@ -132,10 +132,8 @@ const model = computed({
 		background-color: var(--color-white);
 		border-color: var(--color-white);
 		font-weight: 500;
-		-webkit-box-shadow: 0px 0px 16px var(--color-text-secondary);
-		-moz-box-shadow: 0px 0px 16px var(--color-text-secondary);
-		box-shadow: 0px 0px 16px var(--color-text-secondary);
 
+		box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
 		@media (min-width: 1440px) {
 			padding: 7px 14px;
 		}

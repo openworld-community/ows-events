@@ -45,9 +45,8 @@ import { CollapsibleTrigger } from 'radix-vue';
 		gap: 12px;
 		padding-left: 12px;
 		padding-right: 12px;
-		-webkit-box-shadow: -2px -2px 16px var(--color-text-secondary);
-		-moz-box-shadow: -2px -2px 16px var(--color-text-secondary);
-		box-shadow: -2px -2px 16px var(--color-text-secondary);
+
+		box-shadow: 1px -2px 15px rgba(0, 0, 0, 0.15);
 		margin-bottom: 1px;
 		&:focus-visible {
 			background-color: var(--color-input-field);

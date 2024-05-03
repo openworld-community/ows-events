@@ -246,6 +246,7 @@ onMounted(() => {
 			is-icon
 			:interactive="false"
 			icon-name="close"
+			:aria-label="$t('global.button.clear')"
 			class="input__button"
 			@click="onRemove"
 		/>
@@ -298,6 +299,9 @@ onMounted(() => {
 
 	&__menu {
 		overflow: hidden;
+		&:focus-visible {
+			border-color: var(--color-accent-green-main);
+		}
 
 		&_inner {
 			padding: 19px 20px;
@@ -429,6 +433,9 @@ onMounted(() => {
 		&:hover {
 			color: var(--color-accent-green-main);
 		}
+		&:focus-visible {
+			background-color: var(--color-input-field);
+		}
 	}
 
 	&__cell {
@@ -505,7 +512,7 @@ onMounted(() => {
 	}
 }
 
-.dp__btn:focus {
-	background: transparent;
-}
+//.dp__btn:focus {
+//	background: transparent;
+//}
 </style>

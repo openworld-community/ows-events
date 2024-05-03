@@ -36,18 +36,21 @@ import { CollapsibleTrigger } from 'radix-vue';
 
 	&__trigger {
 		align-self: center;
-		height: 34px;
-		background-color: white;
+		background-color: #eeeeee;
 		border-top-left-radius: 15px;
 		border-top-right-radius: 15px;
 		display: flex;
 		align-items: center;
-		gap: 12px;
-		padding-left: 12px;
-		padding-right: 12px;
+		gap: 8px;
+		padding: 4px 8px;
+		//box-shadow: 1px -2px 15px rgba(0, 0, 0, 0.15);
+		//margin-bottom: 1px;
 
-		box-shadow: 1px -2px 15px rgba(0, 0, 0, 0.15);
-		margin-bottom: 1px;
+		@media (min-width: 768px) {
+			gap: 12px;
+			padding: 6px 12px;
+		}
+
 		&:focus-visible {
 			background-color: var(--color-input-field);
 		}
@@ -59,6 +62,8 @@ import { CollapsibleTrigger } from 'radix-vue';
 		line-height: 18px;
 		letter-spacing: -0.3%;
 		font-weight: 600;
+		font-size: var(--font-size-S);
+		line-height: 16px;
 	}
 
 	&__trigger[data-state='open'] {

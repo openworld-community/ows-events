@@ -1,4 +1,3 @@
-import event from './event';
 export default {
 	header: {
 		title: 'Join the Balkan event aggregation platform',
@@ -7,11 +6,7 @@ export default {
 	advantages: {
 		allEvents: {
 			title: 'All events in the region under one roof',
-			description: `Our platform offers aggregation of all events of selected categories (${Object.values(
-				event.tags
-			).join(
-				', '
-			)}) in the Balkans. This means users can find any event, from parties to business conferences, without leaving our site.`
+			description: `Our platform is the premier hub for discovering diverse events across the Balkans, from vibrant festivals and dynamic business conferences to comprehensive tastings and engaging theatrical performances. We meticulously curate events catering to all interests and ages, ensuring that you'll never need to look elsewhere, whether you're attending online or in person.`
 		},
 		simpleCreating: {
 			title: 'Easy to create and promote events',

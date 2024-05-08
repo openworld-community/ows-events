@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RoutePathEnum } from '../../../constants/enums/route';
+
 const mobile = inject('mobile')
 </script>
 

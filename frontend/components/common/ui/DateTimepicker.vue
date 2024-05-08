@@ -234,19 +234,21 @@ onMounted(() => {
 					"
 				/>
 			</template>
+			<template #input-icon>
+				<CommonIcon
+					v-if="!hasValue"
+					:name="isDateType ? 'calendar' : 'clock'"
+				/>
+			</template>
 		</VueDatePicker>
 		<CommonButton
 			v-if="hasValue"
 			is-icon
 			:interactive="false"
 			icon-name="close"
+			:aria-label="$t('global.button.clear')"
 			class="input__button"
 			@click="onRemove"
-		/>
-		<CommonIcon
-			v-else
-			:name="isDateType ? 'calendar' : 'clock'"
-			:class="['input__button', { 'input__button--disabled': disabled }]"
 		/>
 	</div>
 </template>
@@ -297,6 +299,9 @@ onMounted(() => {
 
 	&__menu {
 		overflow: hidden;
+		&:focus-visible {
+			border-color: var(--color-accent-green-main);
+		}
 
 		&_inner {
 			padding: 19px 20px;
@@ -365,8 +370,18 @@ onMounted(() => {
 			color: var(--color-input-icons);
 		}
 
-		&_icon {
-			display: none;
+		&_wrap {
+			& div {
+				position: absolute;
+				right: 6px;
+				top: 50%;
+				transform: translateY(-50%);
+				width: 30px;
+				height: 30px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
 		}
 	}
 
@@ -417,6 +432,9 @@ onMounted(() => {
 
 		&:hover {
 			color: var(--color-accent-green-main);
+		}
+		&:focus-visible {
+			background-color: var(--color-input-field);
 		}
 	}
 
@@ -494,7 +512,7 @@ onMounted(() => {
 	}
 }
 
-.dp__btn:focus {
-	background: transparent;
-}
+//.dp__btn:focus {
+//	background: transparent;
+//}
 </style>

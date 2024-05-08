@@ -81,7 +81,6 @@ export const useFilterStore = defineStore('filter', {
 
 			if (usedTags.value?.length) {
 				usedTags.value.sort((a, b) => b.length - a.length);
-				console.log(usedTags.value);
 				this.usedTags = usedTags.value;
 			}
 		}

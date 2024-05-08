@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RoutePathEnum } from '../../../constants/enums/route';
-import { SUPPORT_TG_URL } from '../../../constants/url';
-const mobile = inject('mobile');
+
+const mobile = inject('mobile')
 </script>
 
 <template>
@@ -20,8 +20,7 @@ const mobile = inject('mobile');
 		</li>
 		<li class="navigation-list__nav-item">
 			<CommonNavLink
-				:to="SUPPORT_TG_URL"
-				is-external-link
+				:to="RoutePathEnum.SUPPORT"
 				class="navigation-list__nav-link"
 			>
 				{{ $t('header.navigation.support') }}

@@ -59,13 +59,22 @@ const onButtonClick = async () => {
 				:text="$t('header.navigation.about')"
 				icon-name="info"
 				@click="emit('close')"
-			/>
+			/>			
 
 			<HeaderSidebarItem
 				:link-to="SUPPORT_TG_URL"
 				:text="$t('header.navigation.support')"
 				is-external-link
 				icon-name="contact-tg"
+				@click="emit('close')"
+			/>
+			
+			<HeaderSidebarItem
+				component-type="link"
+				:link-to="localePath(RoutePathEnum.COOPERATION)"
+				:text="$t('header.navigation.cooperation')"
+				icon-name="cooperation"
+				:current="getRouteName(route.name as string) === RouteNameEnum.COOPERATION"
 				@click="emit('close')"
 			/>
 

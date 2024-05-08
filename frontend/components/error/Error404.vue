@@ -21,12 +21,12 @@ defineProps({
 		<div class="error-page__default-text">
 			{{ $t('errors.ERROR_DEFAULT_MESSAGE') }}
 		</div>
-		<div
+		<!-- <div
 			v-if="Boolean(JSON.parse(message)?.message)"
 			class="error-page__message"
 		>
 			{{ JSON.parse(message)?.message }}
-		</div>
+		</div> -->
 	</div>
 </template>
 <style scoped lang="less">

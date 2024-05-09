@@ -28,7 +28,7 @@ watch(
 				//	search: filters.searchLine || undefined,
 				city: filters.city || undefined,
 				tags: filters.tags.join(', ') || undefined,
-				// может приходить Invalid Date
+
 				startDate: filters.date[0]
 					? dayjs(filters.date[0]).format('YYYY-MM-DD')
 					: undefined,

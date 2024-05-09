@@ -116,7 +116,7 @@ const onClose = () => {
 		input.value.blur();
 		input.value.classList.remove('active');
 		// если выбрана только 1 дата и календарь закрыли, то автоматически проставляется та же дата на вторую позицию
-		if (!displayValue.value[1]) {
+		if (displayValue.value && displayValue.value[0] && !displayValue.value[1]) {
 			displayValue.value = [...displayValue.value, ...displayValue.value];
 		}
 		emit('update:model-value', displayValue.value ?? '');

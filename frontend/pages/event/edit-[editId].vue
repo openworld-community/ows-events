@@ -10,7 +10,6 @@ import { apiRouter } from '../../composables/useApiRouter';
 import { getFirstParam } from '../../utils';
 
 import { getInitialEventFormValues } from '../../utils/events';
-import { getTimezone } from '~/services/timezone.services';
 
 const router = useRouter();
 const localePath = useLocalePath();

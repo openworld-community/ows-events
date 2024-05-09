@@ -4,7 +4,6 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import dayjs from 'dayjs';
 import type { PropType } from 'vue';
 import type { Time } from '../../../utils/dates';
-import type { FilterStore } from '~/stores/filter.store';
 
 // https://vue3datepicker.com/props/modes/
 const props = defineProps({

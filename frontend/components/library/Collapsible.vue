@@ -14,11 +14,10 @@ const open = ref(false);
 			is-open="open"
 		/>
 
-		<CollapsibleContent
-			as-child
-			class="collapsible-root__content"
-		>
-			<slot name="content" />
+		<CollapsibleContent class="collapsible-root__content">
+			<div>
+				<slot name="content" />
+			</div>
 		</CollapsibleContent>
 		<slot
 			name="trigger-reversed"
@@ -34,6 +33,7 @@ const open = ref(false);
 	&__content {
 		width: 100%;
 		overflow: hidden;
+		box-sizing: border-box;
 	}
 
 	&__content[data-state='open'] {

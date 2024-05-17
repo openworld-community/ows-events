@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, CallbackError } from 'mongoose';
 import { UserDbEntity } from '@common/types/user';
 import { createHash } from 'node:crypto';
 import crypto from 'crypto';
-import { UserRolesArray } from '../../../common/const/userRoles';
+import { UserRoles, UserRolesArray } from '../../../common/const/userRoles';
 
 export type IUserDocument = Document &
 	UserDbEntity & {
@@ -88,7 +88,8 @@ const schema = new Schema<IUserDocument>(
 		},
 		role: {
 			type: String,
-			enum: UserRolesArray
+			enum: UserRolesArray,
+			default: UserRoles.USER
 		}
 	},
 	{

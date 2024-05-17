@@ -5,7 +5,6 @@ import { useUserStore } from '../../stores/user.store';
 import { apiRouter } from '../../composables/useApiRouter';
 
 import { RoutePathEnum } from '~/constants/enums/route';
-import { CookieNameEnum } from '~/constants/enums/common';
 
 definePageMeta({
 	layout: 'profile'

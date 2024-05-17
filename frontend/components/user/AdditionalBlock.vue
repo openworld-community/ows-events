@@ -7,7 +7,6 @@ import newEventImg1x from '@/assets/img/user/additionalBlock/new-event-img@1x.jp
 import newEventImg2x from '@/assets/img/user/additionalBlock/new-event-img@2x.jpg';
 
 const desktop = inject('desktop');
-const localePath = useLocalePath();
 </script>
 
 <template>
@@ -37,11 +36,7 @@ const localePath = useLocalePath();
 					:button-kind="desktop ? 'ordinary' : 'success'"
 					:button-text="$t(desktop ? 'user.donate.button' : 'global.button.new_event')"
 					:icon-name="desktop ? 'donate' : ''"
-					:link="
-						localePath(
-							desktop ? RoutePathEnum.DONATION : `${RoutePathEnum.EVENT_EDIT}new`
-						)
-					"
+					:link="desktop ? RoutePathEnum.DONATION : `${RoutePathEnum.EVENT_EDIT}new`"
 				/>
 			</div>
 		</div>
@@ -50,7 +45,7 @@ const localePath = useLocalePath();
 			class="additional-block__button"
 			button-kind="success"
 			:button-text="$t('global.button.new_event')"
-			:link="localePath(`${RoutePathEnum.EVENT_EDIT}new`)"
+			:link="`${RoutePathEnum.EVENT_EDIT}new`"
 		/>
 	</div>
 </template>

@@ -1,26 +1,28 @@
 import vueJsx from '@vitejs/plugin-vue-jsx';
-import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
-import path from 'path';
 import { fileURLToPath, URL } from 'node:url';
 import { searchForWorkspaceRoot } from 'vite';
 import { VITE_GOOGLE_OAUTH_KEY } from './constants/url';
 
+const isTest = import.meta.env.VITE_STAGE == 'test' || process.env.VITE_STAGE == 'test';
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	// @ts-ignore
 	devtools: {
-		enabled: true // or false to disable
+		enabled: isTest
 	},
+	build: {
+		analyze: isTest
+	},
+	logLevel: isTest ? 'verbose' : 'info',
+	debug: isTest,
 	modules: [
+		'nuxt-icons',
 		'nuxt-vue3-google-signin',
 		'@nuxtjs/i18n',
 		'@pinia/nuxt',
 		'@vueuse/nuxt',
 		'nuxt-gtag',
-		'@nuxtjs/robots',
-		//+ resolver?
 		'radix-vue/nuxt',
-		//
+		'@nuxtjs/robots',
 		[
 			'nuxt-viewport',
 			{
@@ -32,7 +34,6 @@ export default defineNuxtConfig({
 			}
 		]
 	],
-
 	routeRules: {
 		'/': { redirect: '/ru', ssr: true }
 	},
@@ -96,13 +97,9 @@ export default defineNuxtConfig({
 			// плагин выдает ошибку из-за компонента /node_modules/nuxt/dist/app/components/nuxt-root.vue
 			// убрал пока не пойму нужен ли он вообще на самом деле
 			// vue(),
-			vueJsx(),
-			createSvgIconsPlugin({
-				iconDirs: [path.resolve(process.cwd(), 'assets/icon')],
-				symbolId: '[name]',
-				inject: 'body-first'
-			})
+			vueJsx()
 		],
+		logLevel: isTest ? 'info' : 'warn',
 		resolve: { alias: { '@common': fileURLToPath(new URL('../common', import.meta.url)) } }
 	},
 	// watcher:
@@ -116,14 +113,14 @@ export default defineNuxtConfig({
 	googleSignIn: {
 		clientId: VITE_GOOGLE_OAUTH_KEY
 	},
-	app :{
+	app: {
 		head: {
 			link: [
-		  	{
-				rel: "stylesheet",
-				href: "https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap",
-		 	 },
-			],
-	 	 }
-	},
+				{
+					rel: 'stylesheet',
+					href: 'https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap'
+				}
+			]
+		}
+	}
 });

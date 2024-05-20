@@ -17,6 +17,7 @@ import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
 import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
 import { UserRoles } from '../../../common/const/userRoles';
+import { validateEventRole } from '../../utils/roles';
 
 const mobile = inject<boolean>('mobile');
 const route = useRoute();
@@ -265,10 +266,7 @@ patchDeleteEventModal({
 			>
 				<div class="event-info__manage">
 					<CommonButton
-						v-if="
-							userStore.id === posterEvent.creatorId ||
-							userStore.userInfo.role === UserRoles.ADMIN
-						"
+						v-if="validateEventRole(posterEvent.creatorId, 'delete')"
 						class="event-info__button-admin"
 						button-kind="warning"
 						:button-text="$t('global.button.delete')"
@@ -278,11 +276,7 @@ patchDeleteEventModal({
 						@click="openDeleteEventModal"
 					/>
 					<CommonButton
-						v-if="
-							userStore.id === posterEvent.creatorId ||
-							userStore.userInfo.role === UserRoles.ADMIN ||
-							userStore.userInfo.role === UserRoles.MODERATOR
-						"
+						v-if="validateEventRole(posterEvent.creatorId, 'edit')"
 						class="event-info__button-admin"
 						button-kind="ordinary"
 						:button-text="$t('global.button.edit')"

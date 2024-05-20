@@ -52,3 +52,12 @@ export type UserCookie = UserInfo & {
 export type PublicTGUserData = Omit<TGUserData, 'auth_date'>;
 
 export type PublicLocalAuthData = Omit<LocalAuthData, 'salt'>;
+
+export type PostUserInfo = {
+	last_name: string;
+	first_name: string;
+	nickname: string;
+	company: string;
+	email: string;
+	phone: string;
+};

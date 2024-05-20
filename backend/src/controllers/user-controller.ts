@@ -1,4 +1,4 @@
-import { LocalAuthInfo, TGUser, UserInfo } from '@common/types/user';
+import { PublicLocalAuthData, TGUserData, UserInfo } from '@common/types/user';
 import { v4 } from 'uuid';
 import { TokenPayload } from 'google-auth-library';
 import { IUserDocument, UserModel } from '../models/user.model';
@@ -16,7 +16,7 @@ export type FindEventParams = {
 };
 
 class UserController {
-	async addTGUser(telegramData: TGUser) {
+	async addTGUser(telegramData: TGUserData) {
 		const newUserId = v4();
 		const user = await UserModel.findOneAndUpdate(
 			{ 'telegram.id': telegramData.id },
@@ -77,7 +77,7 @@ class UserController {
 		return savedToken.token;
 	}
 
-	async addLocalUser(userData: LocalAuthInfo) {
+	async addLocalUser(userData: PublicLocalAuthData) {
 		const newUserId = v4();
 		const isUserExist = await UserModel.findOne({ 'localAuth.email': userData.email });
 		if (isUserExist) throw new Error(CommonErrorsEnum.USER_ALREADY_EXIST);
@@ -104,7 +104,7 @@ class UserController {
 		return savedToken.token;
 	}
 
-	async authLocalUser(userData: LocalAuthInfo) {
+	async authLocalUser(userData: PublicLocalAuthData) {
 		const user: IUserDocument | null = await UserModel.findOne({
 			'localAuth.email': userData.email
 		});

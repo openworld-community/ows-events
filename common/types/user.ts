@@ -1,57 +1,41 @@
 import { UserRoles } from '../const/userRoles';
 
 export type UserDbEntity = {
-	telegram: {
-		id: string;
-		first_name: string;
-		last_name: string;
-		username: string;
-		photo_url: string;
-		auth_date: number;
-	};
+	id: string;
+	telegram: TGUserData;
 
-	google: {
-		userid: string;
-		iat: number;
-		exp: number;
-	};
+	google: GoogleUserData;
 
-	userInfo: {
-		last_name: string;
-		first_name: string;
-		nickname: string;
-		company: string;
-		email: string;
-		phone: string;
-	};
+	userInfo: UserInfo;
 
-	localAuth: {
-		email: string;
-		password: string;
-		salt: string;
-	};
+	localAuth: LocalAuthData;
 	token: string;
-
 	favorites: string[];
 	role: UserRoles;
 };
 
-export type TGUser = UserDbEntity['telegram'];
-
-export type GoogleUser = UserDbEntity['google'];
-
-export type TGUserInfo = Omit<TGUser, 'auth_date'>;
-
-export type UserInfo = UserDbEntity['userInfo'];
-
-export type UserCookieInfo = UserInfo & {
+export type TGUserData = {
 	id: string;
-	role: UserRoles;
+	first_name: string;
+	last_name: string;
+	username: string;
+	photo_url: string;
+	auth_date: number;
 };
 
-export type LocalAuthInfo = Omit<UserDbEntity['localAuth'], 'salt'>;
+export type GoogleUserData = {
+	userid: string;
+	iat: number;
+	exp: number;
+};
 
-export type PostUserInfo = {
+export type LocalAuthData = {
+	email: string;
+	password: string;
+	salt: string;
+};
+
+export type UserInfo = {
 	last_name: string;
 	first_name: string;
 	nickname: string;
@@ -59,3 +43,12 @@ export type PostUserInfo = {
 	email: string;
 	phone: string;
 };
+
+export type UserCookie = UserInfo & {
+	id: string;
+	role: UserRoles;
+};
+
+export type PublicTGUserData = Omit<TGUserData, 'auth_date'>;
+
+export type PublicLocalAuthData = Omit<LocalAuthData, 'salt'>;

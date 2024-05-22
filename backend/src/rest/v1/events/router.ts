@@ -27,7 +27,7 @@ import {
 	updateEventSchema
 } from './schema';
 import { UserRoles } from '../../../../../common/const/userRoles';
-import { authorizeUserHelper, isUserEventAuthor } from '../../../plugins/authorization';
+import { generateAuthUserFn, isUserEventAuthor } from '../../../plugins/authorization';
 
 export const eventsApi = async (fastify: FastifyInstance) => {
 	fastify.get<IGetEventsRoute>('/', {
@@ -41,13 +41,13 @@ export const eventsApi = async (fastify: FastifyInstance) => {
 	});
 
 	fastify.get<IGetMyEventsRoute>('/my', {
-		preHandler: fastify.auth([authorizeUserHelper()]),
+		preHandler: fastify.auth([generateAuthUserFn()]),
 		schema: getMyEventsSchema,
 		handler: getMyEvents
 	});
 
 	fastify.post<IAddEventRoute>('/add', {
-		preHandler: fastify.auth([authorizeUserHelper()]),
+		preHandler: fastify.auth([generateAuthUserFn()]),
 		schema: addEventSchema,
 		handler: addEvent
 	});
@@ -55,13 +55,12 @@ export const eventsApi = async (fastify: FastifyInstance) => {
 	fastify.post<IDeleteEventRoute>('/delete', {
 		preHandler: fastify.auth(
 			[
-				authorizeUserHelper([UserRoles.ADMIN]),
-				(req: FastifyRequest<IUpdateEventRoute>) =>
-					isUserEventAuthor(req.headers.authorization, req.body.event.id)
+				generateAuthUserFn([UserRoles.ADMIN]),
+				(req: FastifyRequest<IDeleteEventRoute>) =>
+					isUserEventAuthor(req.headers.authorization, req.body.id)
 			],
 			{ relation: 'or' }
 		),
-
 		schema: deleteEventSchema,
 		handler: deleteEvent
 	});
@@ -69,7 +68,7 @@ export const eventsApi = async (fastify: FastifyInstance) => {
 	fastify.post<IUpdateEventRoute>('/update', {
 		preHandler: fastify.auth(
 			[
-				authorizeUserHelper([UserRoles.MODERATOR, UserRoles.ADMIN]),
+				generateAuthUserFn([UserRoles.MODERATOR, UserRoles.ADMIN]),
 				(req: FastifyRequest<IUpdateEventRoute>) =>
 					isUserEventAuthor(req.headers.authorization, req.body.event.id)
 			],

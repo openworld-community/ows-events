@@ -16,7 +16,7 @@ export const authorizeUser = async (token?: string, roles?: UserRoles[]) => {
 	return jwtData;
 };
 
-export const authorizeUserHelper = (roles?: UserRoles[]) => async (req: FastifyRequest) => {
+export const generateAuthUserFn = (roles?: UserRoles[]) => async (req: FastifyRequest) => {
 	const data = await authorizeUser(req.headers.authorization, roles);
 	req.userId = data.id;
 };

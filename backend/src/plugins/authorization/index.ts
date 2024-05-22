@@ -1,4 +1,4 @@
-import { authorizeUserHelper } from './helpers/authorizeUser';
+import { generateAuthUserFn } from './helpers/authorizeUser';
 import { isUserEventAuthor } from './helpers/isUserEventAuthor';
 import { validateToken } from './helpers/validateToken';
 
@@ -8,4 +8,4 @@ declare module 'fastify' {
 	}
 }
 
-export { authorizeUserHelper, isUserEventAuthor, validateToken };
+export { generateAuthUserFn, isUserEventAuthor, validateToken };

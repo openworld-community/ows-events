@@ -7,7 +7,12 @@ const mobile = inject('mobile');
 
 <template>
 	<div class="root">
-		<HeaderCommon :has-back-button="getRouteName(route.name) === RouteNameEnum.EVENT" />
+		<HeaderCommon
+			:has-back-button="
+				getRouteName(route.name) === RouteNameEnum.EVENT ||
+				(getRouteName(route.name) === RouteNameEnum.HOME && !!mobile)
+			"
+		/>
 		<slot> </slot>
 
 		<FooterCommon

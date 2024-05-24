@@ -15,6 +15,8 @@ const userStore = useUserStore();
 
 const localePath = useLocalePath();
 
+const mobile = inject('mobile');
+
 const {
 	open: openNeedAuthorizeModal,
 	close: closeNeedAuthorizeModal,
@@ -33,6 +35,24 @@ const onButtonClick = async () => {
 
 <template>
 	<main class="main-page">
+		<div
+			v-if="mobile"
+			class="main-page__identity__mobile"
+		>
+			<img
+				:alt="$t('home.identity.alt')"
+				src="/img/home/identity-mobile.svg"
+			/>
+		</div>
+		<div
+			v-else
+			class="main-page__identity"
+		>
+			<img
+				:alt="$t('home.identity.alt')"
+				src="/img/home/identity.svg"
+			/>
+		</div>
 		<div class="main-page__top">
 			<h1 class="main-page__title">{{ $t('home.title') }}</h1>
 			<!-- <HomeUserLocation
@@ -66,10 +86,27 @@ const onButtonClick = async () => {
 
 	font-size: 24px;
 }
+
 .main-page {
 	position: relative;
 	@media (min-width: 768px) {
 		padding-top: 0;
+	}
+
+	&__identity {
+		display: flex;
+		width: 100%;
+		padding-left: var(--padding-side);
+		padding-right: var(--padding-side);
+		margin-bottom: 20px;
+
+		&__mobile {
+			display: flex;
+			width: 100%;
+			padding-left: var(--padding-side);
+			padding-right: var(--padding-side);
+			justify-content: center;
+		}
 	}
 
 	&__top {

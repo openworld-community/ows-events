@@ -15,8 +15,6 @@ const userStore = useUserStore();
 
 const localePath = useLocalePath();
 
-const mobile = inject('mobile');
-
 const {
 	open: openNeedAuthorizeModal,
 	close: closeNeedAuthorizeModal,
@@ -35,12 +33,7 @@ const onButtonClick = async () => {
 
 <template>
 	<main class="main-page">
-		<div :class="mobile ? 'main-page__identity__mobile' : 'main-page__identity'">
-			<img
-				:alt="$t('home.identity.alt')"
-				:src="mobile ? '/img/home/identity-mobile.svg' : '/img/home/identity.svg'"
-			/>
-		</div>
+		<HomeIdentity />
 		<div class="main-page__top">
 			<h1 class="main-page__title">{{ $t('home.title') }}</h1>
 			<!-- <HomeUserLocation

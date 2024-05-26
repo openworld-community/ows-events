@@ -35,22 +35,10 @@ const onButtonClick = async () => {
 
 <template>
 	<main class="main-page">
-		<div
-			v-if="mobile"
-			class="main-page__identity__mobile"
-		>
+		<div :class="mobile ? 'main-page__identity__mobile' : 'main-page__identity'">
 			<img
 				:alt="$t('home.identity.alt')"
-				src="/img/home/identity-mobile.svg"
-			/>
-		</div>
-		<div
-			v-else
-			class="main-page__identity"
-		>
-			<img
-				:alt="$t('home.identity.alt')"
-				src="/img/home/identity.svg"
+				:src="mobile ? '/img/home/identity-mobile.svg' : '/img/home/identity.svg'"
 			/>
 		</div>
 		<div class="main-page__top">

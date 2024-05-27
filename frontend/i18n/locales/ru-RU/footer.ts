@@ -4,7 +4,7 @@ export default {
 		other_page_aria: 'Вернуться на домашнюю страницу'
 	},
 	navigation: {
-		about: 'О проекте',
+		about: 'Об Афише',
 		support: 'Поддержка',
 		donate: 'Помочь Afisha',
 		limitation_of_liability: 'Ограничение ответственности'

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { SUPPORT_TG_URL, SUPPORT_EMAIL_URL } from '~/constants/url';
 const SUPORT_TG_BOT_NAME = '@afisha_peredelano_support_bot';
-const SUPORT_EMAIL_NAME = 'email:support@afisha.peredelano.com';
+const SUPORT_EMAIL_NAME = 'Почта: support@afisha.peredelano.com';
 </script>
 
 <template>
@@ -15,7 +15,6 @@ const SUPORT_EMAIL_NAME = 'email:support@afisha.peredelano.com';
 			<div class="support__navigation__buttons">
 				<CommonButton
 					:link="SUPPORT_EMAIL_URL"
-					icon-name="edit"
 					:button-text="SUPORT_EMAIL_NAME"
 					class="button__success--filled"
 					button-kind="success"
@@ -79,12 +78,13 @@ const SUPORT_EMAIL_NAME = 'email:support@afisha.peredelano.com';
 			}
 		}
 		&__buttons {
-			align-self: center;
+			//align-self: center;
+			
 			display: flex;
 			flex-direction: column;
 			gap: 30px;
 			width: 100%;
-			max-width: 350px;
+			max-width: 360px;
 		}
 	}
 

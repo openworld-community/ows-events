@@ -71,7 +71,7 @@ const SUPORT_EMAIL_NAME = 'email:support@afisha.peredelano.com';
 			padding-bottom: 100px;
 			font-size: var(--font-size-ML);
 			font-weight: 600;
-			line-height: 1.5;
+			line-height: 20px;
 			@media (max-width: 900px) {
 				font-size: var(--font-size-L);
 				padding-top: 100px;

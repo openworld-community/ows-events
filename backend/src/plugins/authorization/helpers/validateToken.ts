@@ -1,4 +1,4 @@
-import { CommonErrorsEnum } from '@common/const';
+import { CommonErrorsEnum } from '../../../../../common/const';
 import { UserTokenController } from '../../../controllers/user-token-controller';
 import { JWTController } from '../../../controllers/JWT-controller';
 

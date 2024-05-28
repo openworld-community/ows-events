@@ -2,6 +2,11 @@
 import { SUPPORT_TG_URL, SUPPORT_EMAIL_URL } from '~/constants/url';
 const SUPORT_TG_BOT_NAME = '@afisha_peredelano_support_bot';
 const SUPORT_EMAIL_NAME = 'email:support@afisha.peredelano.com';
+const { t } = useI18n();
+getMeta({
+	title: t('meta.support.title'),
+	description: t('meta.support.description')
+});
 </script>
 
 <template>

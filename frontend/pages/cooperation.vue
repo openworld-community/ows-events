@@ -1,4 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const { t } = useI18n();
+getMeta({
+	title: t('meta.collaboration.title'),
+	description: t('meta.collaboration.description')
+});
+</script>
 
 <template>
 	<div class="cooperation">

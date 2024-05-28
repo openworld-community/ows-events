@@ -56,12 +56,7 @@ export const getEvent: IGetEventHandler = async (request) => {
 };
 
 export const deleteEvent: IDeleteEventHandler = async (request) => {
-	const oldEvent = await eventsStateController.getEvent(request.body.id);
-	const isAuthor = oldEvent?.creatorId === String(request.userId);
-	if (!isAuthor) throw new Error(CommonErrorsEnum.FORBIDDEN);
-
 	await eventsStateController.deleteEvent(request.body.id);
-	return undefined;
 };
 
 export const updateEvent: IUpdateEventHandler = async (request) => {

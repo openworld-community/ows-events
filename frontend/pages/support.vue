@@ -1,21 +1,24 @@
 <script setup lang="ts">
 import { SUPPORT_TG_URL, SUPPORT_EMAIL_URL } from '~/constants/url';
 const SUPORT_TG_BOT_NAME = '@afisha_peredelano_support_bot';
-const SUPORT_EMAIL_NAME = 'email:support@afisha.peredelano.com';
+const SUPORT_EMAIL_NAME = 'support@afisha.peredelano.com';
 </script>
 
 <template>
 	<div class="support">
 		<div class="support__navigation">
 			<div class="support__navigation__text">
-				<div>{{ $t('support.title') }}</div>
+				<div>
+					<div>{{ $t('support.title.hi') }}</div> 
+					<div>{{ $t('support.title.main') }}</div>
+				</div>
 				<div>{{ $t('support.message') }}</div>
 			</div>
 
 			<div class="support__navigation__buttons">
 				<CommonButton
 					:link="SUPPORT_EMAIL_URL"
-					icon-name="edit"
+					icon-name="email"
 					:button-text="SUPORT_EMAIL_NAME"
 					class="button__success--filled"
 					button-kind="success"
@@ -30,13 +33,13 @@ const SUPORT_EMAIL_NAME = 'email:support@afisha.peredelano.com';
 				/>
 			</div>
 		</div>
-		<div class="support__design">
-			<img
-				class="support__design__image"
-				src="../assets/img/support/help.webp"
-			/>
-			<div class="support__design__question">{{ $t('support.question') }}</div>
-		</div>
+			<div class="support__design">
+				<img
+					class="support__design__image"
+					src="../assets/img/support/help.webp"
+				/>
+				<div class="support__design__question">{{ $t('support.question') }}</div>
+			</div>
 	</div>
 </template>
 
@@ -67,11 +70,11 @@ const SUPORT_EMAIL_NAME = 'email:support@afisha.peredelano.com';
 		&__text {
 			display: flex;
 			flex-direction: column;
-			gap: 15px;
 			padding-bottom: 100px;
+			gap: 30px;
 			font-size: var(--font-size-ML);
 			font-weight: 600;
-			line-height: 1.5;
+			line-height: 25px;
 			@media (max-width: 900px) {
 				font-size: var(--font-size-L);
 				padding-top: 100px;
@@ -79,7 +82,6 @@ const SUPORT_EMAIL_NAME = 'email:support@afisha.peredelano.com';
 			}
 		}
 		&__buttons {
-			align-self: center;
 			display: flex;
 			flex-direction: column;
 			gap: 30px;

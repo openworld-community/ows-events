@@ -1,7 +1,7 @@
 import { useUserStore } from '../stores/user.store';
 import { RoutePathEnum } from '~/constants/enums/route';
 import { apiRouter } from '../composables/useApiRouter';
-import type { TGUserInfo } from '../../common/types/user';
+import type { PublicTGUserData } from '../../common/types/user';
 import { CookieNameEnum } from '../constants/enums/common';
 import { RouteNameEnum } from '../constants/enums/route';
 import { getRouteName } from '../utils';
@@ -22,7 +22,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 	if (!userStore.isAuthorized) {
 		let userData = null;
 		const token = useCookie(CookieNameEnum.TOKEN);
-		const userCookie = useCookie<TGUserInfo | null>(CookieNameEnum.TG_USER);
+		const userCookie = useCookie<PublicTGUserData | null>(CookieNameEnum.TG_USER);
 		if (token.value) {
 			const { data } = await apiRouter.user.get.useQuery({
 				data: { userToken: token.value }

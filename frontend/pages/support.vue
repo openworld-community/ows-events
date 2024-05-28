@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { SUPPORT_TG_URL, SUPPORT_EMAIL_URL } from '~/constants/url';
+const { t } = useI18n();
+getMeta({
+	title: t('meta.support.title'),
+	description: t('meta.support.description')
+});
 const SUPPORT_TG_BOT_NAME = '@afisha_peredelano_support_bot';
 </script>
 

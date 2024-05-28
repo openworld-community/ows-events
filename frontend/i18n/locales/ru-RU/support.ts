@@ -3,5 +3,5 @@ export default {
 	message:
 		'Ты можешь нам написать на почту или в наш телеграм бот, тут тебе выбирать (управляй своей судьбой сам :)',
 	question: 'У меня вопрос',
-	mail_button: 'Почта: support@afisha.peredelano.com'
+	mail_button: "Почта: support{'@'}afisha.peredelano.com"
 };

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { SUPPORT_TG_URL, SUPPORT_EMAIL_URL } from '~/constants/url';
-const SUPORT_TG_BOT_NAME = '@afisha_peredelano_support_bot';
-const SUPORT_EMAIL_NAME = 'Почта: support@afisha.peredelano.com';
+const SUPPORT_TG_BOT_NAME = '@afisha_peredelano_support_bot';
 </script>
 
 <template>
@@ -15,7 +14,7 @@ const SUPORT_EMAIL_NAME = 'Почта: support@afisha.peredelano.com';
 			<div class="support__navigation__buttons">
 				<CommonButton
 					:link="SUPPORT_EMAIL_URL"
-					:button-text="SUPORT_EMAIL_NAME"
+					:button-text="$t('support.mail_button')"
 					class="button__success--filled"
 					button-kind="success"
 				/>
@@ -23,7 +22,7 @@ const SUPORT_EMAIL_NAME = 'Почта: support@afisha.peredelano.com';
 					isExternalLink
 					:link="SUPPORT_TG_URL"
 					icon-name="telegram"
-					:button-text="SUPORT_TG_BOT_NAME"
+					:button-text="SUPPORT_TG_BOT_NAME"
 					class="button__success--filled"
 					button-kind="success"
 				/>
@@ -79,7 +78,7 @@ const SUPORT_EMAIL_NAME = 'Почта: support@afisha.peredelano.com';
 		}
 		&__buttons {
 			//align-self: center;
-			
+
 			display: flex;
 			flex-direction: column;
 			gap: 30px;
@@ -92,9 +91,9 @@ const SUPORT_EMAIL_NAME = 'Почта: support@afisha.peredelano.com';
 		display: flex;
 		flex-direction: row;
 		gap: 20px;
-		padding: 30px 0px 30px 30px;
+		padding: 30px 0 30px 30px;
 		@media (max-width: 1000px) {
-			padding: 30px 0px 0px 0px;
+			padding: 30px 0 0 0;
 		}
 
 		&__image {
@@ -120,12 +119,12 @@ const SUPORT_EMAIL_NAME = 'Почта: support@afisha.peredelano.com';
 				font-size: var(--font-size-XL);
 			}
 			@media (max-width: 768px) {
-				padding-bottom: 0px;
+				padding-bottom: 0;
 				margin-left: 32vw;
 				font-size: var(--font-size-XL);
 			}
 			@media (max-width: 400px) {
-				padding-bottom: 0px;
+				padding-bottom: 0;
 				margin-left: 45vw;
 				font-size: var(--font-size-L);
 			}

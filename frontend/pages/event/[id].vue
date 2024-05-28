@@ -16,6 +16,8 @@ import { apiRouter } from '../../composables/useApiRouter';
 import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
 import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
+import { UserRoles } from '../../../common/const/userRoles';
+import { validateEventRole } from '../../utils/roles';
 
 const mobile = inject<boolean>('mobile');
 const route = useRoute();
@@ -262,11 +264,9 @@ patchDeleteEventModal({
 				v-if="userStore.isAuthorized"
 				class="event-info__actions"
 			>
-				<div
-					v-if="userStore.id === posterEvent.creatorId"
-					class="event-info__manage"
-				>
+				<div class="event-info__manage">
 					<CommonButton
+						v-if="validateEventRole(posterEvent.creatorId, 'delete')"
 						class="event-info__button-admin"
 						button-kind="warning"
 						:button-text="$t('global.button.delete')"
@@ -276,6 +276,7 @@ patchDeleteEventModal({
 						@click="openDeleteEventModal"
 					/>
 					<CommonButton
+						v-if="validateEventRole(posterEvent.creatorId, 'edit')"
 						class="event-info__button-admin"
 						button-kind="ordinary"
 						:button-text="$t('global.button.edit')"

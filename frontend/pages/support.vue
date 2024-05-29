@@ -2,6 +2,7 @@
 import { SUPPORT_TG_URL, SUPPORT_EMAIL_URL } from '~/constants/url';
 const SUPORT_TG_BOT_NAME = '@afisha_peredelano_support_bot';
 const SUPORT_EMAIL_NAME = 'support@afisha.peredelano.com';
+const mobile = inject('mobile');
 </script>
 
 <template>
@@ -13,6 +14,17 @@ const SUPORT_EMAIL_NAME = 'support@afisha.peredelano.com';
 					<div>{{ $t('support.title.main') }}</div>
 				</div>
 				<div>{{ $t('support.message') }}</div>
+			</div>
+
+			<div
+				v-if = "mobile"
+				class="support__design"
+			>
+				<img
+					class="support__design__image"
+					src="../assets/img/support/help.webp"
+				/>
+				<div class="support__design__question">{{ $t('support.question') }}</div>
 			</div>
 
 			<div class="support__navigation__buttons">
@@ -33,7 +45,10 @@ const SUPORT_EMAIL_NAME = 'support@afisha.peredelano.com';
 				/>
 			</div>
 		</div>
-			<div class="support__design">
+			<div
+				v-if = "!mobile"
+				class="support__design"
+			>
 				<img
 					class="support__design__image"
 					src="../assets/img/support/help.webp"
@@ -65,12 +80,13 @@ const SUPORT_EMAIL_NAME = 'support@afisha.peredelano.com';
 			width: 400px;
 		}
 		@media (max-width: 768px) {
-			width: auto;
+			width: 340px;
+			align-items: center;
+
 		}
 		&__text {
 			display: flex;
 			flex-direction: column;
-			padding-bottom: 100px;
 			gap: 30px;
 			font-size: var(--font-size-ML);
 			font-weight: 600;
@@ -82,11 +98,12 @@ const SUPORT_EMAIL_NAME = 'support@afisha.peredelano.com';
 			}
 		}
 		&__buttons {
+			padding-top: 60px;
 			display: flex;
 			flex-direction: column;
 			gap: 30px;
 			width: 100%;
-			max-width: 350px;
+			max-width: 350px;	
 		}
 	}
 

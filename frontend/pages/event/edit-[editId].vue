@@ -20,6 +20,11 @@ const { t } = useI18n();
 onMounted(async () => {
 	await eventStore.getTimezones();
 });
+
+getMeta({
+	title: t('meta.create.title'),
+	description: t('meta.create.description')
+});
 definePageMeta({
 	layout: false
 });

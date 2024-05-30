@@ -31,7 +31,8 @@ export default {
 	},
 	collaboration: {
 		title: 'Collaboration with  Peredelano Afisha',
-		description: ''
+		description:
+			'Our startup unites the cultural and social space of the Balkans, offering a convenient platform for discovering and organizing events. Join us and explore new opportunities!'
 	},
 	support: {
 		title: 'Peredelano  Afisha Technical Support',

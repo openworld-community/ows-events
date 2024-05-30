@@ -71,10 +71,11 @@ const mobile = inject('mobile');
 	padding-right: 50px;
 	display: flex;
 	align-self: center;
-	align-items: center;
+	align-items: flex-start;
 	@media (max-width: 768px) {
 		flex-direction: column;
 		padding-bottom: 30px;
+		align-items: center;
 	}
 
 	@media (max-width: 1440px) {

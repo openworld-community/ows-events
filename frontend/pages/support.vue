@@ -14,10 +14,10 @@ const mobile = inject('mobile');
 		<div class="support__navigation">
 			<div class="support__navigation-text">
 				<div>
-					<div>{{ $t('support.title.hi') }}</div>
-					<div>{{ $t('support.title.main') }}</div>
+					<p>{{ $t('support.title.hi') }}</p>
+					<p>{{ $t('support.title.main') }}</p>
 				</div>
-				<div>{{ $t('support.message') }}</div>
+				<p>{{ $t('support.message') }}</p>
 			</div>
 
 			<div
@@ -28,7 +28,7 @@ const mobile = inject('mobile');
 					class="support__design-image"
 					src="../assets/img/support/help.webp"
 				/>
-				<div class="support__design-question">{{ $t('support.question') }}</div>
+				<p class="support__design-question">{{ $t('support.question') }}</p>
 			</div>
 
 			<div class="support__navigation-buttons">
@@ -57,7 +57,7 @@ const mobile = inject('mobile');
 				class="support__design-image"
 				src="../assets/img/support/help.webp"
 			/>
-			<div class="support__design-question">{{ $t('support.question') }}</div>
+			<p class="support__design-question">{{ $t('support.question') }}</p>
 		</div>
 	</main>
 </template>
@@ -74,6 +74,11 @@ const mobile = inject('mobile');
 	align-items: center;
 	@media (max-width: 768px) {
 		flex-direction: column;
+		padding-bottom: 30px;
+	}
+
+	@media (max-width: 1440px) {
+		padding-bottom: 30px;
 	}
 	&__navigation {
 		display: flex;

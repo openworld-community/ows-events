@@ -52,12 +52,16 @@ getMeta({
 	&__title {
 		line-height: 1.3;
 
+		@media (min-width: 375px) and (max-width: 768px) {
+			text-align: center;
+		}
+
 		@media (max-width: 768px) {
 			font-size: 24px;
 			font-weight: 600;
 			line-height: 1.4;
-			text-align: center;
 		}
+		
 	}
 
 	&__description {

@@ -24,7 +24,7 @@ export const TELEGRAM_AUTH_BOT_NAME =
 export const SUPPORT_TG_URL = 'https://t.me/afisha_peredelano_support_bot';
 export const SUPPORT_EMAIL_URL = 'mailto:support@afisha.peredelano.com';
 
-export const SUPORT_TG_BOT_NAME = '@afisha_peredelano_support_bot';
+export const SUPORT_TG_BOT_NAME = 'afisha_peredelano_support_bot';
 export const SUPORT_EMAIL_NAME = 'support@afisha.peredelano.com';
 
 // SOCIAL

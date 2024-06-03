@@ -2,6 +2,7 @@ import fastify from 'fastify';
 import cors from '@fastify/cors';
 import path from 'path';
 import Static from '@fastify/static';
+import fastifyAuth from '@fastify/auth';
 
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
@@ -74,8 +75,9 @@ server.register(Static, {
 	prefix: '/image/',
 	decorateReply: false
 });
-
+server.register(fastifyAuth);
 // eventsApi is a plugin
+server.decorateRequest('userId', '');
 server.register(manualModerationApi, { prefix: '/api/moderation' });
 server.register(authApi, { prefix: '/api/auth' });
 server.register(eventsApi, { prefix: '/api/events' });

@@ -24,5 +24,22 @@ export default {
 	event: {
 		description_peredelano:
 			'Classic format, industrial and entertaining talks, networking, activities, and a focus on the community.'
+	},
+	auth: {
+		title: 'Authorization in Peredelano  Afisha',
+		description: 'Authorize in Peredelano Afisha to create, manage events'
+	},
+	collaboration: {
+		title: 'Collaboration with  Peredelano Afisha',
+		description:
+			'Our startup unites the cultural and social space of the Balkans, offering a convenient platform for discovering and organizing events. Join us and explore new opportunities!'
+	},
+	support: {
+		title: 'Peredelano  Afisha Technical Support',
+		description: 'If you have any question - we always ready to help'
+	},
+	create: {
+		title: 'Create new Event',
+		description: 'Create new Event'
 	}
 };

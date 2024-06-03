@@ -24,7 +24,7 @@ const UserSchema = {
 	}
 };
 
-const userInfoWithId = {
+const userInfoWithIdAndRole = {
 	type: 'object',
 	properties: {
 		last_name: { type: 'string' },
@@ -33,7 +33,8 @@ const userInfoWithId = {
 		company: { type: 'string' },
 		email: { type: 'string' },
 		phone: { type: 'string' },
-		id: { type: 'string' }
+		id: { type: 'string' },
+		role: { type: 'string' }
 	}
 };
 
@@ -51,7 +52,7 @@ export const getUserInfoByTokenSchema = {
 	tags: ['User'],
 	summary: 'Get user info by token',
 	response: {
-		200: userInfoWithId
+		200: userInfoWithIdAndRole
 	}
 };
 

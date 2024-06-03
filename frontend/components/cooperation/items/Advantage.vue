@@ -60,6 +60,7 @@ const alignSelf = computed(() => props.isRevercedText ? 'flex-end' : 'flex-start
 
     &__header {
         margin-bottom: 35px;
+        text-align: center;
     }
 }
 </style>

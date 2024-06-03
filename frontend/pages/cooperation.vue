@@ -45,6 +45,7 @@
 
 	&__title {
 		line-height: 1.3;
+		text-align: center;
 
 		@media (max-width: 768px) {
 			font-size: 24px;

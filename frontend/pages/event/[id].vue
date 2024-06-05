@@ -16,7 +16,7 @@ import { apiRouter } from '../../composables/useApiRouter';
 import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
 import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
-import { UserRoles } from '../../../common/const/userRoles';
+
 import { validateEventRole } from '../../utils/roles';
 
 const mobile = inject<boolean>('mobile');

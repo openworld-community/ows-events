@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const { t } = useI18n();
 getMeta({
-	title: t('meta.collaboration.title'),
-	description: t('meta.collaboration.description')
+	title: t('meta.cooperation.title'),
+	description: t('meta.cooperation.description')
 });
 </script>
 

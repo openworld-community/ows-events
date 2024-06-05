@@ -52,14 +52,13 @@ const alignSelf = computed(() => props.isRevercedText ? 'flex-end' : 'flex-start
             max-width: none;
         }
     }
-    
+
     &__description{
         line-height: 1.5;
     }
 
     &__header {
         margin-bottom: 35px;
-
         @media (min-width: 375px) and (max-width: 768px) {
 			text-align: center;
 		}

@@ -51,6 +51,7 @@ getMeta({
 
 	&__title {
 		line-height: 1.3;
+		text-align: center;
 
 		@media (min-width: 375px) and (max-width: 768px) {
 			text-align: center;

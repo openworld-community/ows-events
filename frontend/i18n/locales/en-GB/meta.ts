@@ -1,5 +1,3 @@
-import limitation_of_liability from './limitation_of_liability';
-
 export default {
 	site_name: 'Afisha Peredelano',
 	default_title: 'Events Calendar for Serbia, Montenegro',

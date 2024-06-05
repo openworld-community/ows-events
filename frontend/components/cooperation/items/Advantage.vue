@@ -35,7 +35,6 @@ const alignSelf = computed(() => props.isRevercedText ? 'flex-end' : 'flex-start
     flex-direction: v-bind(direction);
     justify-content: space-between;
     gap: 50px;
-
     font-size: var(--font-size-L);
 
     &__image {
@@ -48,19 +47,21 @@ const alignSelf = computed(() => props.isRevercedText ? 'flex-end' : 'flex-start
     }
 
     &__text {
-        max-width: 66%;
-
+        max-width: 66%;        
         @media (max-width: 900px) {
             max-width: none;
         }
     }
+
     &__description{
         line-height: 1.5;
     }
 
     &__header {
         margin-bottom: 35px;
-        text-align: center;
+        @media (min-width: 375px) and (max-width: 768px) {
+			text-align: center;
+		}
     }
 }
 </style>

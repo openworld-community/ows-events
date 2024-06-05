@@ -44,7 +44,7 @@ const props = defineProps({
 });
 
 const mobile = inject('mobile');
-const desktop = inject('desktop');
+
 const filterStore = useFilterStore();
 
 const isActive = ref<boolean>(false);

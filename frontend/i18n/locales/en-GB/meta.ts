@@ -29,8 +29,8 @@ export default {
 		title: 'Authorization in Peredelano  Afisha',
 		description: 'Authorize in Peredelano Afisha to create, manage events'
 	},
-	collaboration: {
-		title: 'Collaboration with  Peredelano Afisha',
+	cooperation: {
+		title: 'Cooperation with  Peredelano Afisha',
 		description:
 			'Our startup unites the cultural and social space of the Balkans, offering a convenient platform for discovering and organizing events. Join us and explore new opportunities!'
 	},
@@ -41,5 +41,13 @@ export default {
 	create: {
 		title: 'Create new Event',
 		description: 'Create new Event'
+	},
+	edit: {
+		title: 'Edit Event',
+		description: 'Edit Event'
+	},
+	limitation_of_liability: {
+		title: 'Limitation of liability',
+		description: 'Limitation of liability'
 	}
 };

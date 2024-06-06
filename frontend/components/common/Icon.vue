@@ -58,6 +58,7 @@ export type IconName =
 	| 'currency/USDC'
 	| 'currency/USDT'
 	| 'dollar'
+	| 'email'
 	// хак, из-за которого ТС не мерджит этот юнион в просто string, из-за чего и работает автокомплит, и можно указать все равно любую строку
 	| (string & {});
 </script>
@@ -67,13 +68,14 @@ import type { PropType } from 'vue';
 
 const props = defineProps({
 	name: {
-		type: String as PropType<IconName>,
+		type: String as PropType<string>,
 		required: true
 	},
 	color: {
 		type: String as PropType<string>,
 		default: 'var(--color-input-icons)'
 	},
+
 	width: {
 		type: [String, Number] as PropType<string | number>,
 		default: IconDefaultParams.WIDTH
@@ -83,22 +85,22 @@ const props = defineProps({
 		default: IconDefaultParams.HEIGHT
 	}
 });
-
-const symbolId = computed(() => `#${props.name}`);
 </script>
 
 <template>
-	<svg
-		aria-hidden="true"
-		:width="props.width"
-		:height="props.height"
-	>
-		<use :href="symbolId" />
-	</svg>
+	<span>
+		<nuxt-icon
+			:name="props.name"
+			:filled="true"
+			aria-hidden="true"
+			:width="props.width"
+			:height="props.height"
+		/>
+	</span>
 </template>
 
 <style scoped lang="less">
-svg {
+.nuxt-icon:deep(svg) {
 	pointer-events: none;
 	color: v-bind('color');
 }

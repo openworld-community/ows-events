@@ -2,7 +2,6 @@
 import './assets/less/app.less';
 import 'vue-final-modal/style.css';
 import 'vue-toastification/dist/index.css';
-import 'virtual:svg-icons-register';
 import { ModalsContainer } from 'vue-final-modal';
 import { CookieNameEnum, LocalStorageEnum } from './constants/enums/common';
 import { TOKEN_MAX_AGE_SECONDS } from './constants/defaultValues/time';
@@ -28,7 +27,7 @@ useHead({
 		{
 			rel: 'icon',
 			type: 'image/ico',
-			href: './public/favicon.ico'
+			href: '/favicon.ico'
 		}
 	],
 	title: t('meta.default_title'),
@@ -45,7 +44,7 @@ useHead({
 if (process.client) {
 	const route = useRoute();
 	const { gtag } = useGtag();
-	const pageTitle = getRouteName((route.name as string) ?? `UnknownPage: path ${route.path}`);
+	const pageTitle = getRouteName(route.name as string);
 	gtag('event', 'page_view', {
 		page_title: pageTitle
 	});

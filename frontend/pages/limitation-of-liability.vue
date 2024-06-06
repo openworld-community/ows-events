@@ -4,79 +4,79 @@ import {
 	SeoItempropURLEnum,
 	SeoItemTypeEnum
 } from '../constants/enums/seo';
+const { t } = useI18n();
 import { RoutePathEnum } from '../constants/enums/route';
-
-const mobile = inject('mobile');
-const localePath = useLocalePath();
+getMeta({
+	title: t('meta.limitation_of_liability.title'),
+	description: t('meta.limitation_of_liability.description')
+});
 </script>
 
 <template>
-	<div class="root">
-		<HeaderCommon />
-		<main class="privacy">
-			<h1 class="privacy__main-title">{{ $t('limitation_of_liability.title') }}</h1>
+	<main class="privacy">
+		<h1 class="privacy__main-title">{{ $t('limitation_of_liability.title') }}</h1>
+		<ClientOnly>
 			<p class="privacy__paragraph">
 				{{ $t('limitation_of_liability.last_change') }} {{ $d(Date.parse('2023-06-25')) }}
 			</p>
+		</ClientOnly>
 
-			<ol
-				class="privacy__list"
-				itemscope
-				:itemtype="SeoItemTypeEnum.ORGANIZATION"
-				:itemprop="SeoItempropOrganizationEnum.PUBLISHING_PRINCIPLES"
-			>
-				<li>
-					{{ $t('limitation_of_liability.p_1_1') }}
-					<NuxtLink
-						:to="localePath(RoutePathEnum.HOME)"
-						class="link"
-						target="_blank"
-						itemscope
-						:itemtype="SeoItemTypeEnum.URL"
-						:itemprop="SeoItempropURLEnum.FEEDBACK_POLITY"
-					>
-						afisha.peredelano.com
-					</NuxtLink>
-					{{ $t('limitation_of_liability.p_1_2') }}
-					<NuxtLink
-						:to="localePath(RoutePathEnum.HOME)"
-						class="link"
-						target="_blank"
-						itemscope
-						:itemtype="SeoItemTypeEnum.URL"
-						:itemprop="SeoItempropURLEnum.FEEDBACK_POLITY"
-					>
-						afisha.peredelano.com
-					</NuxtLink>
-					{{ $t('limitation_of_liability.p_1_3') }}
-					<span :itemprop="SeoItempropOrganizationEnum.BRAND"> AfishaPeredelano </span>
-					{{ $t('limitation_of_liability.p_1_4') }}
-				</li>
-				<li>
-					{{ $t('limitation_of_liability.p_2') }}
-				</li>
-				<li>
-					{{ $t('limitation_of_liability.p_3') }}
-				</li>
-				<li>
-					{{ $t('limitation_of_liability.p_4') }}
-				</li>
-				<li>
-					{{ $t('limitation_of_liability.p_5') }}
-				</li>
-				<li>
-					{{ $t('limitation_of_liability.p_6') }}
-				</li>
-				<li>
-					{{ $t('limitation_of_liability.p_7') }}
-				</li>
-				<li>
-					{{ $t('limitation_of_liability.p_8') }}
-				</li>
-			</ol>
-		</main>
-		<FooterCommon v-if="!mobile" />
-	</div>
+		<ol
+			class="privacy__list"
+			itemscope
+			:itemtype="SeoItemTypeEnum.ORGANIZATION"
+			:itemprop="SeoItempropOrganizationEnum.PUBLISHING_PRINCIPLES"
+		>
+			<li>
+				{{ $t('limitation_of_liability.p_1_1') }}
+				<CommonNavLink
+					:to="RoutePathEnum.HOME"
+					class="link"
+					target="_blank"
+					itemscope
+					:itemtype="SeoItemTypeEnum.URL"
+					:itemprop="SeoItempropURLEnum.FEEDBACK_POLITY"
+				>
+					afisha.peredelano.com
+				</CommonNavLink>
+				{{ $t('limitation_of_liability.p_1_2') }}
+				<CommonNavLink
+					:to="RoutePathEnum.HOME"
+					class="link"
+					target="_blank"
+					itemscope
+					:itemtype="SeoItemTypeEnum.URL"
+					:itemprop="SeoItempropURLEnum.FEEDBACK_POLITY"
+				>
+					afisha.peredelano.com
+				</CommonNavLink>
+				{{ $t('limitation_of_liability.p_1_3') }}
+				<span :itemprop="SeoItempropOrganizationEnum.BRAND"> AfishaPeredelano </span>
+				{{ $t('limitation_of_liability.p_1_4') }}
+			</li>
+			<li>
+				{{ $t('limitation_of_liability.p_2') }}
+			</li>
+			<li>
+				{{ $t('limitation_of_liability.p_3') }}
+			</li>
+			<li>
+				{{ $t('limitation_of_liability.p_4') }}
+			</li>
+			<li>
+				{{ $t('limitation_of_liability.p_5') }}
+			</li>
+			<li>
+				{{ $t('limitation_of_liability.p_6') }}
+			</li>
+			<li>
+				{{ $t('limitation_of_liability.p_7') }}
+			</li>
+			<li>
+				{{ $t('limitation_of_liability.p_8') }}
+			</li>
+		</ol>
+	</main>
 </template>
 
 <style scoped lang="less">

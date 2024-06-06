@@ -16,7 +16,6 @@ const props = defineProps({
 const mobile: ComputedRef<boolean> = inject('mobile');
 const tablet: ComputedRef<boolean> = inject('tablet');
 const desktop: ComputedRef<boolean> = inject('desktop');
-const localePath = useLocalePath();
 
 const startDate = ref(
 	convertEventDateToLocaleString(
@@ -34,8 +33,8 @@ const tagArray = computed(() => {
 </script>
 
 <template>
-	<NuxtLink
-		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
+	<CommonNavLink
+		:to="`${RoutePathEnum.EVENT}/${eventData.id}`"
 		:class="[
 			'card',
 			{ 'card--expired': eventData.date + eventData.durationInSeconds * 1000 < dateNow }
@@ -88,7 +87,7 @@ const tagArray = computed(() => {
 				class="description__tags"
 			/>
 		</div>
-	</NuxtLink>
+	</CommonNavLink>
 </template>
 
 <style scoped lang="less">

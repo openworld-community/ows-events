@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { TOKEN_MAX_AGE_SECONDS } from '../../constants/defaultValues/time';
-import type { UserInfoWithId } from '../../../common/types/user';
+import type { UserCookie } from '../../../common/types/user';
 import { CookieNameEnum } from '../../constants/enums/common';
 import { RoutePathEnum } from '~/constants/enums/route';
 
@@ -9,6 +9,7 @@ const langCookie = useCookie(CookieNameEnum.LOCALE);
 const localePath = useLocalePath();
 
 definePageMeta({
+	layout: false,
 	middleware: async (to) => {
 		const userToken = getFirstParam(to.params.id);
 		useCookie<string>(CookieNameEnum.TOKEN, { maxAge: TOKEN_MAX_AGE_SECONDS }).value =
@@ -18,7 +19,7 @@ definePageMeta({
 			console.error('No user data retrieved');
 			return;
 		}
-		useCookie<UserInfoWithId | null>(CookieNameEnum.TG_USER, {
+		useCookie<UserCookie | null>(CookieNameEnum.TG_USER, {
 			maxAge: TOKEN_MAX_AGE_SECONDS
 		}).value = user.value;
 	}

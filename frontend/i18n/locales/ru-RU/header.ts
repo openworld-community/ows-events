@@ -20,7 +20,8 @@ export default {
 		about: 'О проекте',
 		support: 'Поддержка',
 		donation: 'Помочь Afisha',
-		limitation_of_liability: 'Ограничение ответственности'
+		limitation_of_liability: 'Ограничение ответственности',
+		cooperation: 'Сотрудничество',
 	},
 	subscription_expired: '$t(dates.day.key) до конца подписки'
 };

@@ -17,6 +17,8 @@ import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
 import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
 
+import { validateEventRole } from '../../utils/roles';
+
 const mobile = inject<boolean>('mobile');
 const route = useRoute();
 
@@ -118,57 +120,84 @@ patchDeleteEventModal({
 </script>
 
 <template>
-	<div class="root">
-		<HeaderCommon :has-back-button="mobile" />
-		<main
-			v-if="posterEvent"
-			class="event"
-			itemscope
-			:itemtype="SeoItemTypeEnum.EVENT"
+	<main
+		v-if="posterEvent"
+		class="event"
+		itemscope
+		:itemtype="SeoItemTypeEnum.EVENT"
+	>
+		<div
+			class="event-image event-image__container"
+			:itemprop="SeoItempropGlobalEnum.IMAGE"
 		>
-			<div
-				class="event-image event-image__container"
+			<img
+				v-if="posterEvent.image"
+				class="event-image__image"
+				:src="eventImage"
+				width="350"
+				height="250"
+				:alt="
+					trimString(
+						`Afisha: ${
+							posterEvent.isOnline
+								? $t(`event.tags.${Tags.ONLINE}`)
+								: posterEvent.location.city
+						}, ${posterEvent.title}` ?? '',
+						460
+					)
+				"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
-			>
-				<img
-					v-if="posterEvent.image"
-					class="event-image__image"
-					:src="eventImage"
-					width="350"
-					height="250"
-					:alt="
-						trimString(
-							`Afisha: ${
-								posterEvent.isOnline
-									? $t(`event.tags.${Tags.ONLINE}`)
-									: posterEvent.location.city
-							}, ${posterEvent.title}` ?? '',
-							460
-						)
-					"
-					:itemprop="SeoItempropGlobalEnum.IMAGE"
-				/>
-				<img
-					v-else
-					class="event-image__image"
-					src="@/assets/img/event-preview@2x.png"
-					width="350"
-					height="250"
-					alt=""
-					:itemprop="SeoItempropGlobalEnum.IMAGE"
-				/>
-			</div>
+			/>
+			<img
+				v-else
+				class="event-image__image"
+				src="@/assets/img/event-preview@2x.png"
+				width="350"
+				height="250"
+				alt=""
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
+			/>
+		</div>
 
-			<div class="event-info">
-				<div class="event-info__summary">
-					<div class="event-info__tag-wrapper">
-						<CommonTagList
-							:tag-list="posterEvent.tags"
-							:tag-size="mobile ? 'standard' : 'small'"
-						/>
+		<div class="event-info">
+			<div class="event-info__summary">
+				<div class="event-info__tag-wrapper">
+					<CommonTagList
+						:tag-list="posterEvent.tags"
+						:tag-size="mobile ? 'standard' : 'small'"
+					/>
 
+					<CommonButton
+						v-if="mobile && userStore.isAuthorized"
+						is-icon
+						is-round
+						:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
+						:alt="
+							isInFavourites
+								? $t('global.button.remove_from_favourites')
+								: $t('global.button.add_to_favourites')
+						"
+						@click="toggleFavourites"
+					/>
+				</div>
+				<div class="event-info__header">
+					<!--      TODO когда будет user info, нужно будет подставлять имя создавшего -->
+					<p
+						v-if="posterEvent.organizer"
+						class="event-info__author"
+						:itemprop="SeoItempropEventEnum.ORGANIZER"
+					>
+						{{ posterEvent?.organizer }}
+					</p>
+					<div class="event-info__title-wrapper">
+						<h1
+							class="event-info__title"
+							:itemprop="SeoItempropEventEnum.NAME"
+						>
+							{{ posterEvent.title }}
+						</h1>
 						<CommonButton
-							v-if="mobile && userStore.isAuthorized"
+							v-if="!mobile && userStore.isAuthorized"
 							is-icon
 							is-round
 							:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
@@ -180,118 +209,86 @@ patchDeleteEventModal({
 							@click="toggleFavourites"
 						/>
 					</div>
-					<div class="event-info__header">
-						<!--      TODO когда будет user info, нужно будет подставлять имя создавшего -->
-						<p
-							v-if="posterEvent.organizer"
-							class="event-info__author"
-							:itemprop="SeoItempropEventEnum.ORGANIZER"
-						>
-							{{ posterEvent?.organizer }}
-						</p>
-						<div class="event-info__title-wrapper">
-							<h1
-								class="event-info__title"
-								:itemprop="SeoItempropEventEnum.NAME"
-							>
-								{{ posterEvent.title }}
-							</h1>
-							<CommonButton
-								v-if="!mobile && userStore.isAuthorized"
-								is-icon
-								is-round
-								:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
-								:alt="
-									isInFavourites
-										? $t('global.button.remove_from_favourites')
-										: $t('global.button.add_to_favourites')
-								"
-								@click="toggleFavourites"
-							/>
-						</div>
-					</div>
-					<CommonEventDetails
-						class="event-info__details"
-						:price="posterEvent.price"
-						:start-date="startDate"
-						:end-date="endDate"
-						:is-online="posterEvent.isOnline"
-						:location="posterEvent.location"
-						has-link-to-g-maps
-					/>
-					<p
-						v-if="!mobile && posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
-						class="event-info__description-title"
-					>
-						{{ $t('event.description_title') }}
-					</p>
-					<p
-						v-if="posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
-						class="event-info__description"
-						:itemprop="SeoItempropEventEnum.DESCRIPTION"
-					>
-						{{ posterEvent.description }}
-					</p>
-					<div
-						v-if="posterEvent.creatorId === PEREDELANO_CREATOR_ID"
-						class="event-info__html-description"
-						:itemprop="SeoItempropEventEnum.DESCRIPTION"
-						v-html="useSanitizer(posterEvent.description)"
+				</div>
+				<CommonEventDetails
+					class="event-info__details"
+					:price="posterEvent.price"
+					:start-date="startDate"
+					:end-date="endDate"
+					:is-online="posterEvent.isOnline"
+					:location="posterEvent.location"
+					has-link-to-g-maps
+				/>
+				<p
+					v-if="!mobile && posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
+					class="event-info__description-title"
+				>
+					{{ $t('event.description_title') }}
+				</p>
+				<p
+					v-if="posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
+					class="event-info__description"
+					:itemprop="SeoItempropEventEnum.DESCRIPTION"
+				>
+					{{ posterEvent.description }}
+				</p>
+				<div
+					v-if="posterEvent.creatorId === PEREDELANO_CREATOR_ID"
+					class="event-info__html-description"
+					:itemprop="SeoItempropEventEnum.DESCRIPTION"
+					v-html="useSanitizer(posterEvent.description)"
+				/>
+				<CommonButton
+					v-if="posterEvent.url"
+					class="event-info__button-contact"
+					button-kind="dark"
+					:button-text="$t('global.button.contact')"
+					:link="posterEvent.url"
+					is-external-link
+					@click="useTrackEvent('redirect to event url')"
+				/>
+			</div>
+
+			<!--			<template v-if="posterEvent.url">-->
+
+			<!--TODO подключить, когда вернемся к проработке регистрации-->
+			<!--				<CommonButton-->
+			<!--					v-else-->
+			<!--					button-kind="success"-->
+			<!--					class="event-actions__button"-->
+			<!--					:button-text="$t('event.button.register')"-->
+			<!--					@click="openRegistrationModal"-->
+			<!--				/>-->
+			<!--			</template>-->
+			<div
+				v-if="userStore.isAuthorized"
+				class="event-info__actions"
+			>
+				<div class="event-info__manage">
+					<CommonButton
+						v-if="validateEventRole(posterEvent.creatorId, 'delete')"
+						class="event-info__button-admin"
+						button-kind="warning"
+						:button-text="$t('global.button.delete')"
+						icon-name="trash"
+						icon-width="16"
+						icon-height="16"
+						@click="openDeleteEventModal"
 					/>
 					<CommonButton
-						v-if="posterEvent.url"
-						class="event-info__button-contact"
-						button-kind="dark"
-						:button-text="$t('global.button.contact')"
-						:link="posterEvent.url"
-						is-external-link
-						@click="useTrackEvent('redirect to event url')"
+						v-if="validateEventRole(posterEvent.creatorId, 'edit')"
+						class="event-info__button-admin"
+						button-kind="ordinary"
+						:button-text="$t('global.button.edit')"
+						icon-name="edit"
+						icon-width="16"
+						icon-height="16"
+						@click="onEditButtonClick"
 					/>
 				</div>
-
-				<!--			<template v-if="posterEvent.url">-->
-
-				<!--TODO подключить, когда вернемся к проработке регистрации-->
-				<!--				<CommonButton-->
-				<!--					v-else-->
-				<!--					button-kind="success"-->
-				<!--					class="event-actions__button"-->
-				<!--					:button-text="$t('event.button.register')"-->
-				<!--					@click="openRegistrationModal"-->
-				<!--				/>-->
-				<!--			</template>-->
-				<div
-					v-if="userStore.isAuthorized"
-					class="event-info__actions"
-				>
-					<div
-						v-if="userStore.id === posterEvent.creatorId"
-						class="event-info__manage"
-					>
-						<CommonButton
-							class="event-info__button-admin"
-							button-kind="warning"
-							:button-text="$t('global.button.delete')"
-							icon-name="trash"
-							icon-width="16"
-							icon-height="16"
-							@click="openDeleteEventModal"
-						/>
-						<CommonButton
-							class="event-info__button-admin"
-							button-kind="ordinary"
-							:button-text="$t('global.button.edit')"
-							icon-name="edit"
-							icon-width="16"
-							icon-height="16"
-							@click="onEditButtonClick"
-						/>
-					</div>
-				</div>
 			</div>
-		</main>
-		<FooterCommon v-if="!mobile" />
-	</div>
+		</div>
+	</main>
 </template>
 
 <style lang="less" scoped>

@@ -10,7 +10,6 @@ import { apiRouter } from '../../composables/useApiRouter';
 import { getFirstParam } from '../../utils';
 
 import { getInitialEventFormValues } from '../../utils/events';
-import { getTimezone } from '~/services/timezone.services';
 
 const router = useRouter();
 const localePath = useLocalePath();
@@ -22,6 +21,13 @@ onMounted(async () => {
 	await eventStore.getTimezones();
 });
 const id = getFirstParam(route.params.editId);
+getMeta({
+	title: id === 'new' ? t('meta.create.title') : t('meta.edit.title'),
+	description: id === 'new' ? t('meta.create.description') : t('meta.edit.description')
+});
+definePageMeta({
+	layout: false
+});
 
 const event = ref<EventOnPoster>();
 const openSuccess = ref(false);
@@ -59,12 +65,6 @@ if (id !== 'new') {
 
 const initialValues = computed(() => {
 	const init = getInitialEventFormValues(event.value);
-	if (!event.value) {
-		getTimezone('Serbia', 'Belgrade')
-			.then((r) => (init.timezone = r))
-			// если по какой-то причине сервер не отдаст, то ставим просто "Центральную Европу"
-			.catch(() => (init.timezone = 'Europe/Belgrade +02:00'));
-	}
 
 	return init;
 });

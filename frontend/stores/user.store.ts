@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia';
-import type { TGUserInfo, UserInfo } from '../../common/types/user';
+import type { PublicTGUserData, UserInfo } from '../../common/types/user';
 import { apiRouter } from '~/composables/useApiRouter';
 import { CookieNameEnum } from '~/constants/enums/common';
+import { UserRoles } from '../../common/const/userRoles';
 
 type UserStore = {
 	id: string | null;
-	userInfo: UserInfo | null;
+	userInfo: (UserInfo & { role: UserRoles }) | null;
 	favouriteIDs: string[];
 	isLoading: boolean;
 	showEditModal: boolean;
@@ -51,7 +52,7 @@ export const useUserStore = defineStore('user', {
 			}
 		},
 		getUserId() {
-			const userCookie = useCookie<TGUserInfo | null>(CookieNameEnum.TG_USER);
+			const userCookie = useCookie<PublicTGUserData | null>(CookieNameEnum.TG_USER);
 			if (userCookie.value && userCookie.value.id) {
 				this.id = userCookie.value.id;
 			}

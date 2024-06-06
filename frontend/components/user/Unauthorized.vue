@@ -1,7 +1,4 @@
-<script
-	setup
-	lang="ts"
->
+<script setup lang="ts">
 import { RoutePathEnum } from '@/constants/enums/route';
 import { useUserStore } from '@/stores/user.store';
 import { TELEGRAM_AUTH_BOT_NAME } from '@/constants/url';
@@ -15,7 +12,7 @@ type TFormType = 'login' | 'signup';
 const userStore = useUserStore();
 const mobile = inject('mobile');
 // const desktop = inject('desktop');
-const localePath = useLocalePath();
+
 const tokenCookie = useCookie<string | null>(CookieNameEnum.TOKEN);
 
 const login = ref<TFormType>('login');
@@ -94,10 +91,11 @@ watch(
 			<UserSignUp v-else />
 
 			<CommonButton
-				:button-text="login === 'login'
-					? $t('user.unauthorized.signup')
-					: $t('user.unauthorized.login')
-					"
+				:button-text="
+					login === 'login'
+						? $t('user.unauthorized.signup')
+						: $t('user.unauthorized.login')
+				"
 				@click="changeFormType"
 			/>
 
@@ -114,10 +112,10 @@ watch(
 						ref="telegram"
 						class="unauthorized__telegram-button"
 						@click="
-					useTrackEvent('login', {
-						method: 'Telegram'
-					})
-					"
+							useTrackEvent('login', {
+								method: 'Telegram'
+							})
+						"
 					>
 						<div
 							id="tgauth"
@@ -132,8 +130,8 @@ watch(
 				</div>
 			</div>
 
-			<NuxtLink
-				:to="localePath(RoutePathEnum.HOME)"
+			<CommonNavLink
+				:to="RoutePathEnum.HOME"
 				class="unauthorized__continue"
 			>
 				<CommonButton
@@ -143,7 +141,7 @@ watch(
 					:icon-color="'var(--color-icons)'"
 					:alt="$t('form.global.close')"
 				/>
-			</NuxtLink>
+			</CommonNavLink>
 		</div>
 		<p
 			v-if="!mobile"
@@ -320,8 +318,9 @@ watch(
 		border-radius: 4px;
 		height: 38px !important;
 		width: 38px !important;
+		width: 38px !important;
 		position: absolute;
-		background-image: url('@/assets/icon/social/telegram_icon_48x48.png');
+		background-image: url('@/assets/icons/social/telegram_icon_48x48.png');
 		background-size: cover;
 		pointer-events: none;
 		filter: grayscale(100%);

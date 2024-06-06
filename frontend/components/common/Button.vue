@@ -43,6 +43,11 @@ const props = defineProps({
 		type: Boolean,
 		default: false
 	},
+	prefetch: {
+		// если необходимо открыть в новом окне
+		type: Boolean,
+		default: false
+	},
 	isRound: {
 		// если кнопка круглая
 		type: Boolean,
@@ -86,18 +91,6 @@ const props = defineProps({
 	isLoading: {
 		type: Boolean,
 		default: false
-	},
-	fontSize: {
-		type: String,
-		default: ''
-	},
-	padding: {
-		type: String,
-		default: '7px 14px'
-	},
-	lineHeight: {
-		type: String,
-		default: 'inherit'
 	}
 });
 
@@ -119,6 +112,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		:is="link ? NuxtLink : 'button'"
 		:type="link ? null : 'button'"
 		:external="isExternalLink"
+		:prefetch="prefetch"
 		:to="link ? (isExternalLink ? link : localePath(link)) : null"
 		:target="isExternalLink ? '_blank' : null"
 		:disabled="!link && isDisabled"
@@ -153,7 +147,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		/>
 		<span
 			v-if="!isIcon"
-			:class="['button__content', { 'button__content--custom-font': fontSize }]"
+			class="button__content"
 		>
 			{{ buttonText }}
 		</span>
@@ -164,10 +158,10 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 .button {
 	display: flex;
 	justify-content: center;
+	height: 40px;
 	border-radius: 8px;
-	padding: v-bind(padding);
+	padding: 7px 14px;
 	align-items: center;
-	line-height: v-bind(lineHeight);
 
 	transition-property: background-color, color, border-color;
 	transition-duration: 0.3s;
@@ -184,10 +178,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 		@media (min-width: 768px) {
 			font-size: var(--font-size-S);
-		}
-
-		&--custom-font {
-			font-size: v-bind(fontSize);
 		}
 	}
 

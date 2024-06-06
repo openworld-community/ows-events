@@ -23,6 +23,8 @@ defineProps({
 	}
 });
 
+const CommonNavLink = resolveComponent('CommonNavLink');
+
 const isNavbarOpen = ref<boolean>(false);
 const navbarToggle = () => {
 	isNavbarOpen.value = !isNavbarOpen.value;
@@ -36,16 +38,17 @@ onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 const isAtHome = computed(() => getRouteName(route.name as string) === RouteNameEnum.HOME);
 const logoComponentIs = computed(() => {
 	if (isAtHome.value) return 'button';
-	else return defineNuxtLink({});
+	else return CommonNavLink;
 });
+
 const titleOnMobile = computed(() => {
-	if (localePath(route.path) === localePath({ path: RoutePathEnum.USER_FAVOURITES })) {
+	if (getRouteName(route.path) === RoutePathEnum.USER_FAVOURITES) {
 		return t('user.favourites.title');
 	}
-	if (localePath(route.path) === localePath({ path: RoutePathEnum.USER_MY_EVENTS })) {
+	if (getRouteName(route.path) === RoutePathEnum.USER_MY_EVENTS) {
 		return t('user.my_events.title');
 	}
-	if (localePath(route.path) === localePath({ path: RoutePathEnum.USER_PROFILE })) {
+	if (getRouteName(route.path) === RoutePathEnum.USER_PROFILE) {
 		return t('user.profile.title');
 	}
 	return '';
@@ -88,7 +91,7 @@ const clearFilters = async () => {
 	filterStore.$patch({
 		filters: {
 			city: '',
-			searchLine: '',
+			//searchLine: '',
 			date: [],
 			tags: []
 		}
@@ -109,10 +112,7 @@ const clearFilters = async () => {
 		>
 			<div class="header__left">
 				<CommonButton
-					v-if="
-						hasBackButton &&
-						localePath(route.path) !== localePath({ path: RoutePathEnum.USER_PAGE })
-					"
+					v-if="hasBackButton && getRouteName(route.path) !== RoutePathEnum.USER_PAGE"
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"
@@ -129,7 +129,7 @@ const clearFilters = async () => {
 					:aria-label="
 						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
 					"
-					:to="!isAtHome ? localePath(RoutePathEnum.HOME) : undefined"
+					:to="!isAtHome ? RoutePathEnum.HOME : undefined"
 					:itemprop="SeoItempropNavEnum.URL"
 					@click="
 						isAtHome && scrollToTop();
@@ -249,7 +249,7 @@ const clearFilters = async () => {
 		@media (min-width: 768px) {
 			display: flex;
 			width: 100%;
-			max-width: 400px;
+			max-width: 480px;
 			justify-content: space-between;
 			align-items: center;
 			margin-left: 7%;

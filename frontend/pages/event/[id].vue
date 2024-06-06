@@ -16,7 +16,6 @@ import { apiRouter } from '../../composables/useApiRouter';
 import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
 import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
-import { UserRoles } from '../../../common/const/userRoles';
 import { validateEventRole } from '../../utils/roles';
 
 const mobile = inject<boolean>('mobile');
@@ -71,6 +70,17 @@ getMeta({
 
 const isInFavourites = computed(() => {
 	return userStore.favouriteIDs.includes(id);
+});
+
+watch(isInFavourites, (value) => {
+	if (value) {
+		useTrackEvent('add_favourites', {
+			id_user: userStore.id,
+			id_event: posterEvent.value.id,
+			country: posterEvent.value.isOnline ? 'online' : posterEvent.value.location.country,
+			city: posterEvent.value.isOnline ? 'online' : posterEvent.value.location.city
+		});
+	}
 });
 
 const toggleFavourites = async () => {
@@ -245,7 +255,15 @@ patchDeleteEventModal({
 					:button-text="$t('global.button.contact')"
 					:link="posterEvent.url"
 					is-external-link
-					@click="useTrackEvent('redirect to event url')"
+					@click="
+						useTrackEvent('redirect to event url', {
+							link_url: posterEvent.url,
+							id_user: userStore.id,
+							id_event: posterEvent.id,
+							country: posterEvent.isOnline ? 'online' : posterEvent.location.country,
+							city: posterEvent.isOnline ? 'online' : posterEvent.location.city
+						})
+					"
 				/>
 			</div>
 

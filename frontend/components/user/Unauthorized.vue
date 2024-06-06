@@ -106,13 +106,18 @@ watch(
 						ux-mode="redirect"
 						type="icon"
 						logo_alignment="center"
+						@click="
+							useTrackEvent('try_login', {
+								method: 'Google'
+							})
+						"
 					/>
 
 					<div
 						ref="telegram"
 						class="unauthorized__telegram-button"
 						@click="
-							useTrackEvent('login', {
+							useTrackEvent('try_login', {
 								method: 'Telegram'
 							})
 						"

@@ -2,6 +2,7 @@
 import { LocalStorageEnum } from '../../constants/enums/common';
 import type { EventOnPoster, PostEventPayload } from '../../../common/types/event';
 import { useEventStore } from '../../stores/event.store';
+import { useUserStore } from '../../stores/user.store';
 import { RoutePathEnum } from '../../constants/enums/route';
 
 import { useRouter, useRoute, navigateTo } from 'nuxt/app';
@@ -14,6 +15,7 @@ import { getInitialEventFormValues } from '../../utils/events';
 const router = useRouter();
 const localePath = useLocalePath();
 const route = useRoute();
+const userStore = useUserStore();
 const eventStore = useEventStore();
 const { t } = useI18n();
 
@@ -78,6 +80,13 @@ const submitEvent = async (payload: PostEventPayload) => {
 		});
 		if (!error.value) {
 			localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
+			useTrackEvent('form_event', {
+				type: 'edit',
+				id_user: userStore.id,
+				id_event: id,
+				country: payload.isOnline ? 'online' : payload.location.country,
+				city: payload.isOnline ? 'online' : payload.location.city
+			});
 			successEditEvent(id);
 		}
 	} else {
@@ -87,7 +96,13 @@ const submitEvent = async (payload: PostEventPayload) => {
 
 		if (data.value) {
 			localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
-
+			useTrackEvent('form_event', {
+				type: 'create',
+				id_user: userStore.id,
+				id_event: 'new',
+				country: payload.isOnline ? 'online' : payload.location.country,
+				city: payload.isOnline ? 'online' : payload.location.city
+			});
 			successCreateEvent(data.value.id);
 		}
 	}

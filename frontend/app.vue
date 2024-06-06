@@ -27,7 +27,7 @@ useHead({
 		{
 			rel: 'icon',
 			type: 'image/ico',
-			href: './public/favicon.ico'
+			href: '/favicon.ico'
 		}
 	],
 	title: t('meta.default_title'),

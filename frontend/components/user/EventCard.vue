@@ -40,6 +40,15 @@ const tagArray = computed(() => {
 			{ 'card--expired': eventData.date + eventData.durationInSeconds * 1000 < dateNow }
 		]"
 		:itemprop="SeoItempropGlobalEnum.URL"
+		@click="
+			useTrackEvent('redirect to event url', {
+				link_url: eventData.url,
+				id_user: eventData.creatorId,
+				id_event: eventData.id,
+				country: eventData.isOnline ? 'online' : eventData.location.country,
+				city: eventData.isOnline ? 'online' : eventData.location.city
+			})
+		"
 	>
 		<div
 			:class="[

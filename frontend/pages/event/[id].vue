@@ -75,7 +75,7 @@ const isInFavourites = computed(() => {
 watch(isInFavourites, (value) => {
 	if (value) {
 		useTrackEvent('add_favourites', {
-			id_user: userStore.id,
+			id_user: posterEvent.value.creatorId,
 			id_event: posterEvent.value.id,
 			country: posterEvent.value.isOnline ? 'online' : posterEvent.value.location.country,
 			city: posterEvent.value.isOnline ? 'online' : posterEvent.value.location.city
@@ -258,7 +258,7 @@ patchDeleteEventModal({
 					@click="
 						useTrackEvent('redirect to event url', {
 							link_url: posterEvent.url,
-							id_user: userStore.id,
+							id_user: posterEvent.creatorId,
 							id_event: posterEvent.id,
 							country: posterEvent.isOnline ? 'online' : posterEvent.location.country,
 							city: posterEvent.isOnline ? 'online' : posterEvent.location.city

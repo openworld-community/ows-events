@@ -81,7 +81,6 @@ const submitEvent = async (payload: PostEventPayload) => {
 		if (!error.value) {
 			localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
 			useTrackEvent('form_event', {
-				type: 'edit',
 				id_user: userStore.id,
 				id_event: id,
 				country: payload.isOnline ? 'online' : payload.location.country,
@@ -97,7 +96,6 @@ const submitEvent = async (payload: PostEventPayload) => {
 		if (data.value) {
 			localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
 			useTrackEvent('form_event', {
-				type: 'create',
 				id_user: userStore.id,
 				id_event: 'new',
 				country: payload.isOnline ? 'online' : payload.location.country,

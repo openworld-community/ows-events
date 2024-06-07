@@ -155,13 +155,14 @@ const scrollUnlockOnBeforeCloseModal = () => {
 		font-weight: var(--font-weight-regular);
 
 		&--center {
-			font-size: var(--font-size-ML);
+			font-size: var(--font-size-XL);
 			text-align: center;
 		}
 	}
 
 	&__button {
 		margin-left: var(--space-related-items);
+		font-weight: var(--font-weight-bold);
 	}
 
 	&__body {

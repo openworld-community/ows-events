@@ -18,7 +18,9 @@ onBeforeMount(async () => {
 		filterStore.$patch({ loading: false });
 		if (route.query) {
 			useTrackEvent('view_search_results', {
-				search_term: route.fullPath
+				search_term: route.fullPath.split('?')[1],
+				city: route.query.city ? getFirstQuery(route.query.city) : '',
+				tags: route.query.tags ? getFirstQuery(route.query.tags) : ''
 			});
 		}
 	});

@@ -2,13 +2,17 @@ import * as yup from '../../yup';
 import { toTypedSchema } from '@vee-validate/yup';
 import { type Time } from '../../../common/types/event';
 import { LINK_MAX_LENGTH, PRICE_MAX_VALUE } from '~/constants/defaultValues/validation';
+import { Tags } from '../../../common/const/tags';
 
 export const eventValidationSchema = toTypedSchema(
 	yup.object().shape({
 		title: yup.string().required().max(255),
 		organizer: yup.string().max(255),
 		description: yup.string().required().max(255),
-		tags: yup.array().max(6),
+		tags: yup
+			.array()
+			.compact((i) => i === Tags.ONLINE)
+			.max(6),
 		startDate: yup.date().required(),
 		startTime: yup.object().required(),
 		endDate: yup

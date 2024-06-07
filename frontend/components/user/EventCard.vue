@@ -43,8 +43,8 @@ const tagArray = computed(() => {
 		]"
 		:itemprop="SeoItempropGlobalEnum.URL"
 		@click="
-			sendAnalytics.redirect('redirect to event url', {
-				link_url: eventData.url,
+			sendAnalytics.clickEvent('click_on_event', {
+				id_creator: eventData.creatorId,
 				id_event: eventData.id,
 				country: eventData?.location?.country,
 				city: eventData?.location?.city,

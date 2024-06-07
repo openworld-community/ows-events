@@ -9,6 +9,7 @@ import { Tags } from '../../../common/const/tags';
 const props = defineProps<{ eventData: EventOnPoster }>();
 const { t } = useI18n();
 const mobile = inject('mobile');
+const { sendAnalytics } = useSendTrackingEvent();
 
 const startDate = ref(
 	convertEventDateToLocaleString(
@@ -46,6 +47,15 @@ const endDate = computed(() => {
 			)
 		"
 		:itemprop="SeoItempropGlobalEnum.URL"
+		@click="
+			sendAnalytics.clickEvent('click_on_event', {
+				id_creator: eventData.creatorId,
+				id_event: eventData.id,
+				country: eventData?.location?.country,
+				city: eventData?.location?.city,
+				online: eventData?.isOnline
+			})
+		"
 	>
 		<div
 			class="card__image-container"

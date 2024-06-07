@@ -6,9 +6,11 @@ import { BASE_URL } from '@/constants/url';
 import { CookieNameEnum } from '@/constants/enums/common';
 import { GoogleSignInButton } from 'vue3-google-signin';
 import { GOOGLE_OAUTH_URL } from '@/constants/url';
+import { useSendTrackingEvent } from '../../composables/useSendTrackingEvent';
 
 type TFormType = 'login' | 'signup';
 
+const { sendAnalytics } = useSendTrackingEvent();
 const userStore = useUserStore();
 const mobile = inject('mobile');
 // const desktop = inject('desktop');
@@ -107,7 +109,7 @@ watch(
 						type="icon"
 						logo_alignment="center"
 						@click="
-							useTrackEvent('try_login', {
+							sendAnalytics.login('try_login', {
 								method: 'Google'
 							})
 						"
@@ -117,7 +119,7 @@ watch(
 						ref="telegram"
 						class="unauthorized__telegram-button"
 						@click="
-							useTrackEvent('try_login', {
+							sendAnalytics.login('try_login', {
 								method: 'Telegram'
 							})
 						"

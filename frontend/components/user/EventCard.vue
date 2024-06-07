@@ -6,6 +6,7 @@ import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enu
 import { dateNow } from '~/utils/dates';
 import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
+import { useSendTrackingEvent } from '~/composables/useSendTrackingEvent';
 
 const props = defineProps({
 	eventData: {
@@ -13,6 +14,7 @@ const props = defineProps({
 		required: true
 	}
 });
+const { sendAnalytics } = useSendTrackingEvent();
 const mobile: ComputedRef<boolean> = inject('mobile');
 const tablet: ComputedRef<boolean> = inject('tablet');
 const desktop: ComputedRef<boolean> = inject('desktop');
@@ -41,12 +43,13 @@ const tagArray = computed(() => {
 		]"
 		:itemprop="SeoItempropGlobalEnum.URL"
 		@click="
-			useTrackEvent('redirect to event url', {
+			sendAnalytics.redirect('redirect to event url', {
 				link_url: eventData.url,
 				id_user: eventData.creatorId,
 				id_event: eventData.id,
-				country: eventData.isOnline ? 'online' : eventData.location.country,
-				city: eventData.isOnline ? 'online' : eventData.location.city
+				country: eventData?.location?.country,
+				city: eventData?.location?.city,
+				online: eventData?.isOnline
 			})
 		"
 	>

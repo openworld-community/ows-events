@@ -11,7 +11,9 @@ import { apiRouter } from '../../composables/useApiRouter';
 import { getFirstParam } from '../../utils';
 
 import { getInitialEventFormValues } from '../../utils/events';
+import { useSendTrackingEvent } from '~/composables/useSendTrackingEvent';
 
+const { sendAnalytics } = useSendTrackingEvent();
 const router = useRouter();
 const localePath = useLocalePath();
 const route = useRoute();
@@ -72,11 +74,12 @@ const submitEvent = async (payload: PostEventPayload) => {
 		if (!error.value) {
 			localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
 
-			useTrackEvent('form_event', {
+			sendAnalytics.formEvent('form_event', {
 				id_user: event.value.creatorId,
 				id_event: id,
-				country: payload.isOnline ? 'online' : payload.location.country,
-				city: payload.isOnline ? 'online' : payload.location.city
+				country: payload?.location?.country,
+				city: payload?.location?.city,
+				online: payload?.isOnline
 			});
 			onSuccess(id);
 		}
@@ -87,11 +90,12 @@ const submitEvent = async (payload: PostEventPayload) => {
 
 		if (data.value) {
 			localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
-			useTrackEvent('form_event', {
+			sendAnalytics.formEvent('form_event', {
 				id_user: userStore.id,
 				id_event: 'new',
-				country: payload.isOnline ? 'online' : payload.location.country,
-				city: payload.isOnline ? 'online' : payload.location.city
+				country: payload?.location?.country,
+				city: payload?.location?.city,
+				online: payload?.isOnline
 			});
 			onSuccess(data.value.id);
 		}

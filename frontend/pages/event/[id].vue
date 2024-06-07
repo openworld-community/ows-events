@@ -17,7 +17,9 @@ import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
 import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
 import { validateEventRole } from '../../utils/roles';
+import { useSendTrackingEvent } from '~/composables/useSendTrackingEvent';
 
+const { sendAnalytics } = useSendTrackingEvent();
 const mobile = inject<boolean>('mobile');
 const route = useRoute();
 
@@ -74,11 +76,12 @@ const isInFavourites = computed(() => {
 
 watch(isInFavourites, (value) => {
 	if (value) {
-		useTrackEvent('add_favourites', {
+		sendAnalytics.favourites('add_favourites', {
 			id_user: posterEvent.value.creatorId,
 			id_event: posterEvent.value.id,
-			country: posterEvent.value.isOnline ? 'online' : posterEvent.value.location.country,
-			city: posterEvent.value.isOnline ? 'online' : posterEvent.value.location.city
+			country: posterEvent.value?.location?.country,
+			city: posterEvent.value?.location?.city,
+			online: posterEvent.value?.isOnline
 		});
 	}
 });
@@ -256,12 +259,13 @@ patchDeleteEventModal({
 					:link="posterEvent.url"
 					is-external-link
 					@click="
-						useTrackEvent('redirect to event url', {
+						sendAnalytics.redirect('redirect to event url', {
 							link_url: posterEvent.url,
 							id_user: posterEvent.creatorId,
 							id_event: posterEvent.id,
-							country: posterEvent.isOnline ? 'online' : posterEvent.location.country,
-							city: posterEvent.isOnline ? 'online' : posterEvent.location.city
+							country: posterEvent?.location?.country,
+							city: posterEvent?.location?.city,
+							online: posterEvent?.isOnline
 						})
 					"
 				/>

@@ -109,7 +109,7 @@ watch(
 						type="icon"
 						logo_alignment="center"
 						@click="
-							sendAnalytics.login('try_login', {
+							sendAnalytics.login('click_login', {
 								method: 'Google'
 							})
 						"
@@ -119,7 +119,7 @@ watch(
 						ref="telegram"
 						class="unauthorized__telegram-button"
 						@click="
-							sendAnalytics.login('try_login', {
+							sendAnalytics.login('click_login', {
 								method: 'Telegram'
 							})
 						"

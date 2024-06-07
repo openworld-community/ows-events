@@ -16,9 +16,10 @@ import { apiRouter } from '../../composables/useApiRouter';
 import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
 import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
-
 import { validateEventRole } from '../../utils/roles';
+import { useSendTrackingEvent } from '~/composables/useSendTrackingEvent';
 
+const { sendAnalytics } = useSendTrackingEvent();
 const mobile = inject<boolean>('mobile');
 const route = useRoute();
 
@@ -71,6 +72,18 @@ getMeta({
 
 const isInFavourites = computed(() => {
 	return userStore.favouriteIDs.includes(id);
+});
+
+watch(isInFavourites, (value) => {
+	if (value) {
+		sendAnalytics.favourites('add_favourites', {
+			id_user: posterEvent.value.creatorId,
+			id_event: posterEvent.value.id,
+			country: posterEvent.value?.location?.country,
+			city: posterEvent.value?.location?.city,
+			online: posterEvent.value?.isOnline
+		});
+	}
 });
 
 const toggleFavourites = async () => {
@@ -245,7 +258,15 @@ patchDeleteEventModal({
 					:button-text="$t('global.button.contact')"
 					:link="posterEvent.url"
 					is-external-link
-					@click="useTrackEvent('redirect to event url')"
+					@click="
+						sendAnalytics.redirect('redirect to event url', {
+							link_url: posterEvent.url,
+							id_event: posterEvent.id,
+							country: posterEvent?.location?.country,
+							city: posterEvent?.location?.city,
+							online: posterEvent?.isOnline
+						})
+					"
 				/>
 			</div>
 

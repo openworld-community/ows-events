@@ -2,11 +2,12 @@
 import dayjs from 'dayjs';
 import { useFilterStore } from '../../stores/filter.store';
 import { debouncedWatch } from '@vueuse/core';
+import { useSendTrackingEvent } from '../../composables/useSendTrackingEvent';
 
 const filterStore = useFilterStore();
 
 const route = useRoute();
-
+const { sendAnalytics } = useSendTrackingEvent();
 onBeforeMount(async () => {
 	//TODO костыль, иначе при ините страницы не достается value из запроса
 	if (process.server) return;
@@ -16,6 +17,13 @@ onBeforeMount(async () => {
 		await filterStore.getFilteredEvents();
 		await filterStore.getUsedFilters();
 		filterStore.$patch({ loading: false });
+		if (route.query) {
+			sendAnalytics.search('view_search_results', {
+				search_term: route.fullPath.split('?')[1],
+				city: route.query.city ? getFirstQuery(route.query.city) : '',
+				tags: route.query.tags ? getFirstQuery(route.query.tags) : ''
+			});
+		}
 	});
 });
 

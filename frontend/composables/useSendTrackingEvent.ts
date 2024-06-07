@@ -25,7 +25,6 @@ export type LoginType = {
 
 export type RedirectToEventType = {
 	link_url: string;
-	id_user: string;
 	id_event: string;
 	country?: string;
 	city?: string;

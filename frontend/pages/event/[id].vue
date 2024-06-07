@@ -261,7 +261,6 @@ patchDeleteEventModal({
 					@click="
 						sendAnalytics.redirect('redirect to event url', {
 							link_url: posterEvent.url,
-							id_user: posterEvent.creatorId,
 							id_event: posterEvent.id,
 							country: posterEvent?.location?.country,
 							city: posterEvent?.location?.city,

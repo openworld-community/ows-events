@@ -45,7 +45,6 @@ const tagArray = computed(() => {
 		@click="
 			sendAnalytics.redirect('redirect to event url', {
 				link_url: eventData.url,
-				id_user: eventData.creatorId,
 				id_event: eventData.id,
 				country: eventData?.location?.country,
 				city: eventData?.location?.city,

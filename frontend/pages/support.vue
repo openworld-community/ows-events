@@ -5,8 +5,13 @@ import {
 	SUPORT_TG_BOT_NAME,
 	SUPORT_EMAIL_NAME
 } from '~/constants/url';
-
+const { t } = useI18n();
 const mobile = inject('mobile');
+
+getMeta({
+	title: t('meta.support.title'),
+	description: t('meta.support.description')
+});
 </script>
 
 <template>

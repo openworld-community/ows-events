@@ -24,15 +24,14 @@ const { t } = useI18n();
 onMounted(async () => {
 	await eventStore.getTimezones();
 });
-
+const id = getFirstParam(route.params.editId);
 getMeta({
-	title: t('meta.create.title'),
-	description: t('meta.create.description')
+	title: id === 'new' ? t('meta.create.title') : t('meta.edit.title'),
+	description: id === 'new' ? t('meta.create.description') : t('meta.edit.description')
 });
 definePageMeta({
 	layout: false
 });
-const id = getFirstParam(route.params.editId);
 
 const event = ref<EventOnPoster>();
 const openSuccess = ref(false);

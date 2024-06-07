@@ -1,16 +1,23 @@
+enum AnalyticEventsEnum {
+	SEARCH = 'view_search_results',
+	LOGIN = 'click_login',
+	REDIRECT = 'redirect to event url',
+	CLICK_EVENT = 'click_on_event',
+	FAVOURITES = 'add_favourites',
+	FORM_EVENT = 'form_event'
+}
+
 export const useSendTrackingEvent = () => {
 	const sendAnalytics = {
-		search: (name: 'view_search_results', params: SearchType) =>
-			useTrackEvent('view_search_results', params),
-		login: (name: 'click_login', params: LoginType) => useTrackEvent('click_login', params),
-		redirect: (name: 'redirect to event url', params: RedirectToEventType) =>
-			useTrackEvent('redirect to event url', params),
-		clickEvent: (name: 'click_on_event', params: ClickEventType) =>
-			useTrackEvent('click_on_event', params),
-		favourites: (name: 'add_favourites', params: FavouritesType) =>
-			useTrackEvent('add_favourites', params),
-		formEvent: (name: 'form_event', params: FormEventType) =>
-			useTrackEvent('form_event', params)
+		search: (params: SearchType) => useTrackEvent(AnalyticEventsEnum.SEARCH, params),
+		login: (params: LoginType) => useTrackEvent(AnalyticEventsEnum.LOGIN, params),
+		redirect: (params: RedirectToEventType) =>
+			useTrackEvent(AnalyticEventsEnum.REDIRECT, params),
+		clickEvent: (params: ClickEventType) =>
+			useTrackEvent(AnalyticEventsEnum.CLICK_EVENT, params),
+		favourites: (params: FavouritesType) =>
+			useTrackEvent(AnalyticEventsEnum.FAVOURITES, params),
+		formEvent: (params: FormEventType) => useTrackEvent(AnalyticEventsEnum.FORM_EVENT, params)
 	};
 	return { sendAnalytics };
 };

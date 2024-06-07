@@ -48,7 +48,7 @@ const endDate = computed(() => {
 		"
 		:itemprop="SeoItempropGlobalEnum.URL"
 		@click="
-			sendAnalytics.clickEvent('click_on_event', {
+			sendAnalytics.clickEvent({
 				id_creator: eventData.creatorId,
 				id_event: eventData.id,
 				country: eventData?.location?.country,

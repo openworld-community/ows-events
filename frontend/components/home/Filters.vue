@@ -16,6 +16,11 @@ onBeforeMount(async () => {
 		await filterStore.getFilteredEvents();
 		await filterStore.getUsedFilters();
 		filterStore.$patch({ loading: false });
+		if (route.query) {
+			useTrackEvent('view_search_results', {
+				search_term: route.fullPath
+			});
+		}
 	});
 });
 

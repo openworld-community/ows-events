@@ -34,19 +34,10 @@ const id = getFirstParam(route.params.editId);
 
 const event = ref<EventOnPoster>();
 const openSuccess = ref(false);
-const successCreateEvent = (eventId: string) => {
+
+const onSuccess = (eventId: string) => {
 	openSuccess.value = true;
 	setTimeout(async () => {
-		eventStore.navTo
-			? await navigateTo(localePath(`${eventStore.navTo}`))
-			: await navigateTo(localePath(`${RoutePathEnum.EVENT}/${eventId}`));
-		openSuccess.value = false;
-	}, 1000);
-};
-
-const successEditEvent = (eventId: string) => {
-	openSuccess.value = true;
-	setTimeout(() => {
 		eventStore.navTo
 			? navigateTo(localePath(`${eventStore.navTo}`))
 			: navigateTo(localePath(`${RoutePathEnum.EVENT}/${eventId}`));
@@ -80,13 +71,14 @@ const submitEvent = async (payload: PostEventPayload) => {
 		});
 		if (!error.value) {
 			localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
+
 			useTrackEvent('form_event', {
-				id_user: userStore.id,
+				id_user: event.value.creatorId,
 				id_event: id,
 				country: payload.isOnline ? 'online' : payload.location.country,
 				city: payload.isOnline ? 'online' : payload.location.city
 			});
-			successEditEvent(id);
+			onSuccess(id);
 		}
 	} else {
 		const { data } = await apiRouter.events.add.useMutation({
@@ -101,7 +93,7 @@ const submitEvent = async (payload: PostEventPayload) => {
 				country: payload.isOnline ? 'online' : payload.location.country,
 				city: payload.isOnline ? 'online' : payload.location.city
 			});
-			successCreateEvent(data.value.id);
+			onSuccess(data.value.id);
 		}
 	}
 };

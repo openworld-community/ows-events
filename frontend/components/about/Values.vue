@@ -1,43 +1,27 @@
 <script setup lang="ts">
 
-defineProps({
-	imageUrl: {
-		type: String,
-		default: ''
-	},
-	title: {
-		type: String,
-		defualt: ''
-	},
-});
-
+import { values } from './index';
 
 </script>
 
-<template>
-    
-    <div>
-        <!--
-        <ul>
-            <AboutValuesItems 
-                v-for = "item in advantage"
-                v-bind = "item"
-                :key = "item.title"
-                class = "Values__item"
-            />
-        </ul>
-        -->
-        
-        <img :src="imageUrl" alt="openness">
-        <p> {{ title }}</p>
-        
-
-
-    </div>
-    
+<template> 
+    <ul class="values__list">
+        <AboutValuesItems
+            v-bind = "item"
+            v-for = "item in values"
+            :key = "item.key"
+            class = "values__item"
+        />
+    </ul>   
 </template>
 
-<style>
-
-
+<style lang="less" scoped>
+.values {
+	&__list {
+		display: flex;
+		flex-direction: column;
+		gap: 50px;
+  
+	}
+}
 </style>

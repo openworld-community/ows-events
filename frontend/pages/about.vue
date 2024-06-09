@@ -15,13 +15,9 @@
             <p class="about__text">{{ $t('about.idea') }}</p>
         </div>
 
-        <h3 class="about__values"> {{ $t('about.values.title') }}</h3>
+        <h3 class="about__values_header"> {{ $t('about.values.title') }}</h3>
 
-        <AboutValues
-            imageUrl = '/img/about/openness.png'
-            :title = "$t('about.values.openness')"
-             
-        /> 
+        <AboutValues /> 
       
         <div class="about__navigation">
             
@@ -34,7 +30,8 @@
 <style lang="less" scoped>
 .about {
     width: 100%;
-    padding: 50px;
+    padding: 20px;
+    margin-top: 60px;
     
     
     &__info {
@@ -48,7 +45,7 @@
             position: relative;
             
             &__text-img {
-                // Это для того чтобы расположить "О нас" посередине изображения
+                
                 position: absolute;
                 top: 50%;
                 left: 50%;
@@ -66,13 +63,12 @@
         margin-bottom: 30px;
     }
 
-
-
-    &__values {
+    &__values_header {
         text-align: center;
         font-size: var(--font-size-M);
         font-weight: 600px;
         line-height: 25px;
+        margin-bottom: 30px;
     
     }
 

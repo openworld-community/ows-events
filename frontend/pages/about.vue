@@ -1,5 +1,5 @@
 <script setup lang="ts">
-
+  
 </script>
 
 <template>
@@ -15,10 +15,16 @@
             <p class="about__text">{{ $t('about.idea') }}</p>
         </div>
 
+        <h3 class="about__values"> {{ $t('about.values.title') }}</h3>
 
-        <AboutValues />
-        
+        <AboutValues
+            imageUrl = '/img/about/openness.png'
+            :title = "$t('about.values.openness')"
+             
+        /> 
+      
         <div class="about__navigation">
+            
 
         </div>
 
@@ -35,16 +41,12 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-
     
     }
 
     &__wrapper {
             position: relative;
             
-
-            
-
             &__text-img {
                 // Это для того чтобы расположить "О нас" посередине изображения
                 position: absolute;
@@ -56,7 +58,23 @@
             }
 
         
-        }
+    }
+
+    &__text {
+        line-height: 17px;
+        font-size: var(--font-size-S);
+        margin-bottom: 30px;
+    }
+
+
+
+    &__values {
+        text-align: center;
+        font-size: var(--font-size-M);
+        font-weight: 600px;
+        line-height: 25px;
+    
+    }
 
     
 }

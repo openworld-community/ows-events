@@ -93,8 +93,6 @@ const props = defineProps({
 			:name="props.name"
 			:filled="true"
 			aria-hidden="true"
-			:width="props.width"
-			:height="props.height"
 		/>
 	</span>
 </template>
@@ -103,5 +101,7 @@ const props = defineProps({
 .nuxt-icon:deep(svg) {
 	pointer-events: none;
 	color: v-bind('color');
+	width: v-bind('width');
+	height: v-bind('height');
 }
 </style>

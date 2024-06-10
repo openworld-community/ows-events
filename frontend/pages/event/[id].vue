@@ -254,7 +254,7 @@ patchDeleteEventModal({
 				<CommonButton
 					v-if="posterEvent.url"
 					class="event-info__button-contact"
-					button-kind="dark"
+					:button-kind="userStore.id === posterEvent.creatorId ? 'dark' : 'success'"
 					:button-text="$t('global.button.contact')"
 					:link="posterEvent.url"
 					is-external-link
@@ -292,8 +292,8 @@ patchDeleteEventModal({
 						button-kind="warning"
 						:button-text="$t('global.button.delete')"
 						icon-name="trash"
-						icon-width="16"
-						icon-height="16"
+						icon-width="20px"
+						icon-height="20px"
 						@click="openDeleteEventModal"
 					/>
 					<CommonButton
@@ -302,8 +302,8 @@ patchDeleteEventModal({
 						button-kind="ordinary"
 						:button-text="$t('global.button.edit')"
 						icon-name="edit"
-						icon-width="16"
-						icon-height="16"
+						icon-width="20px"
+						icon-height="20px"
 						@click="onEditButtonClick"
 					/>
 				</div>

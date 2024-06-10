@@ -76,7 +76,7 @@ const isInFavourites = computed(() => {
 
 watch(isInFavourites, (value) => {
 	if (value) {
-		sendAnalytics.favourites('add_favourites', {
+		sendAnalytics.favourites({
 			id_user: posterEvent.value.creatorId,
 			id_event: posterEvent.value.id,
 			country: posterEvent.value?.location?.country,
@@ -259,7 +259,7 @@ patchDeleteEventModal({
 					:link="posterEvent.url"
 					is-external-link
 					@click="
-						sendAnalytics.redirect('redirect to event url', {
+						sendAnalytics.redirect({
 							link_url: posterEvent.url,
 							id_event: posterEvent.id,
 							country: posterEvent?.location?.country,

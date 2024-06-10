@@ -21,7 +21,7 @@ watch(
 	() => route.query,
 	(value) => {
 		if (Object.keys(value).length) {
-			sendAnalytics.search('view_search_results', {
+			sendAnalytics.search({
 				search_term: route.fullPath.split('?')[1],
 				city: value.city ? getFirstQuery(value.city) : '',
 				tags: value.tags ? getFirstQuery(value.tags) : ''

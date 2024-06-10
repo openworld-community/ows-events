@@ -20,7 +20,8 @@ const tagsFields = useField<String[]>(() => 'tags');
 				is-checkbox
 				size="small"
 				:is-disabled="
-					tagsFields.value.value.length >= 6 && !tagsFields.value.value.includes(tag)
+					tagsFields.value.value.filter((el) => el !== Tags.ONLINE).length >= 6 &&
+					!tagsFields.value.value.includes(tag)
 				"
 			/>
 		</div>

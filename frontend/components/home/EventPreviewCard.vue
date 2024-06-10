@@ -8,8 +8,8 @@ import { Tags } from '../../../common/const/tags';
 
 const props = defineProps<{ eventData: EventOnPoster }>();
 const { t } = useI18n();
-const localePath = useLocalePath();
 const mobile = inject('mobile');
+const { sendAnalytics } = useSendTrackingEvent();
 
 const startDate = ref(
 	convertEventDateToLocaleString(
@@ -34,10 +34,10 @@ const endDate = computed(() => {
 </script>
 
 <template>
-	<NuxtLink
+	<CommonNavLink
 		class="card"
 		:prefetch="false"
-		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
+		:to="`${RoutePathEnum.EVENT}/${eventData.id}`"
 		:title="
 			trimString(
 				`Afisha: ${
@@ -47,6 +47,15 @@ const endDate = computed(() => {
 			)
 		"
 		:itemprop="SeoItempropGlobalEnum.URL"
+		@click="
+			sendAnalytics.clickEvent({
+				id_creator: eventData.creatorId,
+				id_event: eventData.id,
+				country: eventData?.location?.country,
+				city: eventData?.location?.city,
+				online: eventData?.isOnline
+			})
+		"
 	>
 		<div
 			class="card__image-container"
@@ -120,7 +129,7 @@ const endDate = computed(() => {
 				/>
 			</div>
 		</div>
-	</NuxtLink>
+	</CommonNavLink>
 </template>
 
 <style scoped lang="less">

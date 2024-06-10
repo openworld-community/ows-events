@@ -5,15 +5,31 @@ import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import { useUserStore } from '../stores/user.store';
 import { RoutePathEnum } from '../constants/enums/route';
 
+const { sendAnalytics } = useSendTrackingEvent();
 const { t } = useI18n();
 
 getMeta({
 	title: t('meta.default_title')
 });
 
+const route = useRoute();
 const userStore = useUserStore();
 
 const localePath = useLocalePath();
+
+watch(
+	() => route.query,
+	(value) => {
+		if (Object.keys(value).length) {
+			sendAnalytics.search({
+				search_term: route.fullPath.split('?')[1],
+				city: value.city ? getFirstQuery(value.city) : '',
+				tags: value.tags ? getFirstQuery(value.tags) : ''
+			});
+		}
+	},
+	{ deep: true }
+);
 
 const {
 	open: openNeedAuthorizeModal,
@@ -32,33 +48,29 @@ const onButtonClick = async () => {
 </script>
 
 <template>
-	<div class="root">
-		<HeaderCommon />
-		<main class="main-page">
-			<div class="main-page__top">
-				<h1 class="main-page__title">{{ $t('home.title') }}</h1>
-				<!-- <HomeUserLocation
+	<main class="main-page">
+		<div class="main-page__top">
+			<h1 class="main-page__title">{{ $t('home.title') }}</h1>
+			<!-- <HomeUserLocation
 					v-if="mobile"
 					class="main-page__location"
 				/> -->
-				<HomeFilters class="main-page__filter" />
-			</div>
+			<HomeFilters class="main-page__filter" />
+		</div>
 
-			<HomeCardList />
+		<HomeCardList />
 
-			<CommonButton
-				class="add-event-button"
-				button-kind="success"
-				is-round
-				icon-name="plus"
-				:alt="$t('home.button.add_event_aria')"
-				:title="$t('home.button.add_event_aria')"
-				aria-haspopup="true"
-				@click="onButtonClick"
-			/>
-		</main>
-		<FooterCommon />
-	</div>
+		<CommonButton
+			class="add-event-button"
+			button-kind="success"
+			is-round
+			icon-name="plus"
+			:alt="$t('home.button.add_event_aria')"
+			:title="$t('home.button.add_event_aria')"
+			aria-haspopup="true"
+			@click="onButtonClick"
+		/>
+	</main>
 </template>
 
 <style lang="less" scoped>

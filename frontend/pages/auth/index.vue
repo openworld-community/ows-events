@@ -1,13 +1,14 @@
 <script setup>
-const mobile = inject('mobile');
+const { t } = useI18n();
+getMeta({
+	title: t('meta.auth.title'),
+	description: t('meta.auth.description')
+});
+definePageMeta({
+	layout: 'auth'
+});
 </script>
 
 <template>
-	<div class="root">
-		<HeaderCommon
-			v-if="mobile"
-			:has-back-button="mobile"
-		/>
-		<UserUnauthorized />
-	</div>
+	<UserUnauthorized />
 </template>

@@ -7,7 +7,7 @@ export const getEventsByStatusSchema = {
 	params: {
 		type: 'object',
 		properties: {
-			country: { type: 'string' }
+			status: { type: 'string' }
 		}
 	},
 	response: {

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { RoutePathEnum } from '@/constants/enums/route';
-import { SUPPORT_TG_URL } from '../../../constants/url';
 import { useUserStore } from '../../../stores/user.store';
 import { RouteNameEnum } from '../../../constants/enums/route';
 import { useModal } from 'vue-final-modal';
@@ -37,7 +36,7 @@ const onButtonClick = async () => {
 		<ul>
 			<HeaderSidebarItem
 				v-if="getRouteName(route.name as string) !== RouteNameEnum.AUTH"
-				:link-to="RoutePathEnum.USER_PAGE"
+				:link-to="localePath(RoutePathEnum.USER_PAGE)"
 				:text="
 					userStore.isAuthorized
 						? $t('header.navigation.user')
@@ -55,29 +54,37 @@ const onButtonClick = async () => {
 			/>
 
 			<HeaderSidebarItem
-				:link-to="RoutePathEnum.ABOUT"
+				:link-to="localePath(RoutePathEnum.ABOUT)"
 				:text="$t('header.navigation.about')"
 				icon-name="info"
 				@click="emit('close')"
-			/>
+			/>			
 
 			<HeaderSidebarItem
-				:link-to="SUPPORT_TG_URL"
+				:link-to="localePath(RoutePathEnum.SUPPORT)"
 				:text="$t('header.navigation.support')"
-				is-external-link
 				icon-name="contact-tg"
+				@click="emit('close')"
+			/>
+			
+			<HeaderSidebarItem
+				component-type="link"
+				:link-to="localePath(RoutePathEnum.COOPERATION)"
+				:text="$t('header.navigation.cooperation')"
+				icon-name="cooperation"
+				:current="getRouteName(route.name as string) === RouteNameEnum.COOPERATION"
 				@click="emit('close')"
 			/>
 
 			<HeaderSidebarItem
-				:link-to="RoutePathEnum.DONATION"
+				:link-to="localePath(RoutePathEnum.DONATION)"
 				:text="$t('header.navigation.donation')"
 				icon-name="donate"
 				@click="emit('close')"
 			/>
 
 			<HeaderSidebarItem
-				:link-to="RoutePathEnum.LIMITATION_OF_LIABILITY"
+				:link-to="localePath(RoutePathEnum.LIMITATION_OF_LIABILITY)"
 				:text="$t('header.navigation.limitation_of_liability')"
 				icon-name="privacy"
 				@click="emit('close')"
@@ -89,13 +96,13 @@ const onButtonClick = async () => {
 		<!--            :aria-label="translate('modal.header.event.manage')"-->
 		<!--          >-->
 		<!--            <img-->
-		<!--              src="@/assets/img/icon/edit.svg"-->
+		<!--              src="@/assets/img/icons/edit.svg"-->
 		<!--              width="24"-->
 		<!--              height="24"-->
 		<!--              :alt="translate('event.button.edit')"-->
 		<!--            />-->
 		<!--            <img-->
-		<!--              src="@/assets/img/icon/share.svg"-->
+		<!--              src="@/assets/img/icons/share.svg"-->
 		<!--              width="24"-->
 		<!--              height="24"-->
 		<!--              :alt="translate('global.button.share')"-->

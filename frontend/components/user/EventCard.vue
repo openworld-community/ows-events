@@ -6,6 +6,7 @@ import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enu
 import { dateNow } from '~/utils/dates';
 import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
+import { useSendTrackingEvent } from '~/composables/useSendTrackingEvent';
 
 const props = defineProps({
 	eventData: {
@@ -13,10 +14,10 @@ const props = defineProps({
 		required: true
 	}
 });
+const { sendAnalytics } = useSendTrackingEvent();
 const mobile: ComputedRef<boolean> = inject('mobile');
 const tablet: ComputedRef<boolean> = inject('tablet');
 const desktop: ComputedRef<boolean> = inject('desktop');
-const localePath = useLocalePath();
 
 const startDate = ref(
 	convertEventDateToLocaleString(
@@ -34,13 +35,22 @@ const tagArray = computed(() => {
 </script>
 
 <template>
-	<NuxtLink
-		:to="localePath(`${RoutePathEnum.EVENT}/${eventData.id}`)"
+	<CommonNavLink
+		:to="`${RoutePathEnum.EVENT}/${eventData.id}`"
 		:class="[
 			'card',
 			{ 'card--expired': eventData.date + eventData.durationInSeconds * 1000 < dateNow }
 		]"
 		:itemprop="SeoItempropGlobalEnum.URL"
+		@click="
+			sendAnalytics.clickEvent({
+				id_creator: eventData.creatorId,
+				id_event: eventData.id,
+				country: eventData?.location?.country,
+				city: eventData?.location?.city,
+				online: eventData?.isOnline
+			})
+		"
 	>
 		<div
 			:class="[
@@ -88,7 +98,7 @@ const tagArray = computed(() => {
 				class="description__tags"
 			/>
 		</div>
-	</NuxtLink>
+	</CommonNavLink>
 </template>
 
 <style scoped lang="less">

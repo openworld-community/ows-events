@@ -7,6 +7,13 @@ dayjs.extend(utc);
 export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
 export const dateNow = Date.now();
 
+export const getDateFromQuery = (queryDate: string | undefined, keepTimezone = false): Date => {
+	if (!queryDate) return null;
+	const djs = !keepTimezone ? dayjs.utc(queryDate) : dayjs(queryDate);
+	if (!djs.isValid()) return null;
+	return djs.toDate();
+};
+
 export const getDateFromEpochInMs = (epoch: number | undefined, keepTimezone = false) => {
 	if (!epoch) return null;
 	const djs = !keepTimezone ? dayjs.utc(epoch) : dayjs(epoch);

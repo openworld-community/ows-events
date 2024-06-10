@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useSwitchLocalePath } from '../../.nuxt/imports';
 import { TOKEN_MAX_AGE_SECONDS } from '../../constants/defaultValues/time';
 import { CookieNameEnum } from '../../constants/enums/common';
 

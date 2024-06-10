@@ -5,15 +5,31 @@ import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 import { useUserStore } from '../stores/user.store';
 import { RoutePathEnum } from '../constants/enums/route';
 
+const { sendAnalytics } = useSendTrackingEvent();
 const { t } = useI18n();
 
 getMeta({
 	title: t('meta.default_title')
 });
 
+const route = useRoute();
 const userStore = useUserStore();
 
 const localePath = useLocalePath();
+
+watch(
+	() => route.query,
+	(value) => {
+		if (Object.keys(value).length) {
+			sendAnalytics.search({
+				search_term: route.fullPath.split('?')[1],
+				city: value.city ? getFirstQuery(value.city) : '',
+				tags: value.tags ? getFirstQuery(value.tags) : ''
+			});
+		}
+	},
+	{ deep: true }
+);
 
 const {
 	open: openNeedAuthorizeModal,

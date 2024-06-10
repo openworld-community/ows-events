@@ -6,6 +6,7 @@
     import {
         REPO_URL,
         SocialLinks,
+        VITE_DOMAIN
 	    
     } from '~/constants/url';   
   
@@ -31,7 +32,7 @@
         <div class="about__navigation">
 
             <p class="about__paragraph">
-				{{ $t('about.github') }}
+				<p>{{ $t('about.github') }} </p> 
 				<CommonNavLink
 					:href="REPO_URL"
 					class="about__link"
@@ -40,6 +41,17 @@
 					:itemprop="SeoItempropAboutEnum.SIGNIFICANT_LINK"
 				>
 					Repo
+				</CommonNavLink>
+			</p>
+
+            <p class="about__paragraph">
+			   <p>{{ $t('about.website') }}</p> 
+				<CommonNavLink
+					:href="VITE_DOMAIN"
+					class="about__link"
+					
+				>
+                    https://afisha.peredelano.com/ru
 				</CommonNavLink>
 			</p>
 
@@ -90,12 +102,16 @@
         flex-direction: column;
         align-items: center;
 
+        
 
     
     }
 
     &__wrapper {
             position: relative;
+
+            
+            
             
             &__text-img {
                 
@@ -104,6 +120,8 @@
                 left: 50%;
                 transform: translate(-50%, -50%);
                 font-size: 60px;
+
+            
 
             }
 
@@ -114,6 +132,8 @@
         line-height: 17px;
         font-size: var(--font-size-S);
         margin-bottom: 30px;
+
+        
     }
 
     &__values_header {
@@ -133,7 +153,18 @@
         gap: 20px;
         margin-top: 30px;
     }
-    // Ссылка на гит хаб
+    &__paragraph{
+        display: flex;
+        font-size: var(--font-size-S);
+    }
+    &__paragraph p{
+        font-weight: 600;
+        margin-right: 5px;
+        
+
+       
+    }
+    
     &__link {
 		color: var(--color-link);
 		text-decoration: underline;

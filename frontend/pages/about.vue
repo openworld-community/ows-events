@@ -1,4 +1,13 @@
 <script setup lang="ts">
+
+    import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
+    
+
+    import {
+        REPO_URL,
+        SocialLinks,
+	    
+    } from '~/constants/url';   
   
 </script>
 
@@ -20,6 +29,48 @@
         <AboutValues /> 
       
         <div class="about__navigation">
+
+            <p class="about__paragraph">
+				{{ $t('about.github') }}
+				<CommonNavLink
+					:href="REPO_URL"
+					class="about__link"
+					is-external-link
+					rel="noopener noreferrer"
+					:itemprop="SeoItempropAboutEnum.SIGNIFICANT_LINK"
+				>
+					Repo
+				</CommonNavLink>
+			</p>
+
+            <div class="about__social-links social-links">
+                <h3 class="social-links__title">
+                    {{ $t('about.social.title') }}
+                </h3>
+                <ul class="social-links__list">
+                    <li
+                        v-for="(link, key) in SocialLinks"
+                        :key="link"
+                        class="social-links__item"
+                    >
+                        <CommonNavLink
+                            :to="link"
+                            is-external-link
+                            class="social-links__link"
+                            :style="`backgroundColor: var(--color-social-${key})`"
+                            :title="$t(`about.social_title.${key}`)"
+                            :aria-label="$t(`about.social_title.${key}`)"
+                            :itemprop="SeoItempropAboutEnum.SOCIAL_LINK"
+                        >
+                            <CommonIcon
+                                :name="`social/${key}-round`"
+                                width="48px"
+                                height="48px"
+                            />
+                        </CommonNavLink>
+                    </li>
+                </ul>
+		    </div>
             
 
         </div>
@@ -38,6 +89,8 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+
+
     
     }
 
@@ -71,8 +124,55 @@
         margin-bottom: 30px;
     
     }
+// Навигация
+
+    &__navigation {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin-top: 30px;
+    }
+    // Ссылка на гит хаб
+    &__link {
+		color: var(--color-link);
+		text-decoration: underline;
+		font-weight: 600px;
+	}
 
     
+}
+// Социальные сети
+.social-links {
+	&__title {
+		font-size: var(--font-size-L);
+		line-height: 28px;
+		
+	}
+
+	&__list {
+		display: flex;
+        justify-content: center;
+        margin-top: 20px;
+	}
+
+	&__item {
+		display: flex;
+		width: 48px;
+		height: 48px;
+		justify-content: center;
+		align-items: center;
+		margin-right: 10px;
+	}
+
+	&__link {
+		display: flex;
+		width: 40px;
+		height: 40px;
+		justify-content: center;
+		align-items: center;
+		border-radius: 50%;
+	}
 }
 
     

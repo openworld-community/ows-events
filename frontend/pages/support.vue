@@ -15,14 +15,29 @@ getMeta({
 </script>
 
 <template>
-	<main class="support">
-		<div class="support__navigation">
+	<main
+		class="support"
+		itemscope
+		itemtype="https://schema.org/QAPage"
+	>
+		<div
+			class="support__navigation"
+			itemprop="mainEntity"
+			itemscope
+			itemtype="https://schema.org/Question"
+		>
 			<div class="support__navigation-text">
 				<div>
 					<p>{{ $t('support.title.hi') }}</p>
-					<p>{{ $t('support.title.main') }}</p>
+					<p itemprop="name">{{ $t('support.title.main') }}</p>
 				</div>
-				<p>{{ $t('support.message') }}</p>
+				<p
+					itemprop="suggestedAnswer"
+					itemscope
+					itemtype="https://schema.org/Answer"
+				>
+					{{ $t('support.message') }}
+				</p>
 			</div>
 
 			<div
@@ -43,6 +58,7 @@ getMeta({
 					:button-text="SUPORT_EMAIL_NAME"
 					class="button__success--filled"
 					button-kind="success"
+					itemprop="url"
 				/>
 				<CommonButton
 					is-external-link
@@ -51,6 +67,7 @@ getMeta({
 					:button-text="SUPORT_TG_BOT_NAME"
 					class="button__success--filled"
 					button-kind="success"
+					itemprop="url"
 				/>
 			</div>
 		</div>

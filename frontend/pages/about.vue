@@ -31,7 +31,7 @@
       
         <div class="about__navigation">
 
-            <p class="about__paragraph">
+            <div class="about__paragraph">
 				<p>{{ $t('about.github') }} </p> 
 				<CommonNavLink
 					:href="REPO_URL"
@@ -42,9 +42,9 @@
 				>
 					Repo
 				</CommonNavLink>
-			</p>
+			</div>
 
-            <p class="about__paragraph">
+            <div class="about__paragraph">
 			   <p>{{ $t('about.website') }}</p> 
 				<CommonNavLink
 					:href="VITE_DOMAIN"
@@ -53,7 +53,7 @@
 				>
                     https://afisha.peredelano.com/ru
 				</CommonNavLink>
-			</p>
+			</div>
 
             <div class="about__social-links social-links">
                 <h3 class="social-links__title">
@@ -95,53 +95,90 @@
     width: 100%;
     padding: 20px;
     margin-top: 60px;
+
+    
     
     
     &__info {
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
 
-        
+        @media (min-width: 365px) {
+			flex-direction: row;
+            
+            
+		}
+
 
     
     }
 
     &__wrapper {
             position: relative;
+            text-align: center;
+            
+            @media (min-width: 365px) {
+			    flex-basis: 27%; 
+		    }
 
+            &__image {
+                @media (min-width: 365px) {
+			        width: 50vw;
+		        }  
+            }
             
             
-            
-            &__text-img {
-                
+            &__text-img {  
                 position: absolute;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                font-size: 60px;
+                font-size: 80px;
 
-            
-
-            }
-
-        
+                @media (min-width: 365px) {
+			        font-size: 7vw;
+                    
+		        }
+            }   
     }
 
     &__text {
         line-height: 17px;
         font-size: var(--font-size-S);
-        margin-bottom: 30px;
-
+        text-align: justify;
         
+
+        @media (min-width: 365px) {
+			    flex-basis: 73%;
+                padding-left: 15px;
+            
+		    }
+        @media (min-width: 1000px) {
+            font-size: var(--font-size-ML);
+            flex-basis: 60%;
+            line-height: 24px;
+        }
     }
 
     &__values_header {
         text-align: center;
         font-size: var(--font-size-M);
-        font-weight: 600px;
+        font-weight: 600;
         line-height: 25px;
-        margin-bottom: 30px;
+        margin: 30px;
+
+        @media (min-width: 365px) {
+		    font-size: var(--font-size-ML);
+                    
+		}
+        @media (min-width: 768) {
+            font-size: var(--font-size-XL);
+            
+        }
+
+
     
     }
 // Навигация
@@ -151,19 +188,26 @@
         flex-direction: column;
         align-items: center;
         gap: 20px;
-        margin-top: 30px;
+        margin-top: 40px;
+        font-size: var(--font-size-S);
+
+        @media (min-width: 365px) {
+			        font-size: var(--font-size-M);
+                    margin-top: 90px
+                    
+		        }
     }
     &__paragraph{
         display: flex;
-        font-size: var(--font-size-S);
+        
     }
     &__paragraph p{
         font-weight: 600;
-        margin-right: 5px;
-        
-
-       
+        margin-right: 5px;    
     }
+   
+    
+    
     
     &__link {
 		color: var(--color-link);
@@ -176,7 +220,7 @@
 // Социальные сети
 .social-links {
 	&__title {
-		font-size: var(--font-size-L);
+		
 		line-height: 28px;
 		
 	}

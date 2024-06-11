@@ -20,8 +20,17 @@ import { values } from './index';
 	&__list {
 		display: flex;
 		flex-direction: column;
+        align-items: center;
 		gap: 50px;
+
+        @media (min-width: 365px) {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+		}
+        
   
 	}
+    
 }
 </style>

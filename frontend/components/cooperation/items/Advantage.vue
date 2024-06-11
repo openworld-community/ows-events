@@ -59,6 +59,10 @@ const alignSelf = computed(() => (props.isRevercedText ? 'flex-end' : 'flex-star
 
 	&__description {
 		line-height: 1.5;
+		@media (max-width: 375px) {
+			padding-bottom: 10px;
+		}
+		
 	}
 
 	&__header {
@@ -67,6 +71,9 @@ const alignSelf = computed(() => (props.isRevercedText ? 'flex-end' : 'flex-star
 		@media (min-width: 375px) and (max-width: 768px) {
 			font-size: var(--font-size-XL);
 			text-align: center;
+		}
+		@media (max-width: 375px) {
+			text-align: start;
 		}
 	}
 }

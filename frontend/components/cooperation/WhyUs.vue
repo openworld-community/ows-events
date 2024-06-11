@@ -28,6 +28,11 @@
 			font-size: 26px;
 			text-align: center;
 		}
+		@media (max-width: 375px) {
+			padding-bottom: 45px;
+			font-size: 26px;
+			text-align: center;
+		}
 	}
 	&__description {
 		font-size: var(--font-size-L);

@@ -62,7 +62,6 @@ const alignSelf = computed(() => (props.isRevercedText ? 'flex-end' : 'flex-star
 		@media (max-width: 375px) {
 			padding-bottom: 10px;
 		}
-		
 	}
 
 	&__header {

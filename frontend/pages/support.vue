@@ -126,7 +126,7 @@ getMeta({
 			@media (max-width: 375px) {
 				font-size: var(--font-size-S);
 				font-weight: 600;
-				gap:20px;
+				gap: 20px;
 				line-height: 1.2;
 			}
 		}
@@ -141,8 +141,8 @@ getMeta({
 				padding-top: 45px;
 			}
 			@media (max-width: 375px) {
-			padding-top: 80px;
-		}
+				padding-top: 80px;
+			}
 		}
 	}
 

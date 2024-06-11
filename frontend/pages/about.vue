@@ -96,9 +96,6 @@
     padding: 20px;
     margin-top: 60px;
 
-    
-    
-    
     &__info {
         display: flex;
         flex-direction: column;
@@ -106,13 +103,8 @@
         justify-content: center;
 
         @media (min-width: 365px) {
-			flex-direction: row;
-            
-            
+			flex-direction: row;   
 		}
-
-
-    
     }
 
     &__wrapper {
@@ -138,8 +130,7 @@
                 font-size: 80px;
 
                 @media (min-width: 365px) {
-			        font-size: 7vw;
-                    
+			        font-size: 7vw;   
 		        }
             }   
     }
@@ -149,12 +140,11 @@
         font-size: var(--font-size-S);
         text-align: justify;
         
-
         @media (min-width: 365px) {
 			    flex-basis: 73%;
                 padding-left: 15px;
-            
-		    }
+		}
+
         @media (min-width: 1000px) {
             font-size: var(--font-size-ML);
             flex-basis: 60%;
@@ -170,16 +160,12 @@
         margin: 30px;
 
         @media (min-width: 365px) {
-		    font-size: var(--font-size-ML);
-                    
+		    font-size: var(--font-size-ML);          
 		}
+
         @media (min-width: 768) {
-            font-size: var(--font-size-XL);
-            
+            font-size: var(--font-size-XL);  
         }
-
-
-    
     }
 // Навигация
 
@@ -192,37 +178,31 @@
         font-size: var(--font-size-S);
 
         @media (min-width: 365px) {
-			        font-size: var(--font-size-M);
-                    margin-top: 90px
+            font-size: var(--font-size-M);
+            margin-top: 90px
                     
-		        }
+		}
     }
+
     &__paragraph{
-        display: flex;
-        
+        display: flex;  
     }
+
     &__paragraph p{
         font-weight: 600;
         margin-right: 5px;    
     }
    
-    
-    
-    
     &__link {
 		color: var(--color-link);
 		text-decoration: underline;
 		font-weight: 600px;
-	}
-
-    
+	}  
 }
 // Социальные сети
 .social-links {
 	&__title {
-		
-		line-height: 28px;
-		
+		line-height: 28px;	
 	}
 
 	&__list {
@@ -249,6 +229,5 @@
 		border-radius: 50%;
 	}
 }
-
-    
+  
 </style>

@@ -10,13 +10,15 @@ export default {
 		accessibility: 'Доступность: мы делаем культурные события доступными для всех;',
 		quality: 'Качество: не уступаем в качестве как крупным платформам, так и маленьким инициативам.'
 	},
+
 	github: ' Ссылка на GitHub проекта:  ',
-	website: 'Наш сайт:  ',
+	website: 'Наш сайт:',
 
 	social: {
 		title: 'Подпишитесь на нас в соцсетях:',
 		alt: 'Ссылка на страницу в'
 	},
+	
 	social_title: {
 		instagram: 'Instagram Afisha',
 		twitter: 'Twitter Afisha',

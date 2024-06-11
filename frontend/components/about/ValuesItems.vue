@@ -18,10 +18,6 @@
 <style lang="less" scoped>
 .ValuesItem {
 
-    
-
-
-    
 	&__text {
 		font-size: var(--font-size-S);
         width: 200px;
@@ -30,16 +26,14 @@
         @media (min-width: 768px) {
 			font-size: var(--font-size-L);
             width: 40vw;  
-		}
-       
+		} 
 	}
 
     &__image {
-        
         @media (min-width: 365px) {
             width: 40vw;
-		}
-        
+		}  
     }
 }
+
 </style>

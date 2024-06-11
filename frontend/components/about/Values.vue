@@ -28,8 +28,6 @@ import { values } from './index';
             flex-wrap: wrap;
             justify-content: center;
 		}
-        
-  
 	}
     
 }

@@ -8,7 +8,7 @@
 
 <template>
     <li class="ValuesItem__list">
-        <img :src="imageUrl" alt="openness">
+        <img class="ValuesItem__image" :src="imageUrl" alt="openness">
         <p class="ValuesItem__text"> {{ $t(title) }}</p>
     </li>
    
@@ -18,18 +18,28 @@
 <style lang="less" scoped>
 .ValuesItem {
 
-    &__list {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    
 
-    }
+
     
 	&__text {
 		font-size: var(--font-size-S);
-        width: 305px;
+        width: 200px;
         margin-top: 10px;
+
+        @media (min-width: 768px) {
+			font-size: var(--font-size-L);
+            width: 40vw;  
+		}
        
 	}
+
+    &__image {
+        
+        @media (min-width: 365px) {
+            width: 40vw;
+		}
+        
+    }
 }
 </style>

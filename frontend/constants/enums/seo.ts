@@ -15,7 +15,10 @@ export enum SeoItemTypeEnum {
 	NAV = `${SEO_SCHEMA_BASE_URL}SiteNavigationElement`,
 	URL = `${SEO_SCHEMA_BASE_URL}URL`,
 	ORGANIZATION = `${SEO_SCHEMA_BASE_URL}Organization`,
-	USER = `${SEO_SCHEMA_BASE_URL}Person`
+	USER = `${SEO_SCHEMA_BASE_URL}Person`,
+	QA_PAGE = `${SEO_SCHEMA_BASE_URL}QAPage`,
+	QUESTION = `${SEO_SCHEMA_BASE_URL}Question`,
+	ANSWER = `${SEO_SCHEMA_BASE_URL}Answer`
 }
 
 // ITEMPROPS

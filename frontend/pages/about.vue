@@ -1,8 +1,6 @@
 <script setup lang="ts">
 
     import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
-    
-
     import {
         REPO_URL,
         SocialLinks,
@@ -13,12 +11,21 @@
 </script>
 
 <template>
-    <main class="about">
-        <div class="about__info">
+    <main 
+        class="about"
+        itemscope
+		:itemtype="SeoItemTypeEnum.ABOUT"
+    >
+        <div 
+            class="about__info"
+            :itemprop="SeoItempropAboutEnum.MAIN_CONTENT"
+        
+        >
             <div class="about__wrapper">
                 <img
                     class="about__wrapper__image"
-                    src="@/assets/img/about/about-info.png"   
+                    src="@/assets/img/about/about-info.png"
+                    :itemprop="SeoItempropAboutEnum.IMAGE"   
 		        />
                 <p class="about__wrapper__text-img">{{ $t('about.title') }}</p>
             </div>
@@ -49,6 +56,7 @@
 				<CommonNavLink
 					:href="VITE_DOMAIN"
 					class="about__link"
+                    :itemprop="SeoItempropAboutEnum.RELATED_LINK"
 					
 				>
                     https://afisha.peredelano.com/ru
@@ -102,7 +110,7 @@
         align-items: center;
         justify-content: center;
 
-        @media (min-width: 365px) {
+        @media (min-width: 440px) {
 			flex-direction: row;   
 		}
     }
@@ -111,12 +119,12 @@
             position: relative;
             text-align: center;
             
-            @media (min-width: 365px) {
+            @media (min-width: 440px) {
 			    flex-basis: 27%; 
 		    }
 
             &__image {
-                @media (min-width: 365px) {
+                @media (min-width: 440px) {
 			        width: 50vw;
 		        }  
             }
@@ -129,7 +137,7 @@
                 transform: translate(-50%, -50%);
                 font-size: 80px;
 
-                @media (min-width: 365px) {
+                @media (min-width: 440px) {
 			        font-size: 7vw;   
 		        }
             }   

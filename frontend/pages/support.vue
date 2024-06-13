@@ -5,6 +5,7 @@ import {
 	SUPORT_TG_BOT_NAME,
 	SUPORT_EMAIL_NAME
 } from '~/constants/url';
+import { SeoItemTypeEnum, SeoItempropGlobalEnum } from '~/constants/enums/seo';
 const { t } = useI18n();
 const mobile = inject('mobile');
 const imgLink = '/img/support/support.webp';
@@ -16,14 +17,29 @@ getMeta({
 </script>
 
 <template>
-	<main class="support">
-		<div class="support__navigation">
+	<main
+		class="support"
+		itemscope
+		:itemtype="SeoItemTypeEnum.QA_PAGE"
+	>
+		<div
+			class="support__navigation"
+			itemprop="mainEntity"
+			itemscope
+			:itemtype="SeoItemTypeEnum.QUESTION"
+		>
 			<div class="support__navigation-text">
 				<div>
 					<p class="support__navigation-hi">{{ $t('support.title.hi') }}</p>
-					<p>{{ $t('support.title.main') }}</p>
+					<p :itemprop="SeoItempropGlobalEnum.TITLE">{{ $t('support.title.main') }}</p>
 				</div>
-				<p>{{ $t('support.message') }}</p>
+				<p
+					itemprop="suggestedAnswer"
+					itemscope
+					:itemtype="SeoItemTypeEnum.ANSWER"
+				>
+					{{ $t('support.message') }}
+				</p>
 			</div>
 
 			<div
@@ -32,6 +48,7 @@ getMeta({
 			>
 				<img
 					class="support__design-image"
+					:itemprop="SeoItempropGlobalEnum.IMAGE"
 					:src="imgLink"
 				/>
 				<p class="support__design-question">{{ $t('support.question') }}</p>
@@ -44,6 +61,7 @@ getMeta({
 					:button-text="SUPORT_EMAIL_NAME"
 					class="button__success--filled"
 					button-kind="success"
+					:itemprop="SeoItempropGlobalEnum.URL"
 				/>
 				<CommonButton
 					is-external-link
@@ -52,7 +70,7 @@ getMeta({
 					:button-text="SUPORT_TG_BOT_NAME"
 					class="button__success--filled"
 					button-kind="success"
-					font-size="10px"
+					:itemprop="SeoItempropGlobalEnum.URL"
 				/>
 			</div>
 		</div>
@@ -63,6 +81,7 @@ getMeta({
 			<img
 				class="support__design-image"
 				:src="imgLink"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
 			<p class="support__design-question">{{ $t('support.question') }}</p>
 		</div>

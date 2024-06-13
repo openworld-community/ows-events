@@ -16,9 +16,10 @@ import { apiRouter } from '../../composables/useApiRouter';
 import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
 import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
-import { UserRoles } from '../../../common/const/userRoles';
 import { validateEventRole } from '../../utils/roles';
+import { useSendTrackingEvent } from '~/composables/useSendTrackingEvent';
 
+const { sendAnalytics } = useSendTrackingEvent();
 const mobile = inject<boolean>('mobile');
 const route = useRoute();
 
@@ -71,6 +72,18 @@ getMeta({
 
 const isInFavourites = computed(() => {
 	return userStore.favouriteIDs.includes(id);
+});
+
+watch(isInFavourites, (value) => {
+	if (value) {
+		sendAnalytics.favourites({
+			id_user: posterEvent.value.creatorId,
+			id_event: posterEvent.value.id,
+			country: posterEvent.value?.location?.country,
+			city: posterEvent.value?.location?.city,
+			online: posterEvent.value?.isOnline
+		});
+	}
 });
 
 const toggleFavourites = async () => {
@@ -241,11 +254,19 @@ patchDeleteEventModal({
 				<CommonButton
 					v-if="posterEvent.url"
 					class="event-info__button-contact"
-					button-kind="dark"
+					:button-kind="userStore.id === posterEvent.creatorId ? 'dark' : 'success'"
 					:button-text="$t('global.button.contact')"
 					:link="posterEvent.url"
 					is-external-link
-					@click="useTrackEvent('redirect to event url')"
+					@click="
+						sendAnalytics.redirect({
+							link_url: posterEvent.url,
+							id_event: posterEvent.id,
+							country: posterEvent?.location?.country,
+							city: posterEvent?.location?.city,
+							online: posterEvent?.isOnline
+						})
+					"
 				/>
 			</div>
 
@@ -271,8 +292,8 @@ patchDeleteEventModal({
 						button-kind="warning"
 						:button-text="$t('global.button.delete')"
 						icon-name="trash"
-						icon-width="16"
-						icon-height="16"
+						icon-width="20px"
+						icon-height="20px"
 						@click="openDeleteEventModal"
 					/>
 					<CommonButton
@@ -281,8 +302,8 @@ patchDeleteEventModal({
 						button-kind="ordinary"
 						:button-text="$t('global.button.edit')"
 						icon-name="edit"
-						icon-width="16"
-						icon-height="16"
+						icon-width="20px"
+						icon-height="20px"
 						@click="onEditButtonClick"
 					/>
 				</div>

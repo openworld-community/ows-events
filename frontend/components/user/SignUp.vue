@@ -58,7 +58,6 @@ const onSubmit = handleSubmit(async (values) => {
 			console.log('error', error.value);
 			return;
 		}
-
 		navigateTo(data.value, { external: true });
 	} catch (error) {
 		console.log(error);

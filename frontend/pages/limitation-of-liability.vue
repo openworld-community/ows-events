@@ -4,7 +4,12 @@ import {
 	SeoItempropURLEnum,
 	SeoItemTypeEnum
 } from '../constants/enums/seo';
+const { t } = useI18n();
 import { RoutePathEnum } from '../constants/enums/route';
+getMeta({
+	title: t('meta.limitation_of_liability.title'),
+	description: t('meta.limitation_of_liability.description')
+});
 </script>
 
 <template>

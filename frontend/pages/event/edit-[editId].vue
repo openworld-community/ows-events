@@ -2,6 +2,7 @@
 import { LocalStorageEnum } from '../../constants/enums/common';
 import type { EventOnPoster, PostEventPayload } from '../../../common/types/event';
 import { useEventStore } from '../../stores/event.store';
+import { useUserStore } from '../../stores/user.store';
 import { RoutePathEnum } from '../../constants/enums/route';
 
 import { useRouter, useRoute, navigateTo } from 'nuxt/app';
@@ -10,41 +11,34 @@ import { apiRouter } from '../../composables/useApiRouter';
 import { getFirstParam } from '../../utils';
 
 import { getInitialEventFormValues } from '../../utils/events';
+import { useSendTrackingEvent } from '~/composables/useSendTrackingEvent';
 
+const { sendAnalytics } = useSendTrackingEvent();
 const router = useRouter();
 const localePath = useLocalePath();
 const route = useRoute();
+const userStore = useUserStore();
 const eventStore = useEventStore();
 const { t } = useI18n();
 
 onMounted(async () => {
 	await eventStore.getTimezones();
 });
-
+const id = getFirstParam(route.params.editId);
 getMeta({
-	title: t('meta.create.title'),
-	description: t('meta.create.description')
+	title: id === 'new' ? t('meta.create.title') : t('meta.edit.title'),
+	description: id === 'new' ? t('meta.create.description') : t('meta.edit.description')
 });
 definePageMeta({
 	layout: false
 });
-const id = getFirstParam(route.params.editId);
 
 const event = ref<EventOnPoster>();
 const openSuccess = ref(false);
-const successCreateEvent = (eventId: string) => {
+
+const onSuccess = (eventId: string) => {
 	openSuccess.value = true;
 	setTimeout(async () => {
-		eventStore.navTo
-			? await navigateTo(localePath(`${eventStore.navTo}`))
-			: await navigateTo(localePath(`${RoutePathEnum.EVENT}/${eventId}`));
-		openSuccess.value = false;
-	}, 1000);
-};
-
-const successEditEvent = (eventId: string) => {
-	openSuccess.value = true;
-	setTimeout(() => {
 		eventStore.navTo
 			? navigateTo(localePath(`${eventStore.navTo}`))
 			: navigateTo(localePath(`${RoutePathEnum.EVENT}/${eventId}`));
@@ -78,7 +72,15 @@ const submitEvent = async (payload: PostEventPayload) => {
 		});
 		if (!error.value) {
 			localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
-			successEditEvent(id);
+
+			sendAnalytics.formEvent({
+				id_user: event.value.creatorId,
+				id_event: id,
+				country: payload?.location?.country,
+				city: payload?.location?.city,
+				online: payload?.isOnline
+			});
+			onSuccess(id);
 		}
 	} else {
 		const { data } = await apiRouter.events.add.useMutation({
@@ -87,8 +89,14 @@ const submitEvent = async (payload: PostEventPayload) => {
 
 		if (data.value) {
 			localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
-
-			successCreateEvent(data.value.id);
+			sendAnalytics.formEvent({
+				id_user: userStore.id,
+				id_event: 'new',
+				country: payload?.location?.country,
+				city: payload?.location?.city,
+				online: payload?.isOnline
+			});
+			onSuccess(data.value.id);
 		}
 	}
 };

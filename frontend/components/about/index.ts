@@ -1,10 +1,11 @@
 export type values = {
 	title: string;
 	imageUrl: string;
+	key: number;
 	
 };
 
-export const values: Record<string, Advantage> = {
+export const values: Record<string, values> = {
 	openness: {
 		title: 'about.values.openness',
 		imageUrl: '/img/about/openness.png',

@@ -2,10 +2,13 @@
 name: Incident
 about: Ошибка, найденная в проде или на демо
 title: ''
-labels: 'bug'
+labels: 'incident'
 assignees: ''
 
 ---
+
+### Критичность
+В каком релизе был добавлен функционал, в котором возникла ошибка
 
 ### Описание
 Опишите баг
@@ -14,6 +17,7 @@ assignees: ''
 Опишите ожидаемое поведение
 
 ### Условия воспроизведение
+- Среда [e.g. Prod, Demo]
 - Device [e.g. iPhone6, Desktop]
 - OS: [e.g. iOS, Windows]
 - Browser [e.g. chrome, safari]

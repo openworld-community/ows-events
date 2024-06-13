@@ -8,7 +8,7 @@
 
 <template>
     <li class="ValuesItem__list">
-        <img class="ValuesItem__image" :src="imageUrl" alt="openness">
+        <img class="ValuesItem__image" :src="imageUrl" alt="image">
         <p class="ValuesItem__text"> {{ $t(title) }}</p>
     </li>
    
@@ -20,7 +20,7 @@
 
 	&__text {
 		font-size: var(--font-size-S);
-        width: 200px;
+        width: 300px;
         margin-top: 10px;
 
         @media (min-width: 768px) {
@@ -30,7 +30,7 @@
 	}
 
     &__image {
-        @media (min-width: 365px) {
+        @media (min-width: 440px) {
             width: 40vw;
 		}  
     }

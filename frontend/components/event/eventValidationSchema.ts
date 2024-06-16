@@ -8,7 +8,7 @@ export const eventValidationSchema = toTypedSchema(
 	yup.object().shape({
 		title: yup.string().required().max(255),
 		organizer: yup.string().max(255),
-		description: yup.string().required().max(255),
+		description: yup.string().required().max(1000),
 		tags: yup
 			.array()
 			.compact((i) => i === Tags.ONLINE)

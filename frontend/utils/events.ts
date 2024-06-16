@@ -80,14 +80,15 @@ export const getEventPayload = (data: EventFormType): PostEventPayload => {
 	};
 };
 
-export const getEventImage = (eventData?: EventOnPoster) => {
-	if (eventData?.image) {
+export const getEventImage = (imageUrl?: string) => {
+	if (imageUrl) {
 		//TODO убрать, когда с бэка будут приходить одинаковые url
-		if (eventData.image.startsWith('http')) {
-			return eventData.image;
+		if (imageUrl.startsWith('http')) {
+			return imageUrl;
 		}
-		return `${BASE_URL}${eventData.image}`;
+		return `${BASE_URL}${imageUrl}`;
 	}
+	return '';
 };
 
 export const getLocationLink = (location: Location) => {

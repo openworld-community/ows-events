@@ -64,7 +64,7 @@ const endDate = computed(() => {
 			<img
 				v-if="eventData.image"
 				class="card__image"
-				:src="getEventImage(eventData)"
+				:src="getEventImage(eventData.image)"
 				:alt="
 					trimString(
 						`Afisha: ${

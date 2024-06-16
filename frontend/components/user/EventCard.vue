@@ -64,7 +64,7 @@ const tagArray = computed(() => {
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 				:alt="$t('home.events.image_alt')"
 				class="card__image"
-				:src="getEventImage(eventData)"
+				:src="getEventImage(eventData.image)"
 				width="94"
 				height="74"
 			/>

@@ -7,10 +7,10 @@ import { values } from './index';
 <template> 
     <ul class="values__list">
         <AboutValuesItems
-            v-bind = "item"
-            v-for = "item in values"
-            :key = "item.key"
-            class = "values__item"
+            v-for="item in values"
+            v-bind="item"
+            :key="item.key"
+            class="values__item"
         />
     </ul>   
 </template>

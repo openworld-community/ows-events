@@ -1,14 +1,17 @@
 <script setup lang="ts">
 
-    import type { values } from '.';
-    const props = defineProps<values>();
+    import type { AboutValuesData } from '.';
+    defineProps<AboutValuesData>();
 
 </script>
 
 
 <template>
     <li class="ValuesItem__list">
-        <img class="ValuesItem__image" :src="imageUrl" alt="image">
+        <img 
+            class="ValuesItem__image" 
+            :src="imageUrl" 
+        >
         <p class="ValuesItem__text"> {{ $t(title) }}</p>
     </li>
    

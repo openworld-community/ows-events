@@ -1,5 +1,5 @@
 export default {
-	title: "about us",
+	title: "us",
 	idea: "At AfishaPeredelano we strive to make the cultural and social space of the Balkans  more accessible and united. Our mission is to bring people together based on their interests so they can easily find and create events - from vibrant concerts and festivals, and dynamic business conferences to tastings and exciting theater performances. We carefully curate events, ensuring you don't have to look elsewhere, whether you attend online or in person. With easy-to-use search filters, organizing your leisure time can be done in just a few minutes. We're a team of enthusiasts who want to make the world a more socially active and interesting place.",
 	
 	values: {

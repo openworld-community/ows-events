@@ -24,7 +24,7 @@
             <div class="about__wrapper">
                 <img
                     class="about__wrapper__image"
-                    src="@/assets/img/about/about-info.png"
+                    src="@/public/img/about/about-info.png"
                     :itemprop="SeoItempropAboutEnum.IMAGE"   
 		        />
                 <p class="about__wrapper__text-img">{{ $t('about.title') }}</p>

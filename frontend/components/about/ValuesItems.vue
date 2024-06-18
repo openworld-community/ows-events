@@ -1,25 +1,25 @@
 <script setup lang="ts">
 
-    import type { AboutValuesData } from '.';
+    import type { AboutValuesData } from './AboutData';
     defineProps<AboutValuesData>();
 
 </script>
 
 
 <template>
-    <li class="ValuesItem__list">
+    <li class="valuesItem">
         <img 
-            class="ValuesItem__image" 
+            class="valuesItem__image" 
             :src="imageUrl" 
         >
-        <p class="ValuesItem__text"> {{ $t(title) }}</p>
+        <p class="valuesItem__text"> {{ $t(title) }}</p>
     </li>
    
 </template>
 
 
 <style lang="less" scoped>
-.ValuesItem {
+.valuesItem {
 
 	&__text {
 		font-size: var(--font-size-S);

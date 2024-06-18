@@ -13,6 +13,7 @@ export default {
 
 	github: ' Ссылка на GitHub проекта:  ',
 	website: 'Наш сайт:',
+	
 
 	social: {
 		title: 'Подпишитесь на нас в соцсетях:',

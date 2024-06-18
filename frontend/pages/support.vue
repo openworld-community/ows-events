@@ -8,6 +8,7 @@ import {
 import { SeoItemTypeEnum, SeoItempropGlobalEnum } from '~/constants/enums/seo';
 const { t } = useI18n();
 const mobile = inject('mobile');
+const imgLink = '/img/support/support.webp';
 
 getMeta({
 	title: t('meta.support.title'),
@@ -29,7 +30,7 @@ getMeta({
 		>
 			<div class="support__navigation-text">
 				<div>
-					<p>{{ $t('support.title.hi') }}</p>
+					<p class="support__navigation-hi">{{ $t('support.title.hi') }}</p>
 					<p :itemprop="SeoItempropGlobalEnum.TITLE">{{ $t('support.title.main') }}</p>
 				</div>
 				<p
@@ -47,8 +48,8 @@ getMeta({
 			>
 				<img
 					class="support__design-image"
-					src="../assets/img/support/help.webp"
 					:itemprop="SeoItempropGlobalEnum.IMAGE"
+					:src="imgLink"
 				/>
 				<p class="support__design-question">{{ $t('support.question') }}</p>
 			</div>
@@ -79,7 +80,7 @@ getMeta({
 		>
 			<img
 				class="support__design-image"
-				src="../assets/img/support/help.webp"
+				:src="imgLink"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
 			<p class="support__design-question">{{ $t('support.question') }}</p>
@@ -90,22 +91,25 @@ getMeta({
 <style scoped lang="less">
 .support {
 	width: 100%;
-
 	max-width: var(--width-desktop);
-	padding-left: 50px;
-	padding-right: 50px;
+	padding-left: 7vw;
+	padding-right: 7vw;
 	display: flex;
 	align-self: center;
 	align-items: flex-start;
+	padding-bottom: 30px;
 	@media (max-width: 768px) {
+		padding-left: 45px;
+		padding-right: 45px;
 		flex-direction: column;
 		padding-bottom: 30px;
 		align-items: center;
 	}
-
-	@media (max-width: 1440px) {
-		padding-bottom: 30px;
+	@media (max-width: 375px) {
+		padding-top: 30px;
+		padding-left: 18px;
 	}
+
 	&__navigation {
 		display: flex;
 		flex-direction: column;
@@ -114,30 +118,50 @@ getMeta({
 			width: 400px;
 		}
 		@media (max-width: 768px) {
-			width: 340px;
+			width: 100%;
 			align-items: center;
+			padding-top: 50px;
+		}
+		&-hi {
+			@media (max-width: 768px) {
+				padding-bottom: 5px;
+			}
 		}
 		&-text {
 			display: flex;
 			flex-direction: column;
-			gap: 30px;
-			font-size: var(--font-size-ML);
+			gap: 20px;
+			font-size: var(--font-size-L);
 			font-weight: 600;
-			line-height: 25px;
-			padding-top: 30px;
+			line-height: 1;
+			padding-top: 100px;
 			@media (max-width: 900px) {
-				font-size: var(--font-size-L);
-
 				gap: 30px;
+			}
+			@media (max-width: 768px) {
+				padding-top: 15px;
+				gap: 30px;
+			}
+			@media (max-width: 375px) {
+				font-size: var(--font-size-S);
+				font-weight: 600;
+				gap: 20px;
+				line-height: 1.2;
 			}
 		}
 		&-buttons {
-			padding-top: 60px;
+			padding-top: 130px;
 			display: flex;
 			flex-direction: column;
-			gap: 30px;
+			gap: 15px;
 			width: 100%;
-			max-width: 350px;
+			max-width: 280px;
+			@media (max-width: 768px) {
+				padding-top: 45px;
+			}
+			@media (max-width: 375px) {
+				padding-top: 80px;
+			}
 		}
 	}
 
@@ -145,41 +169,54 @@ getMeta({
 		display: flex;
 		flex-direction: row;
 		gap: 20px;
-		padding: 30px 0px 30px 30px;
+		padding: 125px 0px 30px 170px;
 		@media (max-width: 1000px) {
-			padding: 30px 0px 0px 0px;
+			padding: 120px 0px 0px 0px;
+			align-items: center;
+			justify-content: center;
+		}
+		@media (max-width: 768px) {
+			margin-left: 25vw;
+			padding-top: 30px;
+			gap: 0px;
+		}
+		@media (max-width: 375px) {
+			margin-left: 0;
+			padding-top: 65px;
 		}
 
 		&-image {
-			height: 385px;
+			height: 350px;
+			width: auto;
 			@media (max-width: 1000px) {
 				height: 28vw;
 			}
 			@media (max-width: 768px) {
-				margin-right: 25vw;
-				height: 269px;
+				height: 250px;
+			}
+			@media (max-width: 375px) {
+				height: 180px;
 			}
 		}
 		&-question {
-			position: absolute;
-			margin-left: 25vw;
-			padding-bottom: 64px;
+			margin-left: 1vw;
 			align-self: flex-end;
 			font-family: var(--font-family-error);
-			font-size: var(--font-size-XXL);
+			font-size: 40px;
 			font-weight: 600;
 			line-height: 1.5;
 			@media (max-width: 1000px) {
 				font-size: var(--font-size-XL);
 			}
 			@media (max-width: 768px) {
-				padding-bottom: 0px;
-				margin-left: 32vw;
+				padding-top: 200px;
+				align-self: center;
 				font-size: var(--font-size-XL);
 			}
-			@media (max-width: 400px) {
-				padding-bottom: 0px;
-				margin-left: 45vw;
+			@media (max-width: 375px) {
+				position: absolute;
+				padding-top: 150px;
+				padding-left: 190px;
 				font-size: var(--font-size-L);
 			}
 		}

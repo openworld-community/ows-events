@@ -13,6 +13,7 @@ export default {
 
 	github: "Link to the project's GitHub:",
 	website: 'Our website:',
+	
 
 	social: {
 		title: 'Subscribe to us on social media:',

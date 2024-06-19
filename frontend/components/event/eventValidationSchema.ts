@@ -1,14 +1,21 @@
 import * as yup from '../../yup';
 import { toTypedSchema } from '@vee-validate/yup';
 import { type Time } from '../../../common/types/event';
-import { LINK_MAX_LENGTH, PRICE_MAX_VALUE } from '~/constants/defaultValues/validation';
+import {
+	LINK_MAX_LENGTH,
+	PRICE_MAX_VALUE,
+	ORGANIZER_MAX_LENGTH,
+	EVENT_DESCRIPTION_MAX_LENGTH,
+	EVENT_TITLE_MAX_LENGTH,
+	EVENT_ADDRESS_MAX_LENGTH
+} from '~/constants/defaultValues/validation';
 import { Tags } from '../../../common/const/tags';
 
 export const eventValidationSchema = toTypedSchema(
 	yup.object().shape({
-		title: yup.string().required().max(255),
-		organizer: yup.string().max(255),
-		description: yup.string().required().max(1000),
+		title: yup.string().trim().required().max(EVENT_TITLE_MAX_LENGTH),
+		organizer: yup.string().trim().max(ORGANIZER_MAX_LENGTH),
+		description: yup.string().trim().required().max(EVENT_DESCRIPTION_MAX_LENGTH),
 		tags: yup
 			.array()
 			.compact((i) => i === Tags.ONLINE)
@@ -61,13 +68,13 @@ export const eventValidationSchema = toTypedSchema(
 				schema.shape({
 					country: yup.string().required(),
 					city: yup.string().required(),
-					address: yup.string().required().max(255)
+					address: yup.string().trim().required().max(EVENT_ADDRESS_MAX_LENGTH)
 				}),
 			otherwise: (schema) =>
 				schema.shape({
 					country: yup.string().nullable(),
 					city: yup.string().nullable(),
-					address: yup.string().nullable()
+					address: yup.string().trim().max(EVENT_ADDRESS_MAX_LENGTH).nullable()
 				})
 		}),
 

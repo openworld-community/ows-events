@@ -121,6 +121,7 @@ const clearFilters = async () => {
 				/>
 				<component
 					:is="logoComponentIs"
+					v-else
 					class="header__logo"
 					:title="
 						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
@@ -230,7 +231,7 @@ const clearFilters = async () => {
 		display: flex;
 		height: 100%;
 		align-items: center;
-		flex-grow: 1;
+
 		@media (min-width: 768px) {
 			width: auto;
 			justify-content: start;
@@ -272,11 +273,6 @@ const clearFilters = async () => {
 			&:deep(svg) {
 				color: var(--color-accent-green-dark);
 			}
-		}
-		@media (max-width: 768px) {
-			flex-grow: 1;
-			justify-content: center;
-			margin-left: 48px;
 		}
 	}
 

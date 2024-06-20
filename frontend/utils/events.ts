@@ -50,9 +50,9 @@ export const getEventPayload = (data: EventFormType): PostEventPayload => {
 
 	const eventEndEpoch = combineDateTime(data.endDate, data.endTime).getTime();
 	return {
-		title: data.title,
-		organizer: data.organizer,
-		description: data.description,
+		title: data.title.trim(),
+		organizer: data.organizer.trim(),
+		description: data.description.trim(),
 		date: eventStartEpoch,
 		durationInSeconds: Math.floor(Math.max(0, eventEndEpoch - eventStartEpoch) / 1000),
 		isOnline: data.isOnline,
@@ -60,7 +60,7 @@ export const getEventPayload = (data: EventFormType): PostEventPayload => {
 			? {
 					country: data.location.country,
 					city: data.location.city,
-					address: data.location.address
+					address: data.location.address.trim()
 			  }
 			: {
 					country: '',

@@ -4,17 +4,17 @@ defineProps<AboutValuesData>();
 </script>
 
 <template>
-	<li class="valuesItem">
+	<li class="values-item">
 		<img
-			class="valuesItem__image"
+			class="values-item__image"
 			:src="imageUrl"
 		/>
-		<p class="valuesItem__text">{{ $t(title) }}</p>
+		<p class="values-item__text">{{ $t(title) }}</p>
 	</li>
 </template>
 
 <style lang="less" scoped>
-.valuesItem {
+.values-item {
 	&__text {
 		font-size: var(--font-size-S);
 		width: 300px;

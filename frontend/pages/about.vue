@@ -18,7 +18,7 @@ getMeta({
 		:itemtype="SeoItemTypeEnum.ABOUT"
 	>
 		<div
-			class="about__info"
+			class="about-info"
 			:itemprop="SeoItempropAboutEnum.MAIN_CONTENT"
 		>
 			<div class="about-wrapper">
@@ -61,7 +61,7 @@ getMeta({
 				</CommonNavLink>
 			</div>
 
-			<div class="about__social-links">
+			<div class="social-links">
 				<h3 class="social-links__title">
 					{{ $t('about.social.title') }}
 				</h3>
@@ -99,17 +99,6 @@ getMeta({
 	padding: 20px;
 	margin-top: 60px;
 
-	&__info {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-
-		@media (min-width: 440px) {
-			flex-direction: row;
-		}
-	}
-
 	&__text {
 		line-height: 17px;
 		font-size: var(--font-size-S);
@@ -141,6 +130,17 @@ getMeta({
 		@media (min-width: 768) {
 			font-size: var(--font-size-XL);
 		}
+	}
+}
+
+.about-info {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	@media (min-width: 440px) {
+		flex-direction: row;
 	}
 }
 

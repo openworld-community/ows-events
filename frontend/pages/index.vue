@@ -49,6 +49,7 @@ const onButtonClick = async () => {
 
 <template>
 	<main class="main-page">
+		<HomeIdentity />
 		<div class="main-page__top">
 			<h1 class="main-page__title">{{ $t('home.title') }}</h1>
 			<!-- <HomeUserLocation
@@ -82,10 +83,27 @@ const onButtonClick = async () => {
 
 	font-size: 24px;
 }
+
 .main-page {
 	position: relative;
 	@media (min-width: 768px) {
 		padding-top: 0;
+	}
+
+	&__identity {
+		display: flex;
+		width: 100%;
+		padding-left: var(--padding-side);
+		padding-right: var(--padding-side);
+		margin-bottom: 20px;
+
+		&__mobile {
+			display: flex;
+			width: 100%;
+			padding-left: var(--padding-side);
+			padding-right: var(--padding-side);
+			justify-content: center;
+		}
 	}
 
 	&__top {

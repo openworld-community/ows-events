@@ -86,15 +86,7 @@ export const eventValidationSchema = toTypedSchema(
 					val: yup
 						.number()
 						.transform((val) => (isNaN(val) ? undefined : val))
-						.test('notAllowed', 'validation.test.price.val', function (val: number) {
-							if (`${val}`.includes('.')) {
-								return false;
-							}
-
-							return true;
-						})
 						.positive()
-						.integer()
 						.max(PRICE_MAX_VALUE)
 						.required(),
 

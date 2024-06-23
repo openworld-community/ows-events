@@ -14,13 +14,34 @@
 .why-us {
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
+	margin-top: 60px;
+	margin-bottom: 30px;
+	@media (max-width: 768px) {
+		margin-top: 26px;
+	}
+
 	&__title {
-		padding-bottom: 10px;
+		font-size: 32px;
+		padding-bottom: 25px;
+		@media (max-width: 768px) {
+			padding-bottom: 45px;
+			font-size: 26px;
+			text-align: center;
+		}
+		@media (max-width: 375px) {
+			padding-bottom: 45px;
+			font-size: 26px;
+			text-align: center;
+		}
 	}
 	&__description {
 		font-size: var(--font-size-L);
 		line-height: 1.5;
+		padding-bottom: 15px;
+		@media (max-width: 768px) {
+			padding-bottom: 15px;
+			font-size: var(--font-size-ML);
+		}
 	}
 }
 </style>

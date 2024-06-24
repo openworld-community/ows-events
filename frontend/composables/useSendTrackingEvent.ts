@@ -53,4 +53,6 @@ export type FavouritesType = {
 	city?: string;
 	online: boolean;
 };
-export type FormEventType = FavouritesType;
+export type FormEventType = FavouritesType & {
+	type: 'edit_event' | 'create_event';
+};

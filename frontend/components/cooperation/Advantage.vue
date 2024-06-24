@@ -19,7 +19,7 @@ import { advantage } from './items';
 	&__list {
 		display: flex;
 		flex-direction: column;
-		gap: 50px;
+		gap: 51px;
 	}
 }
 </style>

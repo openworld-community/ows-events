@@ -78,7 +78,8 @@ const submitEvent = async (payload: PostEventPayload) => {
 				id_event: id,
 				country: payload?.location?.country,
 				city: payload?.location?.city,
-				online: payload?.isOnline
+				online: payload?.isOnline,
+				type: 'edit_event'
 			});
 			onSuccess(id);
 		}
@@ -91,10 +92,11 @@ const submitEvent = async (payload: PostEventPayload) => {
 			localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
 			sendAnalytics.formEvent({
 				id_user: userStore.id,
-				id_event: 'new',
+				id_event: data.value.id,
 				country: payload?.location?.country,
 				city: payload?.location?.city,
-				online: payload?.isOnline
+				online: payload?.isOnline,
+				type: 'create_event'
 			});
 			onSuccess(data.value.id);
 		}

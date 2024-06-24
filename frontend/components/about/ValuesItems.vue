@@ -15,21 +15,26 @@ defineProps<AboutValuesData>();
 
 <style lang="less" scoped>
 .values-item {
+	display: flex;
+	flex-direction: column;
+	width: 90%;
+
+	@media (min-width: 768px) {
+		width: 45%;
+	}
+
 	&__text {
 		font-size: var(--font-size-S);
-		width: 300px;
 		margin-top: 10px;
 
 		@media (min-width: 768px) {
 			font-size: var(--font-size-L);
-			width: 40vw;
 		}
 	}
 
 	&__image {
-		@media (min-width: 440px) {
-			width: 40vw;
-		}
+		width: 100%;
+		height: 100%;
 	}
 }
 </style>

@@ -57,7 +57,7 @@ getMeta({
 					class="about-navigation__link"
 					:itemprop="SeoItempropAboutEnum.RELATED_LINK"
 				>
-					https://afisha.peredelano.com
+					https://afisha.peredelano.com/
 				</CommonNavLink>
 			</div>
 
@@ -95,24 +95,26 @@ getMeta({
 
 <style lang="less" scoped>
 .about {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	width: 100%;
-	padding: 20px;
-	margin-top: 60px;
+	padding: 50px;
 
 	&__text {
 		line-height: 17px;
 		font-size: var(--font-size-S);
 		text-align: justify;
 
-		@media (min-width: 365px) {
-			flex-basis: 73%;
+		@media (min-width: 768px) {
 			padding-left: 15px;
-		}
 
-		@media (min-width: 1000px) {
-			font-size: var(--font-size-ML);
-			flex-basis: 60%;
-			line-height: 24px;
+			flex-basis: 70%;
+			//max-width: 506px;
+		}
+		@media (min-width: 1440px) {
+			font-size: var(--font-size-L);
+			line-height: var(--line-height);
 		}
 	}
 
@@ -123,7 +125,7 @@ getMeta({
 		line-height: 25px;
 		margin: 30px;
 
-		@media (min-width: 365px) {
+		@media (min-width: 375px) {
 			font-size: var(--font-size-ML);
 		}
 
@@ -139,18 +141,23 @@ getMeta({
 	align-items: center;
 	justify-content: center;
 
-	@media (min-width: 440px) {
+	@media (min-width: 768px) {
 		flex-direction: row;
+	}
+	@media (min-width: 1440px) {
+		width: 1189px;
 	}
 }
 
 // Обертка для картинки с текстом внутри
 .about-wrapper {
 	position: relative;
-	text-align: center;
 
-	@media (min-width: 440px) {
-		flex-basis: 27%;
+	@media (min-width: 768px) {
+		max-width: 163px;
+	}
+	@media (min-width: 1440px) {
+		max-width: 351px;
 	}
 
 	&__text-img {
@@ -160,8 +167,11 @@ getMeta({
 		transform: translate(-50%, -50%);
 		font-size: 80px;
 
-		@media (min-width: 440px) {
-			font-size: 7vw;
+		@media (min-width: 768px) {
+			font-size: 32px;
+		}
+		@media (min-width: 1440px) {
+			font-size: 96px;
 		}
 	}
 }

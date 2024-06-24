@@ -7,7 +7,7 @@ import { values } from './AboutData';
 		<AboutValuesItems
 			v-for="item in values"
 			v-bind="item"
-			:key="item.key"
+			:key="item.title"
 		/>
 	</ul>
 </template>
@@ -19,10 +19,16 @@ import { values } from './AboutData';
 	align-items: center;
 	gap: 50px;
 
-	@media (min-width: 365px) {
+	@media (min-width: 768px) {
 		flex-direction: row;
 		flex-wrap: wrap;
 		justify-content: center;
+		align-items: flex-start;
+		//width: 786px;
+	}
+
+	@media (min-width: 1440px) {
+		width: 1189px;
 	}
 }
 </style>

@@ -29,7 +29,7 @@ export type SearchType = {
 };
 
 export type LoginType = {
-	method: 'Google' | 'Telegram';
+	method: 'google' | 'telegram' | 'localAuth' | 'localSignup';
 };
 
 export type RedirectToEventType = {

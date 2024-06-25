@@ -16,26 +16,26 @@ import { verifyGoogleToken } from '../../../externalServices/googleauth';
 export const telegramLogin: ITelegramHandler = async (request, reply) => {
 	const data = request.query;
 	const token = await userController.addTGUser(data);
-	reply.redirect(302, `${vars.frontend_url}/postauth/${token}`);
+	reply.redirect(302, `${vars.frontend_url}/postauth/${token}?method=telegram`);
 };
 
 export const googleLogin: IGoogleHandler = async (request, reply) => {
 	const data = request.body;
 	const googledata = await verifyGoogleToken(data.credential);
 	const token = await userController.addGoogleUser(googledata);
-	reply.redirect(302, `${vars.frontend_url}/postauth/${token}`);
+	reply.redirect(302, `${vars.frontend_url}/postauth/${token}?method=google`);
 };
 
 export const localSignup: ILocalSignupHandler = async (request) => {
 	const data = request.body;
 	const token = await userController.addLocalUser(data);
-	return `${vars.frontend_url}/postauth/${token}`;
+	return `${vars.frontend_url}/postauth/${token}?method=localSignup`;
 };
 
 export const localAuth: ILocalAuthHandler = async (request) => {
 	const data = request.body;
 	const token = await userController.authLocalUser(data);
-	return `${vars.frontend_url}/postauth/${token}`;
+	return `${vars.frontend_url}/postauth/${token}?method=localAuth`;
 };
 
 export const signout: ISignoutHandler = async (request) => {

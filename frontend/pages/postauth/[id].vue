@@ -15,7 +15,7 @@ definePageMeta({
 		const userToken = getFirstParam(to.params.id);
 		const trackEvent = useSendTrackingEvent();
 		if (to.query.method)
-			trackEvent.sendAnalytics.login(to.query.method as unknown as LoginType);
+			trackEvent.sendAnalytics.login({ method: to.query.method } as LoginType);
 		useCookie<string>(CookieNameEnum.TOKEN, { maxAge: TOKEN_MAX_AGE_SECONDS }).value =
 			userToken;
 		const { data: user } = await apiRouter.user.get.useQuery({ data: { userToken } });

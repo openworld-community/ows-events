@@ -29,13 +29,13 @@ export const googleLogin: IGoogleHandler = async (request, reply) => {
 export const localSignup: ILocalSignupHandler = async (request) => {
 	const data = request.body;
 	const token = await userController.addLocalUser(data);
-	return `${vars.frontend_url}/postauth/${token}?method=localSignup`;
+	return `${vars.frontend_url}/postauth/${token}?method=local_signup`;
 };
 
 export const localAuth: ILocalAuthHandler = async (request) => {
 	const data = request.body;
 	const token = await userController.authLocalUser(data);
-	return `${vars.frontend_url}/postauth/${token}?method=localAuth`;
+	return `${vars.frontend_url}/postauth/${token}?method=local_auth`;
 };
 
 export const signout: ISignoutHandler = async (request) => {

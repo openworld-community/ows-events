@@ -18,7 +18,11 @@ export const vars = {
 		googledocs: {
 			peredelanoConfSheetId: process.env.PEREDELANOCONF_GOOGLEDOC || ''
 		},
-		googleauth: process.env.VITE_GOOGLE_OAUTH_KEY || '123'
+		googleauth: process.env.VITE_GOOGLE_OAUTH_KEY || '123',
+		googleAnalytics: {
+			apiSecret: process.env.GA_API_SECRET || '',
+			measurementId: process.env.GA_MEASUREMENT_ID || ''
+		}
 	},
 	localization: {
 		url: process.env.LOCALIZATION_URL || 'http://localization:5000'

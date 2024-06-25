@@ -33,7 +33,7 @@ export type SearchType = {
 };
 
 export type LoginType = {
-	method: 'google' | 'telegram' | 'localAuth' | 'localSignup';
+	method: 'google' | 'telegram' | 'local_auth' | 'local_signup';
 };
 
 export type RedirectToEventType = {

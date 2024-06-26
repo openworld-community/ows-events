@@ -4,7 +4,8 @@ enum AnalyticEventsEnum {
 	REDIRECT = 'redirect to event url',
 	CLICK_EVENT = 'click_on_event',
 	FAVOURITES = 'add_favourites',
-	FORM_EVENT = 'form_event'
+	FORM_EVENT_CREATE = 'form_event_create',
+	FORM_EVENT_EDIT = 'form_event_edit'
 }
 
 export const useSendTrackingEvent = () => {
@@ -17,7 +18,10 @@ export const useSendTrackingEvent = () => {
 			useTrackEvent(AnalyticEventsEnum.CLICK_EVENT, params),
 		favourites: (params: FavouritesType) =>
 			useTrackEvent(AnalyticEventsEnum.FAVOURITES, params),
-		formEvent: (params: FormEventType) => useTrackEvent(AnalyticEventsEnum.FORM_EVENT, params)
+		formEventCreate: (params: FormEventType) =>
+			useTrackEvent(AnalyticEventsEnum.FORM_EVENT_CREATE, params),
+		formEventEdit: (params: FormEventType) =>
+			useTrackEvent(AnalyticEventsEnum.FORM_EVENT_EDIT, params)
 	};
 	return { sendAnalytics };
 };
@@ -29,7 +33,7 @@ export type SearchType = {
 };
 
 export type LoginType = {
-	method: 'Google' | 'Telegram';
+	method: 'google' | 'telegram' | 'local_auth' | 'local_signup';
 };
 
 export type RedirectToEventType = {

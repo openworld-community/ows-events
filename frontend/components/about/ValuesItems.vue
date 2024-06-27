@@ -20,14 +20,17 @@ defineProps<AboutValuesData>();
 	width: 90%;
 
 	@media (min-width: 768px) {
-		width: 45%;
+		width: 43%;
+	}
+	@media (min-width: 1440px) {
+		gap: 20px;
 	}
 
 	&__text {
 		font-size: var(--font-size-S);
 		margin-top: 10px;
 
-		@media (min-width: 768px) {
+		@media (min-width: 1440px) {
 			font-size: var(--font-size-L);
 		}
 	}

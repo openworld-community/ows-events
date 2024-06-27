@@ -17,7 +17,7 @@ import { values } from './AboutData';
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 50px;
+	gap: 30px;
 
 	@media (min-width: 768px) {
 		flex-direction: row;
@@ -25,10 +25,12 @@ import { values } from './AboutData';
 		justify-content: center;
 		align-items: flex-start;
 		//width: 786px;
+		gap: 75px;
 	}
 
 	@media (min-width: 1440px) {
-		width: 1189px;
+		width: 1260px;
+		gap: 170px;
 	}
 }
 </style>

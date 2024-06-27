@@ -99,38 +99,36 @@ getMeta({
 	flex-direction: column;
 	align-items: center;
 	width: 100%;
-	padding: 50px;
+	padding: 5%;
 
 	&__text {
-		line-height: 17px;
+		line-height: 20px;
 		font-size: var(--font-size-S);
 		text-align: justify;
 
 		@media (min-width: 768px) {
-			padding-left: 15px;
+			padding-left: 5px;
+			//line-height: 17px;
 
 			flex-basis: 70%;
 			//max-width: 506px;
 		}
 		@media (min-width: 1440px) {
 			font-size: var(--font-size-L);
-			line-height: var(--line-height);
+			line-height: 30px;
+			align-self: flex-start;
 		}
 	}
 
 	&__values-header {
 		text-align: center;
-		font-size: var(--font-size-M);
 		font-weight: 600;
 		line-height: 25px;
-		margin: 30px;
+		margin: 25px;
 
-		@media (min-width: 375px) {
+		@media (min-width: 768px) {
 			font-size: var(--font-size-ML);
-		}
-
-		@media (min-width: 768) {
-			font-size: var(--font-size-XL);
+			margin: 70px 0;
 		}
 	}
 }
@@ -140,6 +138,7 @@ getMeta({
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	gap: 20px;
 
 	@media (min-width: 768px) {
 		flex-direction: row;
@@ -151,7 +150,9 @@ getMeta({
 
 // Обертка для картинки с текстом внутри
 .about-wrapper {
-	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
 	@media (min-width: 768px) {
 		max-width: 163px;
@@ -159,13 +160,18 @@ getMeta({
 	@media (min-width: 1440px) {
 		max-width: 351px;
 	}
+	&__image {
+		width: 100%;
+
+		@media (max-width: 767px) {
+			min-width: 351px;
+		}
+	}
 
 	&__text-img {
 		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		font-size: 80px;
+
+		font-size: 96px;
 
 		@media (min-width: 768px) {
 			font-size: 32px;
@@ -181,13 +187,16 @@ getMeta({
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 20px;
-	margin-top: 40px;
+	gap: 15px;
+	margin-top: 28px;
 	font-size: var(--font-size-S);
 
-	@media (min-width: 365px) {
-		font-size: var(--font-size-M);
-		margin-top: 90px;
+	@media (min-width: 768px) {
+		margin-top: 80px;
+	}
+
+	@media (min-width: 1440px) {
+		margin-top: 150px;
 	}
 
 	&__paragraph {
@@ -195,7 +204,6 @@ getMeta({
 	}
 
 	&__paragraph p {
-		font-weight: 600;
 		margin-right: 5px;
 	}
 

@@ -9,6 +9,8 @@ getMeta({
 	title: t('meta.about_us.title'),
 	description: t('meta.about_us.description')
 });
+
+const urlAfisha = 'https://afisha.peredelano.com/';
 </script>
 
 <template>
@@ -21,13 +23,13 @@ getMeta({
 			class="about-info"
 			:itemprop="SeoItempropAboutEnum.MAIN_CONTENT"
 		>
-			<div class="about-wrapper">
+			<div class="about-logo">
 				<img
-					class="about-wrapper__image"
+					class="about-logo__image"
 					src="@/public/img/about/about-info.png"
 					:itemprop="SeoItempropAboutEnum.IMAGE"
 				/>
-				<p class="about-wrapper__text-img">{{ $t('about.title') }}</p>
+				<p class="about-logo__text-img">{{ $t('about.title') }}</p>
 			</div>
 			<p class="about__text">{{ $t('about.idea') }}</p>
 		</div>
@@ -57,7 +59,7 @@ getMeta({
 					class="about-navigation__link"
 					:itemprop="SeoItempropAboutEnum.RELATED_LINK"
 				>
-					https://afisha.peredelano.com/
+					{{ urlAfisha }}
 				</CommonNavLink>
 			</div>
 
@@ -100,6 +102,10 @@ getMeta({
 	align-items: center;
 	width: 100%;
 	padding: 5%;
+
+	@media (max-width: 767px) {
+		padding-top: 80px;
+	}
 
 	&__text {
 		line-height: 20px;
@@ -149,7 +155,7 @@ getMeta({
 }
 
 // Обертка для картинки с текстом внутри
-.about-wrapper {
+.about-logo {
 	display: flex;
 	justify-content: center;
 	align-items: center;

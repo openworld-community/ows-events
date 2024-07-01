@@ -54,5 +54,6 @@ export default {
 	[CommonErrorsEnum.ERROR_PAGE_GO_HOME]: 'Back To Home',
 	[CommonErrorsEnum.ERROR_PAGE_SERVER_ERROR]: 'Unknown Server Error',
 	[CommonErrorsEnum.NOT_FOUND_BY_ID]: 'Event with ID {id} not found',
-	[CommonErrorsEnum.CITY_NOT_FOUND]: 'City not found'
+	[CommonErrorsEnum.CITY_NOT_FOUND]: 'City not found',
+	[CommonErrorsEnum.COUNTRY_NOT_FOUND]: 'Country not found'
 };

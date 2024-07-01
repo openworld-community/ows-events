@@ -54,5 +54,6 @@ export default {
 	[CommonErrorsEnum.ERROR_PAGE_GO_HOME]: 'Вернуться на Главную',
 	[CommonErrorsEnum.ERROR_PAGE_SERVER_ERROR]: 'Неизвестная Ошибка Сервера',
 	[CommonErrorsEnum.NOT_FOUND_BY_ID]: 'Мероприятие с ID {id} не найдено',
-	[CommonErrorsEnum.CITY_NOT_FOUND]: 'Город не найден'
+	[CommonErrorsEnum.CITY_NOT_FOUND]: 'Город не найден',
+	[CommonErrorsEnum.COUNTRY_NOT_FOUND]: 'Страна не найдена'
 };

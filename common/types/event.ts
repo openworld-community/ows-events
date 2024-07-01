@@ -1,6 +1,7 @@
 import type { Timezone } from './location';
 import { EventTypes } from '../const/eventTypes';
 import { type Tag, Tags } from '../const/tags';
+import { CurrencyType } from '../const/price';
 
 export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
 
@@ -83,7 +84,7 @@ export type EventPrice = {
 	maxValue: number | null;
 	value: number | null;
 	minValue: number | null;
-	currency: string | null;
+	currency: CurrencyType | null;
 };
 
 export type IEventMeta = {

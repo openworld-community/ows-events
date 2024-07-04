@@ -21,7 +21,7 @@ const props = defineProps({
 	},
 	initialValues: {
 		type: Object as PropType<EventFormType>,
-		default: () => { }
+		default: () => {}
 	}
 });
 
@@ -82,7 +82,7 @@ watch(
 				setFieldValue('price.currency', currency);
 			}
 		} else {
-			setFieldValue('price.currency', '');
+			setFieldValue('price.currency', null);
 		}
 	},
 	{ deep: true }
@@ -116,7 +116,7 @@ watch(
 			const timeZone = timezoneToString(getUserTimezone());
 			setFieldValue('timezone', timeZone);
 		} else {
-			const belgrade = await getTimezone('Serbia', 'Belgrade')
+			const belgrade = await getTimezone('Serbia', 'Belgrade');
 			setFieldValue('timezone', belgrade);
 		}
 	},
@@ -128,7 +128,7 @@ watch(
 	(free) => {
 		if (free) {
 			if (values['price']['currency']) {
-				setFieldValue('price.currency', '');
+				setFieldValue('price.currency', null);
 			}
 			if (values['price']['val']) {
 				setFieldValue('price.val', null);

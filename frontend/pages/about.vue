@@ -23,8 +23,8 @@ getMeta({
 			class="about__image-container"
 		>
 			<img
-				srcset="@/assets/img/about/about-screen@2x.png 2x"
-				src="@/assets/img/about/about-screen@1x.png"
+				srcset="/img/about/about-screen@2x.png 2x"
+				src="/img/about/about-screen@1x.png"
 				width="351"
 				height="232"
 				class="about__img"

@@ -153,18 +153,18 @@ const tagArray = computed(() => {
 		}
 
 		&--background {
-			background-image: url('@/assets/img/event/event-small-preview-mobile@1x.png');
+			background-image: url('/img/event/event-small-preview-mobile@1x.png');
 			background-size: cover;
 
 			@media (min-width: 768px) {
-				background-image: url('@/assets/img/event/event-small-preview-desktop@1x.png');
+				background-image: url('/img/event/event-small-preview-desktop@1x.png');
 			}
 
 			@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-				background-image: url('@/assets/img/event/event-small-preview-mobile@2x.png');
+				background-image: url('/img/event/event-small-preview-mobile@2x.png');
 
 				@media (min-width: 768px) {
-					background-image: url('@/assets/img/event/event-small-preview-desktop@2x.png');
+					background-image: url('/img/event/event-small-preview-desktop@2x.png');
 				}
 			}
 		}

@@ -80,7 +80,7 @@ const endDate = computed(() => {
 			<img
 				v-else
 				class="card__image"
-				src="@/assets/img/event-preview@2x.png"
+				src="/img/event-preview@2x.png"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 				alt=""
 			/>

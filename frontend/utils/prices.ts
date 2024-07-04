@@ -52,7 +52,7 @@ export const formatPrice = (price: EventPrice) => {
 export const getCurrencyByCountry = (country: string) => {
 	if (country === 'Montenegro') return 'EUR';
 	if (country === 'Serbia') return 'RSD';
-	if (country === 'Kyrgyzstan') return 'KGS';
+
 	return 'USD';
 };
 

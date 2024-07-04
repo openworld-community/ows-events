@@ -10,6 +10,7 @@ import {
 	EVENT_ADDRESS_MAX_LENGTH
 } from '~/constants/defaultValues/validation';
 import { Tags } from '../../../common/const/tags';
+import type { CurrencyType } from '../../../common/const/price';
 
 export const eventValidationSchema = toTypedSchema(
 	yup.object().shape({
@@ -88,6 +89,33 @@ export const eventValidationSchema = toTypedSchema(
 						.transform((val) => (isNaN(val) ? undefined : val))
 						.positive()
 						.max(PRICE_MAX_VALUE)
+						.when(['currency'], {
+							is: (val: CurrencyType) => val === 'BTC' || val === 'ETH',
+							then: (schema) =>
+								schema.test(
+									'priceBitcoin',
+									'validation.test.price.bitcoin',
+									function (val: Number) {
+										if (val && val.toString().split('.')[1]?.length >= 9) {
+											return false;
+										}
+
+										return true;
+									}
+								),
+							otherwise: (schema) =>
+								schema.test(
+									'priceBitcoin',
+									'validation.test.price.typicalCurrency',
+									function (val: Number) {
+										if (val && val.toString().split('.')[1]?.length >= 3) {
+											return false;
+										}
+
+										return true;
+									}
+								)
+						})
 						.required(),
 
 					currency: yup.string().required()

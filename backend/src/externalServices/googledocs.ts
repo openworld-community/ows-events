@@ -6,6 +6,7 @@ import { EventOnPoster } from '@common/types';
 import { countriesAndCitiesController } from '../controllers/countries-and-cities.controller';
 import { EventTypes, PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
 import { Tags } from '../../../common/const/tags';
+import { CurrencyType } from '../../../common/const/price';
 import { translatePeredelanoPlaceName } from './translationForParser';
 import { vars } from '../config/vars';
 import { EventModel } from '../models/event.model';
@@ -117,7 +118,7 @@ export const parsePeredelano = () => {
 						maxValue: event.price || null,
 						minValue: event['partner price'] || event.discount || null,
 						value: event.discount || event.price || event['partner price'] || null,
-						currency: 'USD'
+						currency: 'USD' as CurrencyType
 				  }
 				: null;
 

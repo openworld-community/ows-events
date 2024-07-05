@@ -110,7 +110,7 @@ watch(
 						logo_alignment="center"
 						@click="
 							sendAnalytics.login({
-								method: 'Google'
+								method: 'google'
 							})
 						"
 					/>
@@ -120,7 +120,7 @@ watch(
 						class="unauthorized__telegram-button"
 						@click="
 							sendAnalytics.login({
-								method: 'Telegram'
+								method: 'telegram'
 							})
 						"
 					>

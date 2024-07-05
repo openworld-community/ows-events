@@ -72,7 +72,8 @@ const submitEvent = async (payload: PostEventPayload) => {
 		});
 		if (!error.value) {
 			localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
-			sendAnalytics.formEvent({
+
+			sendAnalytics.formEventEdit({
 				id_user: event.value.creatorId,
 				id_event: id,
 				country: payload?.location?.country,
@@ -88,9 +89,9 @@ const submitEvent = async (payload: PostEventPayload) => {
 
 		if (data.value) {
 			localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
-			sendAnalytics.formEvent({
+			sendAnalytics.formEventCreate({
 				id_user: userStore.id,
-				id_event: 'new',
+				id_event: data.value.id,
 				country: payload?.location?.country,
 				city: payload?.location?.city,
 				online: payload?.isOnline

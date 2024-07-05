@@ -96,7 +96,12 @@ export const eventValidationSchema = toTypedSchema(
 									'priceBitcoin',
 									'validation.test.price.bitcoin',
 									function (val: Number) {
-										if (val && val.toString().split('.')[1]?.length >= 9) {
+										if (
+											val &&
+											(val.toString().split('.')[1]?.length >= 9 ||
+												Number(val.toString().split('-')[1]) > 9)
+											//in case number less then 1 js turn it into scientific form 1e-7 so we need hack against this)
+										) {
 											return false;
 										}
 
@@ -108,7 +113,11 @@ export const eventValidationSchema = toTypedSchema(
 									'priceBitcoin',
 									'validation.test.price.typicalCurrency',
 									function (val: Number) {
-										if (val && val.toString().split('.')[1]?.length >= 3) {
+										if (
+											val &&
+											(val.toString().split('.')[1]?.length >= 3 ||
+												Number(val.toString().split('-')[1]) > 3)
+										) {
 											return false;
 										}
 

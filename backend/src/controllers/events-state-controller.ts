@@ -1,14 +1,17 @@
 import { v4 as uuid } from 'uuid';
 import { FilterQuery, PipelineStage, SortValues } from 'mongoose';
 import { EventDbEntity, EventOnPoster, SearchEventPayload } from '@common/types/event';
+import { CommonErrorsEnum, SupportedLanguages } from '../../../common/const';
 import { EventModel } from '../models/event.model';
 import { imageController } from './image-controller';
+import { countriesAndCitiesController } from './countries-and-cities.controller';
 
 class EventsStateController {
 	async addEvent(event: EventOnPoster) {
 		const id = uuid();
+		const normalizedEvent = this.normalizeEventLocation(event);
 		const eventWithId = {
-			...event,
+			...normalizedEvent,
 			id
 		};
 		const newEvent = new EventModel(eventWithId);
@@ -19,7 +22,40 @@ class EventsStateController {
 		return newEvent.id;
 	}
 
-	async getEvents(query?: SearchEventPayload | undefined): Promise<EventDbEntity[]> {
+	async localizeEventLocation(event: EventOnPoster, lang: SupportedLanguages) {
+		const localizedEvent = { ...event };
+		localizedEvent.location.country =
+			await countriesAndCitiesController.getLocalizedCountryName(
+				event.location.country,
+				lang
+			);
+		localizedEvent.location.city = await countriesAndCitiesController.getLocalizedCityName(
+			event.location.city,
+			lang
+		);
+		return localizedEvent;
+	}
+
+	async normalizeEventLocation(event: EventOnPoster) {
+		const normalizedEvent = { ...event };
+		const englishCityName = await countriesAndCitiesController.getLocalizedCityName(
+			event.location.city,
+			SupportedLanguages.ENGLISH
+		);
+		const englishCountryName = await countriesAndCitiesController.getLocalizedCountryName(
+			event.location.city,
+			SupportedLanguages.ENGLISH
+		);
+		normalizedEvent.location.city = englishCityName;
+		normalizedEvent.location.country = englishCountryName;
+		return normalizedEvent;
+	}
+
+	async getEvents(
+		lang: SupportedLanguages,
+		query?: SearchEventPayload | undefined
+	): Promise<EventDbEntity[]> {
+		console.log(query);
 		const queryObject: FilterQuery<EventOnPoster> = {
 			$and: [],
 			$expr: {
@@ -42,14 +78,23 @@ class EventsStateController {
 			queryObject.$text = { $search: query.searchLine };
 		}
 		if (query?.country) {
+			const englishCountryName = await countriesAndCitiesController.getLocalizedCountryName(
+				query?.country,
+				SupportedLanguages.ENGLISH
+			);
 			const countryQuery = {
-				$or: [{ 'location.country': query?.country }, { isOnline: true }]
+				$or: [{ 'location.country': englishCountryName }, { isOnline: true }]
 			};
 			queryObject.$and?.push(countryQuery);
 			sortObject.isOnline = 'ascending';
 		}
 		if (query?.city) {
-			const cityQuery = { $or: [{ 'location.city': query?.city }, { isOnline: true }] };
+			const englishCityName = await countriesAndCitiesController.getLocalizedCityName(
+				query?.city,
+				SupportedLanguages.ENGLISH
+			);
+			console.log(englishCityName);
+			const cityQuery = { $or: [{ 'location.city': englishCityName }, { isOnline: true }] };
 			queryObject.$and?.push(cityQuery);
 			sortObject.isOnline = 'ascending';
 		}
@@ -87,24 +132,28 @@ class EventsStateController {
 		];
 
 		const futureEvents = await EventModel.aggregate(pipeline).sort(sortObject).exec();
-		return futureEvents;
+		return Promise.all(
+			futureEvents.map(async (event) => this.localizeEventLocation(event, lang))
+		);
 	}
 
-	async getEvent(id: string) {
+	async getEvent(id: string, lang: SupportedLanguages = SupportedLanguages.ENGLISH) {
 		const event = await EventModel.findOne(
 			{
 				id
 			},
 			{ meta: 0 }
 		).exec();
-		return event?.toObject();
+		if (!event) throw new Error(CommonErrorsEnum.EVENT_NOT_FOUND);
+		return this.localizeEventLocation(event?.toObject(), lang);
 	}
 
 	async updateEvent(event: EventOnPoster) {
+		const normalizedEvent = this.normalizeEventLocation(event);
 		const updatedEvent = await EventModel.findOneAndUpdate(
 			{ id: event.id },
 			{
-				$set: event
+				$set: normalizedEvent
 			}
 		);
 
@@ -165,7 +214,7 @@ class EventsStateController {
 		return event;
 	}
 
-	async getUserEvents(userId: string) {
+	async getUserEvents(userId: string, lang: SupportedLanguages) {
 		const events = await EventModel.find(
 			{ creatorId: userId },
 			{},
@@ -176,7 +225,9 @@ class EventsStateController {
 			}
 		).exec();
 
-		return events.map((event) => event.toObject());
+		return Promise.all(
+			events.map(async (event) => this.localizeEventLocation(event?.toObject(), lang))
+		);
 	}
 }
 

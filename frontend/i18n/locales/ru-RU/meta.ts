@@ -49,5 +49,6 @@ export default {
 	limitation_of_liability: {
 		title: 'Ограничение ответственности',
 		description: 'Ограничение ответственности'
-	}
+	},
+	city_title: 'Афиша мероприятий {city}'
 };

@@ -49,5 +49,6 @@ export default {
 	limitation_of_liability: {
 		title: 'Limitation of liability',
 		description: 'Limitation of liability'
-	}
+	},
+	city_title: 'Events in {city}'
 };

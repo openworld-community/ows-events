@@ -3,11 +3,18 @@ import moment from 'moment-timezone';
 import { countriesAndCitiesController } from '../../../controllers/countries-and-cities.controller';
 import {
 	IGetCitiesByCountryHandlerProps,
+	IGetCitiesHandlerProps,
 	IGetCountriesHandlerProps,
+	IGetLocalizedCityHandlerProps,
+	IGetLocalizedCountryHandlerProps,
 	IGetMetaHandlerProps,
 	IGetUsedCitiesHandlerProps
 } from './type';
-import { CommonErrorsEnum } from '../../../../../common/const';
+import {
+	CommonErrorsEnum,
+	SupportedLanguages,
+	SupportedCountries
+} from '../../../../../common/const';
 
 export const getMeta: IGetMetaHandlerProps = async (request) => {
 	const countryString = request.params.country;
@@ -43,22 +50,55 @@ export const getMeta: IGetMetaHandlerProps = async (request) => {
 	};
 };
 
-export const getCountries: IGetCountriesHandlerProps = async () =>
-	countriesAndCitiesController.countries;
+export const getCountries: IGetCountriesHandlerProps = async (request) => {
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	return countriesAndCitiesController.getLocalizedCountries(lang);
+};
+
+export const getLocalizedCityName: IGetLocalizedCityHandlerProps = async (request) => {
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	return countriesAndCitiesController.getLocalizedCityName(request.params.city, lang);
+};
+
+export const getLocalizedCountryName: IGetLocalizedCountryHandlerProps = async (request) => {
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	return countriesAndCitiesController.getLocalizedCityName(request.params.country, lang);
+};
+
+export const getCities: IGetCitiesHandlerProps = async (request) => {
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	return countriesAndCitiesController.getLocalizedCountries(lang);
+};
 
 export const getCitiesByCountry: IGetCitiesByCountryHandlerProps = async (request) => {
 	const { country } = request.params;
-
-	return countriesAndCitiesController.getCitiesByCountry(country);
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	const countryCode = (await countriesAndCitiesController.getCountryCodeByName(
+		country
+	)) as SupportedCountries;
+	return countriesAndCitiesController.getCitiesByCountry(countryCode, lang);
 };
 
-export const getUsedCountries: IGetCountriesHandlerProps = async () =>
-	countriesAndCitiesController.getUsedCountries();
+export const getUsedCountries: IGetCountriesHandlerProps = async (request) => {
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	return countriesAndCitiesController.getUsedCountries(lang);
+};
 
 export const getUsedCitiesByCountry: IGetCitiesByCountryHandlerProps = async (request) => {
 	const { country } = request.params;
-	return countriesAndCitiesController.getUsedCitiesByCountry(country);
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	return countriesAndCitiesController.getUsedCitiesByCountry(country, lang);
 };
 
-export const getUsedCities: IGetUsedCitiesHandlerProps = async () =>
-	countriesAndCitiesController.getUsedCities();
+export const getUsedCities: IGetUsedCitiesHandlerProps = async (request) => {
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	return countriesAndCitiesController.getUsedCities(lang);
+};

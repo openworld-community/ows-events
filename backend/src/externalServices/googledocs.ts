@@ -85,7 +85,7 @@ export const parsePeredelano = () => {
 			const eventCountry =
 				place.type === 'country'
 					? place.name
-					: countriesAndCitiesController.getCountryByCity(eventCity);
+					: await countriesAndCitiesController.getCountryByCity(eventCity);
 			const eventImg = event.img;
 			const eventLink = event.link;
 			const eventTimezoneName =

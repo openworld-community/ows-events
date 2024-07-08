@@ -23,7 +23,7 @@ export const useFilterStore = defineStore('filter', {
 			usedCities: [],
 			usedTags: [],
 			filters: {
-				city: getFirstQuery(route.query.city) ?? '',
+				city: getFirstParam(route.query.city ?? ''),
 				//	searchLine: getFirstQuery(route.query.search) ?? '',
 				tags:
 					getFirstQuery(route.query.tags)

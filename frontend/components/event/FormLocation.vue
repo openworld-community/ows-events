@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useField } from 'vee-validate';
-import { useLocationStore } from '@/stores/location.store';
+import { useLocationStore } from '../../stores/location.store';
 import { useEventStore } from '../../stores/event.store';
 
 const mobile = inject('mobile');
@@ -62,7 +62,7 @@ const addressField = useField<string>(() => 'location.address');
 					:error="cityField.errorMessage.value"
 					:touched="cityField.meta.touched"
 				>
-					<LibrarySelect
+					<LibraryOptimizedAutocomplete
 						v-model="cityField.value.value"
 						name="city"
 						:disabled="!countryField.value.value || isOnlineField.value.value"

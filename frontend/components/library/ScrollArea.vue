@@ -35,6 +35,7 @@ defineProps({
 		<ScrollAreaViewport
 			class="scroll-area__viewport"
 			as-child
+			style="width: 100%"
 		>
 			<slot></slot>
 		</ScrollAreaViewport>

@@ -28,7 +28,7 @@ watch(
 		});
 		filterStore.$patch({
 			filters: {
-				city: filters.city ? city : '',
+				city: filters.city ? city.value : '',
 				tags: filters.tags,
 				date: filters.date
 			}

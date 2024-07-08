@@ -4,8 +4,9 @@ import { useFilterStore } from '../../stores/filter.store';
 import { debouncedWatch } from '@vueuse/core';
 
 const filterStore = useFilterStore();
-
+const localePath = useLocalePath();
 const route = useRoute();
+const { locale } = useI18n();
 
 onBeforeMount(async () => {
 	//TODO костыль, иначе при ините страницы не достается value из запроса
@@ -20,14 +21,25 @@ onBeforeMount(async () => {
 });
 
 watch(
-	() => filterStore.filters,
-	async (filters) => {
+	[() => filterStore.filters, locale],
+	async ([filters]) => {
+		const { data: city } = await apiRouter.location.city.localize.useMutation({
+			data: { city: filters.city }
+		});
+		filterStore.$patch({
+			filters: {
+				city: filters.city ? city : '',
+				tags: filters.tags,
+				date: filters.date
+			}
+		});
 		navigateTo({
+			path: localePath(filters.city ? `/city/${city.value}` : '/'),
 			query: {
 				...route.query,
 				//	search: filters.searchLine || undefined,
-				city: filters.city || undefined,
-				tags: filters.tags.join(', ') || undefined,
+				// city: filters.city || undefined,
+				tags: filters.tags?.join(', ') || undefined,
 
 				startDate: filters.date[0]
 					? dayjs(filters.date[0]).format('YYYY-MM-DD')

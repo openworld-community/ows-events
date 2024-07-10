@@ -4,11 +4,11 @@ import {
 	ComboboxContent,
 	ComboboxInput,
 	ComboboxRoot,
-	ComboboxTrigger,
 	ComboboxViewport,
 	ComboboxCancel
 } from 'radix-vue';
 import type { PropType } from 'vue';
+import { vOnClickOutside } from '@vueuse/components';
 
 const props = defineProps({
 	modelValue: {
@@ -104,9 +104,9 @@ const clearModel = () => emit('update:model-value', '');
 	</label>
 	<ComboboxRoot
 		v-model="model"
+		v-model:searchTerm="searchTerm"
 		:name="name"
 		:disabled="disabled"
-		v-model:searchTerm="searchTerm"
 		:display-value="(value) => (typeof value === 'string' ? value : value['label'])"
 		:open="isOpen"
 		as-child
@@ -126,18 +126,6 @@ const clearModel = () => emit('update:model-value', '');
 					@click="handleOpen"
 				/>
 				<div class="cb__input--actions">
-					<ComboboxTrigger
-						v-if="!model"
-						class="cb__trigger"
-						as-child
-						@click="handleOpen"
-					>
-						<CommonButton
-							tabindex="0"
-							button-kind="multiselect"
-							class="cb__trigger--expand"
-						/>
-					</ComboboxTrigger>
 					<ComboboxCancel
 						v-if="model"
 						as-child

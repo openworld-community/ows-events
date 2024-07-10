@@ -9,7 +9,7 @@ import { countriesAndCitiesController } from './countries-and-cities.controller'
 class EventsStateController {
 	async addEvent(event: EventOnPoster) {
 		const id = uuid();
-		const normalizedEvent = this.normalizeEventLocation(event);
+		const normalizedEvent = await this.normalizeEventLocation(event);
 		const eventWithId = {
 			...normalizedEvent,
 			id
@@ -43,7 +43,7 @@ class EventsStateController {
 			SupportedLanguages.ENGLISH
 		);
 		const englishCountryName = await countriesAndCitiesController.getLocalizedCountryName(
-			event.location.city,
+			event.location.country,
 			SupportedLanguages.ENGLISH
 		);
 		normalizedEvent.location.city = englishCityName;
@@ -55,7 +55,6 @@ class EventsStateController {
 		lang: SupportedLanguages,
 		query?: SearchEventPayload | undefined
 	): Promise<EventDbEntity[]> {
-		console.log(query);
 		const queryObject: FilterQuery<EventOnPoster> = {
 			$and: [],
 			$expr: {
@@ -93,7 +92,6 @@ class EventsStateController {
 				query?.city,
 				SupportedLanguages.ENGLISH
 			);
-			console.log(englishCityName);
 			const cityQuery = { $or: [{ 'location.city': englishCityName }, { isOnline: true }] };
 			queryObject.$and?.push(cityQuery);
 			sortObject.isOnline = 'ascending';

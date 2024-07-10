@@ -45,6 +45,8 @@ export const useLocationStore = defineStore('location', {
 				// 	}
 				//
 				const { data } = await apiRouter.location.country.getAll.useQuery({});
+				if ([...data.value].every((countryName) => state._countries.has(countryName)))
+					return;
 				if (!data.value?.length) return;
 				//
 				state._countries = new Set(data.value);

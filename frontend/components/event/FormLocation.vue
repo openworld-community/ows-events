@@ -7,6 +7,7 @@ const mobile = inject('mobile');
 
 const locationStore = useLocationStore();
 const eventStore = useEventStore();
+locationStore.$reset();
 
 const countryField = useField<string>(() => 'location.country');
 const timeZoneField = useField<string>(() => 'timezone');

@@ -58,6 +58,10 @@ const props = defineProps({
 	required: {
 		type: Boolean,
 		default: false
+	},
+	unfilteredOptions: {
+		type: Array as PropType<string[]>,
+		required: true
 	}
 });
 
@@ -78,7 +82,7 @@ const model = computed({
 const filteredOptions = computed(() => {
 	const opts = [...props.options];
 	if (searchTerm.value.length < 2) {
-		return [];
+		return props.unfilteredOptions;
 	} else {
 		return opts.filter((option) => {
 			return option.toLowerCase().includes(searchTerm.value.toLowerCase());

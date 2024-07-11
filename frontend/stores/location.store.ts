@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import type { UserLocation } from '../../common/types/location';
 import { LOCATION_API_URL } from '../constants/url';
+import { SupportedLanguages } from '../../common/const';
 
 export type City = string;
 export type Country = string;
@@ -158,6 +159,75 @@ export const useLocationStore = defineStore('location', {
 				// 	$locationStoreForage.setItem(country, [...data.value]);
 			})();
 			return this._citiesByCountry.get(country) ?? [];
+		},
+		getDefaultCitiesByCountry(country: Country, locale: SupportedLanguages) {
+			const defaultEnSerbiaCities = [
+				'Belgrade',
+				'Kraljevo',
+				'Zrenjanin',
+				'Pirot',
+				'Sombor',
+				'Novi Knezevac',
+				'Ivanjica',
+				'Negotin',
+				'Zajecar',
+				'Senica'
+			];
+			const defaultEnMontenegroCities = [
+				'Podgorica',
+				'Niksic',
+				'Pljevlja',
+				'Bijelo Polje',
+				'Cetinje',
+				'Bar',
+				'Herceg Novi',
+				'Berane',
+				'Budva',
+				'Ulcinj'
+			];
+			const defaultRuSerbiaCities = [
+				'Белград',
+				'Кралево',
+				'Зренянин',
+				'Пирот',
+				'Сомбор',
+				'Нови Кнежевац',
+				'Иваница',
+				'Неготин',
+				'Заечар',
+				'Сеница'
+			];
+			const defaultRuMontenegroCities = [
+				'Подгорица',
+				'Никшич',
+				'Плевля',
+				'Биело поле',
+				'Цетине',
+				'Бар',
+				'Херцег Нови',
+				'Беране',
+				'Будва',
+				'Улцин'
+			];
+			const defaultSerbiaCities: Record<SupportedLanguages, string[]> = {
+				[SupportedLanguages.ENGLISH]: defaultEnSerbiaCities,
+				[SupportedLanguages.RUSSIAN]: defaultRuSerbiaCities
+			};
+
+			const defaultMontenegroCities: Record<SupportedLanguages, string[]> = {
+				[SupportedLanguages.ENGLISH]: defaultEnMontenegroCities,
+				[SupportedLanguages.RUSSIAN]: defaultRuMontenegroCities
+			};
+
+			if (['Serbia', 'Сербия'].includes(country)) {
+				return defaultSerbiaCities[locale];
+			}
+
+			if (['Montenegro', 'Черногория'].includes(country)) {
+				return defaultMontenegroCities[locale];
+			}
+
+			return [];
 		}
 	}
 });

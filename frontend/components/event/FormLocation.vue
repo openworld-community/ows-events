@@ -4,6 +4,7 @@ import { useLocationStore } from '../../stores/location.store';
 import { useEventStore } from '../../stores/event.store';
 
 const mobile = inject('mobile');
+const { locale } = useI18n();
 
 const locationStore = useLocationStore();
 const eventStore = useEventStore();
@@ -70,6 +71,12 @@ const addressField = useField<string>(() => 'location.address');
 						:error="cityField.meta.touched && Boolean(cityField.errorMessage.value)"
 						:placeholder="$t('global.city')"
 						:options="locationStore.getCitiesByCountry(countryField.value.value)"
+						:unfiltered-options="
+							locationStore.getDefaultCitiesByCountry(
+								countryField.value.value,
+								locale
+							)
+						"
 						:required="!isOnlineField.value.value"
 					/>
 				</CommonFormField>

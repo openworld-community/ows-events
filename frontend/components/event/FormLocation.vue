@@ -2,9 +2,11 @@
 import { useField } from 'vee-validate';
 import { useLocationStore } from '../../stores/location.store';
 import { useEventStore } from '../../stores/event.store';
+import { SupportedLanguages } from '../../../common/const';
 
 const mobile = inject('mobile');
 const { locale } = useI18n();
+const typedLocale = locale.value as SupportedLanguages;
 
 const locationStore = useLocationStore();
 const eventStore = useEventStore();
@@ -74,7 +76,7 @@ const addressField = useField<string>(() => 'location.address');
 						:unfiltered-options="
 							locationStore.getDefaultCitiesByCountry(
 								countryField.value.value,
-								locale
+								typedLocale
 							)
 						"
 						:required="!isOnlineField.value.value"

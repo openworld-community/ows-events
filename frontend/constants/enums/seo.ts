@@ -73,6 +73,7 @@ export enum SeoItempropAboutEnum {
 	MAIN_CONTENT = 'mainContentOfPage',
 	IMAGE = 'primaryImageOfPage',
 	SIGNIFICANT_LINK = 'significantLink',
+	RELATED_LINK = 'relatedLink',
 	SOCIAL_LINK = 'sameAs'
 }
 

@@ -77,6 +77,8 @@ services:
             - GITHUB_PARSING_TOKEN
             - PEREDELANOCONF_GOOGLEDOC
             - VITE_GOOGLE_OAUTH_KEY
+            - GA_API_SECRET
+            - GA_MEASUREMENT_ID
         networks:
             - traefikpublic
         ports:

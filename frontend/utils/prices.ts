@@ -1,5 +1,6 @@
 import type { Currency } from '~/stores/location.store';
 import type { EventPrice } from '../../common/types/event';
+import { NUMBER_DECIMALS_BY_CURRENCY } from '~/constants/defaultValues/validation';
 
 // Получает аббривеатуру валюты (если существует)
 export const formatCurrency = (currency: Currency) => {
@@ -57,10 +58,7 @@ export const getCurrencyByCountry = (country: string) => {
 };
 
 export const getLengthDecimalByCurrency = (currency: Currency) => {
-	if (currency === 'BTC' || currency === 'ETH') {
-		return 8;
-	}
-	return 2;
+	return NUMBER_DECIMALS_BY_CURRENCY[currency];
 };
 
 export const convertPriceToString = (price: number, currency: Currency) => {

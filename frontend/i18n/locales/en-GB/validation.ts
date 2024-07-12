@@ -43,7 +43,11 @@ export default {
 	},
 	test: {
 		endDate: 'End date can not be less then start date',
-		endTime: 'End time can not be less then start time'
+		endTime: 'End time can not be less then start time',
+		price: {
+			bitcoin: 'Maximum number of characters exceeded',
+			typicalCurrency: 'Maximum number of characters exceeded'
+		}
 	},
 	image: {
 		size: 'File size is greater then {count}Mb.',

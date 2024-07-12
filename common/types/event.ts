@@ -1,6 +1,7 @@
 import type { Timezone } from './location';
 import { EventTypes } from '../const/eventTypes';
 import { type Tag, Tags } from '../const/tags';
+import type { CurrencyType } from '../const/price';
 
 export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
 
@@ -27,7 +28,7 @@ export type EventDbEntity = {
 };
 
 export type EventOnPoster = EventDbEntity;
-
+// TODO in Event formype in price using val instead value because value - reserved word and ve-validate has problems, better not use value at all
 export type EventFormType = {
 	startDate: Date;
 	endDate?: Date;
@@ -37,7 +38,7 @@ export type EventFormType = {
 
 	price: {
 		val: number | null;
-		currency: string;
+		currency: CurrencyType | null;
 	};
 	isFree: boolean;
 	timezone: string;
@@ -83,7 +84,7 @@ export type EventPrice = {
 	maxValue: number | null;
 	value: number | null;
 	minValue: number | null;
-	currency: string | null;
+	currency: CurrencyType | null;
 };
 
 export type IEventMeta = {

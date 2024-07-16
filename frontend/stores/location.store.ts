@@ -204,10 +204,10 @@ export const useLocationStore = defineStore('location', {
 				'Биело поле',
 				'Цетине',
 				'Бар',
-				'Херцег Нови',
+				'Херцег-Нови',
 				'Беране',
 				'Будва',
-				'Улцин'
+				'Улцинь'
 			];
 			const defaultSerbiaCities: Record<SupportedLanguages, string[]> = {
 				[SupportedLanguages.ENGLISH]: defaultEnSerbiaCities,

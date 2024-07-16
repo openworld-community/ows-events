@@ -1,5 +1,6 @@
 export enum RoutePathEnum {
 	HOME = '/',
+	CITY = '/city',
 	EVENT = '/event',
 	AUTH = '/auth',
 	EVENT_EDIT = '/event/edit-',
@@ -12,11 +13,12 @@ export enum RoutePathEnum {
 	USER_MY_EVENTS = '/user/my-events',
 	USER_PROFILE = '/user/profile',
 	SUPPORT = '/support',
-	COOPERATION = '/cooperation',
+	COOPERATION = '/cooperation'
 }
 
 export enum RouteNameEnum {
 	HOME = 'index',
+	CITY = 'city-city',
 	EVENT = 'event-id',
 	AUTH = 'auth',
 	ABOUT = 'about',
@@ -29,5 +31,5 @@ export enum RouteNameEnum {
 	EVENT_EDIT = 'event-edit-editId',
 	USER_PROFILE = 'user-profile',
 	SUPPORT = 'support',
-	COOPERATION = 'cooperation',
+	COOPERATION = 'cooperation'
 }

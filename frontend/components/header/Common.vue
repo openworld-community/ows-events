@@ -35,7 +35,11 @@ const navigationBurger = ref(null);
 
 onClickOutside(sidebar, () => navbarToggle(), { ignore: [navigationBurger] });
 
-const isAtHome = computed(() => getRouteName(route.name as string) === RouteNameEnum.HOME);
+const isAtHome = computed(
+	() =>
+		getRouteName(route.name as string) === RouteNameEnum.HOME ||
+		getRouteName(route.name as string) === RouteNameEnum.CITY
+);
 const logoComponentIs = computed(() => {
 	if (isAtHome.value) return 'button';
 	else return CommonNavLink;

@@ -11,8 +11,21 @@ const mobile = inject<boolean>('mobile');
 
 const myEvents = ref<EventOnPoster[] | []>([]);
 
+const localePath = useLocalePath();
 const { data } = await apiRouter.events.createdEvents.get.useQuery({});
 if (data.value) myEvents.value = data.value;
+
+const deleteCard = async (id) => {
+	// если запрос проходит, то ничего не приходит, т.е. может придти только error
+	const { error } = await apiRouter.events.delete.useMutation({ data: { id } });
+	if (error.value) return;
+
+	navigateTo(localePath({ path: RoutePathEnum.USER_PAGE }));
+};
+
+const onEditButtonClick = async (id) => {
+	await navigateTo(localePath({ path: `${RoutePathEnum.EVENT_EDIT}${id}` }));
+};
 </script>
 
 <template>
@@ -36,6 +49,20 @@ if (data.value) myEvents.value = data.value;
 				itemscope
 				:itemtype="SeoItemTypeEnum.EVENT"
 			>
+				<div class="mydiv">
+					<div
+						class="baton"
+						@click="onEditButtonClick(event.id)"
+					>
+						Edit
+					</div>
+					<div
+						class="baton"
+						@click="deleteCard(event.id)"
+					>
+						Delete
+					</div>
+				</div>
 				<UserEventCard :event-data="event" />
 			</li>
 		</ul>
@@ -61,6 +88,21 @@ if (data.value) myEvents.value = data.value;
 </template>
 
 <style scoped lang="less">
+.mydiv {
+	display: flex;
+	position: absolute;
+	flex-direction: column;
+	padding: 5px;
+	color: black;
+	z-index: 1;
+	gap: 5px;
+	user-select: none;
+}
+.baton {
+	height: 20px;
+	width: 50px;
+	background-color: red;
+}
 .my-events {
 	width: 100%;
 	height: 100%;

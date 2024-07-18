@@ -55,9 +55,20 @@ const onButtonClick = async () => {
 					v-if="mobile"
 					class="main-page__location"
 				/> -->
+
 			<HomeFilters class="main-page__filter" />
 		</div>
-
+		<p
+			style="
+				padding-top: 20px;
+				padding-left: 20px;
+				font-size: 22px;
+				font-weight: 600;
+				color: brown;
+			"
+		>
+			Events in Serbia and Montenegro
+		</p>
 		<HomeCardList />
 
 		<CommonButton

@@ -6,12 +6,24 @@ export default {
 	subscription: 'С любовью, Команда AfishaPeredelano.',
 	support: 'Поддержать нашу команду',
 	support_cripta: 'Единоразовый перевод в криптовалюте',
+
 	method: {
-		title: 'Внести вклад:',
 		patreon: 'Patreon',
+		boosty: 'Boosty',
+		paypal: 'Paypal',
 		bitcoin: 'Bitcoin',
 		ethereum: 'Ethereum',
 		usdt: 'USDT',
 		usdc: 'USDC'
-	}
+	},
+
+	text: {
+		patreon: 'Поддержать в patreon',
+		boosty: 'Поддержать в Boosty',
+		paypal: 'Поддержать в Paypal',
+		bitcoin: 'Bitcoin',
+		ethereum: 'Ethereum',
+		usdt: 'USDT',
+		usdc: 'USDC'
+	},
 };

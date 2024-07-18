@@ -5,8 +5,9 @@ export default {
 	gratitude: 'Thank you for making our mission possible!',
 	subscription: 'With love, the AfishaPeredelano Team.',
 	method: {
-		title: 'Contribute:',
 		patreon: 'Patreon',
+		boosty: 'Boosty',
+		paypal: 'Paypal',
 		bitcoin: 'Bitcoin',
 		ethereum: 'Ethereum',
 		usdt: 'USDT',

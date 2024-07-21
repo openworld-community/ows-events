@@ -17,13 +17,4 @@ export default {
 		usdc: 'USDC'
 	},
 
-	text: {
-		patreon: 'Поддержать в patreon',
-		boosty: 'Поддержать в Boosty',
-		paypal: 'Поддержать в Paypal',
-		bitcoin: 'Bitcoin',
-		ethereum: 'Ethereum',
-		usdt: 'USDT',
-		usdc: 'USDC'
-	},
 };

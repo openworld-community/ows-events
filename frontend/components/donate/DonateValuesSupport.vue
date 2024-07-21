@@ -4,6 +4,12 @@ defineProps({
 		type: String,
 		required: true
 	},
+
+	link: {
+		type: String,
+		required: true
+	},
+
 	icon: {
 		type: String,
 		required: true
@@ -17,51 +23,50 @@ defineProps({
 </script>
 
 <template>
-	<li class="metod">
-		<div class="method__name-wrapper">
-			<div class="method__icon-wrapper">
+	<li class="support">
+		<div class="support__header">
+			<div class="support__icon-header">
 				<CommonIcon
 					:name="`donate/${icon}`"
-					class="method__icon"
+					class="support__icon"
 					color="var(--color-white)"
 					width="32px"
 					height="29px"
 				/>
 			</div>
-			<h3 class="method__name">{{ $t(method) }}</h3>
+			<h3 class="support__name">{{ $t(method) }}</h3>
 		</div>
-		<!-- 
-		<div>
-			<p>{{ $t(text) }}</p>
+		 
+		<div class="support__button">
+			<p> Поддержать в {{ $t(method)}} </p>
+			 
 			<CommonButton
-				button-kind="text"
-				:link="link ? link : null"
+				button-kind="success"
+				:link="link"
 				:is-external-link="link ? true : null"
-				:button-text="
-					link
-						? $t('global.button.follow')
-						: !copied
-						? $t('global.button.copy')
-						: $t('global.button.copied')
-				"
-				:icon-name="link ? 'arrow-right' : 'copy'"
-				:itemprop="SeoItempropDonateEnum.LINK"
-				@click="link ? null : copy(copyData)"
+				button-text= "Перейти"
+				class="support__button-style"
+				
+				
+				
 			/>
+			
 		</div>
-        -->
+        
 	</li>
 </template>
 
 <style lang="less" scoped>
-.method {
-	&__name-wrapper {
+.support {
+	
+
+	&__header {
 		width: 100%;
 		display: flex;
 		align-items: center;
 
 		background-color: v-bind('color');
-		color: white;
+		
 		height: 56px;
 		border-radius: 20px 20px 0 0;
 		gap: 44px;
@@ -72,16 +77,20 @@ defineProps({
 		font-size: var(--font-size-M);
 		font-weight: var(--font-weight-regular);
 		line-height: 24px;
+		color: white;
 	}
 
 	&__button {
-		display: flex;
-		align-items: center;
-		padding: var(--space-related-items) 12px;
-
-		&-icon {
-			margin-right: var(--space-related-items);
-		}
+		height: 150px;
+		padding: 15px;
+		background-color: #F5F5F5;
+		margin-bottom: 40px;
 	}
+
+	&__button-style {
+		width: 100px;
+		margin-top: 30px;
+	}
+
 }
 </style>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ValuesSupport } from '../components/donate/DonateData';
 
+
 const { t } = useI18n();
 getMeta({
 	title: t('meta.about_us.title'),
@@ -37,6 +38,7 @@ import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 					:method="item.method"
 					:icon="key as string"
 					:color="`var(--color-donate-${key as string})`"
+					:link="item?.link"
 				/>
 			</ul>
 		</div>

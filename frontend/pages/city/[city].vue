@@ -74,19 +74,20 @@ watch(
 const { data, status, error, refresh } = await useFetch(`${baseUrl}${current}`, {
 	query: { q, key: key, dt, tags }
 });
-
-//const { data: events } = await useFetch(`${API_URL}/${searchUrl}`, {
-////	query: { tags, startDate: dateStart, endDate: dateEnd }
-//});
-const { data: posterEvents } = await apiRouter.filters.findEvents.useQuery({
-	data: {
-		query: {
-			tags,
-			startDate: dateStart,
-			endDate: dateEnd
-		}
-	}
+// backend noy suited for this - becouse it is query not body
+const { data: events } = await useFetch(`${API_URL}/${searchUrl}`, {
+	query: { tags, startDate: dateStart, endDate: dateEnd },
+	method: 'post'
 });
+//const { data: posterEvents } = await apiRouter.filters.findEvents.useQuery({
+//	data: {
+//		query: {
+//			tags,
+//			startDate: dateStart,
+//			endDate: dateEnd
+//		}
+//	}
+//});
 </script>
 <template>
 	<main>

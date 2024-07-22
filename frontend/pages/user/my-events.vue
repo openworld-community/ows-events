@@ -3,6 +3,8 @@ import { SeoItemTypeEnum } from '~/constants/enums/seo';
 import type { EventOnPoster } from '../../../common/types';
 import { RoutePathEnum } from '../../constants/enums/route';
 
+import { ref } from 'vue';
+
 definePageMeta({
 	layout: 'profile'
 });
@@ -15,12 +17,12 @@ const localePath = useLocalePath();
 const { data } = await apiRouter.events.createdEvents.get.useQuery({});
 if (data.value) myEvents.value = data.value;
 
-const deleteCard = async (id) => {
+const deleteCard = async (id: string) => {
 	// если запрос проходит, то ничего не приходит, т.е. может придти только error
 	const { error } = await apiRouter.events.delete.useMutation({ data: { id } });
 	if (error.value) return;
 
-	navigateTo(localePath({ path: RoutePathEnum.USER_PAGE }));
+	myEvents.value = myEvents.value.filter((event: EventOnPoster) => event.id !== id);
 };
 
 const onEditButtonClick = async (id) => {
@@ -48,20 +50,31 @@ const onEditButtonClick = async (id) => {
 				:key="event.id"
 				itemscope
 				:itemtype="SeoItemTypeEnum.EVENT"
+				class="eventss"
 			>
 				<div class="mydiv">
-					<div
-						class="baton"
+					<CommonButton
+						:link="RoutePathEnum.USER_MY_EVENTS"
+						icon-name="edit"
+						button-kind="text"
+						no-border
+						class="buttoncolor"
+						iconColor="#ff0000"
 						@click="onEditButtonClick(event.id)"
+					/>
+					<LibraryAlert
+						:title="$t('user.deleteEvent.title')"
+						:description-text="$t('user.deleteEvent.text')"
+						@on-confirm="deleteCard(event.id)"
 					>
-						Edit
-					</div>
-					<div
-						class="baton"
-						@click="deleteCard(event.id)"
-					>
-						Delete
-					</div>
+						<CommonButton
+							:link="RoutePathEnum.USER_MY_EVENTS"
+							icon-name="trash"
+							button-kind="warning"
+							no-border
+							class="buttoncolor"
+						/>
+					</LibraryAlert>
 				</div>
 				<UserEventCard :event-data="event" />
 			</li>
@@ -88,15 +101,27 @@ const onEditButtonClick = async (id) => {
 </template>
 
 <style scoped lang="less">
+.buttoncolor {
+	width: 40px;
+	color: black;
+	background-color: #f5f5f5;
+}
+.eventss {
+	position: relative;
+}
 .mydiv {
 	display: flex;
 	position: absolute;
-	flex-direction: column;
+	height: 100%;
+	flex-direction: row;
 	padding: 5px;
 	color: black;
 	z-index: 1;
 	gap: 5px;
 	user-select: none;
+	right: 0;
+	align-items: center;
+	justify-content: center;
 }
 .baton {
 	height: 20px;

@@ -32,4 +32,9 @@ export default {
 		title: 'Log out',
 		text: 'Are you sure you want to log out?',
 	},
+	deleteEvent: {
+		title: 'Delete Event',
+		text: 'Are you sure you want to delete this event?',
+
+	},
 };

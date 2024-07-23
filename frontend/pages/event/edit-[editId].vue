@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { LocalStorageEnum } from '../../constants/enums/common';
+import { v4 as uuid } from 'uuid';
+
+import { CookieNameEnum, LocalStorageEnum } from '../../constants/enums/common';
 import type { EventOnPoster, PostEventPayload } from '../../../common/types/event';
 import { useEventStore } from '../../stores/event.store';
 import { useUserStore } from '../../stores/user.store';
@@ -12,6 +14,8 @@ import { getFirstParam } from '../../utils';
 
 import { getInitialEventFormValues } from '../../utils/events';
 import { useSendTrackingEvent } from '~/composables/useSendTrackingEvent';
+import { CommonErrorsEnum } from '../../../common/const';
+import { useField } from 'vee-validate';
 
 const { sendAnalytics } = useSendTrackingEvent();
 const router = useRouter();
@@ -35,6 +39,14 @@ definePageMeta({
 
 const event = ref<EventOnPoster>();
 const openSuccess = ref(false);
+const env = useField<string>(() => 'env');
+const token = useField<string>(() => 'token');
+
+const environments = [
+	'https://api-test.afisha.peredelano.com',
+	'https://api-demo.afisha.peredelano.com',
+	'https://api.afisha.peredelano.com'
+];
 
 const onSuccess = (eventId: string) => {
 	openSuccess.value = true;
@@ -65,38 +77,29 @@ const initialValues = computed(() => {
 });
 
 const submitEvent = async (payload: PostEventPayload) => {
-	if (id !== 'new') {
-		payload.id = id;
-		const { error } = await apiRouter.events.edit.useMutation({
-			data: { event: payload }
-		});
-		if (!error.value) {
-			localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
+	const opts = {
+		method: 'POST' as 'POST',
+		headers: {
+			Authorization: token.value.value
+		},
+		body: { event: payload },
+		key: uuid()
+	};
+	console.log(token.value.value);
+	console.log(env.value.value);
+	const url = `${env.value.value}/api/events/add`;
 
-			sendAnalytics.formEventEdit({
-				id_user: event.value.creatorId,
-				id_event: id,
-				country: payload?.location?.country,
-				city: payload?.location?.city,
-				online: payload?.isOnline
-			});
-			onSuccess(id);
-		}
-	} else {
-		const { data } = await apiRouter.events.add.useMutation({
-			data: { event: payload }
-		});
+	const getData = () => useFetch(url, opts);
+	const data = await getData();
+	if (data.error.value) {
+		// todo - переделать эту проверку когда бэк уже стандартизирует вывод своих ошибок везде
+		if (data.error.value?.data?.message) {
+			const errorMessage = data.error.value.data.message;
 
-		if (data.value) {
-			localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
-			sendAnalytics.formEventCreate({
-				id_user: userStore.id,
-				id_event: data.value.id,
-				country: payload?.location?.country,
-				city: payload?.location?.city,
-				online: payload?.isOnline
-			});
-			onSuccess(data.value.id);
+			const { $errorToast, $i18n } = useNuxtApp();
+			$errorToast($i18n.t(`errors.${errorMessage}`));
+		} else {
+			console.error(data.error.value);
 		}
 	}
 };
@@ -109,6 +112,20 @@ const cancel = () => {
 
 <template>
 	<ClientOnly>
+		<CommonFormField>
+			<LibrarySelect
+				v-model="env.value.value"
+				:options="environments"
+				placeholder="Environment"
+			/>
+		</CommonFormField>
+		<CommonFormField>
+			<CommonUiBaseInput
+				v-model="token.value.value"
+				name="token"
+				placeholder="Token"
+			/>
+		</CommonFormField>
 		<EventForm
 			:title="id !== 'new' ? $t('form.event.title_edit') : $t('form.event.title')"
 			:initial-values="initialValues"

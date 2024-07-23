@@ -143,7 +143,6 @@ const onEditButtonClick = async () => {
 			/>
 
 			<DetailesActions
-				v-if="userStore.isAuthorized"
 				:creator-id="posterEvent.creatorId"
 				@delete-click="deleteCard"
 				@edit-click="onEditButtonClick"

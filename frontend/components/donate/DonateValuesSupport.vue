@@ -52,7 +52,14 @@ defineProps({
 
 <style lang="less" scoped>
 .support {
-	width: 351px;
+	@media (min-width: 765px) {
+		width: 47%;
+	}
+
+	@media (min-width: 1440px) {
+		width: 351px;
+	}
+
 	&__header {
 		display: flex;
 		align-items: center;

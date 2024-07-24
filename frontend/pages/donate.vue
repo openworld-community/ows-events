@@ -3,6 +3,7 @@ import { ValuesSupport } from '../components/donate/DonateData';
 import { ValuesSupportKripta } from '../components/donate/DonateData';
 
 const { t } = useI18n();
+const mobile = inject('mobile');
 getMeta({
 	title: t('meta.about_us.title'),
 	description: t('meta.about_us.description')
@@ -15,17 +16,32 @@ import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 		class="donate"
 		itemscope
 	>
+		<h2 class="donate-info__title">{{ $t('donate.title') }}</h2>
 		<div class="donate-info">
-			<h2 class="donate-info__title">{{ $t('donate.title') }}</h2>
 			<div class="donate-logo">
-				<p class="donate-logo__text">{{ $t('donate.description') }}</p>
+				<div>
+					<p class="donate-logo__title">{{ $t('donate.description') }}</p>
+					<div
+						v-if="!mobile"
+						class="donate-logo__text"
+					>
+						<p>{{ $t('donate.gratitude') }}</p>
+						<p>{{ $t('donate.subscription') }}</p>
+					</div>
+				</div>
+
 				<img
 					class="donate-logo__image"
 					src="@/public/img/help-Afisha/logo.png"
 					:itemprop="SeoItempropAboutEnum.IMAGE"
 				/>
-				<p>{{ $t('donate.gratitude') }}</p>
-				<p>{{ $t('donate.subscription') }}</p>
+				<div
+					v-if="mobile"
+					class="donate-logo__text"
+				>
+					<p>{{ $t('donate.gratitude') }}</p>
+					<p>{{ $t('donate.subscription') }}</p>
+				</div>
 			</div>
 		</div>
 
@@ -60,9 +76,12 @@ import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 <style lang="less" scoped>
 .donate {
 	width: 100%;
-	padding: 4%;
-	@media (max-width: 767px) {
-		padding-top: 80px;
+	padding: 80px 15px 0 15px;
+	@media (min-width: 765px) {
+		padding: 0 43px;
+	}
+	@media (min-width: 1440px) {
+		padding: 0 100px;
 	}
 
 	&__title {
@@ -74,8 +93,19 @@ import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 	}
 }
 .donate-logo {
-	&__text {
+	@media (min-width: 765px) {
+		display: flex;
+		gap: 30px;
+	}
+
+	&__title {
 		text-align: justify;
+	}
+	&__image {
+		width: 100%;
+		@media (min-width: 765px) {
+			min-width: 253px;
+		}
 	}
 }
 .donate-support {
@@ -84,6 +114,13 @@ import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 	}
 
 	&__support {
+		@media (min-width: 765px) {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+
+			flex-wrap: wrap;
+		}
 	}
 }
 </style>

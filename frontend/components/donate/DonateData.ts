@@ -8,7 +8,6 @@ export type DonateValuesData = {
 	icon: String;
 };
 
-
 export const ValuesSupport: { [key: string]: DonateValuesData } = {
 	patreon: {
 		method: 'donate.method.patreon',

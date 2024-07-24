@@ -51,8 +51,8 @@ import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 				<DonateValuesSupport
 					v-for="(item, key) in ValuesSupport"
 					v-bind="item"
-					:key="item.name"
-					:method="item.name"
+					:key="item.method"
+					:method="item.method"
 					:icon="key as string"
 					:color="`var(--color-donate-${key as string})`"
 					:link="item?.link"

@@ -1,25 +1,29 @@
 import { DONATE_PATREON_URL, DONATE_BOOSTY_URL, DONATE_PAYPAL_URL } from '../../constants/url';
 import { CryptoWalletEnum } from '../../constants/enums/crypto-wallets';
+
+export type DonateValuesDataSupport = {
+	method: String;
+	link: String;
+};
+
 export type DonateValuesData = {
-	name: String;
 	method: String;
 	account: String;
-	link: String;
 	color: String;
 	icon: String;
 };
 
-export const ValuesSupport: { [key: string]: DonateValuesData } = {
+export const ValuesSupport: { [key: string]: DonateValuesDataSupport } = {
 	patreon: {
-		name: 'donate.method.patreon',
+		method: 'donate.method.patreon',
 		link: DONATE_PATREON_URL
 	},
 	boosty: {
-		name: 'donate.method.boosty',
+		method: 'donate.method.boosty',
 		link: DONATE_BOOSTY_URL
 	},
 	paypal: {
-		name: 'donate.method.paypal',
+		method: 'donate.method.paypal',
 		link: DONATE_PAYPAL_URL
 	}
 };

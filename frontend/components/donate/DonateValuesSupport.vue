@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps({
-	name: {
+	method: {
 		type: String,
 		required: true
 	},
@@ -33,11 +33,11 @@ defineProps({
 				height="29px"
 			/>
 
-			<h3 class="support__name">{{ $t(name) }}</h3>
+			<h3 class="support__name">{{ $t(method) }}</h3>
 		</div>
 
 		<div class="support__button">
-			<p>Поддержать на {{ $t(name) }}</p>
+			<p>Поддержать на {{ $t(method) }}</p>
 
 			<CommonButton
 				button-kind="success"

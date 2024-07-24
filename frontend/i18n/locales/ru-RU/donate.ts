@@ -13,8 +13,7 @@ export default {
 		paypal: 'Paypal',
 		bitcoin: 'Bitcoin',
 		ethereum: 'Ethereum',
-		usdt: 'USDT',
-		usdc: 'USDC'
-	},
-
+		usdt: 'USDT(TRC20)',
+		usdc: 'USDC(TRC20)'
+	}
 };

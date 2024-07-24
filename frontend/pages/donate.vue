@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ValuesSupport } from '../components/donate/DonateData';
-
+import { ValuesSupportKripta } from '../components/donate/DonateData';
 
 const { t } = useI18n();
 getMeta({
@@ -28,9 +28,10 @@ import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 				<p>{{ $t('donate.subscription') }}</p>
 			</div>
 		</div>
+
 		<div class="donate-support">
-			<h3>{{ $t('donate.support') }}</h3>
-			<ul>
+			<h3 class="donate-support__title">{{ $t('donate.support') }}</h3>
+			<ul class="donate-support__support">
 				<DonateValuesSupport
 					v-for="(item, key) in ValuesSupport"
 					v-bind="item"
@@ -42,8 +43,16 @@ import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 				/>
 			</ul>
 		</div>
-		<div class="donate-cripta">
+
+		<div class="donate-kripta">
 			<h3>{{ $t('donate.support_cripta') }}</h3>
+			<ul>
+				<DonateValuesSupportKripta
+					v-for="item in ValuesSupportKripta"
+					v-bind="item"
+					:key="item.icon"
+				/>
+			</ul>
 		</div>
 	</main>
 </template>
@@ -59,9 +68,22 @@ import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 	&__title {
 	}
 }
+.donate-info {
+	&__title {
+		text-align: center;
+	}
+}
 .donate-logo {
 	&__text {
 		text-align: justify;
+	}
+}
+.donate-support {
+	&__title {
+		text-align: center;
+	}
+
+	&__support {
 	}
 }
 </style>

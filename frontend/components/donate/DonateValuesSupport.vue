@@ -25,48 +25,38 @@ defineProps({
 <template>
 	<li class="support">
 		<div class="support__header">
-			<div class="support__icon-header">
-				<CommonIcon
-					:name="`donate/${icon}`"
-					class="support__icon"
-					color="var(--color-white)"
-					width="32px"
-					height="29px"
-				/>
-			</div>
+			<CommonIcon
+				:name="`donate/${icon}`"
+				class="support__icon"
+				color="var(--color-white)"
+				width="32px"
+				height="29px"
+			/>
+
 			<h3 class="support__name">{{ $t(method) }}</h3>
 		</div>
-		 
+
 		<div class="support__button">
-			<p> Поддержать в {{ $t(method)}} </p>
-			 
+			<p>Поддержать на {{ $t(method) }}</p>
+
 			<CommonButton
 				button-kind="success"
 				:link="link"
 				:is-external-link="link ? true : null"
-				button-text= "Перейти"
+				:button-text="$t('global.button.follow')"
 				class="support__button-style"
-				
-				
-				
 			/>
-			
 		</div>
-        
 	</li>
 </template>
 
 <style lang="less" scoped>
 .support {
-	
-
+	width: 351px;
 	&__header {
-		width: 100%;
 		display: flex;
 		align-items: center;
-
 		background-color: v-bind('color');
-		
 		height: 56px;
 		border-radius: 20px 20px 0 0;
 		gap: 44px;
@@ -76,14 +66,15 @@ defineProps({
 	&__name {
 		font-size: var(--font-size-M);
 		font-weight: var(--font-weight-regular);
-		line-height: 24px;
+
 		color: white;
 	}
 
 	&__button {
 		height: 150px;
-		padding: 15px;
-		background-color: #F5F5F5;
+		padding: 30px 15px;
+
+		background-color: #f5f5f5;
 		margin-bottom: 40px;
 	}
 
@@ -91,6 +82,5 @@ defineProps({
 		width: 100px;
 		margin-top: 30px;
 	}
-
 }
 </style>

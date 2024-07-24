@@ -11,7 +11,6 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 			<div class="supportKripta__icon-wrapper">
 				<CommonIcon
 					:name="`donate/${icon}`"
-					name="donate/bitcoin"
 					class="supportKripta__icon"
 					color="var(--color-white)"
 					width="48px"

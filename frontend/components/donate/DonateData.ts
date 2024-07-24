@@ -2,15 +2,15 @@ import { DONATE_PATREON_URL, DONATE_BOOSTY_URL, DONATE_PAYPAL_URL } from '../../
 import { CryptoWalletEnum } from '../../constants/enums/crypto-wallets';
 
 export type DonateValuesDataSupport = {
-	method: String;
-	link: String;
+	method: string;
+	link: string;
 };
 
 export type DonateValuesData = {
-	method: String;
-	account: String;
-	color: String;
-	icon: String;
+	method: string;
+	account: string;
+	color: string;
+	icon: string;
 };
 
 export const ValuesSupport: { [key: string]: DonateValuesDataSupport } = {

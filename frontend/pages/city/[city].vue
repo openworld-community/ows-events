@@ -50,6 +50,7 @@ const getDataFromParams = (data: ReturnType<typeof useRoute>['params'][string]) 
 	const newCity = getFirstParam(data);
 	q.value = capitalize(newCity);
 };
+console.log('ROUTE_PATH', route.path);
 
 watch(
 	() => route.params.city,
@@ -75,9 +76,9 @@ const { data, status, error, refresh } = await useFetch(`${baseUrl}${current}`, 
 	query: { q, key: key, dt, tags }
 });
 // backend noy suited for this - becouse it is query not body
-const { data: events } = await useFetch(`${API_URL}/${searchUrl}`, {
-	query: { tags, startDate: dateStart, endDate: dateEnd },
-	method: 'post'
+//"req":{"method":"POST","url":"/api/events/find?tags=restaurant&startDate=1721520000000&endDate=1721520000000","hostname":"127.0.0.1","remoteAddress":"172.18.0.4","remotePort":58494}
+const { data: events } = await useFetch(`${API_URL}/${searchUrl}/${route.params.city}`, {
+	query: { tags, startDate: dateStart, endDate: dateEnd }
 });
 //const { data: posterEvents } = await apiRouter.filters.findEvents.useQuery({
 //	data: {

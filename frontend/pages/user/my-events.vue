@@ -50,16 +50,21 @@ const onEditButtonClick = async (id) => {
 				:key="event.id"
 				itemscope
 				:itemtype="SeoItemTypeEnum.EVENT"
-				class="eventss"
+				class="my-events__list__event"
 			>
-				<div class="mydiv">
+				<div class="my-events__list__event__buttons">
 					<CommonButton
 						:link="RoutePathEnum.USER_MY_EVENTS"
 						icon-name="edit"
 						button-kind="text"
 						no-border
-						class="buttoncolor"
-						iconColor="#ff0000"
+						:class="[
+							'my-events__list__event__buttons--edit',
+							{
+								'my-events__list__event__buttons--edit--expired':
+									event.date < Date.now()
+							}
+						]"
 						@click="onEditButtonClick(event.id)"
 					/>
 					<LibraryAlert
@@ -72,7 +77,14 @@ const onEditButtonClick = async (id) => {
 							icon-name="trash"
 							button-kind="warning"
 							no-border
-							class="buttoncolor"
+							:class="[
+								'my-events__list__event__buttons--delete',
+								{
+									'my-events__list__event__buttons--delete--expired':
+										event.date < Date.now()
+								}
+							]"
+							class=""
 						/>
 					</LibraryAlert>
 				</div>
@@ -101,33 +113,6 @@ const onEditButtonClick = async (id) => {
 </template>
 
 <style scoped lang="less">
-.buttoncolor {
-	width: 40px;
-	color: black;
-	background-color: #f5f5f5;
-}
-.eventss {
-	position: relative;
-}
-.mydiv {
-	display: flex;
-	position: absolute;
-	height: 100%;
-	flex-direction: row;
-	padding: 5px;
-	color: black;
-	z-index: 1;
-	gap: 5px;
-	user-select: none;
-	right: 0;
-	align-items: center;
-	justify-content: center;
-}
-.baton {
-	height: 20px;
-	width: 50px;
-	background-color: red;
-}
 .my-events {
 	width: 100%;
 	height: 100%;
@@ -178,6 +163,52 @@ const onEditButtonClick = async (id) => {
 
 		@media (min-width: 768px) {
 			max-width: 820px;
+		}
+		&__event {
+			position: relative;
+
+			&__buttons {
+				display: flex;
+				position: absolute;
+				height: 100%;
+				flex-direction: row;
+				padding: 5px 7px 5px 5px;
+				color: black;
+				z-index: 1;
+				gap: 5px;
+				user-select: none;
+				right: 0;
+				align-items: center;
+				justify-content: center;
+				pointer-events: none;
+				&--edit {
+					width: 40px;
+					background-color: var(--color-background-secondary);
+					pointer-events: auto;
+
+					&--expired {
+						display: none;
+					}
+				}
+				&--edit :deep(svg) {
+					color: var(--color-accent-green-main);
+				}
+				&--delete {
+					width: 40px;
+					background-color: var(--color-background-secondary);
+					pointer-events: auto;
+
+					&--expired {
+						background-color: rgba(250, 250, 250, 0.5);
+					}
+				}
+				&--delete :deep(svg) {
+					color: var(--color-accent-green-main);
+				}
+				&--delete :hover :deep(svg) {
+					color: var(--color-accent-red);
+				}
+			}
 		}
 	}
 

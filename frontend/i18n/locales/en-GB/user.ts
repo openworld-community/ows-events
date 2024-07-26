@@ -34,7 +34,7 @@ export default {
 	},
 	deleteEvent: {
 		title: 'Delete Event',
-		text: 'Are you sure you want to delete this event?',
+		text: 'Are you sure you want to delete this Event?',
 
 	},
 };

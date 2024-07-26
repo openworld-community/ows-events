@@ -109,11 +109,11 @@ const tagArray = computed(() => {
 	background-color: var(--color-background-secondary);
 	border: 1px solid var(--color-background-secondary);
 	border-radius: 8px;
-	padding: 8px 90px 8px 8px;
+	padding: 8px;
 	margin-bottom: 12px;
 
 	@media (min-width: 768px) {
-		padding: 16px 100px 16px 12px;
+		padding: 16px 12px;
 	}
 
 	transition-property: background-color, border-color;
@@ -229,6 +229,12 @@ const tagArray = computed(() => {
 
 		@media (min-width: 768px) {
 			font-size: 12px;
+		}
+	}
+	&__tags {
+		padding-right: 80px;
+		@media (min-width: 768px) {
+			padding-right: 100px;
 		}
 	}
 }

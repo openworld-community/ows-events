@@ -98,11 +98,14 @@ const tagArray = computed(() => {
 				class="description__tags"
 			/>
 		</div>
+
+		<slot />
 	</CommonNavLink>
 </template>
 
 <style scoped lang="less">
 .card {
+	position: relative;
 	display: flex;
 	width: 100%;
 	align-items: center;

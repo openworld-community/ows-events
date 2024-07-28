@@ -2,8 +2,8 @@
 import { SeoItemTypeEnum } from '~/constants/enums/seo';
 import type { EventOnPoster } from '../../../common/types';
 import { RoutePathEnum } from '../../constants/enums/route';
-
 import { ref } from 'vue';
+import UserButtons from '~/components/user/userButtons.vue';
 
 definePageMeta({
 	layout: 'profile'
@@ -25,9 +25,13 @@ const deleteCard = async (id: string) => {
 	myEvents.value = myEvents.value.filter((event: EventOnPoster) => event.id !== id);
 };
 
-const onEditButtonClick = async (id) => {
+const onEditButtonClick = async (id: string) => {
 	await navigateTo(localePath({ path: `${RoutePathEnum.EVENT_EDIT}${id}` }));
 };
+
+// const addToFavorites = async (id: string) => {
+// 	// Задел для избранного добавьте в UserButtons @favorite="addToFavorites" и перепишите визуал в компоненте UserButtons
+// };
 </script>
 
 <template>
@@ -52,43 +56,22 @@ const onEditButtonClick = async (id) => {
 				:itemtype="SeoItemTypeEnum.EVENT"
 				class="my-events__list__event"
 			>
-				<div class="my-events__list__event__buttons">
-					<CommonButton
-						:link="RoutePathEnum.USER_MY_EVENTS"
-						icon-name="edit"
-						button-kind="text"
-						no-border
-						:class="[
-							'my-events__list__event__buttons--edit',
-							{
-								'my-events__list__event__buttons--edit--expired':
-									event.date < Date.now()
-							}
-						]"
-						@click="onEditButtonClick(event.id)"
-					/>
-					<LibraryAlert
-						:title="$t('user.deleteEvent.title')"
-						:description-text="$t('user.deleteEvent.text')"
-						@on-confirm="deleteCard(event.id)"
-					>
-						<CommonButton
-							:link="RoutePathEnum.USER_MY_EVENTS"
-							icon-name="trash"
-							button-kind="warning"
-							no-border
-							:class="[
-								'my-events__list__event__buttons--delete',
-								{
-									'my-events__list__event__buttons--delete--expired':
-										event.date < Date.now()
-								}
-							]"
-							class=""
-						/>
-					</LibraryAlert>
-				</div>
-				<UserEventCard :event-data="event" />
+				<UserButtons
+					:show-edit-delete-buttons="true"
+					:event="event"
+					@delete="deleteCard"
+					@edit="onEditButtonClick"
+				/>
+				<UserEventCard :event-data="event">
+					<slot>
+						<!-- <UserButtons
+							:show-edit-delete-buttons="true"
+							:event="event"
+							@delete="deleteCard"
+							@edit="onEditButtonClick"
+						/> -->
+					</slot>
+				</UserEventCard>
 			</li>
 		</ul>
 
@@ -166,49 +149,6 @@ const onEditButtonClick = async (id) => {
 		}
 		&__event {
 			position: relative;
-
-			&__buttons {
-				display: flex;
-				position: absolute;
-				height: 100%;
-				flex-direction: row;
-				padding: 5px 7px 5px 5px;
-				color: black;
-				z-index: 1;
-				gap: 5px;
-				user-select: none;
-				right: 0;
-				align-items: center;
-				justify-content: center;
-				pointer-events: none;
-				&--edit {
-					width: 40px;
-					background-color: var(--color-background-secondary);
-					pointer-events: auto;
-
-					&--expired {
-						display: none;
-					}
-				}
-				&--edit :deep(svg) {
-					color: var(--color-accent-green-main);
-				}
-				&--delete {
-					width: 40px;
-					background-color: var(--color-background-secondary);
-					pointer-events: auto;
-
-					&--expired {
-						background-color: rgba(250, 250, 250, 0.5);
-					}
-				}
-				&--delete :deep(svg) {
-					color: var(--color-accent-green-main);
-				}
-				&--delete :hover :deep(svg) {
-					color: var(--color-accent-red);
-				}
-			}
 		}
 	}
 

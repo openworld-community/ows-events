@@ -35,20 +35,19 @@ const getDataeFromQuery = (date?: string) => {
 };
 
 const param1 = ref('value1');
-const q = ref(route.params.city);
+const city = computed(() => route.params.city);
 
 const dt = ref(route.query.startDate);
-const dateStart = ref(getDataeFromQuery(route.query.startDate as string));
-const dateEnd = ref(getDataeFromQuery(route.query.endDate as string));
-const tags = ref(
+const dateStart = computed(() => getDataeFromQuery(route.query.startDate as string));
+const dateEnd = computed(() => getDataeFromQuery(route.query.endDate as string));
+const tags = computed(() =>
 	getFirstQuery(route.query.tags)
 		.split(', ')
 		.filter((item) => item !== '')
 );
-
 const getDataFromParams = (data: ReturnType<typeof useRoute>['params'][string]) => {
 	const newCity = getFirstParam(data);
-	q.value = capitalize(newCity);
+	//city.value = capitalize(newCity);
 };
 console.log('ROUTE_PATH', route.path);
 
@@ -60,24 +59,28 @@ watch(
 	{ deep: true }
 );
 
-watch(
-	() => route.query,
-	(val) => {
-		alert(JSON.stringify(val));
-		dt.value = val.startDate;
-		tags.value = getFirstQuery(val.tags)
-			.split(', ')
-			.filter((item) => item !== '');
-	},
-	{ deep: true }
-);
+//watch(
+//	() => route.query,
+//	(val) => {
+//alert(JSON.stringify(val));
+//	dt.value = val.startDate;
+//tags.value = getFirstQuery(val.tags)
+//	.split(', ')
+//	.filter((item) => item !== '');
+//	},
+////	{ deep: true }
+//);
 
-const { data, status, error, refresh } = await useFetch(`${baseUrl}${current}`, {
-	query: { q, key: key, dt, tags }
+const { data, status, error, refresh, pending } = await useFetch(`${baseUrl}${current}`, {
+	query: { q: city, key: key, dt, tags }
 });
 // backend noy suited for this - becouse it is query not body
 //"req":{"method":"POST","url":"/api/events/find?tags=restaurant&startDate=1721520000000&endDate=1721520000000","hostname":"127.0.0.1","remoteAddress":"172.18.0.4","remotePort":58494}
-const { data: events } = await useFetch(`${API_URL}/${searchUrl}/${route.params.city}`, {
+const {
+	data: events,
+	pending: pendingEvents,
+	error: errorEvents
+} = await useFetch(`${API_URL}/${searchUrl}/${route.params.city}`, {
 	query: { tags, startDate: dateStart, endDate: dateEnd }
 });
 //const { data: posterEvents } = await apiRouter.filters.findEvents.useQuery({
@@ -89,22 +92,45 @@ const { data: events } = await useFetch(`${API_URL}/${searchUrl}/${route.params.
 //		}
 //	}
 //});
+
+const {
+	data: eventsB,
+	pending: pendingEventsB,
+	error: errorEventsB
+} = await useFetch(`${API_URL}/${searchUrl}`, {
+	body: {
+		tags: tags.value,
+		startDate: dateStart.value,
+		endDate: dateEnd.value,
+
+		watch: [tags.value, dateStart.value, dateEnd.value]
+	},
+	method: 'POST'
+});
 </script>
 <template>
 	<main>
-		<CityHerowrap :title="`I am the city ${q}`">
+		<CityHerowrap :title="`I am the city ${city}`">
 			<div>filters</div>
 			<CityFilters :tag-list="usedTags" />
 		</CityHerowrap>
 
 		<div>ref:</div>
-		<div>{{ q }}</div>
+		<div>{{ city }}</div>
 		<div>data:</div>
-		<pre>{{ data }}</pre>
+		<div v-if="pending">Loading...</div>
+		<pre v-else>{{ data }}</pre>
 
 		<div>error:</div>
 		<pre>{{ error }}</pre>
 		<div>events:</div>
-		<pre>{{ events }}</pre>
+		<div v-if="pendingEvents">Loading events....</div>
+		<pre v-else>{{ events }}</pre>
+		<div>error:</div>
+		<pre>{{ errorEvents }}</pre>
+		<div>EventsB:</div>
+		<pre>{{ eventsB }}</pre>
+		<div>errorB:</div>
+		<pre>{{ errorEventsB }}</pre>
 	</main>
 </template>

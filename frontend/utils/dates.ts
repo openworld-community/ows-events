@@ -10,6 +10,7 @@ export const dateNow = Date.now();
 export const getDateFromQuery = (queryDate: string | undefined, keepTimezone = false): Date => {
 	if (!queryDate) return null;
 	const djs = !keepTimezone ? dayjs.utc(queryDate) : dayjs(queryDate);
+	console.log('DATE', djs, dayjs(queryDate));
 	if (!djs.isValid()) return null;
 	return djs.toDate();
 };

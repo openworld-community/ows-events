@@ -11,7 +11,7 @@ const filterStore = useFilterStore();
 defineProps({
 	tagList: {
 		type: Array as PropType<TagList>,
-		required: true
+		default: () => []
 	}
 });
 
@@ -63,6 +63,7 @@ watch(
 	<CommonNavLink :to="`/city/${belg}`">Belgrade</CommonNavLink>
 	<CommonNavLink :to="`/city/${nov}`">Novi Sad</CommonNavLink>
 	<CommonNavLink :to="`/city/${podg}`">Podgoritsa</CommonNavLink>
+
 	<CommonUiDateTimepicker
 		v-model="dates"
 		type="date"
@@ -75,6 +76,7 @@ watch(
 		:aria-label="$t(`home.filter.date.aria`)"
 		:min-date="new Date(roundTime(Date.now(), 10))"
 	/>
+
 	<HomeCollapsible>
 		<template #tags>
 			<div>

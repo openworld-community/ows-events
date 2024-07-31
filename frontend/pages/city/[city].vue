@@ -99,9 +99,9 @@ const {
 	error: errorEventsB
 } = await useFetch(`${API_URL}/${searchUrl}`, {
 	body: {
-		tags: tags.value,
-		startDate: dateStart.value,
-		endDate: dateEnd.value,
+		tags,
+		startDate: dateStart,
+		endDate: dateEnd,
 
 		watch: [tags.value, dateStart.value, dateEnd.value]
 	},

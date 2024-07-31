@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ValuesSupport } from '../components/donate/DonateData';
-import { ValuesSupportKripta } from '../components/donate/DonateData';
+import { ValuesSupport, ValuesSupportKripta } from '../components/donate/DonateData';
 
 const { t } = useI18n();
 const mobile = inject('mobile');
@@ -48,7 +47,7 @@ import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 		<div class="donate-support">
 			<h3 class="donate-support__title">{{ $t('donate.support') }}</h3>
 			<ul class="donate-support__support">
-				<DonateValuesSupport
+				<DonateCardSupport
 					v-for="(item, key) in ValuesSupport"
 					v-bind="item"
 					:key="item.method"
@@ -63,7 +62,7 @@ import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 		<div class="donate-kripta">
 			<h3>{{ $t('donate.support_cripta') }}</h3>
 			<ul>
-				<DonateValuesSupportKripta
+				<DonateCardSupportKripta
 					v-for="item in ValuesSupportKripta"
 					v-bind="item"
 					:key="item.icon"

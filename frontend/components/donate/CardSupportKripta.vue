@@ -1,12 +1,18 @@
 <script setup lang="ts">
 import type { DonateValuesData } from './DonateData';
+import { SeoItempropDonateEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
 defineProps<DonateValuesData>();
 
 const { copy, copied } = useClipboard({ source: '', legacy: true });
 </script>
 
 <template>
-	<li class="supportKripta">
+	<li
+		class="supportKripta"
+		itemscope
+		:itemtype="SeoItemTypeEnum.DONATE_METHOD"
+		:itemprop="SeoItempropDonateEnum.METHOD"
+	>
 		<div class="supportKripta__lable">
 			<div class="supportKripta__icon-wrapper">
 				<CommonIcon
@@ -18,7 +24,12 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 				/>
 			</div>
 
-			<p class="supportKripta__name">{{ $t(method) }}</p>
+			<p
+				class="supportKripta__name"
+				:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
+			>
+				{{ $t(method) }}
+			</p>
 		</div>
 
 		<div class="supportKripta__button">
@@ -27,6 +38,7 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 				:button-text="!copied ? $t('global.button.copy') : $t('global.button.copied')"
 				icon-name="copy"
 				@click="copy(account)"
+				:itemprop="SeoItempropDonateEnum.LINK"
 			/>
 		</div>
 	</li>

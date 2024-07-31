@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import {
+	SeoItempropDonateEnum,
+	SeoItemTypeEnum,
+	SeoItempropGlobalEnum
+} from '../../constants/enums/seo';
 defineProps({
 	method: {
 		type: String,
@@ -23,7 +28,12 @@ defineProps({
 </script>
 
 <template>
-	<li class="support">
+	<li
+		class="support"
+		itemscope
+		:itemtype="SeoItemTypeEnum.DONATE_METHOD"
+		:itemprop="SeoItempropDonateEnum.METHOD"
+	>
 		<div class="support__header">
 			<CommonIcon
 				:name="`donate/${icon}`"
@@ -33,11 +43,18 @@ defineProps({
 				height="29px"
 			/>
 
-			<h3 class="support__name">{{ $t(method) }}</h3>
+			<h3
+				class="support__name"
+				:itemprop="SeoItempropGlobalEnum.TITLE"
+			>
+				{{ $t(method) }}
+			</h3>
 		</div>
 
 		<div class="support__button">
-			<p>Поддержать на {{ $t(method) }}</p>
+			<p :itemprop="SeoItempropGlobalEnum.DESCRIPTION">
+				{{ $t('donate.support_on') }} {{ $t(method) }}
+			</p>
 
 			<CommonButton
 				button-kind="success"
@@ -45,6 +62,7 @@ defineProps({
 				:is-external-link="link ? true : null"
 				:button-text="$t('global.button.follow')"
 				class="support__button-style"
+				:itemprop="SeoItempropDonateEnum.LINK"
 			/>
 		</div>
 	</li>

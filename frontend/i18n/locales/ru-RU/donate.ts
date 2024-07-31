@@ -6,6 +6,7 @@ export default {
 	subscription: 'С любовью, Команда AfishaPeredelano.',
 	support: 'Поддержать нашу команду',
 	support_cripta: 'Единоразовый перевод в криптовалюте',
+	support_on: 'Поддержать на',
 
 	method: {
 		patreon: 'Patreon',

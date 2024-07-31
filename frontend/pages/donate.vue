@@ -1,52 +1,85 @@
 <script setup lang="ts">
 import { ValuesSupport, ValuesSupportKripta } from '../components/donate/DonateData';
+import {
+	SeoItempropDonateEnum,
+	SeoItempropGlobalEnum,
+	SeoItemTypeEnum
+} from '../constants/enums/seo';
 
 const { t } = useI18n();
 const mobile = inject('mobile');
 getMeta({
-	title: t('meta.about_us.title'),
-	description: t('meta.about_us.description')
+	title: t('meta.donate.title'),
+	description: t('meta.donate.description')
 });
-import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 </script>
 
 <template>
 	<main
 		class="donate"
 		itemscope
+		:itemtype="SeoItemTypeEnum.DONATE"
 	>
-		<h2 class="donate-info__title">{{ $t('donate.title') }}</h2>
+		<h2
+			class="donate-info__title"
+			:itemprop="SeoItempropGlobalEnum.TITLE"
+		>
+			{{ $t('donate.title') }}
+		</h2>
 		<div class="donate-info">
 			<div class="donate-logo">
 				<div>
-					<p class="donate-logo__title">{{ $t('donate.description') }}</p>
+					<p
+						class="donate-logo__title"
+						:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
+					>
+						{{ $t('donate.description') }}
+					</p>
 					<div
 						v-if="!mobile"
 						class="donate-logo__text"
 					>
-						<p>{{ $t('donate.gratitude') }}</p>
-						<p>{{ $t('donate.subscription') }}</p>
+						<p :itemprop="SeoItempropGlobalEnum.DESCRIPTION">
+							{{ $t('donate.gratitude') }}
+						</p>
+						<p :itemprop="SeoItempropGlobalEnum.DESCRIPTION">
+							{{ $t('donate.subscription') }}
+						</p>
 					</div>
 				</div>
 
 				<img
 					class="donate-logo__image"
 					src="@/public/img/help-Afisha/logo.png"
-					:itemprop="SeoItempropAboutEnum.IMAGE"
+					:itemprop="SeoItempropGlobalEnum.IMAGE"
 				/>
 				<div
 					v-if="mobile"
 					class="donate-logo__text"
 				>
-					<p>{{ $t('donate.gratitude') }}</p>
-					<p>{{ $t('donate.subscription') }}</p>
+					<p :itemprop="SeoItempropGlobalEnum.DESCRIPTION">
+						{{ $t('donate.gratitude') }}
+					</p>
+					<p :itemprop="SeoItempropGlobalEnum.DESCRIPTION">
+						{{ $t('donate.subscription') }}
+					</p>
 				</div>
 			</div>
 		</div>
 
 		<div class="donate-support">
-			<h3 class="donate-support__title">{{ $t('donate.support') }}</h3>
-			<ul class="donate-support__support">
+			<h3
+				class="donate-support__title"
+				:itemprop="SeoItempropGlobalEnum.TITLE"
+			>
+				{{ $t('donate.support') }}
+			</h3>
+			<ul
+				class="donate-support__support"
+				itemscope
+				:itemtype="SeoItemTypeEnum.DONATE"
+				:itemprop="SeoItempropDonateEnum.GROUP_ITEMPROP"
+			>
 				<DonateCardSupport
 					v-for="(item, key) in ValuesSupport"
 					v-bind="item"
@@ -60,8 +93,17 @@ import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
 		</div>
 
 		<div class="donate-kripta">
-			<h3>{{ $t('donate.support_cripta') }}</h3>
-			<ul>
+			<h3
+				class="donate-kripta__title"
+				:itemprop="SeoItempropGlobalEnum.TITLE"
+			>
+				{{ $t('donate.support_cripta') }}
+			</h3>
+			<ul
+				itemscope
+				:itemtype="SeoItemTypeEnum.DONATE"
+				:itemprop="SeoItempropDonateEnum.GROUP_ITEMPROP"
+			>
 				<DonateCardSupportKripta
 					v-for="item in ValuesSupportKripta"
 					v-bind="item"

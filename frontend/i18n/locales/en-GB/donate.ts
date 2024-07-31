@@ -6,6 +6,7 @@ export default {
 	subscription: 'With love, the AfishaPeredelano Team.',
 	support: 'Support our team',
 	support_cripta: 'One-time transfer in cryptocurrency',
+	support_on: 'Support on',
 	method: {
 		patreon: 'Patreon',
 		boosty: 'Boosty',

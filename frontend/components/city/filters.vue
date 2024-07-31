@@ -45,13 +45,13 @@ watch(
 watch(
 	() => dates,
 	async (val) => {
-		alert(JSON.stringify(val.value[0]));
+		alert(JSON.stringify(val.value[1]));
 		await navigateTo({
 			query: {
 				...route.query,
-				dam: 'tyu',
-				startDate: dayjs(val.value[0]).format('YYYY-MM-DD'),
-				endDate: dayjs(val.value[1]).format('YYYY-MM-DD')
+
+				startDate: val.value[0] ? dayjs(val.value[0]).format('YYYY-MM-DD') : undefined,
+				endDate: val.value[1] ? dayjs(val.value[1]).format('YYYY-MM-DD') : undefined
 			}
 		});
 	},

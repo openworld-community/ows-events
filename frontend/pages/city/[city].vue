@@ -83,15 +83,16 @@ const {
 } = await useFetch(`${API_URL}/${searchUrl}/${route.params.city}`, {
 	query: { tags, startDate: dateStart, endDate: dateEnd }
 });
-//const { data: posterEvents } = await apiRouter.filters.findEvents.useQuery({
-//	data: {
-//		query: {
-//			tags,
-//			startDate: dateStart,
-//			endDate: dateEnd
-//		}
-//	}
-//});
+const { data: posterEvents } = await apiRouter.filters.findEvents2.useQuery({
+	data: {
+		query: {
+			tags,
+			startDate: dateStart,
+			endDate: dateEnd
+		},
+		watch: [tags.value, dateStart.value, dateEnd.value]
+	}
+});
 
 const {
 	data: eventsB,
@@ -125,7 +126,7 @@ const {
 		<pre>{{ error }}</pre>
 		<div>events:</div>
 		<div v-if="pendingEvents">Loading events....</div>
-		<pre v-else>{{ events }}</pre>
+		<pre v-else>{{ posterEvents }}</pre>
 		<div>error:</div>
 		<pre>{{ errorEvents }}</pre>
 		<div>EventsB:</div>

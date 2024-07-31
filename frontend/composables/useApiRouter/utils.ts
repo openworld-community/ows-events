@@ -135,7 +135,7 @@ export function useBackendFetch<T>(
 		auth?: boolean;
 		noDefaults?: boolean;
 		uuid?: boolean;
-		watch?: boolean;
+		watch?: any;
 		immediate?: boolean;
 	} = {}
 ) {

@@ -86,7 +86,7 @@ getMeta({
 					:key="item.method"
 					:method="item.method"
 					:icon="key as string"
-					:color="`var(--color-donate-${key as string})`"
+					:color="item.color"
 					:link="item?.link"
 				/>
 			</ul>

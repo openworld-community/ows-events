@@ -16,15 +16,18 @@ export type DonateValuesData = {
 export const ValuesSupport: { [key: string]: DonateValuesDataSupport } = {
 	patreon: {
 		method: 'donate.method.patreon',
-		link: DONATE_PATREON_URL
+		link: DONATE_PATREON_URL,
+		color: '#4E4E4E'
 	},
 	boosty: {
 		method: 'donate.method.boosty',
-		link: DONATE_BOOSTY_URL
+		link: DONATE_BOOSTY_URL,
+		color: '#F16A2B'
 	},
 	paypal: {
 		method: 'donate.method.paypal',
-		link: DONATE_PAYPAL_URL
+		link: DONATE_PAYPAL_URL,
+		color: '#5C9AD2'
 	}
 };
 

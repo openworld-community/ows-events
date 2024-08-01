@@ -4,6 +4,7 @@ import { CryptoWalletEnum } from '../../constants/enums/crypto-wallets';
 export type DonateValuesDataSupport = {
 	method: string;
 	link: string;
+	color: string;
 };
 
 export type DonateValuesData = {

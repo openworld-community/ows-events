@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type { DonateValuesData } from './DonateData';
-import { SeoItempropDonateEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
+import {
+	SeoItempropDonateEnum,
+	SeoItemTypeEnum,
+	SeoItempropGlobalEnum
+} from '../../constants/enums/seo';
 defineProps<DonateValuesData>();
 
 const { copy, copied } = useClipboard({ source: '', legacy: true });

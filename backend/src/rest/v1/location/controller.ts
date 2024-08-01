@@ -92,13 +92,8 @@ export const getUsedCountries: IGetCountriesHandlerProps = async (request) => {
 
 export const getUsedCitiesByCountry: IGetCitiesByCountryHandlerProps = async (request) => {
 	const { country } = request.params;
-	const lang =
-		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
-	return countriesAndCitiesController.getUsedCitiesByCountry(country, lang);
+	return countriesAndCitiesController.getUsedCitiesByCountry(country);
 };
 
-export const getUsedCities: IGetUsedCitiesHandlerProps = async (request) => {
-	const lang =
-		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
-	return countriesAndCitiesController.getUsedCities(lang);
-};
+export const getUsedCities: IGetUsedCitiesHandlerProps = () =>
+	countriesAndCitiesController.getUsedCities();

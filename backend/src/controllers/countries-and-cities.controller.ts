@@ -1,6 +1,6 @@
 import { EventModel } from '../models/event.model';
-import { CitiesModel } from '../models/cities.model';
-import { CommonErrorsEnum, SupportedLanguages, SupportedCountries } from '../../../common/const';
+import { CitiesModel, ICity } from '../models/cities.model';
+import { CommonErrorsEnum, SupportedCountries, SupportedLanguages } from '../../../common/const';
 import { CountriesForParserModel } from '../models/countries-for-parser.model';
 import { citiesForParserController } from './cities-for-parser.controller';
 import { countriesForParserController } from './countries-for-parser.controller';
@@ -107,8 +107,8 @@ class CountriesAndCitiesController {
 		);
 	}
 
-	async getUsedCitiesByCountry(country: string, lang: SupportedLanguages) {
-		const cities: string[] = await EventModel.distinct('location.city', {
+	async getUsedCitiesByCountry(country: string) {
+		const unprocessedCities: string[] = await EventModel.distinct('location.city', {
 			'location.country': country,
 			'meta.moderation.status': { $nin: ['declined', 'in-progress'] },
 			'location.city': { $nin: [''] },
@@ -116,11 +116,27 @@ class CountriesAndCitiesController {
 				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]
 			}
 		});
-		return Promise.all(cities.map(async (city) => this.getLocalizedCityName(city, lang)));
+
+		const pipeline = [
+			{
+				$match: {
+					$or: [
+						{ en: { $in: unprocessedCities } },
+						{ ru: { $in: unprocessedCities } },
+						{ alternateNames: { $in: unprocessedCities } }
+					]
+				}
+			},
+			{
+				$unset: ['countryCode', 'alternateNames', '_id']
+			}
+		];
+
+		return CitiesModel.aggregate(pipeline).exec();
 	}
 
-	async getUsedCities(lang: SupportedLanguages) {
-		const cities: string[] = await EventModel.distinct('location.city', {
+	async getUsedCities() {
+		const unprocessedCities: string[] = await EventModel.distinct('location.city', {
 			'location.country': { $in: ['Serbia', 'Montenegro'] },
 			'meta.moderation.status': { $nin: ['declined', 'in-progress'] },
 			'location.city': { $nin: [''] },
@@ -128,7 +144,51 @@ class CountriesAndCitiesController {
 				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]
 			}
 		});
-		return Promise.all(cities.map(async (city) => this.getLocalizedCityName(city, lang)));
+
+		const pipeline = [
+			{
+				$match: {
+					$or: [
+						{ en: { $in: unprocessedCities } },
+						{ ru: { $in: unprocessedCities } },
+						{ alternateNames: { $in: unprocessedCities } }
+					]
+				}
+			},
+			{
+				$unset: ['alternateNames', '_id']
+			}
+		];
+
+		const citiesWithLocalization = await CitiesModel.aggregate(pipeline).exec();
+		const usedCities = citiesWithLocalization.reduce(
+			(accum, city: ICity) => {
+				const formattedCity = {
+					en: city.en,
+					ru: city.ru
+				};
+				if (city.countryCode === SupportedCountries.SERBIA) {
+					accum[0].cities.push(formattedCity);
+				}
+				if (city.countryCode === SupportedCountries.MONTENEGRO) {
+					accum[0].cities.push(formattedCity);
+				}
+			},
+			[
+				{
+					en: 'Serbia',
+					ru: 'Сербия',
+					cities: []
+				},
+				{
+					en: 'Montengro',
+					ru: 'Черногория',
+					cities: []
+				}
+			]
+		);
+
+		return usedCities;
 	}
 }
 

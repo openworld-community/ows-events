@@ -89,7 +89,23 @@ export const getUsedCitiesSchema = {
 	response: {
 		200: {
 			type: 'array',
-			items: { type: 'string' }
+			items: {
+				type: 'object',
+				properties: {
+					en: 'string',
+					ru: 'string',
+					cities: {
+						type: 'array',
+						items: {
+							type: 'object',
+							properties: {
+								ru: 'string',
+								en: 'string'
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 };

@@ -79,12 +79,14 @@ class UserController {
 
 	async addLocalUser(userData: PublicLocalAuthData) {
 		const newUserId = v4();
-		const isUserExist = await UserModel.findOne({ 'localAuth.email': userData.email });
+		const isUserExist = await UserModel.findOne({
+			'localAuth.email': userData.email.toLowerCase()
+		});
 		if (isUserExist) throw new Error(CommonErrorsEnum.USER_ALREADY_EXIST);
 		const user = await new UserModel({
 			id: newUserId,
 			localAuth: {
-				email: userData.email,
+				email: userData.email.toLowerCase(),
 				password: userData.password
 			}
 		});
@@ -93,7 +95,7 @@ class UserController {
 
 		const newToken = JWTController.issueAccessToken({
 			id: user.id,
-			username: userData.email
+			username: userData.email.toLowerCase()
 		});
 		const expiresAt = Date.now() + getTimestamp({ type: TimestampTypesEnum.DAYS, value: 30 });
 		const savedToken = await UserTokenController.createAccessToken(

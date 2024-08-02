@@ -34,8 +34,8 @@ const onFavoriteButtonClick = () => {
 				@click="onEditButtonClick"
 			/>
 			<LibraryAlert
-				:title="$t('user.deleteEvent.title')"
-				:description-text="$t('user.deleteEvent.text')"
+				:title="$t('modal.delete_event_modal.title')"
+				:description-text="$t('modal.delete_event_modal.text')"
 				confirm-button-text="global.button.confirm"
 				@on-confirm="onDeleteButtonClick"
 			>

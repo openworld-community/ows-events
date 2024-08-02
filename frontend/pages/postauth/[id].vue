@@ -6,6 +6,8 @@ import { RoutePathEnum } from '~/constants/enums/route';
 import { type LoginType, useSendTrackingEvent } from '../../composables/useSendTrackingEvent';
 
 defineI18nRoute(false);
+
+// in cookie ru variable wishould get from i18n locale.value
 const langCookie = useCookie(CookieNameEnum.LOCALE);
 const localePath = useLocalePath();
 
@@ -30,6 +32,7 @@ definePageMeta({
 });
 onBeforeMount(async () => {
 	const pathToRedirect = useCookie('redirectPath');
+	//path contain en or ru variable - locale path not needed
 	pathToRedirect?.value
 		? navigateTo(pathToRedirect.value)
 		: navigateTo(localePath(RoutePathEnum.USER_PAGE));

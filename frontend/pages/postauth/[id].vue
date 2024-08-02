@@ -30,10 +30,9 @@ definePageMeta({
 });
 onBeforeMount(async () => {
 	const pathToRedirect = useCookie('redirectPath');
-
-	navigateTo(
-		localePath(pathToRedirect.value || RoutePathEnum.USER_PAGE, langCookie.value ?? 'ru')
-	);
+	pathToRedirect?.value
+		? navigateTo(pathToRedirect.value)
+		: navigateTo(localePath(RoutePathEnum.USER_PAGE));
 
 	pathToRedirect.value = '';
 });

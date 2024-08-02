@@ -3,6 +3,15 @@ import dayjs from 'dayjs';
 import { useFilterStore } from '../../stores/filter.store';
 import type { TagList } from '../../../common/const/tags';
 
+import {
+	PopoverArrow,
+	PopoverClose,
+	PopoverContent,
+	PopoverPortal,
+	PopoverRoot,
+	PopoverTrigger
+} from 'radix-vue';
+
 const route = useRoute();
 const mobile = inject('mobile');
 
@@ -64,6 +73,25 @@ watch(
 	<CommonNavLink :to="`/city/${nov}`">Novi Sad</CommonNavLink>
 	<CommonNavLink :to="`/city/${podg}`">Podgoritsa</CommonNavLink>
 
+	<LibraryPopover>
+		<template #trigger>
+			<div class="trigger-popover2">
+				<span>I am trigger</span>
+				<CommonIcon
+					name="container"
+					color="var(--color-input-icons)"
+				/>
+			</div>
+		</template>
+		<template #content>
+			<div class="content-popover2">
+				<CommonNavLink :to="`/city/${belg}`">Belgrade</CommonNavLink>
+				<CommonNavLink :to="`/city/${nov}`">Novi Sad</CommonNavLink>
+				<CommonNavLink :to="`/city/${podg}`">Podgoritsa</CommonNavLink>
+			</div>
+		</template>
+	</LibraryPopover>
+
 	<CommonUiDateTimepicker
 		v-model="dates"
 		type="date"
@@ -97,3 +125,23 @@ watch(
 		</template>
 	</HomeCollapsible>
 </template>
+<style lang="less" scoped>
+.trigger-popover {
+	width: 100%;
+	min-width: 100%;
+	display: flex;
+	justify-content: space-between;
+	height: 40px;
+	border: 1px solid #dbdbdb;
+	border-radius: 8px;
+	background-color: #ffffff;
+	font-family: var(--font-family-main);
+	font-size: var(--font-size-M);
+	color: var(--color-text-main);
+	padding: 8px 45px 8px 12px;
+}
+.content-popover {
+	height: 80px;
+	background-color: aquamarine;
+}
+</style>

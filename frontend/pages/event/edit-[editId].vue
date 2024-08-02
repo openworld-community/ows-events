@@ -19,7 +19,7 @@ const localePath = useLocalePath();
 const route = useRoute();
 const userStore = useUserStore();
 const eventStore = useEventStore();
-const { t, locale } = useI18n();
+const { t } = useI18n();
 
 onMounted(async () => {
 	await eventStore.getTimezones();

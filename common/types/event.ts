@@ -1,7 +1,6 @@
 import type { Timezone } from './location';
 import { EventTypes } from '../const/eventTypes';
 import { type Tag, Tags } from '../const/tags';
-import type { CurrencyType } from '../const/price';
 
 export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
 

@@ -5,6 +5,7 @@ import type { CurrencyType } from '../../common/const/price';
 
 export type City = string;
 export type Country = string;
+export type Currency = string;
 
 type LocationStore = {
 	_countries: Set<Country>;

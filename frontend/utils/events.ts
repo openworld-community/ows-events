@@ -34,7 +34,7 @@ export const getInitialEventFormValues = (data?: EventOnPoster): EventFormType =
 			currency: data.price && data.price.currency !== null ? data.price.currency : null
 		}) || {
 			val: null,
-			currency: null
+			currency: ''
 		},
 		// ставим по умолчанию CET таймзону, тк это tz Ценральной Европы (utc +1 // utc +2 от вр. года)
 		timezone:

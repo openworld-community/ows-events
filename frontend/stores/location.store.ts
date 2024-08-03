@@ -5,12 +5,11 @@ import type { CurrencyType } from '../../common/const/price';
 
 export type City = string;
 export type Country = string;
-export type Currency = CurrencyType;
 
 type LocationStore = {
 	_countries: Set<Country>;
 	_citiesByCountry: Map<Country, City[]>;
-	_currencies: Currency[];
+	_currencies: CurrencyType[];
 	userLocation: UserLocation;
 };
 

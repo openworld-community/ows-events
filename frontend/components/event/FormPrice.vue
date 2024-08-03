@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { useField } from 'vee-validate';
 import { useLocationStore } from '@/stores/location.store';
-import type { CurrencyType } from '../../../common/const/price';
 
 const locationStore = useLocationStore();
 
-const currencyField = useField<CurrencyType>(() => 'price.currency');
+const currencyField = useField<string>(() => 'price.currency');
 const valueField = useField<number>(() => 'price.val');
 const isFreeField = useField<boolean>(() => 'isFree');
 </script>

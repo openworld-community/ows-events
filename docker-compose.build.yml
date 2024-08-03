@@ -7,29 +7,33 @@ x-logging: &default-logging
         max-file: '5'
 
 networks:
-    build_ows_events:
+    ows_events_parsing:
 
 services:
     frontend:
+        container_name: ows-events_parsing_frontend
+        image: ows-events_parsing_frontend
         build:
             context: .
             dockerfile: ./frontend/Dockerfile
             args:
                 - NODE_ENV=production
-                - VITE_API_URL=https://127.0.0.1/api
-                - VITE_BASE_URL=https://127.0.0.1
+                - VITE_API_URL=http://127.0.0.1:7080/api
+                - VITE_BASE_URL=http://127.0.0.1:7080
                 - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
-                - VITE_TELEGRAM_AUTH_BOT_NAME
+                - VITE_TELEGRAM_AUTH_BOT_NAME=afisha_oauth_local_bot
                 - VITE_MODE=production
                 - VITE_DOMAIN=127.0.0.1
         logging: *default-logging
         restart: always
         networks:
-            - build_ows_events
+            - ows_events_parsing
         ports:
             - '80:3000'
 
     backend:
+        container_name: ows-events_parsing_backend
+        image: ows-events_parsing_backend
         build:
             context: .
             dockerfile: ./backend/Dockerfile
@@ -42,23 +46,24 @@ services:
         environment:
             - MODE=prod
             - MONGO_URI=mongodb://mongo:27017/dev
-            - FRONTEND_URL=https://127.0.0.1
+            - FRONTEND_URL=http://127.0.0.1
             - SECRET_KEY
         networks:
-            - build_ows_events
+            - ows_events_parsing
         ports:
             - '7080:7080'
         volumes:
             - /root/ows-events/assets/img:/app/assets/img
 
     mongo:
+        container_name: ows-events_parsing_mongo
         image: mongo:6.0
         restart: unless-stopped
         command: ['--bind_ip_all']
         ports:
             - '27020:27017'
         networks:
-            - build_ows_events
+            - ows_events_parsing
         healthcheck:
             test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo --quiet) -eq 1
             interval: 10s

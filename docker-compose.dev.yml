@@ -25,12 +25,12 @@ services:
         environment:
             - NODE_ENV=development
             - VITE_STAGE=test
-            - VITE_API_URL=http://127.0.0.1/api
-            - VITE_BASE_URL=http://127.0.0.1
+            - VITE_API_URL=https://localhost/api
+            - VITE_BASE_URL=https://localhost
             - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
             - VITE_MODE=development
             - VITE_TELEGRAM_AUTH_BOT_NAME=afisha_oauth_local_bot
-            - VITE_GOOGLE_OAUTH_KEY
+            - VITE_GOOGLE_OAUTH_KEY=879620398496-7rtabia15rqav109uiq9olpcsbgk0562.apps.googleusercontent.com
 
     backend:
         build:
@@ -43,9 +43,9 @@ services:
             - mongo
         environment:
             - MODE=dev
-            - FRONTEND_URL=http://127.0.0.1
+            - FRONTEND_URL=https://localhost
             - MONGO_URI=mongodb://mongo:27017/dev
-            - VITE_GOOGLE_OAUTH_KEY
+            - VITE_GOOGLE_OAUTH_KEY=879620398496-7rtabia15rqav109uiq9olpcsbgk0562.apps.googleusercontent.com
         ports:
             - '7080:7080'
         volumes:

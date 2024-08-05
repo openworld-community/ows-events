@@ -171,8 +171,9 @@ class CountriesAndCitiesController {
 					accum[0].cities.push(formattedCity);
 				}
 				if (city.countryCode === SupportedCountries.MONTENEGRO) {
-					accum[0].cities.push(formattedCity);
+					accum[1].cities.push(formattedCity);
 				}
+				return accum;
 			},
 			[
 				{

@@ -57,13 +57,13 @@ const { meta, values, handleSubmit, setFieldValue, resetForm } = useForm<EventFo
 const isLoading = ref(false);
 
 // Запись в localStorage
-//watch(
-//	() => values,
-///	(values) => {
-//		localStorage.setItem(LocalStorageEnum.EVENT_DATA, JSON.stringify(values));
-//	},
-//	{ deep: true }
-//);
+watch(
+	() => values,
+	(values) => {
+		localStorage.setItem(LocalStorageEnum.EVENT_DATA, JSON.stringify(values));
+	},
+	{ deep: true }
+);
 
 // Изменение страны и города
 watch(

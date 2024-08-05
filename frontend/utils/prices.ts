@@ -51,8 +51,8 @@ export const formatPrice = (price: EventPrice) => {
 
 //TODO: выбирает валюту в зависимости от страны (пока валюты прибиты на фронте)
 export const getCurrencyByCountry = (country: string) => {
-	if (country === 'Montenegro') return 'EUR';
-	if (country === 'Serbia') return 'RSD';
+	if (country === 'Montenegro' || country === 'Черногория') return 'EUR';
+	if (country === 'Serbia' || country === 'Сербия') return 'RSD';
 
 	return 'USD';
 };

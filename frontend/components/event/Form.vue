@@ -21,7 +21,7 @@ const props = defineProps({
 	},
 	initialValues: {
 		type: Object as PropType<EventFormType>,
-		default: () => { }
+		default: () => {}
 	}
 });
 
@@ -116,7 +116,7 @@ watch(
 			const timeZone = timezoneToString(getUserTimezone());
 			setFieldValue('timezone', timeZone);
 		} else {
-			const belgrade = await getTimezone('Serbia', 'Belgrade')
+			const belgrade = await getTimezone('Serbia', 'Belgrade');
 			setFieldValue('timezone', belgrade);
 		}
 	},
@@ -190,7 +190,11 @@ const onSubmit = handleSubmit(
 
 		<div class="event-form__fields-wrapper">
 			<div class="event-form__fields">
-				<EventFormLocation />
+				<EventFormLocation
+					:cities-options="
+						locationStore.getCitiesByCountry(values['location']['country'])
+					"
+				/>
 
 				<EventFormMaininfo />
 				<EventFormDate />

@@ -158,6 +158,9 @@ const onRemove = () => {
 		height: auto;
 		min-height: 100px;
 		max-width: 300px;
+		//animation: scaleIn 0.5s ease-out;
+		transform-origin: var(--radix-select-content-transform-origin);
+		animation: scaleIn, 800ms, cubic-bezier(0.16, 1, 0.3, 1);
 	}
 }
 .select {
@@ -272,6 +275,16 @@ const onRemove = () => {
 	&__clear-select:focus :deep(svg),
 	&__clear-select:focus-within :deep(svg) {
 		color: var(--color-accent-green-main);
+	}
+}
+@keyframes scaleIn {
+	from {
+		opacity: 0;
+		transform: scale(0);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
 	}
 }
 </style>

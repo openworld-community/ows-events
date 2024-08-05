@@ -75,7 +75,7 @@ export const useFilterStore = defineStore('filter', {
 		async getUsedFilters() {
 			if (process.server) return;
 			const { data: usedCities } = await apiRouter.filters.getUsedCities.useQuery({});
-
+			console.log('USED_CITIES', usedCities);
 			if (usedCities.value?.length) this.usedCities = usedCities.value;
 			const { data: usedTags } = await apiRouter.filters.getUsedTags.useQuery({});
 

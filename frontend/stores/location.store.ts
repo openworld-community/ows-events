@@ -61,6 +61,9 @@ export const useLocationStore = defineStore('location', {
 			state._countries = new Set(countries);
 			return state._countries;
 		},
+		cities(state): LocationStore['_citiesByCountry'] {
+			return state._citiesByCountry;
+		},
 		currencies(state): LocationStore['_currencies'] {
 			state._currencies = ['USD', 'EUR', 'RSD', 'BTC', 'USDT', 'USDC', 'ETH'];
 			return state._currencies;
@@ -143,6 +146,7 @@ export const useLocationStore = defineStore('location', {
 				await new Promise((r) => r(0));
 
 				const { $locationStoreForage } = useNuxtApp();
+				//localStorage === locationForage
 				const localCities: City[] | null = await $locationStoreForage.getItem(country);
 				if (localCities) {
 					this._citiesByCountry.set(country, localCities);
@@ -153,6 +157,7 @@ export const useLocationStore = defineStore('location', {
 					data: { country }
 				});
 				if (!data.value) return;
+				console.log('CITIES', data.value);
 				this._citiesByCountry.set(country, data.value);
 				// data.value is Proxy which can't copied to storage directly - spread operator converts back to native object
 				$locationStoreForage.setItem(country, [...data.value]);

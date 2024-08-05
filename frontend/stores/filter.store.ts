@@ -1,11 +1,15 @@
 import { defineStore } from 'pinia';
-import type { City } from '../../common/types/location';
+import type { City, Country } from '../../common/types/location';
 import type { EventOnPoster } from '../../common/types/event';
 import type { Tag } from '../../common/const/tags';
 
+export type LocaleKey = 'en' | 'ru';
+
+export type UsedCitiesInternType = { LocaleKey: Country; cities: { LocaleKey: City }[] };
+
 export interface FilterStore {
-	usedCountries: any;
-	usedCities: any;
+	usedCountries: { label: string; value: string }[];
+	usedCities: { label: string; value: string }[];
 	usedTags: string[];
 	filters: {
 		city: City;

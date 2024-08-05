@@ -57,6 +57,9 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 	background-color: #f5f5f5;
 	border-radius: 8px;
 	height: 76px;
+	@media (min-width: 1440px) {
+		width: 45%;
+	}
 
 	&__lable {
 		display: flex;

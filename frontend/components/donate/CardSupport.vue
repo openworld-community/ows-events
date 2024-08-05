@@ -52,9 +52,9 @@ defineProps({
 		</div>
 
 		<div class="support__button">
-			<p :itemprop="SeoItempropGlobalEnum.DESCRIPTION">
+			<h5 :itemprop="SeoItempropGlobalEnum.DESCRIPTION">
 				{{ $t('donate.support_on') }} {{ $t(method) }}
-			</p>
+			</h5>
 
 			<CommonButton
 				button-kind="success"

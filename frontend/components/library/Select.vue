@@ -103,16 +103,12 @@ const onRemove = () => {
 			>
 				<SelectViewport as-child>
 					<LibraryScrollArea :height="height">
-						<ul style="height: auto; padding: 8px 4px; width: 100%">
+						<ul class="select__list">
 							<LibraryUiItemSelect
 								v-for="option in options"
 								:key="typeof option === 'string' ? option : option['value']"
 								:value="typeof option === 'string' ? option : option['value']"
 								:icon-name="optionAsIcon ? `${name}/${option}` : ''"
-								side="top"
-								side-offset="5"
-								position="popper"
-								avoid-collisions
 							>
 								<span class="select__item-content">
 									<CommonIcon
@@ -158,9 +154,8 @@ const onRemove = () => {
 		height: auto;
 		min-height: 100px;
 		max-width: 300px;
-		//animation: scaleIn 0.5s ease-out;
 		transform-origin: var(--radix-select-content-transform-origin);
-		animation: scaleIn, 800ms, cubic-bezier(0.16, 1, 0.3, 1);
+		animation: scaleIn, 0.5s, cubic-bezier(0.2, 0.8, 0.3, 1);
 	}
 }
 .select {
@@ -241,6 +236,13 @@ const onRemove = () => {
 
 	&__trigger[data-error='true'] {
 		border-color: var(--color-accent-red);
+	}
+
+	&__list {
+		//height: auto;
+		padding: 8px 4px;
+		width: 100%;
+		min-width: fit-content;
 	}
 
 	&__clear-select {

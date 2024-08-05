@@ -8,7 +8,6 @@ import { useFilterStore } from '~/stores/filter.store';
 </script>
 <template>
 	<div class="cards">
-		<pre>{{ filterStore.usedCities }}</pre>
 		<div
 			v-if="filterStore.loading"
 			class="loader"

@@ -4,6 +4,7 @@ import type { EventOnPoster } from '../../common/types/event';
 import type { Tag } from '../../common/const/tags';
 
 export interface FilterStore {
+	usedCountries: any;
 	usedCities: any;
 	usedTags: string[];
 	filters: {
@@ -21,6 +22,7 @@ export const useFilterStore = defineStore('filter', {
 		const route = useRoute();
 		return {
 			usedCities: [],
+			usedCountries: [],
 			usedTags: [],
 			filters: {
 				city: getFirstQuery(route.query.city) ?? '',
@@ -74,10 +76,29 @@ export const useFilterStore = defineStore('filter', {
 		},
 		async getUsedFilters() {
 			if (process.server) return;
-			const { data: usedCities } = await apiRouter.filters.getUsedCities.useQuery({});
+			const { $i18n } = useNuxtApp();
+			const lang = $i18n.locale.value;
+			const { data: usedCitiesIntern } = await apiRouter.filters.getUsedCities.useQuery({});
 			//	console.log('USED_CITIES', usedCities);
-			//	const usedCities = Object.values(usedCitiesIntern).map(cityObj)
-			if (usedCities.value?.length) this.usedCities = usedCities.value;
+			//	this.usedCities = usedCitiesIntern.value;
+			this.usedCities = usedCitiesIntern.value
+				.reduce((acc, rec) => {
+					acc = [...acc, ...rec.cities];
+
+					return acc;
+				}, [])
+				.map((objCity) => {
+					return { value: objCity['en'], label: objCity[lang] };
+				});
+
+			this.usedCountries = usedCitiesIntern.value.map((obj) => {
+				return {
+					value: obj['en'],
+					label: obj[lang]
+				};
+			});
+
+			//	if (usedCities.length) this.usedCities = usedCities;
 			const { data: usedTags } = await apiRouter.filters.getUsedTags.useQuery({});
 
 			if (usedTags.value?.length) {

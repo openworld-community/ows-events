@@ -4,7 +4,7 @@ import type { EventOnPoster } from '../../common/types/event';
 import type { Tag } from '../../common/const/tags';
 
 export interface FilterStore {
-	usedCities: City[];
+	usedCities: any;
 	usedTags: string[];
 	filters: {
 		city: City;
@@ -75,7 +75,8 @@ export const useFilterStore = defineStore('filter', {
 		async getUsedFilters() {
 			if (process.server) return;
 			const { data: usedCities } = await apiRouter.filters.getUsedCities.useQuery({});
-			console.log('USED_CITIES', usedCities);
+			//	console.log('USED_CITIES', usedCities);
+			//	const usedCities = Object.values(usedCitiesIntern).map(cityObj)
 			if (usedCities.value?.length) this.usedCities = usedCities.value;
 			const { data: usedTags } = await apiRouter.filters.getUsedTags.useQuery({});
 

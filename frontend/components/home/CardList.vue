@@ -8,6 +8,7 @@ import { useFilterStore } from '~/stores/filter.store';
 </script>
 <template>
 	<div class="cards">
+		<pre>{{ filterStore.usedCities }}</pre>
 		<div
 			v-if="filterStore.loading"
 			class="loader"
@@ -57,9 +58,9 @@ import { useFilterStore } from '~/stores/filter.store';
 .cards {
 	position: relative;
 	padding-top: 32px;
-		@media (min-width: 768px) {
-			padding-top: 60px;
-		}
+	@media (min-width: 768px) {
+		padding-top: 60px;
+	}
 
 	&__list {
 		display: flex;

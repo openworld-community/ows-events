@@ -82,7 +82,7 @@ watch(
 				setFieldValue('price.currency', currency);
 			}
 		} else {
-			setFieldValue('price.currency', null);
+			setFieldValue('price.currency', '');
 		}
 	},
 	{ deep: true }

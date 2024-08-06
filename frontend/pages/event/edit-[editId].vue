@@ -102,7 +102,6 @@ const submitEvent = async (payload: PostEventPayload) => {
 };
 
 const cancel = () => {
-	localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
 	if (router.options.history.state.back.toString().includes('postauth')) {
 		navigateTo(localePath(RoutePathEnum.HOME));
 	} else {

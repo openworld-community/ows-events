@@ -159,7 +159,6 @@ export const useLocationStore = defineStore('location', {
 					data: { country }
 				});
 				if (!data.value) return;
-				console.log('CITIES', data.value);
 				this._citiesByCountry.set(country, data.value);
 				// data.value is Proxy which can't copied to storage directly - spread operator converts back to native object
 				//	$locationStoreForage.setItem(country, [...data.value]);

@@ -7,9 +7,11 @@ import {
 	ORGANIZER_MAX_LENGTH,
 	EVENT_DESCRIPTION_MAX_LENGTH,
 	EVENT_TITLE_MAX_LENGTH,
-	EVENT_ADDRESS_MAX_LENGTH
+	EVENT_ADDRESS_MAX_LENGTH,
+	NUMBER_DECIMALS_BY_CURRENCY
 } from '~/constants/defaultValues/validation';
 import { Tags } from '../../../common/const/tags';
+import type { CurrencyType } from '../../../common/const/price';
 
 export const eventValidationSchema = toTypedSchema(
 	yup.object().shape({
@@ -86,19 +88,29 @@ export const eventValidationSchema = toTypedSchema(
 					val: yup
 						.number()
 						.transform((val) => (isNaN(val) ? undefined : val))
-						.test('notAllowed', 'validation.test.price.val', function (val: number) {
-							if (`${val}`.includes('.')) {
+						.positive()
+						.max(PRICE_MAX_VALUE)
+
+						.test('price', 'validation.test.price.bitcoin', function (val: Number) {
+							const currency = this.parent.currency as CurrencyType;
+							if (
+								currency &&
+								val &&
+								(val.toString().split('.')[1]?.length >
+									NUMBER_DECIMALS_BY_CURRENCY[currency] ||
+									Number(val.toString().split('-')[1]) >
+										NUMBER_DECIMALS_BY_CURRENCY[currency])
+								//in case number less then 1 js turn it into scientific form 1e-7 so we need hack against this)
+							) {
 								return false;
 							}
 
 							return true;
 						})
-						.positive()
-						.integer()
-						.max(PRICE_MAX_VALUE)
+
 						.required(),
 
-					currency: yup.string().required()
+					currency: yup.string<CurrencyType>().required()
 				})
 		}),
 

@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
 import type { UserLocation } from '../../common/types/location';
 import { LOCATION_API_URL } from '../constants/url';
+import type { CurrencyType } from '../../common/const/price';
 
 export type City = string;
 export type Country = string;
-export type Currency = string;
+export type Currency = CurrencyType;
 
 type LocationStore = {
 	_countries: Set<Country>;

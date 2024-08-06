@@ -151,11 +151,11 @@ const scrollUnlockOnBeforeCloseModal = () => {
 	}
 
 	&__title {
-		font-size: var(--font-size-XL);
+		//	font-size: var(--font-size-XL);
 		font-weight: var(--font-weight-regular);
 
 		&--center {
-			font-size: var(--font-size-XL);
+			//	font-size: var(--font-size-XL);
 			text-align: center;
 		}
 	}

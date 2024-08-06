@@ -169,9 +169,11 @@ class CountriesAndCitiesController {
 				};
 				if (city.countryCode === SupportedCountries.SERBIA) {
 					accum[0].cities.push(formattedCity);
+					accum[0].cities.sort((a: ICity, b: ICity) => (a.en < b.en ? -1 : 1));
 				}
 				if (city.countryCode === SupportedCountries.MONTENEGRO) {
 					accum[1].cities.push(formattedCity);
+					accum[1].cities.sort((a: ICity, b: ICity) => (a.en < b.en ? -1 : 1));
 				}
 				return accum;
 			},
@@ -189,7 +191,7 @@ class CountriesAndCitiesController {
 			]
 		);
 
-		return usedCities;
+		return usedCities.filter((country: any) => country.cities.length !== 0);
 	}
 }
 

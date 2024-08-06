@@ -91,7 +91,9 @@ class CountriesAndCitiesController {
 		];
 
 		const cities = await CitiesModel.aggregate(pipeline).exec();
-		return cities.map((city) => city[lang]);
+		return cities
+			.map((city) => city[lang])
+			.sort((a: ICity, b: ICity) => (a.en < b.en ? -1 : 1));
 	}
 
 	async getUsedCountries(lang: SupportedLanguages) {

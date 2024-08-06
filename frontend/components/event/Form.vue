@@ -191,7 +191,11 @@ const onSubmit = handleSubmit(
 
 		<div class="event-form__fields-wrapper">
 			<div class="event-form__fields">
-				<EventFormLocation />
+				<EventFormLocation
+					:cities-options="
+						locationStore.getCitiesByCountry(values['location']['country'])
+					"
+				/>
 
 				<EventFormMaininfo />
 				<EventFormDate />

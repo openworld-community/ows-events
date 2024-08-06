@@ -56,10 +56,15 @@ export const useLocationStore = defineStore('location', {
 			// return state._countries;
 
 			// Сейчас добавляем страны вручную
-			const countries = ['Montenegro', 'Serbia'];
-
-			state._countries = new Set(countries);
+			const { $i18n } = useNuxtApp();
+			const countriesEng = ['Montenegro', 'Serbia'];
+			const countriesRus = ['Черногория', 'Сербия'];
+			state._countries =
+				$i18n.locale.value !== 'en' ? new Set(countriesRus) : new Set(countriesEng);
 			return state._countries;
+		},
+		cities(state): LocationStore['_citiesByCountry'] {
+			return state._citiesByCountry;
 		},
 		currencies(state): LocationStore['_currencies'] {
 			state._currencies = ['USD', 'EUR', 'RSD', 'BTC', 'USDT', 'USDC', 'ETH'];
@@ -142,12 +147,13 @@ export const useLocationStore = defineStore('location', {
 				// forces Nuxt to await function calls if there are multiple of them(avoid duplication of requests)
 				await new Promise((r) => r(0));
 
-				const { $locationStoreForage } = useNuxtApp();
-				const localCities: City[] | null = await $locationStoreForage.getItem(country);
-				if (localCities) {
-					this._citiesByCountry.set(country, localCities);
-					return;
-				}
+				//	const { $locationStoreForage } = useNuxtApp();
+
+				//	const localCities: City[] | null = await $locationStoreForage.getItem(country);
+				//	if (localCities) {
+				//		this._citiesByCountry.set(country, localCities);
+				//		return;
+				//	}
 
 				const { data } = await apiRouter.location.country.getCities.useQuery({
 					data: { country }
@@ -155,7 +161,7 @@ export const useLocationStore = defineStore('location', {
 				if (!data.value) return;
 				this._citiesByCountry.set(country, data.value);
 				// data.value is Proxy which can't copied to storage directly - spread operator converts back to native object
-				$locationStoreForage.setItem(country, [...data.value]);
+				//	$locationStoreForage.setItem(country, [...data.value]);
 			})();
 
 			return this._citiesByCountry.get(country) ?? [];

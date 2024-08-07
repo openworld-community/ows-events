@@ -4,6 +4,19 @@ const { t } = useI18n();
 const mobile = inject('mobile');
 const filterStore = useFilterStore();
 
+const countries = {
+	en: {
+		ME: 'Montenegro',
+		SE: 'Serbia'
+	},
+	ru: {
+		ME: 'Сербия',
+		SE: 'Черногория'
+	}
+};
+
+const { locale } = useI18n();
+
 import { useFilterStore } from '~/stores/filter.store';
 </script>
 <template>
@@ -17,6 +30,11 @@ import { useFilterStore } from '~/stores/filter.store';
 				:size="mobile ? 'middle' : 'big'"
 			/>
 		</div>
+		<h2 class="cards__heading cards__heading--up">
+			{{ t('home.headings.up', { country: `${countries[locale]['SE']}` }) }}
+			&nbsp;&nbsp;|&nbsp;&nbsp;
+			{{ t('home.headings.up', { country: `${countries[locale]['ME']}` }) }}
+		</h2>
 		<div
 			v-if="
 				filterStore.filteredEvents &&
@@ -42,6 +60,11 @@ import { useFilterStore } from '~/stores/filter.store';
 				<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
 			</li>
 		</ul>
+		<h2 class="cards__heading cards__heading--down">
+			{{ t('home.headings.down', { country: `${countries[locale]['SE']}` }) }}
+			&nbsp;&nbsp;|&nbsp;&nbsp;
+			{{ t('home.headings.down', { country: `${countries[locale]['ME']}` }) }}
+		</h2>
 	</div>
 </template>
 <style lang="less" scoped>
@@ -57,9 +80,46 @@ import { useFilterStore } from '~/stores/filter.store';
 .cards {
 	position: relative;
 	padding-top: 32px;
-		@media (min-width: 768px) {
-			padding-top: 60px;
+	@media (min-width: 768px) {
+		padding-top: 60px;
+	}
+
+	&__heading {
+		@media (max-width: 768px) {
+			font-size: var(--font-size-ML);
+			font-weight: 500;
+			letter-spacing: -0.3;
 		}
+		@media (min-width: 768px) {
+			padding-left: var(--padding-side);
+			padding-right: var(--padding-side);
+			margin-bottom: 28px;
+			font-weight: 600;
+			font-size: 34px;
+
+			@media (min-width: 1440px) {
+				font-size: 34px;
+			}
+		}
+
+		&--up {
+			margin-bottom: 20px;
+
+			@media (min-width: 768px) {
+				margin-bottom: 28px;
+			}
+
+			@media (min-width: 768px) {
+				margin-bottom: 30px;
+			}
+		}
+		&--down {
+			margin-top: 30px;
+			@media (min-width: 1440px) {
+				margin-top: 70px;
+			}
+		}
+	}
 
 	&__list {
 		display: flex;

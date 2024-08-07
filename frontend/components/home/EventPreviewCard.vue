@@ -42,7 +42,7 @@ const endDate = computed(() => {
 			trimString(
 				`Afisha: ${
 					eventData.isOnline ? t(`event.tags.${Tags.ONLINE}`) : eventData.location.city
-				}, ${eventData.title}` ?? '',
+				}, ${eventData.title}`,
 				460
 			)
 		"
@@ -71,7 +71,7 @@ const endDate = computed(() => {
 							eventData.isOnline
 								? t(`event.tags.${Tags.ONLINE}`)
 								: eventData.location.city
-						}, ${eventData.title}` ?? '',
+						}, ${eventData.title}`,
 						460
 					)
 				"

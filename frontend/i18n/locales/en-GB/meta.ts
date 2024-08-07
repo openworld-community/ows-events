@@ -1,6 +1,9 @@
 export default {
 	site_name: 'Afisha Peredelano',
-	default_title: 'Events  Serbia {caracter} Events Montenegro - Peredelano Afisha',
+	default_title: {
+		first: 'Events  Serbia ',
+		second: 'Events Montenegro - Peredelano Afisha'
+	},
 	default_description:
 		'The catalog features dozens of events in Serbia, Montenegro across various categories: concerts, meetings, exhibitions, festivals, masterclasses',
 	about_us: {

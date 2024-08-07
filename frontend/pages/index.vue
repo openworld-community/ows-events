@@ -9,7 +9,7 @@ const { sendAnalytics } = useSendTrackingEvent();
 const { t } = useI18n();
 
 getMeta({
-	title: t('meta.default_title')
+	title: `${t('meta.default_title.first')} | ${t('meta.default_title.second')}`
 });
 
 const route = useRoute();

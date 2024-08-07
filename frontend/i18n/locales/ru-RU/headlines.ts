@@ -1,10 +1,22 @@
 export default {
 	main:{
         head: {
-            title:`Афиша Сербия \\| Афиша Черногория`
+            serbia:{
+                title:"Афиша Сербия"
+            },
+            montenegro:{
+                title:"Афиша Черногория"
+
+            }
         },
         foot: {
-            title:"Мероприятия Сербия \\| Черногория "
+            serbia:{
+                title:"Мероприятия Сербия"
+            },
+            montenegro:{
+                title:"Черногория"
+
+            }
         },
     },
 };

@@ -1,10 +1,22 @@
 export default {
 	main:{
         head: {
-            title:"Events Serbia" +"|" + "Events Montenegro"
+            serbia:{
+                title:"Events Serbia"
+            },
+            montenegro:{
+                title:"Events Montenegro"
+
+            }
         },
         foot: {
-            title:"Events Serbia" +"|" + "Events Montenegro"
+            serbia:{
+                title:"Events Serbia"
+            },
+            montenegro:{
+                title:"Events Montenegro"
+
+            }
         },
     },
 };

@@ -58,8 +58,15 @@ const onButtonClick = async () => {
 				/> -->
 			<HomeFilters class="main-page__filter" />
 		</div>
-		<h2> {{ $t('headlines.main.head.title') }} </h2>
+		<h2 class="headline">
+			<a>{{ $t('headlines.main.head.serbia.title') }}</a>
+			&nbsp;|&nbsp;<a>{{ $t('headlines.main.head.montenegro.title') }} </a>
+		</h2>
 		<HomeCardList />
+		<h2 class="headline">
+			<a>{{ $t('headlines.main.head.serbia.title') }}</a>
+			&nbsp;|&nbsp;<a>{{ $t('headlines.main.head.montenegro.title') }} </a>
+		</h2>
 
 		<CommonButton
 			class="add-event-button"
@@ -75,6 +82,16 @@ const onButtonClick = async () => {
 </template>
 
 <style lang="less" scoped>
+.headline{
+	white-space: pre-wrap;
+	padding: 20px 20px 0px 20px;
+	padding-left: var(--padding-side);
+	padding-right: var(--padding-side);
+	@media (max-width: 768px) {
+		font-size: 20px;
+		letter-spacing: -0.5px; 
+	}
+}
 .no-results {
 	display: flex;
 	width: 100%;

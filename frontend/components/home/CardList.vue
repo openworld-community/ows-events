@@ -30,11 +30,6 @@ import { useFilterStore } from '~/stores/filter.store';
 				:size="mobile ? 'middle' : 'big'"
 			/>
 		</div>
-		<h2 class="cards__heading cards__heading--up">
-			{{ t('home.headings.up', { country: `${countries[locale]['SE']}` }) }}
-			&nbsp;&nbsp;|&nbsp;&nbsp;
-			{{ t('home.headings.up', { country: `${countries[locale]['ME']}` }) }}
-		</h2>
 		<div
 			v-if="
 				filterStore.filteredEvents &&
@@ -45,6 +40,15 @@ import { useFilterStore } from '~/stores/filter.store';
 		>
 			<span>{{ t('event.filteredEvents.no_events_found') }}</span>
 		</div>
+		<h2
+			v-if="filterStore.filteredEvents && filterStore.filteredEvents.length"
+			class="cards__heading cards__heading--up"
+		>
+			{{ t('home.headings.up', { country: `${countries[locale]['SE']}` }) }}
+			&nbsp;&nbsp;|&nbsp;&nbsp;
+			{{ t('home.headings.up', { country: `${countries[locale]['ME']}` }) }}
+		</h2>
+
 		<ul
 			v-if="filterStore.filteredEvents && filterStore.filteredEvents.length"
 			class="cards__list"
@@ -60,7 +64,10 @@ import { useFilterStore } from '~/stores/filter.store';
 				<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
 			</li>
 		</ul>
-		<h2 class="cards__heading cards__heading--down">
+		<h2
+			v-if="filterStore.filteredEvents && filterStore.filteredEvents.length"
+			class="cards__heading cards__heading--down"
+		>
 			{{ t('home.headings.down', { country: `${countries[locale]['SE']}` }) }}
 			&nbsp;&nbsp;|&nbsp;&nbsp;
 			{{ t('home.headings.down', { country: `${countries[locale]['ME']}` }) }}

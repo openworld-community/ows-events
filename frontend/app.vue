@@ -24,6 +24,8 @@ provide('tablet', tablet as ComputedRef<boolean>);
 provide('desktop', desktop as ComputedRef<boolean>);
 const route = useRoute();
 
+const caracter = '|';
+
 const langRefs = locales.value.map((it) => ({
 	rel: 'alternate',
 	hreflang: it.code,
@@ -42,7 +44,7 @@ useHead({
 	meta: [
 		{
 			name: 'description',
-			content: t('meta.default_description')
+			content: t('meta.default_description', { caracter: `${caracter}` })
 		},
 		// viewport-fit=cover - фикс для IPhone - убирает рамки при горизонтальном просмотре
 		{ name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' }

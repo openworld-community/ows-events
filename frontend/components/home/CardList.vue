@@ -30,6 +30,11 @@ import { useFilterStore } from '~/stores/filter.store';
 				:size="mobile ? 'middle' : 'big'"
 			/>
 		</div>
+		<h2 class="cards__heading cards__heading--up">
+			{{ t('home.headings.up', { country: `${countries[locale]['SE']}` }) }}
+			&nbsp;&nbsp;|&nbsp;&nbsp;
+			{{ t('home.headings.up', { country: `${countries[locale]['ME']}` }) }}
+		</h2>
 		<div
 			v-if="
 				filterStore.filteredEvents &&

@@ -30,7 +30,7 @@ import { values } from './AboutData';
 
 	@media (min-width: 1440px) {
 		width: 1260px;
-		gap: 170px;
+		
 	}
 }
 </style>

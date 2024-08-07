@@ -38,12 +38,12 @@ const openSuccess = ref(false);
 
 const onSuccess = (eventId: string) => {
 	openSuccess.value = true;
-	setTimeout(async () => {
+	setTimeout(() => {
 		eventStore.navTo
 			? navigateTo(localePath(`${eventStore.navTo}`))
 			: navigateTo(localePath(`${RoutePathEnum.EVENT}/${eventId}`));
 		openSuccess.value = false;
-	}, 1000);
+	}, 1200);
 };
 
 if (id !== 'new') {
@@ -102,7 +102,10 @@ const submitEvent = async (payload: PostEventPayload) => {
 };
 
 const cancel = () => {
-	localStorage.removeItem(LocalStorageEnum.EVENT_DATA);
+	if (router.options.history.state.back.toString().includes('postauth')) {
+		navigateTo(localePath(RoutePathEnum.HOME));
+		return;
+	}
 	router.back();
 };
 </script>

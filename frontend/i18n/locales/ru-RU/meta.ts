@@ -1,7 +1,10 @@
 export default {
 	site_name: 'Афиша Peredelano',
-	default_title:
-		'Афиша мероприятий Сербии {caracter} Афиша мероприятий Черногории - Peredelano Afisha',
+	default_title: {
+		first: 'Афиша мероприятий Сербии',
+		second: 'Афиша мероприятий Черногории - Peredelano Afisha'
+	},
+
 	default_description:
 		'В каталоге представлены десятки мероприятий Сербии, Черногории по различным направлениям: концерты, встречи, выставки, фестивали, мастер-классы',
 	about_us: {

@@ -49,7 +49,7 @@ const onButtonClick = async () => {
 
 <template>
 	<main class="main-page">
-		<HomeIdentity />
+		<HomeIdentity />		
 		<div class="main-page__top">
 			<h1 class="main-page__title">{{ $t('home.title') }}</h1>
 			<!-- <HomeUserLocation
@@ -58,7 +58,7 @@ const onButtonClick = async () => {
 				/> -->
 			<HomeFilters class="main-page__filter" />
 		</div>
-
+		<h2> {{ $t('headlines.main.head.title') }} </h2>
 		<HomeCardList />
 
 		<CommonButton

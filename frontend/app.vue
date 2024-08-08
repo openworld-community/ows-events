@@ -38,9 +38,12 @@ useHead({
 		},
 		...langRefs
 	],
-	title: t('meta.default_title'),
+	title: `${t('meta.default_title.first')} | ${t('meta.default_title.second')}`,
 	meta: [
-		{ name: 'description', content: t('meta.default_description') },
+		{
+			name: 'description',
+			content: t('meta.default_description')
+		},
 		// viewport-fit=cover - фикс для IPhone - убирает рамки при горизонтальном просмотре
 		{ name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' }
 	],

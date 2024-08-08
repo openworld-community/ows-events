@@ -6,6 +6,10 @@ export default {
 	button: {
 		add_event_aria: 'Add an event'
 	},
+	headings: {
+		up: 'Afisha {country}',
+		down: 'Events {country}'
+	},
 	events: {
 		image_alt: 'Event photo',
 		ad: 'Advertisement',

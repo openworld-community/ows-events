@@ -6,6 +6,10 @@ export default {
 	button: {
 		add_event_aria: 'Добавить мероприятие'
 	},
+	headings: {
+		up: 'Афиша {country}',
+		down: 'Мероприятия {country}'
+	},
 	events: {
 		image_alt: 'Фото мероприятия',
 		ad: 'Реклама',

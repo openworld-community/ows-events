@@ -1,20 +1,20 @@
 import { DONATE_PATREON_URL, DONATE_BOOSTY_URL, DONATE_PAYPAL_URL } from '../../constants/url';
 import { CryptoWalletEnum } from '../../constants/enums/crypto-wallets';
 
-export type DonateValuesDataSupport = {
+export type DataDonate = {
 	method: string;
 	link: string;
 	color: string;
 };
 
-export type DonateValuesData = {
+export type DataDonateCrypto = {
 	method: string;
 	account: string;
 	color: string;
 	icon: string;
 };
 
-export const ValuesSupport: { [key: string]: DonateValuesDataSupport } = {
+export const ValuesDonate: { [key: string]: DataDonate } = {
 	patreon: {
 		method: 'donate.method.patreon',
 		link: DONATE_PATREON_URL,
@@ -32,7 +32,7 @@ export const ValuesSupport: { [key: string]: DonateValuesDataSupport } = {
 	}
 };
 
-export const ValuesSupportKripta: Record<string, DonateValuesData> = {
+export const ValuesDonateCrypto: Record<string, DataDonateCrypto> = {
 	usdt: {
 		method: 'donate.method.usdt',
 		account: CryptoWalletEnum.USDT,

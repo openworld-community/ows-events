@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import type { DonateValuesData } from './DonateData';
+import type { DataDonateCrypto } from './DonateData';
 import {
 	SeoItempropDonateEnum,
 	SeoItemTypeEnum,
 	SeoItempropGlobalEnum
 } from '../../constants/enums/seo';
-defineProps<DonateValuesData>();
+defineProps<DataDonateCrypto>();
 
 const { copy, copied } = useClipboard({ source: '', legacy: true });
 </script>
 
 <template>
 	<li
-		class="supportKripta"
+		class="donate-cripto"
 		itemscope
 		:itemtype="SeoItemTypeEnum.DONATE_METHOD"
 		:itemprop="SeoItempropDonateEnum.METHOD"
 	>
-		<div class="supportKripta__lable">
-			<div class="supportKripta__icon-wrapper">
+		<div class="donate-cripto__lable">
+			<div class="donate-cripto__icon-wrapper">
 				<CommonIcon
 					:name="`donate/${icon}`"
-					class="supportKripta__icon"
+					class="donate-cripto__icon"
 					color="var(--color-white)"
 					width="48px"
 					height="48px"
@@ -29,14 +29,14 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 			</div>
 
 			<p
-				class="supportKripta__name"
+				class="donate-cripto__name"
 				:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
 			>
 				{{ $t(method) }}
 			</p>
 		</div>
 
-		<div class="supportKripta__button">
+		<div class="donate-cripto__button">
 			<CommonButton
 				button-kind="text"
 				:button-text="!copied ? $t('global.button.copy') : $t('global.button.copied')"
@@ -49,7 +49,7 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 </template>
 
 <style lang="less" scoped>
-.supportKripta {
+.donate-cripto {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -74,10 +74,7 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 		align-items: center;
 		justify-content: center;
 		border-radius: 50%;
-
 		background-color: v-bind('color');
-		//background-color: var(--color-donate-usdt);
-
 		margin-right: var(--space-related-items);
 	}
 

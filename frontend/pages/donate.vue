@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ValuesSupport, ValuesSupportKripta } from '../components/donate/DonateData';
+import { ValuesDonate, ValuesDonateCrypto } from '../components/donate/DonateData';
 import {
 	SeoItempropDonateEnum,
 	SeoItempropGlobalEnum,
@@ -78,21 +78,21 @@ getMeta({
 			</div>
 		</div>
 
-		<div class="donate-support">
+		<div class="donate-card">
 			<h3
-				class="donate-support__title"
+				class="donate-card__title"
 				:itemprop="SeoItempropGlobalEnum.TITLE"
 			>
 				{{ $t('donate.support') }}
 			</h3>
 			<ul
-				class="donate-support__support"
+				class="donate-card__support"
 				itemscope
 				:itemtype="SeoItemTypeEnum.DONATE"
 				:itemprop="SeoItempropDonateEnum.GROUP_ITEMPROP"
 			>
-				<DonateCardSupport
-					v-for="(item, key) in ValuesSupport"
+				<DonateCardDonate
+					v-for="(item, key) in ValuesDonate"
 					v-bind="item"
 					:key="item.method"
 					:method="item.method"
@@ -103,21 +103,21 @@ getMeta({
 			</ul>
 		</div>
 
-		<div class="donate-kripta">
+		<div class="donate-crypto">
 			<h3
-				class="donate-kripta__title"
+				class="donate-crypto__title"
 				:itemprop="SeoItempropGlobalEnum.TITLE"
 			>
 				{{ $t('donate.support_cripta') }}
 			</h3>
 			<ul
-				class="donate-kripta__kripta"
+				class="donate-crypto__crypto"
 				itemscope
 				:itemtype="SeoItemTypeEnum.DONATE"
 				:itemprop="SeoItempropDonateEnum.GROUP_ITEMPROP"
 			>
-				<DonateCardSupportKripta
-					v-for="item in ValuesSupportKripta"
+				<DonateCardDonateCrypto
+					v-for="item in ValuesDonateCrypto"
 					v-bind="item"
 					:key="item.icon"
 				/>
@@ -173,7 +173,7 @@ getMeta({
 		}
 	}
 }
-.donate-support {
+.donate-card {
 	&__title {
 		text-align: center;
 		line-height: 110px;
@@ -187,16 +187,15 @@ getMeta({
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-
 			flex-wrap: wrap;
 		}
 	}
 }
-.donate-kripta {
+.donate-crypto {
 	&__title {
 		margin-bottom: 40px;
 	}
-	&__kripta {
+	&__crypto {
 		@media (min-width: 1440px) {
 			display: flex;
 			align-items: center;

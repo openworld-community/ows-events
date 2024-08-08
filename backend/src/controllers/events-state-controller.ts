@@ -23,6 +23,7 @@ class EventsStateController {
 	}
 
 	async localizeEventLocation(event: EventOnPoster, lang: SupportedLanguages) {
+		if (event.isOnline) return event;
 		const localizedEvent = { ...event };
 		localizedEvent.location.country =
 			await countriesAndCitiesController.getLocalizedCountryName(
@@ -37,6 +38,7 @@ class EventsStateController {
 	}
 
 	async normalizeEventLocation(event: EventOnPoster) {
+		if (event.isOnline) return event;
 		const normalizedEvent = { ...event };
 		const englishCityName = await countriesAndCitiesController.getLocalizedCityName(
 			event.location.city,
@@ -147,7 +149,7 @@ class EventsStateController {
 	}
 
 	async updateEvent(event: EventOnPoster) {
-		const normalizedEvent = this.normalizeEventLocation(event);
+		const normalizedEvent = await this.normalizeEventLocation(event);
 		const updatedEvent = await EventModel.findOneAndUpdate(
 			{ id: event.id },
 			{

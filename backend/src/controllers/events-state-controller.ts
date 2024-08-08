@@ -149,7 +149,7 @@ class EventsStateController {
 	}
 
 	async updateEvent(event: EventOnPoster) {
-		const normalizedEvent = this.normalizeEventLocation(event);
+		const normalizedEvent = await this.normalizeEventLocation(event);
 		const updatedEvent = await EventModel.findOneAndUpdate(
 			{ id: event.id },
 			{

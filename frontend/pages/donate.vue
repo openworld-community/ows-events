@@ -52,12 +52,16 @@ getMeta({
 					</p>
 				</div>
 			</div>
-
-			<img
+			<div class="donate-logo__wrapper-image">
+				<img
 				class="donate-logo__image"
 				src="@/public/img/help-Afisha/logo.png"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
+
+			</div>
+
+			
 			<!-- При десктопной версии текст находится в другом месте-->
 			<div
 				v-if="mobile"
@@ -164,11 +168,21 @@ getMeta({
 	&__text {
 		text-align: justify;
 	}
+	&__wrapper-image{
+		display: flex;
+		justify-content: center;
+	}
 	&__image {
 		width: 100%;
 		margin: 40px 0 20px 0;
+
+		@media (max-width: 765px) {
+			max-width: 500px;
+			
+		}
+
 		@media (min-width: 765px) {
-			min-width: 253px;
+			min-width: 300px;
 			margin: 0;
 		}
 	}

@@ -41,8 +41,8 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 				button-kind="text"
 				:button-text="!copied ? $t('global.button.copy') : $t('global.button.copied')"
 				icon-name="copy"
-				@click="copy(account)"
 				:itemprop="SeoItempropDonateEnum.LINK"
+				@click="copy(account)"
 			/>
 		</div>
 	</li>

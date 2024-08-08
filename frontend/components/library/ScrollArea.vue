@@ -49,6 +49,12 @@ defineProps({
 </template>
 
 <style scoped lang="less">
+:deep(.scroll-area) {
+	&__viewport {
+		width: 100%;
+		height: 100%;
+	}
+}
 .scroll-area {
 	border-radius: 4px;
 	display: flex;

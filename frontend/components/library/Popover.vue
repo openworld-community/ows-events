@@ -24,10 +24,29 @@ const props = defineProps({
 	},
 	height: { type: Number, default: 200 }
 });
+
+const _open = ref(false);
+
+const model = computed({
+	get() {
+		if (props.open) {
+			return props.open;
+		} else {
+			return _open.value;
+		}
+	},
+	set(value) {
+		_open.value = value;
+		return value;
+	}
+});
 </script>
 
 <template>
-	<Popover class="popover">
+	<Popover
+		v-model:open="model"
+		class="popover"
+	>
 		<PopoverTrigger
 			:class="['popover__trigger', { 'popover__trigger--primary': variant === 'primary' }]"
 			:aria-label="ariaLabel"
@@ -61,10 +80,16 @@ const props = defineProps({
 
 		border-radius: 8px;
 		border: 2px black;
-		height: auto;
 		min-height: 100px;
 		max-width: 300px;
 		z-index: 100;
+		overflow: hidden;
+
+		&--primary {
+			//to set height for the content - set height to the real content
+			height: fit-content;
+			max-height: 300px;
+		}
 
 		&[data-side='top'] {
 			animation-name: slideUp;

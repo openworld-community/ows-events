@@ -29,29 +29,29 @@ defineProps({
 
 <template>
 	<li
-		class="Donate"
+		class="card"
 		itemscope
 		:itemtype="SeoItemTypeEnum.DONATE_METHOD"
 		:itemprop="SeoItempropDonateEnum.METHOD"
 	>
-		<div class="Donate__header">
+		<div class="card__header">
 			<CommonIcon
 				:name="`donate/${icon}`"
-				class="Donate__icon"
+				class="card__icon"
 				color="var(--color-white)"
 				width="32px"
 				height="29px"
 			/>
 
 			<h3
-				class="Donate__name"
+				class="card__name"
 				:itemprop="SeoItempropGlobalEnum.TITLE"
 			>
 				{{ $t(method) }}
 			</h3>
 		</div>
 
-		<div class="Donate__button">
+		<div class="card__button">
 			<h5 :itemprop="SeoItempropGlobalEnum.DESCRIPTION">
 				{{ $t('donate.support_on') }} {{ $t(method) }}
 			</h5>
@@ -61,7 +61,7 @@ defineProps({
 				:link="link"
 				:is-external-link="link ? true : null"
 				:button-text="$t('global.button.follow')"
-				class="Donate__button-style"
+				class="card__button-style"
 				:itemprop="SeoItempropDonateEnum.LINK"
 			/>
 		</div>
@@ -69,7 +69,7 @@ defineProps({
 </template>
 
 <style lang="less" scoped>
-.Donate {
+.card {
 	@media (min-width: 765px) {
 		width: 47%;
 	}

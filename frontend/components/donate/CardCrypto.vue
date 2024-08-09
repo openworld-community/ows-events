@@ -12,16 +12,16 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 
 <template>
 	<li
-		class="donate-cripto"
+		class="card"
 		itemscope
 		:itemtype="SeoItemTypeEnum.DONATE_METHOD"
 		:itemprop="SeoItempropDonateEnum.METHOD"
 	>
-		<div class="donate-cripto__lable">
-			<div class="donate-cripto__icon-wrapper">
+		<div class="card__lable">
+			<div class="card__icon-wrapper">
 				<CommonIcon
 					:name="`donate/${icon}`"
-					class="donate-cripto__icon"
+					class="card__icon"
 					color="var(--color-white)"
 					width="48px"
 					height="48px"
@@ -29,14 +29,14 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 			</div>
 
 			<p
-				class="donate-cripto__name"
+				class="card__name text3"
 				:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
 			>
 				{{ $t(method) }}
 			</p>
 		</div>
 
-		<div class="donate-cripto__button">
+		<div class="card__button">
 			<CommonButton
 				button-kind="text"
 				:button-text="!copied ? $t('global.button.copy') : $t('global.button.copied')"
@@ -49,7 +49,7 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 </template>
 
 <style lang="less" scoped>
-.donate-cripto {
+.card {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;

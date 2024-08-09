@@ -54,14 +54,12 @@ getMeta({
 			</div>
 			<div class="donate-logo__wrapper-image">
 				<img
-				class="donate-logo__image"
-				src="@/public/img/help-Afisha/logo.png"
-				:itemprop="SeoItempropGlobalEnum.IMAGE"
-			/>
-
+					class="donate-logo__image"
+					src="@/public/img/help-Afisha/logo.png"
+					:itemprop="SeoItempropGlobalEnum.IMAGE"
+				/>
 			</div>
 
-			
 			<!-- При десктопной версии текст находится в другом месте-->
 			<div
 				v-if="mobile"
@@ -82,20 +80,20 @@ getMeta({
 			</div>
 		</div>
 
-		<div class="donate-card">
+		<div class="cards">
 			<h3
-				class="donate-card__title"
+				class="cards__title"
 				:itemprop="SeoItempropGlobalEnum.TITLE"
 			>
-				{{ $t('donate.support') }}
+				{{ $t('donate.title_card') }}
 			</h3>
 			<ul
-				class="donate-card__support"
+				class="cards__list"
 				itemscope
 				:itemtype="SeoItemTypeEnum.DONATE"
 				:itemprop="SeoItempropDonateEnum.GROUP_ITEMPROP"
 			>
-				<DonateCardDonate
+				<DonateCard
 					v-for="(item, key) in ValuesDonate"
 					v-bind="item"
 					:key="item.method"
@@ -107,20 +105,20 @@ getMeta({
 			</ul>
 		</div>
 
-		<div class="donate-crypto">
+		<div class="cards-crypto">
 			<h3
-				class="donate-crypto__title"
+				class="cards-crypto__title"
 				:itemprop="SeoItempropGlobalEnum.TITLE"
 			>
-				{{ $t('donate.support_cripta') }}
+				{{ $t('donate.title_card_crypto') }}
 			</h3>
 			<ul
-				class="donate-crypto__crypto"
+				class="cards-crypto__list"
 				itemscope
 				:itemtype="SeoItemTypeEnum.DONATE"
 				:itemprop="SeoItempropDonateEnum.GROUP_ITEMPROP"
 			>
-				<DonateCardDonateCrypto
+				<DonateCardCrypto
 					v-for="item in ValuesDonateCrypto"
 					v-bind="item"
 					:key="item.icon"
@@ -168,7 +166,7 @@ getMeta({
 	&__text {
 		text-align: justify;
 	}
-	&__wrapper-image{
+	&__wrapper-image {
 		display: flex;
 		justify-content: center;
 	}
@@ -178,7 +176,6 @@ getMeta({
 
 		@media (max-width: 765px) {
 			max-width: 500px;
-			
 		}
 
 		@media (min-width: 765px) {
@@ -187,7 +184,7 @@ getMeta({
 		}
 	}
 }
-.donate-card {
+.cards {
 	&__title {
 		text-align: center;
 		line-height: 110px;
@@ -196,7 +193,7 @@ getMeta({
 		}
 	}
 
-	&__support {
+	&__list {
 		@media (min-width: 765px) {
 			display: flex;
 			align-items: center;
@@ -205,11 +202,11 @@ getMeta({
 		}
 	}
 }
-.donate-crypto {
+.cards-crypto {
 	&__title {
 		margin-bottom: 40px;
 	}
-	&__crypto {
+	&__list {
 		@media (min-width: 1440px) {
 			display: flex;
 			align-items: center;

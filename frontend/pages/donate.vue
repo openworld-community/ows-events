@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { DONATE_PATREON_URL } from '../constants/url';
-import { CryptoWalletEnum } from '../constants/enums/crypto-wallets';
+import { ValuesDonate, ValuesDonateCrypto } from '../components/donate/DonateData';
 import {
 	SeoItempropDonateEnum,
 	SeoItempropGlobalEnum,
@@ -8,40 +7,11 @@ import {
 } from '../constants/enums/seo';
 
 const { t } = useI18n();
-
+const mobile = inject('mobile');
 getMeta({
 	title: t('meta.donate.title'),
 	description: t('meta.donate.description')
 });
-
-type DonationMethod = {
-	method: string;
-	link?: string;
-	account?: string;
-};
-
-const DONATE_METHODS: { [key: string]: DonationMethod } = {
-	patreon: {
-		method: t('donate.method.patreon'),
-		link: DONATE_PATREON_URL
-	},
-	bitcoin: {
-		method: t('donate.method.bitcoin'),
-		account: CryptoWalletEnum.BITCOIN
-	},
-	ethereum: {
-		method: t('donate.method.ethereum'),
-		account: CryptoWalletEnum.ETHEREUM
-	},
-	usdt: {
-		method: t('donate.method.usdt'),
-		account: CryptoWalletEnum.USDT
-	},
-	usdc: {
-		method: t('donate.method.usdc'),
-		account: CryptoWalletEnum.USDC
-	}
-};
 </script>
 
 <template>
@@ -50,85 +20,202 @@ const DONATE_METHODS: { [key: string]: DonationMethod } = {
 		itemscope
 		:itemtype="SeoItemTypeEnum.DONATE"
 	>
-		<h1
+		<h2
 			class="donate__title"
 			:itemprop="SeoItempropGlobalEnum.TITLE"
 		>
 			{{ $t('donate.title') }}
-		</h1>
-		<p
-			class="donate__description"
-			:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
-		>
-			{{ $t('donate.description') }}
-		</p>
-		<p class="donate__description">
-			{{ $t('donate.gratitude') }} <br />
-			{{ $t('donate.subscription') }}
-		</p>
-
-		<h2
-			class="donate__method donate-method__title"
-			:itemprop="SeoItempropGlobalEnum.TITLE"
-		>
-			{{ $t('donate.method.title') }}
 		</h2>
-		<ul
-			class="donate-method__list"
-			itemscope
-			:itemtype="SeoItemTypeEnum.DONATE"
-			:itemprop="SeoItempropDonateEnum.GROUP_ITEMPROP"
-		>
-			<DonateMethodItem
-				v-for="(item, key) in DONATE_METHODS"
-				:key="item.method"
-				:method="item.method"
-				:icon="key as string"
-				:color="`var(--color-donate-${key as string})`"
-				:link="item?.link"
-				:copy-data="item?.account"
+		<div class="donate-logo">
+			<div>
+				<p
+					class="donate-logo__text text1"
+					:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
+				>
+					{{ $t('donate.description') }}
+				</p>
+				<div
+					v-if="!mobile"
+					class="donate-logo__text text1"
+				>
+					<p
+						class="text1"
+						:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
+					>
+						{{ $t('donate.gratitude') }}
+					</p>
+					<p
+						class="text1"
+						:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
+					>
+						{{ $t('donate.subscription') }}
+					</p>
+				</div>
+			</div>
+			<div class="donate-logo__wrapper-image">
+				<img
+				class="donate-logo__image"
+				src="@/public/img/help-Afisha/logo.png"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
-		</ul>
+
+			</div>
+
+			
+			<!-- При десктопной версии текст находится в другом месте-->
+			<div
+				v-if="mobile"
+				class="donate-logo__text text1"
+			>
+				<p
+					class="text1"
+					:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
+				>
+					{{ $t('donate.gratitude') }}
+				</p>
+				<p
+					class="text1"
+					:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
+				>
+					{{ $t('donate.subscription') }}
+				</p>
+			</div>
+		</div>
+
+		<div class="donate-card">
+			<h3
+				class="donate-card__title"
+				:itemprop="SeoItempropGlobalEnum.TITLE"
+			>
+				{{ $t('donate.support') }}
+			</h3>
+			<ul
+				class="donate-card__support"
+				itemscope
+				:itemtype="SeoItemTypeEnum.DONATE"
+				:itemprop="SeoItempropDonateEnum.GROUP_ITEMPROP"
+			>
+				<DonateCardDonate
+					v-for="(item, key) in ValuesDonate"
+					v-bind="item"
+					:key="item.method"
+					:method="item.method"
+					:icon="key as string"
+					:color="item.color"
+					:link="item?.link"
+				/>
+			</ul>
+		</div>
+
+		<div class="donate-crypto">
+			<h3
+				class="donate-crypto__title"
+				:itemprop="SeoItempropGlobalEnum.TITLE"
+			>
+				{{ $t('donate.support_cripta') }}
+			</h3>
+			<ul
+				class="donate-crypto__crypto"
+				itemscope
+				:itemtype="SeoItemTypeEnum.DONATE"
+				:itemprop="SeoItempropDonateEnum.GROUP_ITEMPROP"
+			>
+				<DonateCardDonateCrypto
+					v-for="item in ValuesDonateCrypto"
+					v-bind="item"
+					:key="item.icon"
+				/>
+			</ul>
+		</div>
 	</main>
 </template>
 
 <style lang="less" scoped>
 .donate {
-	display: flex;
-	flex-direction: column;
-	padding-left: var(--padding-side);
-	padding-right: var(--padding-side);
-	padding-bottom: var(--padding-vertical);
-
-	&__title {
-		font-size: var(--font-size-XXL);
-		font-weight: var(--font-weight-bold);
-		line-height: 40px;
-		padding-top: var(--padding-vertical);
-		margin-bottom: var(--space-unrelated-items);
-
-		@media (min-width: 768px) {
-			padding-top: 0;
-		}
+	width: 100%;
+	padding: 80px 15px 0 15px;
+	@media (min-width: 765px) {
+		padding: 0 43px;
+	}
+	@media (min-width: 1440px) {
+		padding: 0 100px;
 	}
 
-	&__description {
-		font-size: var(--font-size-S);
-		line-height: 20px;
-		margin-bottom: var(--space-subsections);
+	&__title {
+		text-align: center;
+		@media (min-width: 765px) {
+			margin-top: 50px;
+		}
+		@media (min-width: 1440px) {
+			text-align: start;
+			margin-top: 75px;
+			margin-bottom: 20px;
+		}
 	}
 }
 
-.donate-method {
-	&__title {
-		font-size: var(--font-size-L);
-		line-height: 24px;
-		margin-bottom: var(--space-related-items);
+.donate-logo {
+	margin-top: 45px;
+
+	@media (min-width: 765px) {
+		display: flex;
+		gap: 30px;
+	}
+	@media (min-width: 1440px) {
+		margin-top: 0px;
 	}
 
-	&__list {
-		@media (min-width: 768px) {
+	&__text {
+		text-align: justify;
+	}
+	&__wrapper-image{
+		display: flex;
+		justify-content: center;
+	}
+	&__image {
+		width: 100%;
+		margin: 40px 0 20px 0;
+
+		@media (max-width: 765px) {
 			max-width: 500px;
+			
+		}
+
+		@media (min-width: 765px) {
+			min-width: 300px;
+			margin: 0;
+		}
+	}
+}
+.donate-card {
+	&__title {
+		text-align: center;
+		line-height: 110px;
+		@media (min-width: 1440px) {
+			text-align: start;
+		}
+	}
+
+	&__support {
+		@media (min-width: 765px) {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			flex-wrap: wrap;
+		}
+	}
+}
+.donate-crypto {
+	&__title {
+		margin-bottom: 40px;
+	}
+	&__crypto {
+		@media (min-width: 1440px) {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+
+			flex-wrap: wrap;
 		}
 	}
 }

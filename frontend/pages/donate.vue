@@ -132,7 +132,7 @@ getMeta({
 .donate {
 	width: 100%;
 	padding: 80px 15px 0 15px;
-	@media (min-width: 765px) {
+	@media (min-width: 768px) {
 		padding: 0 43px;
 	}
 	@media (min-width: 1440px) {
@@ -141,7 +141,7 @@ getMeta({
 
 	&__title {
 		text-align: center;
-		@media (min-width: 765px) {
+		@media (min-width: 768px) {
 			margin-top: 50px;
 		}
 		@media (min-width: 1440px) {
@@ -155,7 +155,7 @@ getMeta({
 .donate-logo {
 	margin-top: 45px;
 
-	@media (min-width: 765px) {
+	@media (min-width: 768px) {
 		display: flex;
 		gap: 30px;
 	}
@@ -171,16 +171,29 @@ getMeta({
 		justify-content: center;
 	}
 	&__image {
-		width: 100%;
+		//min-width: 253px;
+		//width: 100%;
 		margin: 40px 0 20px 0;
 
-		@media (max-width: 765px) {
-			max-width: 500px;
+		@media (max-width: 768px) {
+			//max-width: 500px;
 		}
 
-		@media (min-width: 765px) {
-			min-width: 300px;
+		@media (min-width: 768px) {
+			
+			min-width: 253px;
 			margin: 0;
+		}
+		@media (min-width: 1100px) {
+			
+			min-width: 315px;
+			
+		}
+		@media (min-width: 1440px) {
+			
+			min-width: 350px;
+			
+			
 		}
 	}
 }
@@ -194,7 +207,7 @@ getMeta({
 	}
 
 	&__list {
-		@media (min-width: 765px) {
+		@media (min-width: 768px) {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
@@ -203,6 +216,12 @@ getMeta({
 	}
 }
 .cards-crypto {
+
+	margin-bottom: 70px;
+	@media (min-width: 1440px) {
+		margin-bottom: 130px;
+		}
+
 	&__title {
 		margin-bottom: 40px;
 	}

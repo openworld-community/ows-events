@@ -103,7 +103,17 @@ const writableType = ref<string>(props.type);
 
 const emit = defineEmits(['update:model-value']);
 const updateValue = (event: Event) => {
-	emit('update:model-value', (event.target as HTMLInputElement).value);
+	const target = event.target as HTMLInputElement;
+
+	emit('update:model-value', target.value);
+};
+
+const checkDigit = (event: KeyboardEvent) => {
+	if (props.type === 'number') {
+		if (event.key.length === 1 && ['e', 'E', '+', '-'].includes(event.key)) {
+			event.preventDefault();
+		}
+	}
 };
 
 const onRemove = () => {
@@ -142,6 +152,7 @@ const onRemove = () => {
 			:required="required"
 			:min="type === 'number' || type === 'date' || type === 'time' ? minValue : undefined"
 			@input="updateValue"
+			@keydown="checkDigit"
 		/>
 
 		<!--    иконка справа-->

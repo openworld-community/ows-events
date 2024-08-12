@@ -1,5 +1,5 @@
 import { EventOnPoster } from '@common/types';
-import { CommonErrorsEnum } from '../../../../../common/const';
+import { CommonErrorsEnum, SupportedLanguages } from '../../../../../common/const';
 import { EventTypes } from '../../../../../common/const/eventTypes';
 import { SearchEventPayload } from '../../../../../common/types/event';
 import { eventsStateController } from '../../../controllers/events-state-controller';
@@ -43,15 +43,23 @@ export const addEvent: IAddEventHandler = async (request) => {
 	return { id: newPostId };
 };
 
-export const getEvents: IGetEventsHandler = async (): Promise<EventOnPoster[]> =>
-	(await eventsStateController.getEvents()).slice(0, 100);
+export const getEvents: IGetEventsHandler = async (request): Promise<EventOnPoster[]> => {
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	return (await eventsStateController.getEvents(lang)).slice(0, 100);
+};
 
-export const getMyEvents: IGetMyEventsHandler = async (request) =>
-	eventsStateController.getUserEvents(request.userId);
+export const getMyEvents: IGetMyEventsHandler = async (request) => {
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	return eventsStateController.getUserEvents(request.userId, lang);
+};
 
 export const getEvent: IGetEventHandler = async (request) => {
 	const eventId = request.params.id;
-	const event = await eventsStateController.getEvent(eventId);
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	const event = await eventsStateController.getEvent(eventId, lang);
 	if (!event) throw new Error(CommonErrorsEnum.EVENT_NOT_FOUND);
 
 	return event;

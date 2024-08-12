@@ -32,10 +32,7 @@ defineProps({
 		:type="type"
 		:style="{ height: height ? `${height}px` : '100%', width: width ? `${width}px` : '100%' }"
 	>
-		<ScrollAreaViewport
-			class="scroll-area__viewport"
-			as-child
-		>
+		<ScrollAreaViewport class="scroll-area__viewport">
 			<slot></slot>
 		</ScrollAreaViewport>
 		<ScrollAreaScrollbar
@@ -62,6 +59,7 @@ defineProps({
 
 	&__viewport {
 		width: 100%;
+		height: 100%;
 	}
 
 	&__scrollbar {

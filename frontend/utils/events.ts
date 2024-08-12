@@ -31,7 +31,7 @@ export const getInitialEventFormValues = (data?: EventOnPoster): EventFormType =
 		image: (data && data.image) || '',
 		price: (data && {
 			val: data.price && data.price.value !== 0 ? data.price.value : null,
-			currency: data.price && data.price.currency !== null ? data.price.currency : ''
+			currency: data.price && data.price.currency !== null ? data.price.currency : null
 		}) || {
 			val: null,
 			currency: ''

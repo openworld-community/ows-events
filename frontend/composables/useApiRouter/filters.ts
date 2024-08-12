@@ -1,5 +1,6 @@
 import { defineQuery, useBackendFetch } from './utils';
 import type { Country, City } from '../../stores/location.store';
+import type { UsedCitiesInternType } from '../../stores/filter.store';
 import type { Tag } from '../../../common/const/tags';
 import type { EventOnPoster } from '../../../common/types';
 
@@ -37,5 +38,7 @@ export const filters = {
 		useBackendFetch(`location/usedCities/${input.country}`)
 	),
 	getUsedTags: defineQuery<() => Tag[]>(() => useBackendFetch(`tags/used`)),
-	getUsedCities: defineQuery<() => City[]>(() => useBackendFetch('location/usedCities'))
+	getUsedCities: defineQuery<() => UsedCitiesInternType[]>(() =>
+		useBackendFetch('location/usedCities')
+	)
 };

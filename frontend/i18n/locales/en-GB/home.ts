@@ -1,7 +1,14 @@
 export default {
 	title: 'Bringing people together around events',
+	identity: {
+		alt: 'Serbia, Montenegro'
+	},
 	button: {
 		add_event_aria: 'Add an event'
+	},
+	headings: {
+		up: 'Afisha {country}',
+		down: 'Events {country}'
 	},
 	events: {
 		image_alt: 'Event photo',

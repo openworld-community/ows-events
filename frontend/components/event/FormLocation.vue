@@ -8,6 +8,15 @@ const mobile = inject('mobile');
 const locationStore = useLocationStore();
 const eventStore = useEventStore();
 
+defineProps({
+	citiesOptions: {
+		type: [Array, String, Set] as PropType<
+			string | string[] | { [key: string]: string }[] | Set<string>
+		>,
+		default: () => []
+	}
+});
+
 const countryField = useField<string>(() => 'location.country');
 const timeZoneField = useField<string>(() => 'timezone');
 const isOnlineField = useField<boolean>(() => 'isOnline');
@@ -68,7 +77,7 @@ const addressField = useField<string>(() => 'location.address');
 						:disabled="!countryField.value.value || isOnlineField.value.value"
 						:error="cityField.meta.touched && Boolean(cityField.errorMessage.value)"
 						:placeholder="$t('global.city')"
-						:options="locationStore.getCitiesByCountry(countryField.value.value)"
+						:options="citiesOptions"
 						:required="!isOnlineField.value.value"
 					/>
 				</CommonFormField>

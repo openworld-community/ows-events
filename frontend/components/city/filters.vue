@@ -3,15 +3,6 @@ import dayjs from 'dayjs';
 import { useFilterStore } from '../../stores/filter.store';
 import type { TagList } from '../../../common/const/tags';
 
-import {
-	PopoverArrow,
-	PopoverClose,
-	PopoverContent,
-	PopoverPortal,
-	PopoverRoot,
-	PopoverTrigger
-} from 'radix-vue';
-
 const route = useRoute();
 const mobile = inject('mobile');
 
@@ -23,13 +14,15 @@ defineProps({
 		default: () => []
 	}
 });
-
+//dayjs.utc(queryDate)
 const belg = 'belgrade';
 const nov = 'novisad';
 const podg = 'podgoritsa';
+
+//utc allow not to apply local time and change the day: when dataPicker apply format to string from query (where hh:mm:ss = 0 0 0) it can change the day becouse the user can have timezone back
 const dates = ref([
-	dayjs(getFirstQuery(route.query.startDate)).toDate() ?? undefined,
-	dayjs(getFirstQuery(route.query.endDate)).toDate() ?? undefined
+	dayjs(getFirstQuery(route.query.startDate)).utc() ?? undefined,
+	dayjs(getFirstQuery(route.query.endDate)).utc() ?? undefined
 ]);
 const tags = ref(
 	getFirstQuery(route.query.tags)
@@ -351,7 +344,7 @@ const countryList = [
 		</template>
 	</LibraryPopover>
 
-	<CommonUiDateTimepicker
+	<LazyCommonUiDateTimepicker
 		v-model="dates"
 		type="date"
 		:range="true"

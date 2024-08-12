@@ -43,10 +43,7 @@ const model = computed({
 </script>
 
 <template>
-	<Popover
-		v-model:open="model"
-		class="popover"
-	>
+	<Popover v-model:open="model">
 		<PopoverTrigger
 			:class="['popover__trigger', { 'popover__trigger--primary': variant === 'primary' }]"
 			:aria-label="ariaLabel"

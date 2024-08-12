@@ -1,3 +1,14 @@
+<script setup lang="ts">
+const props = defineProps({
+	message: {
+		type: String,
+		default: ''
+	}
+});
+
+console.log('ERROR%))', props.message);
+</script>
+
 <template>
 	<div>
 		<div class="error-page">

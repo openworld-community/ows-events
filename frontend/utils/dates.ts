@@ -10,9 +10,38 @@ export const dateNow = Date.now();
 export const getDateFromQuery = (queryDate: string | undefined, keepTimezone = false): Date => {
 	if (!queryDate) return null;
 	const djs = !keepTimezone ? dayjs.utc(queryDate) : dayjs(queryDate);
-	console.log('DATE', djs, dayjs(queryDate));
+	console.log('DATE_FROM_QUERY', djs);
 	if (!djs.isValid()) return null;
 	return djs.toDate();
+};
+
+export const getFirstDateFromFilters = (date: Date) => {
+	const startDate = new Date(date).setHours(0, 0, 0);
+
+	//Приводим таймзону времени устройства юзера к миллисекундам
+	// dayjs(startDate).utc(true)
+	// dayjs(endDate).utc(true) можно сделать так, но понятнее не сильно становится
+	const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
+
+	// Перевод в UTC 0
+	const startDateTS = startDate ? startDate - timezoneOffset : null;
+	console.log('FIRST DATE', new Date(startDateTS));
+	return startDateTS;
+};
+
+export const getSecondDateFromFilters = (date: Date) => {
+	const endDate = new Date(date).setHours(23, 59, 59);
+
+	//Приводим таймзону времени устройства юзера к миллисекундам
+	// dayjs(startDate).utc(true)
+	// dayjs(endDate).utc(true) можно сделать так, но понятнее не сильно становится
+	const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
+
+	// Перевод в UTC 0
+
+	const endDateTS = endDate ? endDate - timezoneOffset : null;
+	console.log('SECOND DATE', new Date(endDateTS));
+	return endDateTS;
 };
 
 export const getDateFromEpochInMs = (epoch: number | undefined, keepTimezone = false) => {

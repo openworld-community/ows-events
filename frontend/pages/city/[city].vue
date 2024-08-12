@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const route = useRoute();
+import dayjs from 'dayjs';
 import { useFilterStore } from '../../stores/filter.store';
 import { API_URL } from '~/constants/url';
 
@@ -27,19 +28,53 @@ const capitalize = (str: string) => {
 	return str.slice(0, 1).toUpperCase() + str.slice(1);
 };
 
-const getDataeFromQuery = (date?: string) => {
-	const newDate = new Date(date).setHours(0, 0, 0);
+const getDateFromQuery = (queryDate: string | undefined, keepTimezone = false): Date => {
+	if (!queryDate) return null;
+	const djs = !keepTimezone ? dayjs.utc(queryDate) : dayjs(queryDate);
+	//	console.log('DATE0000', djs, dayjs(queryDate));
+
+	if (!djs.isValid()) return null;
+	//alert(JSON.stringify(djs));
+	return djs.toDate();
+};
+
+const getFirstFromQuery = (date?: string) => {
+	console.log('DATE', new Date(date), dayjs(date).utc().toDate().getDate());
+	// applying new Date changes the day if user has timezone with minus from UTC (from query hh:mm:ss = 0:0:0 the date turns out to be previous day) so we use UTC
+	const timeObj = {
+		year: new Date(date).getUTCFullYear(),
+		month: new Date(date).getUTCMonth(),
+		day: new Date(date).getUTCDate()
+	};
+	const newDate = +new Date(timeObj.year, timeObj.month, timeObj.day, 0, 0, 0);
+	console.log('CITY FIRST DATE2', newDate, timeObj);
+
 	const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
 	const dateTS = newDate ? newDate - timezoneOffset : null;
+	console.log('CITY FIRST', date, new Date(dateTS));
 	return dateTS;
 };
 
-const param1 = ref('value1');
+const getSecondFromQuery = (date?: string) => {
+	const timeObj = {
+		year: new Date(date).getUTCFullYear(),
+		month: new Date(date).getUTCMonth(),
+		day: new Date(date).getUTCDate()
+	};
+	const newDate = +new Date(timeObj.year, timeObj.month, timeObj.day, 23, 59, 59);
+	console.log('CITY SECOND DATE2', newDate, timeObj);
+
+	const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
+	const dateTS = newDate ? newDate - timezoneOffset : null;
+	console.log('CITY SECOND', date, new Date(dateTS));
+	return dateTS;
+};
+
 const city = computed(() => route.params.city);
 
 const dt = ref(route.query.startDate);
-const dateStart = computed(() => getDataeFromQuery(route.query.startDate as string));
-const dateEnd = computed(() => getDataeFromQuery(route.query.endDate as string));
+const dateStart = computed(() => getFirstFromQuery(getFirstQuery(route.query.startDate as string)));
+const dateEnd = computed(() => getSecondFromQuery(getFirstQuery(route.query.endDate as string)));
 const tags = computed(() =>
 	getFirstQuery(route.query.tags)
 		.split(', ')

@@ -78,8 +78,10 @@ const handleDate = (modelData: typeof props.modelValue) => {
 	isDateType.value && datepicker.value?.closeMenu();
 	if (props.range && !modelData[1]) {
 		emit('update:model-value', [modelData[0], modelData[0]]);
+		modelData = undefined;
 	} else {
 		emit('update:model-value', modelData);
+		modelData = undefined;
 	}
 };
 
@@ -89,7 +91,9 @@ const dateFormat = (date: Date | Date[] | string | string[]) => {
 	if (Array.isArray(date)) {
 		return !date[1]
 			? `${dayjs(date[0]).format('DD.MM.YYYY')} -`
-			: `${dayjs(date[0]).format('DD.MM.YYYY')} - ${dayjs(date[1]).format('DD.MM.YYYY')}`;
+			: `${dayjs(date[0]).format('DD.MM.YYYY')} - ${dayjs(date[1])
+					.utc()
+					.format('DD.MM.YYYY')}`;
 	} else {
 		return dayjs(date).format('DD.MM.YYYY');
 	}
@@ -252,7 +256,7 @@ onMounted(() => {
 	</div>
 </template>
 
-<style lang="less">
+<style lang="less" scoped>
 .custom__input {
 	box-sizing: border-box;
 	cursor: pointer;
@@ -268,7 +272,7 @@ onMounted(() => {
 	}
 }
 
-.dp {
+:deep(.dp) {
 	&__range {
 		&_start,
 		&_between,

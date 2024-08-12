@@ -80,13 +80,18 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 	return undefined;
 };
 
-export const findEvents: IFindEventHandler = async (request) =>
-	eventsStateController.getEvents(request.body);
+export const findEvents: IFindEventHandler = async (request) => {
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	return eventsStateController.getEvents(lang, request.body);
+};
 
 export const findEventsByCity: IFindEventsCityHandler = async (request) => {
 	const queryObj: SearchEventPayload = {
 		city: request.params.city,
 		...request.body
 	};
-	return eventsStateController.getEvents(queryObj);
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	return eventsStateController.getEvents(lang, queryObj);
 };

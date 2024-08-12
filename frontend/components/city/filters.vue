@@ -19,10 +19,9 @@ const belg = 'belgrade';
 const nov = 'novisad';
 const podg = 'podgoritsa';
 
-//utc allow not to apply local time and change the day: when dataPicker apply format to string from query (where hh:mm:ss = 0 0 0) it can change the day becouse the user can have timezone back
 const dates = ref([
-	dayjs.utc(getFirstQuery(route.query.startDate)) ?? undefined,
-	dayjs.utc(getFirstQuery(route.query.endDate)) ?? undefined
+	dayjs(getFirstQuery(route.query.startDate)) ?? undefined,
+	dayjs(getFirstQuery(route.query.endDate)) ?? undefined
 ]);
 const tags = ref(
 	getFirstQuery(route.query.tags)

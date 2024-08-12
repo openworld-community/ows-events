@@ -28,16 +28,6 @@ const capitalize = (str: string) => {
 	return str.slice(0, 1).toUpperCase() + str.slice(1);
 };
 
-const getDateFromQuery = (queryDate: string | undefined, keepTimezone = false): Date => {
-	if (!queryDate) return null;
-	const djs = !keepTimezone ? dayjs.utc(queryDate) : dayjs(queryDate);
-	//	console.log('DATE0000', djs, dayjs(queryDate));
-
-	if (!djs.isValid()) return null;
-	//alert(JSON.stringify(djs));
-	return djs.toDate();
-};
-
 const getFirstFromQuery = (date?: string) => {
 	console.log('DATE', new Date(date), dayjs(date).utc().toDate().getDate());
 	// applying new Date changes the day if user has timezone with minus from UTC (from query hh:mm:ss = 0:0:0 the date turns out to be previous day) so we use UTC

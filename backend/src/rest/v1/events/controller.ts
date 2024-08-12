@@ -1,11 +1,13 @@
 import { EventOnPoster } from '@common/types';
 import { CommonErrorsEnum } from '../../../../../common/const';
 import { EventTypes } from '../../../../../common/const/eventTypes';
+import { SearchEventPayload } from '../../../../../common/types/event';
 import { eventsStateController } from '../../../controllers/events-state-controller';
 import {
 	IAddEventHandler,
 	IDeleteEventHandler,
 	IFindEventHandler,
+	IFindEventsCityHandler,
 	IGetEventHandler,
 	IGetEventsHandler,
 	IGetMyEventsHandler,
@@ -72,3 +74,11 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 
 export const findEvents: IFindEventHandler = async (request) =>
 	eventsStateController.getEvents(request.body);
+
+export const findEventsByCity: IFindEventsCityHandler = async (request) => {
+	const queryObj: SearchEventPayload = {
+		city: request.params.city,
+		...request.body
+	};
+	return eventsStateController.getEvents(queryObj);
+};

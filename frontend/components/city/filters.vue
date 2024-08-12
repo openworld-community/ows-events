@@ -20,8 +20,8 @@ const nov = 'novisad';
 const podg = 'podgoritsa';
 
 const dates = ref([
-	dayjs(getFirstQuery(route.query.startDate)) ?? undefined,
-	dayjs(getFirstQuery(route.query.endDate)) ?? undefined
+	dayjs(getFirstQuery(route.query.startDate)).toDate() ?? undefined,
+	dayjs(getFirstQuery(route.query.endDate)).toDate() ?? undefined
 ]);
 const tags = ref(
 	getFirstQuery(route.query.tags)

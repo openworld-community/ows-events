@@ -128,7 +128,7 @@ watch(
 	(free) => {
 		if (free) {
 			if (values['price']['currency']) {
-				setFieldValue('price.currency', null);
+				setFieldValue('price.currency', '');
 			}
 			if (values['price']['val']) {
 				setFieldValue('price.val', null);

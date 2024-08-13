@@ -29,6 +29,7 @@ const capitalize = (str: string) => {
 };
 
 const getFirstFromQuery = (date?: string) => {
+	if (!date) return null;
 	console.log('DATE', new Date(date), dayjs(date).utc().toDate().getDate());
 	// applying new Date changes the day if user has timezone with minus from UTC (from query hh:mm:ss = 0:0:0 the date turns out to be previous day) so we use UTC
 	const timeObj = {
@@ -46,6 +47,7 @@ const getFirstFromQuery = (date?: string) => {
 };
 
 const getSecondFromQuery = (date?: string) => {
+	if (!date) return null;
 	const timeObj = {
 		year: new Date(date).getUTCFullYear(),
 		month: new Date(date).getUTCMonth(),

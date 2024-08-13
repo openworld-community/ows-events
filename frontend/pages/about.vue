@@ -26,7 +26,7 @@ const urlAfisha = 'https://afisha.peredelano.com/';
 			<div class="about-logo">
 				<img
 					class="about-logo__image"
-					src="@/public/img/about/about-info.png"
+					src="/img/about/about-info.png"
 					:itemprop="SeoItempropAboutEnum.IMAGE"
 				/>
 				<p class="about-logo__text-img">{{ $t('about.title') }}</p>
@@ -122,7 +122,7 @@ const urlAfisha = 'https://afisha.peredelano.com/';
 		@media (min-width: 1440px) {
 			font-size: var(--font-size-L);
 			line-height: 30px;
-			
+
 		}
 	}
 

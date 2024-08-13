@@ -15,7 +15,7 @@ const pagesWithAuth: string[] = [
 	RouteNameEnum.EVENT_EDIT
 ];
 
-export default defineNuxtRouteMiddleware(async (to) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
 	const localePath = useNuxtApp().$localePath;
 	const userStore = useUserStore();
 
@@ -38,7 +38,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
 			userCookie.value = null;
 
 			if (to.name && pagesWithAuth.includes(getRouteName(to.name as string))) {
-				const path = to.path;
+				const path =
+					getRouteName(to.name as string) !== RouteNameEnum.EVENT_EDIT
+						? from.path
+						: to.path;
 				const redirectPath = useCookie('redirectPath');
 				redirectPath.value = path;
 				return (to.path = localePath(RoutePathEnum.AUTH));

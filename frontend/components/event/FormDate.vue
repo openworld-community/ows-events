@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useField } from 'vee-validate';
 
-const startDateField = useField<Date >(() => 'startDate', {
+const startDateField = useField<Date>(() => 'startDate', {
 	validateOnModelUpdate: false
 });
 const startTimeField = useField<Time>(() => 'startTime', {
@@ -13,10 +13,6 @@ const endDateField = useField<Date>(() => 'endDate', {
 const endTimeField = useField<Time>(() => 'endTime', {
 	validateOnModelUpdate: false
 });
-
-watch(() => startDateField, value => {
-	console.log(value.value);
-})
 </script>
 <template>
 	<ModalUiModalSection

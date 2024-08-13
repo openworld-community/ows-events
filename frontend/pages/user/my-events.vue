@@ -2,6 +2,8 @@
 import { SeoItemTypeEnum } from '~/constants/enums/seo';
 import type { EventOnPoster } from '../../../common/types';
 import { RoutePathEnum } from '../../constants/enums/route';
+import { ref } from 'vue';
+import UserButtons from '~/components/user/userButtons.vue';
 
 definePageMeta({
 	layout: 'profile'
@@ -11,8 +13,25 @@ const mobile = inject<boolean>('mobile');
 
 const myEvents = ref<EventOnPoster[] | []>([]);
 
+const localePath = useLocalePath();
 const { data } = await apiRouter.events.createdEvents.get.useQuery({});
 if (data.value) myEvents.value = data.value;
+
+const deleteCard = async (id: string) => {
+	// если запрос проходит, то ничего не приходит, т.е. может придти только error
+	const { error } = await apiRouter.events.delete.useMutation({ data: { id } });
+	if (error.value) return;
+
+	myEvents.value = myEvents.value.filter((event: EventOnPoster) => event.id !== id);
+};
+
+const onEditButtonClick = async (id: string) => {
+	await navigateTo(localePath({ path: `${RoutePathEnum.EVENT_EDIT}${id}` }));
+};
+
+// const addToFavorites = async (id: string) => {
+// 	// Задел для избранного добавьте в UserButtons @favorite="addToFavorites" и перепишите визуал в компоненте UserButtons
+// };
 </script>
 
 <template>
@@ -35,8 +54,24 @@ if (data.value) myEvents.value = data.value;
 				:key="event.id"
 				itemscope
 				:itemtype="SeoItemTypeEnum.EVENT"
+				class="my-events__list__event"
 			>
-				<UserEventCard :event-data="event" />
+				<UserButtons
+					:show-edit-delete-buttons="true"
+					:event="event"
+					@delete="deleteCard"
+					@edit="onEditButtonClick"
+				/>
+				<UserEventCard :event-data="event">
+					<slot>
+						<!-- <UserButtons
+							:show-edit-delete-buttons="true"
+							:event="event"
+							@delete="deleteCard"
+							@edit="onEditButtonClick"
+						/> -->
+					</slot>
+				</UserEventCard>
 			</li>
 		</ul>
 
@@ -111,6 +146,9 @@ if (data.value) myEvents.value = data.value;
 
 		@media (min-width: 768px) {
 			max-width: 820px;
+		}
+		&__event {
+			position: relative;
 		}
 	}
 

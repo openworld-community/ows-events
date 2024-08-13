@@ -18,7 +18,8 @@ export default {
 		}
 	},
 	delete_event_modal: {
-		title: 'Delete event'
+		title: 'Delete event',
+		text:'Are you sure you want to delete this Event?'
 	},
 	need_authorize_modal: {
 		title: 'Authorization required to create an Event'

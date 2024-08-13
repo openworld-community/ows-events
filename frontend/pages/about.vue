@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { SeoItempropAboutEnum, SeoItemTypeEnum } from '~/constants/enums/seo';
+
 import { REPO_URL, SocialLinks } from '~/constants/url';
+import { RoutePathEnum } from '../constants/enums/route';
 
 const { t } = useI18n();
-const mobile = inject('mobile');
-
 getMeta({
 	title: t('meta.about_us.title'),
 	description: t('meta.about_us.description')
 });
+
+const urlAfisha = 'https://afisha.peredelano.com/';
 </script>
 
 <template>
@@ -17,176 +19,217 @@ getMeta({
 		itemscope
 		:itemtype="SeoItemTypeEnum.ABOUT"
 	>
-		<h1 class="about__title">{{ $t('about.title') }}</h1>
 		<div
-			v-if="mobile"
-			class="about__image-container"
-		>
-			<img
-				srcset="/img/about/about-screen@2x.png 2x"
-				src="/img/about/about-screen@1x.png"
-				width="351"
-				height="232"
-				class="about__img"
-				alt=""
-				:itemprop="SeoItempropAboutEnum.IMAGE"
-			/>
-		</div>
-		<div
-			class="about__description"
+			class="about-info"
 			:itemprop="SeoItempropAboutEnum.MAIN_CONTENT"
 		>
-			<p class="about__paragraph about__paragraph--separated">{{ $t('about.idea') }}</p>
-			<p class="about__paragraph">{{ $t('about.mission') }}</p>
-			<p class="about__paragraph about__paragraph--separated">
-				{{ $t('about.functionality') }}
-			</p>
-			<p class="about__paragraph about__paragraph--separated">{{ $t('about.team') }}</p>
-			<h2 class="about__list-title">{{ $t('about.values.title') }}</h2>
-			<ul class="about__list">
-				<li class="about__list-item">
-					{{ $t('about.values.openness') }}
-				</li>
-				<li class="about__list-item">
-					{{ $t('about.values.innovation') }}
-				</li>
-				<li class="about__list-item">
-					{{ $t('about.values.community') }}
-				</li>
-				<li class="about__list-item">
-					{{ $t('about.values.accessibility') }}
-				</li>
-				<li class="about__list-item">
-					{{ $t('about.values.quality') }}
-				</li>
-			</ul>
-			<p class="about__paragraph">
-				{{ $t('about.github') }}:
+			<div class="about-logo">
+				<img
+					class="about-logo__image"
+					src="/img/about/about-info.png"
+					:itemprop="SeoItempropAboutEnum.IMAGE"
+				/>
+				<p class="about-logo__text-img">{{ $t('about.title') }}</p>
+			</div>
+			<p class="about__text">{{ $t('about.idea') }}</p>
+		</div>
+
+		<h3 class="about__values-header">{{ $t('about.values.title') }}</h3>
+
+		<AboutValues />
+
+		<div class="about-navigation">
+			<div class="about-navigation__paragraph">
+				<p>{{ $t('about.github') }}</p>
 				<CommonNavLink
 					:href="REPO_URL"
-					class="about__link"
+					class="about-navigation__link"
 					is-external-link
 					rel="noopener noreferrer"
 					:itemprop="SeoItempropAboutEnum.SIGNIFICANT_LINK"
 				>
 					Repo
 				</CommonNavLink>
-			</p>
-		</div>
-		<div class="about__social-links social-links">
-			<h2 class="social-links__title">
-				{{ $t('about.social.title') }}
-			</h2>
-			<ul class="social-links__list">
-				<li
-					v-for="(link, key) in SocialLinks"
-					:key="link"
-					class="social-links__item"
+			</div>
+
+			<div class="about-navigation__paragraph">
+				<p>{{ $t('about.website') }}</p>
+				<CommonNavLink
+					:to="RoutePathEnum.HOME"
+					class="about-navigation__link"
+					:itemprop="SeoItempropAboutEnum.RELATED_LINK"
 				>
-					<CommonNavLink
-						:to="link"
-						is-external-link
-						class="social-links__link"
-						:style="`backgroundColor: var(--color-social-${key})`"
-						:title="$t(`about.social_title.${key}`)"
-						:aria-label="$t(`about.social_title.${key}`)"
-						:itemprop="SeoItempropAboutEnum.SOCIAL_LINK"
+					{{ urlAfisha }}
+				</CommonNavLink>
+			</div>
+
+			<div class="social-links">
+				<h3 class="social-links__title">
+					{{ $t('about.social.title') }}
+				</h3>
+				<ul class="social-links__list">
+					<li
+						v-for="(link, key) in SocialLinks"
+						:key="link"
+						class="social-links__item"
 					>
-						<CommonIcon
-							:name="`social/${key}-round`"
-							width="40px"
-							height="40px"
-						/>
-					</CommonNavLink>
-				</li>
-			</ul>
+						<CommonNavLink
+							:to="link"
+							is-external-link
+							class="social-links__link"
+							:style="`backgroundColor: var(--color-social-${key})`"
+							:title="$t(`about.social_title.${key}`)"
+							:aria-label="$t(`about.social_title.${key}`)"
+							:itemprop="SeoItempropAboutEnum.SOCIAL_LINK"
+						>
+							<CommonIcon
+								:name="`social/${key}-round`"
+								width="48px"
+								height="48px"
+							/>
+						</CommonNavLink>
+					</li>
+				</ul>
+			</div>
 		</div>
 	</main>
 </template>
 
 <style lang="less" scoped>
 .about {
-	padding-left: var(--padding-side);
-	padding-right: var(--padding-side);
-	padding-bottom: var(--padding-vertical);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	padding: 5%;
 
-	&__title {
-		padding-top: var(--padding-vertical);
-		font-size: var(--font-size-XXL);
-		line-height: var(--line-height-XXL);
-		font-weight: var(--font-weight-bold);
-		margin-bottom: var(--space-unrelated-items);
+	@media (max-width: 767px) {
+		padding-top: 80px;
+	}
+
+	&__text {
+		line-height: 20px;
+		font-size: var(--font-size-S);
+		text-align: justify;
 
 		@media (min-width: 768px) {
-			padding-top: 0;
-			margin-bottom: 20px;
+			padding-left: 5px;
+			//line-height: 17px;
+
+			flex-basis: 70%;
+			//max-width: 506px;
+		}
+		@media (min-width: 1440px) {
+			font-size: var(--font-size-L);
+			line-height: 30px;
+
 		}
 	}
 
-	&__image-container {
-		display: flex;
+	&__values-header {
+		text-align: center;
+		font-weight: 600;
+		line-height: 25px;
+		margin: 25px;
+
+		@media (min-width: 768px) {
+			font-size: var(--font-size-ML);
+			margin: 70px 0;
+		}
+	}
+}
+
+.about-info {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 20px;
+
+	@media (min-width: 768px) {
+		flex-direction: row;
+	}
+	@media (min-width: 1440px) {
+		width: 1189px;
+	}
+}
+
+// Обертка для картинки с текстом внутри
+.about-logo {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	@media (min-width: 768px) {
+		max-width: 163px;
+	}
+	@media (min-width: 1440px) {
+		max-width: 351px;
+	}
+	&__image {
 		width: 100%;
-		min-height: 232px;
-		line-height: 0;
-		background-color: var(--color-input-field);
-		border-radius: 4px;
-		margin-bottom: var(--space-related-items);
+
+		@media (max-width: 767px) {
+			min-width: 351px;
+		}
 	}
 
-	&__img {
-		width: 100%;
-		min-width: 100%;
-		max-width: 100%;
-		height: 100%;
-		border-radius: 4px;
+	&__text-img {
+		position: absolute;
+
+		font-size: 96px;
+
+		@media (min-width: 768px) {
+			font-size: 32px;
+		}
+		@media (min-width: 1440px) {
+			font-size: 96px;
+		}
+	}
+}
+
+// Навигация
+.about-navigation {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 15px;
+	margin-top: 28px;
+	font-size: var(--font-size-S);
+
+	@media (min-width: 768px) {
+		margin-top: 80px;
 	}
 
-	&__description {
-		margin-bottom: var(--space-subsections);
-	}
-
-	&__list-title {
-		font-size: var(--font-size-S);
-		line-height: 20px;
-		margin-bottom: var(--space-related-items);
-	}
-
-	&__list {
-		margin-bottom: var(--space-unrelated-items);
-	}
-
-	&__list-item {
-		list-style-type: disc;
-		list-style-position: inside;
-		font-size: var(--font-size-S);
-		line-height: 20px;
+	@media (min-width: 1440px) {
+		margin-top: 150px;
 	}
 
 	&__paragraph {
-		font-size: var(--font-size-S);
-		line-height: 20px;
+		display: flex;
+	}
 
-		&--separated {
-			margin-bottom: var(--space-unrelated-items);
-		}
+	&__paragraph p {
+		margin-right: 5px;
 	}
 
 	&__link {
 		color: var(--color-link);
 		text-decoration: underline;
-		font-weight: var(--font-weight-bold);
+		font-weight: 600px;
 	}
 }
 
+// Социальные сети
 .social-links {
 	&__title {
-		font-size: var(--font-size-L);
-		line-height: 24px;
-		margin-bottom: var(--space-unrelated-items);
+		line-height: 28px;
 	}
 
 	&__list {
 		display: flex;
+		justify-content: center;
+		margin-top: 20px;
 	}
 
 	&__item {

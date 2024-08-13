@@ -23,6 +23,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 				navTo: to.path,
 				showClearFormModal: true
 			});
+			return false;
 		}
 	} else {
 		return true;

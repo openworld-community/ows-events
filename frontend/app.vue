@@ -7,8 +7,9 @@ import { CookieNameEnum, LocalStorageEnum } from './constants/enums/common';
 import { TOKEN_MAX_AGE_SECONDS } from './constants/defaultValues/time';
 import type { ComputedRef } from 'vue';
 import { getRouteName } from './utils';
+import { VITE_DOMAIN } from './constants/url';
 
-const { locale, t } = useI18n();
+const { locale, locales, t } = useI18n();
 
 const viewport = useViewport();
 
@@ -21,18 +22,28 @@ const desktop = computed(() => viewport.isGreaterOrEquals('desktop'));
 provide('mobile', mobile as ComputedRef<boolean>);
 provide('tablet', tablet as ComputedRef<boolean>);
 provide('desktop', desktop as ComputedRef<boolean>);
+const route = useRoute();
 
+const langRefs = locales.value.map((it) => ({
+	rel: 'alternate',
+	hreflang: it.code,
+	href: `${VITE_DOMAIN}/${it.code}/${getRouteName(route.name as string)}`
+}));
 useHead({
 	link: [
 		{
 			rel: 'icon',
 			type: 'image/ico',
 			href: '/favicon.ico'
-		}
+		},
+		...langRefs
 	],
-	title: t('meta.default_title'),
+	title: `${t('meta.default_title.first')} | ${t('meta.default_title.second')}`,
 	meta: [
-		{ name: 'description', content: t('meta.default_description') },
+		{
+			name: 'description',
+			content: t('meta.default_description')
+		},
 		// viewport-fit=cover - фикс для IPhone - убирает рамки при горизонтальном просмотре
 		{ name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' }
 	],
@@ -42,7 +53,6 @@ useHead({
 });
 
 if (process.client) {
-	const route = useRoute();
 	const { gtag } = useGtag();
 	const pageTitle = getRouteName(route.name as string);
 	gtag('event', 'page_view', {

@@ -187,7 +187,7 @@ export const findEventsByCitySchema = {
 	params: {
 		type: 'object',
 		properties: {
-			city: {
+			cityName: {
 				type: 'string',
 				description: 'City in which event hold'
 			}

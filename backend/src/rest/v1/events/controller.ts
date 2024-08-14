@@ -88,7 +88,7 @@ export const findEvents: IFindEventHandler = async (request) => {
 
 export const findEventsByCity: IFindEventsCityHandler = async (request) => {
 	const queryObj: SearchEventPayload = {
-		city: request.params.city,
+		city: request.params.cityName,
 		...request.body
 	};
 	const lang =

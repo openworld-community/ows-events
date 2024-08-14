@@ -16,26 +16,48 @@ import { verifyGoogleToken } from '../../../externalServices/googleauth';
 export const telegramLogin: ITelegramHandler = async (request, reply) => {
 	const data = request.query;
 	const token = await userController.addTGUser(data);
-	reply.redirect(302, `${vars.frontend_url}/postauth/${token}?method=telegram`);
+	const cookies = request.headers.cookie
+		?.split('; ')
+		.reduce((accum: Record<string, string>, cookie) => {
+			const [cookieName, cookieValue] = cookie.split('=');
+			const newAccum = { ...accum, ...{ [cookieName]: cookieValue } };
+			return newAccum;
+		}, {});
+	reply.redirect(
+		302,
+		`${vars.frontend_url}/${cookies?.lang || 'ru'}/postauth/${token}?method=telegram`
+	);
 };
 
 export const googleLogin: IGoogleHandler = async (request, reply) => {
 	const data = request.body;
 	const googledata = await verifyGoogleToken(data.credential);
 	const token = await userController.addGoogleUser(googledata);
-	reply.redirect(302, `${vars.frontend_url}/postauth/${token}?method=google`);
+	const cookies = request.headers.cookie
+		?.split('; ')
+		.reduce((accum: Record<string, string>, cookie) => {
+			const [cookieName, cookieValue] = cookie.split('=');
+			const newAccum = { ...accum, ...{ [cookieName]: cookieValue } };
+			return newAccum;
+		}, {});
+	reply.redirect(
+		302,
+		`${vars.frontend_url}/${cookies?.lang || 'ru'}/postauth/${token}?method=google`
+	);
 };
 
 export const localSignup: ILocalSignupHandler = async (request) => {
 	const data = request.body;
 	const token = await userController.addLocalUser(data);
-	return `${vars.frontend_url}/postauth/${token}?method=local_signup`;
+	const lang = request.headers['accept-language'];
+	return `${vars.frontend_url}/${lang || 'ru'}/postauth/${token}?method=local_signup`;
 };
 
 export const localAuth: ILocalAuthHandler = async (request) => {
 	const data = request.body;
 	const token = await userController.authLocalUser(data);
-	return `${vars.frontend_url}/postauth/${token}?method=local_auth`;
+	const lang = request.headers['accept-language'];
+	return `${vars.frontend_url}/${lang || 'ru'}/postauth/${token}?method=local_auth`;
 };
 
 export const signout: ISignoutHandler = async (request) => {

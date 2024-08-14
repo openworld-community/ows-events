@@ -85,7 +85,13 @@ const model = computed({
 		&--primary {
 			//to set height for the content - set height to the real content
 			height: fit-content;
+			min-height: 100px;
 			max-height: 300px;
+			min-width: 200px;
+
+			&:focus-within {
+				outline: 1px solid var(--color-accent-green-main);
+			}
 		}
 
 		&[data-side='top'] {
@@ -105,6 +111,7 @@ const model = computed({
 			min-width: 100%;
 			display: flex;
 			justify-content: space-between;
+			align-items: center;
 			height: 40px;
 			border: 1px solid #dbdbdb;
 			border-radius: 8px;
@@ -112,7 +119,11 @@ const model = computed({
 			font-family: var(--font-family-main);
 			font-size: var(--font-size-M);
 			color: var(--color-text-main);
-			padding: 8px 45px 8px 12px;
+			padding: 8px 12px 8px 12px;
+
+			&:focus-within {
+				border-color: var(--color-accent-green-main-50);
+			}
 		}
 	}
 }

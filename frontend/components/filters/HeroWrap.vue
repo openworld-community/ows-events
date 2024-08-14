@@ -12,7 +12,7 @@ defineProps({
 		<slot></slot>
 	</div>
 </template>
-<style lang="less">
+<style lang="less" scoped>
 .herowrap {
 	width: 100%;
 	background: linear-gradient(
@@ -20,6 +20,8 @@ defineProps({
 		var(--color-accent-background) 0%,
 		var(--color-accent-green-main) 100%
 	);
+	padding-left: var(--padding-side);
+	padding-right: var(--padding-side);
 
 	@media (min-width: 768px) {
 		padding-top: 32px;
@@ -41,16 +43,14 @@ defineProps({
 
 		@media (min-width: 768px) {
 			max-width: 600px;
-			font-size: 50px;
-			line-height: 60px;
+
 			padding-top: 0;
 			margin-bottom: 40px;
 		}
 
 		@media (min-width: 1440px) {
 			max-width: 900px;
-			font-size: 70px;
-			line-height: 80px;
+
 			margin-bottom: 60px;
 		}
 	}

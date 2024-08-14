@@ -5,6 +5,24 @@ import type { Tag } from '../../../common/const/tags';
 import type { EventOnPoster } from '../../../common/types';
 
 export const filters = {
+	findEventsByCity: defineQuery<
+		(input?: {
+			city?: string | string[];
+			query: {
+				country?: string;
+				tags?: globalThis.ComputedRef<string[]>;
+				startDate: globalThis.ComputedRef<number>;
+				endDate: globalThis.ComputedRef<number>;
+			};
+			watch: any;
+		}) => EventOnPoster[]
+	>((input) => {
+		return useBackendFetch(
+			`events/city/${input.city}`,
+			{ body: input?.query ?? {} },
+			{ watch }
+		);
+	}),
 	findEvents2: defineQuery<
 		(input?: {
 			query: {

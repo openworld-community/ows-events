@@ -13,6 +13,7 @@ import {
 	IGetMyEventsHandler,
 	IUpdateEventHandler
 } from './type';
+import { transformFromQuery } from '../../../utils/cityNameTransform';
 
 export const addEvent: IAddEventHandler = async (request) => {
 	const { event } = request.body;
@@ -87,8 +88,9 @@ export const findEvents: IFindEventHandler = async (request) => {
 };
 
 export const findEventsByCity: IFindEventsCityHandler = async (request) => {
+	const city = transformFromQuery(request.params.cityName);
 	const queryObj: SearchEventPayload = {
-		city: request.params.cityName,
+		city,
 		...request.body
 	};
 	const lang =

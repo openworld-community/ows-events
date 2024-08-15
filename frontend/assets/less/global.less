@@ -51,16 +51,16 @@ body {
 .root {
   display: flex;
   flex-direction: column;
+  height: vh;
   min-width: 100%;
   min-height: 100%;
 }
 
 main {
-  padding-top: var(--header-height);
-
-  @media (min-width: 768px) {
+  @media (max-width: 768px) {
     height: 100%;
-    padding-top: 30px;
+    padding-top: var(--header-height);
+  
   }
 }
 

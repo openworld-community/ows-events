@@ -1,23 +1,11 @@
 <script setup lang="ts">
 const route = useRoute();
-import dayjs from 'dayjs';
 import { API_URL } from '~/constants/url';
 const { locale } = useI18n();
-
-const key = '3b0f745872084e60b3d100135241707';
-const baseUrl = 'http://api.weatherapi.com/v1';
-const current = '/forecast.json';
+const mobile = inject('mobile');
+import { countries as supportedCountries } from '../../../common/const/supportedCountries';
 
 const searchUrl = 'events/find';
-
-onBeforeMount(async () => {
-	//TODO костыль, иначе при ините страницы не достается value из запроса
-	//if (process.server) return;
-	//setTimeout(async () => {
-	//	await filterStore.getUsedFilters();
-	//});
-	//	const { data: usedCities } = await apiRouter.filters.getUsedCities.useQuery({});
-});
 
 const { data: usedCities } = await apiRouter.filters.getUsedCities.useQuery({});
 
@@ -27,79 +15,27 @@ const capitalize = (str: string) => {
 	return str.slice(0, 1).toUpperCase() + str.slice(1);
 };
 
-const getFirstFromQuery = (date?: string) => {
-	if (!date) return null;
-	console.log('DATE', new Date(date), dayjs(date).utc().toDate().getDate());
-	// applying new Date changes the day if user has timezone with minus from UTC (from query hh:mm:ss = 0:0:0 the date turns out to be previous day) so we use UTC
-	const timeObj = {
-		year: new Date(date).getUTCFullYear(),
-		month: new Date(date).getUTCMonth(),
-		day: new Date(date).getUTCDate()
-	};
-	const newDate = +new Date(timeObj.year, timeObj.month, timeObj.day, 0, 0, 0);
-	console.log('CITY FIRST DATE2', newDate, timeObj);
-
-	const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
-	const dateTS = newDate ? newDate - timezoneOffset : null;
-	console.log('CITY FIRST', date, new Date(dateTS));
-	return dateTS;
+const transformCityFromQuery = (city: string) => {
+	return city.split('-').join(' ');
 };
 
-const getSecondFromQuery = (date?: string) => {
-	if (!date) return null;
-	const timeObj = {
-		year: new Date(date).getUTCFullYear(),
-		month: new Date(date).getUTCMonth(),
-		day: new Date(date).getUTCDate()
-	};
-	const newDate = +new Date(timeObj.year, timeObj.month, timeObj.day, 23, 59, 59);
-	console.log('CITY SECOND DATE2', newDate, timeObj);
-
-	const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
-	const dateTS = newDate ? newDate - timezoneOffset : null;
-	console.log('CITY SECOND', date, new Date(dateTS));
-	return dateTS;
+const transformCityToQuery = (city: string) => {
+	return city.toLowerCase().split(' ').join('-');
 };
 
-const city = computed(() => route.params.city);
+const city = computed(() => route.params.city as string);
 
-const dt = ref(route.query.startDate);
-const dateStart = computed(() => getFirstFromQuery(getFirstQuery(route.query.startDate as string)));
-const dateEnd = computed(() => getSecondFromQuery(getFirstQuery(route.query.endDate as string)));
+const dateStart = computed(() =>
+	dateFromQueryToFilter('first', getFirstQuery(route.query.startDate as string))
+);
+const dateEnd = computed(() => {
+	return dateFromQueryToFilter('second', getFirstQuery(route.query.endDate as string));
+});
 const tags = computed(() =>
 	getFirstQuery(route.query.tags)
 		.split(', ')
 		.filter((item) => item !== '')
 );
-const getDataFromParams = (data: ReturnType<typeof useRoute>['params'][string]) => {
-	const newCity = getFirstParam(data);
-	//city.value = capitalize(newCity);
-};
-
-console.log('ROUTE_PATH', route.path);
-
-watch(
-	() => route.params.city,
-	(val) => {
-		getDataFromParams(val);
-	},
-	{ deep: true }
-);
-
-const citiesS = [
-	'gkjhhh',
-	'njksdacdsc',
-	'cadcdasd',
-	'sdfsgfsdg',
-	'dsgsdfgsdfg',
-	'sdgsdgdsgsd',
-	'sdgsdfgsdg',
-	'efafafaf',
-	'escresrcc',
-	'xertrtbytby',
-	'xwreretvrt',
-	'awercewrcr'
-];
 
 const filterCities = computed(() => {
 	return usedCities.value
@@ -112,16 +48,20 @@ const filterCities = computed(() => {
 		});
 });
 
+const currentCity = computed(() => {
+	return capitalize(city.value);
+});
+
 const {
 	data: events,
 	pending: pendingEvents,
-	error: errorEvents
+	error
 } = await useFetch(`${API_URL}/${searchUrl}/${route.params.city}`, {
 	query: { tags, startDate: dateStart, endDate: dateEnd }
 });
 const {
 	data: posterEvents,
-	error,
+	error: errorEvents,
 	pending
 } = await apiRouter.filters.findEventsByCity.useQuery({
 	data: {
@@ -137,28 +77,40 @@ const {
 </script>
 <template>
 	<main class="citi-page">
-		<FiltersHeroWrap :title="`I am the city ${city}`">
+		<FiltersHeroWrap :title="$t('city.title', { city: currentCity })">
 			<FiltersContent
+				:current-text="currentCity"
 				:tag-list="usedTags"
-				:filter-cities="citiesS"
+				:filter-cities="filterCities"
 			/>
 		</FiltersHeroWrap>
-
-		<div v-if="pending">Loading...</div>
-
-		<div>events:</div>
-		<div v-if="pendingEvents">Loading events....</div>
-		<pre v-else>{{ posterEvents }}</pre>
-		<div>errorPosterEvents: {{ error }}</div>
 		<div>error:</div>
 		<pre>{{ errorEvents }}</pre>
+
+		<SearchCardsWrapper>
+			<SearchLoader
+				v-if="pending"
+				:size="mobile ? 'middle' : 'big'"
+			/>
+			<SearchNotFound
+				v-if="!pending && posterEvents && posterEvents.length === 0"
+				:title="$t('event.filteredEvents.no_events_found')"
+			/>
+			<SearchEventCardsList :events="posterEvents" />
+			<SearchHeading
+				v-if="posterEvents.length !== 0"
+				position="down"
+				:title="$t('city.heading', { city, country: supportedCountries['ME'][locale] })"
+			/>
+		</SearchCardsWrapper>
 	</main>
 </template>
 
 <style lang="less" scoped>
 .city-page {
 	//tag main has padding in global
-
+	flex-grow: 1;
+	padding-top: var(--header-height);
 	@media (max-width: 768px) {
 		padding-top: var(--header-height);
 	}

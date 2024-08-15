@@ -16,6 +16,10 @@ defineProps({
 			string | string[] | { [key: string]: string }[] | Set<string>
 		>,
 		default: () => []
+	},
+	currentText: {
+		type: String,
+		default: ''
 	}
 });
 
@@ -61,7 +65,10 @@ watch(
 </script>
 <template>
 	<div class="main-filters">
-		<FiltersUiLinkSelectWrapper placeholder="Choose sth">
+		<FiltersUiLinkSelectWrapper
+			placeholder="$t('city.placeholder')"
+			:current-text="currentText"
+		>
 			<FiltersUiListWithoutLabel :options="filterCities" />
 		</FiltersUiLinkSelectWrapper>
 
@@ -79,25 +86,12 @@ watch(
 		/>
 	</div>
 	<div>
-		<HomeCollapsible>
-			<template #tags>
-				<div>
-					<div class="filter-tags">
-						<CommonUiTag
-							v-for="tagElem in tagList"
-							:key="tagElem"
-							v-model="tags"
-							name="tags"
-							:tag-key="tagElem"
-							is-checkbox
-							:size="mobile ? 'small' : 'standard'"
-							appearance="filter"
-							:aria-label="$t(`home.filter.tags.aria`)"
-						/>
-					</div>
-				</div>
-			</template>
-		</HomeCollapsible>
+		<FiltersTags
+			v-if="tagList.length !== 0"
+			v-model="tags"
+			:size="mobile ? 'small' : 'standard'"
+			:tag-list="tagList"
+		/>
 	</div>
 </template>
 <style lang="less" scoped>

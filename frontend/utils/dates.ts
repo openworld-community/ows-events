@@ -7,6 +7,31 @@ dayjs.extend(utc);
 export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
 export const dateNow = Date.now();
 
+export const dateFromQueryToFilter = (order: 'first' | 'second', date?: string) => {
+	if (!date) return null;
+	let hh = 0;
+	let mm = 0;
+	let ss = 0;
+	if (order === 'second') {
+		hh = 23;
+		mm = 59;
+		ss = 59;
+	}
+	//using UTC allow get time without adding user timezone (it can be - or +, - led date to previous day)
+	//we can parse string to get year, month and day date.split('-'), month should be used month-1
+	const timeObj = {
+		year: new Date(date).getUTCFullYear(),
+		month: new Date(date).getUTCMonth(),
+		day: new Date(date).getUTCDate()
+	};
+	const newDate = +new Date(timeObj.year, timeObj.month, timeObj.day, hh, mm, ss);
+
+	const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
+	const dateTS = newDate ? newDate - timezoneOffset : null;
+
+	return dateTS;
+};
+
 export const getDateFromQuery = (queryDate: string | undefined, keepTimezone = false): Date => {
 	if (!queryDate) return null;
 	const djs = !keepTimezone ? dayjs.utc(queryDate) : dayjs(queryDate);

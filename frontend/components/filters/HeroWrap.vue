@@ -33,8 +33,6 @@ defineProps({
 	}
 
 	&__title {
-		font-size: var(--font-size-XXL);
-		line-height: 40px;
 		text-align: center;
 		word-wrap: break-word;
 		color: var(--color-white);
@@ -43,14 +41,12 @@ defineProps({
 
 		@media (min-width: 768px) {
 			max-width: 600px;
-
 			padding-top: 0;
 			margin-bottom: 40px;
 		}
 
 		@media (min-width: 1440px) {
 			max-width: 900px;
-
 			margin-bottom: 60px;
 		}
 	}

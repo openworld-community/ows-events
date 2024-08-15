@@ -59,6 +59,7 @@ const city = computed(() => {
 	}
 
 	&__nav-link {
+		width: 100%;
 		&:hover,
 		&:focus-visible {
 			color: var(--color-accent-green-dark);

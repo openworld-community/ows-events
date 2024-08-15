@@ -18,7 +18,7 @@ defineProps({
 		>,
 		default: () => []
 	},
-	currentText: {
+	currentCity: {
 		type: String,
 		default: ''
 	}
@@ -69,7 +69,7 @@ watch(
 		<FiltersUiLinkSelectWrapper
 			v-if="!mobile"
 			:placeholder="$t('city.filters.city.placeholder')"
-			:current-text="currentText"
+			:current-text="currentCity"
 		>
 			<FiltersUiListWithoutLabel
 				:options="filterCities"
@@ -81,7 +81,7 @@ watch(
 			:placeholder="$t('city.filters.city.placeholder')"
 			:options="filterCities"
 			:path="RoutePathEnum.CITY"
-			:current-text="currentText"
+			:current-text="currentCity"
 		/>
 
 		<LazyCommonUiDateTimepicker

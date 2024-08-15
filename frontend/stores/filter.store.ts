@@ -6,7 +6,7 @@ import { getFirstDateFromFilters, getSecondDateFromFilters } from '~/utils/dates
 
 export type LocaleKey = 'en' | 'ru';
 
-export type UsedCitiesInternType = { LocaleKey: Country; cities: { LocaleKey: City }[] };
+export type UsedCitiesInternType = { [key in LocaleKey]: City }[];
 
 export interface FilterStore {
 	usedCountries: { label: string; value: string }[];

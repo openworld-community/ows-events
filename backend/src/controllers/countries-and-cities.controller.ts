@@ -38,7 +38,7 @@ class CountriesAndCitiesController {
 		const city = await CitiesModel.findOne({
 			$or: [{ en: cityName }, { ru: cityName }, { alternateNames: cityName }]
 		});
-		if (!city) return cityName;
+		if (!city) throw new Error(CommonErrorsEnum.CITY_NOT_FOUND);
 		return city[lang];
 	}
 
@@ -160,38 +160,38 @@ class CountriesAndCitiesController {
 			}
 		];
 
-		const citiesWithLocalization = await CitiesModel.aggregate(pipeline).exec();
-		const usedCities = citiesWithLocalization.reduce(
-			(accum, city: ICity) => {
-				const formattedCity = {
-					en: city.en,
-					ru: city.ru
-				};
-				if (city.countryCode === SupportedCountries.SERBIA) {
-					accum[0].cities.push(formattedCity);
-					accum[0].cities.sort((a: ICity, b: ICity) => (a.en < b.en ? -1 : 1));
-				}
-				if (city.countryCode === SupportedCountries.MONTENEGRO) {
-					accum[1].cities.push(formattedCity);
-					accum[1].cities.sort((a: ICity, b: ICity) => (a.en < b.en ? -1 : 1));
-				}
-				return accum;
-			},
-			[
-				{
-					en: 'Serbia',
-					ru: 'Сербия',
-					cities: []
-				},
-				{
-					en: 'Montengro',
-					ru: 'Черногория',
-					cities: []
-				}
-			]
-		);
+		const citiesWithLocalization: ICity[] = await CitiesModel.aggregate(pipeline).exec();
+		// const usedCities = citiesWithLocalization.reduce(
+		// 	(accum, city: ICity) => {
+		// 		const formattedCity = {
+		// 			en: city.en,
+		// 			locale: city.ru
+		// 		};
+		// 		if (city.countryCode === SupportedCountries.SERBIA) {
+		// 			accum[0].cities.push(formattedCity);
+		// 			accum[0].cities.sort((a: ICity, b: ICity) => (a.en < b.en ? -1 : 1));
+		// 		}
+		// 		if (city.countryCode === SupportedCountries.MONTENEGRO) {
+		// 			accum[1].cities.push(formattedCity);
+		// 			accum[1].cities.sort((a: ICity, b: ICity) => (a.en < b.en ? -1 : 1));
+		// 		}
+		// 		return accum;
+		// 	},
+		// 	[
+		// 		{
+		// 			en: 'Serbia',
+		// 			ru: 'Сербия',
+		// 			cities: []
+		// 		},
+		// 		{
+		// 			en: 'Montengro',
+		// 			ru: 'Черногория',
+		// 			cities: []
+		// 		}
+		// 	]
+		// );
 
-		return usedCities.filter((country: any) => country.cities.length !== 0);
+		return citiesWithLocalization;
 	}
 }
 

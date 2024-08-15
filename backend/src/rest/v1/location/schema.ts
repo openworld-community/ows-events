@@ -94,16 +94,7 @@ export const getUsedCitiesSchema = {
 				properties: {
 					en: { type: 'string' },
 					ru: { type: 'string' },
-					cities: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								ru: { type: 'string' },
-								en: { type: 'string' }
-							}
-						}
-					}
+					countryCode: { type: 'string' }
 				}
 			}
 		}

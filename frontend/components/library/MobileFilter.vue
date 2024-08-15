@@ -51,7 +51,7 @@ const clearModel = () => {
 };
 
 const navigate = (to: string) => {
-	navigateTo(localePath({ path: `${props.path}/${to}` }));
+	navigateTo(localePath({ path: `${props.path}/${transformToQuery(to)}` }));
 };
 </script>
 

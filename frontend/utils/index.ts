@@ -35,7 +35,7 @@ export const capitalize = (str: string) => {
 };
 
 export const transformFromQuery = (param: string) => {
-	return capitalize(param.split('-').join(' '));
+	return capitalize(param.split('-').map(capitalize).join(' '));
 };
 
 export const transformToQuery = (param: string) => {

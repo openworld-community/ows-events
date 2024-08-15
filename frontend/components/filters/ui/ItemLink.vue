@@ -24,7 +24,7 @@ const city = computed(() => {
 <template>
 	<li class="item-link">
 		<CommonNavLink
-			:to="`${path}/${city}`"
+			:to="`${path}/${transformToQuery(city)}`"
 			class="item-link__nav-link"
 		>
 			{{ typeof option === 'string' ? option : option['label'] }}

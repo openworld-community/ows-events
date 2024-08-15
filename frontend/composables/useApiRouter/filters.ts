@@ -14,7 +14,7 @@ export const filters = {
 				startDate: globalThis.ComputedRef<number>;
 				endDate: globalThis.ComputedRef<number>;
 			};
-			watch: string[];
+			watch: any;
 		}) => EventOnPoster[]
 	>((input) => {
 		return useBackendFetch(

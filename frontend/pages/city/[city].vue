@@ -1,12 +1,32 @@
 <script setup lang="ts">
+import { SeoItemTypeEnum } from '../../constants/enums/seo';
 const route = useRoute();
-import { API_URL } from '~/constants/url';
-const { locale } = useI18n();
+
+const { locale, t } = useI18n();
 const mobile = inject('mobile');
 import { countries as supportedCountries } from '../../../common/const/supportedCountries';
-import { capitalize } from 'vue';
 
-const searchUrl = 'events/find';
+const findCurrenCity = (param: string): string => {
+	const englishName = transformFromQuery(param);
+	const currentCity = usedCities.value.find((city) => city['en'] === englishName);
+	if (!currentCity) return;
+
+	return currentCity[locale.value];
+};
+
+const findCountryByParam = (param: string): string => {
+	console.log('USED_CITIES', usedCities.value);
+	const englishName = transformFromQuery(param);
+	const countryCode = usedCities.value.find((city) => city['en'] === englishName)['countryCode'];
+	if (!countryCode) return '';
+	console.log('COUNTRYCode', countryCode, englishName);
+	const currentCountry = supportedCountries[countryCode][locale.value];
+	return currentCountry;
+};
+//change
+getMeta({
+	title: `${t('meta.default_title.first')} | ${t('meta.default_title.second')}`
+});
 
 const { data: usedCities } = await apiRouter.filters.getUsedCities.useQuery({});
 
@@ -25,24 +45,6 @@ const tags = computed(() =>
 		.split(', ')
 		.filter((item) => item !== '')
 );
-
-const filterCities = computed(() => {
-	return usedCities.value.map((objCity) => {
-		return { value: objCity['en'], label: objCity[locale.value] };
-	});
-});
-
-const currentCity = computed(() => {
-	return capitalize(city.value);
-});
-
-const {
-	data: events,
-	pending: pendingEvents,
-	error
-} = await useFetch(`${API_URL}/${searchUrl}/${route.params.city}`, {
-	query: { tags, startDate: dateStart, endDate: dateEnd }
-});
 const {
 	data: posterEvents,
 	error: errorEvents,
@@ -58,12 +60,34 @@ const {
 		watch: [tags.value, dateStart.value, dateEnd.value]
 	}
 });
+
+if (errorEvents.value) {
+	throw createError({
+		statusCode: 404,
+		data: { message: t('errors.NOT_FOUND_BY_ID', { city: city }) }
+	});
+}
+
+export type Option = { label: string; value: string };
+
+const filterCities = computed(() => {
+	const filtered: Option[] = usedCities.value
+		.map((objCity) => {
+			return { value: objCity['en'], label: objCity[locale.value] };
+		})
+		.filter((cityObj) => cityObj['value'] !== transformFromQuery(city.value));
+	return filtered;
+});
 </script>
 <template>
-	<main class="citi-page">
-		<FiltersHeroWrap :title="$t('city.title', { city: currentCity })">
+	<main
+		class="citi-page"
+		itemscope
+		:itemtype="SeoItemTypeEnum.EVENT"
+	>
+		<FiltersHeroWrap :title="$t('city.title', { city: findCurrenCity(city) })">
 			<FiltersContent
-				:current-text="currentCity"
+				:current-city="findCurrenCity(city)"
 				:tag-list="usedTags"
 				:filter-cities="filterCities"
 			/>
@@ -84,7 +108,12 @@ const {
 			<SearchHeading
 				v-if="posterEvents && posterEvents.length !== 0"
 				position="down"
-				:title="$t('city.heading', { city, country: supportedCountries['ME'][locale] })"
+				:title="
+					$t('city.heading', {
+						city: findCurrenCity(city),
+						country: findCountryByParam(city)
+					})
+				"
 			/>
 		</SearchCardsWrapper>
 	</main>

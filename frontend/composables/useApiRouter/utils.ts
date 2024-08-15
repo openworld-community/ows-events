@@ -4,6 +4,8 @@ import { useUserStore } from '../../stores/user.store';
 import { CookieNameEnum } from '../../constants/enums/common';
 import { v4 as uuid } from 'uuid';
 import { CommonErrorsEnum } from '../../../common/const/common-errors';
+import type { WatchSource } from 'vue';
+import type { WatchOptions } from 'fs';
 
 type ApiRouter = {
 	[K in string]: ApiRouter | ReturnType<typeof defineQuery> | ReturnType<typeof defineMutation>;

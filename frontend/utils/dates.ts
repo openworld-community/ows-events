@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import type { Timezone } from '../../common/types/location';
 import { getUserTimezoneName } from '../services/timezone.services';
+import { RouteNameEnum } from '~/constants/enums/route';
 
 dayjs.extend(utc);
 export type Time = { hours: number | string; minutes: number | string; seconds?: number | string };
@@ -32,10 +33,15 @@ export const dateFromQueryToFilter = (order: 'first' | 'second', date?: string) 
 	return dateTS;
 };
 
-export const getDateFromQuery = (queryDate: string | undefined, keepTimezone = false): Date => {
+export const getDateFromQuery = (
+	queryDate: string | undefined,
+	routeName: string,
+	keepTimezone = false
+): Date => {
+	if (routeName !== RouteNameEnum.HOME) return;
 	if (!queryDate) return null;
 	const djs = !keepTimezone ? dayjs.utc(queryDate) : dayjs(queryDate);
-	console.log('DATE_FROM_QUERY', djs);
+
 	if (!djs.isValid()) return null;
 	return djs.toDate();
 };
@@ -50,7 +56,7 @@ export const getFirstDateFromFilters = (date: Date) => {
 
 	// Перевод в UTC 0
 	const startDateTS = startDate ? startDate - timezoneOffset : null;
-	console.log('FIRST DATE', new Date(startDateTS));
+
 	return startDateTS;
 };
 
@@ -65,7 +71,7 @@ export const getSecondDateFromFilters = (date: Date) => {
 	// Перевод в UTC 0
 
 	const endDateTS = endDate ? endDate - timezoneOffset : null;
-	console.log('SECOND DATE', new Date(endDateTS));
+
 	return endDateTS;
 };
 

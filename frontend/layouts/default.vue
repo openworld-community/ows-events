@@ -12,7 +12,11 @@ const mobile = inject('mobile');
 		<slot></slot>
 
 		<FooterCommon
-			v-if="!mobile || (mobile && getRouteName(route.name) === RouteNameEnum.HOME)"
+			v-if="
+				!mobile ||
+				(mobile && getRouteName(route.name) === RouteNameEnum.HOME) ||
+				(mobile && getRouteName(route.name) === RouteNameEnum.CITY)
+			"
 		/>
 	</div>
 </template>

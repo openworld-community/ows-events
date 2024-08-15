@@ -14,7 +14,7 @@ export const filters = {
 				startDate: globalThis.ComputedRef<number>;
 				endDate: globalThis.ComputedRef<number>;
 			};
-			watch: any;
+			watch: string[];
 		}) => EventOnPoster[]
 	>((input) => {
 		return useBackendFetch(
@@ -22,20 +22,6 @@ export const filters = {
 			{ body: input?.query ?? {} },
 			{ watch }
 		);
-	}),
-	findEvents2: defineQuery<
-		(input?: {
-			query: {
-				country?: string;
-				city?: string;
-				tags?: globalThis.ComputedRef<string[]>;
-				startDate: globalThis.ComputedRef<number>;
-				endDate: globalThis.ComputedRef<number>;
-			};
-			watch: any;
-		}) => EventOnPoster[]
-	>((input) => {
-		return useBackendFetch('events/find', { body: input?.query ?? {} }, { watch });
 	}),
 	findEvents: defineQuery<
 		(input?: {

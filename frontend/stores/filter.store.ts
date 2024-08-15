@@ -37,8 +37,14 @@ export const useFilterStore = defineStore('filter', {
 						.split(', ')
 						.filter((item) => item !== '') ?? [],
 				date: [
-					getDateFromQuery(getFirstQuery(route.query.startDate)) ?? undefined,
-					getDateFromQuery(getFirstQuery(route.query.endDate)) ?? undefined
+					getDateFromQuery(
+						getFirstQuery(route.query.startDate),
+						getRouteName(route.name as string)
+					) ?? undefined,
+					getDateFromQuery(
+						getFirstQuery(route.query.endDate),
+						getRouteName(route.name as string)
+					) ?? undefined
 				]
 			},
 			filteredEvents: undefined,
@@ -73,15 +79,9 @@ export const useFilterStore = defineStore('filter', {
 			const { data: usedCitiesIntern } = await apiRouter.filters.getUsedCities.useQuery({});
 			//	console.log('USED_CITIES', usedCities);
 			//	this.usedCities = usedCitiesIntern.value;
-			this.usedCities = usedCitiesIntern.value
-				.reduce((acc, rec) => {
-					acc = [...acc, ...rec.cities];
-
-					return acc;
-				}, [])
-				.map((objCity) => {
-					return { value: objCity['en'], label: objCity[lang] };
-				});
+			this.usedCities = usedCitiesIntern.value.map((objCity) => {
+				return { value: objCity['en'], label: objCity[lang] };
+			});
 
 			this.usedCountries = usedCitiesIntern.value.map((obj) => {
 				return {

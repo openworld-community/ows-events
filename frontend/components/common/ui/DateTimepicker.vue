@@ -78,10 +78,8 @@ const handleDate = (modelData: typeof props.modelValue) => {
 	isDateType.value && datepicker.value?.closeMenu();
 	if (props.range && !modelData[1]) {
 		emit('update:model-value', [modelData[0], modelData[0]]);
-		modelData = undefined;
 	} else {
 		emit('update:model-value', modelData);
-		modelData = undefined;
 	}
 };
 

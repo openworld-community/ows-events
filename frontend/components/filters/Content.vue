@@ -2,6 +2,7 @@
 import dayjs from 'dayjs';
 
 import type { TagList } from '../../../common/const/tags';
+import { RoutePathEnum } from '~/constants/enums/route';
 
 const route = useRoute();
 const mobile = inject('mobile');
@@ -66,11 +67,22 @@ watch(
 <template>
 	<div class="main-filters">
 		<FiltersUiLinkSelectWrapper
-			placeholder="$t('city.placeholder')"
+			v-if="!mobile"
+			:placeholder="$t('city.filters.city.placeholder')"
 			:current-text="currentText"
 		>
-			<FiltersUiListWithoutLabel :options="filterCities" />
+			<FiltersUiListWithoutLabel
+				:options="filterCities"
+				:path="RoutePathEnum.CITY"
+			/>
 		</FiltersUiLinkSelectWrapper>
+		<LibraryMobileFilter
+			v-else
+			:placeholder="$t('city.filters.city.placeholder')"
+			:options="filterCities"
+			:path="RoutePathEnum.CITY"
+			:current-text="currentText"
+		/>
 
 		<LazyCommonUiDateTimepicker
 			v-model="dates"

@@ -29,3 +29,15 @@ export const getRouteName = (fullRouteName: string | undefined) => {
 	if (!fullRouteName) return `UnknownPage: path ${fullRouteName}`;
 	return fullRouteName.split('___')[0];
 };
+
+export const capitalize = (str: string) => {
+	return str.slice(0, 1).toUpperCase() + str.slice(1);
+};
+
+export const transformFromQuery = (param: string) => {
+	return capitalize(param.split('-').join(' '));
+};
+
+export const transformToQuery = (param: string) => {
+	return param.toLowerCase().split(' ').join('-');
+};

@@ -4,24 +4,13 @@ import { API_URL } from '~/constants/url';
 const { locale } = useI18n();
 const mobile = inject('mobile');
 import { countries as supportedCountries } from '../../../common/const/supportedCountries';
+import { capitalize } from 'vue';
 
 const searchUrl = 'events/find';
 
 const { data: usedCities } = await apiRouter.filters.getUsedCities.useQuery({});
 
 const { data: usedTags } = await apiRouter.filters.getUsedTags.useQuery({});
-
-const capitalize = (str: string) => {
-	return str.slice(0, 1).toUpperCase() + str.slice(1);
-};
-
-const transformCityFromQuery = (city: string) => {
-	return city.split('-').join(' ');
-};
-
-const transformCityToQuery = (city: string) => {
-	return city.toLowerCase().split(' ').join('-');
-};
 
 const city = computed(() => route.params.city as string);
 
@@ -38,14 +27,9 @@ const tags = computed(() =>
 );
 
 const filterCities = computed(() => {
-	return usedCities.value
-		.reduce((acc, rec) => {
-			acc = [...acc, ...rec.cities];
-			return acc;
-		}, [])
-		.map((objCity) => {
-			return { value: objCity['en'], label: objCity[locale.value] };
-		});
+	return usedCities.value.map((objCity) => {
+		return { value: objCity['en'], label: objCity[locale.value] };
+	});
 });
 
 const currentCity = computed(() => {
@@ -98,7 +82,7 @@ const {
 			/>
 			<SearchEventCardsList :events="posterEvents" />
 			<SearchHeading
-				v-if="posterEvents.length !== 0"
+				v-if="posterEvents && posterEvents.length !== 0"
 				position="down"
 				:title="$t('city.heading', { city, country: supportedCountries['ME'][locale] })"
 			/>
@@ -117,5 +101,9 @@ const {
 	@media (min-width: 768px) {
 		padding-top: 0px;
 	}
+}
+
+.heading--down:has(.city-page) {
+	margin-bottom: 30px;
 }
 </style>

@@ -1,7 +1,15 @@
 <script setup lang="ts">
+import type { RouteBaseNameFunction } from '@nuxtjs/i18n/dist/runtime/composables';
+import type { PropType } from 'vue';
+import type { RoutePathEnum } from '~/constants/enums/route';
+
 const props = defineProps({
 	option: {
 		type: [String, Object] as PropType<string | { [key: string]: string }>,
+		required: true
+	},
+	path: {
+		type: String as PropType<RoutePathEnum>,
 		required: true
 	}
 });
@@ -16,7 +24,7 @@ const city = computed(() => {
 <template>
 	<li class="item-link">
 		<CommonNavLink
-			:to="`/city/${city}`"
+			:to="`${path}/${city}`"
 			class="item-link__nav-link"
 		>
 			{{ typeof option === 'string' ? option : option['label'] }}

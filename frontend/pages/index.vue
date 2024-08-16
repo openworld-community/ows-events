@@ -23,7 +23,6 @@ watch(
 		if (Object.keys(value).length) {
 			sendAnalytics.search({
 				search_term: route.fullPath.split('?')[1],
-				city: value.city ? getFirstQuery(value.city) : '',
 				tags: value.tags ? getFirstQuery(value.tags) : ''
 			});
 		}

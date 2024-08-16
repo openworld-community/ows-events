@@ -4,7 +4,12 @@ const route = useRoute();
 
 const { locale, t } = useI18n();
 const mobile = inject('mobile');
-import { countries as supportedCountries } from '../../../common/const/supportedCountries';
+import {
+	declinationCountries,
+	countries as supportedCountries
+} from '../../../common/const/supportedCountries';
+
+const { sendAnalytics } = useSendTrackingEvent();
 
 const findCurrenCity = (param: string): string => {
 	const englishName = transformFromQuery(param);
@@ -16,22 +21,28 @@ const findCurrenCity = (param: string): string => {
 
 const findCountryByParam = (param: string): string => {
 	const englishName = transformFromQuery(param);
+
 	const countryCode = usedCities.value.find((city) => city['en'] === englishName)['countryCode'];
 	if (!countryCode) return '';
 
 	const currentCountry = supportedCountries[countryCode][locale.value];
 	return currentCountry;
 };
-//change
-getMeta({
-	title: `${t('meta.default_title.first')} | ${t('meta.default_title.second')}`
-});
 
 const { data: usedCities } = await apiRouter.filters.getUsedCities.useQuery({});
 
 const { data: usedTags } = await apiRouter.filters.getUsedTags.useQuery({});
 
 const city = computed(() => route.params.city as string);
+
+getMeta({
+	title: `${t('meta.city.title.first', { city: findCurrenCity(city.value) })} - ${t(
+		'meta.city.title.second'
+	)} ${declinationCountries[findCountryByParam(city.value)]}`,
+	description: t('meta.city.description', {
+		country: declinationCountries[findCountryByParam(city.value)]
+	})
+});
 
 const dateStart = computed(() =>
 	dateFromQueryToFilter('first', getFirstQuery(route.query.startDate as string))
@@ -77,6 +88,19 @@ const filterCities = computed(() => {
 		.filter((cityObj) => cityObj['value'] !== transformFromQuery(city.value));
 	return filtered;
 });
+
+watch(
+	() => route.query,
+	(value) => {
+		if (Object.keys(value).length) {
+			sendAnalytics.search({
+				search_term: route.fullPath.split('?')[1],
+				tags: value.tags ? getFirstQuery(value.tags) : ''
+			});
+		}
+	},
+	{ deep: true }
+);
 </script>
 <template>
 	<main

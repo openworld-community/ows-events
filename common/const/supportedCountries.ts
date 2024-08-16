@@ -30,3 +30,10 @@ export const countries: CountriesTranslateType = {
 		en: 'Serbia'
 	}
 };
+
+export const declinationCountries = {
+	Сербия: 'Сербии',
+	Serbia: 'Serbia',
+	Montenegro: 'Montenegro',
+	Черногория: 'Черногории'
+};

@@ -21,8 +21,9 @@ const findCurrenCity = (param: string): string => {
 
 const findCountryByParam = (param: string): string => {
 	const englishName = transformFromQuery(param);
-
-	const countryCode = usedCities.value.find((city) => city['en'] === englishName)['countryCode'];
+	const cityObjectWithCountryCode = usedCities.value.find((city) => city['en'] === englishName);
+	if (!cityObjectWithCountryCode) return '';
+	const countryCode = cityObjectWithCountryCode['countryCode'];
 	if (!countryCode) return '';
 
 	const currentCountry = supportedCountries[countryCode][locale.value];
@@ -108,7 +109,7 @@ watch(
 		itemscope
 		:itemtype="SeoItemTypeEnum.EVENT"
 	>
-		<FiltersHeroWrap :title="$t('city.title', { city: findCurrenCity(city).toUpperCase() })">
+		<FiltersHeroWrap :title="$t('city.title', { city: findCurrenCity(city)?.toUpperCase() })">
 			<FiltersContent
 				:current-city="findCurrenCity(city)"
 				:tag-list="usedTags"

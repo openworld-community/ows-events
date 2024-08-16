@@ -13,9 +13,7 @@ defineProps({
 		default: () => []
 	},
 	filterCities: {
-		type: [Array, String, Set] as PropType<
-			string | string[] | { [key: string]: string }[] | Set<string>
-		>,
+		type: [Array, String, Set] as PropType<string | string[] | { [key: string]: string }[]>,
 		default: () => []
 	},
 	currentCity: {
@@ -70,6 +68,8 @@ watch(
 			v-if="!mobile"
 			:placeholder="$t('city.filters.city.placeholder')"
 			:current-text="currentCity"
+			:disabled="filterCities.length === 0"
+			:aria-label="$t(`home.filter.city.aria`)"
 		>
 			<FiltersUiListWithoutLabel
 				:options="filterCities"
@@ -83,6 +83,7 @@ watch(
 			:path="RoutePathEnum.CITY"
 			:current-text="currentCity"
 			:title="$t('home.filter.city.title')"
+			:disabled="filterCities.length === 0"
 		/>
 
 		<LazyCommonUiDateTimepicker

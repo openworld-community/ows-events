@@ -96,6 +96,7 @@ export const findEventsByCity: IFindEventsCityHandler = async (request) => {
 	const lang =
 		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
 	const events = await eventsStateController.getEvents(lang, false, queryObj);
-	if (events.length === 0) throw new Error(CommonErrorsEnum.NO_EVENTS_IN_CITY);
+	// eslint-disable-next-line @typescript-eslint/no-throw-literal
+	if (events.length === 0) throw { statusCode: 404, message: CommonErrorsEnum.NO_EVENTS_IN_CITY };
 	return events;
 };

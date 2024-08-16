@@ -74,7 +74,7 @@ const navigate = (to: string) => {
 		<template #content>
 			<div class="mobile-filter__content">
 				<DialogTitle>
-					<h2 class="mobile-filter__title">{{ $t(`home.filter.${title}.title`) }}</h2>
+					<h2 class="mobile-filter__title">{{ title }}</h2>
 				</DialogTitle>
 
 				<ul class="mobile-filter__list list">
@@ -149,6 +149,14 @@ const navigate = (to: string) => {
 		//font-size: var(--font-size-M);
 		color: var(--color-white);
 		background-color: var(--color-dark);
+	}
+
+	&__content {
+		width: 100%;
+		padding: 20px var(--padding-side);
+		margin: auto auto 0;
+		border-top-left-radius: 8px;
+		border-top-right-radius: 8px;
 	}
 
 	&__title {

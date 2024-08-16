@@ -25,8 +25,8 @@ defineProps({
 .heading {
 	@media (max-width: 768px) {
 		font-size: var(--font-size-ML);
-		//font-weight: 500;
-		letter-spacing: -0.3;
+		font-weight: 500;
+		letter-spacing: -0.3px;
 	}
 	@media (min-width: 768px) {
 		padding-left: var(--padding-side);
@@ -48,8 +48,20 @@ defineProps({
 	}
 	&--down {
 		margin-top: 30px;
+		margin-bottom: 30px;
+		text-align: center;
+		margin-left: 16px;
+		margin-right: 16px;
+
+		@media (min-width: 768px) {
+			text-align: left;
+			margin-left: 0px;
+			margin-right: 0px;
+			margin-bottom: 70px;
+		}
 		@media (min-width: 1440px) {
 			margin-top: 70px;
+			margin-bottom: 70px;
 		}
 	}
 }

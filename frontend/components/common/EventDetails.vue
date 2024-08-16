@@ -159,7 +159,7 @@ const component = computed(() => {
 					class="details__icon"
 					color="var(--color-accent-green-main)"
 				/>
-				<p>
+				<span>
 					<span
 						v-if="props.location.country"
 						:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
@@ -179,7 +179,7 @@ const component = computed(() => {
 						:itemprop="SeoItempropLocationEnum.ADDRESS"
 						>, {{ location.address }}
 					</span>
-				</p>
+				</span>
 			</component>
 		</li>
 	</ul>

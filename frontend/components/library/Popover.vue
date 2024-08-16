@@ -26,6 +26,7 @@ const props = defineProps({
 });
 
 const _open = ref(false);
+const button = ref<HTMLButtonElement>(null);
 
 const model = computed({
 	get() {
@@ -45,6 +46,7 @@ const model = computed({
 <template>
 	<Popover v-model:open="model">
 		<PopoverTrigger
+			ref="button"
 			:class="['popover__trigger', { 'popover__trigger--primary': variant === 'primary' }]"
 			:aria-label="ariaLabel"
 		>
@@ -120,11 +122,20 @@ const model = computed({
 			font-size: var(--font-size-M);
 			color: var(--color-text-main);
 			padding: 8px 12px 8px 12px;
-
+			@media (min-width: 1440px) {
+				border-color: transparent;
+			}
 			&:focus-within {
 				border-color: var(--color-accent-green-main-50);
 			}
 		}
+	}
+
+	&__trigger[data-state='open'] {
+		border-color: var(--color-accent-green-main-50);
+	}
+	&__trigger[data-state='close'] {
+		border-color: transparent;
 	}
 }
 

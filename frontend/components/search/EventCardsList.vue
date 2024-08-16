@@ -33,44 +33,39 @@ defineProps({
 </template>
 <style lang="less" scoped>
 .cards-list {
-	display: flex;
-	flex-direction: column;
+	display: grid;
+	grid-template-columns: 1fr;
 
+	row-gap: 20px;
 	width: 100%;
 
 	@media (max-width: 768px) {
-		gap: 20px;
 	}
 
 	@media (min-width: 768px) {
-		flex-direction: row;
-		flex-wrap: wrap;
+		grid-template-columns: 1fr 1fr;
+		row-gap: 40px;
+		column-gap: 14px;
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
+	}
+
+	@media (min-width: 1440px) {
+		grid-template-columns: 1fr 1fr 1fr;
+		column-gap: 20px;
 	}
 
 	&__item {
 		@media (min-width: 768px) {
 			display: flex;
-			width: 49.2%;
+			width: 100%;
 			height: auto;
-			margin-bottom: 5%;
-			margin-right: 1.5%;
-
-			&:nth-child(2n) {
-				margin-right: 0;
-			}
 		}
 
 		@media (min-width: 1440px) {
 			display: flex;
-			width: 32.3%;
+			width: 100%;
 			min-height: 100%;
-			margin-right: 0;
-
-			&:not(:nth-child(3n)) {
-				margin-right: 1.5%;
-			}
 		}
 	}
 }

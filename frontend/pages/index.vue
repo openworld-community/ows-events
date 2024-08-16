@@ -140,6 +140,7 @@ const onButtonClick = async () => {
 		color: var(--color-white);
 		padding-top: 28px;
 		margin-bottom: 24px;
+		letter-spacing: -0.3px;
 
 		@media (min-width: 768px) {
 			max-width: 500px;

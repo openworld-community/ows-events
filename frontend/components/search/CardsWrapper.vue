@@ -7,6 +7,8 @@
 .card-wrapper {
 	position: relative;
 	padding-top: 32px;
+	flex-grow: 1;
+	gap: 50;
 	@media (min-width: 768px) {
 		padding-top: 60px;
 	}

@@ -82,6 +82,7 @@ watch(
 			:options="filterCities"
 			:path="RoutePathEnum.CITY"
 			:current-text="currentCity"
+			:title="$t('home.filter.city.title')"
 		/>
 
 		<LazyCommonUiDateTimepicker
@@ -97,7 +98,7 @@ watch(
 			:min-date="new Date(roundTime(Date.now(), 10))"
 		/>
 	</div>
-	<div>
+	<div class="main-filters__tags">
 		<FiltersTags
 			v-if="tagList.length !== 0"
 			v-model="tags"
@@ -135,7 +136,34 @@ watch(
 		&:deep(.input__field),
 		&:deep(.popover__trigger--primary) {
 			height: 72px;
+			//border-color: transparent;
 		}
+
+		&:deep(.calendar):before {
+			width: 1px;
+			content: '';
+			background-color: var(--color-text-secondary);
+			height: 80%;
+			position: absolute;
+			top: 10%;
+			left: -1px;
+			transition: backround-color, 0.15s ease-in-out;
+		}
+	}
+
+	&__tags {
+		width: 100%;
+	}
+}
+@media (min-width: 1440px) {
+	// прозраные сепараторы при фокусе первые два отвечают за пикер
+
+	.filter:focus-within::before,
+	.filter:focus-within + .filter::before,
+	.filter:has(.input__field:focus) + .filters__wrapper--mobile > .filter:first-child::before,
+	.popover__trigger--primary[data-state='open'] + div + .filter::before,
+	.popover__trigger--primary:focus-within + .filter::before {
+		background-color: transparent;
 	}
 }
 </style>

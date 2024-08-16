@@ -1,6 +1,6 @@
 export default {
 	title: 'Afisha {city}',
-	heading: 'Events {city} ({country}) ',
+	heading: 'Events in {city} ({country}) ',
 	filters: {
 		city: {
 			placeholder: 'Select a city',

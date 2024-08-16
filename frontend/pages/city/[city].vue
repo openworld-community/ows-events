@@ -15,11 +15,10 @@ const findCurrenCity = (param: string): string => {
 };
 
 const findCountryByParam = (param: string): string => {
-	console.log('USED_CITIES', usedCities.value);
 	const englishName = transformFromQuery(param);
 	const countryCode = usedCities.value.find((city) => city['en'] === englishName)['countryCode'];
 	if (!countryCode) return '';
-	console.log('COUNTRYCode', countryCode, englishName);
+
 	const currentCountry = supportedCountries[countryCode][locale.value];
 	return currentCountry;
 };
@@ -85,14 +84,14 @@ const filterCities = computed(() => {
 		itemscope
 		:itemtype="SeoItemTypeEnum.EVENT"
 	>
-		<FiltersHeroWrap :title="$t('city.title', { city: findCurrenCity(city) })">
+		<FiltersHeroWrap :title="$t('city.title', { city: findCurrenCity(city).toUpperCase() })">
 			<FiltersContent
 				:current-city="findCurrenCity(city)"
 				:tag-list="usedTags"
 				:filter-cities="filterCities"
 			/>
 		</FiltersHeroWrap>
-		<div>error:</div>
+
 		<pre>{{ errorEvents }}</pre>
 
 		<SearchCardsWrapper>
@@ -124,15 +123,12 @@ const filterCities = computed(() => {
 	//tag main has padding in global
 	flex-grow: 1;
 	padding-top: var(--header-height);
+
 	@media (max-width: 768px) {
 		padding-top: var(--header-height);
 	}
 	@media (min-width: 768px) {
 		padding-top: 0px;
 	}
-}
-
-.heading--down:has(.city-page) {
-	margin-bottom: 30px;
 }
 </style>

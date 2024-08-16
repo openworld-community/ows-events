@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
 import { useFilterStore } from '../../../stores/filter.store';
+import { RoutePathEnum } from '~/constants/enums/route';
 
 const props = defineProps({
 	tag: {
@@ -11,6 +12,7 @@ const props = defineProps({
 		type: String as PropType<'select' | 'date' | 'tag'>,
 		required: true
 	},
+
 	name: {
 		// должен соответствовать названию в filter.store и ключу в файлах i18n/home[filter]
 		type: String,
@@ -36,10 +38,6 @@ const props = defineProps({
 	dropdownPosition: {
 		type: String as PropType<'left' | 'right'>,
 		default: 'left'
-	},
-	range: {
-		type: Boolean,
-		default: false
 	}
 });
 
@@ -61,7 +59,7 @@ onMounted(() => {
 		v-if="filterType === 'date'"
 		v-model="filterStore.filters[name]"
 		type="date"
-		:range="range"
+		:range="true"
 		is-filter
 		appearance="no-border"
 		class="filter"
@@ -72,25 +70,22 @@ onMounted(() => {
 		:min-time="name === 'startDate' ? { hours: 0, minutes: 0 } : { hours: '23', minutes: '59' }"
 	/>
 	<template v-if="filterType === 'select'">
-		<LibraryMobileSelect
-			v-if="mobile && name === 'city'"
-			v-model="filterStore.filters[name]"
-			:title="name"
-			:name="name"
-			:placeholder="$t(`home.filter.${name}.placeholder`)"
-			:options="list"
-			:disabled="disabled"
-		/>
-		<LibrarySelect
-			v-else
-			v-model="filterStore.filters[name]"
-			:class="['filter', { 'filter--no-separator': noSeparator }]"
-			:name="name"
-			:placeholder="$t(`home.filter.${name}.placeholder`)"
-			:options="list"
-			:disabled="disabled"
-			:no-border="'no-border' ? true : false"
+		<FiltersUiLinkSelectWrapper
+			v-if="!mobile && name === 'city'"
+			:placeholder="$t('city.filters.city.placeholder')"
 			:aria-label="$t(`home.filter.${name}.aria`)"
+		>
+			<FiltersUiListWithoutLabel
+				:options="list"
+				:path="RoutePathEnum.CITY"
+			/>
+		</FiltersUiLinkSelectWrapper>
+		<LibraryMobileFilter
+			v-else
+			:placeholder="$t('city.filters.city.placeholder')"
+			:options="list"
+			:path="RoutePathEnum.CITY"
+			:title="$t(`home.filter.${name}.title`)"
 		/>
 	</template>
 	<HomeCollapsible v-if="filterType === 'tag'">

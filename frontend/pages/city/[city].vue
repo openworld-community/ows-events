@@ -29,19 +29,17 @@ const findCountryByParam = (param: string): string => {
 	const currentCountry = supportedCountries[countryCode][locale.value];
 	return currentCountry;
 };
-
+const city = getFirstParam(route.params.city);
 const { data: usedCities } = await apiRouter.filters.getUsedCities.useQuery({});
 
-const { data: usedTags } = await apiRouter.filters.getUsedTags.useQuery({});
-
-const city = computed(() => route.params.city as string);
+const { data: usedTags } = await apiRouter.filters.getUsedTagsByCity.useQuery({ data: { city } });
 
 getMeta({
-	title: `${t('meta.city.title.first', { city: findCurrenCity(city.value) })} - ${t(
+	title: `${t('meta.city.title.first', { city: findCurrenCity(city) })} - ${t(
 		'meta.city.title.second'
-	)} ${declinationCountries[findCountryByParam(city.value)]}`,
+	)} ${declinationCountries[findCountryByParam(city)]}`,
 	description: t('meta.city.description', {
-		country: declinationCountries[findCountryByParam(city.value)]
+		country: declinationCountries[findCountryByParam(city)]
 	})
 });
 
@@ -62,7 +60,7 @@ const {
 	pending
 } = await apiRouter.filters.findEventsByCity.useQuery({
 	data: {
-		city: city.value,
+		city,
 		query: {
 			tags,
 			startDate: dateStart,
@@ -86,7 +84,7 @@ const filterCities = computed(() => {
 		.map((objCity) => {
 			return { value: objCity['en'], label: objCity[locale.value] };
 		})
-		.filter((cityObj) => cityObj['value'] !== transformFromQuery(city.value));
+		.filter((cityObj) => cityObj['value'] !== transformFromQuery(city));
 	return filtered;
 });
 

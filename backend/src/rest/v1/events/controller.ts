@@ -95,5 +95,7 @@ export const findEventsByCity: IFindEventsCityHandler = async (request) => {
 	};
 	const lang =
 		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
-	return eventsStateController.getEvents(lang, queryObj);
+	const events = await eventsStateController.getEvents(lang, queryObj);
+	if (events.length === 0) throw new Error(CommonErrorsEnum.NO_EVENTS_IN_CITY);
+	return events;
 };

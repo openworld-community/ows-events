@@ -84,9 +84,9 @@ class EventsStateController {
 				query?.country,
 				SupportedLanguages.ENGLISH
 			);
-			const countryQuery = {
-				$or: [{ 'location.country': englishCountryName }, { isOnline }]
-			};
+			const countryQuery = isOnline
+				? { $and: [{ 'location.country': englishCountryName }, { isOnline }] }
+				: { 'location.country': englishCountryName };
 			queryObject.$and?.push(countryQuery);
 			sortObject.isOnline = 'ascending';
 		}
@@ -95,7 +95,9 @@ class EventsStateController {
 				query?.city,
 				SupportedLanguages.ENGLISH
 			);
-			const cityQuery = { $or: [{ 'location.city': englishCityName }, { isOnline }] };
+			const cityQuery = isOnline
+				? { $or: [{ 'location.city': englishCityName }, { isOnline }] }
+				: { 'location.city': englishCityName };
 			queryObject.$and?.push(cityQuery);
 			sortObject.isOnline = 'ascending';
 		}

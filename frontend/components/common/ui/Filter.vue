@@ -74,6 +74,7 @@ onMounted(() => {
 			v-if="!mobile && name === 'city'"
 			:placeholder="$t('city.filters.city.placeholder')"
 			:aria-label="$t(`home.filter.${name}.aria`)"
+			:disabled="list.length === 0"
 		>
 			<FiltersUiListWithoutLabel
 				:options="list"
@@ -86,6 +87,7 @@ onMounted(() => {
 			:options="list"
 			:path="RoutePathEnum.CITY"
 			:title="$t(`home.filter.${name}.title`)"
+			:disabled="list.length === 0"
 		/>
 	</template>
 	<HomeCollapsible v-if="filterType === 'tag'">

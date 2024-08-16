@@ -7,11 +7,22 @@ defineProps({
 	currentText: {
 		type: String,
 		default: ''
+	},
+	disabled: {
+		type: Boolean,
+		default: false
+	},
+	ariaLabel: {
+		type: String,
+		default: ''
 	}
 });
 </script>
 <template>
-	<LibraryPopover>
+	<LibraryPopover
+		:aria-label="ariaLabel"
+		:disabled="disabled"
+	>
 		<template #trigger>
 			<div
 				class="link-select__trigger"

@@ -56,7 +56,7 @@ const navigate = (to: string) => {
 </script>
 
 <template>
-	<LibraryDownsheet>
+	<LibraryDownsheet :disabled="disabled">
 		<template #trigger>
 			<div
 				class="mobile-filter__trigger-wrap"

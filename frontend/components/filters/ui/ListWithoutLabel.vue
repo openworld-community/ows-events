@@ -3,9 +3,7 @@ import type { RoutePathEnum } from '~/constants/enums/route';
 
 defineProps({
 	options: {
-		type: [Array, String, Set] as PropType<
-			string | string[] | { [key: string]: string }[] | Set<string>
-		>,
+		type: [Array, String, Set] as PropType<string | string[] | { [key: string]: string }[]>,
 		required: true
 	},
 	path: {

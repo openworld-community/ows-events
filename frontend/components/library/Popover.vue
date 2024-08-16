@@ -22,11 +22,14 @@ const props = defineProps({
 		type: String as PropType<'start' | 'center' | 'end'>,
 		default: 'start'
 	},
+	disabled: {
+		type: Boolean,
+		default: false
+	},
 	height: { type: Number, default: 200 }
 });
 
 const _open = ref(false);
-const button = ref<HTMLButtonElement>(null);
 
 const model = computed({
 	get() {
@@ -46,9 +49,9 @@ const model = computed({
 <template>
 	<Popover v-model:open="model">
 		<PopoverTrigger
-			ref="button"
 			:class="['popover__trigger', { 'popover__trigger--primary': variant === 'primary' }]"
 			:aria-label="ariaLabel"
+			:disabled="disabled"
 		>
 			<slot name="trigger" />
 		</PopoverTrigger>
@@ -136,6 +139,9 @@ const model = computed({
 	}
 	&__trigger[data-state='close'] {
 		border-color: transparent;
+	}
+	&__trigger:disabled {
+		opacity: 0.8;
 	}
 }
 

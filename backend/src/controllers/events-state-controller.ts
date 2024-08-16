@@ -55,6 +55,7 @@ class EventsStateController {
 
 	async getEvents(
 		lang: SupportedLanguages,
+		isOnline: boolean,
 		query?: SearchEventPayload | undefined
 	): Promise<EventDbEntity[]> {
 		const queryObject: FilterQuery<EventOnPoster> = {
@@ -84,7 +85,7 @@ class EventsStateController {
 				SupportedLanguages.ENGLISH
 			);
 			const countryQuery = {
-				$or: [{ 'location.country': englishCountryName }, { isOnline: true }]
+				$or: [{ 'location.country': englishCountryName }, { isOnline }]
 			};
 			queryObject.$and?.push(countryQuery);
 			sortObject.isOnline = 'ascending';
@@ -94,7 +95,7 @@ class EventsStateController {
 				query?.city,
 				SupportedLanguages.ENGLISH
 			);
-			const cityQuery = { $or: [{ 'location.city': englishCityName }, { isOnline: true }] };
+			const cityQuery = { $or: [{ 'location.city': englishCityName }, { isOnline }] };
 			queryObject.$and?.push(cityQuery);
 			sortObject.isOnline = 'ascending';
 		}

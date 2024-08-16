@@ -47,7 +47,7 @@ export const addEvent: IAddEventHandler = async (request) => {
 export const getEvents: IGetEventsHandler = async (request): Promise<EventOnPoster[]> => {
 	const lang =
 		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
-	return (await eventsStateController.getEvents(lang)).slice(0, 100);
+	return (await eventsStateController.getEvents(lang, true)).slice(0, 100);
 };
 
 export const getMyEvents: IGetMyEventsHandler = async (request) => {
@@ -84,7 +84,7 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 export const findEvents: IFindEventHandler = async (request) => {
 	const lang =
 		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
-	return eventsStateController.getEvents(lang, request.body);
+	return eventsStateController.getEvents(lang, true, request.body);
 };
 
 export const findEventsByCity: IFindEventsCityHandler = async (request) => {
@@ -95,7 +95,7 @@ export const findEventsByCity: IFindEventsCityHandler = async (request) => {
 	};
 	const lang =
 		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
-	const events = await eventsStateController.getEvents(lang, queryObj);
+	const events = await eventsStateController.getEvents(lang, false, queryObj);
 	if (events.length === 0) throw new Error(CommonErrorsEnum.NO_EVENTS_IN_CITY);
 	return events;
 };

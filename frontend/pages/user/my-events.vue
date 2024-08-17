@@ -200,7 +200,7 @@ const onEditButtonClick = async (id: string) => {
 	&__image {
 		width: 202px;
 		height: 203px;
-		background-image: url('~/assets/img/user/my-events-screen.svg');
+		background-image: url('/img/user/my-events-screen.svg');
 		margin-bottom: var(--space-subsections);
 	}
 

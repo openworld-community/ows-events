@@ -29,7 +29,7 @@ defineProps({
 		<img
 			v-else
 			class="event-image__image"
-			src="@/assets/img/event-preview@2x.png"
+			src="/img/event-preview@2x.png"
 			width="350"
 			height="250"
 			alt=""

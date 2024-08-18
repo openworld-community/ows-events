@@ -31,7 +31,7 @@ const urlAfisha = 'https://afisha.peredelano.com/';
 				/>
 				<p class="about-logo__text-img">{{ $t('about.title') }}</p>
 			</div>
-			<p class="about__text">{{ $t('about.idea') }}</p>
+			<p class="about__text text1">{{ $t('about.idea') }}</p>
 		</div>
 
 		<h3 class="about__values-header">{{ $t('about.values.title') }}</h3>
@@ -40,10 +40,10 @@ const urlAfisha = 'https://afisha.peredelano.com/';
 
 		<div class="about-navigation">
 			<div class="about-navigation__paragraph">
-				<p>{{ $t('about.github') }}</p>
+				<p class="text2">{{ $t('about.github') }}</p>
 				<CommonNavLink
 					:href="REPO_URL"
-					class="about-navigation__link"
+					class="about-navigation__link text2"
 					is-external-link
 					rel="noopener noreferrer"
 					:itemprop="SeoItempropAboutEnum.SIGNIFICANT_LINK"
@@ -53,10 +53,10 @@ const urlAfisha = 'https://afisha.peredelano.com/';
 			</div>
 
 			<div class="about-navigation__paragraph">
-				<p>{{ $t('about.website') }}</p>
+				<p class="text2">{{ $t('about.website') }}</p>
 				<CommonNavLink
 					:to="RoutePathEnum.HOME"
-					class="about-navigation__link"
+					class="about-navigation__link text2"
 					:itemprop="SeoItempropAboutEnum.RELATED_LINK"
 				>
 					{{ urlAfisha }}
@@ -64,9 +64,9 @@ const urlAfisha = 'https://afisha.peredelano.com/';
 			</div>
 
 			<div class="social-links">
-				<h3 class="social-links__title">
+				<h5>
 					{{ $t('about.social.title') }}
-				</h3>
+				</h5>
 				<ul class="social-links__list">
 					<li
 						v-for="(link, key) in SocialLinks"
@@ -108,32 +108,19 @@ const urlAfisha = 'https://afisha.peredelano.com/';
 	}
 
 	&__text {
-		line-height: 20px;
-		font-size: var(--font-size-S);
 		text-align: justify;
 
 		@media (min-width: 768px) {
 			padding-left: 5px;
-			//line-height: 17px;
-
 			flex-basis: 70%;
-			//max-width: 506px;
-		}
-		@media (min-width: 1440px) {
-			font-size: var(--font-size-L);
-			line-height: 30px;
-
 		}
 	}
 
 	&__values-header {
 		text-align: center;
-		font-weight: 600;
-		line-height: 25px;
 		margin: 25px;
 
 		@media (min-width: 768px) {
-			font-size: var(--font-size-ML);
 			margin: 70px 0;
 		}
 	}
@@ -194,7 +181,7 @@ const urlAfisha = 'https://afisha.peredelano.com/';
 	flex-direction: column;
 	align-items: center;
 	gap: 15px;
-	margin-top: 28px;
+	margin-top: 48px;
 	font-size: var(--font-size-S);
 
 	@media (min-width: 768px) {
@@ -214,18 +201,13 @@ const urlAfisha = 'https://afisha.peredelano.com/';
 	}
 
 	&__link {
-		color: var(--color-link);
+		color: var(--color-text-link);
 		text-decoration: underline;
-		font-weight: 600px;
 	}
 }
 
 // Социальные сети
 .social-links {
-	&__title {
-		line-height: 28px;
-	}
-
 	&__list {
 		display: flex;
 		justify-content: center;

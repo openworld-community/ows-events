@@ -13,7 +13,7 @@ export interface FilterStore {
 	usedCities: { label: string; value: string }[];
 	usedTags: string[];
 	filters: {
-		city: City;
+		//	city: City;
 		//searchLine: string;
 		tags: Tag[];
 		date: Date[];
@@ -30,7 +30,7 @@ export const useFilterStore = defineStore('filter', {
 			usedCountries: [],
 			usedTags: [],
 			filters: {
-				city: getFirstQuery(route.query.city) ?? '',
+				//	city: getFirstQuery(route.query.city) ?? '',
 				//	searchLine: getFirstQuery(route.query.search) ?? '',
 				tags:
 					getFirstQuery(route.query.tags)

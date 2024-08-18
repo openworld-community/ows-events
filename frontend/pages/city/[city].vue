@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SEO_SCHEMA_BASE_URL, SeoItemTypeEnum } from '../../constants/enums/seo';
+import { SeoItemTypeEnum } from '../../constants/enums/seo';
 const route = useRoute();
 
 const { locale, t } = useI18n();
@@ -8,8 +8,6 @@ import {
 	declinationCountries,
 	countries as supportedCountries
 } from '../../../common/const/supportedCountries';
-import { RoutePathEnum } from '~/constants/enums/route';
-import { VITE_DOMAIN } from '~/constants/url';
 
 const { sendAnalytics } = useSendTrackingEvent();
 
@@ -91,7 +89,7 @@ const filterCities = computed(() => {
 });
 
 useHead({
-	script: [getJSONEventList(posterEvents.value)]
+	script: [getJSONEventList(posterEvents.value, locale.value)]
 });
 
 watch(

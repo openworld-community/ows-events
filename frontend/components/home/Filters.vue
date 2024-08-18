@@ -25,8 +25,7 @@ watch(
 		navigateTo({
 			query: {
 				...route.query,
-				//	search: filters.searchLine || undefined,
-				city: filters.city || undefined,
+
 				tags: filters.tags.join(', ') || undefined,
 
 				startDate: filters.date[0]

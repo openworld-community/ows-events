@@ -3,7 +3,7 @@ import type { EventOnPoster } from '../../common/types';
 import { VITE_DOMAIN } from '~/constants/url';
 import { RoutePathEnum } from '~/constants/enums/route';
 
-export const getJSONEventList = (posterEvents: EventOnPoster[], locale: 'en' | 'ru') => {
+export const getJSONEventList = (posterEvents: EventOnPoster[], locale: string) => {
 	return {
 		type: 'application/ld+json',
 		innerHTML: JSON.stringify({

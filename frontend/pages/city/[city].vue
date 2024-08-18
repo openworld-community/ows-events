@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { SeoItemTypeEnum } from '../../constants/enums/seo';
 const route = useRoute();
 
 const { locale, t } = useI18n();
@@ -29,6 +28,7 @@ const findCountryByParam = (param: string): string => {
 	const currentCountry = supportedCountries[countryCode][locale.value];
 	return currentCountry;
 };
+
 const city = getFirstParam(route.params.city);
 const { data: usedCities } = await apiRouter.filters.getUsedCities.useQuery({});
 
@@ -106,11 +106,7 @@ watch(
 );
 </script>
 <template>
-	<main
-		class="citi-page"
-		itemscope
-		:itemtype="SeoItemTypeEnum.EVENT"
-	>
+	<main class="citi-page">
 		<FiltersHeroWrap :title="$t('city.title', { city: findCurrenCity(city)?.toUpperCase() })">
 			<FiltersContent
 				:current-city="findCurrenCity(city)"

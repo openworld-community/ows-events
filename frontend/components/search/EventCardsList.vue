@@ -18,16 +18,26 @@ defineProps({
 	<ul
 		v-if="events && events.length"
 		class="cards-list"
+		itemscope
+		:itemtype="SeoItemTypeEnum.BREADCRUMBLIST"
 	>
 		<li
-			v-for="event in events"
+			v-for="(event, index) in events"
 			:key="event.id"
 			class="cards-list__item"
+			itemprop="itemListElement"
 			itemscope
-			:itemtype="SeoItemTypeEnum.EVENT"
+			:itemtype="SeoItemTypeEnum.ITEMLIST"
 		>
-			<SearchEventPreviewCard :event-data="event" />
+			<SearchEventPreviewCard
+				:event-data="event"
+				:position="index"
+			/>
 			<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
+			<meta
+				itemprop="position"
+				content="index+1"
+			/>
 		</li>
 	</ul>
 </template>

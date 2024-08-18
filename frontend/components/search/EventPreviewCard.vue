@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { EventOnPoster } from '../../../common/types';
-import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
+import { SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { RoutePathEnum } from '../../constants/enums/route';
 import { trimString } from '../../utils/trimString';
 import { convertEventDateToLocaleString } from '../../utils/dates';
@@ -46,7 +46,7 @@ const endDate = computed(() => {
 				460
 			)
 		"
-		:itemprop="SeoItempropGlobalEnum.URL"
+		itemprop="item"
 		@click="
 			sendAnalytics.clickEvent({
 				id_creator: eventData.creatorId,
@@ -101,14 +101,13 @@ const endDate = computed(() => {
 				/>
 				<h2
 					class="card-description__title"
-					:itemprop="SeoItempropEventEnum.NAME"
+					itemprop="name"
 				>
 					{{ eventData.title }}
 				</h2>
 				<p
 					v-if="eventData.organizer"
 					class="card-description__author"
-					:itemprop="SeoItempropEventEnum.ORGANIZER"
 				>
 					{{ eventData.organizer }}
 				</p>

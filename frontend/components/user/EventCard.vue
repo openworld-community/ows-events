@@ -98,11 +98,14 @@ const tagArray = computed(() => {
 				class="description__tags"
 			/>
 		</div>
+
+		<slot />
 	</CommonNavLink>
 </template>
 
 <style scoped lang="less">
 .card {
+	position: relative;
 	display: flex;
 	width: 100%;
 	align-items: center;
@@ -229,6 +232,12 @@ const tagArray = computed(() => {
 
 		@media (min-width: 768px) {
 			font-size: 12px;
+		}
+	}
+	&__tags {
+		padding-right: 80px;
+		@media (min-width: 768px) {
+			padding-right: 100px;
 		}
 	}
 }

@@ -122,7 +122,7 @@ const urlAfisha = 'https://afisha.peredelano.com/';
 		@media (min-width: 1440px) {
 			font-size: var(--font-size-L);
 			line-height: 30px;
-			align-self: flex-start;
+			
 		}
 	}
 

@@ -8,6 +8,14 @@ class Controller {
 		if (!city) return null;
 		return { type: 'city', name: city.name };
 	}
+
+	async findCountryByCityName(cityName: string) {
+		const city = await CitiesForParserModel.findOne({
+			alternateNames: cityName
+		});
+		if (!city) return null;
+		return city.countryCode;
+	}
 }
 
 export const citiesForParserController = new Controller();

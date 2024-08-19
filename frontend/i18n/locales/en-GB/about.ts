@@ -4,11 +4,11 @@ export default {
 	
 	values: {
 		title: 'Values that we are committed to in our work:',
-		openness: 'Openness: we believe in the power of communication and openness;',
-		innovation: 'Innovation: constantly looking for ways to make our app better;',
-		community:'Community: strive to create a space where everyone feels accepted;',
-		accessibility: 'Accessibility: we make cultural events accessible to everyone;',
-		quality: 'Quality: equal quality to both large platforms and small initiatives.'
+		openness: 'Openness: we believe in the power of communication and openness',
+		innovation: 'Innovation: constantly looking for ways to make our app better',
+		community:'Community: strive to create a space where everyone feels accepted',
+		accessibility: 'Accessibility: we make cultural events accessible to everyone',
+		quality: 'Quality: equal quality to both large platforms and small initiatives'
 	},
 
 	github: "Link to the project's GitHub:",

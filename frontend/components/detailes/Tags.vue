@@ -28,12 +28,9 @@ defineProps({
 			:tag-size="mobile ? 'standard' : 'small'"
 		/>
 
-		<CommonButton
+		<CommonLikeButton
 			v-if="mobile && isShowFavourites"
-			is-icon
-			is-round
-			:icon-name="iconName"
-			:alt="altContent"
+			:is-in-favourites="isShowFavourites"
 			@click="emit('toggleFavourites')"
 		/>
 	</div>

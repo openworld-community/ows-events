@@ -17,7 +17,7 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 		:itemtype="SeoItemTypeEnum.DONATE_METHOD"
 		:itemprop="SeoItempropDonateEnum.METHOD"
 	>
-		<div class="card__lable">
+		<div class="card__label">
 			<div class="card__icon-wrapper">
 				<CommonIcon
 					:name="`donate/${icon}`"
@@ -53,7 +53,7 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 30px;
+	//margin-bottom: 30px;
 	background-color: #f5f5f5;
 	border-radius: 8px;
 	height: 76px;
@@ -61,7 +61,7 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 		width: 45%;
 	}
 
-	&__lable {
+	&__label {
 		display: flex;
 		align-items: center;
 		margin-left: 15px;

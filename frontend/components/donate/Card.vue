@@ -70,6 +70,7 @@ defineProps({
 
 <style lang="less" scoped>
 .card {
+	margin-bottom: 40px;
 	@media (min-width: 768px) {
 		width: 47%;
 	}
@@ -98,7 +99,6 @@ defineProps({
 		height: 150px;
 		padding: 30px 15px;
 		background-color: #f5f5f5;
-		margin-bottom: 40px;
 	}
 
 	&__button-style {

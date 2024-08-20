@@ -180,20 +180,14 @@ getMeta({
 		}
 
 		@media (min-width: 768px) {
-			
 			min-width: 253px;
 			margin: 0;
 		}
 		@media (min-width: 1100px) {
-			
 			min-width: 315px;
-			
 		}
 		@media (min-width: 1440px) {
-			
 			min-width: 350px;
-			
-			
 		}
 	}
 }
@@ -216,21 +210,24 @@ getMeta({
 	}
 }
 .cards-crypto {
-
 	margin-bottom: 70px;
 	@media (min-width: 1440px) {
 		margin-bottom: 130px;
-		}
+	}
 
 	&__title {
 		margin-bottom: 40px;
 	}
 	&__list {
+		display: flex;
+		flex-direction: column;
+		gap: 30px;
+
 		@media (min-width: 1440px) {
 			display: flex;
+			flex-direction: row;
 			align-items: center;
 			justify-content: space-between;
-
 			flex-wrap: wrap;
 		}
 	}

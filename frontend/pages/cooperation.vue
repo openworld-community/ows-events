@@ -9,8 +9,8 @@ getMeta({
 <template>
 	<div class="cooperation">
 		<div class="cooperation__wrapper">
-			<h1 class="cooperation__title">{{ $t('cooperation.header.title') }}</h1>
-			<p class="cooperation__description">{{ $t('cooperation.header.description') }}</p>
+			<h2 class="cooperation__title">{{ $t('cooperation.header.title') }}</h2>
+			<p class="cooperation__description text1">{{ $t('cooperation.header.description') }}</p>
 			<CooperationAdvantage />
 			<CooperationWhyUs />
 			<!-- <CooperationServices />
@@ -56,27 +56,15 @@ getMeta({
 	}
 
 	&__title {
-		line-height: 1.3;
-		font-size: 32px;
-
 		@media (min-width: 375px) and (max-width: 768px) {
 			text-align: center;
-		}
-
-		@media (max-width: 768px) {
-			font-size: var(--font-size-XL);
-			font-weight: 600;
-			line-height: 1.3;
 		}
 	}
 
 	&__description {
-		font-size: var(--font-size-L);
-		line-height: 1.5;
 		padding-top: 52px;
 		margin-bottom: 76px;
 		@media (max-width: 768px) {
-			font-size: var(--font-size-ML);
 			padding-top: 0px;
 			margin-bottom: 12px;
 		}

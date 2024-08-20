@@ -115,8 +115,6 @@ watch(
 			/>
 		</FiltersHeroWrap>
 
-		<pre>{{ errorEvents }}</pre>
-
 		<SearchCardsWrapper>
 			<SearchLoader
 				v-if="pending"

@@ -3,6 +3,7 @@ const route = useRoute();
 
 const { locale, t } = useI18n();
 const mobile = inject('mobile');
+import { CommonErrorsEnum } from '../../../common/const/common-errors';
 import {
 	declinationCountries,
 	countries as supportedCountries
@@ -71,10 +72,15 @@ const {
 });
 
 if (errorEvents.value) {
-	throw createError({
-		statusCode: 404,
-		data: { message: t('errors.NOT_FOUND_BY_ID', { city: city }) }
-	});
+	if (
+		errorEvents.value.data &&
+		errorEvents.value.data.message === CommonErrorsEnum.CITY_NOT_FOUND
+	) {
+		throw createError({
+			statusCode: 404,
+			data: { message: t(`errors.${CommonErrorsEnum.CITY_NOT_FOUND}`, { city: city }) }
+		});
+	}
 }
 
 export type Option = { label: string; value: string };
@@ -89,7 +95,7 @@ const filterCities = computed(() => {
 });
 
 useHead({
-	script: [getJSONEventList(posterEvents.value, locale.value)]
+	script: [posterEvents.value ? getJSONEventList(posterEvents.value, locale.value) : undefined]
 });
 
 watch(
@@ -121,10 +127,13 @@ watch(
 				:size="mobile ? 'middle' : 'big'"
 			/>
 			<SearchNotFound
-				v-if="!pending && posterEvents && posterEvents.length === 0"
+				v-if="!pending && !posterEvents"
 				:title="$t('event.filteredEvents.no_events_found')"
 			/>
-			<SearchEventCardsList :events="posterEvents" />
+			<SearchEventCardsList
+				v-if="posterEvents && posterEvents.length !== 0"
+				:events="posterEvents"
+			/>
 			<SearchHeading
 				v-if="posterEvents && posterEvents.length !== 0"
 				position="down"

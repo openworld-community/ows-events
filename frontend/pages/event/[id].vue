@@ -124,12 +124,8 @@ const onEditButtonClick = async () => {
 		<DetailesTags
 			:tag-list="posterEvent.tags"
 			:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
-			:alt-content="
-				isInFavourites
-					? $t('global.button.remove_from_favourites')
-					: $t('global.button.add_to_favourites')
-			"
 			:is-show-favourites="userStore.isAuthorized"
+			:is-in-favourites="isInFavourites"
 			@toggle-favourites="toggleFavourites"
 		/>
 		<div class="event-info">

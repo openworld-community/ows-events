@@ -7,6 +7,10 @@ defineProps({
 		type: Boolean,
 		default: false
 	},
+	isInFavourites: {
+		type: Boolean,
+		default: false
+	},
 	tagList: {
 		type: Array as PropType<TagList>,
 		required: true
@@ -30,7 +34,7 @@ defineProps({
 
 		<CommonLikeButton
 			v-if="mobile && isShowFavourites"
-			:is-in-favourites="isShowFavourites"
+			:is-in-favourites="isInFavourites"
 			@click="emit('toggleFavourites')"
 		/>
 	</div>

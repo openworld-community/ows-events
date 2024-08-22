@@ -78,10 +78,10 @@ const model = computed({
 
 		min-width: 267px;
 		background-color: #ffffff;
-		box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
+		box-shadow: var(--shadow-dropdown);
 
 		border-radius: 8px;
-		border: 2px black;
+
 		min-height: 100px;
 		max-width: 300px;
 		z-index: 100;
@@ -93,10 +93,6 @@ const model = computed({
 			min-height: 100px;
 			max-height: 300px;
 			min-width: 200px;
-
-			&:focus-within {
-				outline: 1px solid var(--color-accent-green-main);
-			}
 		}
 
 		&[data-side='top'] {
@@ -129,13 +125,13 @@ const model = computed({
 				border-color: transparent;
 			}
 			&:focus-within {
-				border-color: var(--color-accent-green-main-50);
+				border-color: var(--color-accent-green-main);
 			}
 		}
 	}
 
 	&__trigger[data-state='open'] {
-		border-color: var(--color-accent-green-main-50);
+		border-color: var(--color-accent-green-main);
 	}
 	&__trigger[data-state='close'] {
 		border-color: transparent;

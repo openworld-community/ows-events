@@ -158,7 +158,16 @@ onMounted(() => {
 	// прозраные сепараторы при фокусе
 	.filter:focus-within::before,
 	.filter:focus-within + .filter::before,
+	.filter:has(.input__field:focus)::before,
 	.filter:has(.input__field:focus) + .filters__wrapper--mobile > .filter:first-child::before {
+		background-color: transparent;
+	}
+
+	.filter:focus-within::before,
+	.filter:focus-within + .filter::before,
+	.filter:has(.input__field:focus) + .filters__wrapper--mobile > .filter:first-child::before,
+	.popover__trigger--primary[data-state='open'] + div + .filter::before,
+	.popover__trigger--primary:focus-within + .filter::before {
 		background-color: transparent;
 	}
 }

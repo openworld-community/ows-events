@@ -6,7 +6,7 @@ import {
 	ComboboxRoot,
 	ComboboxTrigger,
 	ComboboxViewport,
-	ComboboxCancel,
+	ComboboxCancel
 } from 'radix-vue';
 import type { PropType } from 'vue';
 import { vOnClickOutside } from '@vueuse/components';
@@ -25,10 +25,8 @@ const props = defineProps({
 		default: false
 	},
 	options: {
-		type: [Array, String, Set] as PropType<
-			string | string[] | { [key: string]: string }[]
-		>,
-		required: true,
+		type: [Array, String, Set] as PropType<string | string[] | { [key: string]: string }[]>,
+		required: true
 	},
 	optionAsIcon: {
 		type: Boolean,
@@ -61,28 +59,28 @@ const props = defineProps({
 	required: {
 		type: Boolean,
 		default: false
-	},
+	}
 });
 
-const emit = defineEmits(['update:model-value'])
+const emit = defineEmits(['update:model-value']);
 
-const isOpen = ref(false)
+const isOpen = ref(false);
 const model = computed({
 	get() {
-		return props.modelValue
+		return props.modelValue;
 	},
 	set(value) {
-		return emit('update:model-value', value)
+		return emit('update:model-value', value);
 	}
 });
 
 const handleOpen = () => {
-	isOpen.value === false ? isOpen.value = true : isOpen.value = false
-}
+	isOpen.value === false ? (isOpen.value = true) : (isOpen.value = false);
+};
 const close = () => {
-	isOpen.value = false
-}
-const clearModel = () => emit('update:model-value', '')
+	isOpen.value = false;
+};
+const clearModel = () => emit('update:model-value', '');
 </script>
 
 <template>
@@ -97,7 +95,7 @@ const clearModel = () => emit('update:model-value', '')
 		v-model="model"
 		:name="name"
 		:disabled="disabled"
-		:display-value="(value) => typeof value === 'string' ? value : value['label']"
+		:display-value="(value) => (typeof value === 'string' ? value : value['label'])"
 		:open="isOpen"
 		as-child
 	>
@@ -140,7 +138,10 @@ const clearModel = () => emit('update:model-value', '')
 							:interactive="false"
 							class="cb__cancel--icon"
 							:is-disabled="disabled"
-							@click="clearModel(); close()"
+							@click="
+								clearModel();
+								close();
+							"
 						/>
 					</ComboboxCancel>
 				</div>
@@ -152,7 +153,7 @@ const clearModel = () => emit('update:model-value', '')
 				:style="{ maxHeight: `${height}px` }"
 				position="popper"
 				:side-offset="5"
-				style="background-color: #fff;"
+				style="background-color: #fff"
 				@click="handleOpen"
 			>
 				<ComboboxViewport>
@@ -190,9 +191,9 @@ const clearModel = () => emit('update:model-value', '')
 	font-family: var(--font-family-main);
 	font-size: var(--font-size-M);
 
-	&>div[data-radix-popper-content-wrapper] {
+	& > div[data-radix-popper-content-wrapper] {
 		/* у поппера обертки инлайн стили, веса по тегу не хватает */
-		box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
+		box-shadow: var(--shadow-dropdown);
 		position: absolute !important;
 		width: 100% !important;
 		max-width: 100% !important;
@@ -216,11 +217,11 @@ const clearModel = () => emit('update:model-value', '')
 		color: var(--color-input-icons);
 	}
 
-	&[data-error="true"] {
+	&[data-error='true'] {
 		border-color: var(--color-accent-red);
 	}
 
-	&[data-disabled="true"] {
+	&[data-disabled='true'] {
 		border-color: var(--color-input-field);
 		opacity: 0.4;
 		pointer-events: none;
@@ -303,7 +304,7 @@ const clearModel = () => emit('update:model-value', '')
 			transition: rotate 0.15s ease-in-out, color 0.15s ease-in-out;
 		}
 
-		&[aria-expanded="true"]:deep(svg) {
+		&[aria-expanded='true']:deep(svg) {
 			rotate: 180deg;
 			color: var(--color-accent-green-main);
 		}

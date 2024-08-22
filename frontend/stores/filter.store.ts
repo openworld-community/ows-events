@@ -3,6 +3,7 @@ import type { City, Country } from '../../common/types/location';
 import type { EventOnPoster } from '../../common/types/event';
 import type { Tag } from '../../common/const/tags';
 import { getFirstDateFromFilters, getSecondDateFromFilters } from '~/utils/dates';
+import { RouteNameEnum } from '~/constants/enums/route';
 
 export type LocaleKey = 'en' | 'ru';
 
@@ -22,6 +23,14 @@ export interface FilterStore {
 	loading: boolean;
 }
 
+const getTagsFromQuery = (queryTags: string | undefined, routeName: string) => {
+	if (routeName !== RouteNameEnum.HOME) return [];
+	if (!queryTags) return [];
+	getFirstQuery(routeName)
+		.split(', ')
+		.filter((item) => item !== '');
+};
+
 export const useFilterStore = defineStore('filter', {
 	state: (): FilterStore => {
 		const route = useRoute();
@@ -32,10 +41,7 @@ export const useFilterStore = defineStore('filter', {
 			filters: {
 				//	city: getFirstQuery(route.query.city) ?? '',
 				//	searchLine: getFirstQuery(route.query.search) ?? '',
-				tags:
-					getFirstQuery(route.query.tags)
-						.split(', ')
-						.filter((item) => item !== '') ?? [],
+				tags: getTagsFromQuery(getFirstQuery(route.query.tags), route.name as string),
 				date: [
 					getDateFromQuery(
 						getFirstQuery(route.query.startDate),

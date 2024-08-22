@@ -283,6 +283,9 @@ onMounted(() => {
 			border-color: var(--color-accent-green-main);
 		}
 	}
+	&__theme_light {
+		border-color: transparent;
+	}
 
 	&__disabled {
 		background-color: transparent;
@@ -315,6 +318,7 @@ onMounted(() => {
 		&_content_wrapper {
 			flex-direction: column;
 			flex-wrap: nowrap;
+
 			// justify-content: flex-end;
 			// gap: 10px;
 			// padding: 0;
@@ -326,7 +330,10 @@ onMounted(() => {
 		position: relative;
 	}
 
-	&__menu_transitioned,
+	&__menu_transitioned {
+		border-radius: 8px;
+		box-shadow: var(--shadow-dropdown);
+	}
 	&__input {
 		border-radius: 8px;
 	}

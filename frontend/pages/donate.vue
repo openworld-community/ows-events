@@ -171,13 +171,7 @@ getMeta({
 		justify-content: center;
 	}
 	&__image {
-		//min-width: 253px;
-		//width: 100%;
 		margin: 40px 0 20px 0;
-
-		@media (max-width: 768px) {
-			//max-width: 500px;
-		}
 
 		@media (min-width: 768px) {
 			min-width: 253px;
@@ -192,6 +186,7 @@ getMeta({
 	}
 }
 .cards {
+	margin-bottom: 50px;
 	&__title {
 		text-align: center;
 		line-height: 110px;
@@ -206,6 +201,7 @@ getMeta({
 			align-items: center;
 			justify-content: space-between;
 			flex-wrap: wrap;
+			gap: 40px;
 		}
 	}
 }

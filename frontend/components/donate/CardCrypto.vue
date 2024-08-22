@@ -29,7 +29,7 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 			</div>
 
 			<p
-				class="card__name text3"
+				class="card__name text1"
 				:itemprop="SeoItempropGlobalEnum.DESCRIPTION"
 			>
 				{{ $t(method) }}
@@ -53,10 +53,13 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	//margin-bottom: 30px;
 	background-color: #f5f5f5;
 	border-radius: 8px;
 	height: 76px;
+	@media (min-width: 768px) {
+		width: 90%;
+	}
+
 	@media (min-width: 1440px) {
 		width: 45%;
 	}

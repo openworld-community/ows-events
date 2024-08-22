@@ -43,7 +43,7 @@ services:
             - mongo
         environment:
             - MODE=dev
-            - FRONTEND_URL=https://localhost
+            - FRONTEND_URL=http://127.0.0.1
             - MONGO_URI=mongodb://mongo:27017/dev
             - VITE_GOOGLE_OAUTH_KEY=879620398496-7rtabia15rqav109uiq9olpcsbgk0562.apps.googleusercontent.com
         ports:

@@ -71,13 +71,13 @@ const addressField = useField<string>(() => 'location.address');
 					:error="cityField.errorMessage.value"
 					:touched="cityField.meta.touched"
 				>
-					<LibrarySelect
+					<CommonUiBaseSelect
 						v-model="cityField.value.value"
 						name="city"
 						:disabled="!countryField.value.value || isOnlineField.value.value"
 						:error="cityField.meta.touched && Boolean(cityField.errorMessage.value)"
 						:placeholder="$t('global.city')"
-						:options="citiesOptions"
+						:list="citiesOptions"
 						:required="!isOnlineField.value.value"
 					/>
 				</CommonFormField>

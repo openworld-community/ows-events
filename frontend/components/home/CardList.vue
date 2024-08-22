@@ -94,7 +94,7 @@ import { useFilterStore } from '~/stores/filter.store';
 	&__heading {
 		@media (max-width: 768px) {
 			font-size: var(--font-size-ML);
-			font-weight: 500;
+			//font-weight: 500;
 			letter-spacing: -0.3;
 		}
 		@media (min-width: 768px) {
@@ -102,11 +102,6 @@ import { useFilterStore } from '~/stores/filter.store';
 			padding-right: var(--padding-side);
 			margin-bottom: 28px;
 			font-weight: 600;
-			font-size: 34px;
-
-			@media (min-width: 1440px) {
-				font-size: 34px;
-			}
 		}
 
 		&--up {

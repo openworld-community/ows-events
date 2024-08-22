@@ -42,7 +42,7 @@ const endDate = computed(() => {
 			trimString(
 				`Afisha: ${
 					eventData.isOnline ? t(`event.tags.${Tags.ONLINE}`) : eventData.location.city
-				}, ${eventData.title}` ?? '',
+				}, ${eventData.title}`,
 				460
 			)
 		"
@@ -71,7 +71,7 @@ const endDate = computed(() => {
 							eventData.isOnline
 								? t(`event.tags.${Tags.ONLINE}`)
 								: eventData.location.city
-						}, ${eventData.title}` ?? '',
+						}, ${eventData.title}`,
 						460
 					)
 				"
@@ -80,7 +80,7 @@ const endDate = computed(() => {
 			<img
 				v-else
 				class="card__image"
-				src="@/assets/img/event-preview@2x.png"
+				src="/img/event-preview@2x.png"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 				alt=""
 			/>

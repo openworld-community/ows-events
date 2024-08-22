@@ -77,7 +77,7 @@ defineProps({
 	&__image {
 		width: 550px;
 		height: 410px;
-		background-image: url(@/assets/img/error/404.webp);
+		background-image: url(/img/error/404.webp);
 		background-size: contain; /* изображение будет масштабироваться, чтобы покрыть всю область фона блока */
 		background-repeat: no-repeat;
 		@media (max-width: 768px) {

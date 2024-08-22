@@ -36,13 +36,8 @@ defineProps({
 			/>
 			<DetailesItemsTitle
 				:title="posterEvent.title"
-				:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
 				:is-show-favourites="isShowFavourites"
-				:alt-content="
-					isInFavourites
-						? $t('global.button.remove_from_favourites')
-						: $t('global.button.add_to_favourites')
-				"
+				:is-in-favourites="isInFavourites"
 				@toggle-favourites="$emit('toggleFavourites')"
 			/>
 		</div>

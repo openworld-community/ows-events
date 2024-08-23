@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { RouteBaseNameFunction } from '@nuxtjs/i18n/dist/runtime/composables';
 import type { PropType } from 'vue';
 import type { RoutePathEnum } from '~/constants/enums/route';
 

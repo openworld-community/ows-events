@@ -55,6 +55,7 @@ class EventsStateController {
 
 	async getEvents(
 		lang: SupportedLanguages,
+		isOnline: boolean,
 		query?: SearchEventPayload | undefined
 	): Promise<EventDbEntity[]> {
 		const queryObject: FilterQuery<EventOnPoster> = {
@@ -83,9 +84,9 @@ class EventsStateController {
 				query?.country,
 				SupportedLanguages.ENGLISH
 			);
-			const countryQuery = {
-				$or: [{ 'location.country': englishCountryName }, { isOnline: true }]
-			};
+			const countryQuery = isOnline
+				? { $and: [{ 'location.country': englishCountryName }, { isOnline }] }
+				: { 'location.country': englishCountryName };
 			queryObject.$and?.push(countryQuery);
 			sortObject.isOnline = 'ascending';
 		}
@@ -94,7 +95,9 @@ class EventsStateController {
 				query?.city,
 				SupportedLanguages.ENGLISH
 			);
-			const cityQuery = { $or: [{ 'location.city': englishCityName }, { isOnline: true }] };
+			const cityQuery = isOnline
+				? { $or: [{ 'location.city': englishCityName }, { isOnline }] }
+				: { 'location.city': englishCityName };
 			queryObject.$and?.push(cityQuery);
 			sortObject.isOnline = 'ascending';
 		}
@@ -188,6 +191,18 @@ class EventsStateController {
 
 	async findUsedTags() {
 		const tags = await EventModel.distinct('tags', {
+			'meta.moderation.status': { $nin: ['declined', 'in-progress'] },
+			$expr: {
+				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]
+			}
+		});
+
+		return tags;
+	}
+
+	async findUsedTagsByCity(city: string) {
+		const tags = await EventModel.distinct('tags', {
+			'location.city': city,
 			'meta.moderation.status': { $nin: ['declined', 'in-progress'] },
 			$expr: {
 				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]

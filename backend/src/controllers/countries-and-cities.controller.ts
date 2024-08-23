@@ -38,7 +38,8 @@ class CountriesAndCitiesController {
 		const city = await CitiesModel.findOne({
 			$or: [{ en: cityName }, { ru: cityName }, { alternateNames: cityName }]
 		});
-		if (!city) return cityName;
+		// eslint-disable-next-line @typescript-eslint/no-throw-literal
+		if (!city) throw { statusCode: 404, message: CommonErrorsEnum.CITY_NOT_FOUND };
 		return city[lang];
 	}
 
@@ -52,7 +53,8 @@ class CountriesAndCitiesController {
 				{ russian_short: countryName }
 			]
 		});
-		if (!country) throw new Error(CommonErrorsEnum.COUNTRY_NOT_FOUND);
+		// eslint-disable-next-line @typescript-eslint/no-throw-literal
+		if (!country) throw { statusCode: 404, message: CommonErrorsEnum.COUNTRY_NOT_FOUND };
 		if (lang === SupportedLanguages.RUSSIAN) return country.russian_short!;
 		return country.english_short!;
 	}
@@ -67,17 +69,20 @@ class CountriesAndCitiesController {
 				{ russian_short: countryName }
 			]
 		});
-		if (!country) throw new Error(CommonErrorsEnum.COUNTRY_NOT_FOUND);
+		// eslint-disable-next-line @typescript-eslint/no-throw-literal
+		if (!country) throw { statusCode: 404, message: CommonErrorsEnum.COUNTRY_NOT_FOUND };
 		return country.iso_3166_1_alpha_2_codes!;
 	}
 
 	async getCountryByCity(city: string) {
 		const countryCode = await citiesForParserController.findCountryByCityName(city);
-		if (!countryCode) throw new Error(CommonErrorsEnum.CITY_NOT_FOUND);
+		// eslint-disable-next-line @typescript-eslint/no-throw-literal
+		if (!countryCode) throw { statusCode: 404, message: CommonErrorsEnum.CITY_NOT_FOUND };
 		const countryName = await countriesForParserController.findEnglishCountryNameByCountryCode(
 			countryCode
 		);
-		if (!countryName) throw new Error(CommonErrorsEnum.COUNTRY_NOT_FOUND);
+		// eslint-disable-next-line @typescript-eslint/no-throw-literal
+		if (!countryName) throw { statusCode: 404, message: CommonErrorsEnum.COUNTRY_NOT_FOUND };
 		return countryName;
 	}
 
@@ -160,38 +165,38 @@ class CountriesAndCitiesController {
 			}
 		];
 
-		const citiesWithLocalization = await CitiesModel.aggregate(pipeline).exec();
-		const usedCities = citiesWithLocalization.reduce(
-			(accum, city: ICity) => {
-				const formattedCity = {
-					en: city.en,
-					ru: city.ru
-				};
-				if (city.countryCode === SupportedCountries.SERBIA) {
-					accum[0].cities.push(formattedCity);
-					accum[0].cities.sort((a: ICity, b: ICity) => (a.en < b.en ? -1 : 1));
-				}
-				if (city.countryCode === SupportedCountries.MONTENEGRO) {
-					accum[1].cities.push(formattedCity);
-					accum[1].cities.sort((a: ICity, b: ICity) => (a.en < b.en ? -1 : 1));
-				}
-				return accum;
-			},
-			[
-				{
-					en: 'Serbia',
-					ru: 'Сербия',
-					cities: []
-				},
-				{
-					en: 'Montengro',
-					ru: 'Черногория',
-					cities: []
-				}
-			]
-		);
+		const citiesWithLocalization: ICity[] = await CitiesModel.aggregate(pipeline).exec();
+		// const usedCities = citiesWithLocalization.reduce(
+		// 	(accum, city: ICity) => {
+		// 		const formattedCity = {
+		// 			en: city.en,
+		// 			locale: city.ru
+		// 		};
+		// 		if (city.countryCode === SupportedCountries.SERBIA) {
+		// 			accum[0].cities.push(formattedCity);
+		// 			accum[0].cities.sort((a: ICity, b: ICity) => (a.en < b.en ? -1 : 1));
+		// 		}
+		// 		if (city.countryCode === SupportedCountries.MONTENEGRO) {
+		// 			accum[1].cities.push(formattedCity);
+		// 			accum[1].cities.sort((a: ICity, b: ICity) => (a.en < b.en ? -1 : 1));
+		// 		}
+		// 		return accum;
+		// 	},
+		// 	[
+		// 		{
+		// 			en: 'Serbia',
+		// 			ru: 'Сербия',
+		// 			cities: []
+		// 		},
+		// 		{
+		// 			en: 'Montengro',
+		// 			ru: 'Черногория',
+		// 			cities: []
+		// 		}
+		// 	]
+		// );
 
-		return usedCities.filter((country: any) => country.cities.length !== 0);
+		return citiesWithLocalization;
 	}
 }
 

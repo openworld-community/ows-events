@@ -18,7 +18,9 @@ export enum SeoItemTypeEnum {
 	USER = `${SEO_SCHEMA_BASE_URL}Person`,
 	QA_PAGE = `${SEO_SCHEMA_BASE_URL}QAPage`,
 	QUESTION = `${SEO_SCHEMA_BASE_URL}Question`,
-	ANSWER = `${SEO_SCHEMA_BASE_URL}Answer`
+	ANSWER = `${SEO_SCHEMA_BASE_URL}Answer`,
+	BREADCRUMBLIST = `${SEO_SCHEMA_BASE_URL}BreadcrumbList`,
+	ITEMLIST = `${SEO_SCHEMA_BASE_URL}ListItem`
 }
 
 // ITEMPROPS
@@ -100,3 +102,7 @@ export enum SeoItempropUserEnum {
 	nickname = 'alternateName',
 	company = 'affiliation'
 }
+
+//listItem
+
+export enum SeoListEnum {}

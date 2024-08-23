@@ -116,7 +116,7 @@ const onEditButtonClick = async () => {
 						posterEvent.isOnline
 							? $t(`event.tags.${Tags.ONLINE}`)
 							: posterEvent.location.city
-					}, ${posterEvent.title}` ?? '',
+					}, ${posterEvent.title}`,
 					460
 				)
 			"

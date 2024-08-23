@@ -99,12 +99,12 @@ const endDate = computed(() => {
 					:tag-list="eventData.tags"
 					class="card-description__tags"
 				/>
-				<h2
+				<h3
 					class="card-description__title"
 					:itemprop="SeoItempropEventEnum.NAME"
 				>
 					{{ eventData.title }}
-				</h2>
+				</h3>
 				<p
 					v-if="eventData.organizer"
 					class="card-description__author"
@@ -201,6 +201,7 @@ const endDate = computed(() => {
 		width: 100%;
 		flex-direction: column;
 		padding: 12px 16px 18px;
+		overflow: hidden;
 
 		@media (min-width: 768px) {
 			height: inherit;
@@ -229,7 +230,7 @@ const endDate = computed(() => {
 		&__title {
 			//TODO: пока верстка только мобилки
 			max-width: 480px;
-			word-wrap: break-word;
+			overflow-wrap: break-word;
 			font-size: var(--font-size-L);
 			font-weight: var(--font-weight-bold);
 			line-height: 24px;

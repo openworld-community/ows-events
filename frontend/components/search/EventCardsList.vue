@@ -44,16 +44,16 @@ defineProps({
 <style lang="less" scoped>
 .cards-list {
 	display: grid;
-	grid-template-columns: 1fr;
-
-	row-gap: 20px;
 	width: 100%;
+	max-width: 100%;
+	grid-template-columns: repeat(1, 100%);
+	row-gap: 20px;
 
 	@media (max-width: 768px) {
 	}
 
 	@media (min-width: 768px) {
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: repeat(2, 50%);
 		row-gap: 40px;
 		column-gap: 14px;
 		padding-left: var(--padding-side);
@@ -61,20 +61,19 @@ defineProps({
 	}
 
 	@media (min-width: 1440px) {
-		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-columns: repeat(3, 33.3%);
 		column-gap: 20px;
 	}
 
 	&__item {
+		width: 100%;
 		@media (min-width: 768px) {
 			display: flex;
-			width: 100%;
 			height: auto;
 		}
 
 		@media (min-width: 1440px) {
 			display: flex;
-			width: 100%;
 			min-height: 100%;
 		}
 	}

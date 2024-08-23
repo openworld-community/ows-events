@@ -190,6 +190,7 @@ const component = computed(() => {
 	display: flex;
 	width: 100%;
 	flex-direction: column;
+	overflow: hidden;
 
 	&__item,
 	&__item > a,

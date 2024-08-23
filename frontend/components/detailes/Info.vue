@@ -36,13 +36,8 @@ defineProps({
 			/>
 			<DetailesItemsTitle
 				:title="posterEvent.title"
-				:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
 				:is-show-favourites="isShowFavourites"
-				:alt-content="
-					isInFavourites
-						? $t('global.button.remove_from_favourites')
-						: $t('global.button.add_to_favourites')
-				"
+				:is-in-favourites="isInFavourites"
 				@toggle-favourites="$emit('toggleFavourites')"
 			/>
 		</div>
@@ -103,9 +98,12 @@ defineProps({
 <style lang="less" scoped>
 .event-summary {
 	display: flex;
-	width: 100%;
+	//width: 100%;
+	flex-grow: 1;
+	overflow: hidden;
 	height: 100%;
 	flex-direction: column;
+	//	overflow: hidden;
 
 	@media (min-width: 768px) {
 		width: 66%;

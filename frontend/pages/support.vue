@@ -30,16 +30,16 @@ getMeta({
 		>
 			<div class="support__navigation-text">
 				<div>
-					<p class="support__navigation-hi">{{ $t('support.title.hi') }}</p>
-					<p :itemprop="SeoItempropGlobalEnum.TITLE">{{ $t('support.title.main') }}</p>
+					<h5 class="support__navigation-hi">{{ $t('support.title.hi') }}</h5>
+					<h5 :itemprop="SeoItempropGlobalEnum.TITLE">{{ $t('support.title.main') }}</h5>
 				</div>
-				<p
+				<h5
 					itemprop="suggestedAnswer"
 					itemscope
 					:itemtype="SeoItemTypeEnum.ANSWER"
 				>
 					{{ $t('support.message') }}
-				</p>
+				</h5>
 			</div>
 
 			<div
@@ -51,7 +51,7 @@ getMeta({
 					:src="imgLink"
 					:itemprop="SeoItempropGlobalEnum.IMAGE"
 				/>
-				<p class="support__design-question">{{ $t('support.question') }}</p>
+				<h5 class="support__design-question">{{ $t('support.question') }}</h5>
 			</div>
 
 			<div class="support__navigation-buttons">
@@ -122,31 +122,17 @@ getMeta({
 			align-items: center;
 			padding-top: 50px;
 		}
-		&-hi {
-			@media (max-width: 768px) {
-				padding-bottom: 5px;
-			}
-		}
+
 		&-text {
 			display: flex;
 			flex-direction: column;
-			gap: 20px;
-			font-size: var(--font-size-L);
-			font-weight: 600;
-			line-height: 1;
+
 			padding-top: 100px;
-			@media (max-width: 900px) {
+			@media (min-width: 768px) {
 				gap: 30px;
 			}
 			@media (max-width: 768px) {
 				padding-top: 15px;
-				gap: 30px;
-			}
-			@media (max-width: 375px) {
-				font-size: var(--font-size-S);
-				font-weight: 600;
-				gap: 20px;
-				line-height: 1.2;
 			}
 		}
 		&-buttons {
@@ -156,6 +142,7 @@ getMeta({
 			gap: 15px;
 			width: 100%;
 			max-width: 280px;
+
 			@media (max-width: 768px) {
 				padding-top: 45px;
 			}
@@ -170,13 +157,15 @@ getMeta({
 		flex-direction: row;
 		gap: 20px;
 		padding: 125px 0px 30px 170px;
+		@media (max-width: 1440px) {
+			padding: 120px 0px 0px 60px;
+		}
 		@media (max-width: 1000px) {
 			padding: 120px 0px 0px 0px;
 			align-items: center;
 			justify-content: center;
 		}
 		@media (max-width: 768px) {
-			margin-left: 25vw;
 			padding-top: 30px;
 			gap: 0px;
 		}
@@ -199,25 +188,19 @@ getMeta({
 			}
 		}
 		&-question {
-			margin-left: 1vw;
 			align-self: flex-end;
-			font-family: var(--font-family-error);
-			font-size: 40px;
-			font-weight: 600;
-			line-height: 1.5;
-			@media (max-width: 1000px) {
+			position: absolute;
+			padding-top: 220px;
+			padding-left: 220px;
+			font-size: var(--font-size-L);
+
+			@media (min-width: 1000px) {
+				padding-left: 180px;
 				font-size: var(--font-size-XL);
 			}
-			@media (max-width: 768px) {
-				padding-top: 200px;
-				align-self: center;
-				font-size: var(--font-size-XL);
-			}
-			@media (max-width: 375px) {
-				position: absolute;
-				padding-top: 150px;
-				padding-left: 190px;
-				font-size: var(--font-size-L);
+
+			@media (min-width: 1440px) {
+				font-size: 40px;
 			}
 		}
 	}

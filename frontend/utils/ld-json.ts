@@ -15,7 +15,10 @@ export const getJSONEventList = (posterEvents: EventOnPoster[], locale: string) 
 					return {
 						'@type': 'ListItem',
 						position: ind + 1,
-						url: `${VITE_DOMAIN}/${locale}${RoutePathEnum.EVENT}/${event.id}`
+						item: {
+							'@id': `${VITE_DOMAIN}/${locale}${RoutePathEnum.EVENT}/${event.id}`,
+							name: event.title
+						}
 					};
 				})
 			}

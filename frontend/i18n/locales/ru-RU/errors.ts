@@ -55,5 +55,6 @@ export default {
 	[CommonErrorsEnum.ERROR_PAGE_SERVER_ERROR]: 'Неизвестная Ошибка Сервера',
 	[CommonErrorsEnum.NOT_FOUND_BY_ID]: 'Мероприятие с ID {id} не найдено',
 	[CommonErrorsEnum.NO_EVENTS_IN_CITY]: 'Мероприятий в городе не найдено',
+	[CommonErrorsEnum.NO_EVENTS_IN_COUNTRY]: 'Мероприятий в стране не найдено',
 	[CommonErrorsEnum.CITY_NOT_FOUND]: 'Город {city} не найден '
 };

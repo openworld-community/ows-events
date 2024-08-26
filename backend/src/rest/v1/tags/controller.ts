@@ -4,7 +4,8 @@ import {
 	// IAddTagHandler,
 	IGetUsedTagsHandler,
 	IGetTagByEventHandler,
-	IGetUsedTagsByCityHandler
+	IGetUsedTagsByCityHandler,
+	IGetUsedTagsByCountryHandler
 	// IDeleteTagsHandler
 } from './type';
 import { transformFromQuery } from '../../../utils/cityNameTransform';
@@ -34,6 +35,13 @@ export const getUsedTags: IGetUsedTagsHandler = async () => {
 export const getUsedTagsByCity: IGetUsedTagsByCityHandler = async (request) => {
 	const city = transformFromQuery(request.params.cityName);
 	const response = await eventsStateController.findUsedTagsByCity(city);
+
+	return response;
+};
+
+export const getUsedTagsByCountry: IGetUsedTagsByCountryHandler = async (request) => {
+	const country = transformFromQuery(request.params.countryName);
+	const response = await eventsStateController.findUsedTagsByCity(country);
 
 	return response;
 };

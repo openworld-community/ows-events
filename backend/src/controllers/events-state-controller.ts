@@ -212,6 +212,18 @@ class EventsStateController {
 		return tags;
 	}
 
+	async findUsedTagsByCountry(country: string) {
+		const tags = await EventModel.distinct('tags', {
+			'location.country': country,
+			'meta.moderation.status': { $nin: ['declined', 'in-progress'] },
+			$expr: {
+				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]
+			}
+		});
+
+		return tags;
+	}
+
 	async findTagsByEventId(id: string) {
 		const event = await EventModel.findOne({ id }, { _id: 0, tags: 1 });
 

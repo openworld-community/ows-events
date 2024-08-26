@@ -20,7 +20,9 @@ export enum SeoItemTypeEnum {
 	QUESTION = `${SEO_SCHEMA_BASE_URL}Question`,
 	ANSWER = `${SEO_SCHEMA_BASE_URL}Answer`,
 	BREADCRUMBLIST = `${SEO_SCHEMA_BASE_URL}BreadcrumbList`,
-	ITEMLIST = `${SEO_SCHEMA_BASE_URL}ListItem`
+	ITEMLIST = `${SEO_SCHEMA_BASE_URL}ListItem`,
+	ONLINE = `${SEO_SCHEMA_BASE_URL}OnlineEventAttendanceMode`,
+	OFFLINE = `${SEO_SCHEMA_BASE_URL}OfflineEventAttendanceMode`
 }
 
 // ITEMPROPS

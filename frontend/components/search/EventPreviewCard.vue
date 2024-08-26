@@ -115,11 +115,12 @@ const endDate = computed(() => {
 			<div class="card-description__bottom">
 				<CommonEventDetails
 					class="card-description__details"
-					:price="eventData?.price"
+					:price="eventData.price"
+					:date="eventData.date"
+					:duration="eventData.durationInSeconds"
 					:is-online="eventData.isOnline"
 					:location="eventData.location"
-					:start-date="startDate"
-					:end-date="endDate"
+					:timezone="eventData.timezone"
 				/>
 				<CommonTagList
 					v-if="mobile && eventData.tags"

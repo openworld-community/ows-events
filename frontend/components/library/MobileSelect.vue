@@ -68,6 +68,17 @@ const model = computed<string>({
 		return value;
 	}
 });
+
+const labelModel = computed(() => {
+	if (Array.isArray(props.options) && typeof props.options[0] === 'object') {
+		const label = props.options.find((option) => option['value'] === model.value);
+		if (label) {
+			return label['label'];
+		}
+		return '';
+	}
+	return model.value;
+});
 const innerModel = ref<string>('');
 
 const onOpen = () => {
@@ -83,7 +94,7 @@ const clearModel = () => {
 	<DialogRoot>
 		<DialogTrigger class="mobile-filter">
 			<CommonUiBaseInput
-				v-model="model"
+				v-model="labelModel"
 				:name="name"
 				:disabled="disabled"
 				:placeholder="placeholder"

@@ -8,7 +8,8 @@ import {
 	IGetLocalizedCityHandlerProps,
 	IGetLocalizedCountryHandlerProps,
 	IGetMetaHandlerProps,
-	IGetUsedCitiesHandlerProps
+	IGetUsedCitiesHandlerProps,
+	IGetUsedLocationsHandlerProps
 } from './type';
 import {
 	CommonErrorsEnum,
@@ -97,3 +98,6 @@ export const getUsedCitiesByCountry: IGetCitiesByCountryHandlerProps = async (re
 
 export const getUsedCities: IGetUsedCitiesHandlerProps = () =>
 	countriesAndCitiesController.getUsedCities();
+
+export const getUsedLocations: IGetUsedLocationsHandlerProps = () =>
+	countriesAndCitiesController.getUsedLocations();

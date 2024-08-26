@@ -101,6 +101,34 @@ export const getUsedCitiesSchema = {
 	}
 };
 
+export const getUsedLocationsSchema = {
+	description: 'get used locations',
+	tags: ['Location'],
+	summary: 'Get used locations',
+	response: {
+		200: {
+			type: 'object',
+			properties: {
+				cities: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							en: { type: 'string' },
+							ru: { type: 'string' },
+							countryCode: { type: 'string' }
+						}
+					}
+				},
+				countries: {
+					type: 'array',
+					items: { type: 'string' }
+				}
+			}
+		}
+	}
+};
+
 export const getLocalizedCitySchema = {
 	description: 'get localized city name',
 	tags: ['Location'],

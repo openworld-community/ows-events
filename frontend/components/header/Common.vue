@@ -112,7 +112,11 @@ const clearFilters = async () => {
 		>
 			<div class="header__left">
 				<CommonButton
-					v-if="hasBackButton && getRouteName(route.path) !== RoutePathEnum.USER_PAGE && mobile"
+					v-if="
+						hasBackButton &&
+						getRouteName(route.path) !== RoutePathEnum.USER_PAGE &&
+						mobile
+					"
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"
@@ -121,7 +125,7 @@ const clearFilters = async () => {
 				/>
 				<component
 					:is="logoComponentIs"
-					v-else 
+					v-else
 					class="header__logo"
 					:title="
 						$t(isAtHome ? 'header.logo.at_home_aria' : 'header.logo.other_page_aria')
@@ -133,7 +137,7 @@ const clearFilters = async () => {
 					:itemprop="SeoItempropNavEnum.URL"
 					@click="
 						isAtHome && scrollToTop();
-						isAtHome && clearFilters();
+						clearFilters();
 					"
 				>
 					<CommonIcon

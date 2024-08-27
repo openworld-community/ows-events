@@ -3,34 +3,12 @@ import type { EventOnPoster } from '../../../common/types';
 import { SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { RoutePathEnum } from '../../constants/enums/route';
 import { trimString } from '../../utils/trimString';
-import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
 
-const props = defineProps<{ eventData: EventOnPoster }>();
+defineProps<{ eventData: EventOnPoster }>();
 const { t } = useI18n();
 const mobile = inject('mobile');
 const { sendAnalytics } = useSendTrackingEvent();
-
-const startDate = ref(
-	convertEventDateToLocaleString(
-		props.eventData.date,
-		props.eventData.isOnline,
-		props.eventData.timezone
-	)
-);
-
-const endDate = computed(() => {
-	// проверка на однодневный ивент
-	if (props.eventData.date + props.eventData.durationInSeconds * 1000 === props.eventData.date) {
-		return '';
-	}
-
-	return convertEventDateToLocaleString(
-		props.eventData.date + props.eventData.durationInSeconds * 1000,
-		props.eventData.isOnline,
-		props.eventData.timezone
-	);
-});
 </script>
 
 <template>

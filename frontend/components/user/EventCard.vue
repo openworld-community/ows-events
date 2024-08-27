@@ -53,20 +53,13 @@ const tagArray = computed(() => {
 		"
 	>
 		<div
-			:class="[
-				'card__image-container',
-				{ 'card__image-container--background': !eventData.image }
-			]"
+			class="card__image-container"
 			:itemprop="eventData.image ? undefined : SeoItempropGlobalEnum.IMAGE"
 		>
 			<img
-				v-if="eventData.image"
-				:itemprop="SeoItempropGlobalEnum.IMAGE"
-				:alt="$t('home.events.image_alt')"
 				class="card__image"
-				:src="getEventImage(eventData.image)"
-				width="94"
-				height="74"
+				:alt="eventData.image ? $t('home.events.image_alt') : $t('user.image.alt')"
+				:src="eventData.image ? getEventImage(eventData.image) : $t('user.image.no_image')"
 			/>
 			<CommonUiTag
 				v-if="eventData.isOnline"
@@ -78,12 +71,16 @@ const tagArray = computed(() => {
 		</div>
 		<div class="card__description description">
 			<div class="description__info">
-				<h2
-					class="description__title"
-					:itemprop="SeoItempropEventEnum.NAME"
-				>
-					{{ eventData.title }}
-				</h2>
+				<div class="description__info__buttons">
+					<h2
+						class="description__title"
+						:itemprop="SeoItempropEventEnum.NAME"
+					>
+						{{ eventData.title }}
+					</h2>
+					<slot v-if="!desktop" />
+				</div>
+
 				<p
 					class="description__date"
 					:itemprop="SeoItempropEventEnum.START_DATE"
@@ -99,7 +96,7 @@ const tagArray = computed(() => {
 			/>
 		</div>
 
-		<slot />
+		<slot v-if="desktop" />
 	</CommonNavLink>
 </template>
 
@@ -114,9 +111,10 @@ const tagArray = computed(() => {
 	border-radius: 8px;
 	padding: 8px;
 	margin-bottom: 12px;
+	justify-content: space-between;
 
 	@media (min-width: 768px) {
-		padding: 16px 12px;
+		padding: 12px 12px;
 	}
 
 	transition-property: background-color, border-color;
@@ -136,40 +134,37 @@ const tagArray = computed(() => {
 	&--expired {
 		opacity: 0.5;
 	}
-
+	&__wrapper {
+		display: block;
+	}
 	&__image-container {
 		display: flex;
-		width: 94px;
 		min-width: 94px;
-		height: 74px;
+		min-height: 74px;
+		max-height: 100px;
+		max-width: 177px;
+		height: 100%;
 		position: relative;
 		background-color: var(--color-input-field);
 		background-size: cover;
 		border-radius: 4px;
 		line-height: 0;
-		margin-right: 8px;
+		margin-right: 12px;
+		aspect-ratio: 6/5 auto;
+		transition: width 0.7s ease-in-out, height 0.7s ease-in-out, aspect-ratio 0.7s ease-in-out;
 
 		@media (min-width: 768px) {
-			width: 248px;
-			height: 108px;
+			min-width: unset;
+			aspect-ratio: 4/3 auto;
+			min-height: 100px;
 			margin-right: 12px;
 		}
 
-		&--background {
-			background-image: url('/img/event/event-small-preview-mobile@1x.png');
-			background-size: cover;
-
-			@media (min-width: 768px) {
-				background-image: url('/img/event/event-small-preview-desktop@1x.png');
-			}
-
-			@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-				background-image: url('/img/event/event-small-preview-mobile@2x.png');
-
-				@media (min-width: 768px) {
-					background-image: url('/img/event/event-small-preview-desktop@2x.png');
-				}
-			}
+		@media (min-width: 1440px) {
+			max-width: 205px;
+			min-width: unset;
+			aspect-ratio: 16/9 auto;
+			height: 115px;
 		}
 	}
 
@@ -198,15 +193,27 @@ const tagArray = computed(() => {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
+	width: 100%;
+	height: 100%;
+	transition: width 0.7s ease-in-out, height 0.7s ease-in-out;
+	@media (min-width: 768px) {
+		min-height: 100px;
+	}
 
 	&__info {
 		display: flex;
-		width: 100%;
 		flex-direction: column;
-		margin-bottom: 8px;
+		margin-bottom: 12px;
 
-		@media (min-width: 768px) {
-			margin-bottom: 12px;
+		@media (min-width: 1440px) {
+			margin-bottom: 8px;
+		}
+
+		&__buttons {
+			display: flex;
+			width: 100%;
+			justify-content: space-between;
+			align-items: flex-start;
 		}
 	}
 
@@ -235,9 +242,7 @@ const tagArray = computed(() => {
 		}
 	}
 	&__tags {
-		padding-right: 80px;
 		@media (min-width: 768px) {
-			padding-right: 100px;
 		}
 	}
 }

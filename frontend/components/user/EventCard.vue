@@ -53,10 +53,7 @@ const tagArray = computed(() => {
 		"
 	>
 		<div
-			:class="[
-				'card__image-container',
-				{ 'card__image-container--background': !eventData.image }
-			]"
+			class="card__image-container"
 			:itemprop="eventData.image ? undefined : SeoItempropGlobalEnum.IMAGE"
 		>
 			<img
@@ -65,8 +62,13 @@ const tagArray = computed(() => {
 				:alt="$t('home.events.image_alt')"
 				class="card__image"
 				:src="getEventImage(eventData.image)"
-				width="94"
-				height="74"
+			/>
+			<img
+				v-if="!eventData.image"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
+				alt="Hello from Afisha"
+				class="card__image"
+				src="/img/event/event-small-preview-desktop@2x.png"
 			/>
 			<CommonUiTag
 				v-if="eventData.isOnline"
@@ -153,23 +155,6 @@ const tagArray = computed(() => {
 			width: 248px;
 			height: 108px;
 			margin-right: 12px;
-		}
-
-		&--background {
-			background-image: url('/img/event/event-small-preview-mobile@1x.png');
-			background-size: cover;
-
-			@media (min-width: 768px) {
-				background-image: url('/img/event/event-small-preview-desktop@1x.png');
-			}
-
-			@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-				background-image: url('/img/event/event-small-preview-mobile@2x.png');
-
-				@media (min-width: 768px) {
-					background-image: url('/img/event/event-small-preview-desktop@2x.png');
-				}
-			}
 		}
 	}
 

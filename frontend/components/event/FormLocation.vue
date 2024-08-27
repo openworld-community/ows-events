@@ -71,13 +71,13 @@ const addressField = useField<string>(() => 'location.address');
 					:error="cityField.errorMessage.value"
 					:touched="cityField.meta.touched"
 				>
-					<CommonUiBaseSelect
+					<LibrarySelect
 						v-model="cityField.value.value"
 						name="city"
 						:disabled="!countryField.value.value || isOnlineField.value.value"
 						:error="cityField.meta.touched && Boolean(cityField.errorMessage.value)"
 						:placeholder="$t('global.city')"
-						:list="citiesOptions"
+						:options="citiesOptions"
 						:required="!isOnlineField.value.value"
 					/>
 				</CommonFormField>
@@ -85,7 +85,7 @@ const addressField = useField<string>(() => 'location.address');
 					:error="timeZoneField.errorMessage.value"
 					:touched="timeZoneField.meta.touched"
 				>
-					<LibrarySelect
+					<LibraryAutocomplete
 						v-model="timeZoneField.value.value"
 						name="timezone"
 						:placeholder="$t('global.timezone')"

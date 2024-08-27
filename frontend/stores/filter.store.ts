@@ -83,7 +83,6 @@ export const useFilterStore = defineStore('filter', {
 			const { $i18n } = useNuxtApp();
 			const lang = $i18n.locale.value;
 			const { data: usedCitiesIntern } = await apiRouter.filters.getUsedCities.useQuery({});
-			//	console.log('USED_CITIES', usedCities);
 			//	this.usedCities = usedCitiesIntern.value;
 			this.usedCities = usedCitiesIntern.value
 				.reduce((acc, rec) => {

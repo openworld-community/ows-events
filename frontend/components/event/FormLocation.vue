@@ -85,7 +85,7 @@ const addressField = useField<string>(() => 'location.address');
 					:error="timeZoneField.errorMessage.value"
 					:touched="timeZoneField.meta.touched"
 				>
-					<LibraryAutocomplete
+					<LibrarySelect
 						v-model="timeZoneField.value.value"
 						name="timezone"
 						:placeholder="$t('global.timezone')"

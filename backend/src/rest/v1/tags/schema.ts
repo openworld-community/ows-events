@@ -29,6 +29,24 @@ export const getUsedTagsSchema = {
 	}
 };
 
+export const getUsedTagsByCitySchema = {
+	description: 'get used tags',
+	tags: ['Tags'],
+	summary: 'Get used tags',
+	params: {
+		type: 'object',
+		properties: {
+			cityName: { type: 'string' }
+		}
+	},
+	response: {
+		200: {
+			type: 'array',
+			items: { type: 'string' }
+		}
+	}
+};
+
 export const getTagByEventSchema = {
 	description: 'get tag by event id',
 	tags: ['Tags'],

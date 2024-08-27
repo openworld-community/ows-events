@@ -98,9 +98,12 @@ defineProps({
 <style lang="less" scoped>
 .event-summary {
 	display: flex;
-	width: 100%;
+	//width: 100%;
+	flex-grow: 1;
+	overflow: hidden;
 	height: 100%;
 	flex-direction: column;
+	//	overflow: hidden;
 
 	@media (min-width: 768px) {
 		width: 66%;

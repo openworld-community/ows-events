@@ -1,16 +1,19 @@
 import { EventOnPoster } from '@common/types';
 import { CommonErrorsEnum, SupportedLanguages } from '../../../../../common/const';
 import { EventTypes } from '../../../../../common/const/eventTypes';
+import { SearchEventPayload } from '../../../../../common/types/event';
 import { eventsStateController } from '../../../controllers/events-state-controller';
 import {
 	IAddEventHandler,
 	IDeleteEventHandler,
 	IFindEventHandler,
+	IFindEventsCityHandler,
 	IGetEventHandler,
 	IGetEventsHandler,
 	IGetMyEventsHandler,
 	IUpdateEventHandler
 } from './type';
+import { transformFromQuery } from '../../../utils/cityNameTransform';
 
 export const addEvent: IAddEventHandler = async (request) => {
 	const { event } = request.body;
@@ -44,7 +47,7 @@ export const addEvent: IAddEventHandler = async (request) => {
 export const getEvents: IGetEventsHandler = async (request): Promise<EventOnPoster[]> => {
 	const lang =
 		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
-	return (await eventsStateController.getEvents(lang)).slice(0, 100);
+	return (await eventsStateController.getEvents(lang, true)).slice(0, 100);
 };
 
 export const getMyEvents: IGetMyEventsHandler = async (request) => {
@@ -81,5 +84,19 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 export const findEvents: IFindEventHandler = async (request) => {
 	const lang =
 		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
-	return eventsStateController.getEvents(lang, request.body);
+	return eventsStateController.getEvents(lang, true, request.body);
+};
+
+export const findEventsByCity: IFindEventsCityHandler = async (request) => {
+	const city = transformFromQuery(request.params.cityName);
+	const queryObj: SearchEventPayload = {
+		city,
+		...request.body
+	};
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	const events = await eventsStateController.getEvents(lang, false, queryObj);
+	// eslint-disable-next-line @typescript-eslint/no-throw-literal
+	if (events.length === 0) throw { statusCode: 404, message: CommonErrorsEnum.NO_EVENTS_IN_CITY };
+	return events;
 };

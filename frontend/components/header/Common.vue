@@ -135,7 +135,7 @@ const clearFilters = async () => {
 					:itemprop="SeoItempropNavEnum.URL"
 					@click="
 						isAtHome && scrollToTop();
-						isAtHome && clearFilters();
+						clearFilters();
 					"
 				>
 					<CommonIcon

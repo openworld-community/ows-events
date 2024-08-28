@@ -498,10 +498,17 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		background-color: var(--color-background-secondary);
 		border: 1px solid var(--color-background-secondary);
 
-		&:hover,
-		&:focus-visible {
+		&:focus-visible,
+		&:active {
 			&::v-deep(svg) {
 				color: var(--color-accent-green-main-30);
+			}
+		}
+		@media (min-width: 768px) {
+			&:hover {
+				&::v-deep(svg) {
+					color: var(--color-accent-green-main-30);
+				}
 			}
 		}
 	}

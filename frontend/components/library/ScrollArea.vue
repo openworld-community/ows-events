@@ -32,10 +32,7 @@ defineProps({
 		:type="type"
 		:style="{ height: height ? `${height}px` : '100%', width: width ? `${width}px` : '100%' }"
 	>
-		<ScrollAreaViewport
-			class="scroll-area__viewport"
-			as-child
-		>
+		<ScrollAreaViewport class="scroll-area__viewport">
 			<slot></slot>
 		</ScrollAreaViewport>
 		<ScrollAreaScrollbar
@@ -49,6 +46,16 @@ defineProps({
 </template>
 
 <style scoped lang="less">
+:deep(.scroll-area) {
+	&__viewport {
+		width: 100%;
+		height: 100%;
+
+		&:focus-within {
+			outline: none;
+		}
+	}
+}
 .scroll-area {
 	border-radius: 4px;
 	display: flex;
@@ -56,6 +63,7 @@ defineProps({
 
 	&__viewport {
 		width: 100%;
+		height: 100%;
 	}
 
 	&__scrollbar {

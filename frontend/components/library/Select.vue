@@ -103,16 +103,12 @@ const onRemove = () => {
 			>
 				<SelectViewport as-child>
 					<LibraryScrollArea :height="height">
-						<ul style="height: auto; padding: 8px 4px; width: 100%">
+						<ul class="select__list">
 							<LibraryUiItemSelect
 								v-for="option in options"
 								:key="typeof option === 'string' ? option : option['value']"
 								:value="typeof option === 'string' ? option : option['value']"
 								:icon-name="optionAsIcon ? `${name}/${option}` : ''"
-								side="top"
-								side-offset="5"
-								position="popper"
-								avoid-collisions
 							>
 								<span class="select__item-content">
 									<CommonIcon
@@ -149,7 +145,7 @@ const onRemove = () => {
 	&__content {
 		min-width: 267px;
 		background-color: #ffffff;
-		box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
+		box-shadow: var(--shadow-dropdown);
 		position: absolute;
 		z-index: 100;
 		border-radius: 8px;
@@ -158,6 +154,8 @@ const onRemove = () => {
 		height: auto;
 		min-height: 100px;
 		max-width: 300px;
+		transform-origin: var(--radix-select-content-transform-origin);
+		animation: scaleIn, 0.5s, cubic-bezier(0.2, 0.8, 0.3, 1);
 	}
 }
 .select {
@@ -240,6 +238,13 @@ const onRemove = () => {
 		border-color: var(--color-accent-red);
 	}
 
+	&__list {
+		//height: auto;
+		padding: 8px 4px;
+		width: 100%;
+		min-width: fit-content;
+	}
+
 	&__clear-select {
 		position: absolute;
 		z-index: 10;
@@ -272,6 +277,16 @@ const onRemove = () => {
 	&__clear-select:focus :deep(svg),
 	&__clear-select:focus-within :deep(svg) {
 		color: var(--color-accent-green-main);
+	}
+}
+@keyframes scaleIn {
+	from {
+		opacity: 0;
+		transform: scale(0);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
 	}
 }
 </style>

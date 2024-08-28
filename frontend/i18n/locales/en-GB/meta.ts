@@ -1,8 +1,11 @@
 export default {
 	site_name: 'Afisha Peredelano',
-	default_title: 'Events Calendar for Serbia, Montenegro',
+	default_title: {
+		first: 'Events  Serbia ',
+		second: 'Events Montenegro - Peredelano Afisha'
+	},
 	default_description:
-		'The catalog features dozens of events across various categories: concerts, meetings, exhibitions, festivals, masterclasses',
+		'The catalog features dozens of events in Serbia, Montenegro across various categories: concerts, meetings, exhibitions, festivals, masterclasses',
 	about_us: {
 		title: 'About Peredelano Afisha Project',
 		description: 'Learn more about our project, team and mission'
@@ -49,5 +52,13 @@ export default {
 	limitation_of_liability: {
 		title: 'Limitation of liability',
 		description: 'Limitation of liability'
+	},
+	city: {
+		title: {
+			first: 'Afisha {city}',
+			second: 'Events in'
+		},
+		description:
+			'Find or create an event with our poster in {country}. Concerts, theaters, performances, master classes, offline and online - always be up to date with the latest events.'
 	}
 };

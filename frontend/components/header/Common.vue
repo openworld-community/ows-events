@@ -90,8 +90,6 @@ const onButtonClick = async () => {
 const clearFilters = async () => {
 	filterStore.$patch({
 		filters: {
-			city: '',
-			//searchLine: '',
 			date: [],
 			tags: []
 		}
@@ -112,7 +110,11 @@ const clearFilters = async () => {
 		>
 			<div class="header__left">
 				<CommonButton
-					v-if="hasBackButton && getRouteName(route.path) !== RoutePathEnum.USER_PAGE"
+					v-if="
+						hasBackButton &&
+						getRouteName(route.path) !== RoutePathEnum.USER_PAGE &&
+						mobile
+					"
 					is-icon
 					icon-name="back"
 					button-kind="ordinary"
@@ -133,7 +135,7 @@ const clearFilters = async () => {
 					:itemprop="SeoItempropNavEnum.URL"
 					@click="
 						isAtHome && scrollToTop();
-						isAtHome && clearFilters();
+						clearFilters();
 					"
 				>
 					<CommonIcon

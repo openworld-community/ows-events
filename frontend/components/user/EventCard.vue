@@ -64,7 +64,7 @@ const tagArray = computed(() => {
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 				:alt="$t('home.events.image_alt')"
 				class="card__image"
-				:src="getEventImage(eventData)"
+				:src="getEventImage(eventData.image)"
 				width="94"
 				height="74"
 			/>
@@ -98,11 +98,14 @@ const tagArray = computed(() => {
 				class="description__tags"
 			/>
 		</div>
+
+		<slot />
 	</CommonNavLink>
 </template>
 
 <style scoped lang="less">
 .card {
+	position: relative;
 	display: flex;
 	width: 100%;
 	align-items: center;
@@ -153,18 +156,18 @@ const tagArray = computed(() => {
 		}
 
 		&--background {
-			background-image: url('@/assets/img/event/event-small-preview-mobile@1x.png');
+			background-image: url('/img/event/event-small-preview-mobile@1x.png');
 			background-size: cover;
 
 			@media (min-width: 768px) {
-				background-image: url('@/assets/img/event/event-small-preview-desktop@1x.png');
+				background-image: url('/img/event/event-small-preview-desktop@1x.png');
 			}
 
 			@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-				background-image: url('@/assets/img/event/event-small-preview-mobile@2x.png');
+				background-image: url('/img/event/event-small-preview-mobile@2x.png');
 
 				@media (min-width: 768px) {
-					background-image: url('@/assets/img/event/event-small-preview-desktop@2x.png');
+					background-image: url('/img/event/event-small-preview-desktop@2x.png');
 				}
 			}
 		}
@@ -229,6 +232,12 @@ const tagArray = computed(() => {
 
 		@media (min-width: 768px) {
 			font-size: 12px;
+		}
+	}
+	&__tags {
+		padding-right: 80px;
+		@media (min-width: 768px) {
+			padding-right: 100px;
 		}
 	}
 }

@@ -24,7 +24,7 @@ services:
                 - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
                 - VITE_TELEGRAM_AUTH_BOT_NAME
                 - VITE_MODE=production
-                - VITE_DOMAIN=demo.afisha.peredelano.com
+                - VITE_DOMAIN=https://demo.afisha.peredelano.com
                 - VITE_GOOGLE_OAUTH_KEY
         logging: *default-logging
         restart: always
@@ -76,6 +76,8 @@ services:
             - GITHUB_PARSING_TOKEN
             - PEREDELANOCONF_GOOGLEDOC
             - VITE_GOOGLE_OAUTH_KEY
+            - GA_API_SECRET
+            - GA_MEASUREMENT_ID
         networks:
             - traefikpublic
         ports:

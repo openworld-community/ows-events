@@ -110,7 +110,7 @@ watch(
 						logo_alignment="center"
 						@click="
 							sendAnalytics.login({
-								method: 'Google'
+								method: 'google'
 							})
 						"
 					/>
@@ -120,7 +120,7 @@ watch(
 						class="unauthorized__telegram-button"
 						@click="
 							sendAnalytics.login({
-								method: 'Telegram'
+								method: 'telegram'
 							})
 						"
 					>
@@ -174,12 +174,12 @@ watch(
 	@media (min-width: 768px) {
 		padding: 0;
 		position: relative;
-		background: url(@/assets/img/user/unauthorized-background.svg) 0 0 no-repeat;
+		background: url(/img/user/unauthorized-background.svg) 0 0 no-repeat;
 		background-size: cover;
 
 		// @media (-webkit-min-device-pixel-ratio: 2),
 		// (min-resolution: 192dpi) {
-		// 	background-image: url(@/assets/img/user/unauthorized-background.svg);
+		// 	background-image: url(/img/user/unauthorized-background.svg);
 		// }
 	}
 

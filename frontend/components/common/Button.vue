@@ -175,10 +175,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 	&__content {
 		font-size: var(--font-size-M);
-
-		@media (min-width: 768px) {
-			font-size: var(--font-size-S);
-		}
 	}
 
 	&__icon {

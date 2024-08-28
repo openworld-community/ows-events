@@ -89,7 +89,36 @@ export const getUsedCitiesSchema = {
 	response: {
 		200: {
 			type: 'array',
-			items: { type: 'string' }
+			items: {
+				type: 'object',
+				properties: {
+					en: { type: 'string' },
+					ru: { type: 'string' },
+					countryCode: { type: 'string' }
+				}
+			}
+		}
+	}
+};
+
+export const getLocalizedCitySchema = {
+	description: 'get localized city name',
+	tags: ['Location'],
+	summary: 'Get localized city name',
+	response: {
+		200: {
+			type: 'string'
+		}
+	}
+};
+
+export const getLocalizedCountrySchema = {
+	description: 'get localized country name',
+	tags: ['Location'],
+	summary: 'Get localized country name',
+	response: {
+		200: {
+			type: 'string'
 		}
 	}
 };

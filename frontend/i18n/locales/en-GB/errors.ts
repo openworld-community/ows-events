@@ -43,8 +43,8 @@ export default {
 		'Could not find a time zone for the specified parameters',
 	[CommonErrorsEnum.USER_DOES_NOT_EXIST]: 'User not found',
 	[CommonErrorsEnum.USER_ALREADY_EXIST]: 'User already exists',
-	[CommonErrorsEnum.PASSWORD_TOO_SHORT]: 'Password must be longer than 4 symbols',
-	[CommonErrorsEnum.PASSWORD_TOO_LONG]: 'Password must be no longer than 24 symbols',
+	[CommonErrorsEnum.PASSWORD_TOO_SHORT]: 'Password must be longer than {count} symbols',
+	[CommonErrorsEnum.PASSWORD_TOO_LONG]: 'Password must be no longer than {count} symbols',
 	[CommonErrorsEnum.PASSWORD_MISMATCH]: "Password doesn't match",
 	[CommonErrorsEnum.INVALID_EMAIL]: 'Enter a valid email address',
 	[CommonErrorsEnum.REQUIRED_FIELD]: 'This field is required',
@@ -53,5 +53,7 @@ export default {
 	[CommonErrorsEnum.ERROR_PAGE_NOT_FOUND]: 'Not Found',
 	[CommonErrorsEnum.ERROR_PAGE_GO_HOME]: 'Back To Home',
 	[CommonErrorsEnum.ERROR_PAGE_SERVER_ERROR]: 'Unknown Server Error',
-	[CommonErrorsEnum.NOT_FOUND_BY_ID]: 'Event with ID {id} not found'
+	[CommonErrorsEnum.NOT_FOUND_BY_ID]: 'Event with ID {id} not found',
+	[CommonErrorsEnum.NO_EVENTS_IN_CITY]: 'No events in city',
+	[CommonErrorsEnum.CITY_NOT_FOUND]: 'City {city} not found'
 };

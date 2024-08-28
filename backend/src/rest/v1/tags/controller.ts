@@ -3,9 +3,11 @@ import { eventsStateController } from '../../../controllers/events-state-control
 import {
 	// IAddTagHandler,
 	IGetUsedTagsHandler,
-	IGetTagByEventHandler
+	IGetTagByEventHandler,
+	IGetUsedTagsByCityHandler
 	// IDeleteTagsHandler
 } from './type';
+import { transformFromQuery } from '../../../utils/cityNameTransform';
 
 // export const addTags: IAddTagHandler = async (request) => {
 // 	const { event } = request.body;
@@ -25,6 +27,13 @@ import {
 
 export const getUsedTags: IGetUsedTagsHandler = async () => {
 	const response = await eventsStateController.findUsedTags();
+
+	return response;
+};
+
+export const getUsedTagsByCity: IGetUsedTagsByCityHandler = async (request) => {
+	const city = transformFromQuery(request.params.cityName);
+	const response = await eventsStateController.findUsedTagsByCity(city);
 
 	return response;
 };

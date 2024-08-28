@@ -25,8 +25,7 @@ watch(
 		navigateTo({
 			query: {
 				...route.query,
-				//	search: filters.searchLine || undefined,
-				city: filters.city || undefined,
+
 				tags: filters.tags.join(', ') || undefined,
 
 				startDate: filters.date[0]
@@ -62,7 +61,6 @@ debouncedWatch(
 			<CommonUiFilter
 				filter-type="date"
 				name="date"
-				:range="true"
 			/>
 		</div>
 		<div
@@ -109,6 +107,31 @@ debouncedWatch(
 			background-color: var(--color-white);
 			margin-bottom: 40px;
 			gap: 0;
+
+			&:deep(.input__field),
+			&:deep(.popover__trigger--primary) {
+				height: 72px;
+			}
+			&:deep(.calendar):before {
+				width: 1px;
+				content: '';
+				background-color: var(--color-text-secondary);
+				height: 80%;
+				position: absolute;
+				top: 10%;
+				left: -1px;
+				transition: backround-color, 0.15s ease-in-out;
+			}
+		}
+
+		// прозраные сепараторы при фокусе первые два отвечают за пикер
+
+		.filter:focus-within::before,
+		.filter:focus-within + .filter::before,
+		.filter:has(.input__field:focus) + .filters__wrapper--mobile > .filter:first-child::before,
+		.popover__trigger--primary[data-state='open'] + div + .filter::before,
+		.popover__trigger--primary:focus-within + .filter::before {
+			background-color: transparent;
 		}
 	}
 

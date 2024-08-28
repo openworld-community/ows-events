@@ -27,7 +27,7 @@ export type EventDbEntity = {
 };
 
 export type EventOnPoster = EventDbEntity;
-
+// TODO in Event formype in price using val instead value because value - reserved word and ve-validate has problems, better not use value at all
 export type EventFormType = {
 	startDate: Date;
 	endDate?: Date;
@@ -74,6 +74,13 @@ export type SearchEventPayload = {
 	searchLine?: string;
 	country?: string;
 	city?: string;
+	startDate?: number;
+	endDate?: number;
+	tags?: (typeof Tags)[];
+};
+
+export type SearchEventCityPayload = {
+	searchLine?: string;
 	startDate?: number;
 	endDate?: number;
 	tags?: (typeof Tags)[];

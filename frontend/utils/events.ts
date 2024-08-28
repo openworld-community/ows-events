@@ -31,7 +31,7 @@ export const getInitialEventFormValues = (data?: EventOnPoster): EventFormType =
 		image: (data && data.image) || '',
 		price: (data && {
 			val: data.price && data.price.value !== 0 ? data.price.value : null,
-			currency: data.price && data.price.currency !== null ? data.price.currency : ''
+			currency: data.price && data.price.currency !== null ? data.price.currency : null
 		}) || {
 			val: null,
 			currency: ''
@@ -80,14 +80,15 @@ export const getEventPayload = (data: EventFormType): PostEventPayload => {
 	};
 };
 
-export const getEventImage = (eventData?: EventOnPoster) => {
-	if (eventData?.image) {
+export const getEventImage = (imageUrl?: string) => {
+	if (imageUrl) {
 		//TODO убрать, когда с бэка будут приходить одинаковые url
-		if (eventData.image.startsWith('http')) {
-			return eventData.image;
+		if (imageUrl.startsWith('http')) {
+			return imageUrl;
 		}
-		return `${BASE_URL}${eventData.image}`;
+		return `${BASE_URL}${imageUrl}`;
 	}
+	return '';
 };
 
 export const getLocationLink = (location: Location) => {

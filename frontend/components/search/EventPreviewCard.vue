@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { EventOnPoster } from '../../../common/types';
-import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
+import { SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { RoutePathEnum } from '../../constants/enums/route';
 import { trimString } from '../../utils/trimString';
 import { convertEventDateToLocaleString } from '../../utils/dates';
@@ -42,11 +42,11 @@ const endDate = computed(() => {
 			trimString(
 				`Afisha: ${
 					eventData.isOnline ? t(`event.tags.${Tags.ONLINE}`) : eventData.location.city
-				}, ${eventData.title}` ?? '',
+				}, ${eventData.title}`,
 				460
 			)
 		"
-		:itemprop="SeoItempropGlobalEnum.URL"
+		itemprop="item"
 		@click="
 			sendAnalytics.clickEvent({
 				id_creator: eventData.creatorId,
@@ -64,14 +64,14 @@ const endDate = computed(() => {
 			<img
 				v-if="eventData.image"
 				class="card__image"
-				:src="getEventImage(eventData)"
+				:src="getEventImage(eventData.image)"
 				:alt="
 					trimString(
 						`Afisha: ${
 							eventData.isOnline
 								? t(`event.tags.${Tags.ONLINE}`)
 								: eventData.location.city
-						}, ${eventData.title}` ?? '',
+						}, ${eventData.title}`,
 						460
 					)
 				"
@@ -80,7 +80,7 @@ const endDate = computed(() => {
 			<img
 				v-else
 				class="card__image"
-				src="@/assets/img/event-preview@2x.png"
+				src="/img/event-preview@2x.png"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 				alt=""
 			/>
@@ -99,16 +99,15 @@ const endDate = computed(() => {
 					:tag-list="eventData.tags"
 					class="card-description__tags"
 				/>
-				<h2
+				<h3
 					class="card-description__title"
-					:itemprop="SeoItempropEventEnum.NAME"
+					itemprop="name"
 				>
 					{{ eventData.title }}
-				</h2>
+				</h3>
 				<p
 					v-if="eventData.organizer"
 					class="card-description__author"
-					:itemprop="SeoItempropEventEnum.ORGANIZER"
 				>
 					{{ eventData.organizer }}
 				</p>
@@ -201,6 +200,7 @@ const endDate = computed(() => {
 		width: 100%;
 		flex-direction: column;
 		padding: 12px 16px 18px;
+		overflow: hidden;
 
 		@media (min-width: 768px) {
 			height: inherit;
@@ -229,7 +229,7 @@ const endDate = computed(() => {
 		&__title {
 			//TODO: пока верстка только мобилки
 			max-width: 480px;
-			word-wrap: break-word;
+			overflow-wrap: break-word;
 			font-size: var(--font-size-L);
 			font-weight: var(--font-weight-bold);
 			line-height: 24px;

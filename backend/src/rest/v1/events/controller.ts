@@ -1,16 +1,19 @@
 import { EventOnPoster } from '@common/types';
-import { CommonErrorsEnum } from '../../../../../common/const';
+import { CommonErrorsEnum, SupportedLanguages } from '../../../../../common/const';
 import { EventTypes } from '../../../../../common/const/eventTypes';
+import { SearchEventPayload } from '../../../../../common/types/event';
 import { eventsStateController } from '../../../controllers/events-state-controller';
 import {
 	IAddEventHandler,
 	IDeleteEventHandler,
 	IFindEventHandler,
+	IFindEventsCityHandler,
 	IGetEventHandler,
 	IGetEventsHandler,
 	IGetMyEventsHandler,
 	IUpdateEventHandler
 } from './type';
+import { transformFromQuery } from '../../../utils/cityNameTransform';
 
 export const addEvent: IAddEventHandler = async (request) => {
 	const { event } = request.body;
@@ -41,15 +44,23 @@ export const addEvent: IAddEventHandler = async (request) => {
 	return { id: newPostId };
 };
 
-export const getEvents: IGetEventsHandler = async (): Promise<EventOnPoster[]> =>
-	(await eventsStateController.getEvents()).slice(0, 100);
+export const getEvents: IGetEventsHandler = async (request): Promise<EventOnPoster[]> => {
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	return (await eventsStateController.getEvents(lang, true)).slice(0, 100);
+};
 
-export const getMyEvents: IGetMyEventsHandler = async (request) =>
-	eventsStateController.getUserEvents(request.userId);
+export const getMyEvents: IGetMyEventsHandler = async (request) => {
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	return eventsStateController.getUserEvents(request.userId, lang);
+};
 
 export const getEvent: IGetEventHandler = async (request) => {
 	const eventId = request.params.id;
-	const event = await eventsStateController.getEvent(eventId);
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	const event = await eventsStateController.getEvent(eventId, lang);
 	if (!event) throw new Error(CommonErrorsEnum.EVENT_NOT_FOUND);
 
 	return event;
@@ -70,5 +81,22 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 	return undefined;
 };
 
-export const findEvents: IFindEventHandler = async (request) =>
-	eventsStateController.getEvents(request.body);
+export const findEvents: IFindEventHandler = async (request) => {
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	return eventsStateController.getEvents(lang, true, request.body);
+};
+
+export const findEventsByCity: IFindEventsCityHandler = async (request) => {
+	const city = transformFromQuery(request.params.cityName);
+	const queryObj: SearchEventPayload = {
+		city,
+		...request.body
+	};
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	const events = await eventsStateController.getEvents(lang, false, queryObj);
+	// eslint-disable-next-line @typescript-eslint/no-throw-literal
+	if (events.length === 0) throw { statusCode: 404, message: CommonErrorsEnum.NO_EVENTS_IN_CITY };
+	return events;
+};

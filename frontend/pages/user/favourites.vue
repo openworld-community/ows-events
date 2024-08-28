@@ -109,7 +109,7 @@ if (data.value) favourites.value = data.value;
 	&__image {
 		width: 260px;
 		height: 202px;
-		background-image: url('~/assets/img/user/favourites-screen.svg');
+		background-image: url('/img/user/favourites-screen.svg');
 		margin-bottom: var(--space-subsections);
 	}
 

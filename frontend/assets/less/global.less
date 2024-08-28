@@ -1,6 +1,7 @@
 html {
   box-sizing: border-box;
   height: 100%;
+  font-size: 62.5%;
 }
 
 * {
@@ -57,16 +58,16 @@ body {
 .root {
   display: flex;
   flex-direction: column;
+  height: vh;
   min-width: 100%;
   min-height: 100%;
 }
 
 main {
-  padding-top: var(--header-height);
-
-  @media (min-width: 768px) {
+  @media (max-width: 768px) {
     height: 100%;
-    padding-top: 30px;
+    padding-top: var(--header-height);
+  
   }
 }
 
@@ -92,6 +93,185 @@ h5,
 h6 {
   margin: 0;
 }
+
+  h1 {
+    font-size: var(--font-size-XXL);
+    line-height: 1.6;
+    font-weight: 700;
+  }
+  h2 {
+    font-size: var(--font-size-XL);
+    line-height: 1.1;
+    font-weight: 600;
+  }
+  h3 {
+    font-size: var(--font-size-ML);
+    line-height: 1.3;
+    font-weight: 500;
+  }
+  h4 {
+    font-size: var(--font-size-L);
+    line-height: 1.3;
+    font-weight: 500;
+  }
+  h5 {
+    font-size: var(--font-size-M);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  .text1{
+    font-size: var(--font-size-S);
+    line-height: 1.3;
+  }
+  .text2{
+    font-size: var(--font-size-XS);
+    line-height: 1.2;
+  }
+  .text3{
+    font-size: var(--font-size-XXS);
+    line-height: 1.3;
+  }
+
+  .button {
+    font-size: var(--font-size-M);
+    line-height: 1.6;
+  }
+  .button14 {
+    font-size: var(--font-size-S);
+    line-height: 1.2;
+  }
+  .button16 {
+    font-size: var(--font-size-M);
+    line-height: 1.3;
+  }
+
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: var(--font-size-XXL);
+    line-height: 1.4;
+    font-weight: 700;
+  }
+  h2 {
+    font-size: var(--font-size-XL);
+    line-height: 1.1;
+    font-weight: 600;
+  }
+  h3 {
+    font-size: 2.2rem;  // так как нет такой константы
+    line-height: 1.6;
+    font-weight: 600;
+  }
+  h4 {
+    font-size: var(--font-size-ML);
+    line-height: 1.2;
+    font-weight: 500;
+  }
+  h5 {
+    font-size: var(--font-size-L);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  .text1{
+    font-size: var(--font-size-M);
+    line-height: 1.5;
+  }
+  .text2{
+    font-size: var(--font-size-S);
+    line-height: 1.2;
+  }
+  .text3{
+    font-size: var(--font-size-XS);
+    line-height: 1.2;
+  }
+
+  .text4{
+    font-size: var(--font-size-XXS);
+    line-height: 1.3;
+  }
+
+  .button {
+    font-size: var(--font-size-M);
+    line-height: 1.6;
+  }
+  .button14 {
+    font-size: var(--font-size-S);
+    line-height: 1.2;
+  }
+  .button16 {
+    font-size: var(--font-size-M);
+    line-height: 1.3;
+  }
+}
+
+@media (min-width: 1440px) {
+  h1 {
+    font-size: 7rem; // так как нет такой константы
+    line-height: 1.1;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: 3.4rem;  // так как нет такой константы
+    line-height: 1.1;
+    font-weight: 600;
+  }
+  h3 {
+    font-size: 2.8rem; // так как нет такой константы
+    line-height: 1.3;
+    font-weight: 600;
+  }
+  h4 {
+    font-size: var(--font-size-XL);
+    line-height: 1.3;
+    font-weight: 500;
+  }
+  h5 {
+    font-size: var(--font-size-ML);
+    line-height: 1;
+    font-weight: 500;
+  }
+  h6 {
+    font-size: var(--font-size-S);
+    line-height: 1.2;
+    font-weight: 400;
+  }
+
+  .text1{
+    font-size: var(--font-size-L);
+    line-height: 1.5;
+  }
+  .text2{
+    font-size: var(--font-size-M);
+    line-height: 1.5;
+  }
+  .text3{
+    font-size: var(--font-size-S);
+    line-height: 1.5;
+  }
+  .text4{
+    font-size: var(--font-size-XS);
+    line-height: 1.5;
+  }
+  .text5{
+    font-size: var(--font-size-XXS);
+    line-height: 1.5;
+  }
+
+  .button {
+    font-size: var(--font-size-M);
+    line-height: 1.6;
+  }
+
+  .button24 {
+    font-size: var(--font-size-XL);
+    line-height: 1.6;
+  }
+ 
+}
+
 
 p {
   margin: 0;
@@ -160,7 +340,7 @@ textarea {
 
 .nuxt-icon svg {
   margin-bottom: 0;
-  width: auto;
-  height: auto;
+ // width: auto;
+ // height: auto;
   vertical-align: middle;
 }

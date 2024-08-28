@@ -48,8 +48,8 @@ getMeta({
 			>
 				<img
 					class="support__design-image"
-					:itemprop="SeoItempropGlobalEnum.IMAGE"
 					:src="imgLink"
+					:itemprop="SeoItempropGlobalEnum.IMAGE"
 				/>
 				<p class="support__design-question">{{ $t('support.question') }}</p>
 			</div>

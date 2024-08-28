@@ -186,7 +186,11 @@ getMeta({
 	}
 }
 .cards {
-	margin-bottom: 50px;
+	margin-bottom: 41px;
+	@media (min-width: 768px) {
+		margin-bottom: 50px;
+	}
+
 	&__title {
 		text-align: center;
 		line-height: 110px;
@@ -196,8 +200,11 @@ getMeta({
 	}
 
 	&__list {
+		display: flex;
+		flex-direction: column;
+		gap: 50px;
 		@media (min-width: 768px) {
-			display: flex;
+			flex-direction: row;
 			align-items: center;
 			justify-content: space-between;
 			flex-wrap: wrap;
@@ -212,7 +219,10 @@ getMeta({
 	}
 
 	&__title {
-		margin-bottom: 40px;
+		margin-bottom: 26px;
+		@media (max-width: 1440px) {
+			text-align: center;
+		}
 	}
 	&__list {
 		display: flex;

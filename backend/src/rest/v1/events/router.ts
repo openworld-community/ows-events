@@ -47,7 +47,6 @@ export const eventsApi = async (fastify: FastifyInstance) => {
 	});
 
 	fastify.post<IAddEventRoute>('/add', {
-		preHandler: fastify.auth([generateAuthUserFn()]),
 		schema: addEventSchema,
 		handler: addEvent
 	});

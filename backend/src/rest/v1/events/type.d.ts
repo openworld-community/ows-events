@@ -5,7 +5,6 @@ import { IRouteHandler } from '../../types';
 
 type IAddEventRoute = {
 	Body: { event: EventOnPoster };
-	Header: { Authorization: string };
 	Reply: { id: string };
 };
 type IAddEventHandler = IRouteHandler<IAddEventRoute>;

@@ -21,7 +21,7 @@ services:
                 - VITE_BASE_URL=https://api-parsing.il12.ru
                 - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
                 - VITE_MODE=production
-                - VITE_DOMAIN=api-parsing.il12.ru
+                - VITE_DOMAIN=parsing.il12.ru
         logging: *default-logging
         restart: always
         networks:
@@ -51,7 +51,7 @@ services:
             - /root/ows-events_parsing/assets/img:/app/assets/img
 
     mongo:
-        image: mongo:6.0
+        image: mongo:4.4.6
         restart: unless-stopped
         command: ['--bind_ip_all']
         ports:
@@ -63,4 +63,4 @@ services:
             interval: 10s
             start_period: 30s
         volumes:
-            - /root/db/test:/data/db
+            - /root/db/parsing:/data/db

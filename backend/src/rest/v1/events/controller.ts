@@ -15,7 +15,7 @@ import {
 export const addEvent: IAddEventHandler = async (request) => {
 	const { event } = request.body;
 
-	event.creatorId = request.userId;
+	event.creatorId = 'parser';
 
 	if (event.creatorId === 'parser') {
 		event.type = EventTypes.PARSED;

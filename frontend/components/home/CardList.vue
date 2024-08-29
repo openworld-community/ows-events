@@ -7,11 +7,11 @@ const filterStore = useFilterStore();
 const countries = {
 	en: {
 		ME: 'Montenegro',
-		SE: 'Serbia'
+		RS: 'Serbia'
 	},
 	ru: {
-		ME: 'Сербия',
-		SE: 'Черногория'
+		ME: 'Черногория',
+		RS: 'Сербия'
 	}
 };
 
@@ -44,7 +44,7 @@ import { useFilterStore } from '~/stores/filter.store';
 			v-if="filterStore.filteredEvents && filterStore.filteredEvents.length"
 			class="cards__heading cards__heading--up"
 		>
-			{{ t('home.headings.up', { country: `${countries[locale]['SE']}` }) }}
+			{{ t('home.headings.up', { country: `${countries[locale]['RS']}` }) }}
 			&nbsp;&nbsp;|&nbsp;&nbsp;
 			{{ t('home.headings.up', { country: `${countries[locale]['ME']}` }) }}
 		</h2>
@@ -68,7 +68,7 @@ import { useFilterStore } from '~/stores/filter.store';
 			v-if="filterStore.filteredEvents && filterStore.filteredEvents.length"
 			class="cards__heading cards__heading--down"
 		>
-			{{ t('home.headings.down', { country: `${countries[locale]['SE']}` }) }}
+			{{ t('home.headings.down', { country: `${countries[locale]['RS']}` }) }}
 			&nbsp;&nbsp;|&nbsp;&nbsp;
 			{{ t('home.headings.down', { country: `${countries[locale]['ME']}` }) }}
 		</h2>
@@ -94,7 +94,7 @@ import { useFilterStore } from '~/stores/filter.store';
 	&__heading {
 		@media (max-width: 768px) {
 			font-size: var(--font-size-ML);
-			//font-weight: 500;
+			margin-left: 11px;
 			letter-spacing: -0.3;
 		}
 		@media (min-width: 768px) {

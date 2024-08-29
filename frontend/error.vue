@@ -41,7 +41,7 @@ const resultMessage = computed(() => {
 			<Error404 :message="resultMessage" />
 		</template>
 		<template v-else>
-			<Error500 />
+			<Error500 :message="props.error?.message" />
 		</template>
 		<div class="error-go-home-wrapper">
 			<!-- РЕАЛИЗАЦИЯ С ХЕНДЛЕРОМ -->

@@ -23,7 +23,6 @@ watch(
 		if (Object.keys(value).length) {
 			sendAnalytics.search({
 				search_term: route.fullPath.split('?')[1],
-				city: value.city ? getFirstQuery(value.city) : '',
 				tags: value.tags ? getFirstQuery(value.tags) : ''
 			});
 		}
@@ -56,6 +55,7 @@ const onButtonClick = async () => {
 					v-if="mobile"
 					class="main-page__location"
 				/> -->
+
 			<HomeFilters class="main-page__filter" />
 		</div>
 
@@ -86,6 +86,7 @@ const onButtonClick = async () => {
 
 .main-page {
 	position: relative;
+	width: 100%;
 	@media (min-width: 768px) {
 		padding-top: 0;
 	}
@@ -139,6 +140,7 @@ const onButtonClick = async () => {
 		color: var(--color-white);
 		padding-top: 28px;
 		margin-bottom: 24px;
+		letter-spacing: -0.3px;
 
 		@media (min-width: 768px) {
 			max-width: 500px;

@@ -1,0 +1,66 @@
+version: '3.7'
+
+x-logging: &default-logging
+    driver: json-file
+    options:
+        max-size: '10m'
+        max-file: '5'
+
+networks:
+    ows-events_parsing:
+
+services:
+    frontend:
+        build:
+            context: .
+            dockerfile: ./frontend/Dockerfile
+            args:
+                - NODE_ENV=production
+                - VITE_STAGE=test
+                - VITE_API_URL=https://api-parsing.il12.ru/api
+                - VITE_BASE_URL=https://api-parsing.il12.ru
+                - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
+                - VITE_MODE=production
+                - VITE_DOMAIN=api-parsing.il12.ru
+        logging: *default-logging
+        restart: always
+        networks:
+            - ows-events_parsing
+        ports:
+            - '3002:3000'
+
+    backend:
+        build:
+            context: .
+            dockerfile: ./backend/Dockerfile
+        logging: *default-logging
+        restart: always
+        depends_on:
+            - mongo
+        links:
+            - mongo
+        environment:
+            - MODE=prod
+            - MONGO_URI=mongodb://mongo:27017/parsing
+            - FRONTEND_URL=https://parsing.il12.ru
+        networks:
+            - ows-events_parsing
+        ports:
+            - '7082:7080'
+        volumes:
+            - /root/ows-events_parsing/assets/img:/app/assets/img
+
+    mongo:
+        image: mongo:6.0
+        restart: unless-stopped
+        command: ['--bind_ip_all']
+        ports:
+            - '127.0.0.1:27002:27017'
+        networks:
+            - ows-events_parsing
+        healthcheck:
+            test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo --quiet) -eq 1
+            interval: 10s
+            start_period: 30s
+        volumes:
+            - /root/db/test:/data/db

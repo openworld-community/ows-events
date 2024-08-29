@@ -42,7 +42,6 @@ defineProps({
 	align-items: start;
 
 	&__title {
-		flex-grow: 1;
 		word-break: break-all;
 		font-size: var(--font-size-L);
 		font-weight: var(--font-weight-bold);

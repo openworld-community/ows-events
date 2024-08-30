@@ -6,44 +6,22 @@ const mobile = inject('mobile');
 import { CommonErrorsEnum } from '../../../common/const/common-errors';
 import {
 	declinationCountries,
-	countries as supportedCountries
+	countries as supportedCountries,
+	queryToCountryLocaleName
 } from '../../../common/const/supportedCountries';
 
 const { sendAnalytics } = useSendTrackingEvent();
 
-const findCurrenCity = (param: string): string => {
-	const englishName = transformFromQuery(param);
-	const currentCity = usedLocales.value.cities.find((city) => city['en'] === englishName);
-	if (!currentCity) return;
-
-	return currentCity[locale.value];
-};
-
-const findCountryByParam = (param: string): string => {
-	const englishName = transformFromQuery(param);
-	const cityObjectWithCountryCode = usedLocales.value.cities.find(
-		(city) => city['en'] === englishName
-	);
-	if (!cityObjectWithCountryCode) return '';
-	const countryCode = cityObjectWithCountryCode['countryCode'];
-	if (!countryCode) return '';
-
-	const currentCountry = supportedCountries[countryCode][locale.value];
-	return currentCountry;
-};
-
-const city = getFirstParam(route.params.city);
+const country = getFirstParam(route.params.country);
 const { data: usedLocales } = await apiRouter.filters.getUsedLocations.useQuery({});
 
-const { data: usedTags } = await apiRouter.filters.getUsedTagsByCity.useQuery({ data: { city } });
+const { data: usedTags } = await apiRouter.filters.getUsedTagsByCountry.useQuery({
+	data: { country }
+});
 
 getMeta({
-	title: `${t('meta.city.title.first', { city: findCurrenCity(city) })} - ${t(
-		'meta.city.title.second'
-	)} ${declinationCountries[findCountryByParam(city)]}`,
-	description: t('meta.city.description', {
-		country: declinationCountries[findCountryByParam(city)]
-	})
+	title: '',
+	description: ''
 });
 
 const dateStart = computed(() =>
@@ -61,9 +39,9 @@ const {
 	data: posterEvents,
 	error: errorEvents,
 	pending
-} = await apiRouter.filters.findEventsByCity.useQuery({
+} = await apiRouter.filters.findEventsByCountry.useQuery({
 	data: {
-		city,
+		country,
 		query: {
 			tags,
 			startDate: dateStart,
@@ -76,34 +54,36 @@ const {
 if (errorEvents.value) {
 	if (
 		errorEvents.value.data &&
-		errorEvents.value.data.message === CommonErrorsEnum.CITY_NOT_FOUND
+		errorEvents.value.data.message === CommonErrorsEnum.COUNTRY_NOT_FOUND
 	) {
 		throw createError({
 			statusCode: 404,
-			data: { message: t(`errors.${CommonErrorsEnum.CITY_NOT_FOUND}`, { city: city }) }
+			data: {
+				message: t(`errors.${CommonErrorsEnum.COUNTRY_NOT_FOUND}`, { country: country })
+			}
 		});
 	}
 }
 
 export type Option = { label: string; value: string };
 
-const filterCities = computed(() => {
-	const filtered: Option[] = usedLocales.value.cities
-		.map((objCity) => {
-			return { value: objCity['en'], label: objCity[locale.value] };
-		})
-		.filter((cityObj) => cityObj['value'] !== transformFromQuery(city));
+const filterCitiesOptions = computed(() => {
+	const filtered: Option[] = usedLocales.value.cities.map((objCity) => {
+		return { value: objCity['en'], label: objCity[locale.value] };
+	});
+
 	return filtered;
 });
 
 const filterCountriesOptions = computed(() => {
-	const filtered = usedLocales.value.countries.map((countryName) => {
-		return {
-			['label']: supportedCountries[countryName][locale.value],
-			['value']: supportedCountries[countryName]['en']
-		};
-	});
-
+	const filtered = usedLocales.value.countries
+		.map((countryName) => {
+			return {
+				['label']: supportedCountries[countryName][locale.value],
+				['value']: supportedCountries[countryName]['en']
+			};
+		})
+		.filter((countryOption) => countryOption.value !== transformFromQuery(country));
 	return filtered;
 });
 
@@ -125,14 +105,20 @@ watch(
 );
 </script>
 <template>
-	<main class="citi-page">
-		<FiltersHeroWrap :title="$t('city.title', { city: findCurrenCity(city)?.toUpperCase() })">
+	<main class="country-page">
+		<FiltersHeroWrap
+			:title="
+				$t('country.title', {
+					country: queryToCountryLocaleName[country][locale].toUpperCase()
+				})
+			"
+		>
 			<FiltersContent
-				:current-city="findCurrenCity(city)"
+				current-city=""
 				:tag-list="usedTags"
-				:filter-cities="filterCities"
+				:filter-cities="filterCitiesOptions"
+				:current-country="queryToCountryLocaleName[country][locale]"
 				:filter-countries="filterCountriesOptions"
-				:current-country="findCountryByParam(city)"
 			/>
 		</FiltersHeroWrap>
 
@@ -153,9 +139,8 @@ watch(
 				v-if="posterEvents && posterEvents.length !== 0"
 				position="down"
 				:title="
-					$t('city.heading', {
-						city: findCurrenCity(city),
-						country: findCountryByParam(city)
+					$t('country.heading', {
+						country: queryToCountryLocaleName[country][locale]
 					})
 				"
 			/>
@@ -164,7 +149,7 @@ watch(
 </template>
 
 <style lang="less" scoped>
-.city-page {
+.country-page {
 	//tag main has padding in global
 	flex-grow: 1;
 	padding-top: var(--header-height);

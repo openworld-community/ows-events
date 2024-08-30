@@ -7,18 +7,18 @@ export const getJSONEventList = (posterEvents: EventOnPoster[], locale: string) 
 	return {
 		type: 'application/ld+json',
 		innerHTML: JSON.stringify({
-			type: 'application/ld+json',
-			textContent: {
-				'@context': SEO_SCHEMA_BASE_URL,
-				type: 'BreadcrumbList',
-				itemListElement: posterEvents.map((event, ind) => {
-					return {
-						'@type': 'ListItem',
-						position: ind + 1,
-						url: `${VITE_DOMAIN}/${locale}${RoutePathEnum.EVENT}/${event.id}`
-					};
-				})
-			}
+			'@context': SEO_SCHEMA_BASE_URL,
+			'@type': 'BreadcrumbList',
+			itemListElement: posterEvents.map((event, ind) => {
+				return {
+					'@type': 'ListItem',
+					position: ind + 1,
+					item: {
+						'@id': `${VITE_DOMAIN}/${locale}${RoutePathEnum.EVENT}/${event.id}`,
+						name: event.title
+					}
+				};
+			})
 		})
 	};
 };

@@ -54,6 +54,13 @@ debouncedWatch(
 		<div class="filters__wrapper">
 			<CommonUiFilter
 				filter-type="select"
+				name="country"
+				:list="filterStore.usedCountries"
+				:disabled="!filterStore.usedCountries.length"
+			/>
+
+			<CommonUiFilter
+				filter-type="select"
 				name="city"
 				:list="filterStore.usedCities"
 				:disabled="!filterStore.usedCities.length"

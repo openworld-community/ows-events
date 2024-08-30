@@ -31,6 +31,11 @@ export const countries: CountriesTranslateType = {
 	}
 };
 
+export const queryToCountryLocaleName = {
+	serbia: { en: 'Serbia', ru: 'Сербия' },
+	montenegro: { en: 'Montenegro', ru: 'Черногория' }
+};
+
 export const declinationCountries = {
 	Сербия: 'Сербии',
 	Serbia: 'Serbia',

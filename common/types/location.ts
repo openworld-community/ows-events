@@ -1,3 +1,5 @@
+import { CountriesType } from '../const/supportedCountries';
+
 export type UserLocation = {
 	code?: string;
 	city?: string;
@@ -9,5 +11,5 @@ export type Timezone = {
 	timezoneOffset: string;
 };
 
-export type Country = string;
+export type Country = CountriesType;
 export type City = string;

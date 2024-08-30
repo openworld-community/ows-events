@@ -16,7 +16,15 @@ defineProps({
 		type: [Array, String, Set] as PropType<string | string[] | { [key: string]: string }[]>,
 		default: () => []
 	},
+	filterCountries: {
+		type: [Array, String, Set] as PropType<string | string[] | { [key: string]: string }[]>,
+		default: () => []
+	},
 	currentCity: {
+		type: String,
+		default: ''
+	},
+	currentCountry: {
 		type: String,
 		default: ''
 	}
@@ -66,10 +74,31 @@ watch(
 	<div class="main-filters">
 		<FiltersUiLinkSelectWrapper
 			v-if="!mobile"
-			:placeholder="$t('city.filters.city.placeholder')"
+			:placeholder="$t('filters.city.placeholder')"
+			:current-text="currentCountry"
+			:disabled="filterCountries.length === 0"
+			:aria-label="$t(`filters.country.aria`)"
+		>
+			<FiltersUiListWithoutLabel
+				:options="filterCountries"
+				:path="RoutePathEnum.COUNTRY"
+			/>
+		</FiltersUiLinkSelectWrapper>
+		<LibraryMobileFilter
+			v-else
+			:placeholder="$t('filters.city.placeholder')"
+			:options="filterCountries"
+			:path="RoutePathEnum.COUNTRY"
+			:current-text="currentCountry"
+			:title="$t('filters.country.title')"
+			:disabled="filterCountries.length === 0"
+		/>
+		<FiltersUiLinkSelectWrapper
+			v-if="!mobile"
+			:placeholder="$t('filters.city.placeholder')"
 			:current-text="currentCity"
 			:disabled="filterCities.length === 0"
-			:aria-label="$t(`home.filter.city.aria`)"
+			:aria-label="$t(`filters.city.aria`)"
 		>
 			<FiltersUiListWithoutLabel
 				:options="filterCities"
@@ -78,11 +107,11 @@ watch(
 		</FiltersUiLinkSelectWrapper>
 		<LibraryMobileFilter
 			v-else
-			:placeholder="$t('city.filters.city.placeholder')"
+			:placeholder="$t('filters.city.placeholder')"
 			:options="filterCities"
 			:path="RoutePathEnum.CITY"
 			:current-text="currentCity"
-			:title="$t('home.filter.city.title')"
+			:title="$t('filters.city.title')"
 			:disabled="filterCities.length === 0"
 		/>
 
@@ -94,8 +123,8 @@ watch(
 			appearance="no-border"
 			class="filter"
 			name="date"
-			:placeholder="$t(`home.filter.date.placeholder`)"
-			:aria-label="$t(`home.filter.date.aria`)"
+			:placeholder="$t(`filters.date.placeholder`)"
+			:aria-label="$t(`filters.date.aria`)"
 			:min-date="new Date(roundTime(Date.now(), 10))"
 		/>
 	</div>
@@ -123,7 +152,7 @@ watch(
 		align-items: center;
 		margin-top: 0;
 		gap: var(--gap);
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 1fr 1fr 1fr;
 
 		&:deep(.calendar) {
 			max-width: 100%;

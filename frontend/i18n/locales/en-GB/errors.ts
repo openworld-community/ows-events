@@ -56,5 +56,6 @@ export default {
 	[CommonErrorsEnum.NOT_FOUND_BY_ID]: 'Event with ID {id} not found',
 	[CommonErrorsEnum.NO_EVENTS_IN_CITY]: 'No events in city',
 	[CommonErrorsEnum.NO_EVENTS_IN_COUNTRY]: 'No events in country',
-	[CommonErrorsEnum.CITY_NOT_FOUND]: 'City {city} not found'
+	[CommonErrorsEnum.CITY_NOT_FOUND]: 'City {city} not found',
+	[CommonErrorsEnum.COUNTRY_NOT_FOUND]: 'Country {country} not found'
 };

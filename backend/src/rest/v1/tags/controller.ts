@@ -41,7 +41,7 @@ export const getUsedTagsByCity: IGetUsedTagsByCityHandler = async (request) => {
 
 export const getUsedTagsByCountry: IGetUsedTagsByCountryHandler = async (request) => {
 	const country = transformFromQuery(request.params.countryName);
-	const response = await eventsStateController.findUsedTagsByCity(country);
+	const response = await eventsStateController.findUsedTagsByCountry(country);
 
 	return response;
 };

@@ -59,7 +59,7 @@ export const filters = {
 		useBackendFetch(`location/usedCities/${input.country}`)
 	),
 	getUsedTagsByCountry: defineQuery<(input: { country: string }) => Tag[]>((input) =>
-		useBackendFetch(`tags/used/city/${input.country}`)
+		useBackendFetch(`tags/used/country/${input.country}`)
 	),
 	getUsedTagsByCity: defineQuery<(input: { city: string }) => Tag[]>((input) =>
 		useBackendFetch(`tags/used/city/${input.city}`)

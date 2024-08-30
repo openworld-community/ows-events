@@ -108,7 +108,11 @@ const filterCountriesOptions = computed(() => {
 });
 
 useHead({
-	script: [posterEvents.value ? getJSONEventList(posterEvents.value, locale.value) : undefined]
+	script: [
+		posterEvents.value
+			? getJSONEventList(posterEvents.value, locale.value, route.query)
+			: undefined
+	]
 });
 
 watch(
@@ -127,7 +131,7 @@ watch(
 <template>
 	<main class="citi-page">
 		<FiltersHeroWrap :title="$t('city.title', { city: findCurrenCity(city)?.toUpperCase() })">
-			<FiltersContent
+			<FiltersWrapper
 				:current-city="findCurrenCity(city)"
 				:tag-list="usedTags"
 				:filter-cities="filterCities"

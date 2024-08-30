@@ -113,7 +113,7 @@ watch(
 				})
 			"
 		>
-			<FiltersContent
+			<FiltersWrapper
 				current-city=""
 				:tag-list="usedTags"
 				:filter-cities="filterCitiesOptions"

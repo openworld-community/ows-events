@@ -11,8 +11,7 @@ const pagesWithAuth: string[] = [
 	RouteNameEnum.USER_MY_EVENTS,
 	RouteNameEnum.USER_PROFILE,
 	//RouteNameEnum.EVENT_FORM,
-	RouteNameEnum.USER_PAGE,
-	RouteNameEnum.EVENT_EDIT
+	RouteNameEnum.USER_PAGE
 ];
 
 export default defineNuxtRouteMiddleware(async (to) => {

@@ -31,7 +31,6 @@ patchDeleteEventModal({
 <template>
 	<div class="event-info-actions">
 		<CommonButton
-			v-if="validateEventRole(creatorId, 'delete')"
 			class="event-info-actions__button-admin"
 			button-kind="warning"
 			:button-text="$t('global.button.delete')"
@@ -41,7 +40,6 @@ patchDeleteEventModal({
 			@click="openDeleteEventModal"
 		/>
 		<CommonButton
-			v-if="validateEventRole(creatorId, 'edit')"
 			class="event-info-actions__button-admin"
 			button-kind="ordinary"
 			:button-text="$t('global.button.edit')"

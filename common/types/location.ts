@@ -1,4 +1,4 @@
-import { CountriesType } from '../const/supportedCountries';
+import type { CountriesType } from '../const/supportedCountries';
 
 export type UserLocation = {
 	code?: string;

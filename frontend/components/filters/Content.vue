@@ -59,7 +59,7 @@ const dates = computed({
 	<div class="main-filters">
 		<FiltersUiLinkSelectWrapper
 			v-if="!mobile"
-			:placeholder="$t('filters.city.placeholder')"
+			:placeholder="$t('filters.country.placeholder')"
 			:current-text="currentCountry"
 			:disabled="filterCountries.length === 0"
 			:aria-label="$t(`filters.country.aria`)"
@@ -71,7 +71,7 @@ const dates = computed({
 		</FiltersUiLinkSelectWrapper>
 		<LibraryMobileFilter
 			v-else
-			:placeholder="$t('filters.city.placeholder')"
+			:placeholder="$t('filters.country.placeholder')"
 			:options="filterCountries"
 			:path="RoutePathEnum.COUNTRY"
 			:current-text="currentCountry"
@@ -152,10 +152,11 @@ const dates = computed({
 		&:deep(.input__field),
 		&:deep(.popover__trigger--primary) {
 			height: 72px;
-			//border-color: transparent;
+			position: relative;
 		}
 
-		&:deep(.calendar):before {
+		&:deep(.calendar):before,
+		&:deep(.popover__trigger--primary):not(:first-child):before {
 			width: 1px;
 			content: '';
 			background-color: var(--color-text-secondary);
@@ -172,11 +173,16 @@ const dates = computed({
 	}
 }
 @media (min-width: 1440px) {
-	// прозраные сепараторы при фокусе первые два отвечают за пикер
-
+	// прозраные сепараторы при фокусе or data-state=open
+	.main-filters:deep(.popover__trigger--primary:focus-within)::before,
+	.main-filters:deep(.popover__trigger--primary[data-state='open'])::before,
+	.main-filters:deep(.popover__trigger--primary:focus-within + .popover__trigger--primary:before),
+	.main-filters:deep(
+			.popover__trigger--primary[data-state='open'] + div + .popover__trigger--primary:before
+		) {
+		background-color: transparent;
+	}
 	.filter:focus-within::before,
-	.filter:focus-within + .filter::before,
-	.filter:has(.input__field:focus) + .filters__wrapper--mobile > .filter:first-child::before,
 	.popover__trigger--primary[data-state='open'] + div + .filter::before,
 	.popover__trigger--primary:focus-within + .filter::before {
 		background-color: transparent;

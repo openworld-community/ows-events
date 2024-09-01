@@ -171,19 +171,20 @@ const navigate = (to: string) => {
 		margin-left: calc(-1 * var(--padding-side));
 		margin-right: calc(-1 * var(--padding-side));
 	}
-	.list {
-		&__item {
-			padding: 8px var(--padding-side);
-		}
+}
 
-		&__icon {
-			min-width: 24px;
-			margin-left: 10px;
-		}
+.list {
+	&__item {
+		padding: 8px var(--padding-side);
+	}
 
-		&__input {
-			appearance: none;
-		}
+	&__icon {
+		min-width: 24px;
+		margin-left: 10px;
+	}
+
+	&__input {
+		appearance: none;
 	}
 }
 .buttons {

@@ -20,8 +20,12 @@ const { data: usedTags } = await apiRouter.filters.getUsedTagsByCountry.useQuery
 });
 
 getMeta({
-	title: '',
-	description: ''
+	title: t('meta.country.title', {
+		country: declinationCountries[queryToCountryLocaleName[country][locale.value]]
+	}),
+	description: t('meta.country.description', {
+		country: declinationCountries[queryToCountryLocaleName[country][locale.value]]
+	})
 });
 
 const dateStart = computed(() =>

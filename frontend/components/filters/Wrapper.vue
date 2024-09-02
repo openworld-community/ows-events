@@ -2,10 +2,8 @@
 import dayjs from 'dayjs';
 
 import type { TagList } from '../../../common/const/tags';
-import { RoutePathEnum } from '~/constants/enums/route';
 
 const route = useRoute();
-const mobile = inject('mobile');
 
 defineProps({
 	tagList: {

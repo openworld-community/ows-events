@@ -110,7 +110,7 @@ const filterCountriesOptions = computed(() => {
 useHead({
 	script: [
 		posterEvents.value
-			? getJSONEventList(posterEvents.value, locale.value, route.query)
+			? getJSONEventList(posterEvents.value, locale.value, route.path)
 			: undefined
 	]
 });

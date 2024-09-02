@@ -21,7 +21,7 @@ const props = defineProps({
 	},
 	initialValues: {
 		type: Object as PropType<EventFormType>,
-		default: () => { }
+		default: () => {}
 	}
 });
 
@@ -47,7 +47,7 @@ const dataFromLocalStorage = (initialValues: EventFormType) => {
 	return copy;
 };
 
-const { meta, values, handleSubmit, setFieldValue, handleReset } = useForm<EventFormType>({
+const { meta, values, handleSubmit, setFieldValue, resetForm } = useForm<EventFormType>({
 	validationSchema: schema,
 	initialValues:
 		localStorage.getItem(LocalStorageEnum.EVENT_DATA) !== null
@@ -82,7 +82,7 @@ watch(
 				setFieldValue('price.currency', currency);
 			}
 		} else {
-			setFieldValue('price.currency', '');
+			setFieldValue('price.currency', null);
 		}
 	},
 	{ deep: true }
@@ -116,7 +116,7 @@ watch(
 			const timeZone = timezoneToString(getUserTimezone());
 			setFieldValue('timezone', timeZone);
 		} else {
-			const belgrade = await getTimezone('Serbia', 'Belgrade')
+			const belgrade = await getTimezone('Serbia', 'Belgrade');
 			setFieldValue('timezone', belgrade);
 		}
 	},
@@ -128,7 +128,7 @@ watch(
 	(free) => {
 		if (free) {
 			if (values['price']['currency']) {
-				setFieldValue('price.currency', '');
+				setFieldValue('price.currency', null);
 			}
 			if (values['price']['val']) {
 				setFieldValue('price.val', null);
@@ -165,7 +165,8 @@ const onSubmit = handleSubmit(
 		isLoading.value = true;
 
 		emit('submitEvent', payload);
-		handleReset();
+		//in case edit we  need reset form and use blank initial values (not previous notedited event)
+		resetForm({ values: getInitialEventFormValues() });
 		isLoading.value = false;
 	},
 	() => {
@@ -190,7 +191,11 @@ const onSubmit = handleSubmit(
 
 		<div class="event-form__fields-wrapper">
 			<div class="event-form__fields">
-				<EventFormLocation />
+				<EventFormLocation
+					:cities-options="
+						locationStore.getCitiesByCountry(values['location']['country'])
+					"
+				/>
 
 				<EventFormMaininfo />
 				<EventFormDate />

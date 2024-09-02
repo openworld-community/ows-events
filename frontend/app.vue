@@ -24,10 +24,15 @@ provide('tablet', tablet as ComputedRef<boolean>);
 provide('desktop', desktop as ComputedRef<boolean>);
 const route = useRoute();
 
+const getPath = (path: string) => {
+	const localeLength = locale.value.length;
+	return path.slice(localeLength + 1);
+};
+
 const langRefs = locales.value.map((it) => ({
 	rel: 'alternate',
 	hreflang: it.code,
-	href: `${VITE_DOMAIN}/${it.code}/${getRouteName(route.name as string)}`
+	href: `${VITE_DOMAIN}/${it.code}${getPath(route.path)}`
 }));
 useHead({
 	link: [
@@ -40,7 +45,10 @@ useHead({
 	],
 	title: t('meta.default_title'),
 	meta: [
-		{ name: 'description', content: t('meta.default_description') },
+		{
+			name: 'description',
+			content: t('meta.default_description')
+		},
 		// viewport-fit=cover - фикс для IPhone - убирает рамки при горизонтальном просмотре
 		{ name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover' }
 	],

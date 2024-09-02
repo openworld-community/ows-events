@@ -4,6 +4,19 @@ const { t } = useI18n();
 const mobile = inject('mobile');
 const filterStore = useFilterStore();
 
+const countries = {
+	en: {
+		ME: 'Montenegro',
+		RS: 'Serbia'
+	},
+	ru: {
+		ME: 'Черногория',
+		RS: 'Сербия'
+	}
+};
+
+const { locale } = useI18n();
+
 import { useFilterStore } from '~/stores/filter.store';
 </script>
 <template>
@@ -27,6 +40,15 @@ import { useFilterStore } from '~/stores/filter.store';
 		>
 			<span>{{ t('event.filteredEvents.no_events_found') }}</span>
 		</div>
+		<h2
+			v-if="filterStore.filteredEvents && filterStore.filteredEvents.length"
+			class="cards__heading cards__heading--up"
+		>
+			{{ t('home.headings.up', { country: `${countries[locale]['RS']}` }) }}
+			&nbsp;&nbsp;|&nbsp;&nbsp;
+			{{ t('home.headings.up', { country: `${countries[locale]['ME']}` }) }}
+		</h2>
+
 		<ul
 			v-if="filterStore.filteredEvents && filterStore.filteredEvents.length"
 			class="cards__list"
@@ -42,6 +64,14 @@ import { useFilterStore } from '~/stores/filter.store';
 				<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
 			</li>
 		</ul>
+		<h2
+			v-if="filterStore.filteredEvents && filterStore.filteredEvents.length"
+			class="cards__heading cards__heading--down"
+		>
+			{{ t('home.headings.down', { country: `${countries[locale]['RS']}` }) }}
+			&nbsp;&nbsp;|&nbsp;&nbsp;
+			{{ t('home.headings.down', { country: `${countries[locale]['ME']}` }) }}
+		</h2>
 	</div>
 </template>
 <style lang="less" scoped>
@@ -57,9 +87,41 @@ import { useFilterStore } from '~/stores/filter.store';
 .cards {
 	position: relative;
 	padding-top: 32px;
-		@media (min-width: 768px) {
-			padding-top: 60px;
+	@media (min-width: 768px) {
+		padding-top: 60px;
+	}
+
+	&__heading {
+		@media (max-width: 768px) {
+			font-size: var(--font-size-ML);
+			margin-left: 11px;
+			letter-spacing: -0.3;
 		}
+		@media (min-width: 768px) {
+			padding-left: var(--padding-side);
+			padding-right: var(--padding-side);
+			margin-bottom: 28px;
+			font-weight: 600;
+		}
+
+		&--up {
+			margin-bottom: 20px;
+
+			@media (min-width: 768px) {
+				margin-bottom: 28px;
+			}
+
+			@media (min-width: 768px) {
+				margin-bottom: 30px;
+			}
+		}
+		&--down {
+			margin-top: 30px;
+			@media (min-width: 1440px) {
+				margin-top: 70px;
+			}
+		}
+	}
 
 	&__list {
 		display: flex;

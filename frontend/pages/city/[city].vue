@@ -88,7 +88,14 @@ if (errorEvents.value) {
 export type Option = { label: string; value: string };
 
 const filterCities = computed(() => {
+	const englishName = transformFromQuery(city);
+	const selectedCountryCode = usedLocales.value.cities.find(
+		(city) => city['en'] === englishName
+	)?.countryCode;
 	const filtered: Option[] = usedLocales.value.cities
+		.filter((objCity) => {
+			return objCity.countryCode == selectedCountryCode;
+		})
 		.map((objCity) => {
 			return { value: objCity['en'], label: objCity[locale.value] };
 		})

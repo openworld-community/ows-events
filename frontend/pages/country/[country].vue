@@ -7,7 +7,8 @@ import { CommonErrorsEnum } from '../../../common/const/common-errors';
 import {
 	declinationCountries,
 	countries as supportedCountries,
-	queryToCountryLocaleName
+	queryToCountryLocaleName,
+	queryToCountryCode
 } from '../../../common/const/supportedCountries';
 
 const { sendAnalytics } = useSendTrackingEvent();
@@ -72,9 +73,13 @@ if (errorEvents.value) {
 export type Option = { label: string; value: string };
 
 const filterCitiesOptions = computed(() => {
-	const filtered: Option[] = usedLocales.value.cities.map((objCity) => {
-		return { value: objCity['en'], label: objCity[locale.value] };
-	});
+	const filtered: Option[] = usedLocales.value.cities
+		.filter((objCity) => {
+			return !country || objCity.countryCode == queryToCountryCode[country];
+		})
+		.map((objCity) => {
+			return { value: objCity['en'], label: objCity[locale.value] };
+		});
 
 	return filtered;
 });

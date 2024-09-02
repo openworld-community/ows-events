@@ -36,6 +36,11 @@ export const queryToCountryLocaleName = {
 	montenegro: { en: 'Montenegro', ru: 'Черногория' }
 };
 
+export const queryToCountryCode = {
+	serbia: 'RS',
+	montenegro: 'ME'
+};
+
 export const declinationCountries = {
 	Сербия: 'Сербии',
 	Serbia: 'Serbia',

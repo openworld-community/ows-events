@@ -2,8 +2,13 @@ import { SEO_SCHEMA_BASE_URL } from '~/constants/enums/seo';
 import type { EventOnPoster } from '../../common/types';
 import { VITE_DOMAIN } from '~/constants/url';
 import { RoutePathEnum } from '~/constants/enums/route';
+import type { LocationQuery } from '#vue-router';
 
-export const getJSONEventList = (posterEvents: EventOnPoster[], locale: string) => {
+export const getJSONEventList = (
+	posterEvents: EventOnPoster[],
+	locale: string,
+	query?: LocationQuery
+) => {
 	return {
 		type: 'application/ld+json',
 		innerHTML: JSON.stringify({
@@ -18,7 +23,12 @@ export const getJSONEventList = (posterEvents: EventOnPoster[], locale: string) 
 						name: event.title
 					}
 				};
-			})
+			}),
+			potentialAction: {
+				'@type': 'SearchAction',
+				target: `${VITE_DOMAIN}/${locale}${RoutePathEnum.CITY}?q=${query}`,
+				query: 'nonrequired'
+			}
 		})
 	};
 };

@@ -95,7 +95,11 @@ const filterCities = computed(() => {
 });
 
 useHead({
-	script: [posterEvents.value ? getJSONEventList(posterEvents.value, locale.value) : undefined]
+	script: [
+		posterEvents.value
+			? getJSONEventList(posterEvents.value, locale.value, route.query)
+			: undefined
+	]
 });
 
 watch(

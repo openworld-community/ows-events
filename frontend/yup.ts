@@ -28,7 +28,7 @@ const emailRegexp =
 const passwordRegex = /^[a-z,A-Z, 0-9, .,!,?, @,:, ;,*,/,",+,-,,]{6,20}$/;
 
 const linkRegexp =
-	/^(https?):\/\/(([a-zA-Z\d]([a-zA-Z\d-]*[a-zA-Z\d])?\.)+[a-zA-Z]{2,}|localhost)(\/[-a-z-A-Z\d%_.~+]*)*(\?[;&a-zA-Z\d%_.~+=[\]{}{}-]*)?(#[-a-z-A-Z\d_]*)?$/;
+	/^(https?):\/\/(([a-zA-Z\d]([a-zA-Z\d-]*[a-zA-Z\d])?\.)+[a-zA-Z]{2,}|localhost)(\/[-a-z-A-Z\d%_.~+]*)*(\?[;&a-zA-Z\d%_.~+=-]*)?(#[-a-z-A-Z\d_]*)?$/;
 
 //  https://fjhjh.ru/blog/?name=struct-url&topic=expl#h1   example url
 

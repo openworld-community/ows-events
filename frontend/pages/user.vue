@@ -52,8 +52,11 @@ getMeta({
 		min-height: unset;
 		flex-direction: row;
 		align-items: flex-start;
-		justify-content: space-between;
 		margin-bottom: unset;
+		padding-top: 10px;
+	}
+	@media (max-width: 768px-1px) {
+		padding-top: var(--header-height);
 	}
 
 	&__wrapper {
@@ -74,6 +77,10 @@ getMeta({
 		}
 	}
 	.sidebar {
+		margin-right: 20px;
+		@media (min-width: 1440px) {
+			margin-right: 130px;
+		}
 	}
 }
 </style>

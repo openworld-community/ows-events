@@ -3,7 +3,7 @@ import { SeoItemTypeEnum } from '~/constants/enums/seo';
 import type { EventOnPoster } from '../../../common/types';
 import { RoutePathEnum } from '../../constants/enums/route';
 import { ref } from 'vue';
-import UserButtons from '~/components/user/userButtons.vue';
+import UserButtons from '~/components/user/UserButtons.vue';
 
 definePageMeta({
 	layout: 'profile'
@@ -36,19 +36,18 @@ const onEditButtonClick = async (id: string) => {
 
 <template>
 	<div class="my-events">
-		<div
-			v-if="!mobile"
-			class="my-events__title-wrapper"
-		>
-			<h1 class="my-events__title">
-				{{ $t('user.my_events.title') }}
-			</h1>
-		</div>
-
 		<ul
 			v-if="myEvents.length"
 			class="my-events__list"
 		>
+			<div
+				v-if="!mobile"
+				class="my-events__title-wrapper"
+			>
+				<h1 class="my-events__title">
+					{{ $t('user.my_events.title') }}
+				</h1>
+			</div>
 			<li
 				v-for="event in myEvents"
 				:key="event.id"
@@ -56,20 +55,15 @@ const onEditButtonClick = async (id: string) => {
 				:itemtype="SeoItemTypeEnum.EVENT"
 				class="my-events__list__event"
 			>
-				<UserButtons
-					:show-edit-delete-buttons="true"
-					:event="event"
-					@delete="deleteCard"
-					@edit="onEditButtonClick"
-				/>
 				<UserEventCard :event-data="event">
 					<slot>
-						<!-- <UserButtons
+						<UserButtons
+							class="my-events__user-buttons"
 							:show-edit-delete-buttons="true"
 							:event="event"
 							@delete="deleteCard"
 							@edit="onEditButtonClick"
-						/> -->
+						/>
 					</slot>
 				</UserEventCard>
 			</li>
@@ -102,8 +96,6 @@ const onEditButtonClick = async (id: string) => {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding-left: var(--padding-side);
-	padding-right: var(--padding-side);
 	padding-bottom: var(--padding-vertical);
 
 	@media (min-width: 768px) {
@@ -119,8 +111,6 @@ const onEditButtonClick = async (id: string) => {
 			display: flex;
 			width: 100%;
 			justify-content: center;
-			padding-left: var(--padding-side);
-			padding-right: var(--padding-side);
 		}
 	}
 
@@ -130,13 +120,17 @@ const onEditButtonClick = async (id: string) => {
 			font-size: var(--font-size-XL);
 			font-weight: var(--font-weight-regular);
 			text-align: left;
-			max-width: 820px;
 			margin-bottom: 32px;
 		}
 
 		@media (min-width: 1440px) {
 			font-size: var(--font-size-XXL);
 			line-height: 38px;
+			font-weight: 500;
+			padding-left: 15px;
+		}
+		@media (max-width: 1439px) {
+			text-align: center;
 		}
 	}
 
@@ -145,7 +139,7 @@ const onEditButtonClick = async (id: string) => {
 		flex-grow: 1;
 
 		@media (min-width: 768px) {
-			max-width: 820px;
+			max-width: 55vw;
 		}
 		&__event {
 			position: relative;
@@ -182,6 +176,10 @@ const onEditButtonClick = async (id: string) => {
 		@media (min-width: 768px) {
 			width: max-content;
 		}
+	}
+	&__user-buttons {
+		justify-content: center;
+		align-items: center;
 	}
 }
 

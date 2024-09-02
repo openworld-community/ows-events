@@ -54,12 +54,13 @@ const onLogoutPress = async () => {
 
 <style scoped lang="less">
 .navigation-menu {
-	width: 200px;
+	width: 255px;
 	display: flex;
 	flex-direction: column;
+	transition: width 0.3s ease-in-out;
 
-	@media (min-width: 100px) {
-		width: 255px;
+	@media (max-width: 1439px) {
+		width: 230px;
 	}
 
 	&__button {

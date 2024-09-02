@@ -116,9 +116,10 @@ const tagArray = computed(() => {
 	border-radius: 8px;
 	padding: 8px;
 	margin-bottom: 12px;
+	justify-content: space-between;
 
 	@media (min-width: 768px) {
-		padding: 16px 12px;
+		padding: 12px 12px;
 	}
 
 	transition-property: background-color, border-color;
@@ -141,19 +142,29 @@ const tagArray = computed(() => {
 
 	&__image-container {
 		display: flex;
-		width: 94px;
-		min-width: 94px;
-		height: 74px;
+		max-width: 17.36vw;
+		max-height: 115px;
+		height: 115px;
 		position: relative;
 		background-color: var(--color-input-field);
 		background-size: cover;
 		border-radius: 4px;
 		line-height: 0;
 		margin-right: 8px;
+		aspect-ratio: 16/9 auto;
+		transition: height 0.7s ease-in-out;
 
-		@media (min-width: 768px) {
-			width: 248px;
-			height: 108px;
+		@media (max-width: 768px) {
+			min-width: 25%;
+			aspect-ratio: 4/3 auto;
+			height: 100px;
+			margin-right: 12px;
+		}
+
+		@media (max-width: 500px) {
+			min-width: 30%;
+			aspect-ratio: 6/5 auto;
+			height: 74px;
 			margin-right: 12px;
 		}
 	}
@@ -183,14 +194,25 @@ const tagArray = computed(() => {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
+	width: 60%;
+	@media (max-width: 1440px) {
+		width: 100%;
+	}
+	@media (max-width: 1000px) {
+		width: 60%;
+	}
+	@media (max-width: 768px) {
+		width: 75%;
+	}
 
 	&__info {
 		display: flex;
-		width: 100%;
+
 		flex-direction: column;
 		margin-bottom: 8px;
 
-		@media (min-width: 768px) {
+		@media (max-width: 1440px) {
+			width: 80%;
 			margin-bottom: 12px;
 		}
 	}
@@ -220,9 +242,7 @@ const tagArray = computed(() => {
 		}
 	}
 	&__tags {
-		padding-right: 80px;
 		@media (min-width: 768px) {
-			padding-right: 100px;
 		}
 	}
 }

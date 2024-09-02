@@ -69,11 +69,9 @@ const onFavoriteButtonClick = () => {
 </template>
 <style scoped lang="less">
 .user-buttons {
-	position: relative;
 	&__button {
+		height: 100px;
 		display: flex;
-		position: absolute;
-		height: 100%;
 		flex-direction: row;
 		padding: 5px 7px 5px 5px;
 		color: black;
@@ -84,10 +82,20 @@ const onFavoriteButtonClick = () => {
 		align-items: center;
 		justify-content: center;
 		pointer-events: none;
+		transition: padding-top 0.5s ease-in-out;
+
+		@media (max-width: 1440px) {
+			align-items: flex-start;
+			padding: 0px;
+			padding-top: 10px;
+		}
 		&--edit {
 			width: 40px;
 			background-color: var(--color-background-secondary);
 			pointer-events: auto;
+			@media (max-width: 1440px) {
+				width: 30px;
+			}
 
 			&--expired {
 				display: none;
@@ -100,6 +108,9 @@ const onFavoriteButtonClick = () => {
 			width: 40px;
 			background-color: var(--color-background-secondary);
 			pointer-events: auto;
+			@media (max-width: 1440px) {
+				width: 30px;
+			}
 
 			&--expired {
 				background-color: rgba(250, 250, 250, 0.5);

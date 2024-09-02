@@ -56,15 +56,16 @@ const onEditButtonClick = async (id: string) => {
 				class="my-events__list__event"
 			>
 				<UserEventCard :event-data="event">
+					<div class="my-events__user-buttons">
 					<slot>
-						<UserButtons
-							class="my-events__user-buttons"
+						<UserButtons							
 							:show-edit-delete-buttons="true"
 							:event="event"
 							@delete="deleteCard"
 							@edit="onEditButtonClick"
 						/>
 					</slot>
+				</div>
 				</UserEventCard>
 			</li>
 		</ul>
@@ -178,8 +179,12 @@ const onEditButtonClick = async (id: string) => {
 		}
 	}
 	&__user-buttons {
-		justify-content: center;
-		align-items: center;
+		height: 100px;
+		@media (max-width: 500px) {
+			height: 80px;
+		}
+		
+		
 	}
 }
 

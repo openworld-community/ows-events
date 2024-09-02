@@ -70,7 +70,7 @@ const onFavoriteButtonClick = () => {
 <style scoped lang="less">
 .user-buttons {
 	&__button {
-		height: 100px;
+		height: 100%;
 		display: flex;
 		flex-direction: row;
 		padding: 5px 7px 5px 5px;
@@ -87,7 +87,7 @@ const onFavoriteButtonClick = () => {
 		@media (max-width: 1440px) {
 			align-items: flex-start;
 			padding: 0px;
-			padding-top: 10px;
+			
 		}
 		&--edit {
 			width: 40px;

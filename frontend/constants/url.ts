@@ -42,4 +42,4 @@ export enum SocialLinks {
 
 // OG-IMAGES
 
-export const DEFAULT_IMAGE_URL = `${BASE_URL}/image/url-image.png`;
+export const DEFAULT_IMAGE_URL = `${BASE_URL}/image/url-image`;

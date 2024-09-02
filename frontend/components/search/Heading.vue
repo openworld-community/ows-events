@@ -37,6 +37,9 @@ defineProps({
 
 	&--up {
 		margin-bottom: 20px;
+		@media (max-width: 768px) {
+			margin-left: 11px;
+		}
 
 		@media (min-width: 768px) {
 			margin-bottom: 28px;

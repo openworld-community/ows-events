@@ -4,12 +4,17 @@ export default {
 		'We invite you to join our creative family and together create something greater than just a list of events. Your support will enable us to develop the project, expand its capabilities, and bring our boldest ideas to life, so we can offer you something truly unique.',
 	gratitude: 'Thank you for making our mission possible!',
 	subscription: 'With love, the AfishaPeredelano Team.',
+	title_card: 'Support our team',
+	title_card_crypto: 'One-time transfer in cryptocurrency',
+	support_on: 'Support on',
+	
 	method: {
-		title: 'Contribute:',
 		patreon: 'Patreon',
+		boosty: 'Boosty',
+		paypal: 'Paypal',
 		bitcoin: 'Bitcoin',
 		ethereum: 'Ethereum',
-		usdt: 'USDT',
-		usdc: 'USDC'
+		usdt: 'USDT(TRC20)',
+		usdc: 'USDC(TRC20)'
 	}
 };

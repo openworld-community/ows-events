@@ -13,6 +13,8 @@ export enum RoutePathEnum {
 	USER_PROFILE = '/user/profile',
 	SUPPORT = '/support',
 	COOPERATION = '/cooperation',
+	CITY = '/city',
+	COUNTRY = '/country'
 }
 
 export enum RouteNameEnum {
@@ -30,4 +32,6 @@ export enum RouteNameEnum {
 	USER_PROFILE = 'user-profile',
 	SUPPORT = 'support',
 	COOPERATION = 'cooperation',
+	CITY = 'city-city',
+	COUNTRY = 'country-country'
 }

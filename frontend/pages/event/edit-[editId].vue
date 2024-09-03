@@ -38,12 +38,12 @@ const openSuccess = ref(false);
 
 const onSuccess = (eventId: string) => {
 	openSuccess.value = true;
-	setTimeout(async () => {
+	setTimeout(() => {
 		eventStore.navTo
 			? navigateTo(localePath(`${eventStore.navTo}`))
 			: navigateTo(localePath(`${RoutePathEnum.EVENT}/${eventId}`));
 		openSuccess.value = false;
-	}, 1000);
+	}, 1200);
 };
 
 if (id !== 'new') {

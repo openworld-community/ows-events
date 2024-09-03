@@ -90,8 +90,6 @@ const onButtonClick = async () => {
 const clearFilters = async () => {
 	filterStore.$patch({
 		filters: {
-			city: '',
-			//searchLine: '',
 			date: [],
 			tags: []
 		}

@@ -52,5 +52,18 @@ export default {
 	limitation_of_liability: {
 		title: 'Limitation of liability',
 		description: 'Limitation of liability'
+	},
+	city: {
+		title: {
+			first: 'Afisha {city}',
+			second: 'Events in'
+		},
+		description:
+			'Find or create an event with our poster in {country}. Concerts, theaters, performances, master classes, offline and online - always be up to date with the latest events.'
+	},
+	country: {
+		title: 'Events in {country} - concerts, festivales, stendups, networking, markets',
+		description:
+			'Find or create an event with our poster in {country}. Concerts, theaters, performances, master classes, sports activities, offline and online - always be up to date with the latest events.'
 	}
 };

@@ -43,7 +43,7 @@ useHead({
 		},
 		...langRefs
 	],
-	title: t('meta.default_title'),
+	title: `${t('meta.default_title.first')} | ${t('meta.default_title.second')}`,
 	meta: [
 		{
 			name: 'description',

@@ -1,13 +1,13 @@
 export default {
 	notType: 'Wrong type',
 	matches: {
-		url: 'The value entered must be a valid link',
+		url: 'Enter a valid link',
 		email: '',
 		password: ''
 	},
 	required: {
 		price: {
-			val: 'Enter positive integer number',
+			val: 'Enter a number',
 			currency: 'Choose currency'
 		},
 		location: {
@@ -20,7 +20,8 @@ export default {
 		description: 'Description is required',
 		startDate: 'Start date is required',
 		startTime: 'Start time is required',
-		endTime: 'Enter send date'
+		endTime: 'Enter send date',
+		url: 'Link is a required field'
 	},
 	max: {
 		tags: 'Number of tags should be no more then {count}',
@@ -45,8 +46,7 @@ export default {
 		endTime: 'End time can not be less then start time',
 		price: {
 			bitcoin: 'Maximum number of characters exceeded',
-			typicalCurrency: 'Maximum number of characters exceeded',
-			val: 'Price should be positive integer number'
+			typicalCurrency: 'Maximum number of characters exceeded'
 		}
 	},
 	image: {

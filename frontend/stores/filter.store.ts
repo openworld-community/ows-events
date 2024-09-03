@@ -1,18 +1,35 @@
 import { defineStore } from 'pinia';
 import type { City, Country } from '../../common/types/location';
 import type { EventOnPoster } from '../../common/types/event';
+import { countries as supportedCountries } from '../../common/const/supportedCountries';
 import type { Tag } from '../../common/const/tags';
+import { getFirstDateFromFilters, getSecondDateFromFilters } from '~/utils/dates';
+import { RouteNameEnum } from '~/constants/enums/route';
 
 export type LocaleKey = 'en' | 'ru';
 
-export type UsedCitiesInternType = { LocaleKey: Country; cities: { LocaleKey: City }[] };
+export type usedCitiesKeys = LocaleKey | 'countryCode';
+
+type CitiesType = {
+	[key in LocaleKey]: City;
+};
+type CountriesPartType = {
+	['countryCode']: Country;
+};
+
+export type UsedCitiesInternType = CitiesType & CountriesPartType[];
+
+export type UsedLocationType = {
+	countries: Country[];
+	cities: UsedCitiesInternType;
+};
 
 export interface FilterStore {
 	usedCountries: { label: string; value: string }[];
 	usedCities: { label: string; value: string }[];
 	usedTags: string[];
 	filters: {
-		city: City;
+		//	city: City;
 		//searchLine: string;
 		tags: Tag[];
 		date: Date[];
@@ -20,6 +37,14 @@ export interface FilterStore {
 	filteredEvents: EventOnPoster[];
 	loading: boolean;
 }
+
+const getTagsFromQuery = (queryTags: string | undefined, routeName: string) => {
+	if (routeName !== RouteNameEnum.HOME) return [];
+	if (!queryTags) return [];
+	getFirstQuery(routeName)
+		.split(', ')
+		.filter((item) => item !== '');
+};
 
 export const useFilterStore = defineStore('filter', {
 	state: (): FilterStore => {
@@ -29,15 +54,18 @@ export const useFilterStore = defineStore('filter', {
 			usedCountries: [],
 			usedTags: [],
 			filters: {
-				city: getFirstQuery(route.query.city) ?? '',
+				//	city: getFirstQuery(route.query.city) ?? '',
 				//	searchLine: getFirstQuery(route.query.search) ?? '',
-				tags:
-					getFirstQuery(route.query.tags)
-						.split(', ')
-						.filter((item) => item !== '') ?? [],
+				tags: getTagsFromQuery(getFirstQuery(route.query.tags), route.name as string),
 				date: [
-					getDateFromQuery(getFirstQuery(route.query.startDate)) ?? undefined,
-					getDateFromQuery(getFirstQuery(route.query.endDate)) ?? undefined
+					getDateFromQuery(
+						getFirstQuery(route.query.startDate),
+						getRouteName(route.name as string)
+					) ?? undefined,
+					getDateFromQuery(
+						getFirstQuery(route.query.endDate),
+						getRouteName(route.name as string)
+					) ?? undefined
 				]
 			},
 			filteredEvents: undefined,
@@ -49,27 +77,14 @@ export const useFilterStore = defineStore('filter', {
 		async getFilteredEvents() {
 			if (process.server) return;
 
-			// явно приводим к Date и ставим точное время для каждой из дат
 			// начало ивента считаем от 00:00:00, конец от 23:59:59
-			// Date.setHours(hours: number, min?: number, sec?: number, ms?: number): number
-			const startDate = new Date(this.filters?.date[0]).setHours(0, 0, 0);
-			const endDate = new Date(this.filters?.date[1]).setHours(23, 59, 59);
-
-			//Приводим таймзону времени устройства юзера к миллисекундам
-			// dayjs(startDate).utc(true)
-			// dayjs(endDate).utc(true) можно сделать так, но понятнее не сильно становится
-			const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
-
-			// Перевод в UTC 0
-			const startDateTS = startDate ? startDate - timezoneOffset : null;
-			const endDateTS = endDate ? endDate - timezoneOffset : null;
 
 			const { data: posterEvents } = await apiRouter.filters.findEvents.useQuery({
 				data: {
 					query: {
 						...this.filters,
-						startDate: startDateTS,
-						endDate: endDateTS
+						startDate: getFirstDateFromFilters(this.filters?.date[0]),
+						endDate: getSecondDateFromFilters(this.filters?.date[1])
 					}
 				}
 			});
@@ -82,22 +97,17 @@ export const useFilterStore = defineStore('filter', {
 			if (process.server) return;
 			const { $i18n } = useNuxtApp();
 			const lang = $i18n.locale.value;
-			const { data: usedCitiesIntern } = await apiRouter.filters.getUsedCities.useQuery({});
+			const { data: usedLocations } = await apiRouter.filters.getUsedLocations.useQuery({});
+			//	console.log('USED_CITIES', usedCities);
 			//	this.usedCities = usedCitiesIntern.value;
-			this.usedCities = usedCitiesIntern.value
-				.reduce((acc, rec) => {
-					acc = [...acc, ...rec.cities];
+			this.usedCities = usedLocations.value.cities.map((objCity) => {
+				return { value: objCity['en'], label: objCity[lang] };
+			});
 
-					return acc;
-				}, [])
-				.map((objCity) => {
-					return { value: objCity['en'], label: objCity[lang] };
-				});
-
-			this.usedCountries = usedCitiesIntern.value.map((obj) => {
+			this.usedCountries = usedLocations.value.countries.map((countryName) => {
 				return {
-					value: obj['en'],
-					label: obj[lang]
+					['label']: supportedCountries[countryName][lang],
+					['value']: supportedCountries[countryName]['en']
 				};
 			});
 

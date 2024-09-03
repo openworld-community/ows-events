@@ -80,6 +80,13 @@ export type SearchEventPayload = {
 	tags?: (typeof Tags)[];
 };
 
+export type SearchEventCityPayload = {
+	searchLine?: string;
+	startDate?: number;
+	endDate?: number;
+	tags?: (typeof Tags)[];
+};
+
 export type EventPrice = {
 	maxValue: number | null;
 	value: number | null;

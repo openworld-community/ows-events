@@ -71,7 +71,6 @@ getMeta({
 					class="button__success--filled"
 					button-kind="success"
 					:itemprop="SeoItempropGlobalEnum.URL"
-					font-size="10px"
 				/>
 			</div>
 		</div>

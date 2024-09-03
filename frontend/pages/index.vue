@@ -23,7 +23,6 @@ watch(
 		if (Object.keys(value).length) {
 			sendAnalytics.search({
 				search_term: route.fullPath.split('?')[1],
-				city: value.city ? getFirstQuery(value.city) : '',
 				tags: value.tags ? getFirstQuery(value.tags) : ''
 			});
 		}
@@ -55,6 +54,7 @@ const onButtonClick = async () => {
 					v-if="mobile"
 					class="main-page__location"
 				/> -->
+
 			<HomeFilters class="main-page__filter" />
 		</div>
 
@@ -84,6 +84,7 @@ const onButtonClick = async () => {
 }
 .main-page {
 	position: relative;
+	width: 100%;
 	@media (min-width: 768px) {
 		padding-top: 0;
 	}
@@ -116,26 +117,21 @@ const onButtonClick = async () => {
 
 	&__title {
 		max-width: 400px;
-		font-size: var(--font-size-XXL);
-		line-height: 40px;
 		text-align: center;
 		word-wrap: break-word;
 		color: var(--color-white);
 		padding-top: 28px;
 		margin-bottom: 24px;
+		letter-spacing: -0.3px;
 
 		@media (min-width: 768px) {
-			max-width: 600px;
-			font-size: 50px;
-			line-height: 60px;
+			max-width: 500px;
 			padding-top: 0;
 			margin-bottom: 40px;
 		}
 
 		@media (min-width: 1440px) {
 			max-width: 900px;
-			font-size: 70px;
-			line-height: 80px;
 			margin-bottom: 60px;
 		}
 	}
@@ -177,15 +173,5 @@ const onButtonClick = async () => {
 			}
 		}
 	}
-}
-
-.add-event-button {
-	position: sticky;
-	bottom: 20px;
-	right: 0;
-	margin-left: auto;
-	margin-right: 20px;
-	margin-bottom: var(--space-related-items);
-	z-index: 1;
 }
 </style>

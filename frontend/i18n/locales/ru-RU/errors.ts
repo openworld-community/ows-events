@@ -43,8 +43,8 @@ export default {
 		'Не удалось найти часовой пояс по указанным параметрам',
 	[CommonErrorsEnum.USER_DOES_NOT_EXIST]: 'Пользователь не найден',
 	[CommonErrorsEnum.USER_ALREADY_EXIST]: 'Пользователь уже существует',
-	[CommonErrorsEnum.PASSWORD_TOO_SHORT]: 'Пароль должен быть длиннее 4 символов',
-	[CommonErrorsEnum.PASSWORD_TOO_LONG]: 'Пароль не должен превышать 24 символа',
+	[CommonErrorsEnum.PASSWORD_TOO_SHORT]: 'Пароль должен быть длиннее {count} символов',
+	[CommonErrorsEnum.PASSWORD_TOO_LONG]: 'Пароль не должен превышать {count} символа',
 	[CommonErrorsEnum.PASSWORD_MISMATCH]: 'Пароль не совпадает',
 	[CommonErrorsEnum.INVALID_EMAIL]: 'Введите действительный адрес электронной почты',
 	[CommonErrorsEnum.REQUIRED_FIELD]: 'Это поле обязательно',
@@ -53,5 +53,9 @@ export default {
 	[CommonErrorsEnum.ERROR_PAGE_NOT_FOUND]: 'не найдена',
 	[CommonErrorsEnum.ERROR_PAGE_GO_HOME]: 'Вернуться на Главную',
 	[CommonErrorsEnum.ERROR_PAGE_SERVER_ERROR]: 'Неизвестная Ошибка Сервера',
-	[CommonErrorsEnum.NOT_FOUND_BY_ID]: 'Мероприятие с ID {id} не найдено'
+	[CommonErrorsEnum.NOT_FOUND_BY_ID]: 'Мероприятие с ID {id} не найдено',
+	[CommonErrorsEnum.NO_EVENTS_IN_CITY]: 'Мероприятий в городе не найдено',
+	[CommonErrorsEnum.NO_EVENTS_IN_COUNTRY]: 'Мероприятий в стране не найдено',
+	[CommonErrorsEnum.CITY_NOT_FOUND]: 'Город {city} не найден',
+	[CommonErrorsEnum.COUNTRY_NOT_FOUND]: 'Страна {country} не найдена'
 };

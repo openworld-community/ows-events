@@ -35,6 +35,8 @@ export type IconName =
 	| 'trash'
 	| 'user'
 	| 'donate/patreon'
+	| 'donate/boosty'
+	| 'donate/paypal'
 	| 'donate/bitcoin'
 	| 'donate/ethereum'
 	| 'donate/usdc'

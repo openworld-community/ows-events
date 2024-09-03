@@ -3,6 +3,8 @@ import {
 	addEvent,
 	deleteEvent,
 	findEvents,
+	findEventsByCity,
+	findEventsByCountry,
 	getEvent,
 	getEvents,
 	getMyEvents,
@@ -12,6 +14,8 @@ import {
 	IAddEventRoute,
 	IDeleteEventRoute,
 	IFindEventRoute,
+	IFindEventsCityRoute,
+	IFindEventsCountryRoute,
 	IGetEventRoute,
 	IGetEventsRoute,
 	IGetMyEventsRoute,
@@ -20,6 +24,8 @@ import {
 import {
 	addEventSchema,
 	deleteEventSchema,
+	findEventsByCitySchema,
+	findEventsByCountrySchema,
 	findEventsSchema,
 	getEventSchema,
 	getEventsSchema,
@@ -81,5 +87,15 @@ export const eventsApi = async (fastify: FastifyInstance) => {
 	fastify.post<IFindEventRoute>('/find', {
 		schema: findEventsSchema,
 		handler: findEvents
+	});
+
+	fastify.post<IFindEventsCityRoute>('/city/:cityName', {
+		schema: findEventsByCitySchema,
+		handler: findEventsByCity
+	});
+
+	fastify.post<IFindEventsCountryRoute>('/country/:countryName', {
+		schema: findEventsByCountrySchema,
+		handler: findEventsByCountry
 	});
 };

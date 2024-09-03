@@ -141,7 +141,9 @@ const onButtonClick = async () => {
 useHead({
 	script: [
 		posterEvents.value
+
 			? getJSONEventList(posterEvents.value, locale.value, route.path)
+
 			: undefined
 	]
 });

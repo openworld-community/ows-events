@@ -12,7 +12,7 @@ type MetaData = {
 
 export const getMeta = (meta: MetaData) => {
 	const route = useRoute();
-	const { t } = useI18n();
+	const { locale, t } = useI18n();
 	return useSeoMeta({
 		title: meta.title as string,
 		description: (meta.description as string) ?? t('meta.default_description'),
@@ -20,12 +20,13 @@ export const getMeta = (meta: MetaData) => {
 		ogType: 'website',
 		ogTitle: meta.title as string,
 		ogDescription: (meta.description as string) ?? t('meta.default_description'),
-		ogImage: (meta.image as string) ?? DEFAULT_IMAGE_URL,
+		ogImage: (meta.image as string) ?? `${DEFAULT_IMAGE_URL}-${locale.value}.jpeg`,
 		ogImageWidth: 1200,
 		ogImageHeight: 630,
+		ogLocale: locale.value,
 		ogUrl: VITE_DOMAIN + route.path,
 		twitterCard: 'summary_large_image',
-		twitterImage: meta.image ?? DEFAULT_IMAGE_URL,
+		twitterImage: meta.image ?? `${DEFAULT_IMAGE_URL}-${locale.value}.jpeg`,
 		twitterTitle: meta.title as string,
 		twitterDescription: (meta.description as string) ?? t('meta.default_description'),
 		twitterSite: t('meta.site_name')

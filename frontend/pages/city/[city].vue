@@ -1,5 +1,14 @@
 <script setup lang="ts">
+import { useModal } from 'vue-final-modal';
+import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
+
+import { useUserStore } from '../../stores/user.store';
+import { RoutePathEnum } from '../../constants/enums/route';
 const route = useRoute();
+
+const userStore = useUserStore();
+
+const localePath = useLocalePath();
 
 const { locale, t } = useI18n();
 const mobile = inject('mobile');
@@ -114,6 +123,21 @@ const filterCountriesOptions = computed(() => {
 	return filtered;
 });
 
+const {
+	open: openNeedAuthorizeModal,
+	close: closeNeedAuthorizeModal,
+	patchOptions: needAuthorizeModalPatch
+} = useModal({ component: NeedAuthorize });
+needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
+
+const onButtonClick = async () => {
+	if (userStore.isAuthorized) {
+		await navigateTo(localePath(`${RoutePathEnum.EVENT_EDIT}new`));
+	} else {
+		await openNeedAuthorizeModal();
+	}
+};
+
 useHead({
 	script: [
 		posterEvents.value
@@ -171,6 +195,16 @@ watch(
 				"
 			/>
 		</SearchCardsWrapper>
+		<CommonButton
+			class="add-event-button"
+			button-kind="success"
+			is-round
+			icon-name="plus"
+			:alt="$t('home.button.add_event_aria')"
+			:title="$t('home.button.add_event_aria')"
+			aria-haspopup="true"
+			@click="onButtonClick"
+		/>
 	</main>
 </template>
 

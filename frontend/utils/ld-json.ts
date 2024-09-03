@@ -6,16 +6,16 @@ import type { LocationQuery } from '#vue-router';
 import { convertEventDateToISOString } from './dates';
 
 
-export const getJSONEventList = (
-	posterEvents: EventOnPoster[],
-	locale: string,
-	query?: LocationQuery
-) => {
+export const getJSONEventList = (posterEvents: EventOnPoster[], locale: string, path: string) => {
+
 	return {
 		type: 'application/ld+json',
 		innerHTML: JSON.stringify({
 			'@context': SEO_SCHEMA_BASE_URL,
-			type: 'BreadcrumbList',
+
+			'@type': 'BreadcrumbList',
+			name: 'Event Items',
+
 			itemListElement: posterEvents.map((event, ind) => {
 				return {
 					'@type': 'ListItem',
@@ -26,10 +26,14 @@ export const getJSONEventList = (
 					}
 				};
 			}),
+
+			url: `${VITE_DOMAIN}${path}`,
 			potentialAction: {
 				'@type': 'SearchAction',
-				target: `${VITE_DOMAIN}/${locale}${RoutePathEnum.CITY}?q=${query}`,
-				query: 'nonrequired'
+				target: `${VITE_DOMAIN}${path}?{query}`,
+				query: 'required'
+
+	
 			}
 		})
 	};

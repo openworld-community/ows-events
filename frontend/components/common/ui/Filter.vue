@@ -71,21 +71,21 @@ onMounted(() => {
 	/>
 	<template v-if="filterType === 'select'">
 		<FiltersUiLinkSelectWrapper
-			v-if="!mobile && name === 'city'"
-			:placeholder="$t('city.filters.city.placeholder')"
+			v-if="!mobile"
+			:placeholder="$t(`filters.${name}.placeholder`)"
 			:aria-label="$t(`home.filter.${name}.aria`)"
 			:disabled="list.length === 0"
 		>
 			<FiltersUiListWithoutLabel
 				:options="list"
-				:path="RoutePathEnum.CITY"
+				:path="RoutePathEnum[name.toUpperCase()]"
 			/>
 		</FiltersUiLinkSelectWrapper>
 		<LibraryMobileFilter
 			v-else
-			:placeholder="$t('city.filters.city.placeholder')"
+			:placeholder="$t(`filters.${name}.placeholder`)"
 			:options="list"
-			:path="RoutePathEnum.CITY"
+			:path="RoutePathEnum[name.toUpperCase()]"
 			:title="$t(`home.filter.${name}.title`)"
 			:disabled="list.length === 0"
 		/>

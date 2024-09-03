@@ -68,3 +68,13 @@ type IFindEventsCityRoute = {
 	Reply: EventOnPoster[];
 };
 type IFindEventsCityHandler = IRouteHandler<IFindEventsCityRoute>;
+
+type IFindEventsCountryRoute = {
+	Header: {
+		'accept-language': SupportedLanguages;
+	};
+	Body: SearchEventCityPayload;
+	Params: { countryName: string };
+	Reply: EventOnPoster[];
+};
+type IFindEventsCountryHandler = IRouteHandler<IFindEventsCountryRoute>;

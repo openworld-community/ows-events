@@ -51,28 +51,15 @@ debouncedWatch(
 
 <template>
 	<section class="filters">
-		<div class="filters__wrapper">
-			<CommonUiFilter
-				filter-type="select"
-				name="city"
-				:list="filterStore.usedCities"
-				:disabled="!filterStore.usedCities.length"
-			/>
-			<CommonUiFilter
-				filter-type="date"
-				name="date"
-			/>
-		</div>
-		<div
-			v-if="filterStore.usedTags.length !== 0"
-			class="filters__tags"
-		>
-			<CommonUiFilter
-				name="tags"
-				filter-type="tag"
-				:list="filterStore.usedTags"
-			/>
-		</div>
+		<FiltersContent
+			v-model:model-tags="filterStore.filters.tags"
+			v-model:model-dates="filterStore.filters.date"
+			current-country=""
+			:filter-countries="filterStore.usedCountries"
+			current-city=""
+			:filter-cities="filterStore.usedCities"
+			:tag-list="filterStore.usedTags"
+		/>
 	</section>
 </template>
 

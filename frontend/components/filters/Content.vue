@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import dayjs from 'dayjs';
-
 import type { TagList } from '../../../common/const/tags';
 import { RoutePathEnum } from '~/constants/enums/route';
+import type { PropType } from 'vue';
 
-const route = useRoute();
 const mobile = inject('mobile');
 
-defineProps({
+const props = defineProps({
 	tagList: {
 		type: Array as PropType<TagList>,
 		default: () => []
@@ -16,60 +14,76 @@ defineProps({
 		type: [Array, String, Set] as PropType<string | string[] | { [key: string]: string }[]>,
 		default: () => []
 	},
+	filterCountries: {
+		type: [Array, String, Set] as PropType<string | string[] | { [key: string]: string }[]>,
+		default: () => []
+	},
 	currentCity: {
 		type: String,
 		default: ''
+	},
+	currentCountry: {
+		type: String,
+		default: ''
+	},
+	modelTags: {
+		type: Array as PropType<string[]>,
+		default: () => []
+	},
+	modelDates: {
+		type: Array as PropType<Date[]>,
+		default: () => []
+	}
+});
+const emit = defineEmits(['update:model-tags', 'update:model-dates']);
+
+const tags = computed({
+	get() {
+		return props.modelTags;
+	},
+	set(value) {
+		emit('update:model-tags', value);
 	}
 });
 
-const dates = ref([
-	dayjs(getFirstQuery(route.query.startDate)).toDate() ?? undefined,
-	dayjs(getFirstQuery(route.query.endDate)).toDate() ?? undefined
-]);
-const tags = ref(
-	getFirstQuery(route.query.tags)
-		.split(', ')
-		.filter((item) => item !== '') ?? []
-);
-
-watch(
-	() => tags,
-	async (val) => {
-		await navigateTo({
-			query: {
-				...route.query,
-				tags: val.value.join(', ') || undefined
-			}
-		});
+const dates = computed({
+	get() {
+		return props.modelDates;
 	},
-
-	{ deep: true }
-);
-
-watch(
-	() => dates,
-	async (val) => {
-		await navigateTo({
-			query: {
-				...route.query,
-
-				startDate: val.value[0] ? dayjs(val.value[0]).format('YYYY-MM-DD') : undefined,
-				endDate: val.value[1] ? dayjs(val.value[1]).format('YYYY-MM-DD') : undefined
-			}
-		});
-	},
-
-	{ deep: true }
-);
+	set(value) {
+		emit('update:model-dates', value);
+	}
+});
 </script>
 <template>
 	<div class="main-filters">
 		<FiltersUiLinkSelectWrapper
 			v-if="!mobile"
-			:placeholder="$t('city.filters.city.placeholder')"
+			:placeholder="$t('filters.country.placeholder')"
+			:current-text="currentCountry"
+			:disabled="filterCountries.length === 0"
+			:aria-label="$t(`filters.country.aria`)"
+		>
+			<FiltersUiListWithoutLabel
+				:options="filterCountries"
+				:path="RoutePathEnum.COUNTRY"
+			/>
+		</FiltersUiLinkSelectWrapper>
+		<LibraryMobileFilter
+			v-else
+			:placeholder="$t('filters.country.placeholder')"
+			:options="filterCountries"
+			:path="RoutePathEnum.COUNTRY"
+			:current-text="currentCountry"
+			:title="$t('filters.country.title')"
+			:disabled="filterCountries.length === 0"
+		/>
+		<FiltersUiLinkSelectWrapper
+			v-if="!mobile"
+			:placeholder="$t('filters.city.placeholder')"
 			:current-text="currentCity"
 			:disabled="filterCities.length === 0"
-			:aria-label="$t(`home.filter.city.aria`)"
+			:aria-label="$t(`filters.city.aria`)"
 		>
 			<FiltersUiListWithoutLabel
 				:options="filterCities"
@@ -78,11 +92,11 @@ watch(
 		</FiltersUiLinkSelectWrapper>
 		<LibraryMobileFilter
 			v-else
-			:placeholder="$t('city.filters.city.placeholder')"
+			:placeholder="$t('filters.city.placeholder')"
 			:options="filterCities"
 			:path="RoutePathEnum.CITY"
 			:current-text="currentCity"
-			:title="$t('home.filter.city.title')"
+			:title="$t('filters.city.title')"
 			:disabled="filterCities.length === 0"
 		/>
 
@@ -94,8 +108,8 @@ watch(
 			appearance="no-border"
 			class="filter"
 			name="date"
-			:placeholder="$t(`home.filter.date.placeholder`)"
-			:aria-label="$t(`home.filter.date.aria`)"
+			:placeholder="$t(`filters.date.placeholder`)"
+			:aria-label="$t(`filters.date.aria`)"
 			:min-date="new Date(roundTime(Date.now(), 10))"
 		/>
 	</div>
@@ -108,7 +122,8 @@ watch(
 		/>
 	</div>
 </template>
-<style lang="less" scoped>
+
+<style scoped lang="less">
 .main-filters {
 	--gap: 10px;
 	display: grid;
@@ -123,7 +138,7 @@ watch(
 		align-items: center;
 		margin-top: 0;
 		gap: var(--gap);
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 1fr 1fr 1fr;
 
 		&:deep(.calendar) {
 			max-width: 100%;
@@ -137,10 +152,11 @@ watch(
 		&:deep(.input__field),
 		&:deep(.popover__trigger--primary) {
 			height: 72px;
-			//border-color: transparent;
+			position: relative;
 		}
 
-		&:deep(.calendar):before {
+		&:deep(.calendar):before,
+		&:deep(.popover__trigger--primary):not(:first-child):before {
 			width: 1px;
 			content: '';
 			background-color: var(--color-text-secondary);
@@ -157,11 +173,16 @@ watch(
 	}
 }
 @media (min-width: 1440px) {
-	// прозраные сепараторы при фокусе первые два отвечают за пикер
-
+	// прозраные сепараторы при фокусе or data-state=open
+	.main-filters:deep(.popover__trigger--primary:focus-within)::before,
+	.main-filters:deep(.popover__trigger--primary[data-state='open'])::before,
+	.main-filters:deep(.popover__trigger--primary:focus-within + .popover__trigger--primary:before),
+	.main-filters:deep(
+			.popover__trigger--primary[data-state='open'] + div + .popover__trigger--primary:before
+		) {
+		background-color: transparent;
+	}
 	.filter:focus-within::before,
-	.filter:focus-within + .filter::before,
-	.filter:has(.input__field:focus) + .filters__wrapper--mobile > .filter:first-child::before,
 	.popover__trigger--primary[data-state='open'] + div + .filter::before,
 	.popover__trigger--primary:focus-within + .filter::before {
 		background-color: transparent;

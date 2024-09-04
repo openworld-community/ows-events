@@ -204,3 +204,34 @@ export const findEventsByCitySchema = {
 	},
 	security: [{ authJWT: [] }]
 };
+
+export const findEventsByCountrySchema = {
+	description: 'find events by country',
+	tags: ['Events'],
+	summary: 'Find events by country',
+	response: {
+		200: {
+			type: 'array',
+			items: ItemEvent
+		}
+	},
+	params: {
+		type: 'object',
+		properties: {
+			countryName: {
+				type: 'string',
+				description: 'Country in which event hold'
+			}
+		}
+	},
+	body: {
+		type: 'object',
+		properties: {
+			searchLine: { type: 'string' },
+			tags: { type: 'array', items: { type: 'string' } },
+			startDate: { type: 'number' },
+			endDate: { type: 'number' }
+		}
+	},
+	security: [{ authJWT: [] }]
+};

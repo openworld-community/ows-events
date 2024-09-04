@@ -1,6 +1,7 @@
 import { Timezone } from '@common/types/location';
 import { IRouteHandler } from '../../types';
 import { SupportedLanguages } from '../../../../../common/const';
+import { ICity } from '../../../models/cities.model';
 
 type IGetCountriesRouteProps = {
 	Reply: Promise<string[]>;
@@ -49,3 +50,11 @@ type IGetUsedCitiesRouteProps = {
 	Body: { country: string };
 };
 type IGetUsedCitiesHandlerProps = IRouteHandler<IGetUsedCitiesRouteProps>;
+
+type IGetUsedLocationsRouteProps = {
+	Reply: Promise<{
+		countries: string[];
+		cities: ICity[];
+	}>;
+};
+type IGetUsedLocationsHandlerProps = IRouteHandler<IGetUsedLocationsRouteProps>;

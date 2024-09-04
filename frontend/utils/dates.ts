@@ -124,14 +124,14 @@ export const duration = (
 
 export const convertToLocaleString = (epoch: number, timezoneName?: string) => {
 	const { locale } = useI18n();
-
-	return new Date(epoch).toLocaleString(locale.value, {
+	const date = new Intl.DateTimeFormat(locale.value, {
 		month: 'long',
 		day: 'numeric',
 		hour: '2-digit',
 		minute: '2-digit',
 		timeZone: timezoneName ?? 'UTC'
-	});
+	}).format(epoch);
+	return date;
 };
 
 export const convertEventDateToLocaleString = (
@@ -147,6 +147,28 @@ export const convertEventDateToLocaleString = (
 	} else {
 		time = epoch;
 		return convertToLocaleString(time);
+	}
+};
+
+export const convertToISOString = (epoch: number, timezoneOffset?: string) => {
+	const result = dayjs(epoch).utc().format('YYYY-MM-DDTHH:mm:ss');
+	return timezoneOffset ? `${result}${timezoneOffset}` : result;
+};
+
+export const convertEventDateToISOString = (
+	epoch: number,
+	isOnline: boolean,
+	eventTimezone: Timezone
+) => {
+	let time: number;
+	if (isOnline) {
+		// учитывает разницу между часовым поясом мероприятия и пользователя
+		time = epoch - parseInt(eventTimezone.timezoneOffset) * 1000 * 60 * 60;
+		return convertToISOString(time, eventTimezone.timezoneOffset);
+	} else {
+		time = epoch;
+
+		return convertToISOString(time);
 	}
 };
 

@@ -77,6 +77,10 @@ getMeta({
 	image: eventImage.value
 });
 
+useHead({
+	script: [posterEvent.value ? getJSONEvent(posterEvent.value) : undefined]
+});
+
 const deleteCard = async () => {
 	// если запрос проходит, то ничего не приходит, т.е. может придти только error
 	const { error } = await apiRouter.events.delete.useMutation({ data: { id } });

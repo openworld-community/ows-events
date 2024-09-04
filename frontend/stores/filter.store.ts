@@ -1,13 +1,28 @@
 import { defineStore } from 'pinia';
 import type { City, Country } from '../../common/types/location';
 import type { EventOnPoster } from '../../common/types/event';
+import { countries as supportedCountries } from '../../common/const/supportedCountries';
 import type { Tag } from '../../common/const/tags';
 import { getFirstDateFromFilters, getSecondDateFromFilters } from '~/utils/dates';
 import { RouteNameEnum } from '~/constants/enums/route';
 
 export type LocaleKey = 'en' | 'ru';
 
-export type UsedCitiesInternType = { [key in LocaleKey]: City }[];
+export type usedCitiesKeys = LocaleKey | 'countryCode';
+
+type CitiesType = {
+	[key in LocaleKey]: City;
+};
+type CountriesPartType = {
+	['countryCode']: Country;
+};
+
+export type UsedCitiesInternType = CitiesType & CountriesPartType[];
+
+export type UsedLocationType = {
+	countries: Country[];
+	cities: UsedCitiesInternType;
+};
 
 export interface FilterStore {
 	usedCountries: { label: string; value: string }[];
@@ -82,17 +97,17 @@ export const useFilterStore = defineStore('filter', {
 			if (process.server) return;
 			const { $i18n } = useNuxtApp();
 			const lang = $i18n.locale.value;
-			const { data: usedCitiesIntern } = await apiRouter.filters.getUsedCities.useQuery({});
+			const { data: usedLocations } = await apiRouter.filters.getUsedLocations.useQuery({});
 			//	console.log('USED_CITIES', usedCities);
 			//	this.usedCities = usedCitiesIntern.value;
-			this.usedCities = usedCitiesIntern.value.map((objCity) => {
+			this.usedCities = usedLocations.value.cities.map((objCity) => {
 				return { value: objCity['en'], label: objCity[lang] };
 			});
 
-			this.usedCountries = usedCitiesIntern.value.map((obj) => {
+			this.usedCountries = usedLocations.value.countries.map((countryName) => {
 				return {
-					value: obj['en'],
-					label: obj[lang]
+					['label']: supportedCountries[countryName][lang],
+					['value']: supportedCountries[countryName]['en']
 				};
 			});
 

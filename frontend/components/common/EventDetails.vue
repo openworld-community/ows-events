@@ -9,6 +9,7 @@ import {
 	SeoItemTypeEnum,
 	SeoItempropPriceEnum
 } from '../../constants/enums/seo';
+import type { Timezone } from '../../../common/types/location';
 
 const props = defineProps({
 	location: {
@@ -23,14 +24,15 @@ const props = defineProps({
 		type: Boolean,
 		default: false
 	},
-	startDate: {
-		type: String,
-		default: ''
+	date: {
+		type: Number,
+		required: true
 	},
-	endDate: {
-		type: String,
-		default: ''
+	duration: {
+		type: Number,
+		default: 0
 	},
+	timezone: { type: Object as PropType<Timezone>, default: null },
 	price: {
 		type: [Object, null] as PropType<EventPrice | null>,
 		required: true,
@@ -47,38 +49,38 @@ const component = computed(() => {
 <template>
 	<ul class="details">
 		<!--	Дата	-->
-		<ClientOnly>
-			<li
-				v-if="startDate"
-				class="details__item"
-				:itemtype="SeoItemTypeEnum.DATE"
+
+		<li
+			class="details__item"
+			:itemtype="SeoItemTypeEnum.DATE"
+		>
+			<CommonIcon
+				name="calendar"
+				class="details__icon"
+				color="var(--color-accent-green-main)"
+			/>
+			<span
+				class="details__text"
+				:itemprop="SeoItempropEventEnum.START_DATE"
+				:content="convertEventDateToISOString(date, isOnline, timezone)"
 			>
-				<CommonIcon
-					name="calendar"
-					class="details__icon"
-					color="var(--color-accent-green-main)"
-				/>
-				<span
-					class="details__text"
-					:itemprop="SeoItempropEventEnum.START_DATE"
-				>
-					{{ startDate }}
-				</span>
-				<span
-					v-if="endDate"
-					class="details__text"
-				>
-					&nbsp;-&nbsp;
-				</span>
-				<span
-					v-if="endDate"
-					class="details__text"
-					:itemprop="SeoItempropEventEnum.END_DATE"
-				>
-					{{ endDate }}
-				</span>
-			</li>
-		</ClientOnly>
+				{{ convertEventDateToLocaleString(date, isOnline, timezone) }}
+			</span>
+			<span
+				v-if="duration"
+				class="details__text"
+			>
+				&nbsp;-&nbsp;
+			</span>
+			<span
+				v-if="duration"
+				class="details__text"
+				:itemprop="SeoItempropEventEnum.END_DATE"
+				:content="convertEventDateToISOString(date, isOnline, timezone)"
+			>
+				{{ convertEventDateToLocaleString(date + duration * 1000, isOnline, timezone) }}
+			</span>
+		</li>
 
 		<!-- Цена -->
 		<li class="details__item">
@@ -112,12 +114,14 @@ const component = computed(() => {
 				<span
 					:itemprop="SeoItempropPriceEnum.PRICE"
 					class="details__text"
+					:content="price.value"
 				>
 					{{ formatPrice(price) }}
 				</span>
 				<span
 					class="visually-hidden"
 					:itemprop="SeoItempropPriceEnum.CURRENCY"
+					:content="price.currency"
 				>
 					{{ price.currency }}
 				</span>
@@ -159,7 +163,7 @@ const component = computed(() => {
 					class="details__icon"
 					color="var(--color-accent-green-main)"
 				/>
-				<p>
+				<span>
 					<span
 						v-if="props.location.country"
 						:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
@@ -179,7 +183,7 @@ const component = computed(() => {
 						:itemprop="SeoItempropLocationEnum.ADDRESS"
 						>, {{ location.address }}
 					</span>
-				</p>
+				</span>
 			</component>
 		</li>
 	</ul>
@@ -190,6 +194,7 @@ const component = computed(() => {
 	display: flex;
 	width: 100%;
 	flex-direction: column;
+	overflow: hidden;
 
 	&__item,
 	&__item > a,

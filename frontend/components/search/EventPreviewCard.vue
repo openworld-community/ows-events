@@ -1,36 +1,14 @@
 <script setup lang="ts">
 import type { EventOnPoster } from '../../../common/types';
-import { SeoItempropEventEnum, SeoItempropGlobalEnum } from '../../constants/enums/seo';
+import { SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { RoutePathEnum } from '../../constants/enums/route';
 import { trimString } from '../../utils/trimString';
-import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
 
-const props = defineProps<{ eventData: EventOnPoster }>();
+defineProps<{ eventData: EventOnPoster }>();
 const { t } = useI18n();
 const mobile = inject('mobile');
 const { sendAnalytics } = useSendTrackingEvent();
-
-const startDate = ref(
-	convertEventDateToLocaleString(
-		props.eventData.date,
-		props.eventData.isOnline,
-		props.eventData.timezone
-	)
-);
-
-const endDate = computed(() => {
-	// проверка на однодневный ивент
-	if (props.eventData.date + props.eventData.durationInSeconds * 1000 === props.eventData.date) {
-		return '';
-	}
-
-	return convertEventDateToLocaleString(
-		props.eventData.date + props.eventData.durationInSeconds * 1000,
-		props.eventData.isOnline,
-		props.eventData.timezone
-	);
-});
 </script>
 
 <template>
@@ -46,7 +24,7 @@ const endDate = computed(() => {
 				460
 			)
 		"
-		:itemprop="SeoItempropGlobalEnum.URL"
+		itemprop="item"
 		@click="
 			sendAnalytics.clickEvent({
 				id_creator: eventData.creatorId,
@@ -99,16 +77,15 @@ const endDate = computed(() => {
 					:tag-list="eventData.tags"
 					class="card-description__tags"
 				/>
-				<h2
+				<h3
 					class="card-description__title"
-					:itemprop="SeoItempropEventEnum.NAME"
+					itemprop="name"
 				>
 					{{ eventData.title }}
-				</h2>
+				</h3>
 				<p
 					v-if="eventData.organizer"
 					class="card-description__author"
-					:itemprop="SeoItempropEventEnum.ORGANIZER"
 				>
 					{{ eventData.organizer }}
 				</p>
@@ -116,11 +93,12 @@ const endDate = computed(() => {
 			<div class="card-description__bottom">
 				<CommonEventDetails
 					class="card-description__details"
-					:price="eventData?.price"
+					:price="eventData.price"
+					:date="eventData.date"
+					:duration="eventData.durationInSeconds"
 					:is-online="eventData.isOnline"
 					:location="eventData.location"
-					:start-date="startDate"
-					:end-date="endDate"
+					:timezone="eventData.timezone"
 				/>
 				<CommonTagList
 					v-if="mobile && eventData.tags"
@@ -201,6 +179,7 @@ const endDate = computed(() => {
 		width: 100%;
 		flex-direction: column;
 		padding: 12px 16px 18px;
+		overflow: hidden;
 
 		@media (min-width: 768px) {
 			height: inherit;
@@ -229,7 +208,7 @@ const endDate = computed(() => {
 		&__title {
 			//TODO: пока верстка только мобилки
 			max-width: 480px;
-			word-wrap: break-word;
+			overflow-wrap: break-word;
 			font-size: var(--font-size-L);
 			font-weight: var(--font-weight-bold);
 			line-height: 24px;

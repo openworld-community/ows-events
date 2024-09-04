@@ -1,13 +1,17 @@
 <script setup lang="ts">
+import type { LocationQuery } from '#vue-router';
+
+//if we need use with object:
+//:to="localePath({ path: `/city/${belg}`, query: route.query })"
 const localePath = useLocalePath();
 type LinkObjectType = {
-	name?: string;
+	query?: LocationQuery;
 	path?: string;
 };
 defineProps({
 	to: {
 		// если это ссылка
-		type: [String, Object] as PropType<string | LinkObjectType>,
+		type: [String, Object] as PropType<String | LinkObjectType>,
 		default: ''
 	},
 	isExternalLink: {

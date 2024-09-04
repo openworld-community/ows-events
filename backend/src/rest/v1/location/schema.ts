@@ -94,16 +94,35 @@ export const getUsedCitiesSchema = {
 				properties: {
 					en: { type: 'string' },
 					ru: { type: 'string' },
-					cities: {
-						type: 'array',
-						items: {
-							type: 'object',
-							properties: {
-								ru: { type: 'string' },
-								en: { type: 'string' }
-							}
+					countryCode: { type: 'string' }
+				}
+			}
+		}
+	}
+};
+
+export const getUsedLocationsSchema = {
+	description: 'get used locations',
+	tags: ['Location'],
+	summary: 'Get used locations',
+	response: {
+		200: {
+			type: 'object',
+			properties: {
+				cities: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							en: { type: 'string' },
+							ru: { type: 'string' },
+							countryCode: { type: 'string' }
 						}
 					}
+				},
+				countries: {
+					type: 'array',
+					items: { type: 'string' }
 				}
 			}
 		}

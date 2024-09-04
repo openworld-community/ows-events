@@ -23,7 +23,6 @@ watch(
 		if (Object.keys(value).length) {
 			sendAnalytics.search({
 				search_term: route.fullPath.split('?')[1],
-				city: value.city ? getFirstQuery(value.city) : '',
 				tags: value.tags ? getFirstQuery(value.tags) : ''
 			});
 		}
@@ -49,13 +48,13 @@ const onButtonClick = async () => {
 
 <template>
 	<main class="main-page">
-		<HomeIdentity />
 		<div class="main-page__top">
 			<h1 class="main-page__title">{{ $t('home.title') }}</h1>
 			<!-- <HomeUserLocation
 					v-if="mobile"
 					class="main-page__location"
 				/> -->
+
 			<HomeFilters class="main-page__filter" />
 		</div>
 
@@ -83,27 +82,11 @@ const onButtonClick = async () => {
 
 	font-size: 24px;
 }
-
 .main-page {
 	position: relative;
+	width: 100%;
 	@media (min-width: 768px) {
 		padding-top: 0;
-	}
-
-	&__identity {
-		display: flex;
-		width: 100%;
-		padding-left: var(--padding-side);
-		padding-right: var(--padding-side);
-		margin-bottom: 20px;
-
-		&__mobile {
-			display: flex;
-			width: 100%;
-			padding-left: var(--padding-side);
-			padding-right: var(--padding-side);
-			justify-content: center;
-		}
 	}
 
 	&__top {
@@ -139,6 +122,7 @@ const onButtonClick = async () => {
 		color: var(--color-white);
 		padding-top: 28px;
 		margin-bottom: 24px;
+		letter-spacing: -0.3px;
 
 		@media (min-width: 768px) {
 			max-width: 500px;
@@ -189,15 +173,5 @@ const onButtonClick = async () => {
 			}
 		}
 	}
-}
-
-.add-event-button {
-	position: sticky;
-	bottom: 20px;
-	right: 0;
-	margin-left: auto;
-	margin-right: 20px;
-	margin-bottom: var(--space-related-items);
-	z-index: 1;
 }
 </style>

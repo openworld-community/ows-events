@@ -14,6 +14,10 @@ const props = defineProps({
 	description: {
 		type: String,
 		default: ''
+	},
+	disabled: {
+		type: Boolean,
+		default: false
 	}
 });
 const open = ref(false);
@@ -34,7 +38,10 @@ const model = computed({
 
 <template>
 	<DialogRoot v-model:open="model">
-		<DialogTrigger>
+		<DialogTrigger
+			:disabled="disabled"
+			class="dialog__trigger"
+		>
 			<slot name="trigger"></slot>
 		</DialogTrigger>
 		<LibraryUiModalDownsheetContent>
@@ -55,3 +62,10 @@ const model = computed({
 		</LibraryUiModalDownsheetContent>
 	</DialogRoot>
 </template>
+<style lang="less" scoped>
+.dialog {
+	&__trigger:disabled {
+		opacity: 0.8;
+	}
+}
+</style>

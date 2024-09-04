@@ -83,7 +83,7 @@ getMeta({
 				:src="imgLink"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 			/>
-			<p class="support__design-question">{{ $t('support.question') }}</p>
+			<h5 class="support__design-question">{{ $t('support.question') }}</h5>
 		</div>
 	</main>
 </template>
@@ -193,6 +193,8 @@ getMeta({
 			padding-top: 220px;
 			padding-left: 220px;
 			font-size: var(--font-size-L);
+			font-family: var(--font-family-error);
+			font-weight: 600;
 
 			@media (min-width: 1000px) {
 				padding-left: 180px;

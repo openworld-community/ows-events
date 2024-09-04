@@ -8,6 +8,7 @@ import {
 	IDeleteEventHandler,
 	IFindEventHandler,
 	IFindEventsCityHandler,
+	IFindEventsCountryHandler,
 	IGetEventHandler,
 	IGetEventsHandler,
 	IGetMyEventsHandler,
@@ -98,5 +99,20 @@ export const findEventsByCity: IFindEventsCityHandler = async (request) => {
 	const events = await eventsStateController.getEvents(lang, false, queryObj);
 	// eslint-disable-next-line @typescript-eslint/no-throw-literal
 	if (events.length === 0) throw { statusCode: 404, message: CommonErrorsEnum.NO_EVENTS_IN_CITY };
+	return events;
+};
+
+export const findEventsByCountry: IFindEventsCountryHandler = async (request) => {
+	const country = transformFromQuery(request.params.countryName);
+	const queryObj: SearchEventPayload = {
+		country,
+		...request.body
+	};
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	const events = await eventsStateController.getEvents(lang, false, queryObj);
+	if (events.length === 0)
+		// eslint-disable-next-line @typescript-eslint/no-throw-literal
+		throw { statusCode: 404, message: CommonErrorsEnum.NO_EVENTS_IN_COUNTRY };
 	return events;
 };

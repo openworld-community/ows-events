@@ -193,7 +193,7 @@ class EventsStateController {
 		const tags = await EventModel.distinct('tags', {
 			'meta.moderation.status': { $nin: ['declined', 'in-progress'] },
 			$expr: {
-				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]
+				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, '$NOW']
 			}
 		});
 
@@ -205,10 +205,21 @@ class EventsStateController {
 			'location.city': city,
 			'meta.moderation.status': { $nin: ['declined', 'in-progress'] },
 			$expr: {
-				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, Date.now()]
+				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, '$NOW']
 			}
 		});
 
+		return tags;
+	}
+
+	async findUsedTagsByCountry(country: string) {
+		const tags = await EventModel.distinct('tags', {
+			'location.country': country,
+			'meta.moderation.status': { $nin: ['declined', 'in-progress'] },
+			$expr: {
+				$gte: [{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }, '$NOW']
+			}
+		});
 		return tags;
 	}
 

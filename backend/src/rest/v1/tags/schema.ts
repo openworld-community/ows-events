@@ -47,6 +47,24 @@ export const getUsedTagsByCitySchema = {
 	}
 };
 
+export const getUsedTagsByCountrySchema = {
+	description: 'get used tags by country',
+	tags: ['Tags'],
+	summary: 'Get used tags by country',
+	params: {
+		type: 'object',
+		properties: {
+			countryName: { type: 'string' }
+		}
+	},
+	response: {
+		200: {
+			type: 'array',
+			items: { type: 'string' }
+		}
+	}
+};
+
 export const getTagByEventSchema = {
 	description: 'get tag by event id',
 	tags: ['Tags'],

@@ -139,6 +139,13 @@ const model = computed({
 	&__trigger:disabled {
 		opacity: 0.8;
 	}
+
+	@media (min-width: 1440px) {
+		&__trigger:disabled {
+			opacity: 1;
+			background-color: rgba(72, 199, 142, 0.2);
+		}
+	}
 }
 
 @keyframes slideDown {

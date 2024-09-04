@@ -63,6 +63,7 @@ class CountriesAndCitiesController {
 		if (countryName === '') return '';
 		const country = await CountriesForParserModel.findOne({
 			$or: [
+				{ preferred_term: countryName },
 				{ english_short: countryName },
 				{ french_short: countryName },
 				{ spanish_short: countryName },
@@ -197,6 +198,16 @@ class CountriesAndCitiesController {
 		// );
 
 		return citiesWithLocalization;
+	}
+
+	async getUsedLocations() {
+		const cities = await this.getUsedCities();
+		const countryNames = await this.getUsedCountries(SupportedLanguages.ENGLISH);
+		const countryCodes = await Promise.all(countryNames.map(this.getCountryCodeByName));
+		return {
+			countries: countryCodes,
+			cities
+		};
 	}
 }
 

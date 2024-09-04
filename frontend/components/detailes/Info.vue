@@ -44,24 +44,11 @@ defineProps({
 		<CommonEventDetails
 			class="event-summary__details"
 			:price="posterEvent.price"
-			:start-date="
-				convertEventDateToLocaleString(
-					posterEvent.date,
-					posterEvent.isOnline,
-					posterEvent.timezone
-				)
-			"
-			:end-date="
-				posterEvent.durationInSeconds
-					? convertEventDateToLocaleString(
-							posterEvent.date + posterEvent.durationInSeconds * 1000,
-							posterEvent.isOnline,
-							posterEvent.timezone
-					  )
-					: null
-			"
+			:date="posterEvent.date"
+			:duration="posterEvent.durationInSeconds"
 			:is-online="posterEvent.isOnline"
 			:location="posterEvent.location"
+			:timezone="posterEvent.timezone"
 			has-link-to-g-maps
 		/>
 		<h3

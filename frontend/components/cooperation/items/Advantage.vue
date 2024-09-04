@@ -23,8 +23,8 @@ const alignSelf = computed(() => (props.isRevercedText ? 'flex-end' : 'flex-star
 			class="advantage__image"
 		/>
 		<div class="advantage__text">
-			<h2 class="advantage__header">{{ $t(title) }}</h2>
-			<p class="advantage__description">{{ $t(description) }}</p>
+			<h3 class="advantage__header">{{ $t(title) }}</h3>
+			<p class="advantage__description text1">{{ $t(description) }}</p>
 		</div>
 	</div>
 </template>
@@ -35,10 +35,9 @@ const alignSelf = computed(() => (props.isRevercedText ? 'flex-end' : 'flex-star
 	flex-direction: v-bind(direction);
 	justify-content: space-between;
 	gap: 50px;
-	font-size: var(--font-size-L);
+
 	@media (max-width: 768px) {
 		gap: 35px;
-		font-size: var(--font-size-ML);
 	}
 
 	&__image {
@@ -58,7 +57,6 @@ const alignSelf = computed(() => (props.isRevercedText ? 'flex-end' : 'flex-star
 	}
 
 	&__description {
-		line-height: 1.5;
 		@media (max-width: 375px) {
 			padding-bottom: 10px;
 		}
@@ -66,9 +64,8 @@ const alignSelf = computed(() => (props.isRevercedText ? 'flex-end' : 'flex-star
 
 	&__header {
 		margin-bottom: 35px;
-		font-size: var(--font-size-ML);
+
 		@media (min-width: 375px) and (max-width: 768px) {
-			font-size: var(--font-size-XL);
 			text-align: center;
 		}
 		@media (max-width: 375px) {

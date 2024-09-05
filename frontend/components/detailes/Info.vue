@@ -50,6 +50,7 @@ defineProps({
 			:location="posterEvent.location"
 			:timezone="posterEvent.timezone"
 			has-link-to-g-maps
+			size="big"
 		/>
 		<h3
 			v-if="!mobile && posterEvent.creatorId !== PEREDELANO_CREATOR_ID"

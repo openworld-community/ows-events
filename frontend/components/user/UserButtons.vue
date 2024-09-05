@@ -84,16 +84,15 @@ const onFavoriteButtonClick = () => {
 		pointer-events: none;
 		transition: padding-top 0.5s ease-in-out;
 
-		@media (max-width: 1440px) {
+		@media (max-width: 1439px) {
 			align-items: flex-start;
 			padding: 0px;
-			
 		}
 		&--edit {
 			width: 40px;
 			background-color: var(--color-background-secondary);
 			pointer-events: auto;
-			@media (max-width: 1440px) {
+			@media (max-width: 1439px) {
 				width: 30px;
 			}
 
@@ -108,7 +107,7 @@ const onFavoriteButtonClick = () => {
 			width: 40px;
 			background-color: var(--color-background-secondary);
 			pointer-events: auto;
-			@media (max-width: 1440px) {
+			@media (max-width: 1439px) {
 				width: 30px;
 			}
 

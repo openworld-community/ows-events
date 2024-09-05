@@ -119,7 +119,7 @@ const tagArray = computed(() => {
 	justify-content: space-between;
 
 	@media (min-width: 768px) {
-		padding: 12px 12px;
+		padding: 8px 8px;
 	}
 
 	transition-property: background-color, border-color;
@@ -139,7 +139,9 @@ const tagArray = computed(() => {
 	&--expired {
 		opacity: 0.5;
 	}
-
+	&__wrapper {
+		display: block;
+	}
 	&__image-container {
 		display: flex;
 		max-width: 17.36vw;
@@ -155,7 +157,7 @@ const tagArray = computed(() => {
 		transition: height 0.7s ease-in-out;
 
 		@media (max-width: 768px) {
-			min-width: 25%;
+			min-width: 30%;
 			aspect-ratio: 4/3 auto;
 			height: 100px;
 			margin-right: 12px;
@@ -194,16 +196,7 @@ const tagArray = computed(() => {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-	width: 60%;
-	@media (max-width: 1440px) {
-		width: 100%;
-	}
-	@media (max-width: 1000px) {
-		width: 60%;
-	}
-	@media (max-width: 768px) {
-		width: 75%;
-	}
+	width: 100%;
 
 	&__info {
 		display: flex;
@@ -212,7 +205,6 @@ const tagArray = computed(() => {
 		margin-bottom: 8px;
 
 		@media (max-width: 1440px) {
-			width: 80%;
 			margin-bottom: 12px;
 		}
 	}

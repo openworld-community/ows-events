@@ -41,6 +41,11 @@ useHead({
 			type: 'image/ico',
 			href: '/favicon.ico'
 		},
+		{
+			rel: 'alternate',
+			hreflang: 'x-default',
+			href: `${VITE_DOMAIN}${getPath(route.path)}`
+		},
 		...langRefs
 	],
 	title: `${t('meta.default_title.first')} | ${t('meta.default_title.second')}`,

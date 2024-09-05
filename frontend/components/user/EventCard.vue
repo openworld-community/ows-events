@@ -80,12 +80,16 @@ const tagArray = computed(() => {
 		</div>
 		<div class="card__description description">
 			<div class="description__info">
-				<h2
-					class="description__title"
-					:itemprop="SeoItempropEventEnum.NAME"
-				>
-					{{ eventData.title }}
-				</h2>
+				<div class="description__info__buttons">
+					<h2
+						class="description__title"
+						:itemprop="SeoItempropEventEnum.NAME"
+					>
+						{{ eventData.title }}
+					</h2>
+					<slot v-if="!desktop" />
+				</div>
+
 				<p
 					class="description__date"
 					:itemprop="SeoItempropEventEnum.START_DATE"
@@ -101,7 +105,7 @@ const tagArray = computed(() => {
 			/>
 		</div>
 
-		<slot />
+		<slot v-if="desktop" />
 	</CommonNavLink>
 </template>
 
@@ -206,6 +210,13 @@ const tagArray = computed(() => {
 
 		@media (max-width: 1440px) {
 			margin-bottom: 12px;
+		}
+
+		&__buttons {
+			display: flex;
+			width: 100%;
+			justify-content: space-between;
+			align-items: flex-start;
 		}
 	}
 

@@ -94,6 +94,7 @@ const onFavoriteButtonClick = () => {
 			pointer-events: auto;
 			@media (max-width: 1439px) {
 				width: 30px;
+				height: 24px;
 			}
 
 			&--expired {
@@ -109,6 +110,7 @@ const onFavoriteButtonClick = () => {
 			pointer-events: auto;
 			@media (max-width: 1439px) {
 				width: 30px;
+				height: 24px;
 			}
 
 			&--expired {

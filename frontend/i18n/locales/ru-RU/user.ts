@@ -32,4 +32,8 @@ export default {
 		title: 'Выйти из аккаунта',
 		text: 'Вы уверены, что хотите выйти из аккаунта?',
 	},
+	image:{
+		alt:'Привет От Афиши',
+		no_image:'/img/event/no_image_ru.svg'
+	}
 };

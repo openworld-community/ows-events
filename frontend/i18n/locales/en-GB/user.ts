@@ -32,4 +32,8 @@ export default {
 		title: 'Log out',
 		text: 'Are you sure you want to log out?',
 	},
+	image:{
+		alt:'Hello from Afisha',
+		no_image:'/img/event/no_image_en.svg'
+	}
 };

@@ -66,9 +66,9 @@ const tagArray = computed(() => {
 			<img
 				v-if="!eventData.image"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
-				alt="Hello from Afisha"
+				:alt="$t('user.img.alt')"
 				class="card__image"
-				src="/img/event/event-small-preview-desktop@2x.png"
+				:src="$t('user.image.no_image')"
 			/>
 			<CommonUiTag
 				v-if="eventData.isOnline"

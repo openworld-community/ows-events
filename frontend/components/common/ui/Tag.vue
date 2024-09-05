@@ -89,6 +89,7 @@ const model = computed({
 	max-width: max-content;
 
 	font-size: var(--font-size-S);
+	line-height: 2rem;
 	text-align: center;
 
 	background-color: var(--color-input-field);
@@ -105,10 +106,12 @@ const model = computed({
 
 	&--small {
 		font-size: var(--font-size-XS);
+		line-height: 1.6rem;
 	}
 
 	&--mini {
 		font-size: var(--font-size-XXS);
+		line-height: 1.2rem;
 		padding: 0 4px;
 		border-radius: 3px;
 	}

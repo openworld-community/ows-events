@@ -45,7 +45,7 @@ useHead({
 		{
 			rel: 'alternate',
 			hreflang: 'x-default',
-			href: `${VITE_DOMAIN}${RoutePathEnum.HOME}`
+			href: `${VITE_DOMAIN}${getPath(route.path)}`
 		},
 		...langRefs
 	],

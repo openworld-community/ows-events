@@ -69,7 +69,7 @@ watch(
 );
 </script>
 <template>
-	<FiltersContent
+	<LazyFiltersContent
 		v-model:model-tags="tags"
 		v-model:model-dates="dates"
 		:current-country="currentCountry"

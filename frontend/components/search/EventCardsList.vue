@@ -36,7 +36,7 @@ defineProps({
 			<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
 			<meta
 				itemprop="position"
-				content="index+1"
+				:content="`${index}+1`"
 			/>
 		</li>
 	</ul>

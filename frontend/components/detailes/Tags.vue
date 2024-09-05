@@ -29,7 +29,7 @@ defineProps({
 	<div class="event-info-tags">
 		<CommonTagList
 			:tag-list="tagList"
-			:tag-size="mobile ? 'standard' : 'small'"
+			:tag-size="mobile ? 'small' : 'standard'"
 		/>
 
 		<CommonLikeButton

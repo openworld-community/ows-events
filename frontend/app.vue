@@ -8,6 +8,7 @@ import { TOKEN_MAX_AGE_SECONDS } from './constants/defaultValues/time';
 import type { ComputedRef } from 'vue';
 import { getRouteName } from './utils';
 import { VITE_DOMAIN } from './constants/url';
+import { RoutePathEnum } from './constants/enums/route';
 
 const { locale, locales, t } = useI18n();
 
@@ -40,6 +41,11 @@ useHead({
 			rel: 'icon',
 			type: 'image/ico',
 			href: '/favicon.ico'
+		},
+		{
+			rel: 'alternate',
+			hreflang: 'x-default',
+			href: `${VITE_DOMAIN}${RoutePathEnum.HOME}`
 		},
 		...langRefs
 	],

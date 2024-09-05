@@ -76,6 +76,7 @@ const { sendAnalytics } = useSendTrackingEvent();
 					v-if="!mobile && eventData.tags"
 					:tag-list="eventData.tags"
 					class="card-description__tags"
+					tag-size="small"
 				/>
 				<h3
 					class="card-description__title"

@@ -7,8 +7,8 @@ const props = defineProps({
 		default: ''
 	},
 	data: {
-		type: Array as PropType<string[]>,
-		default: () => []
+		type: String,
+		default: ''
 	},
 	size: {
 		type: String as PropType<'big' | 'small'>,
@@ -37,8 +37,6 @@ const component = computed(() => {
 				color="var(--color-accent-green-main)"
 			/>
 			<span
-				v-for="item in data"
-				:key="item"
 				:class="[
 					'details__text',
 					{
@@ -48,7 +46,7 @@ const component = computed(() => {
 					}
 				]"
 			>
-				{{ item }}
+				{{ data }}
 			</span>
 		</component>
 	</li>

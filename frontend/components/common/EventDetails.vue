@@ -3,6 +3,7 @@ import type { Location } from '../../../common/types/address';
 import type { PropType } from 'vue';
 import type { EventPrice } from '../../../common/types/event';
 import { formatPrice } from '../../utils/prices';
+import { formatDate } from '../../utils/dates';
 
 import type { Timezone } from '../../../common/types/location';
 import { formatLocation } from '~/utils/location';
@@ -41,29 +42,14 @@ const props = defineProps({
 	}
 });
 
-const data = computed(() => {
-	if (props.duration) {
-		return [
-			convertEventDateToLocaleString(props.date, props.isOnline, props.timezone),
-			'&nbsp;-&nbsp;',
-			convertEventDateToLocaleString(
-				props.date + props.duration * 1000,
-				props.isOnline,
-				props.timezone
-			)
-		];
-	}
-	return [convertEventDateToLocaleString(props.date, props.isOnline, props.timezone)];
-});
-
 const dataPrice = computed(() => {
 	if (!props.price) {
-		return [t('event.price.unknown')];
+		return t('event.price.unknown');
 	}
 	if (props.price.value === 0) {
-		return [t('event.price.free')];
+		return t('event.price.free');
 	} else {
-		return [formatPrice(props.price)];
+		return formatPrice(props.price);
 	}
 });
 </script>
@@ -73,7 +59,7 @@ const dataPrice = computed(() => {
 		<!--	Дата	-->
 		<CommonEventDetailesItem
 			icon-name="calendar"
-			:data="data"
+			:data="formatDate(date, isOnline, timezone, duration)"
 			:size="size"
 		/>
 
@@ -88,14 +74,14 @@ const dataPrice = computed(() => {
 		<CommonEventDetailesItem
 			v-if="isOnline"
 			icon-name="globe"
-			:data="[$t('event.tags.online')]"
+			:data="$t('event.tags.online')"
 			:size="size"
 		/>
 		<CommonEventDetailesItem
 			v-if="!isOnline"
 			icon-name="map-pin"
 			:to="hasLinkToGMaps ? getLocationLink(location) : ''"
-			:data="[formatLocation(location)]"
+			:data="formatLocation(location)"
 			:size="size"
 		/>
 	</ul>

@@ -58,7 +58,7 @@ const onButtonClick = async () => {
 				:text="$t('header.navigation.about')"
 				icon-name="info"
 				@click="emit('close')"
-			/>			
+			/>
 
 			<HeaderSidebarItem
 				:link-to="localePath(RoutePathEnum.SUPPORT)"
@@ -66,7 +66,7 @@ const onButtonClick = async () => {
 				icon-name="contact-tg"
 				@click="emit('close')"
 			/>
-			
+
 			<HeaderSidebarItem
 				component-type="link"
 				:link-to="localePath(RoutePathEnum.COOPERATION)"

@@ -148,30 +148,32 @@ const tagArray = computed(() => {
 	}
 	&__image-container {
 		display: flex;
-		max-width: 17.36vw;
-		max-height: 115px;
-		height: 115px;
+		min-width: 110px;
+		min-height: 74px;
+		max-height: 100px;
+		max-width: 177px;
+		height: 100%;
 		position: relative;
 		background-color: var(--color-input-field);
 		background-size: cover;
 		border-radius: 4px;
 		line-height: 0;
-		margin-right: 8px;
-		aspect-ratio: 16/9 auto;
-		transition: height 0.7s ease-in-out;
+		margin-right: 12px;
+		aspect-ratio: 6/5 auto;
+		transition: width 0.7s ease-in-out, height 0.7s ease-in-out, aspect-ratio 0.7s ease-in-out;
 
-		@media (max-width: 768px) {
-			min-width: 30%;
+		@media (min-width: 768px) {
+			min-width: unset;
 			aspect-ratio: 4/3 auto;
-			height: 100px;
+			min-height: 100px;
 			margin-right: 12px;
 		}
 
-		@media (max-width: 500px) {
-			min-width: 30%;
-			aspect-ratio: 6/5 auto;
-			height: 74px;
-			margin-right: 12px;
+		@media (min-width: 1440px) {
+			max-width: 205px;
+			min-width: unset;
+			aspect-ratio: 16/9 auto;
+			height: 115px;
 		}
 	}
 
@@ -202,18 +204,18 @@ const tagArray = computed(() => {
 	overflow: hidden;
 	width: 100%;
 	height: 100%;
+	transition: width 0.7s ease-in-out, height 0.7s ease-in-out;
 	@media (min-width: 768px) {
-		min-height: 100px;			
-		}
+		min-height: 100px;
+	}
 
 	&__info {
 		display: flex;
-
 		flex-direction: column;
-		margin-bottom: 8px;
+		margin-bottom: 12px;
 
-		@media (max-width: 1440px) {
-			margin-bottom: 12px;
+		@media (min-width: 1440px) {
+			margin-bottom: 8px;
 		}
 
 		&__buttons {

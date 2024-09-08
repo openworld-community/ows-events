@@ -73,28 +73,29 @@ const onFavoriteButtonClick = () => {
 		height: 100%;
 		display: flex;
 		flex-direction: row;
-		padding: 5px 7px 5px 5px;
+		padding: 0px;
 		color: black;
 		z-index: 1;
 		gap: 5px;
 		user-select: none;
 		right: 0;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: center;
 		pointer-events: none;
-		transition: padding-top 0.5s ease-in-out;
+		transition: all 0.7s ease-in-out;
 
-		@media (max-width: 1439px) {
-			align-items: flex-start;
-			padding: 0px;
+		@media (min-width: 1440px) {
+			align-items: center;
+			padding: 5px 7px 5px 5px;
 		}
 		&--edit {
-			width: 40px;
+			width: 30px;
+			height: 24px;
 			background-color: var(--color-background-secondary);
 			pointer-events: auto;
-			@media (max-width: 1439px) {
-				width: 30px;
-				height: 24px;
+			@media (min-width: 1440px) {
+				width: 40px;
+				height: 40px;
 			}
 
 			&--expired {
@@ -105,12 +106,13 @@ const onFavoriteButtonClick = () => {
 			color: var(--color-accent-green-main);
 		}
 		&--delete {
-			width: 40px;
+			width: 30px;
+			height: 24px;
 			background-color: var(--color-background-secondary);
 			pointer-events: auto;
-			@media (max-width: 1439px) {
-				width: 30px;
-				height: 24px;
+			@media (min-width: 1440px) {
+				width: 40px;
+				height: 40px;
 			}
 
 			&--expired {

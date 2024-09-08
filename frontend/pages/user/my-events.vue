@@ -122,6 +122,7 @@ const onEditButtonClick = async (id: string) => {
 			font-weight: var(--font-weight-regular);
 			text-align: left;
 			margin-bottom: 32px;
+			text-align: center;
 		}
 
 		@media (min-width: 1440px) {
@@ -129,9 +130,7 @@ const onEditButtonClick = async (id: string) => {
 			line-height: 38px;
 			font-weight: 500;
 			padding-left: 15px;
-		}
-		@media (max-width: 1439px) {
-			text-align: center;
+			text-align: left;
 		}
 	}
 
@@ -145,6 +144,7 @@ const onEditButtonClick = async (id: string) => {
 		}
 		&__event {
 			position: relative;
+			transition: width 0.3s ease-in-out, height 1s ease-in-out;
 		}
 	}
 
@@ -152,7 +152,7 @@ const onEditButtonClick = async (id: string) => {
 		display: flex;
 		width: 100%;
 		justify-content: center;
-		position:static;
+		position: static;
 		bottom: 0;
 		left: 0;
 		background-color: var(--color-white);
@@ -163,8 +163,7 @@ const onEditButtonClick = async (id: string) => {
 			background-color: transparent;
 			padding-top: 0;
 			padding-bottom: 0;
-			margin: unset 0 0 auto;
-			
+			margin: unset;
 			position: sticky;
 			bottom: 20px;
 			right: 0;

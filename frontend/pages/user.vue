@@ -42,6 +42,7 @@ getMeta({
 	padding-right: var(--padding-side);
 	padding-bottom: 30px;
 	margin-bottom: auto;
+	padding-top: var(--header-height);
 
 	//Для адаптивной height на iOs
 	@supports (-webkit-touch-callout: none) {
@@ -54,9 +55,6 @@ getMeta({
 		align-items: flex-start;
 		margin-bottom: unset;
 		padding-top: 10px;
-	}
-	@media (max-width: 768px-1px) {
-		padding-top: var(--header-height);
 	}
 
 	&__wrapper {

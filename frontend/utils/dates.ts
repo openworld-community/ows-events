@@ -182,3 +182,12 @@ export const getDatesDayDifference = (firstDate: Date, secondDate: Date): number
 export const roundTime = (date, interval) => {
 	return Math.ceil(new Date(date).getTime() / (interval * 60 * 1000)) * (interval * 60 * 1000);
 };
+
+export const formatDate = (date, isOnline, timezone, duration) => {
+	if (duration) {
+		return `${convertEventDateToLocaleString(date, isOnline, timezone)} - 
+
+	${convertEventDateToLocaleString(date + duration * 1000, isOnline, timezone)}`;
+	}
+	return convertEventDateToLocaleString(date, isOnline, timezone);
+};

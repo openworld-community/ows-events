@@ -249,8 +249,6 @@ const tagArray = computed(() => {
 		}
 	}
 	&__tags {
-		height: 100%;
-		min-height: 24px;
 		@media (min-width: 768px) {
 		}
 	}

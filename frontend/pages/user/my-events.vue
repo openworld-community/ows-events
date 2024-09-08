@@ -152,7 +152,7 @@ const onEditButtonClick = async (id: string) => {
 		display: flex;
 		width: 100%;
 		justify-content: center;
-		position: fixed;
+		position:static;
 		bottom: 0;
 		left: 0;
 		background-color: var(--color-white);
@@ -164,7 +164,7 @@ const onEditButtonClick = async (id: string) => {
 			padding-top: 0;
 			padding-bottom: 0;
 			margin: unset 0 0 auto;
-
+			
 			position: sticky;
 			bottom: 20px;
 			right: 0;

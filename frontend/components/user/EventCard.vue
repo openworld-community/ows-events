@@ -57,18 +57,9 @@ const tagArray = computed(() => {
 			:itemprop="eventData.image ? undefined : SeoItempropGlobalEnum.IMAGE"
 		>
 			<img
-				v-if="eventData.image"
-				:itemprop="SeoItempropGlobalEnum.IMAGE"
-				:alt="$t('home.events.image_alt')"
 				class="card__image"
-				:src="getEventImage(eventData.image)"
-			/>
-			<img
-				v-if="!eventData.image"
-				:itemprop="SeoItempropGlobalEnum.IMAGE"
-				:alt="$t('user.image.alt')"
-				class="card__image"
-				:src="$t('user.image.no_image')"
+				:alt="eventData.image ? $t('home.events.image_alt') : $t('user.image.alt')"
+				:src="eventData.image ? getEventImage(eventData.image) : $t('user.image.no_image')"
 			/>
 			<CommonUiTag
 				v-if="eventData.isOnline"

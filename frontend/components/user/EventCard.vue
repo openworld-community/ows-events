@@ -139,7 +139,7 @@ const tagArray = computed(() => {
 	}
 	&__image-container {
 		display: flex;
-		min-width: 110px;
+		min-width: 94px;
 		min-height: 74px;
 		max-height: 100px;
 		max-width: 177px;

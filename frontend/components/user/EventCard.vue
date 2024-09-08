@@ -66,7 +66,7 @@ const tagArray = computed(() => {
 			<img
 				v-if="!eventData.image"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
-				:alt="$t('user.img.alt')"
+				:alt="$t('user.image.alt')"
 				class="card__image"
 				:src="$t('user.image.no_image')"
 			/>
@@ -123,7 +123,7 @@ const tagArray = computed(() => {
 	justify-content: space-between;
 
 	@media (min-width: 768px) {
-		padding: 8px 8px;
+		padding: 12px 12px;
 	}
 
 	transition-property: background-color, border-color;
@@ -201,6 +201,10 @@ const tagArray = computed(() => {
 	flex-direction: column;
 	overflow: hidden;
 	width: 100%;
+	height: 100%;
+	@media (min-width: 768px) {
+		min-height: 100px;			
+		}
 
 	&__info {
 		display: flex;
@@ -245,6 +249,8 @@ const tagArray = computed(() => {
 		}
 	}
 	&__tags {
+		height: 100%;
+		min-height: 24px;
 		@media (min-width: 768px) {
 		}
 	}

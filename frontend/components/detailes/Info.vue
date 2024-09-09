@@ -36,37 +36,19 @@ defineProps({
 			/>
 			<DetailesItemsTitle
 				:title="posterEvent.title"
-				:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
 				:is-show-favourites="isShowFavourites"
-				:alt-content="
-					isInFavourites
-						? $t('global.button.remove_from_favourites')
-						: $t('global.button.add_to_favourites')
-				"
+				:is-in-favourites="isInFavourites"
 				@toggle-favourites="$emit('toggleFavourites')"
 			/>
 		</div>
 		<CommonEventDetails
 			class="event-summary__details"
 			:price="posterEvent.price"
-			:start-date="
-				convertEventDateToLocaleString(
-					posterEvent.date,
-					posterEvent.isOnline,
-					posterEvent.timezone
-				)
-			"
-			:end-date="
-				posterEvent.durationInSeconds
-					? convertEventDateToLocaleString(
-							posterEvent.date + posterEvent.durationInSeconds * 1000,
-							posterEvent.isOnline,
-							posterEvent.timezone
-					  )
-					: null
-			"
+			:date="posterEvent.date"
+			:duration="posterEvent.durationInSeconds"
 			:is-online="posterEvent.isOnline"
 			:location="posterEvent.location"
+			:timezone="posterEvent.timezone"
 			has-link-to-g-maps
 		/>
 		<h3
@@ -103,9 +85,12 @@ defineProps({
 <style lang="less" scoped>
 .event-summary {
 	display: flex;
-	width: 100%;
+	//width: 100%;
+	flex-grow: 1;
+	overflow: hidden;
 	height: 100%;
 	flex-direction: column;
+	//	overflow: hidden;
 
 	@media (min-width: 768px) {
 		width: 66%;

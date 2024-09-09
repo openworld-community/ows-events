@@ -7,6 +7,10 @@ defineProps({
 		type: Boolean,
 		default: false
 	},
+	isInFavourites: {
+		type: Boolean,
+		default: false
+	},
 	tagList: {
 		type: Array as PropType<TagList>,
 		required: true
@@ -28,12 +32,9 @@ defineProps({
 			:tag-size="mobile ? 'standard' : 'small'"
 		/>
 
-		<CommonButton
+		<CommonLikeButton
 			v-if="mobile && isShowFavourites"
-			is-icon
-			is-round
-			:icon-name="iconName"
-			:alt="altContent"
+			:is-in-favourites="isInFavourites"
 			@click="emit('toggleFavourites')"
 		/>
 	</div>

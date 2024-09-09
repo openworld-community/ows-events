@@ -13,6 +13,18 @@ type IGetUsedTagsRoute = {
 };
 type IGetUsedTagsHandler = IRouteHandler<IGetUsedTagsRoute>;
 
+type IGetUsedTagsByCityRoute = {
+	Params: { cityName: string };
+	Reply: string[];
+};
+type IGetUsedTagsByCityHandler = IRouteHandler<IGetUsedTagsByCityRoute>;
+
+type IGetUsedTagsByCountryRoute = {
+	Params: { countryName: string };
+	Reply: string[];
+};
+type IGetUsedTagsByCountryHandler = IRouteHandler<IGetUsedTagsByCountryRoute>;
+
 type IDeleteTagsRoute = {
 	Body: { event: EventOnPoster };
 	Header: { Authorization: string };

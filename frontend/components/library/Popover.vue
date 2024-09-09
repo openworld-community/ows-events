@@ -22,6 +22,10 @@ const props = defineProps({
 		type: String as PropType<'start' | 'center' | 'end'>,
 		default: 'start'
 	},
+	disabled: {
+		type: Boolean,
+		default: false
+	},
 	height: { type: Number, default: 200 }
 });
 
@@ -43,13 +47,11 @@ const model = computed({
 </script>
 
 <template>
-	<Popover
-		v-model:open="model"
-		class="popover"
-	>
+	<Popover v-model:open="model">
 		<PopoverTrigger
 			:class="['popover__trigger', { 'popover__trigger--primary': variant === 'primary' }]"
 			:aria-label="ariaLabel"
+			:disabled="disabled"
 		>
 			<slot name="trigger" />
 		</PopoverTrigger>
@@ -76,10 +78,10 @@ const model = computed({
 
 		min-width: 267px;
 		background-color: #ffffff;
-		box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
+		box-shadow: var(--shadow-dropdown);
 
 		border-radius: 8px;
-		border: 2px black;
+
 		min-height: 100px;
 		max-width: 300px;
 		z-index: 100;
@@ -88,7 +90,9 @@ const model = computed({
 		&--primary {
 			//to set height for the content - set height to the real content
 			height: fit-content;
+			min-height: 100px;
 			max-height: 300px;
+			min-width: 200px;
 		}
 
 		&[data-side='top'] {
@@ -108,6 +112,7 @@ const model = computed({
 			min-width: 100%;
 			display: flex;
 			justify-content: space-between;
+			align-items: center;
 			height: 40px;
 			border: 1px solid #dbdbdb;
 			border-radius: 8px;
@@ -115,7 +120,30 @@ const model = computed({
 			font-family: var(--font-family-main);
 			font-size: var(--font-size-M);
 			color: var(--color-text-main);
-			padding: 8px 45px 8px 12px;
+			padding: 8px 12px 8px 12px;
+			@media (min-width: 1440px) {
+				border-color: transparent;
+			}
+			&:focus-within {
+				border-color: var(--color-accent-green-main);
+			}
+		}
+	}
+
+	&__trigger[data-state='open'] {
+		border-color: var(--color-accent-green-main);
+	}
+	&__trigger[data-state='close'] {
+		border-color: transparent;
+	}
+	&__trigger:disabled {
+		opacity: 0.8;
+	}
+
+	@media (min-width: 1440px) {
+		&__trigger:disabled {
+			opacity: 1;
+			background-color: rgba(72, 199, 142, 0.2);
 		}
 	}
 }

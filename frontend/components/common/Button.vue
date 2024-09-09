@@ -175,10 +175,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 	&__content {
 		font-size: var(--font-size-M);
-
-		@media (min-width: 768px) {
-			font-size: var(--font-size-S);
-		}
 	}
 
 	&__icon {
@@ -502,10 +498,17 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		background-color: var(--color-background-secondary);
 		border: 1px solid var(--color-background-secondary);
 
-		&:hover,
-		&:focus-visible {
+		&:focus-visible,
+		&:active {
 			&::v-deep(svg) {
 				color: var(--color-accent-green-main-30);
+			}
+		}
+		@media (min-width: 768px) {
+			&:hover {
+				&::v-deep(svg) {
+					color: var(--color-accent-green-main-30);
+				}
 			}
 		}
 	}

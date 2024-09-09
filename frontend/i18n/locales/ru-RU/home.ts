@@ -1,8 +1,5 @@
 export default {
 	title: 'Объединяем людей вокруг событий',
-	identity: {
-		alt: 'Сербия, Черногория'
-	},
 	button: {
 		add_event_aria: 'Добавить мероприятие'
 	},

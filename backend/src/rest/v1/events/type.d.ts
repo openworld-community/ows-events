@@ -1,5 +1,5 @@
 import { EventOnPoster } from '@common/types';
-import { EventParams, SearchEventPayload } from '@common/types/event';
+import { EventParams, SearchEventCityPayload, SearchEventPayload } from '@common/types/event';
 import { SupportedLanguages } from '../../../../../common/const';
 import { IRouteHandler } from '../../types';
 
@@ -58,3 +58,23 @@ type IFindEventRoute = {
 	Reply: EventOnPoster[];
 };
 type IFindEventHandler = IRouteHandler<IFindEventRoute>;
+
+type IFindEventsCityRoute = {
+	Header: {
+		'accept-language': SupportedLanguages;
+	};
+	Body: SearchEventCityPayload;
+	Params: { cityName: string };
+	Reply: EventOnPoster[];
+};
+type IFindEventsCityHandler = IRouteHandler<IFindEventsCityRoute>;
+
+type IFindEventsCountryRoute = {
+	Header: {
+		'accept-language': SupportedLanguages;
+	};
+	Body: SearchEventCityPayload;
+	Params: { countryName: string };
+	Reply: EventOnPoster[];
+};
+type IFindEventsCountryHandler = IRouteHandler<IFindEventsCountryRoute>;

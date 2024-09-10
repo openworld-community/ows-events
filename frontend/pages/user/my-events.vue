@@ -56,16 +56,12 @@ const onEditButtonClick = async (id: string) => {
 				class="my-events__list__event"
 			>
 				<UserEventCard :event-data="event">
-					<div class="my-events__user-buttons">
-						<slot>
-							<UserButtons
-								:show-edit-delete-buttons="true"
-								:event="event"
-								@delete="deleteCard"
-								@edit="onEditButtonClick"
-							/>
-						</slot>
-					</div>
+					<UserButtons
+						:show-edit-delete-buttons="true"
+						:event="event"
+						@delete="deleteCard"
+						@edit="onEditButtonClick"
+					/>
 				</UserEventCard>
 			</li>
 		</ul>
@@ -121,7 +117,7 @@ const onEditButtonClick = async (id: string) => {
 			font-size: var(--font-size-XL);
 			font-weight: var(--font-weight-regular);
 			text-align: left;
-			margin-bottom: 32px;
+			margin-bottom: 20px;
 			text-align: center;
 		}
 
@@ -135,8 +131,11 @@ const onEditButtonClick = async (id: string) => {
 	}
 
 	&__list {
+		display: flex;
+		flex-direction: column;
 		width: 100%;
 		flex-grow: 1;
+		gap: 12px;
 
 		@media (min-width: 768px) {
 			width: 55vw;
@@ -177,9 +176,6 @@ const onEditButtonClick = async (id: string) => {
 		@media (min-width: 768px) {
 			width: max-content;
 		}
-	}
-	&__user-buttons {
-		height: 100%;
 	}
 }
 

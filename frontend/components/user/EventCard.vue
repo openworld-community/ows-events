@@ -110,7 +110,6 @@ const tagArray = computed(() => {
 	border: 1px solid var(--color-background-secondary);
 	border-radius: 8px;
 	padding: 8px;
-	margin-bottom: 12px;
 	justify-content: space-between;
 
 	@media (min-width: 768px) {
@@ -141,7 +140,7 @@ const tagArray = computed(() => {
 		display: flex;
 		min-width: 94px;
 		min-height: 74px;
-		max-height: 100px;
+		max-height: 115px;
 		max-width: 177px;
 		height: 100%;
 		position: relative;
@@ -179,8 +178,8 @@ const tagArray = computed(() => {
 
 	&__online-tag {
 		position: absolute;
-		top: 2px;
-		left: 2px;
+		top: 4px;
+		left: 4px;
 
 		@media (min-width: 768px) {
 			top: 7px;

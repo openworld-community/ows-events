@@ -76,7 +76,7 @@ if (data.value) favourites.value = data.value;
 
 		@media (min-width: 768px) {
 			max-width: 820px;
-			margin-bottom: 32px;
+			margin-bottom: 20px;
 		}
 
 		@media (min-width: 1440px) {
@@ -86,8 +86,11 @@ if (data.value) favourites.value = data.value;
 	}
 
 	&__list {
+		display: flex;
+		flex-direction: column;
 		width: 100%;
 		flex-grow: 1;
+		gap: 12px;
 
 		@media (min-width: 768px) {
 			max-width: 820px;

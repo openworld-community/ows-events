@@ -86,7 +86,7 @@ const { sendAnalytics } = useSendTrackingEvent();
 				</h4>
 				<p
 					v-if="eventData.organizer"
-					class="card-description__author"
+					class="card-description__author text3"
 				>
 					{{ eventData.organizer }}
 				</p>
@@ -193,9 +193,7 @@ const { sendAnalytics } = useSendTrackingEvent();
 			//TODO: пока верстка только мобилки
 			max-width: 480px;
 			word-wrap: break-word;
-			font-size: var(--font-size-XS);
 			font-weight: var(--font-weight-bold);
-			line-height: 1.6rem;
 			text-align: left;
 			color: var(--color-text-secondary);
 			margin-bottom: 12px;

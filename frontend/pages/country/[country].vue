@@ -146,7 +146,7 @@ watch(
 		<FiltersHeroWrap
 			:title="
 				$t('country.title', {
-					country: queryToCountryLocaleName[country][locale].toUpperCase()
+					country: queryToCountryLocaleName[country][locale]
 				})
 			"
 		>

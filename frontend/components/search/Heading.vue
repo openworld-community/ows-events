@@ -11,7 +11,7 @@ defineProps({
 });
 </script>
 <template>
-	<h2
+	<h3
 		:class="[
 			'heading',
 			{ 'heading--up': position === 'up' },
@@ -19,7 +19,7 @@ defineProps({
 		]"
 	>
 		{{ title }}
-	</h2>
+	</h3>
 </template>
 <style lang="less" scoped>
 .heading {

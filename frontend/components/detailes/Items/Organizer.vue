@@ -9,7 +9,7 @@ defineProps({
 </script>
 <template>
 	<p
-		class="event-author"
+		class="event-author text3"
 		:itemprop="SeoItempropEventEnum.ORGANIZER"
 	>
 		{{ organizer }}
@@ -19,9 +19,7 @@ defineProps({
 <style lang="less" scoped>
 .event-author {
 	word-wrap: break-word;
-	font-size: var(--font-size-XS);
 	font-weight: var(--font-weight-bold);
-	line-height: 16px;
 	text-align: left;
 	color: var(--color-text-secondary);
 	margin-bottom: 12px;

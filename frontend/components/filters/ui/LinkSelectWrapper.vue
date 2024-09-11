@@ -51,17 +51,18 @@ defineProps({
 		min-width: 100%;
 		display: flex;
 		justify-content: space-between;
+		font-family: var(--font-family-main);
+		font-size: var(--font-size-M);
+		@media (min-width: 1440px) {
+			font-size: var(--font-size-L);
+		}
 	}
 
 	&__trigger[data-placeholder='true'] {
-		font-family: var(--font-family-main);
-		font-size: var(--font-size-M);
 		color: var(--color-input-icons);
 	}
 
 	&__trigger[data-placeholder='false'] {
-		font-family: var(--font-family-main);
-		font-size: var(--font-size-M);
 		color: var(--color-text-main);
 	}
 

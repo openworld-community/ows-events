@@ -158,9 +158,11 @@ const onEditButtonClick = async (id: string) => {
 		padding: 20px var(--padding-side);
 
 		@media (min-width: 768px) {
+			width: 55vw;
+			max-width: 900px;
 			justify-content: flex-end;
 			background-color: transparent;
-			padding-top: 0;
+			padding-right: 0px;
 			padding-bottom: 0;
 			margin: unset;
 			position: sticky;

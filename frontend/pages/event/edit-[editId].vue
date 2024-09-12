@@ -102,11 +102,11 @@ const submitEvent = async (payload: PostEventPayload) => {
 };
 
 const cancel = () => {
-	if (router.options.history.state.back.toString().includes('postauth')) {
-		navigateTo(localePath(RoutePathEnum.HOME));
-	} else {
-		router.back();
-	}
+	//	if (router.options.history.state.back.toString().includes('postauth')) {
+	//		navigateTo(localePath(RoutePathEnum.HOME));
+	//	} else {
+	router.back();
+	//	}
 };
 </script>
 

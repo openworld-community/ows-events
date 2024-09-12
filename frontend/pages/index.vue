@@ -3,10 +3,13 @@ import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 
 import { useUserStore } from '../stores/user.store';
-import { RoutePathEnum } from '../constants/enums/route';
 
+import { RoutePathEnum } from '../constants/enums/route';
+import { useFilterStore } from '~/stores/filter.store';
+
+const filterStore = useFilterStore();
 const { sendAnalytics } = useSendTrackingEvent();
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 getMeta({
 	title: `${t('meta.default_title.first')} | ${t('meta.default_title.second')}`
@@ -44,6 +47,14 @@ const onButtonClick = async () => {
 		await openNeedAuthorizeModal();
 	}
 };
+
+useHead({
+	script: [
+		filterStore.filteredEvents
+			? getJSONEventList(filterStore.filteredEvents, locale.value, route.path)
+			: undefined
+	]
+});
 </script>
 
 <template>

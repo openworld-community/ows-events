@@ -180,7 +180,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	&__icon {
 		transition: color 0.3s ease;
 		margin-right: 5px;
-		color: var(--color-input-field);
 	}
 
 	.loader {

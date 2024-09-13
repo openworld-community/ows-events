@@ -90,6 +90,7 @@ const removeImage = async () => {
 			button-kind="ordinary"
 			:button-text="$t('form.event.add_image')"
 			icon-name="picture"
+			icon-color="var(--color-text-main)"
 			@click="input?.click()"
 		/>
 		<p

@@ -13,6 +13,7 @@ const onLogoutPress = async () => {
 		<CommonButton
 			:link="RoutePathEnum.USER_PROFILE"
 			class="navigation-menu__button"
+			icon-color="'var(--color-icons)'"
 			button-kind="ordinary"
 			no-border
 			:button-text="$t('global.button.edit_profile')"
@@ -23,6 +24,7 @@ const onLogoutPress = async () => {
 			:link="RoutePathEnum.USER_MY_EVENTS"
 			:button-text="$t('user.my_events.title')"
 			icon-name="notebook"
+			icon-color="'var(--color-icons)'"
 			button-kind="ordinary"
 			no-border
 			class="navigation-menu__button"
@@ -31,6 +33,7 @@ const onLogoutPress = async () => {
 			:link="RoutePathEnum.USER_FAVOURITES"
 			:button-text="$t('user.favourites.title')"
 			icon-name="heart"
+			icon-color="'var(--color-icons)'"
 			button-kind="ordinary"
 			no-border
 			class="navigation-menu__button"
@@ -44,6 +47,7 @@ const onLogoutPress = async () => {
 			<CommonButton
 				class="navigation-menu__button"
 				button-kind="warning"
+				icon-color="'var(--color-accent-red)'"
 				no-border
 				:button-text="$t('global.button.logout')"
 				icon-name="logout"

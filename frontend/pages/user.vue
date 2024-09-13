@@ -42,6 +42,7 @@ getMeta({
 	padding-right: var(--padding-side);
 	padding-bottom: 30px;
 	margin-bottom: auto;
+	padding-top: var(--header-height);
 
 	//Для адаптивной height на iOs
 	@supports (-webkit-touch-callout: none) {
@@ -52,8 +53,8 @@ getMeta({
 		min-height: unset;
 		flex-direction: row;
 		align-items: flex-start;
-		justify-content: space-between;
 		margin-bottom: unset;
+		padding-top: 10px;
 	}
 
 	&__wrapper {
@@ -74,6 +75,10 @@ getMeta({
 		}
 	}
 	.sidebar {
+		margin-right: 20px;
+		@media (min-width: 1440px) {
+			margin-right: 130px;
+		}
 	}
 }
 </style>

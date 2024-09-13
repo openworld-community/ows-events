@@ -36,7 +36,7 @@ defineProps({
 			<!-- <HomeAdCard v-else :ad-data="event" class="ad-block" /> -->
 			<meta
 				itemprop="position"
-				content="index+1"
+				:content="`${index}+1`"
 			/>
 		</li>
 	</ul>
@@ -49,20 +49,20 @@ defineProps({
 	grid-template-columns: repeat(1, 100%);
 	row-gap: 20px;
 
-	@media (max-width: 768px) {
-	}
+	--gap: 14px;
 
 	@media (min-width: 768px) {
-		grid-template-columns: repeat(2, 50%);
+		grid-template-columns: 1fr 1fr;
 		row-gap: 40px;
-		column-gap: 14px;
+		column-gap: var(--gap);
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
 	}
 
 	@media (min-width: 1440px) {
-		grid-template-columns: repeat(3, 33.3%);
-		column-gap: 20px;
+		--gap: 20px;
+		grid-template-columns: 1fr 1fr 1fr;
+		column-gap: var(--gap);
 	}
 
 	&__item {

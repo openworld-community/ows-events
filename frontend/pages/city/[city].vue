@@ -141,9 +141,7 @@ const onButtonClick = async () => {
 useHead({
 	script: [
 		posterEvents.value
-
 			? getJSONEventList(posterEvents.value, locale.value, route.path)
-
 			: undefined
 	]
 });
@@ -163,7 +161,7 @@ watch(
 </script>
 <template>
 	<main class="citi-page">
-		<FiltersHeroWrap :title="$t('city.title', { city: findCurrenCity(city)?.toUpperCase() })">
+		<FiltersHeroWrap :title="$t('city.title', { city: findCurrenCity(city) })">
 			<FiltersWrapper
 				:current-city="findCurrenCity(city)"
 				:tag-list="usedTags"

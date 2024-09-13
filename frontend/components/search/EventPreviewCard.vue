@@ -76,16 +76,17 @@ const { sendAnalytics } = useSendTrackingEvent();
 					v-if="!mobile && eventData.tags"
 					:tag-list="eventData.tags"
 					class="card-description__tags"
+					tag-size="small"
 				/>
-				<h3
+				<h4
 					class="card-description__title"
 					itemprop="name"
 				>
 					{{ eventData.title }}
-				</h3>
+				</h4>
 				<p
 					v-if="eventData.organizer"
-					class="card-description__author"
+					class="card-description__author text3"
 				>
 					{{ eventData.organizer }}
 				</p>
@@ -192,9 +193,7 @@ const { sendAnalytics } = useSendTrackingEvent();
 			//TODO: пока верстка только мобилки
 			max-width: 480px;
 			word-wrap: break-word;
-			font-size: var(--font-size-XS);
 			font-weight: var(--font-weight-bold);
-			line-height: 16px;
 			text-align: left;
 			color: var(--color-text-secondary);
 			margin-bottom: 12px;
@@ -209,9 +208,9 @@ const { sendAnalytics } = useSendTrackingEvent();
 			//TODO: пока верстка только мобилки
 			max-width: 480px;
 			overflow-wrap: break-word;
-			font-size: var(--font-size-L);
+			font-size: var(--font-size-ML);
 			font-weight: var(--font-weight-bold);
-			line-height: 24px;
+			line-height: 2.4rem;
 			margin-bottom: 12px;
 		}
 

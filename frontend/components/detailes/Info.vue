@@ -50,16 +50,17 @@ defineProps({
 			:location="posterEvent.location"
 			:timezone="posterEvent.timezone"
 			has-link-to-g-maps
+			size="big"
 		/>
-		<h3
+		<h4
 			v-if="!mobile && posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
 			class="event-summary__description-title"
 		>
 			{{ $t('event.description_title') }}
-		</h3>
+		</h4>
 		<p
 			v-if="posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
-			class="event-summary__description"
+			class="event-summary__description text3"
 			:itemprop="SeoItempropEventEnum.DESCRIPTION"
 		>
 			{{ posterEvent.description }}
@@ -125,8 +126,6 @@ defineProps({
 		@media (min-width: 768px) {
 			display: flex;
 			width: 100%;
-			font-size: var(--font-size-ML);
-			font-weight: 500;
 			padding-top: 24px;
 			border-top: 1px solid var(--color-input-field);
 			margin-bottom: 24px;
@@ -136,8 +135,6 @@ defineProps({
 	&__description {
 		word-wrap: break-word;
 		white-space: pre-line;
-		font-size: var(--font-size-S);
-		line-height: 20px;
 		margin-bottom: 24px;
 	}
 

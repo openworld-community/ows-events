@@ -141,7 +141,7 @@ watch(
 </script>
 <template>
 	<main class="citi-page">
-		<FiltersHeroWrap :title="$t('city.title', { city: findCurrenCity(city)?.toUpperCase() })">
+		<FiltersHeroWrap :title="$t('city.title', { city: findCurrenCity(city) })">
 			<FiltersWrapper
 				:current-city="findCurrenCity(city)"
 				:tag-list="usedTags"

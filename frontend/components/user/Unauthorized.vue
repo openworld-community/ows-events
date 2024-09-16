@@ -14,7 +14,6 @@ const { sendAnalytics } = useSendTrackingEvent();
 const userStore = useUserStore();
 const mobile = inject('mobile');
 // const desktop = inject('desktop');
-
 const tokenCookie = useCookie<string | null>(CookieNameEnum.TOKEN);
 
 const login = ref<TFormType>('login');

@@ -182,6 +182,7 @@ const clearFilters = async () => {
 					:link="RoutePathEnum.USER_PAGE"
 					button-kind="ordinary"
 					icon-name="user"
+					icon-color="var(--color-text-main)"
 					:button-text="
 						userStore.isAuthorized
 							? $t('header.navigation.user')

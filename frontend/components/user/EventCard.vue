@@ -133,9 +133,11 @@ const tagArray = computed(() => {
 	&--expired {
 		opacity: 0.5;
 	}
+
 	&__wrapper {
 		display: block;
 	}
+
 	&__image-container {
 		display: flex;
 		min-width: 94px;
@@ -240,6 +242,7 @@ const tagArray = computed(() => {
 			font-size: 12px;
 		}
 	}
+
 	&__tags {
 		@media (min-width: 768px) {
 		}

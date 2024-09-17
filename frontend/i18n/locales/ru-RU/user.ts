@@ -11,7 +11,11 @@ export default {
 	user: 'Пользователь',
 	my_events: {
 		title: 'Мои мероприятия',
-		no_my_events: 'У Вас пока нет созданных мероприятий'
+		no_my_events: 'У Вас пока нет созданных мероприятий',
+		buttons: {
+			edit: 'Редактировать',
+			delete: 'Удалить'
+		}
 	},
 	favourites: {
 		title: 'Избранное',
@@ -28,12 +32,12 @@ export default {
 	new_event: {
 		title: 'Создай свое уникальное мероприятие!'
 	},
-	logout:	{
+	logout: {
 		title: 'Выйти из аккаунта',
-		text: 'Вы уверены, что хотите выйти из аккаунта?',
+		text: 'Вы уверены, что хотите выйти из аккаунта?'
 	},
-	image:{
-		alt:'Привет От Афиши',
-		no_image:'/img/event/no_image_ru.svg'
+	image: {
+		alt: 'Привет От Афиши',
+		no_image: '/img/event/no_image_ru.svg'
 	}
 };

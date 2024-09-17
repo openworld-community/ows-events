@@ -141,6 +141,7 @@ const onEditButtonClick = async (id: string) => {
 			width: 55vw;
 			max-width: 900px;
 		}
+
 		&__event {
 			position: relative;
 			transition: width 0.3s ease-in-out, height 1s ease-in-out;

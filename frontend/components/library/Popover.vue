@@ -98,6 +98,7 @@ const model = computed({
 		&[data-side='top'] {
 			animation-name: slideUp;
 		}
+
 		&[data-side='bottom'] {
 			animation-name: slideDown;
 		}
@@ -124,6 +125,7 @@ const model = computed({
 			@media (min-width: 1440px) {
 				border-color: transparent;
 			}
+
 			&:focus-within {
 				border-color: var(--color-accent-green-main);
 			}
@@ -133,9 +135,11 @@ const model = computed({
 	&__trigger[data-state='open'] {
 		border-color: var(--color-accent-green-main);
 	}
+
 	&__trigger[data-state='close'] {
 		border-color: transparent;
 	}
+
 	&__trigger:disabled {
 		opacity: 0.8;
 	}

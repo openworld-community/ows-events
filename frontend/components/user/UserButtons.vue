@@ -35,6 +35,7 @@ const onFavoriteButtonClick = () => {
 						:link="RoutePathEnum.USER_MY_EVENTS"
 						icon-name="edit"
 						button-kind="text"
+						:button-text="$t('user.my_events.buttons.edit')"
 						no-border
 						:class="[
 							'user-buttons__button--edit',
@@ -51,6 +52,7 @@ const onFavoriteButtonClick = () => {
 						<CommonButton
 							:link="RoutePathEnum.USER_MY_EVENTS"
 							icon-name="trash"
+							:button-text="$t('user.my_events.buttons.delete')"
 							button-kind="warning"
 							no-border
 							:class="[

@@ -3,7 +3,7 @@ import { PopoverContent, Popover, PopoverTrigger } from './ui/MyPopover';
 
 const props = defineProps({
 	variant: {
-		type: String as PropType<'primary'>,
+		type: String as PropType<'primary' | 'custom'>,
 		default: 'primary'
 	},
 	ariaLabel: {

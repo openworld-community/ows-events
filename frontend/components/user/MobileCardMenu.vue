@@ -11,6 +11,10 @@ defineProps({
 		default: false
 	}
 });
+const test = (event) => {
+	event.preventDefault();
+	event.stopPropogation();
+};
 </script>
 <template>
 	<div style="z-index: 2">
@@ -19,9 +23,9 @@ defineProps({
 			align="end"
 		>
 			<template #trigger>
-				<CommonButton :link="RoutePathEnum.USER_MY_EVENTS">
+				<button @click="test($event)">
 					<CommonIcon name="dots-three-vertical" />
-				</CommonButton>
+				</button>
 			</template>
 			<template #content>
 				<CommonButton

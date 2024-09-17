@@ -52,6 +52,7 @@ const model = computed({
 			:class="['popover__trigger', { 'popover__trigger--primary': variant === 'primary' }]"
 			:aria-label="ariaLabel"
 			:disabled="disabled"
+			:as-child="variant === 'custom'"
 		>
 			<slot name="trigger" />
 		</PopoverTrigger>
@@ -149,6 +150,9 @@ const model = computed({
 			opacity: 1;
 			background-color: rgba(72, 199, 142, 0.2);
 		}
+	}
+	&--custom {
+		z-index: 1;
 	}
 }
 

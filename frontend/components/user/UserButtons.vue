@@ -5,7 +5,6 @@ import type { EventOnPoster } from '../../../common/types';
 
 const props = defineProps<{ event: EventOnPoster; showEditDeleteButtons: boolean }>();
 const emit = defineEmits(['delete', 'edit', 'favorite']);
-const mobile = inject('mobile');
 
 const onEditButtonClick = () => {
 	emit('edit', props.event.id);
@@ -22,95 +21,47 @@ const onFavoriteButtonClick = () => {
 
 <template>
 	<div class="user-buttons__button">
-		<template v-if="props.showEditDeleteButtons && mobile">
-			<LibraryPopover
-				variant="custom"
-				align="end"
-			>
-				<template #trigger>
-					<CommonIcon name="dots-three-vertical" />
-				</template>
-				<template #content>
-					<CommonButton
-						:link="RoutePathEnum.USER_MY_EVENTS"
-						icon-name="edit"
-						button-kind="text"
-						:button-text="$t('user.my_events.buttons.edit')"
-						no-border
-						:class="[
-							'user-buttons__button--edit',
-							{ 'user-buttons__button--edit--expired': props.event.date < Date.now() }
-						]"
-						@click="onEditButtonClick"
-					/>
-					<LibraryAlert
-						:title="$t('modal.delete_event_modal.title')"
-						:description-text="$t('modal.delete_event_modal.text')"
-						confirm-button-text="global.button.confirm"
-						@on-confirm="onDeleteButtonClick"
-					>
-						<CommonButton
-							:link="RoutePathEnum.USER_MY_EVENTS"
-							icon-name="trash"
-							:button-text="$t('user.my_events.buttons.delete')"
-							button-kind="warning"
-							no-border
-							:class="[
-								'user-buttons__button--delete',
-								{
-									'user-buttons__button--delete--expired':
-										props.event.date < Date.now()
-								}
-							]"
-						/>
-					</LibraryAlert>
-				</template>
-			</LibraryPopover>
-		</template>
-		<template v-else-if="props.showEditDeleteButtons && !mobile">
+		<CommonButton
+			:link="RoutePathEnum.USER_MY_EVENTS"
+			icon-name="edit"
+			button-kind="text"
+			no-border
+			:class="[
+				'user-buttons__button--edit',
+				{ 'user-buttons__button--edit--expired': props.event.date < Date.now() }
+			]"
+			@click="onEditButtonClick"
+		/>
+		<LibraryAlert
+			:title="$t('modal.delete_event_modal.title')"
+			:description-text="$t('modal.delete_event_modal.text')"
+			confirm-button-text="global.button.confirm"
+			@on-confirm="onDeleteButtonClick"
+		>
 			<CommonButton
 				:link="RoutePathEnum.USER_MY_EVENTS"
-				icon-name="edit"
-				button-kind="text"
+				icon-name="trash"
+				button-kind="warning"
 				no-border
 				:class="[
-					'user-buttons__button--edit',
-					{ 'user-buttons__button--edit--expired': props.event.date < Date.now() }
+					'user-buttons__button--delete',
+					{ 'user-buttons__button--delete--expired': props.event.date < Date.now() }
 				]"
-				@click="onEditButtonClick"
 			/>
-			<LibraryAlert
-				:title="$t('modal.delete_event_modal.title')"
-				:description-text="$t('modal.delete_event_modal.text')"
-				confirm-button-text="global.button.confirm"
-				@on-confirm="onDeleteButtonClick"
-			>
-				<CommonButton
-					:link="RoutePathEnum.USER_MY_EVENTS"
-					icon-name="trash"
-					button-kind="warning"
-					no-border
-					:class="[
-						'user-buttons__button--delete',
-						{ 'user-buttons__button--delete--expired': props.event.date < Date.now() }
-					]"
-				/>
-			</LibraryAlert>
-		</template>
-		<template v-else>
-			<CommonButton
-				:link="RoutePathEnum.USER_MY_EVENTS"
-				icon-name="heart"
-				button-kind="success"
-				no-border
-				:class="[
-					'user-buttons__button--favorite',
-					{ 'user-buttons__button--favorite--expired': props.event.date < Date.now() }
-				]"
-				@click="onFavoriteButtonClick"
-			/>
-			<!-- чуть переписать визуал избранного -->
-		</template>
+		</LibraryAlert>
+
+		<CommonButton
+			:link="RoutePathEnum.USER_MY_EVENTS"
+			icon-name="heart"
+			button-kind="success"
+			no-border
+			:class="[
+				'user-buttons__button--delete',
+				{ 'user-buttons__button--favorite--expired': props.event.date < Date.now() }
+			]"
+			@click="onFavoriteButtonClick"
+		/>
+		<!-- чуть переписать визуал избранного -->
 	</div>
 </template>
 <style scoped lang="less">

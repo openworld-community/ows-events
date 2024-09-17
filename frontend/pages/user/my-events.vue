@@ -28,6 +28,9 @@ const deleteCard = async (id: string) => {
 const onEditButtonClick = async (id: string) => {
 	await navigateTo(localePath({ path: `${RoutePathEnum.EVENT_EDIT}${id}` }));
 };
+const toggleFavourite = (id: string) => {
+	console.log('toggleFavourite', id);
+};
 
 // const addToFavorites = async (id: string) => {
 // 	// Задел для избранного добавьте в UserButtons @favorite="addToFavorites" и перепишите визуал в компоненте UserButtons
@@ -56,12 +59,27 @@ const onEditButtonClick = async (id: string) => {
 				class="my-events__list__event"
 			>
 				<UserEventCard :event-data="event">
-					<UserButtons
-						:show-edit-delete-buttons="true"
-						:event="event"
-						@delete="deleteCard"
-						@edit="onEditButtonClick"
-					/>
+					<template
+						v-if="mobile"
+						#dots
+					>
+						<UserMobileCardMenu
+							:id="event.id"
+							:is-expired="event.date < Date.now()"
+						/>
+					</template>
+					<template
+						v-if="!mobile"
+						#desctop
+					>
+						<UserButtons
+							:show-edit-delete-buttons="true"
+							:event="event"
+							@delete="deleteCard"
+							@edit="onEditButtonClick"
+							@favorite="toggleFavourite"
+						/>
+					</template>
 				</UserEventCard>
 			</li>
 		</ul>

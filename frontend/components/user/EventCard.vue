@@ -78,7 +78,7 @@ const tagArray = computed(() => {
 					>
 						{{ eventData.title }}
 					</h2>
-					<slot v-if="!desktop" />
+					<slot name="dots" />
 				</div>
 
 				<p
@@ -96,7 +96,7 @@ const tagArray = computed(() => {
 			/>
 		</div>
 
-		<slot v-if="desktop" />
+		<slot name="desctop" />
 	</CommonNavLink>
 </template>
 

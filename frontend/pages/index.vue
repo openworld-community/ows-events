@@ -1,13 +1,6 @@
 <script setup lang="ts">
-import { useModal } from 'vue-final-modal';
-import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
-
 import { useUserStore } from '../stores/user.store';
 
-import { RoutePathEnum } from '../constants/enums/route';
-import { useFilterStore } from '~/stores/filter.store';
-
-const filterStore = useFilterStore();
 const { sendAnalytics } = useSendTrackingEvent();
 const { t, locale } = useI18n();
 
@@ -17,8 +10,6 @@ getMeta({
 
 const route = useRoute();
 const userStore = useUserStore();
-
-const localePath = useLocalePath();
 
 watch(
 	() => route.query,
@@ -32,29 +23,6 @@ watch(
 	},
 	{ deep: true }
 );
-
-const {
-	open: openNeedAuthorizeModal,
-	close: closeNeedAuthorizeModal,
-	patchOptions: needAuthorizeModalPatch
-} = useModal({ component: NeedAuthorize });
-needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
-
-const onButtonClick = async () => {
-	if (userStore.isAuthorized) {
-		await navigateTo(localePath(`${RoutePathEnum.EVENT_EDIT}new`));
-	} else {
-		await openNeedAuthorizeModal();
-	}
-};
-
-useHead({
-	script: [
-		filterStore.filteredEvents
-			? getJSONEventList(filterStore.filteredEvents, locale.value, route.path)
-			: undefined
-	]
-});
 </script>
 
 <template>
@@ -71,16 +39,7 @@ useHead({
 
 		<HomeCardList />
 
-		<CommonButton
-			class="add-event-button"
-			button-kind="success"
-			is-round
-			icon-name="plus"
-			:alt="$t('home.button.add_event_aria')"
-			:title="$t('home.button.add_event_aria')"
-			aria-haspopup="true"
-			@click="onButtonClick"
-		/>
+		<CommonCreateButton :is-authorized="userStore.isAuthorized" />
 	</main>
 </template>
 

@@ -58,6 +58,7 @@ getMeta({
 				<CommonButton
 					:link="SUPPORT_EMAIL_URL"
 					icon-name="email"
+					icon-color="var(--color-white)"
 					:button-text="SUPORT_EMAIL_NAME"
 					class="button__success--filled"
 					button-kind="success"
@@ -67,6 +68,7 @@ getMeta({
 					is-external-link
 					:link="SUPPORT_TG_URL"
 					icon-name="telegram"
+					icon-color="var(--color-white)"
 					:button-text="SUPORT_TG_BOT_NAME"
 					class="button__success--filled"
 					button-kind="success"

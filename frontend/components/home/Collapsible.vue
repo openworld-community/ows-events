@@ -11,7 +11,7 @@ import { CollapsibleTrigger } from 'radix-vue';
 					tabindex="0"
 					:aria-label="$t(`home.filter.tags_button.aria`)"
 				>
-					<span class="trigger__text">{{
+					<span class="trigger__text text2">{{
 						opened.isOpen
 							? $t(`home.filter.tags_button.close`)
 							: $t(`home.filter.tags_button.open`)
@@ -62,8 +62,6 @@ import { CollapsibleTrigger } from 'radix-vue';
 		line-height: 18px;
 		letter-spacing: -0.3%;
 		font-weight: 600;
-		font-size: var(--font-size-S);
-		line-height: 16px;
 	}
 
 	&__trigger[data-state='open'] {

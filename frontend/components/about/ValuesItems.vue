@@ -9,7 +9,7 @@ defineProps<AboutValuesData>();
 			class="values-item__image"
 			:src="imageUrl"
 		/>
-		<p class="values-item__text">{{ $t(title) }}</p>
+		<p class="values-item__text text1">{{ $t(title) }}</p>
 	</li>
 </template>
 
@@ -27,12 +27,7 @@ defineProps<AboutValuesData>();
 	}
 
 	&__text {
-		font-size: var(--font-size-S);
 		margin-top: 10px;
-
-		@media (min-width: 1440px) {
-			font-size: var(--font-size-L);
-		}
 	}
 
 	&__image {

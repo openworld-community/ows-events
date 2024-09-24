@@ -69,25 +69,34 @@ const onFavoriteButtonClick = () => {
 </template>
 <style scoped lang="less">
 .user-buttons {
-	position: relative;
 	&__button {
-		display: flex;
-		position: absolute;
 		height: 100%;
+		display: flex;
 		flex-direction: row;
-		padding: 5px 7px 5px 5px;
+		padding: 0px;
 		color: black;
 		z-index: 1;
 		gap: 5px;
 		user-select: none;
 		right: 0;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: center;
 		pointer-events: none;
+		transition: all 0.7s ease-in-out;
+
+		@media (min-width: 1440px) {
+			align-items: center;
+			padding: 5px 7px 5px 5px;
+		}
 		&--edit {
-			width: 40px;
+			width: 30px;
+			height: 24px;
 			background-color: var(--color-background-secondary);
 			pointer-events: auto;
+			@media (min-width: 1440px) {
+				width: 40px;
+				height: 40px;
+			}
 
 			&--expired {
 				display: none;
@@ -97,9 +106,14 @@ const onFavoriteButtonClick = () => {
 			color: var(--color-accent-green-main);
 		}
 		&--delete {
-			width: 40px;
+			width: 30px;
+			height: 24px;
 			background-color: var(--color-background-secondary);
 			pointer-events: auto;
+			@media (min-width: 1440px) {
+				width: 40px;
+				height: 40px;
+			}
 
 			&--expired {
 				background-color: rgba(250, 250, 250, 0.5);

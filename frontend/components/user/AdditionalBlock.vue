@@ -9,8 +9,16 @@ const desktop = inject('desktop');
 	<div class="additional-block">
 		<div class="additional-block__wrapper">
 			<img
-				:srcset="desktop ? `/img/user/additionalBlock/donate-img-desktop@2x.png 2x` : `/img/user/additionalBlock/new-event-img@2x.jpg 2x`"
-				:src="desktop ? `/img/user/additionalBlock/donate-img-desktop@1x.png` : `/img/user/additionalBlock/new-event-img@1x.jpg`"
+				:srcset="
+					desktop
+						? `/img/user/additionalBlock/donate-img-desktop@2x.png 2x`
+						: `/img/user/additionalBlock/new-event-img@2x.jpg 2x`
+				"
+				:src="
+					desktop
+						? `/img/user/additionalBlock/donate-img-desktop@1x.png`
+						: `/img/user/additionalBlock/new-event-img@1x.jpg`
+				"
 				:width="desktop ? '370' : '351'"
 				:height="desktop ? '372' : '116'"
 				alt=""
@@ -32,6 +40,7 @@ const desktop = inject('desktop');
 					:button-kind="desktop ? 'ordinary' : 'success'"
 					:button-text="$t(desktop ? 'user.donate.button' : 'global.button.new_event')"
 					:icon-name="desktop ? 'donate' : ''"
+					icon-color="var(--color-text-main)"
 					:link="desktop ? RoutePathEnum.DONATION : `${RoutePathEnum.EVENT_EDIT}new`"
 				/>
 			</div>

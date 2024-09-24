@@ -79,7 +79,8 @@ export const getDateFromEpochInMs = (epoch: number | undefined, keepTimezone = f
 	if (!epoch) return null;
 	const djs = !keepTimezone ? dayjs.utc(epoch) : dayjs(epoch);
 	if (!djs.isValid()) return null;
-	return djs.toDate();
+
+	return new Date(djs.year(), djs.month(), djs.date());
 };
 
 export const getTimeFromEpochInMs = (

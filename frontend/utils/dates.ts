@@ -85,7 +85,6 @@ export const getDateFromEpochInMs = (epoch: number | undefined, keepTimezone = f
 		month: date.getUTCMonth(),
 		day: date.getUTCDate()
 	};
-	console.log('getdate', timeObj);
 	return new Date(timeObj.year, timeObj.month, timeObj.day);
 };
 
@@ -106,7 +105,6 @@ export const getTimeFromEpochInMs = (
  * @returns a UTC Date object
  */
 export const combineDateTime = (date: Date | null, time: Time | null): Date => {
-	console.log('cdt', date, time);
 	date ??= new Date();
 	time ??= { hours: 0, minutes: 0, seconds: 0 };
 	const timeObj = {
@@ -122,7 +120,6 @@ export const combineDateTime = (date: Date | null, time: Time | null): Date => {
 		Number(time.minutes),
 		Number(time.seconds)
 	);
-	console.log(timeObj, newDate);
 	return newDate;
 };
 

@@ -118,9 +118,9 @@ export const combineDateTime = (date: Date | null, time: Time | null): Date => {
 		timeObj.year,
 		timeObj.month,
 		timeObj.day,
-		time.hours,
-		time.minutes,
-		time.seconds
+		Number(time.hours),
+		Number(time.minutes),
+		Number(time.seconds)
 	);
 	console.log(timeObj, newDate);
 	return newDate;

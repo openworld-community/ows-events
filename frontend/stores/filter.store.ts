@@ -3,7 +3,7 @@ import type { City, Country } from '../../common/types/location';
 import type { EventOnPoster } from '../../common/types/event';
 import { countries as supportedCountries } from '../../common/const/supportedCountries';
 import type { Tag } from '../../common/const/tags';
-import { getFirstDateFromFilters, getSecondDateFromFilters } from '~/utils/dates';
+import { getDateFromFilters } from '~/utils/dates';
 import { RouteNameEnum } from '~/constants/enums/route';
 
 export type LocaleKey = 'en' | 'ru';
@@ -78,13 +78,12 @@ export const useFilterStore = defineStore('filter', {
 			if (process.server) return;
 
 			// начало ивента считаем от 00:00:00, конец от 23:59:59
-
 			const { data: posterEvents } = await apiRouter.filters.findEvents.useQuery({
 				data: {
 					query: {
 						...this.filters,
-						startDate: getFirstDateFromFilters(this.filters?.date[0]),
-						endDate: getSecondDateFromFilters(this.filters?.date[1])
+						startDate: getDateFromFilters('first', this.filters?.date[0]),
+						endDate: getDateFromFilters('second', this.filters?.date[1])
 					}
 				}
 			});

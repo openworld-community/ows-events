@@ -89,7 +89,7 @@ const dateFormat = (date: Date | Date[] | string | string[]) => {
 	if (Array.isArray(date)) {
 		return !date[1]
 			? `${dayjs(date[0]).format('DD.MM.YYYY')} -`
-			: `${dayjs(date[0]).format('DD.MM.YYYY')} - ${dayjs(date[1])
+			: `${dayjs(date[0]).utc().format('DD.MM.YYYY')} - ${dayjs(date[1])
 					.utc()
 					.format('DD.MM.YYYY')}`;
 	} else {
@@ -283,6 +283,7 @@ onMounted(() => {
 			border-color: var(--color-accent-green-main);
 		}
 	}
+
 	&__theme_light {
 		border-color: transparent;
 	}
@@ -303,6 +304,7 @@ onMounted(() => {
 
 	&__menu {
 		overflow: hidden;
+
 		&:focus-visible {
 			border-color: var(--color-accent-green-main);
 		}
@@ -334,6 +336,7 @@ onMounted(() => {
 		border-radius: 8px;
 		box-shadow: var(--shadow-dropdown);
 	}
+
 	&__input {
 		border-radius: 8px;
 	}
@@ -441,6 +444,7 @@ onMounted(() => {
 		&:hover {
 			color: var(--color-accent-green-main);
 		}
+
 		&:focus-visible {
 			background-color: var(--color-input-field);
 		}

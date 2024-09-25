@@ -77,10 +77,16 @@ export const getSecondDateFromFilters = (date: Date) => {
 
 export const getDateFromEpochInMs = (epoch: number | undefined, keepTimezone = false) => {
 	if (!epoch) return null;
+	const date = new Date(epoch);
 	const djs = !keepTimezone ? dayjs.utc(epoch) : dayjs(epoch);
 	if (!djs.isValid()) return null;
-
-	return new Date(djs.year(), djs.month(), djs.date());
+	const timeObj = {
+		year: date.getUTCFullYear(),
+		month: date.getUTCMonth(),
+		day: date.getUTCDate()
+	};
+	console.log('getdate', timeObj);
+	return new Date(timeObj.year, timeObj.month, timeObj.day);
 };
 
 export const getTimeFromEpochInMs = (
@@ -100,14 +106,24 @@ export const getTimeFromEpochInMs = (
  * @returns a UTC Date object
  */
 export const combineDateTime = (date: Date | null, time: Time | null): Date => {
+	console.log('cdt', date, time);
 	date ??= new Date();
 	time ??= { hours: 0, minutes: 0, seconds: 0 };
-	return dayjs
-		.utc(date)
-		.set('hour', +time.hours)
-		.set('minute', +time.minutes)
-		.set('second', +(time.seconds ?? 0))
-		.toDate();
+	const timeObj = {
+		year: new Date(date).getFullYear(),
+		month: new Date(date).getMonth(),
+		day: new Date(date).getDate()
+	};
+	const newDate = new Date(
+		timeObj.year,
+		timeObj.month,
+		timeObj.day,
+		time.hours,
+		time.minutes,
+		time.seconds
+	);
+	console.log(timeObj, newDate);
+	return newDate;
 };
 
 export const duration = (

@@ -46,9 +46,12 @@ export const getInitialEventFormValues = (data?: EventOnPoster): EventFormType =
 };
 
 export const getEventPayload = (data: EventFormType): PostEventPayload => {
-	const eventStartEpoch = combineDateTime(data.startDate, data.startTime).getTime();
+	const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
+	const eventStartEpoch =
+		combineDateTime(data.startDate, data.startTime).getTime() - timezoneOffset;
 
-	const eventEndEpoch = combineDateTime(data.endDate, data.endTime).getTime();
+	const eventEndEpoch = combineDateTime(data.endDate, data.endTime).getTime() - timezoneOffset;
+
 	return {
 		title: data.title.trim(),
 		organizer: data.organizer.trim(),

@@ -102,10 +102,14 @@ watch(
 
 watch(
 	() => values['isOnline'],
-	async (online) => {
+	async (online, country) => {
 		if (online) {
 			if (values['location']['country']) {
-				setFieldValue('location.country', '');
+				if (country) {
+					const currency = getCurrencyByCountry(country);
+					setFieldValue('price.currency', currency);
+					setFieldValue('location.country', '');
+				}
 			}
 			if (values['location']['city']) {
 				setFieldValue('location.city', '');

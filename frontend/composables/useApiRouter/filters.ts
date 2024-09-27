@@ -43,16 +43,14 @@ export const filters = {
 	findEvents: defineQuery<
 		(input?: {
 			query: {
-				searchLine?: string;
-				country?: string;
-				city?: string;
 				tags?: Tag[];
 				startDate: number;
 				endDate: number;
 			};
+			watch: any;
 		}) => EventOnPoster[]
 	>((input) => {
-		return useBackendFetch('events/find', { body: input?.query ?? {} }, { watch: false });
+		return useBackendFetch('events/find', { body: input?.query ?? {} }, { watch });
 	}),
 	getUsedCountries: defineQuery<() => Country[]>(() => useBackendFetch('location/usedCountries')),
 	getUsedCitiesByCountry: defineQuery<(input: { country: Country }) => City[]>((input) =>

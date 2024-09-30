@@ -1,6 +1,6 @@
 import { defineQuery, useBackendFetch } from './utils';
 import type { Country, City } from '../../stores/location.store';
-import type { UsedCitiesInternType, UsedLocationType } from '../../stores/filter.store';
+import type { UsedCitiesInternType, UsedLocationType } from '../../../common/types/location';
 import type { Tag } from '../../../common/const/tags';
 import type { EventOnPoster } from '../../../common/types';
 

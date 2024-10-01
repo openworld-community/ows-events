@@ -27,8 +27,9 @@ defineProps({
 		default: ''
 	}
 });
-console.log('query', route?.query?.endDate);
+
 const getDate = (date?: string) => {
+	if (!date) return null;
 	const newDate = dayjs(date);
 	if (!newDate.isValid) return null;
 	const result = newDate.toDate();
@@ -44,7 +45,19 @@ const tags = ref(
 		.split(', ')
 		.filter((item) => item !== '') ?? []
 );
-
+watch(
+	() => route.query,
+	(val) => {
+		tags.value =
+			getFirstQuery(val?.tags)
+				.split(', ')
+				.filter((item) => item !== '') ?? [];
+		dates.value = [
+			getDate(getFirstQuery(route.query.startDate)) ?? undefined,
+			getDate(getFirstQuery(route.query.endDate)) ?? undefined
+		];
+	}
+);
 watch(
 	() => tags,
 	async (val) => {

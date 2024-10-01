@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { BASE_URL } from '@/constants/url';
 import { allowedFormatsToString, isImageFormatAllowed, isImageTooBig } from '../../utils/image';
 import { ALLOWED_IMAGE_EXTENSIONS, ALLOWED_IMAGE_SIZE } from '~/constants/defaultValues/validation';
 
 export type ImageLoaderFile = File | null | 'DELETED';
 
+const config = useRuntimeConfig();
 const props = defineProps<{
 	externalImage?: string;
 }>();
@@ -13,7 +13,9 @@ const emit = defineEmits(['update:model-value']);
 
 const input = ref<HTMLInputElement>();
 const errorLoad = ref('');
-const imageSrc = computed(() => (props.externalImage ? `${BASE_URL}${props.externalImage}` : ''));
+const imageSrc = computed(() =>
+	props.externalImage ? `${config.public.baseUrl}${props.externalImage}` : ''
+);
 
 const loadImage = async (event: Event) => {
 	errorLoad.value = '';

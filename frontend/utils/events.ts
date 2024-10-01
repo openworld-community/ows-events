@@ -1,4 +1,3 @@
-import { BASE_URL } from '@/constants/url';
 import type { EventOnPoster } from '../../common/types';
 import type { Location } from '../../common/types/address';
 import type { EventFormType, PostEventPayload } from '../../common/types/event';
@@ -81,12 +80,13 @@ export const getEventPayload = (data: EventFormType): PostEventPayload => {
 };
 
 export const getEventImage = (imageUrl?: string) => {
+	const config = useRuntimeConfig();
 	if (imageUrl) {
 		//TODO убрать, когда с бэка будут приходить одинаковые url
 		if (imageUrl.startsWith('http')) {
 			return imageUrl;
 		}
-		return `${BASE_URL}${imageUrl}`;
+		return `${config.public.baseUrl}${imageUrl}`;
 	}
 	return '';
 };

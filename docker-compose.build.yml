@@ -16,18 +16,20 @@ services:
             dockerfile: ./frontend/Dockerfile
             args:
                 - NODE_ENV=production
-                - VITE_API_URL=https://127.0.0.1/api
-                - VITE_BASE_URL=https://127.0.0.1
-                - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
-                - VITE_TELEGRAM_AUTH_BOT_NAME
                 - VITE_MODE=production
-                - VITE_DOMAIN=127.0.0.1
         logging: *default-logging
         restart: always
         networks:
             - build_ows_events
         ports:
             - '80:3000'
+        environment:
+            - NUXT_PUBLIC_API_URL=http://localhost:7080/api
+            - NUXT_PUBLIC_BASE_URL=http://localhost:7080
+            - NUXT_PUBLIC_TELEGRAM_AUTH_BOT_NAME=afisha_oauth_local_bot
+            - NUXT_PUBLIC_DOMAIN=localhost
+            - NUXT_PUBLIC_GTAG_ID=localhostGtagId
+            - NUXT_PUBLIC_GOOGLE_SIGN_IN_CLIENT_ID
 
     backend:
         build:
@@ -42,7 +44,7 @@ services:
         environment:
             - MODE=prod
             - MONGO_URI=mongodb://mongo:27017/dev
-            - FRONTEND_URL=https://127.0.0.1
+            - FRONTEND_URL=http://127.0.0.1
             - SECRET_KEY
         networks:
             - build_ows_events

@@ -1,13 +1,11 @@
 import { SEO_SCHEMA_BASE_URL, SeoItemTypeEnum } from '~/constants/enums/seo';
 import type { EventOnPoster } from '../../common/types';
-import { VITE_DOMAIN } from '~/constants/url';
 import { RoutePathEnum } from '~/constants/enums/route';
 import type { LocationQuery } from '#vue-router';
 import { convertEventDateToISOString } from './dates';
 
-
 export const getJSONEventList = (posterEvents: EventOnPoster[], locale: string, path: string) => {
-
+	const config = useRuntimeConfig();
 	return {
 		type: 'application/ld+json',
 		innerHTML: JSON.stringify({
@@ -21,19 +19,17 @@ export const getJSONEventList = (posterEvents: EventOnPoster[], locale: string, 
 					'@type': 'ListItem',
 					position: ind + 1,
 					item: {
-						'@id': `${VITE_DOMAIN}/${locale}${RoutePathEnum.EVENT}/${event.id}`,
+						'@id': `${config.public.domain}/${locale}${RoutePathEnum.EVENT}/${event.id}`,
 						name: event.title
 					}
 				};
 			}),
 
-			url: `${VITE_DOMAIN}${path}`,
+			url: `${config.public.domain}${path}`,
 			potentialAction: {
 				'@type': 'SearchAction',
-				target: `${VITE_DOMAIN}${path}?{query}`,
+				target: `${config.public.domain}${path}?{query}`,
 				query: 'required'
-
-	
 			}
 		})
 	};

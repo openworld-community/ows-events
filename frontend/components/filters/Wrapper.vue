@@ -27,10 +27,18 @@ defineProps({
 		default: ''
 	}
 });
+console.log('query', route?.query?.endDate);
+const getDate = (date?: string) => {
+	const newDate = dayjs(date);
+	if (!newDate.isValid) return null;
+	const result = newDate.toDate();
+	console.log('result', newDate, result);
+	return result;
+};
 
 const dates = ref([
-	dayjs(getFirstQuery(route.query.startDate)).toDate() ?? undefined,
-	dayjs(getFirstQuery(route.query.endDate)).toDate() ?? undefined
+	getDate(getFirstQuery(route.query.startDate)) ?? undefined,
+	getDate(getFirstQuery(route.query.endDate)) ?? undefined
 ]);
 const tags = ref(
 	getFirstQuery(route.query.tags)

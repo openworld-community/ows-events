@@ -3,7 +3,7 @@ import { SeoItempropNavEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
 import { RouteNameEnum, RoutePathEnum } from '../../constants/enums/route';
 import { getRouteName } from '../../utils';
 import { useUserStore } from '../../stores/user.store';
-import { useFilterStore } from '~/stores/filter.store';
+
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 
@@ -70,8 +70,6 @@ const goBack = () => {
 	}
 };
 
-const filterStore = useFilterStore();
-
 const {
 	open: openNeedAuthorizeModal,
 	close: closeNeedAuthorizeModal,
@@ -85,15 +83,6 @@ const onButtonClick = async () => {
 	} else {
 		await openNeedAuthorizeModal();
 	}
-};
-
-const clearFilters = async () => {
-	filterStore.$patch({
-		filters: {
-			date: [],
-			tags: []
-		}
-	});
 };
 </script>
 
@@ -133,10 +122,7 @@ const clearFilters = async () => {
 					"
 					:to="!isAtHome ? RoutePathEnum.HOME : undefined"
 					:itemprop="SeoItempropNavEnum.URL"
-					@click="
-						isAtHome && scrollToTop();
-						clearFilters();
-					"
+					@click="isAtHome && scrollToTop()"
 				>
 					<CommonIcon
 						name="afisha-logo-light"

@@ -32,7 +32,6 @@ const getDate = (date?: string) => {
 	const newDate = dayjs(date);
 	if (!newDate.isValid) return null;
 	const result = newDate.toDate();
-	console.log('result', newDate, result);
 	return result;
 };
 

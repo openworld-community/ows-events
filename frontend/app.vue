@@ -7,7 +7,6 @@ import { CookieNameEnum, LocalStorageEnum } from './constants/enums/common';
 import { TOKEN_MAX_AGE_SECONDS } from './constants/defaultValues/time';
 import type { ComputedRef } from 'vue';
 import { getRouteName } from './utils';
-import { VITE_DOMAIN } from './constants/url';
 
 const { locale, locales, t } = useI18n();
 
@@ -18,6 +17,8 @@ const tablet = computed(
 	() => viewport.isGreaterOrEquals('tablet') && viewport.isLessThan('desktop')
 );
 const desktop = computed(() => viewport.isGreaterOrEquals('desktop'));
+
+const config = useRuntimeConfig();
 
 provide('mobile', mobile as ComputedRef<boolean>);
 provide('tablet', tablet as ComputedRef<boolean>);
@@ -32,7 +33,7 @@ const getPath = (path: string) => {
 const langRefs = locales.value.map((it) => ({
 	rel: 'alternate',
 	hreflang: it.code,
-	href: `${VITE_DOMAIN}/${it.code}${getPath(route.path)}`
+	href: `${config.public.domain}/${it.code}${getPath(route.path)}`
 }));
 useHead({
 	link: [
@@ -43,12 +44,12 @@ useHead({
 		},
 		{
 			rel: 'canonical',
-			href: `${VITE_DOMAIN}/${locale.value}${getPath(route.path)}`
+			href: `${config.public.domain}/${locale.value}${getPath(route.path)}`
 		},
 		{
 			rel: 'alternate',
 			hreflang: 'x-default',
-			href: `${VITE_DOMAIN}/ru${getPath(route.path)}`
+			href: `${config.public.domain}/ru${getPath(route.path)}`
 		},
 		...langRefs
 	],

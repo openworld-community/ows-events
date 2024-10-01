@@ -1,11 +1,8 @@
 import type { UseFetchOptions } from 'nuxt/app';
-import { API_URL } from '~/constants/url';
 import { useUserStore } from '../../stores/user.store';
 import { CookieNameEnum } from '../../constants/enums/common';
 import { v4 as uuid } from 'uuid';
 import { CommonErrorsEnum } from '../../../common/const/common-errors';
-import type { WatchSource } from 'vue';
-import type { WatchOptions } from 'fs';
 
 type ApiRouter = {
 	[K in string]: ApiRouter | ReturnType<typeof defineQuery> | ReturnType<typeof defineMutation>;
@@ -144,7 +141,7 @@ export function useBackendFetch<T>(
 	if (modifiers.noDefaults)
 		return (opts_: UseFetchOptions<T> = {}) => useFetch(request, Object.assign(opts, opts_));
 
-	opts.baseURL ??= API_URL;
+	opts.baseURL ??= useRuntimeConfig().public.apiUrl as string;
 
 	if (modifiers?.watch === false) {
 		opts.watch = false;

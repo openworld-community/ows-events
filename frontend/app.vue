@@ -7,7 +7,7 @@ import { CookieNameEnum, LocalStorageEnum } from './constants/enums/common';
 import { TOKEN_MAX_AGE_SECONDS } from './constants/defaultValues/time';
 import type { ComputedRef } from 'vue';
 import { getRouteName } from './utils';
-import { BASE_URL, VITE_DOMAIN } from './constants/url';
+import { VITE_DOMAIN } from './constants/url';
 
 const { locale, locales, t } = useI18n();
 
@@ -75,12 +75,6 @@ if (process.client) {
 }
 
 useCookie(CookieNameEnum.LOCALE, { maxAge: TOKEN_MAX_AGE_SECONDS }).value = locale.value;
-useCookie(CookieNameEnum.LOCALE_FOR_BACKEND, {
-	maxAge: TOKEN_MAX_AGE_SECONDS,
-	domain: BASE_URL,
-	secure: false,
-	sameSite: 'none'
-}).value = locale.value;
 
 //TODO ALL_TIMEZONES перенесены в sessionStorage, ниже функция для очистки их в localStorage у пользователей
 onMounted(() => localStorage.removeItem(LocalStorageEnum.TIMEZONES));

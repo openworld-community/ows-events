@@ -45,28 +45,43 @@ const tags = ref(
 		.split(', ')
 		.filter((item) => item !== '') ?? []
 );
+
+//when go to main page as spa (routing on frontend only and this comonent not rerenders) we need to change refs acording to changed route.query
+//conditions - becouse we need change refs only when they coused by client navigation on main page (click on logo)
+//in other cases they change by themselves or by taking initial data becouse first render this component
+
 watch(
 	() => route.query,
 	(val) => {
-		tags.value =
-			getFirstQuery(val?.tags)
-				.split(', ')
-				.filter((item) => item !== '') ?? [];
-		dates.value = [
-			getDate(getFirstQuery(route.query.startDate)) ?? undefined,
-			getDate(getFirstQuery(route.query.endDate)) ?? undefined
-		];
+		const tagsForQuery = tags.value.join(', ') || undefined;
+		if (tagsForQuery !== val.tags) {
+			tags.value =
+				getFirstQuery(val?.tags)
+					.split(', ')
+					.filter((item) => item !== '') ?? [];
+		}
+		if (dates[0] !== getFirstQuery(val.startDate) || dates[1] !== getFirstQuery(val.endDate)) {
+			dates.value = [
+				getDate(getFirstQuery(val.startDate)) ?? undefined,
+				getDate(getFirstQuery(val.endDate)) ?? undefined
+			];
+		}
 	}
 );
+
 watch(
 	() => tags,
 	async (val) => {
-		await navigateTo({
-			query: {
-				...route.query,
-				tags: val.value.join(', ') || undefined
-			}
-		});
+		const tagsForQuery = val.value.join(', ') || undefined;
+		if (tagsForQuery !== route.query.tags) {
+			console.log('work nawigation tags changed');
+			await navigateTo({
+				query: {
+					...route.query,
+					tags: val.value.join(', ') || undefined
+				}
+			});
+		}
 	},
 
 	{ deep: true }

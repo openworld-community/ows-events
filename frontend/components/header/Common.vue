@@ -84,6 +84,10 @@ const onButtonClick = async () => {
 		await openNeedAuthorizeModal();
 	}
 };
+
+const clickOnLogo = () => {
+	navigateTo(localePath(RoutePathEnum.HOME));
+};
 </script>
 
 <template>
@@ -122,7 +126,10 @@ const onButtonClick = async () => {
 					"
 					:to="!isAtHome ? RoutePathEnum.HOME : undefined"
 					:itemprop="SeoItempropNavEnum.URL"
-					@click="isAtHome && scrollToTop()"
+					@click="
+						isAtHome && scrollToTop();
+						clickOnLogo();
+					"
 				>
 					<CommonIcon
 						name="afisha-logo-light"

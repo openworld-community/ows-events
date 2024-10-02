@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { TOKEN_MAX_AGE_SECONDS } from '../../constants/defaultValues/time';
 import { CookieNameEnum } from '../../constants/enums/common';
-import { BASE_URL } from '../../constants/url';
 
 const { locale } = useI18n();
 
@@ -11,12 +10,6 @@ const language = computed(() => locale.value);
 
 watch(locale, (loc) => {
 	useCookie(CookieNameEnum.LOCALE, { maxAge: TOKEN_MAX_AGE_SECONDS }).value = loc;
-	useCookie(CookieNameEnum.LOCALE_FOR_BACKEND, {
-		maxAge: TOKEN_MAX_AGE_SECONDS,
-		domain: BASE_URL,
-		secure: false,
-		sameSite: 'none'
-	}).value = loc;
 });
 
 const sidebar = ref(null);

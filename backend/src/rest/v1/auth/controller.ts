@@ -25,7 +25,7 @@ export const telegramLogin: ITelegramHandler = async (request, reply) => {
 		}, {});
 	reply.redirect(
 		302,
-		`${vars.frontend_url}/${cookies?.lang_backend || 'ru'}/postauth/${token}?method=telegram`
+		`${vars.frontend_url}/${cookies?.lang || 'ru'}/postauth/${token}?method=telegram`
 	);
 };
 
@@ -42,7 +42,7 @@ export const googleLogin: IGoogleHandler = async (request, reply) => {
 		}, {});
 	reply.redirect(
 		302,
-		`${vars.frontend_url}/${cookies?.lang_backend || 'ru'}/postauth/${token}?method=google`
+		`${vars.frontend_url}/${cookies?.lang || 'ru'}/postauth/${token}?method=google`
 	);
 };
 

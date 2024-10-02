@@ -38,6 +38,7 @@ patchDeleteEventModal({
 			icon-name="trash"
 			icon-width="20px"
 			icon-height="20px"
+			icon-color="var(--color-accent-red)"
 			@click="openDeleteEventModal"
 		/>
 		<CommonButton
@@ -48,6 +49,7 @@ patchDeleteEventModal({
 			icon-name="edit"
 			icon-width="20px"
 			icon-height="20px"
+			icon-color="var(--color-text-main)"
 			@click="emit('editClick')"
 		/>
 	</div>

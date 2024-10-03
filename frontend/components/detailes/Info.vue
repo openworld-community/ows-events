@@ -36,48 +36,31 @@ defineProps({
 			/>
 			<DetailesItemsTitle
 				:title="posterEvent.title"
-				:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
 				:is-show-favourites="isShowFavourites"
-				:alt-content="
-					isInFavourites
-						? $t('global.button.remove_from_favourites')
-						: $t('global.button.add_to_favourites')
-				"
+				:is-in-favourites="isInFavourites"
 				@toggle-favourites="$emit('toggleFavourites')"
 			/>
 		</div>
 		<CommonEventDetails
 			class="event-summary__details"
 			:price="posterEvent.price"
-			:start-date="
-				convertEventDateToLocaleString(
-					posterEvent.date,
-					posterEvent.isOnline,
-					posterEvent.timezone
-				)
-			"
-			:end-date="
-				posterEvent.durationInSeconds
-					? convertEventDateToLocaleString(
-							posterEvent.date + posterEvent.durationInSeconds * 1000,
-							posterEvent.isOnline,
-							posterEvent.timezone
-					  )
-					: null
-			"
+			:date="posterEvent.date"
+			:duration="posterEvent.durationInSeconds"
 			:is-online="posterEvent.isOnline"
 			:location="posterEvent.location"
+			:timezone="posterEvent.timezone"
 			has-link-to-g-maps
+			size="big"
 		/>
-		<h3
+		<h4
 			v-if="!mobile && posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
 			class="event-summary__description-title"
 		>
 			{{ $t('event.description_title') }}
-		</h3>
+		</h4>
 		<p
 			v-if="posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
-			class="event-summary__description"
+			class="event-summary__description text3"
 			:itemprop="SeoItempropEventEnum.DESCRIPTION"
 		>
 			{{ posterEvent.description }}
@@ -103,9 +86,12 @@ defineProps({
 <style lang="less" scoped>
 .event-summary {
 	display: flex;
-	width: 100%;
+	//width: 100%;
+	flex-grow: 1;
+	overflow: hidden;
 	height: 100%;
 	flex-direction: column;
+	//	overflow: hidden;
 
 	@media (min-width: 768px) {
 		width: 66%;
@@ -140,8 +126,6 @@ defineProps({
 		@media (min-width: 768px) {
 			display: flex;
 			width: 100%;
-			font-size: var(--font-size-ML);
-			font-weight: 500;
 			padding-top: 24px;
 			border-top: 1px solid var(--color-input-field);
 			margin-bottom: 24px;
@@ -151,8 +135,6 @@ defineProps({
 	&__description {
 		word-wrap: break-word;
 		white-space: pre-line;
-		font-size: var(--font-size-S);
-		line-height: 20px;
 		margin-bottom: 24px;
 	}
 

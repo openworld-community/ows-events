@@ -28,7 +28,6 @@ export const useSendTrackingEvent = () => {
 
 export type SearchType = {
 	search_term: string;
-	city: string;
 	tags: string;
 };
 

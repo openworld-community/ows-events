@@ -3,14 +3,17 @@ import type { Location } from '../../../common/types/address';
 import type { PropType } from 'vue';
 import type { EventPrice } from '../../../common/types/event';
 import { formatPrice } from '../../utils/prices';
-import {
-	SeoItempropEventEnum,
-	SeoItempropLocationEnum,
-	SeoItemTypeEnum,
-	SeoItempropPriceEnum
-} from '../../constants/enums/seo';
+import { formatDate } from '../../utils/dates';
+
+import type { Timezone } from '../../../common/types/location';
+import { formatLocation } from '~/utils/location';
+const { t } = useI18n();
 
 const props = defineProps({
+	size: {
+		type: String as PropType<'big' | 'small'>,
+		default: 'small'
+	},
 	location: {
 		type: Object as PropType<Location | null>,
 		default: null
@@ -23,14 +26,15 @@ const props = defineProps({
 		type: Boolean,
 		default: false
 	},
-	startDate: {
-		type: String,
-		default: ''
+	date: {
+		type: Number,
+		required: true
 	},
-	endDate: {
-		type: String,
-		default: ''
+	duration: {
+		type: Number,
+		default: 0
 	},
+	timezone: { type: Object as PropType<Timezone>, default: null },
 	price: {
 		type: [Object, null] as PropType<EventPrice | null>,
 		required: true,
@@ -38,150 +42,48 @@ const props = defineProps({
 	}
 });
 
-const component = computed(() => {
-	if (props.hasLinkToGMaps) return defineNuxtLink({});
-	else return 'p';
+const dataPrice = computed(() => {
+	if (!props.price) {
+		return t('event.price.unknown');
+	}
+	if (props.price.value === 0) {
+		return t('event.price.free');
+	} else {
+		return formatPrice(props.price);
+	}
 });
 </script>
 
 <template>
 	<ul class="details">
 		<!--	Дата	-->
-		<ClientOnly>
-			<li
-				v-if="startDate"
-				class="details__item"
-				:itemtype="SeoItemTypeEnum.DATE"
-			>
-				<CommonIcon
-					name="calendar"
-					class="details__icon"
-					color="var(--color-accent-green-main)"
-				/>
-				<span
-					class="details__text"
-					:itemprop="SeoItempropEventEnum.START_DATE"
-				>
-					{{ startDate }}
-				</span>
-				<span
-					v-if="endDate"
-					class="details__text"
-				>
-					&nbsp;-&nbsp;
-				</span>
-				<span
-					v-if="endDate"
-					class="details__text"
-					:itemprop="SeoItempropEventEnum.END_DATE"
-				>
-					{{ endDate }}
-				</span>
-			</li>
-		</ClientOnly>
+		<CommonEventDetailesItem
+			icon-name="calendar"
+			:data="formatDate(date, isOnline, timezone, duration)"
+			:size="size"
+		/>
 
 		<!-- Цена -->
-		<li class="details__item">
-			<CommonIcon
-				name="dollar"
-				class="details__icon"
-				color="var(--color-accent-green-main)"
-			/>
-			<span
-				v-if="!price"
-				class="details__text"
-			>
-				{{ $t('event.price.unknown') }}
-			</span>
-
-			<span
-				v-else-if="price.value === 0"
-				class="details__text"
-				:itemprop="SeoItempropPriceEnum.FREE"
-				content="true"
-			>
-				{{ $t('event.price.free') }}
-			</span>
-
-			<span
-				v-else
-				:itemprop="SeoItempropPriceEnum.GROUP_ITEMPROP"
-				itemscope
-				:itemtype="SeoItemTypeEnum.OFFER"
-			>
-				<span
-					:itemprop="SeoItempropPriceEnum.PRICE"
-					class="details__text"
-				>
-					{{ formatPrice(price) }}
-				</span>
-				<span
-					class="visually-hidden"
-					:itemprop="SeoItempropPriceEnum.CURRENCY"
-				>
-					{{ price.currency }}
-				</span>
-			</span>
-		</li>
+		<CommonEventDetailesItem
+			icon-name="dollar"
+			:data="dataPrice"
+			:size="size"
+		/>
 
 		<!--	Локация		-->
-		<li
-			v-if="location || isOnline"
-			class="details__item"
-			itemscope
-			:itemtype="SeoItemTypeEnum.LOCATION"
-			:itemprop="SeoItempropLocationEnum.GROUP_ITEMPROP"
-		>
-			<p v-if="isOnline">
-				<CommonIcon
-					name="globe"
-					class="details__icon"
-					color="var(--color-accent-green-main)"
-				/>
-				<span
-					class="details__text"
-					:itemprop="SeoItempropLocationEnum.NAME"
-				>
-					{{ $t('event.tags.online') }}
-				</span>
-			</p>
-			<component
-				:is="component"
-				v-else
-				:to="hasLinkToGMaps ? getLocationLink(location) : null"
-				:target="hasLinkToGMaps ? '_blank' : null"
-				:itemprop="SeoItempropLocationEnum.GROUP_ITEMPROP"
-				:itemtype="SeoItemTypeEnum.ADDRESS"
-				itemscope
-			>
-				<CommonIcon
-					name="map-pin"
-					class="details__icon"
-					color="var(--color-accent-green-main)"
-				/>
-				<p>
-					<span
-						v-if="props.location.country"
-						:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
-						:itemprop="SeoItempropLocationEnum.COUNTRY"
-					>
-						{{ location.country }}
-					</span>
-					<span
-						v-if="location.city"
-						:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
-						:itemprop="SeoItempropLocationEnum.CITY"
-						>, {{ location.city }}
-					</span>
-					<span
-						v-if="location?.address"
-						:class="['details__text', { 'details__text--link': hasLinkToGMaps }]"
-						:itemprop="SeoItempropLocationEnum.ADDRESS"
-						>, {{ location.address }}
-					</span>
-				</p>
-			</component>
-		</li>
+		<CommonEventDetailesItem
+			v-if="isOnline"
+			icon-name="globe"
+			:data="$t('event.tags.online')"
+			:size="size"
+		/>
+		<CommonEventDetailesItem
+			v-if="!isOnline"
+			icon-name="map-pin"
+			:to="hasLinkToGMaps ? getLocationLink(location) : ''"
+			:data="formatLocation(location)"
+			:size="size"
+		/>
 	</ul>
 </template>
 
@@ -190,40 +92,7 @@ const component = computed(() => {
 	display: flex;
 	width: 100%;
 	flex-direction: column;
-
-	&__item,
-	&__item > a,
-	&__item > p {
-		display: flex;
-		width: 100%;
-		align-items: center;
-		line-height: 20px;
-
-		&:not(:last-child) {
-			margin-bottom: 8px;
-
-			@media (min-width: 1440px) {
-				margin-bottom: 12px;
-			}
-		}
-	}
-
-	&__icon {
-		min-width: 24px;
-		margin-right: 8px;
-	}
-
-	&__text {
-		font-size: var(--font-size-S);
-		vertical-align: center;
-
-		@media (min-width: 1440px) {
-			font-size: var(--font-size-XS);
-		}
-
-		&--link {
-			text-decoration: underline;
-		}
-	}
+	overflow: hidden;
+	gap: 12px;
 }
 </style>

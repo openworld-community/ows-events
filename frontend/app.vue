@@ -42,13 +42,17 @@ useHead({
 			href: '/favicon.ico'
 		},
 		{
+			rel: 'canonical',
+			href: `${VITE_DOMAIN}/${locale.value}${getPath(route.path)}`
+		},
+		{
 			rel: 'alternate',
 			hreflang: 'x-default',
-			href: `${VITE_DOMAIN}${getPath(route.path)}`
+			href: `${VITE_DOMAIN}/ru${getPath(route.path)}`
 		},
 		...langRefs
 	],
-	title: t('meta.default_title'),
+	title: `${t('meta.default_title.first')} | ${t('meta.default_title.second')}`,
 	meta: [
 		{
 			name: 'description',

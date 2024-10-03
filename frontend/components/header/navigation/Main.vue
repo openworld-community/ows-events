@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RoutePathEnum } from '../../../constants/enums/route';
 
-const mobile = inject('mobile')
+const mobile = inject('mobile');
 </script>
 
 <template>
@@ -13,7 +13,7 @@ const mobile = inject('mobile')
 			<CommonNavLink
 				:to="RoutePathEnum.ABOUT"
 				:prefetch="false"
-				class="navigation-list__nav-link"
+				class="navigation-list__nav-link text2"
 			>
 				{{ $t('header.navigation.about') }}
 			</CommonNavLink>
@@ -21,7 +21,7 @@ const mobile = inject('mobile')
 		<li class="navigation-list__nav-item">
 			<CommonNavLink
 				:to="RoutePathEnum.SUPPORT"
-				class="navigation-list__nav-link"
+				class="navigation-list__nav-link text2"
 			>
 				{{ $t('header.navigation.support') }}
 			</CommonNavLink>
@@ -29,7 +29,7 @@ const mobile = inject('mobile')
 		<li class="navigation-list__nav-item">
 			<CommonNavLink
 				:to="RoutePathEnum.DONATION"
-				class="navigation-list__nav-link"
+				class="navigation-list__nav-link text2"
 			>
 				{{ $t('header.navigation.donation') }}
 			</CommonNavLink>
@@ -37,7 +37,7 @@ const mobile = inject('mobile')
 		<li class="navigation-list__nav-item">
 			<CommonNavLink
 				:to="RoutePathEnum.COOPERATION"
-				class="navigation-list__nav-link"
+				class="navigation-list__nav-link text2"
 			>
 				{{ $t('header.navigation.cooperation') }}
 			</CommonNavLink>
@@ -46,7 +46,6 @@ const mobile = inject('mobile')
 </template>
 
 <style scoped lang="less">
-
 .navigation-list {
 	@media (min-width: 768px) {
 		display: grid;
@@ -59,17 +58,13 @@ const mobile = inject('mobile')
 		margin-left: auto;
 		margin-right: auto;
 	}
-	&__nav-item{
+	&__nav-item {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
 
-	&__nav-link { 
-		@media (min-width: 768px) {
-			font-size: var(--font-size-S);
-		}
-
+	&__nav-link {
 		&:hover,
 		&:focus-visible {
 			color: var(--color-accent-green-dark);

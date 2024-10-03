@@ -83,9 +83,8 @@ const handleDate = (modelData: typeof props.modelValue) => {
 	}
 };
 
-const dateFormat = (date: Date | Date[] | string | string[]) => {
+const dateFormat = (date: string) => {
 	if (!date) return '';
-
 	if (Array.isArray(date)) {
 		return !date[1]
 			? `${dayjs(date[0]).format('DD.MM.YYYY')} -`
@@ -252,7 +251,7 @@ onMounted(() => {
 	</div>
 </template>
 
-<style lang="less">
+<style lang="less" scoped>
 .custom__input {
 	box-sizing: border-box;
 	cursor: pointer;
@@ -268,7 +267,7 @@ onMounted(() => {
 	}
 }
 
-.dp {
+:deep(.dp) {
 	&__range {
 		&_start,
 		&_between,
@@ -280,6 +279,9 @@ onMounted(() => {
 		&_end {
 			border-color: var(--color-accent-green-main);
 		}
+	}
+	&__theme_light {
+		border-color: transparent;
 	}
 
 	&__disabled {
@@ -313,6 +315,7 @@ onMounted(() => {
 		&_content_wrapper {
 			flex-direction: column;
 			flex-wrap: nowrap;
+
 			// justify-content: flex-end;
 			// gap: 10px;
 			// padding: 0;
@@ -324,7 +327,10 @@ onMounted(() => {
 		position: relative;
 	}
 
-	&__menu_transitioned,
+	&__menu_transitioned {
+		border-radius: 8px;
+		box-shadow: var(--shadow-dropdown);
+	}
 	&__input {
 		border-radius: 8px;
 	}

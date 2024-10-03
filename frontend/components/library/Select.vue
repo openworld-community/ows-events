@@ -145,7 +145,7 @@ const onRemove = () => {
 	&__content {
 		min-width: 267px;
 		background-color: #ffffff;
-		box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
+		box-shadow: var(--shadow-dropdown);
 		position: absolute;
 		z-index: 100;
 		border-radius: 8px;

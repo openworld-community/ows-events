@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { useModal } from 'vue-final-modal';
-import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
-
+import { countries as supportedCountries } from '../../common/const/supportedCountries';
 import { useUserStore } from '../stores/user.store';
-import { RoutePathEnum } from '../constants/enums/route';
 
 const { sendAnalytics } = useSendTrackingEvent();
-const { t } = useI18n();
+const { t, locale } = useI18n();
+const mobile = inject('mobile');
 
 getMeta({
 	title: `${t('meta.default_title.first')} | ${t('meta.default_title.second')}`
@@ -15,7 +13,52 @@ getMeta({
 const route = useRoute();
 const userStore = useUserStore();
 
-const localePath = useLocalePath();
+const dateStart = computed(() =>
+	dateFromQueryToFilter('first', getFirstQuery(route.query.startDate as string))
+);
+const dateEnd = computed(() => {
+	return dateFromQueryToFilter('second', getFirstQuery(route.query.endDate as string));
+});
+const tags = computed(() =>
+	getFirstQuery(route.query.tags)
+		.split(', ')
+		.filter((item) => item !== '')
+);
+
+const { data: usedLocations } = await apiRouter.filters.getUsedLocations.useQuery({});
+
+const { data: usedTags } = await apiRouter.filters.getUsedTags.useQuery({});
+const {
+	data: posterEvents,
+	error: errorEvents,
+	pending
+} = await apiRouter.filters.findEvents.useQuery({
+	data: {
+		query: {
+			tags,
+			startDate: dateStart,
+			endDate: dateEnd
+		},
+		watch: [tags.value, dateStart.value, dateEnd.value]
+	}
+});
+
+const filteredCountriesOptions = computed(() => {
+	const usedCountries = usedLocations.value.countries.map((countryName) => {
+		return {
+			['label']: supportedCountries[countryName][locale.value],
+			['value']: supportedCountries[countryName]['en']
+		};
+	});
+	return usedCountries;
+});
+
+const filteredCitiesOptions = computed(() => {
+	const usedCities = usedLocations.value.cities.map((objCity) => {
+		return { value: objCity['en'], label: objCity[locale.value] };
+	});
+	return usedCities;
+});
 
 watch(
 	() => route.query,
@@ -23,28 +66,12 @@ watch(
 		if (Object.keys(value).length) {
 			sendAnalytics.search({
 				search_term: route.fullPath.split('?')[1],
-				city: value.city ? getFirstQuery(value.city) : '',
 				tags: value.tags ? getFirstQuery(value.tags) : ''
 			});
 		}
 	},
 	{ deep: true }
 );
-
-const {
-	open: openNeedAuthorizeModal,
-	close: closeNeedAuthorizeModal,
-	patchOptions: needAuthorizeModalPatch
-} = useModal({ component: NeedAuthorize });
-needAuthorizeModalPatch({ attrs: { closeNeedAuthorizeModal } });
-
-const onButtonClick = async () => {
-	if (userStore.isAuthorized) {
-		await navigateTo(localePath(`${RoutePathEnum.EVENT_EDIT}new`));
-	} else {
-		await openNeedAuthorizeModal();
-	}
-};
 </script>
 
 <template>
@@ -55,21 +82,49 @@ const onButtonClick = async () => {
 					v-if="mobile"
 					class="main-page__location"
 				/> -->
-			<HomeFilters class="main-page__filter" />
+
+			<FiltersWrapper
+				current-city=""
+				:tag-list="usedTags"
+				:filter-cities="filteredCitiesOptions"
+				:filter-countries="filteredCountriesOptions"
+			/>
 		</div>
 
-		<HomeCardList />
+		<SearchCardsWrapper>
+			<SearchLoader
+				v-if="pending"
+				:size="mobile ? 'middle' : 'big'"
+			/>
+			<SearchHeading
+				v-if="posterEvents && posterEvents.length !== 0"
+				position="up"
+				:title="`${$t('home.headings.up', {
+					country: `${supportedCountries['RS'][locale]}`
+				})}
+			&nbsp;&nbsp;|&nbsp;&nbsp;
+			 ${$t('home.headings.up', { country: `${supportedCountries['ME'][locale]}` })}`"
+			/>
+			<SearchNotFound
+				v-if="!pending && (!posterEvents || posterEvents.length === 0)"
+				:title="$t('event.filteredEvents.no_events_found')"
+			/>
+			<SearchEventCardsList
+				v-if="posterEvents && posterEvents.length !== 0"
+				:events="posterEvents"
+			/>
+			<SearchHeading
+				v-if="posterEvents && posterEvents.length !== 0"
+				position="down"
+				:title="`${$t('home.headings.down', {
+					country: `${supportedCountries['RS'][locale]}`
+				})}
+			&nbsp;&nbsp;|&nbsp;&nbsp;
+			 ${$t('home.headings.down', { country: `${supportedCountries['ME'][locale]}` })}`"
+			/>
+		</SearchCardsWrapper>
 
-		<CommonButton
-			class="add-event-button"
-			button-kind="success"
-			is-round
-			icon-name="plus"
-			:alt="$t('home.button.add_event_aria')"
-			:title="$t('home.button.add_event_aria')"
-			aria-haspopup="true"
-			@click="onButtonClick"
-		/>
+		<CommonCreateButton :is-authorized="userStore.isAuthorized" />
 	</main>
 </template>
 
@@ -84,6 +139,7 @@ const onButtonClick = async () => {
 }
 .main-page {
 	position: relative;
+	width: 100%;
 	@media (min-width: 768px) {
 		padding-top: 0;
 	}
@@ -116,26 +172,21 @@ const onButtonClick = async () => {
 
 	&__title {
 		max-width: 400px;
-		font-size: var(--font-size-XXL);
-		line-height: 40px;
 		text-align: center;
 		word-wrap: break-word;
 		color: var(--color-white);
 		padding-top: 28px;
 		margin-bottom: 24px;
+		letter-spacing: -0.3px;
 
 		@media (min-width: 768px) {
-			max-width: 600px;
-			font-size: 50px;
-			line-height: 60px;
+			max-width: 500px;
 			padding-top: 0;
 			margin-bottom: 40px;
 		}
 
 		@media (min-width: 1440px) {
 			max-width: 900px;
-			font-size: 70px;
-			line-height: 80px;
 			margin-bottom: 60px;
 		}
 	}
@@ -177,15 +228,5 @@ const onButtonClick = async () => {
 			}
 		}
 	}
-}
-
-.add-event-button {
-	position: sticky;
-	bottom: 20px;
-	right: 0;
-	margin-left: auto;
-	margin-right: 20px;
-	margin-bottom: var(--space-related-items);
-	z-index: 1;
 }
 </style>

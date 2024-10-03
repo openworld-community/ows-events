@@ -77,6 +77,10 @@ getMeta({
 	image: eventImage.value
 });
 
+useHead({
+	script: [posterEvent.value ? getJSONEvent(posterEvent.value) : undefined]
+});
+
 const deleteCard = async () => {
 	// если запрос проходит, то ничего не приходит, т.е. может придти только error
 	const { error } = await apiRouter.events.delete.useMutation({ data: { id } });
@@ -116,7 +120,7 @@ const onEditButtonClick = async () => {
 						posterEvent.isOnline
 							? $t(`event.tags.${Tags.ONLINE}`)
 							: posterEvent.location.city
-					}, ${posterEvent.title}` ?? '',
+					}, ${posterEvent.title}`,
 					460
 				)
 			"
@@ -124,12 +128,8 @@ const onEditButtonClick = async () => {
 		<DetailesTags
 			:tag-list="posterEvent.tags"
 			:icon-name="isInFavourites ? 'heart-filled' : 'heart'"
-			:alt-content="
-				isInFavourites
-					? $t('global.button.remove_from_favourites')
-					: $t('global.button.add_to_favourites')
-			"
 			:is-show-favourites="userStore.isAuthorized"
+			:is-in-favourites="isInFavourites"
 			@toggle-favourites="toggleFavourites"
 		/>
 		<div class="event-info">

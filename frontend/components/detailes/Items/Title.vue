@@ -11,31 +11,24 @@ defineProps({
 		type: String,
 		default: ''
 	},
-	iconName: {
-		type: String as PropType<'heart-filled' | 'heart'>,
-		default: 'heart'
-	},
-	altContent: {
-		type: String,
-		default: ''
+	isInFavourites: {
+		type: Boolean,
+		default: false
 	}
 });
 </script>
 
 <template>
 	<div class="event-info-title">
-		<h1
+		<h2
 			class="event-info-title__title"
 			:itemprop="SeoItempropEventEnum.NAME"
 		>
 			{{ title }}
-		</h1>
-		<CommonButton
+		</h2>
+		<CommonLikeButton
 			v-if="!mobile && isShowFavourites"
-			is-icon
-			is-round
-			:icon-name="iconName"
-			:alt="altContent"
+			:is-in-favourites="isInFavourites"
 			@click="emit('toggleFavourites')"
 		/>
 	</div>
@@ -46,16 +39,12 @@ defineProps({
 	display: flex;
 	width: 100%;
 	margin-bottom: 10px;
+	align-items: start;
 
 	&__title {
-		word-wrap: break-word;
-		font-size: var(--font-size-L);
-		font-weight: var(--font-weight-bold);
-		line-height: 24px;
+		word-break: break-all;
 
 		@media (min-width: 768px) {
-			font-size: var(--font-size-XXL);
-			line-height: 36px;
 			margin-bottom: 12px;
 			margin-right: 16px;
 		}

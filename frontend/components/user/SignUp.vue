@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useForm, useField } from 'vee-validate';
 import * as yup from 'yup';
+import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from '~/constants/defaultValues/validation';
 
 const { t } = useI18n();
 
@@ -23,8 +24,14 @@ const { handleSubmit, handleReset, values } = useForm({
 		password: yup
 			.string()
 			.required(t('errors.REQUIRED_FIELD'))
-			.min(4, t('errors.PASSWORD_TOO_SHORT'))
-			.max(30, t('errors.PASSWORD_TOO_LONG')),
+			.min(
+				PASSWORD_MIN_LENGTH,
+				t('errors.PASSWORD_TOO_SHORT', { count: PASSWORD_MIN_LENGTH })
+			)
+			.max(
+				PASSWORD_MAX_LENGTH,
+				t('errors.PASSWORD_TOO_LONG', { count: PASSWORD_MAX_LENGTH })
+			),
 		confirmPassword: yup
 			.string()
 			.required(t('errors.REQUIRED_FIELD'))

@@ -139,11 +139,11 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		/>
 		<CommonIcon
 			v-if="iconName || (buttonKind === 'multiselect' && !filled)"
-			:color="iconColor"
 			:class="{ button__icon: buttonText }"
 			:name="buttonKind === 'multiselect' && !filled ? 'container' : iconName"
 			:width="iconWidth"
 			:height="iconHeight"
+			:color="iconColor"
 		/>
 		<span
 			v-if="!isIcon"
@@ -175,10 +175,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 	&__content {
 		font-size: var(--font-size-M);
-
-		@media (min-width: 768px) {
-			font-size: var(--font-size-S);
-		}
 	}
 
 	&__icon {
@@ -195,10 +191,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		border: 1px solid var(--color-text-main);
 		background-color: var(--color-text-main);
 		color: var(--color-white);
-
-		&::v-deep(svg) {
-			color: var(--color-white);
-		}
 
 		&:focus-visible,
 		&:active {
@@ -224,10 +216,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		background-color: var(--color-accent-green-main);
 		border: 1px solid var(--color-accent-green-main);
 
-		&::v-deep(svg) {
-			color: var(--color-white);
-		}
-
 		&:hover,
 		&:focus-visible {
 			background-color: var(--color-accent-green-dark);
@@ -249,10 +237,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		color: var(--color-text-main);
 		background-color: var(--color-white);
 		border: 1px solid var(--color-input-field);
-
-		&::v-deep(svg) {
-			color: var(--color-text-main);
-		}
 
 		&:hover {
 			@media (hover: hover) {
@@ -289,10 +273,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		background-color: transparent;
 		border: 1px solid transparent;
 
-		&::v-deep(svg) {
-			color: var(--color-text-main);
-		}
-
 		&:hover,
 		&:focus-visible {
 			background-color: var(--color-accent-green-main-30);
@@ -320,10 +300,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		background-color: var(--color-white);
 		border: 1px solid var(--color-accent-red);
 
-		&::v-deep(svg) {
-			color: var(--color-accent-red);
-		}
-
 		&:hover,
 		&:focus-visible,
 		&:active {
@@ -334,7 +310,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			border: 1px solid transparent;
 
 			&::v-deep(svg) {
-				color: var(--color-accent-red);
+				//	color: var(--color-accent-red);
 			}
 
 			&:hover,
@@ -384,7 +360,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		}
 
 		&::v-deep(svg) {
-			color: var(--color-text-secondary);
 			width: 20px;
 			min-width: 20px;
 			height: 20px;
@@ -405,10 +380,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			background-color: var(--color-dark);
 			color: var(--color-white);
 			border-color: var(--color-dark);
-
-			&::v-deep(svg) {
-				color: var(--color-text-secondary);
-			}
 
 			& > .button__content {
 				margin-right: 0;
@@ -481,8 +452,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 	}
 
 	& svg {
-		color: v-bind('iconColor');
-		// color: var(--color-input-icons);
 		transition: color 0.3s ease;
 	}
 
@@ -502,29 +471,18 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		background-color: var(--color-background-secondary);
 		border: 1px solid var(--color-background-secondary);
 
-		&:hover,
-		&:focus-visible {
+		&:focus-visible,
+		&:active {
 			&::v-deep(svg) {
 				color: var(--color-accent-green-main-30);
 			}
 		}
-	}
-
-	&__ordinary {
-		&::v-deep(svg) {
-			color: var(--color-text-main);
-		}
-	}
-
-	&__success {
-		&::v-deep(svg) {
-			color: var(--color-accent-green-main);
-		}
-	}
-
-	&__warning {
-		&::v-deep(svg) {
-			color: var(--color-accent-red);
+		@media (min-width: 768px) {
+			&:hover {
+				&::v-deep(svg) {
+					color: var(--color-accent-green-main-30);
+				}
+			}
 		}
 	}
 }

@@ -11,7 +11,11 @@ export default {
 	user: 'User',
 	my_events: {
 		title: 'My events',
-		no_my_events: "You haven't created any events yet"
+		no_my_events: "You haven't created any events yet",
+		buttons: {
+			edit: 'Edit',
+			delete: 'Delete'
+		}
 	},
 	favourites: {
 		title: 'Favourites',
@@ -27,13 +31,13 @@ export default {
 	},
 	new_event: {
 		title: 'Create your own unique event!'
-	}, 
-	logout:	{
-		title: 'Log out',
-		text: 'Are you sure you want to log out?',
 	},
-	image:{
-		alt:'Hello from Afisha',
-		no_image:'/img/event/no_image_en.svg'
+	logout: {
+		title: 'Log out',
+		text: 'Are you sure you want to log out?'
+	},
+	image: {
+		alt: 'Hello from Afisha',
+		no_image: '/img/event/no_image_en.svg'
 	}
 };

@@ -3,7 +3,7 @@ import { PopoverContent, Popover, PopoverTrigger } from './ui/MyPopover';
 
 const props = defineProps({
 	variant: {
-		type: String as PropType<'primary'>,
+		type: String as PropType<'primary' | 'custom'>,
 		default: 'primary'
 	},
 	ariaLabel: {
@@ -52,6 +52,7 @@ const model = computed({
 			:class="['popover__trigger', { 'popover__trigger--primary': variant === 'primary' }]"
 			:aria-label="ariaLabel"
 			:disabled="disabled"
+			:as-child="variant === 'custom'"
 		>
 			<slot name="trigger" />
 		</PopoverTrigger>
@@ -98,6 +99,7 @@ const model = computed({
 		&[data-side='top'] {
 			animation-name: slideUp;
 		}
+
 		&[data-side='bottom'] {
 			animation-name: slideDown;
 		}
@@ -124,6 +126,7 @@ const model = computed({
 			@media (min-width: 1440px) {
 				border-color: transparent;
 			}
+
 			&:focus-within {
 				border-color: var(--color-accent-green-main);
 			}
@@ -133,9 +136,11 @@ const model = computed({
 	&__trigger[data-state='open'] {
 		border-color: var(--color-accent-green-main);
 	}
+
 	&__trigger[data-state='close'] {
 		border-color: transparent;
 	}
+
 	&__trigger:disabled {
 		opacity: 0.8;
 	}
@@ -145,6 +150,9 @@ const model = computed({
 			opacity: 1;
 			background-color: rgba(72, 199, 142, 0.2);
 		}
+	}
+	&--custom {
+		z-index: 1;
 	}
 }
 

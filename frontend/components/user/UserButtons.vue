@@ -21,50 +21,47 @@ const onFavoriteButtonClick = () => {
 
 <template>
 	<div class="user-buttons__button">
-		<template v-if="props.showEditDeleteButtons">
+		<CommonButton
+			:link="RoutePathEnum.USER_MY_EVENTS"
+			icon-name="edit"
+			button-kind="text"
+			no-border
+			:class="[
+				'user-buttons__button--edit',
+				{ 'user-buttons__button--edit--expired': props.event.date < Date.now() }
+			]"
+			@click="onEditButtonClick"
+		/>
+		<LibraryAlert
+			:title="$t('modal.delete_event_modal.title')"
+			:description-text="$t('modal.delete_event_modal.text')"
+			confirm-button-text="global.button.confirm"
+			@on-confirm="onDeleteButtonClick"
+		>
 			<CommonButton
 				:link="RoutePathEnum.USER_MY_EVENTS"
-				icon-name="edit"
-				button-kind="text"
+				icon-name="trash"
+				button-kind="warning"
 				no-border
 				:class="[
-					'user-buttons__button--edit',
-					{ 'user-buttons__button--edit--expired': props.event.date < Date.now() }
+					'user-buttons__button--delete',
+					{ 'user-buttons__button--delete--expired': props.event.date < Date.now() }
 				]"
-				@click="onEditButtonClick"
 			/>
-			<LibraryAlert
-				:title="$t('modal.delete_event_modal.title')"
-				:description-text="$t('modal.delete_event_modal.text')"
-				confirm-button-text="global.button.confirm"
-				@on-confirm="onDeleteButtonClick"
-			>
-				<CommonButton
-					:link="RoutePathEnum.USER_MY_EVENTS"
-					icon-name="trash"
-					button-kind="warning"
-					no-border
-					:class="[
-						'user-buttons__button--delete',
-						{ 'user-buttons__button--delete--expired': props.event.date < Date.now() }
-					]"
-				/>
-			</LibraryAlert>
-		</template>
-		<template v-else>
-			<CommonButton
-				:link="RoutePathEnum.USER_MY_EVENTS"
-				icon-name="heart"
-				button-kind="success"
-				no-border
-				:class="[
-					'user-buttons__button--favorite',
-					{ 'user-buttons__button--favorite--expired': props.event.date < Date.now() }
-				]"
-				@click="onFavoriteButtonClick"
-			/>
-			<!-- чуть переписать визуал избранного -->
-		</template>
+		</LibraryAlert>
+
+		<CommonButton
+			:link="RoutePathEnum.USER_MY_EVENTS"
+			icon-name="heart"
+			button-kind="success"
+			no-border
+			:class="[
+				'user-buttons__button--delete',
+				{ 'user-buttons__button--favorite--expired': props.event.date < Date.now() }
+			]"
+			@click="onFavoriteButtonClick"
+		/>
+		<!-- чуть переписать визуал избранного -->
 	</div>
 </template>
 <style scoped lang="less">
@@ -88,6 +85,7 @@ const onFavoriteButtonClick = () => {
 			align-items: center;
 			padding: 5px 7px 5px 5px;
 		}
+
 		&--edit {
 			width: 30px;
 			height: 24px;
@@ -102,9 +100,11 @@ const onFavoriteButtonClick = () => {
 				display: none;
 			}
 		}
+
 		&--edit :deep(svg) {
 			color: var(--color-accent-green-main);
 		}
+
 		&--delete {
 			width: 30px;
 			height: 24px;
@@ -119,9 +119,11 @@ const onFavoriteButtonClick = () => {
 				background-color: rgba(250, 250, 250, 0.5);
 			}
 		}
+
 		&--delete :deep(svg) {
 			color: var(--color-accent-green-main);
 		}
+
 		&--delete :hover :deep(svg) {
 			color: var(--color-accent-red);
 		}

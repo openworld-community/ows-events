@@ -7,6 +7,7 @@ import { dateNow } from '~/utils/dates';
 import { convertEventDateToLocaleString } from '../../utils/dates';
 import { Tags } from '../../../common/const/tags';
 import { useSendTrackingEvent } from '~/composables/useSendTrackingEvent';
+import event from '~/i18n/locales/en-GB/event';
 
 const props = defineProps({
 	eventData: {
@@ -32,6 +33,22 @@ const tagArray = computed(() => {
 	if (tablet.value) return props.eventData.tags.slice(0, 3);
 	if (desktop.value) return props.eventData.tags.slice(0, 4);
 });
+
+const clickOnCard = (ev: Event) => {
+	ev.preventDefault();
+	if (ev.target !== ev.currentTarget) {
+		ev.preventDefault();
+		console.log('kjhkjh', ev.target, ev.currentTarget);
+
+		sendAnalytics.clickEvent({
+			id_creator: props.eventData.creatorId,
+			id_event: props.eventData.id,
+			country: props.eventData?.location?.country,
+			city: props.eventData?.location?.city,
+			online: props.eventData?.isOnline
+		});
+	}
+};
 </script>
 
 <template>
@@ -42,15 +59,8 @@ const tagArray = computed(() => {
 			{ 'card--expired': eventData.date + eventData.durationInSeconds * 1000 < dateNow }
 		]"
 		:itemprop="SeoItempropGlobalEnum.URL"
-		@click="
-			sendAnalytics.clickEvent({
-				id_creator: eventData.creatorId,
-				id_event: eventData.id,
-				country: eventData?.location?.country,
-				city: eventData?.location?.city,
-				online: eventData?.isOnline
-			})
-		"
+		event=""
+		@click.prevent="clickOnCard($event)"
 	>
 		<div
 			class="card__image-container"
@@ -78,7 +88,7 @@ const tagArray = computed(() => {
 					>
 						{{ eventData.title }}
 					</h2>
-					<slot v-if="!desktop" />
+					<slot name="dots" />
 				</div>
 
 				<p
@@ -96,7 +106,7 @@ const tagArray = computed(() => {
 			/>
 		</div>
 
-		<slot v-if="desktop" />
+		<slot name="desctop" />
 	</CommonNavLink>
 </template>
 
@@ -133,9 +143,11 @@ const tagArray = computed(() => {
 	&--expired {
 		opacity: 0.5;
 	}
+
 	&__wrapper {
 		display: block;
 	}
+
 	&__image-container {
 		display: flex;
 		min-width: 94px;
@@ -240,6 +252,7 @@ const tagArray = computed(() => {
 			font-size: 12px;
 		}
 	}
+
 	&__tags {
 		@media (min-width: 768px) {
 		}

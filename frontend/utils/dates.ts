@@ -165,7 +165,8 @@ export const convertEventDateToLocaleString = (
 };
 
 export const convertToISOString = (epoch: number, timezoneOffset?: string) => {
-	const result = dayjs(epoch).utc().format('YYYY-MM-DDTHH:mm:ss');
+	const result = dayjs(epoch).format('YYYY-MM-DDTHH:mm:ss');
+	console.log('RESULT', timezoneOffset, result);
 	return timezoneOffset ? `${result}${timezoneOffset}` : result;
 };
 
@@ -182,7 +183,7 @@ export const convertEventDateToISOString = (
 	} else {
 		time = epoch;
 
-		return convertToISOString(time);
+		return new Date(epoch).toISOString();
 	}
 };
 
@@ -193,11 +194,16 @@ export const getDatesDayDifference = (firstDate: Date, secondDate: Date): number
 	return Math.ceil(diffTime / day);
 };
 
-export const roundTime = (date, interval) => {
+export const roundTime = (date: number, interval: number) => {
 	return Math.ceil(new Date(date).getTime() / (interval * 60 * 1000)) * (interval * 60 * 1000);
 };
 
-export const formatDate = (date, isOnline, timezone, duration) => {
+export const formatDate = (
+	date: number,
+	isOnline: boolean,
+	timezone: Timezone,
+	duration: number
+) => {
 	if (duration) {
 		return `${convertEventDateToLocaleString(date, isOnline, timezone)} - 
 

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { RoutePathEnum } from '@/constants/enums/route';
 import { trimString } from '../../utils/trimString';
-import { SeoItemTypeEnum } from '../../constants/enums/seo';
 
 import { apiRouter } from '../../composables/useApiRouter';
 
@@ -109,8 +108,6 @@ const onEditButtonClick = async () => {
 	<main
 		v-if="posterEvent"
 		class="event"
-		itemscope
-		:itemtype="SeoItemTypeEnum.EVENT"
 	>
 		<DetailesImage
 			:image-url="eventImage"

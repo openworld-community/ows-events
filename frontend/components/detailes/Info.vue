@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
 import type { EventOnPoster } from '../../../common/types';
-import { SeoItempropEventEnum } from '../../constants/enums/seo';
 import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
 
 const mobile = inject<boolean>('mobile');
@@ -61,14 +60,12 @@ defineProps({
 		<p
 			v-if="posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
 			class="event-summary__description text3"
-			:itemprop="SeoItempropEventEnum.DESCRIPTION"
 		>
 			{{ posterEvent.description }}
 		</p>
 		<div
 			v-if="posterEvent.creatorId === PEREDELANO_CREATOR_ID"
 			class="event-summary__html-description"
-			:itemprop="SeoItempropEventEnum.DESCRIPTION"
 			v-html="useSanitizer(posterEvent.description)"
 		/>
 		<CommonButton

@@ -2,12 +2,9 @@ import { SEO_SCHEMA_BASE_URL, SeoItemTypeEnum } from '~/constants/enums/seo';
 import type { EventOnPoster } from '../../common/types';
 import { VITE_DOMAIN } from '~/constants/url';
 import { RoutePathEnum } from '~/constants/enums/route';
-import type { LocationQuery } from '#vue-router';
 import { convertEventDateToISOString } from './dates';
 
-
 export const getJSONEventList = (posterEvents: EventOnPoster[], locale: string, path: string) => {
-
 	return {
 		type: 'application/ld+json',
 		innerHTML: JSON.stringify({
@@ -32,8 +29,6 @@ export const getJSONEventList = (posterEvents: EventOnPoster[], locale: string, 
 				'@type': 'SearchAction',
 				target: `${VITE_DOMAIN}${path}?{query}`,
 				query: 'required'
-
-	
 			}
 		})
 	};
@@ -53,7 +48,7 @@ export const getJSONEvent = (posterEvent: EventOnPoster) => {
 			),
 			endDate: posterEvent.durationInSeconds
 				? convertEventDateToISOString(
-						posterEvent.date,
+						posterEvent.date + posterEvent.durationInSeconds * 1000,
 						posterEvent.isOnline,
 						posterEvent.timezone
 				  )

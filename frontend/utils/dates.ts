@@ -166,7 +166,6 @@ export const convertEventDateToLocaleString = (
 
 export const convertToISOString = (epoch: number, timezoneOffset?: string) => {
 	const result = dayjs(epoch).format('YYYY-MM-DDTHH:mm:ss');
-	console.log('RESULT', timezoneOffset, result);
 	return timezoneOffset ? `${result}${timezoneOffset}` : result;
 };
 

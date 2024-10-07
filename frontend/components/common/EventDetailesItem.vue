@@ -30,6 +30,7 @@ const component = computed(() => {
 			:is="component"
 			:target="to ? '_blank' : null"
 			class="details__item"
+			:to="to ? to : null"
 		>
 			<CommonIcon
 				:name="iconName"

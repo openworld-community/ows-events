@@ -83,15 +83,12 @@ const handleDate = (modelData: typeof props.modelValue) => {
 	}
 };
 
-const dateFormat = (date: Date | Date[] | string | string[]) => {
+const dateFormat = (date: string) => {
 	if (!date) return '';
-
 	if (Array.isArray(date)) {
 		return !date[1]
 			? `${dayjs(date[0]).format('DD.MM.YYYY')} -`
-			: `${dayjs(date[0]).format('DD.MM.YYYY')} - ${dayjs(date[1])
-					.utc()
-					.format('DD.MM.YYYY')}`;
+			: `${dayjs(date[0]).format('DD.MM.YYYY')} - ${dayjs(date[1]).format('DD.MM.YYYY')}`;
 	} else {
 		return dayjs(date).format('DD.MM.YYYY');
 	}

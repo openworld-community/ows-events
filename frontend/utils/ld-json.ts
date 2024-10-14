@@ -1,7 +1,6 @@
 import { SEO_SCHEMA_BASE_URL, SeoItemTypeEnum } from '~/constants/enums/seo';
 import type { EventOnPoster } from '../../common/types';
 import { RoutePathEnum } from '~/constants/enums/route';
-import type { LocationQuery } from '#vue-router';
 import { convertEventDateToISOString } from './dates';
 
 export const getJSONEventList = (posterEvents: EventOnPoster[], locale: string, path: string) => {
@@ -49,7 +48,7 @@ export const getJSONEvent = (posterEvent: EventOnPoster) => {
 			),
 			endDate: posterEvent.durationInSeconds
 				? convertEventDateToISOString(
-						posterEvent.date,
+						posterEvent.date + posterEvent.durationInSeconds * 1000,
 						posterEvent.isOnline,
 						posterEvent.timezone
 				  )

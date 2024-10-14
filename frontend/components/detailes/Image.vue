@@ -1,6 +1,4 @@
 <script setup>
-import { SeoItempropGlobalEnum } from '../../constants/enums/seo';
-
 defineProps({
 	imageUrl: {
 		type: String,
@@ -13,10 +11,7 @@ defineProps({
 });
 </script>
 <template>
-	<div
-		class="event-image event-image__container"
-		:itemprop="SeoItempropGlobalEnum.IMAGE"
-	>
+	<div class="event-image event-image__container">
 		<img
 			v-if="imageUrl"
 			class="event-image__image"
@@ -24,7 +19,6 @@ defineProps({
 			width="350"
 			height="250"
 			:alt="altContent"
-			:itemprop="SeoItempropGlobalEnum.IMAGE"
 		/>
 		<img
 			v-else
@@ -33,7 +27,6 @@ defineProps({
 			width="350"
 			height="250"
 			alt=""
-			:itemprop="SeoItempropGlobalEnum.IMAGE"
 		/>
 	</div>
 </template>

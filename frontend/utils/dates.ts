@@ -77,9 +77,15 @@ export const getSecondDateFromFilters = (date: Date) => {
 
 export const getDateFromEpochInMs = (epoch: number | undefined, keepTimezone = false) => {
 	if (!epoch) return null;
+	const date = new Date(epoch);
 	const djs = !keepTimezone ? dayjs.utc(epoch) : dayjs(epoch);
 	if (!djs.isValid()) return null;
-	return djs.toDate();
+	const timeObj = {
+		year: date.getUTCFullYear(),
+		month: date.getUTCMonth(),
+		day: date.getUTCDate()
+	};
+	return new Date(timeObj.year, timeObj.month, timeObj.day);
 };
 
 export const getTimeFromEpochInMs = (
@@ -101,12 +107,20 @@ export const getTimeFromEpochInMs = (
 export const combineDateTime = (date: Date | null, time: Time | null): Date => {
 	date ??= new Date();
 	time ??= { hours: 0, minutes: 0, seconds: 0 };
-	return dayjs
-		.utc(date)
-		.set('hour', +time.hours)
-		.set('minute', +time.minutes)
-		.set('second', +(time.seconds ?? 0))
-		.toDate();
+	const timeObj = {
+		year: new Date(date).getFullYear(),
+		month: new Date(date).getMonth(),
+		day: new Date(date).getDate()
+	};
+	const newDate = new Date(
+		timeObj.year,
+		timeObj.month,
+		timeObj.day,
+		Number(time.hours),
+		Number(time.minutes),
+		Number(time.seconds)
+	);
+	return newDate;
 };
 
 export const duration = (
@@ -151,7 +165,7 @@ export const convertEventDateToLocaleString = (
 };
 
 export const convertToISOString = (epoch: number, timezoneOffset?: string) => {
-	const result = dayjs(epoch).utc().format('YYYY-MM-DDTHH:mm:ss');
+	const result = dayjs(epoch).format('YYYY-MM-DDTHH:mm:ss');
 	return timezoneOffset ? `${result}${timezoneOffset}` : result;
 };
 
@@ -168,7 +182,7 @@ export const convertEventDateToISOString = (
 	} else {
 		time = epoch;
 
-		return convertToISOString(time);
+		return new Date(epoch).toISOString();
 	}
 };
 
@@ -179,11 +193,16 @@ export const getDatesDayDifference = (firstDate: Date, secondDate: Date): number
 	return Math.ceil(diffTime / day);
 };
 
-export const roundTime = (date, interval) => {
+export const roundTime = (date: number, interval: number) => {
 	return Math.ceil(new Date(date).getTime() / (interval * 60 * 1000)) * (interval * 60 * 1000);
 };
 
-export const formatDate = (date, isOnline, timezone, duration) => {
+export const formatDate = (
+	date: number,
+	isOnline: boolean,
+	timezone: Timezone,
+	duration: number
+) => {
 	if (duration) {
 		return `${convertEventDateToLocaleString(date, isOnline, timezone)} - 
 

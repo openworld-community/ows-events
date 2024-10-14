@@ -3,7 +3,7 @@ import { SeoItempropNavEnum, SeoItemTypeEnum } from '../../constants/enums/seo';
 import { RouteNameEnum, RoutePathEnum } from '../../constants/enums/route';
 import { getRouteName } from '../../utils';
 import { useUserStore } from '../../stores/user.store';
-import { useFilterStore } from '~/stores/filter.store';
+
 import { useModal } from 'vue-final-modal';
 import NeedAuthorize from '@/components/modal/NeedAuthorize.vue';
 
@@ -70,8 +70,6 @@ const goBack = () => {
 	}
 };
 
-const filterStore = useFilterStore();
-
 const {
 	open: openNeedAuthorizeModal,
 	close: closeNeedAuthorizeModal,
@@ -87,13 +85,8 @@ const onButtonClick = async () => {
 	}
 };
 
-const clearFilters = async () => {
-	filterStore.$patch({
-		filters: {
-			date: [],
-			tags: []
-		}
-	});
+const clickOnLogo = () => {
+	navigateTo(localePath(RoutePathEnum.HOME));
 };
 </script>
 
@@ -135,7 +128,7 @@ const clearFilters = async () => {
 					:itemprop="SeoItempropNavEnum.URL"
 					@click="
 						isAtHome && scrollToTop();
-						clearFilters();
+						clickOnLogo();
 					"
 				>
 					<CommonIcon

@@ -20,12 +20,14 @@ services:
             - backend
         environment:
             - NODE_ENV=development
-            - VITE_STAGE=test
-            - VITE_API_URL=http://127.0.0.1/api
-            - VITE_BASE_URL=http://127.0.0.1
-            - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
             - VITE_MODE=development
-            - VITE_TELEGRAM_AUTH_BOT_NAME=afisha_oauth_local_bot
+            - VITE_STAGE=test
+            - NUXT_PUBLIC_API_URL=http://127.0.0.1/api
+            - NUXT_PUBLIC_BASE_URL=http://127.0.0.1
+            - NUXT_PUBLIC_TELEGRAM_AUTH_BOT_NAME=afisha_oauth_local_bot
+            - NUXT_PUBLIC_DOMAIN=localhost
+            - NUXT_PUBLIC_GTAG_ID=localhostGtagId
+            - NUXT_PUBLIC_GOOGLE_SIGN_IN_CLIENT_ID
         develop:
             watch:
                 # sync static content

@@ -4,6 +4,10 @@ export default {
 		event: 'Event image'
 	},
 	description_title: 'Event description',
+	create_title: 'And you can also create an event yourself and rally people around it.',
+	click_button: 'Just click on the button:',
+	button: 'in my personal account',
+	button_plus: 'on the main',
 	price: {
 		free: 'Free',
 		unknown: 'Price not specified',

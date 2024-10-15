@@ -96,22 +96,21 @@ defineProps({
 				<div class="card-event__button-info">
 					<CommonButton
 						class="card-event__button-plus"
-						button-kind="success"
 						is-round
 						icon-name="plus"
 						icon-color="var(--color-white)"
 						:alt="$t('home.button.add_event_aria')"
 						:title="$t('home.button.add_event_aria')"
 						aria-haspopup="true"
-						@click="onButtonClick"
 					/>
-					<p class="card-event__circle-text">{{ $t('event.button_circle') }}</p>
-
+					<p class="card-event__plus-text">{{ $t('event.button_plus') }}</p>
+					<!--
 					<CommonButton
 						:button-text="$t('global.button.more')"
 						class="button__success--filled isRound"
 						button-kind="success"
 					/>
+					-->
 				</div>
 			</div>
 		</div>
@@ -123,6 +122,7 @@ defineProps({
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	align-items: center;
 
 	@media (min-width: 768px) {
 		flex-direction: row;
@@ -169,13 +169,17 @@ defineProps({
 		color: var(--color-white);
 		background-color: var(--color-accent-green-main);
 		border: 1px solid var(--color-accent-green-main);
+		cursor: default;
 	}
 	&__button-plus {
 		width: 38px;
 		height: 38px;
+		cursor: default;
+		background-color: var(--color-accent-green-main);
+		border: 1px solid var(--color-accent-green-main);
 	}
 
-	&__circle-text {
+	&__plus-text {
 		margin-left: 13px;
 		margin-right: 70px;
 	}

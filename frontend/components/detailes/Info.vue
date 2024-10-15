@@ -53,7 +53,7 @@ defineProps({
 			size="big"
 		/>
 		<div class="container">
-			<div>
+			<div class="description">
 				<h4
 					v-if="!mobile && posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
 					class="event-summary__description-title"
@@ -84,18 +84,18 @@ defineProps({
 				/>
 			</div>
 
-			<div class="create-event">
-				<h5 class="create-event__title">{{ $t('event.create_title') }}</h5>
+			<div class="card-event">
+				<h5 class="card-event__title">{{ $t('event.create_title') }}</h5>
 				<p class="text3">{{ $t('event.click_button') }}</p>
 
-				<div class="create-event__button-info">
-					<div class="create-event__button">{{ $t('global.button.create_event') }}</div>
+				<div class="card-event__button-info">
+					<div class="card-event__button">{{ $t('global.button.create_event') }}</div>
 					<p>{{ $t('event.button') }}</p>
 				</div>
 
-				<div class="create-event__button-info">
+				<div class="card-event__button-info">
 					<CommonButton
-						class="create-event__button-plus"
+						class="card-event__button-plus"
 						button-kind="success"
 						is-round
 						icon-name="plus"
@@ -105,7 +105,7 @@ defineProps({
 						aria-haspopup="true"
 						@click="onButtonClick"
 					/>
-					<p class="create-event__circle-text">{{ $t('event.button_circle') }}</p>
+					<p class="card-event__circle-text">{{ $t('event.button_circle') }}</p>
 
 					<CommonButton
 						:button-text="$t('global.button.more')"
@@ -128,16 +128,28 @@ defineProps({
 		flex-direction: row;
 	}
 }
-.create-event {
+.description {
+	@media (min-width: 768px) {
+		flex: 1;
+	}
+}
+.card-event {
 	border-radius: 20px;
 	width: 350px;
 	height: 225px;
 	margin-top: 24px;
 	padding: 20px;
-
 	background-image: url(/img/event/background.svg);
 	background-repeat: no-repeat;
 	background-size: cover;
+
+	@media (min-width: 768px) {
+		margin-left: 20px;
+	}
+
+	@media (min-width: 1440px) {
+		width: 400px;
+	}
 	&__title {
 		text-align: center;
 		font-size: 14px;
@@ -179,7 +191,7 @@ defineProps({
 
 	@media (min-width: 768px) {
 		width: 66%;
-		max-width: 820px;
+		//max-width: 820px;
 		flex: 1;
 	}
 	&__header {

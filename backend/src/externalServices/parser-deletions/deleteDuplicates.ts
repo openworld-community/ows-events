@@ -1,18 +1,15 @@
-import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import { vars } from '../../config/vars';
 
-dotenv.config()
+dotenv.config();
 
 export async function deleteDuplicates() {
-	const uri = process.env.MONGO_URII;
-	if (!uri) {
-		throw new Error('MONGO_URI is not defined in the environment variables.');
-	}
-	const client = new MongoClient(uri);
+	const client = new mongoose.mongo.MongoClient(vars.mongo.uri);
 
 	try {
 		await client.connect();
-		console.log("Connected successfully to MongoDB");
+		console.log('Connected successfully to MongoDB');
 		const db = client.db('dev');
 		const collection = db.collection('events');
 
@@ -60,5 +57,11 @@ export async function deleteDuplicates() {
 		console.log('MongoDB connection closed');
 	}
 }
+
+// eslint-disable-next-line no-console
+export const deleteDuplicatesWrapper = () =>
+	deleteDuplicates().then(() => {
+		console.log('Duplicate events deleted');
+	});
 
 // deleteDuplicates();

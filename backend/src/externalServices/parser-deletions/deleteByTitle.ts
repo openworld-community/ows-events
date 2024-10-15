@@ -1,17 +1,15 @@
-import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import { vars } from '../../config/vars';
+import { titlesToDeleteList } from './titlesToDeleteList';
 
 dotenv.config();
 
 export async function deleteByTitle(eventTitles: string[]) {
-	const uri = process.env.MONGO_URII;
-	if (!uri) {
-		throw new Error('MONGO_URI is not defined in the environment variables.');
-	}
-	const client = new MongoClient(uri);
+	const client = new mongoose.mongo.MongoClient(vars.mongo.uri);
 	try {
 		await client.connect();
-		console.log("Connected successfully to MongoDB");
+		console.log('Connected successfully to MongoDB');
 		const db = client.db('dev');
 		const collection = db.collection('events');
 
@@ -47,6 +45,12 @@ export async function deleteByTitle(eventTitles: string[]) {
 		console.log('MongoDB connection closed');
 	}
 }
+
+// eslint-disable-next-line no-console
+export const deleteByTitleWrapper = () =>
+	deleteByTitle(titlesToDeleteList).then(() => {
+		console.log('Events with selected titles deleted');
+	});
 // const titlesToDelete = [
 //     "Museum of Broken Relationships",
 //     "Permanent Vacation",

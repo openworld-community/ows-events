@@ -1,20 +1,17 @@
-import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import { vars } from '../../config/vars';
 
-dotenv.config()
+dotenv.config();
 
 export async function deleteExpired() {
-	const uri = process.env.MONGO_URII;
-	if (!uri) {
-		throw new Error('MONGO_URI is not defined in the environment variables.');
-	}
-	const client = new MongoClient(uri);
+	const client = new mongoose.mongo.MongoClient(vars.mongo.uri);
 
 	try {
 		await client.connect();
-		console.log("Connected successfully to MongoDB");
-		const database = client.db('dev'); 
-		const collection = database.collection('events'); 
+		console.log('Connected successfully to MongoDB');
+		const database = client.db('dev');
+		const collection = database.collection('events');
 
 		// Получаем текущую дату и отнимаем один день
 		const oneDayAgo = new Date();
@@ -24,13 +21,18 @@ export async function deleteExpired() {
 		const result = await collection.deleteMany({
 			date: { $lt: oneDayAgo.getTime() },
 			durationInSeconds: 0
-		  });
-	  
-		  console.log(`${result.deletedCount} events were deleted.`);
+		});
+
+		console.log(`${result.deletedCount} events were deleted.`);
 	} finally {
 		await client.close();
 		console.log('MongoDB connection closed');
 	}
 }
 
+// eslint-disable-next-line no-console
+export const deleteExpiredWrapper = () =>
+	deleteExpired().then(() => {
+		console.log('Expired events deleted');
+	});
 // deleteExpired();

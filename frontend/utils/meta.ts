@@ -1,4 +1,4 @@
-import { DEFAULT_IMAGE_URL, VITE_DOMAIN } from '../constants/url';
+import { useRuntimeConfig } from 'nuxt/app';
 
 type MetaData = {
 	title: string | undefined;
@@ -11,6 +11,8 @@ type MetaData = {
 // image передается, если от отличается от дефолтного
 
 export const getMeta = (meta: MetaData) => {
+	const config = useRuntimeConfig();
+	const DEFAULT_IMAGE_URL = `${config.public.baseUrl}/image/url-image`;
 	const route = useRoute();
 	const { locale, t } = useI18n();
 	return useSeoMeta({
@@ -24,7 +26,7 @@ export const getMeta = (meta: MetaData) => {
 		ogImageWidth: 1200,
 		ogImageHeight: 630,
 		ogLocale: locale.value,
-		ogUrl: VITE_DOMAIN + route.path,
+		ogUrl: config.public.domain + route.path,
 		twitterCard: 'summary_large_image',
 		twitterImage: meta.image ?? `${DEFAULT_IMAGE_URL}-${locale.value}.jpeg`,
 		twitterTitle: meta.title as string,

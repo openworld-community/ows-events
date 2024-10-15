@@ -2,6 +2,7 @@
 import type { PropType } from 'vue';
 import type { EventOnPoster } from '../../../common/types';
 import { PEREDELANO_CREATOR_ID } from '../../../common/const/eventTypes';
+import { SeoItempropEventEnum } from '../constants/enums/seo';
 
 const mobile = inject<boolean>('mobile');
 

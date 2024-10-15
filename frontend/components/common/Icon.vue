@@ -4,6 +4,7 @@ export type IconName =
 	| 'afisha-logo-dark'
 	| 'arrow-right'
 	| 'back'
+	| 'background'
 	| 'button-plus'
 	| 'calendar'
 	| 'check'

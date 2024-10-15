@@ -149,10 +149,12 @@ const onEditButtonClick = async () => {
 				@edit-click="onEditButtonClick"
 			/>
 		</div>
+		
 	</main>
 </template>
 
 <style lang="less" scoped>
+
 .event {
 	display: flex;
 	flex-direction: column;

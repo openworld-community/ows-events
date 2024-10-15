@@ -52,38 +52,124 @@ defineProps({
 			has-link-to-g-maps
 			size="big"
 		/>
-		<h4
-			v-if="!mobile && posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
-			class="event-summary__description-title"
-		>
-			{{ $t('event.description_title') }}
-		</h4>
-		<p
-			v-if="posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
-			class="event-summary__description text3"
-			:itemprop="SeoItempropEventEnum.DESCRIPTION"
-		>
-			{{ posterEvent.description }}
-		</p>
-		<div
-			v-if="posterEvent.creatorId === PEREDELANO_CREATOR_ID"
-			class="event-summary__html-description"
-			:itemprop="SeoItempropEventEnum.DESCRIPTION"
-			v-html="useSanitizer(posterEvent.description)"
-		/>
-		<CommonButton
-			v-if="posterEvent.url"
-			class="event-summary__button-contact"
-			:button-kind="isOwner ? 'dark' : 'success'"
-			:button-text="$t('global.button.contact')"
-			:link="posterEvent.url"
-			is-external-link
-			:@click="$emit('onClickRedirect')"
-		/>
+		<div class="container">
+			<div>
+				<h4
+					v-if="!mobile && posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
+					class="event-summary__description-title"
+				>
+					{{ $t('event.description_title') }}
+				</h4>
+				<p
+					v-if="posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
+					class="event-summary__description text3"
+					:itemprop="SeoItempropEventEnum.DESCRIPTION"
+				>
+					{{ posterEvent.description }}
+				</p>
+				<div
+					v-if="posterEvent.creatorId === PEREDELANO_CREATOR_ID"
+					class="event-summary__html-description"
+					:itemprop="SeoItempropEventEnum.DESCRIPTION"
+					v-html="useSanitizer(posterEvent.description)"
+				/>
+				<CommonButton
+					v-if="posterEvent.url"
+					class="event-summary__button-contact"
+					:button-kind="isOwner ? 'dark' : 'success'"
+					:button-text="$t('global.button.contact')"
+					:link="posterEvent.url"
+					is-external-link
+					:@click="$emit('onClickRedirect')"
+				/>
+			</div>
+
+			<div class="create-event">
+				<h5 class="create-event__title">{{ $t('event.create_title') }}</h5>
+				<p class="text3">{{ $t('event.click_button') }}</p>
+
+				<div class="create-event__button-info">
+					<div class="create-event__button">{{ $t('global.button.create_event') }}</div>
+					<p>{{ $t('event.button') }}</p>
+				</div>
+
+				<div class="create-event__button-info">
+					<div class="create-event__circle"></div>
+					<p class="create-event__circle-text">{{ $t('event.button_circle') }}</p>
+
+					<CommonButton
+						:button-text="$t('global.button.more')"
+						class="button__success--filled isRound"
+						button-kind="success"
+					/>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 
 <style lang="less" scoped>
+.container {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+
+	@media (min-width: 768px) {
+		flex-direction: row;
+	}
+}
+.create-event {
+	border-radius: 20px;
+	width: 350px;
+	height: 225px;
+	margin-top: 24px;
+	padding: 20px;
+
+	background-image: url(/img/event/background.svg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	&__title {
+		text-align: center;
+		font-size: 14px;
+		margin: 18px 0;
+	}
+	&__button-info {
+		margin: 10px 0;
+		display: flex;
+		align-items: center;
+		font-size: 12px;
+	}
+	&__button {
+		margin-right: 14px;
+		border-radius: 8px;
+		line-height: 18px;
+		padding: 4px 10px;
+		color: var(--color-white);
+		background-color: var(--color-accent-green-main);
+		border: 1px solid var(--color-accent-green-main);
+	}
+	&__circle {
+		width: 38px;
+		height: 38px;
+		background-color: var(--color-accent-green-main);
+		border-radius: 50%;
+		position: relative;
+	}
+	&__circle::before {
+		content: '+';
+		font-size: 30px;
+		color: var(--color-white);
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	&__circle-text {
+		margin-left: 14px;
+		margin-right: 20px;
+	}
+}
 .event-summary {
 	display: flex;
 	//width: 100%;

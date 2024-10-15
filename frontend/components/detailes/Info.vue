@@ -94,7 +94,17 @@ defineProps({
 				</div>
 
 				<div class="create-event__button-info">
-					<div class="create-event__circle"></div>
+					<CommonButton
+						class="create-event__button-plus"
+						button-kind="success"
+						is-round
+						icon-name="plus"
+						icon-color="var(--color-white)"
+						:alt="$t('home.button.add_event_aria')"
+						:title="$t('home.button.add_event_aria')"
+						aria-haspopup="true"
+						@click="onButtonClick"
+					/>
 					<p class="create-event__circle-text">{{ $t('event.button_circle') }}</p>
 
 					<CommonButton
@@ -148,26 +158,14 @@ defineProps({
 		background-color: var(--color-accent-green-main);
 		border: 1px solid var(--color-accent-green-main);
 	}
-	&__circle {
+	&__button-plus {
 		width: 38px;
 		height: 38px;
-		background-color: var(--color-accent-green-main);
-		border-radius: 50%;
-		position: relative;
-	}
-	&__circle::before {
-		content: '+';
-		font-size: 30px;
-		color: var(--color-white);
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
 	}
 
 	&__circle-text {
-		margin-left: 14px;
-		margin-right: 20px;
+		margin-left: 13px;
+		margin-right: 70px;
 	}
 }
 .event-summary {

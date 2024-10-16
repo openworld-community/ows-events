@@ -82,12 +82,12 @@ defineProps({
 			</div>
 
 			<div class="info-poster">
-				<h5 class="info-poster__title">{{ $t('event.create_title') }}</h5>
-				<p class="text3">{{ $t('event.click_button') }}</p>
+				<h3 class="info-poster__title info-poster__text">{{ $t('event.create_title') }}</h3>
+				<p class="info-poster__text">{{ $t('event.click_button') }}</p>
 
 				<div class="info-poster__button-info">
 					<div class="info-poster__button">{{ $t('global.button.create_event') }}</div>
-					<p>{{ $t('event.button') }}</p>
+					<p class="info-poster__text">{{ $t('event.button') }}</p>
 				</div>
 
 				<div class="info-poster__button-info">
@@ -100,7 +100,7 @@ defineProps({
 						:title="$t('home.button.add_event_aria')"
 						aria-haspopup="true"
 					/>
-					<p class="info-poster__plus-text">{{ $t('event.button_plus') }}</p>
+					<p class="info-poster__text">{{ $t('event.button_plus') }}</p>
 					<!--
 					<CommonButton
 						:button-text="$t('global.button.more')"
@@ -149,9 +149,17 @@ defineProps({
 	}
 	&__title {
 		text-align: center;
-		font-size: 14px;
 		margin: 18px 0;
 	}
+	&__text {
+		font-size: 12px;
+		font-weight: bold;
+
+		@media (min-width: 1440px) {
+			font-size: 16px;
+		}
+	}
+
 	&__button-info {
 		margin: 10px 0;
 		display: flex;
@@ -168,17 +176,14 @@ defineProps({
 		border: 1px solid var(--color-accent-green-main);
 		cursor: default;
 	}
+
 	&__button-plus {
 		width: 38px;
 		height: 38px;
 		cursor: default;
 		background-color: var(--color-accent-green-main);
 		border: 1px solid var(--color-accent-green-main);
-	}
-
-	&__plus-text {
-		margin-left: 13px;
-		margin-right: 70px;
+		margin-right: 13px;
 	}
 }
 .event-summary {

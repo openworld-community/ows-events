@@ -81,18 +81,18 @@ defineProps({
 				/>
 			</div>
 
-			<div class="card-event">
-				<h5 class="card-event__title">{{ $t('event.create_title') }}</h5>
+			<div class="info-poster">
+				<h5 class="info-poster__title">{{ $t('event.create_title') }}</h5>
 				<p class="text3">{{ $t('event.click_button') }}</p>
 
-				<div class="card-event__button-info">
-					<div class="card-event__button">{{ $t('global.button.create_event') }}</div>
+				<div class="info-poster__button-info">
+					<div class="info-poster__button">{{ $t('global.button.create_event') }}</div>
 					<p>{{ $t('event.button') }}</p>
 				</div>
 
-				<div class="card-event__button-info">
+				<div class="info-poster__button-info">
 					<CommonButton
-						class="card-event__button-plus"
+						class="info-poster__button-plus"
 						is-round
 						icon-name="plus"
 						icon-color="var(--color-white)"
@@ -100,7 +100,7 @@ defineProps({
 						:title="$t('home.button.add_event_aria')"
 						aria-haspopup="true"
 					/>
-					<p class="card-event__plus-text">{{ $t('event.button_plus') }}</p>
+					<p class="info-poster__plus-text">{{ $t('event.button_plus') }}</p>
 					<!--
 					<CommonButton
 						:button-text="$t('global.button.more')"
@@ -130,7 +130,7 @@ defineProps({
 		flex: 1;
 	}
 }
-.card-event {
+.info-poster {
 	border-radius: 20px;
 	width: 350px;
 	height: 225px;

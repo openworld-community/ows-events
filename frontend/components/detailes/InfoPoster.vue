@@ -2,32 +2,18 @@
 
 <template>
 	<div class="info-poster">
-		<h3 class="info-poster__title info-poster__text">{{ $t('event.create_title') }}</h3>
-		<p class="info-poster__text">{{ $t('event.click_button') }}</p>
+		<h3 class="info-poster__title">{{ $t('event.create_title') }}</h3>
+		<p class="info-poster__text font-size">{{ $t('event.click_button') }}</p>
+		<p class="info-poster__text-btn font-size">{{ $t('event.button') }}</p>
 
-		<div class="info-poster__button-info">
-			<div class="info-poster__button">{{ $t('global.button.create_event') }}</div>
-			<p class="info-poster__text">{{ $t('event.button') }}</p>
-		</div>
-
-		<div class="info-poster__button-info">
+		<div class="info-poster__plus">
+			<p class="info-poster__text-plus font-size">{{ $t('event.button_plus') }}</p>
+			<!-- 
 			<CommonButton
-				class="info-poster__button-plus"
-				is-round
-				icon-name="plus"
-				icon-color="var(--color-white)"
-				:alt="$t('home.button.add_event_aria')"
-				:title="$t('home.button.add_event_aria')"
-				aria-haspopup="true"
+				:button-text="$t('global.button.more')"
+				button-kind="success"
 			/>
-			<p class="info-poster__text">{{ $t('event.button_plus') }}</p>
-			<!--
-					<CommonButton
-						:button-text="$t('global.button.more')"
-						class="button__success--filled isRound"
-						button-kind="success"
-					/>
-					-->
+			-->
 		</div>
 	</div>
 </template>
@@ -38,7 +24,7 @@
 	width: 350px;
 	height: 225px;
 	margin-top: 24px;
-	padding: 20px;
+	padding: 38px 12px 17px 12px;
 	background-image: url(/img/event/background.svg);
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -49,44 +35,58 @@
 
 	@media (min-width: 1440px) {
 		width: 400px;
+		height: 280px;
 	}
 	&__title {
 		text-align: center;
-		margin: 18px 0;
-	}
-	&__text {
-		font-size: 12px;
+		font-size: 14px;
 		font-weight: bold;
 
 		@media (min-width: 1440px) {
 			font-size: 16px;
 		}
 	}
+	&__text {
+		margin-top: 19px;
+		margin-bottom: 21px;
+		@media (min-width: 768px) {
+			margin-bottom: 13px;
+		}
+		@media (min-width: 1440px) {
+			margin-bottom: 26px;
+		}
+	}
 
-	&__button-info {
-		margin: 10px 0;
+	&__text-btn {
+		margin-left: 140px;
+		//margin-bottom: 18px; когда вставим кнопку "подробнее"
+		margin-bottom: 27px;
+		@media (min-width: 1440px) {
+			margin-left: 170px;
+			margin-bottom: 30px;
+		}
+	}
+
+	&__plus {
 		display: flex;
 		align-items: center;
-		font-size: 12px;
-	}
-	&__button {
-		margin-right: 14px;
-		border-radius: 8px;
-		line-height: 18px;
-		padding: 4px 10px;
-		color: var(--color-white);
-		background-color: var(--color-accent-green-main);
-		border: 1px solid var(--color-accent-green-main);
-		cursor: default;
 	}
 
-	&__button-plus {
-		width: 38px;
-		height: 38px;
-		cursor: default;
-		background-color: var(--color-accent-green-main);
-		border: 1px solid var(--color-accent-green-main);
-		margin-right: 13px;
+	&__text-plus {
+		margin-left: 50px;
+		margin-right: 91px;
+		@media (min-width: 1440px) {
+			margin-left: 60px;
+		}
+	}
+
+	.font-size {
+		font-size: 12px;
+		font-weight: bold;
+
+		@media (min-width: 1440px) {
+			font-size: 16px;
+		}
 	}
 }
 </style>

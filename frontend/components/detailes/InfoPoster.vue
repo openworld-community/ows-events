@@ -3,11 +3,11 @@
 <template>
 	<div class="info-poster">
 		<h3 class="info-poster__title">{{ $t('event.create_title') }}</h3>
-		<p class="info-poster__text font-size">{{ $t('event.click_button') }}</p>
-		<p class="info-poster__text-btn font-size">{{ $t('event.button') }}</p>
+		<p class="info-poster__text">{{ $t('event.click_button') }}</p>
+		<p class="info-poster__text-btn">{{ $t('event.button') }}</p>
 
 		<div class="info-poster__plus">
-			<p class="info-poster__text-plus font-size">{{ $t('event.button_plus') }}</p>
+			<p class="info-poster__text-plus">{{ $t('event.button_plus') }}</p>
 			<!-- 
 			<CommonButton
 				:button-text="$t('global.button.more')"
@@ -20,11 +20,12 @@
 
 <style lang="less" scoped>
 .info-poster {
+	position: relative;
 	border-radius: 20px;
 	width: 350px;
 	height: 225px;
 	margin-top: 24px;
-	padding: 38px 12px 17px 12px;
+	padding: 38px 15px 17px 15px;
 	background-image: url(/img/event/background.svg);
 	background-repeat: no-repeat;
 	background-size: cover;
@@ -39,31 +40,38 @@
 	}
 	&__title {
 		text-align: center;
-		font-size: 14px;
+		font-size: 1.4rem;
 		font-weight: bold;
 
 		@media (min-width: 1440px) {
-			font-size: 16px;
+			font-size: 1.6rem;
 		}
 	}
 	&__text {
 		margin-top: 19px;
 		margin-bottom: 21px;
+		font-size: 1.2rem;
+		font-weight: bold;
 		@media (min-width: 768px) {
 			margin-bottom: 13px;
 		}
 		@media (min-width: 1440px) {
 			margin-bottom: 26px;
+			font-size: 1.6rem;
 		}
 	}
 
 	&__text-btn {
-		margin-left: 140px;
+		position: absolute;
+		left: 160px;
 		//margin-bottom: 18px; когда вставим кнопку "подробнее"
-		margin-bottom: 27px;
+
+		font-size: 1.2rem;
+		font-weight: bold;
 		@media (min-width: 1440px) {
-			margin-left: 170px;
-			margin-bottom: 30px;
+			left: 174px;
+			
+			font-size: 1.6rem;
 		}
 	}
 
@@ -73,19 +81,15 @@
 	}
 
 	&__text-plus {
-		margin-left: 50px;
-		margin-right: 91px;
-		@media (min-width: 1440px) {
-			margin-left: 60px;
-		}
-	}
-
-	.font-size {
-		font-size: 12px;
+		position: absolute;
+		bottom: 29px;
+		left: 71px;
+		font-size: 1.2rem;
 		font-weight: bold;
-
 		@media (min-width: 1440px) {
-			font-size: 16px;
+			left: 72px;
+			bottom: 55px;
+			font-size: 1.6rem;
 		}
 	}
 }

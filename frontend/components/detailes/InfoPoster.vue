@@ -2,12 +2,12 @@
 
 <template>
 	<div class="info-poster">
-		<h3 class="info-poster__title">{{ $t('event.create_title') }}</h3>
-		<p class="info-poster__text">{{ $t('event.click_button') }}</p>
-		<p class="info-poster__text-btn">{{ $t('event.button') }}</p>
+		<h3 class="info-poster__title">{{ $t('event.poster.create_title') }}</h3>
+		<p class="info-poster__text">{{ $t('event.poster.click_button') }}</p>
+		<p class="info-poster__text-btn">{{ $t('event.poster.button') }}</p>
 
 		<div class="info-poster__plus">
-			<p class="info-poster__text-plus">{{ $t('event.button_plus') }}</p>
+			<p class="info-poster__text-plus">{{ $t('event.poster.button_plus') }}</p>
 			<!-- 
 			<CommonButton
 				:button-text="$t('global.button.more')"
@@ -70,7 +70,7 @@
 		font-weight: bold;
 		@media (min-width: 1440px) {
 			left: 174px;
-			
+
 			font-size: 1.6rem;
 		}
 	}

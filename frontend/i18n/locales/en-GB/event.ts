@@ -5,9 +5,9 @@ export default {
 	},
 	description_title: 'Event description',
 	poster: {
-		create_title: 'And you can also create an event yourself and rally people around it.',
+		create_title: 'You can also create your own event and gather people around it.',
 		click_button: 'Just click on the button:',
-		button: 'in your profile',
+		button: 'in your personal account',
 		button_plus: 'on the main page'
 	},
 

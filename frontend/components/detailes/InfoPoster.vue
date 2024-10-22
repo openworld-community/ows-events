@@ -2,18 +2,32 @@
 
 <template>
 	<div class="info-poster">
-		<h3 class="info-poster__title">{{ $t('event.poster.create_title') }}</h3>
+		<h3 class="info-poster__title info-poster__text">{{ $t('event.poster.create_title') }}</h3>
 		<p class="info-poster__text">{{ $t('event.poster.click_button') }}</p>
-		<p class="info-poster__text-btn">{{ $t('event.poster.button') }}</p>
 
-		<div class="info-poster__plus">
-			<p class="info-poster__text-plus">{{ $t('event.poster.button_plus') }}</p>
-			<!-- 
+		<div class="info-poster__button-info">
+			<div class="info-poster__button">{{ $t('global.button.create_event') }}</div>
+			<p class="info-poster__text">{{ $t('event.poster.button') }}</p>
+		</div>
+
+		<div class="info-poster__button-info">
 			<CommonButton
-				:button-text="$t('global.button.more')"
-				button-kind="success"
+				class="info-poster__button-plus"
+				is-round
+				icon-name="plus"
+				icon-color="var(--color-white)"
+				:alt="$t('home.button.add_event_aria')"
+				:title="$t('home.button.add_event_aria')"
+				aria-haspopup="true"
 			/>
-			-->
+			<p class="info-poster__text">{{ $t('event.poster.button_plus') }}</p>
+			<!--
+					<CommonButton
+						:button-text="$t('global.button.more')"
+						class="button__success--filled isRound"
+						button-kind="success"
+					/>
+					-->
 		</div>
 	</div>
 </template>

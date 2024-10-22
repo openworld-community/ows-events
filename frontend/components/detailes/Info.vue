@@ -51,36 +51,47 @@ defineProps({
 			has-link-to-g-maps
 			size="big"
 		/>
-		<h4
-			v-if="!mobile && posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
-			class="event-summary__description-title"
-		>
-			{{ $t('event.description_title') }}
-		</h4>
-		<p
-			v-if="posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
-			class="event-summary__description text3"
-		>
-			{{ posterEvent.description }}
-		</p>
-		<div
-			v-if="posterEvent.creatorId === PEREDELANO_CREATOR_ID"
-			class="event-summary__html-description"
-			v-html="useSanitizer(posterEvent.description)"
-		/>
-		<CommonButton
-			v-if="posterEvent.url"
-			class="event-summary__button-contact"
-			:button-kind="isOwner ? 'dark' : 'success'"
-			:button-text="$t('global.button.contact')"
-			:link="posterEvent.url"
-			is-external-link
-			:@click="$emit('onClickRedirect')"
-		/>
+		<div class="event-summary__container">
+			<div class="description">
+				<h4
+					v-if="!mobile && posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
+					class="event-summary__description-title"
+				>
+					{{ $t('event.description_title') }}
+				</h4>
+				<p
+					v-if="posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
+					class="event-summary__description text3"
+				>
+					{{ posterEvent.description }}
+				</p>
+				<div
+					v-if="posterEvent.creatorId === PEREDELANO_CREATOR_ID"
+					class="event-summary__html-description"
+					v-html="useSanitizer(posterEvent.description)"
+				/>
+				<CommonButton
+					v-if="posterEvent.url"
+					class="event-summary__button-contact"
+					:button-kind="isOwner ? 'dark' : 'success'"
+					:button-text="$t('global.button.contact')"
+					:link="posterEvent.url"
+					is-external-link
+					:@click="$emit('onClickRedirect')"
+				/>
+			</div>
+			<DetailesInfoPoster />
+		</div>
 	</div>
 </template>
 
 <style lang="less" scoped>
+.description {
+	@media (min-width: 768px) {
+		flex: 1;
+	}
+}
+
 .event-summary {
 	display: flex;
 	//width: 100%;
@@ -92,7 +103,7 @@ defineProps({
 
 	@media (min-width: 768px) {
 		width: 66%;
-		max-width: 820px;
+		//max-width: 820px;
 		flex: 1;
 	}
 	&__header {
@@ -126,6 +137,17 @@ defineProps({
 			padding-top: 24px;
 			border-top: 1px solid var(--color-input-field);
 			margin-bottom: 24px;
+		}
+	}
+
+	&__container {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
+
+		@media (min-width: 768px) {
+			flex-direction: row;
 		}
 	}
 

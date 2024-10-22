@@ -51,7 +51,7 @@ defineProps({
 			has-link-to-g-maps
 			size="big"
 		/>
-		<div class="container">
+		<div class="event-summary__container">
 			<div class="description">
 				<h4
 					v-if="!mobile && posterEvent.creatorId !== PEREDELANO_CREATOR_ID"
@@ -86,16 +86,6 @@ defineProps({
 </template>
 
 <style lang="less" scoped>
-.container {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
-
-	@media (min-width: 768px) {
-		flex-direction: row;
-	}
-}
 .description {
 	@media (min-width: 768px) {
 		flex: 1;
@@ -147,6 +137,17 @@ defineProps({
 			padding-top: 24px;
 			border-top: 1px solid var(--color-input-field);
 			margin-bottom: 24px;
+		}
+	}
+
+	&__container {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
+
+		@media (min-width: 768px) {
+			flex-direction: row;
 		}
 	}
 

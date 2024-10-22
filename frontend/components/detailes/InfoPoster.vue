@@ -19,11 +19,11 @@
 			/>
 			<p class="info-poster__text">{{ $t('event.poster.button_plus') }}</p>
 			<!--
-					<CommonButton
-						:button-text="$t('global.button.more')"
-						class="button__success--filled isRound info-poster__more"
-						button-kind="success"
-					/>
+			<CommonButton
+				:button-text="$t('global.button.more')"
+				class="button__success--filled isRound info-poster__more"
+				button-kind="success"
+			/>
 			-->
 		</div>
 	</div>
@@ -31,7 +31,6 @@
 
 <style lang="less" scoped>
 .info-poster {
-	position: relative;
 	border-radius: 20px;
 	width: 350px;
 	height: 225px;
@@ -62,22 +61,7 @@
 	&__text {
 		font-size: 1.2rem;
 		font-weight: bold;
-		@media (min-width: 768px) {
-			margin-bottom: 13px;
-		}
-		@media (min-width: 1440px) {
-			margin-bottom: 26px;
-			font-size: 1.6rem;
-		}
-	}
 
-	&__text-btn {
-		position: absolute;
-		left: 160px;
-		//margin-bottom: 18px; когда вставим кнопку "подробнее"
-
-		font-size: 1.2rem;
-		font-weight: bold;
 		@media (min-width: 1440px) {
 			font-size: 1.6rem;
 		}
@@ -87,7 +71,6 @@
 		margin-top: 16px;
 		display: flex;
 		align-items: center;
-		font-size: 1.2rem;
 	}
 	&__button {
 		margin-right: 14px;
@@ -98,6 +81,7 @@
 		background-color: var(--color-accent-green-main);
 		border: 1px solid var(--color-accent-green-main);
 		cursor: default;
+		font-size: 1.2rem;
 	}
 
 	&__button-plus {

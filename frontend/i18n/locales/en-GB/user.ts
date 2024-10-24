@@ -5,7 +5,7 @@ export default {
 		signupText: 'Please sign up to access additional features',
 		continue: 'Continue without authorization',
 		login: 'Already have an account',
-		signup: "Don't have account? Sign up!"
+		signup: 'Sign up!'
 	},
 	greeting: 'Hello',
 	user: 'User',

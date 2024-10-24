@@ -15,7 +15,7 @@ export default {
 		close: 'Close navigation menu'
 	},
 	navigation: {
-		user: 'Personal account',
+		user: 'Account',
 		authorize: 'Authorize',
 		about: 'About the project',
 		support: 'Support',

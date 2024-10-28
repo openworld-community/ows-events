@@ -131,7 +131,7 @@ const { sendAnalytics } = useSendTrackingEvent();
 	&__image-container {
 		display: flex;
 		width: 100%;
-		aspect-ratio: 2 / 1.33;
+		aspect-ratio: 16 / 9;
 		height: auto;
 		max-height: 400px;
 		position: relative;
@@ -140,7 +140,7 @@ const { sendAnalytics } = useSendTrackingEvent();
 		line-height: 0;
 
 		@media (min-width: 768px) {
-			aspect-ratio: 2 / 1.25;
+			aspect-ratio: 16 / 9;
 			height: auto;
 			max-height: unset;
 			border-top-left-radius: 8px;
@@ -152,12 +152,12 @@ const { sendAnalytics } = useSendTrackingEvent();
 		width: 100%;
 		min-width: 100%;
 		max-width: 100%;
-		aspect-ratio: 2 / 1.33;
+		aspect-ratio: 16 / 9;
 		height: auto;
 		object-fit: cover;
 
 		@media (min-width: 768px) {
-			aspect-ratio: 2 / 1.25;
+			aspect-ratio: 16 / 9;
 			height: auto;
 			border-top-left-radius: 8px;
 			border-top-right-radius: 8px;
@@ -179,7 +179,7 @@ const { sendAnalytics } = useSendTrackingEvent();
 		display: flex;
 		width: 100%;
 		flex-direction: column;
-		padding: 12px 16px 18px;
+		padding: 7px 16px 0px;
 		overflow: hidden;
 
 		@media (min-width: 768px) {
@@ -196,12 +196,18 @@ const { sendAnalytics } = useSendTrackingEvent();
 			font-weight: var(--font-weight-bold);
 			text-align: left;
 			color: var(--color-text-secondary);
-			margin-bottom: 12px;
+			margin-bottom: 7px;
+			@media (min-width: 768px) {
+				margin-bottom: 12px;
+			}
 		}
 
 		&__tags {
 			margin-top: auto;
-			margin-bottom: 12px;
+			margin-bottom: 0px;
+			@media (min-width: 768px) {
+				margin-bottom: 12px;
+			}
 		}
 
 		&__title {
@@ -211,11 +217,17 @@ const { sendAnalytics } = useSendTrackingEvent();
 			font-size: var(--font-size-ML);
 			font-weight: var(--font-weight-bold);
 			line-height: 2.4rem;
-			margin-bottom: 12px;
+			margin-bottom: 7px;
+			@media (min-width: 768px) {
+				margin-bottom: 12px;
+			}
 		}
 
 		&__details {
-			margin-bottom: 12px;
+			margin-bottom: 7px;
+			@media (min-width: 768px) {
+				margin-bottom: 12px;
+			}
 		}
 	}
 }

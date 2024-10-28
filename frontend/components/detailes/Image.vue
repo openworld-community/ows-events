@@ -36,7 +36,7 @@ defineProps({
 	&__container {
 		display: flex;
 		width: 100%;
-		aspect-ratio: 2 / 1.43;
+		aspect-ratio: 16 / 9;
 		height: auto;
 		max-height: 450px;
 		line-height: 0;
@@ -46,7 +46,7 @@ defineProps({
 		overflow: hidden;
 
 		@media (min-width: 768px) {
-			aspect-ratio: 2 / 1;
+			aspect-ratio: 16 / 9;
 			max-height: 540px;
 			margin-bottom: 24px;
 		}
@@ -61,13 +61,13 @@ defineProps({
 		width: 100%;
 		min-width: 100%;
 		max-width: 100%;
-		aspect-ratio: 2 / 1.43;
+		aspect-ratio: 16 / 9;
 		height: auto;
 		object-fit: cover;
 		border-radius: 8px;
 
 		@media (min-width: 768px) {
-			aspect-ratio: 2 / 1;
+			aspect-ratio: 16 / 9;
 		}
 	}
 }

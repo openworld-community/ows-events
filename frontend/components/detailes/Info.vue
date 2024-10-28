@@ -99,7 +99,7 @@ defineProps({
 		display: flex;
 		width: 100%;
 		flex-direction: column;
-		margin-bottom: var(--space-related-items);
+		// margin-bottom: var(--space-related-items);
 
 		@media (min-width: 768px) {
 			flex-direction: column-reverse;
@@ -111,11 +111,12 @@ defineProps({
 		display: flex;
 		width: 100%;
 		flex-direction: column;
-		margin-bottom: var(--space-unrelated-items);
+		margin-bottom: 10px;
 
 		@media (min-width: 768px) {
 			padding-top: 24px;
 			border-top: 1px solid var(--color-input-field);
+			margin-bottom: var(--space-unrelated-items);
 		}
 	}
 

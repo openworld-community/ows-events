@@ -17,7 +17,7 @@ const route = useRoute();
 const localePath = useLocalePath();
 const { t } = useI18n();
 const id = getFirstParam(route.params.id);
-
+const mobile = inject<boolean>('mobile');
 const posterEvent = ref(null);
 
 const toggleFavourites = async () => {
@@ -89,6 +89,7 @@ const deleteCard = async () => {
 };
 
 const onEditButtonClick = async () => {
+	console.log('EDIT', id);
 	await navigateTo(localePath({ path: `${RoutePathEnum.EVENT_EDIT}${id}` }));
 };
 
@@ -129,29 +130,39 @@ const onEditButtonClick = async () => {
 			:is-in-favourites="isInFavourites"
 			@toggle-favourites="toggleFavourites"
 		/>
-		<div class="event-info">
-			<DetailesInfo
-				:poster-event="posterEvent"
-				:is-in-favourites="isInFavourites"
-				:is-owner="userStore.id === posterEvent.creatorId"
-				:is-show-favourites="userStore.isAuthorized"
-				@on-click-redirect="analyticsOnRedirect"
-				@toggle-favourites="toggleFavourites"
-			/>
+		<DetailesEventSummary
+			:poster-event="posterEvent"
+			:is-in-favourites="isInFavourites"
+			:is-owner="userStore.id === posterEvent.creatorId"
+			:is-show-favourites="userStore.isAuthorized"
+			:is-active-buttons="userStore.isAuthorized && !mobile"
+			@toggle-favourites="toggleFavourites"
+			@delete-click="deleteCard"
+			@edit-click="onEditButtonClick"
+		/>
+		<DetailesDescription :poster-event="posterEvent" />
 
-			<DetailesActions
-				v-if="userStore.isAuthorized"
-				:creator-id="posterEvent.creatorId"
-				@delete-click="deleteCard"
-				@edit-click="onEditButtonClick"
-			/>
-		</div>
-		
+		<CommonButton
+			v-if="posterEvent.url"
+			class="event__button-contact"
+			:button-kind="userStore.id === posterEvent.creatorId ? 'dark' : 'success'"
+			:button-text="$t('global.button.contact')"
+			:link="posterEvent.url"
+			is-external-link
+			@click="analyticsOnRedirect"
+		/>
+		<DetailesActions
+			v-if="userStore.isAuthorized && mobile"
+			:creator-id="posterEvent.creatorId"
+			@delete-click="deleteCard"
+			@edit-click="onEditButtonClick"
+		/>
+
+		<DetailesInfoPoster v-if="mobile" />
 	</main>
 </template>
 
 <style lang="less" scoped>
-
 .event {
 	display: flex;
 	flex-direction: column;
@@ -172,31 +183,17 @@ const onEditButtonClick = async () => {
 		min-height: unset;
 		height: unset;
 	}
-}
 
-.event-info {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	min-height: 250px;
-	padding-inline: 0;
-
-	@media (min-width: 768px) {
-		flex-direction: row;
-
-		justify-content: space-between;
-	}
-
-	&__actions {
-		display: flex;
-		width: 100%;
-		padding-top: 15px;
+	&__button-contact {
+		margin-top: auto;
 
 		@media (min-width: 768px) {
-			width: 34%;
-			justify-content: flex-end;
-			padding-top: 50px;
+			margin-top: 0;
+			width: 272px;
+		}
+
+		@media (min-width: 1440px) {
+			width: 351px;
 		}
 	}
 }

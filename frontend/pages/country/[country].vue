@@ -149,6 +149,7 @@ watch(
 				v-if="!pending && !posterEvents"
 				:title="$t('event.filteredEvents.no_events_found')"
 			/>
+			<div class="country-page__divider"></div>
 			<SearchEventCardsList
 				v-if="posterEvents && posterEvents.length !== 0"
 				:events="posterEvents"
@@ -179,6 +180,12 @@ watch(
 	}
 	@media (min-width: 768px) {
 		padding-top: 0px;
+	}
+	&__divider {
+		height: 32px;
+		@media (min-width: 768px) {
+			height: 60px;
+		}
 	}
 }
 </style>

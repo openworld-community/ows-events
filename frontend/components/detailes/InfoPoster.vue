@@ -31,7 +31,6 @@
 
 <style lang="less" scoped>
 .info-poster {
-	grid-area: 1 / 1 / 1 / 1;
 	border-radius: 20px;
 	width: 350px;
 	height: 225px;
@@ -43,7 +42,9 @@
 		align-self: center;
 		margin-top: 24px;
 	}
-
+	@media (min-width: 768px) {
+		flex-shrink: 0;
+	}
 	@media (min-width: 1440px) {
 		width: 400px;
 		height: 250px;

@@ -101,7 +101,6 @@ defineProps({
 		@media (min-width: 768px) {
 			padding-top: 24px;
 			border-top: 1px solid var(--color-input-field);
-			border-bottom: 1px solid var(--color-input-field);
 			padding-bottom: 24px;
 		}
 	}

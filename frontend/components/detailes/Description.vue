@@ -41,23 +41,25 @@ defineProps({
 	display: flex;
 	width: 100%;
 	margin-bottom: 30px;
+
 	@media (min-width: 768px) {
-		flex: 1;
+		gap: 20px;
 	}
 	&__content {
 		padding-top: 22px;
-
 		flex-grow: 1;
 
 		@media (max-width: 768px) {
 			margin-bottom: 24px;
+		}
+		@media (min-width: 768px) {
+			border-top: 1px solid var(--color-input-field);
 		}
 	}
 	&__title {
 		padding-bottom: 30px;
 		@media (min-width: 768px) {
 			display: flex;
-			width: 100%;
 		}
 	}
 

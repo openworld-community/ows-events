@@ -17,7 +17,14 @@ defineProps({
 	width: 100%;
 	justify-content: center;
 	align-items: center;
-
 	font-size: 24px;
+	margin-top: 20px;
+	transition: all 0.4s ease-in-out;
+	@media (min-width: 375px) {
+		margin-top: 32px;
+	}
+	@media (min-width: 768px) {
+		margin-top: 60px;
+	}
 }
 </style>

@@ -140,7 +140,7 @@ watch(
 );
 </script>
 <template>
-	<main class="citi-page">
+	<main class="city-page">
 		<FiltersHeroWrap :title="$t('city.title', { city: findCurrenCity(city) })">
 			<FiltersWrapper
 				:current-city="findCurrenCity(city)"
@@ -160,6 +160,7 @@ watch(
 				v-if="!pending && !posterEvents"
 				:title="$t('event.filteredEvents.no_events_found')"
 			/>
+			<div class="city-page__divider"></div>
 			<SearchEventCardsList
 				v-if="posterEvents && posterEvents.length !== 0"
 				:events="posterEvents"
@@ -185,11 +186,14 @@ watch(
 	flex-grow: 1;
 	padding-top: var(--header-height);
 
-	@media (max-width: 768px) {
-		padding-top: var(--header-height);
-	}
 	@media (min-width: 768px) {
 		padding-top: 0px;
+	}
+	&__divider {
+		height: 32px;
+		@media (min-width: 768px) {
+			height: 60px;
+		}
 	}
 }
 </style>

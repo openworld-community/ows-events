@@ -164,9 +164,14 @@ export const convertEventDateToLocaleString = (
 		return convertToLocaleString(time);
 	}
 };
-export const deleteMonth = (str) => {
-	const arr = str.split(' ');
-	arr[1] = arr[1].slice(0, 3) + '.';
+export const editDate = (data, isShort) => {
+	const arr = data.split(' ');
+	arr.splice(3, 1);
+	if (isShort) {
+		arr[1] = arr[1].slice(0, 3) + '.';
+		return arr.join(' ');
+	}
+
 	return arr.join(' ');
 };
 
@@ -210,9 +215,9 @@ export const formatDate = (
 	duration: number
 ) => {
 	if (duration) {
-		return `${deleteMonth(convertEventDateToLocaleString(date, isOnline, timezone))} - 
+		return `${editDate(convertEventDateToLocaleString(date, isOnline, timezone), true)} - 
 
-	${deleteMonth(convertEventDateToLocaleString(date + duration * 1000, isOnline, timezone))}`;
+	${editDate(convertEventDateToLocaleString(date + duration * 1000, isOnline, timezone), true)}`;
 	}
-	return convertEventDateToLocaleString(date, isOnline, timezone);
+	return editDate(convertEventDateToLocaleString(date, isOnline, timezone), false);
 };

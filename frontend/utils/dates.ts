@@ -164,12 +164,20 @@ export const convertEventDateToLocaleString = (
 		return convertToLocaleString(time);
 	}
 };
+
 export const editDate = (data, isShort) => {
+	const { locale } = useI18n();
 	const arr = data.split(' ');
-	arr.splice(3, 1);
+
 	if (isShort) {
-		arr[1] = arr[1].slice(0, 3) + '.';
-		return arr.join(' ');
+		if (locale.value == 'ru') {
+			arr.splice(3, 1);
+			arr[1] = arr[1].slice(0, 3) + '.';
+			return arr.join(' ');
+		} else {
+			arr[0] = arr[0].slice(0, 3) + '.';
+			return arr.join(' ');
+		}
 	}
 
 	return arr.join(' ');

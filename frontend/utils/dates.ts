@@ -143,6 +143,7 @@ export const convertToLocaleString = (epoch: number, timezoneName?: string) => {
 		day: 'numeric',
 		hour: '2-digit',
 		minute: '2-digit',
+		year: 'numeric',
 		timeZone: timezoneName ?? 'UTC'
 	}).format(epoch);
 	return date;
@@ -162,6 +163,11 @@ export const convertEventDateToLocaleString = (
 		time = epoch;
 		return convertToLocaleString(time);
 	}
+};
+export const deleteMonth = (str) => {
+	const arr = str.split(' ');
+	arr[1] = arr[1].slice(0, 3) + '.';
+	return arr.join(' ');
 };
 
 export const convertToISOString = (epoch: number, timezoneOffset?: string) => {
@@ -204,9 +210,9 @@ export const formatDate = (
 	duration: number
 ) => {
 	if (duration) {
-		return `${convertEventDateToLocaleString(date, isOnline, timezone)} - 
+		return `${deleteMonth(convertEventDateToLocaleString(date, isOnline, timezone))} - 
 
-	${convertEventDateToLocaleString(date + duration * 1000, isOnline, timezone)}`;
+	${deleteMonth(convertEventDateToLocaleString(date + duration * 1000, isOnline, timezone))}`;
 	}
 	return convertEventDateToLocaleString(date, isOnline, timezone);
 };

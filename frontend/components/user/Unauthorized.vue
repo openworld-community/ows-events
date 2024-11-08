@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { RoutePathEnum } from '@/constants/enums/route';
 import { useUserStore } from '@/stores/user.store';
-import { TELEGRAM_AUTH_BOT_NAME } from '@/constants/url';
-import { BASE_URL } from '@/constants/url';
 import { CookieNameEnum } from '@/constants/enums/common';
 import { GoogleSignInButton } from 'vue3-google-signin';
-import { GOOGLE_OAUTH_URL } from '@/constants/url';
 import { useSendTrackingEvent } from '../../composables/useSendTrackingEvent';
+
+const config = useRuntimeConfig();
 
 type TFormType = 'login' | 'signup';
 
@@ -32,10 +31,10 @@ const initTGButton = () => {
 
 	script.setAttribute('data-size', 'large');
 	script.setAttribute('data-userpic', 'false');
-	script.setAttribute('data-telegram-login', TELEGRAM_AUTH_BOT_NAME);
+	script.setAttribute('data-telegram-login', config.public.telegramAuthBotName as string);
 	script.setAttribute('data-radius', '8');
 	script.setAttribute('data-request-access', 'write');
-	script.setAttribute('data-auth-url', `${BASE_URL}/api/auth/telegram`);
+	script.setAttribute('data-auth-url', `${config.public.apiUrl}/auth/telegram`);
 	script.addEventListener('load', () => {
 		// после загрузки скрипта меняем цвет кнопки на активный
 		const tgicon = document.getElementById('tgicon');
@@ -104,7 +103,7 @@ watch(
 			<div class="unauthorized__buttons">
 				<div class="unauthorized__wrapper">
 					<GoogleSignInButton
-						:login-uri="GOOGLE_OAUTH_URL"
+						:login-uri="`${config.public.apiUrl}/auth/google`"
 						ux-mode="redirect"
 						type="icon"
 						logo_alignment="center"

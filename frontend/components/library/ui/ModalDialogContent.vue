@@ -77,7 +77,7 @@ const emitsAsProps = useEmitAsProps(emits);
 	position: fixed;
 	top: 50%;
 	left: 50%;
-	max-height: 85vh;
+	max-height: 90vh;
 	transform: translate(-50%, -50%);
 	border-radius: 6px;
 	padding: 25px;

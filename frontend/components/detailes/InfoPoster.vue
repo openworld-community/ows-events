@@ -1,4 +1,21 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+const height = ref(800);
+
+const updateHeight = () => {
+	const desktop = window.innerHeight * 0.85;
+	const mobile = window.innerHeight * 0.6;
+	height.value = window.innerHeight < window.innerWidth ? desktop : mobile;
+};
+onMounted(() => {
+	updateHeight();
+	window.addEventListener('resize', updateHeight); // обновляем значение при изменении размера экрана
+});
+
+onBeforeUnmount(() => {
+	window.removeEventListener('resize', updateHeight);
+});
+</script>
 
 <template>
 	<div class="poster">
@@ -23,14 +40,30 @@
 				<span class="info-poster__text">{{ $t('event.poster.button_plus') }}</span>
 			</div>
 		</div>
-		<!--
-		
-<CommonButton
-	:button-text="$t('global.button.more')"
-	class="button__success--filled isRound more"
-	button-kind="success"
-/>
--->
+
+		<LibraryDialog>
+			<!-- Использование слота для кнопки вызова диалога -->
+			<template #trigger>
+				<CommonButton
+					:button-text="$t('global.button.more')"
+					class="button__success--filled isRound more"
+					button-kind="success"
+				/>
+			</template>
+			<template #content>
+				<div class="info-poster__dialog">
+					<LibraryScrollArea
+						type="scroll"
+						:height="height"
+					>
+						<img
+							class="info-poster__image"
+							src="/img/modal-info/info.webp"
+						/>
+					</LibraryScrollArea>
+				</div>
+			</template>
+		</LibraryDialog>
 	</div>
 </template>
 
@@ -65,6 +98,15 @@
 	border-radius: 20px;
 	width: 100%;
 	height: 100%;
+	&__dialog {
+		padding-right: 15px;
+	}
+	&__image {
+		width: 1200px;
+		max-width: 85vw;
+		min-height: 100%;
+		object-fit: contain;
+	}
 
 	&__title {
 		text-align: center;

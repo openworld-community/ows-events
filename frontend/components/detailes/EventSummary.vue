@@ -2,7 +2,7 @@
 import type { PropType } from 'vue';
 import type { EventOnPoster } from '../../../common/types';
 
-defineEmits(['toggleFavourites', 'deleteCard', 'editClick']);
+defineEmits(['toggleFavourites', 'deleteClick', 'editClick']);
 defineProps({
 	posterEvent: {
 		type: Object as PropType<EventOnPoster>,
@@ -57,7 +57,7 @@ defineProps({
 			v-if="isActiveButtons"
 			:creator-id="posterEvent.creatorId"
 			@edit-click="$emit('editClick')"
-			@delete-click="$emit('deleteCard')"
+			@delete-click="$emit('deleteClick')"
 		/>
 	</div>
 </template>

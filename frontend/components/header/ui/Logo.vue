@@ -7,7 +7,7 @@ const route = useRoute();
 
 const CommonNavLink = resolveComponent('CommonNavLink');
 const isAtHome = computed(() => getRouteName(route.name as string) === RouteNameEnum.HOME);
-console.log('Logo', getRouteName(route.name as string), RouteNameEnum.CITY, RouteNameEnum.COUNTRY);
+
 const logoComponentIs = computed(() => {
 	if (isAtHome.value) return 'button';
 	else return CommonNavLink;

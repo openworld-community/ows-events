@@ -54,6 +54,7 @@ const { sendAnalytics } = useSendTrackingEvent();
 					)
 				"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
+				loading="lazy"
 			/>
 			<img
 				v-else

@@ -39,7 +39,7 @@ const { sendAnalytics } = useSendTrackingEvent();
 			class="card__image-container"
 			:itemprop="eventData.image ? undefined : SeoItempropGlobalEnum.IMAGE"
 		>
-			<img
+			<NuxtImg
 				v-if="eventData.image"
 				class="card__image"
 				:src="getEventImage(eventData.image)"
@@ -58,9 +58,10 @@ const { sendAnalytics } = useSendTrackingEvent();
 			<img
 				v-else
 				class="card__image"
-				src="/img/event-preview@2x.png"
+				src="/img/event-card@2x.png"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
 				alt=""
+				loading="lazy"
 			/>
 			<CommonUiTag
 				v-if="eventData.isOnline"

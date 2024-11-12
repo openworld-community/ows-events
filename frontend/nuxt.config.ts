@@ -15,6 +15,7 @@ export default defineNuxtConfig({
 	debug: isTest,
 	modules: [
 		'nuxt-icons',
+		'@nuxt/image',
 		'nuxt-vue3-google-signin',
 		'@nuxtjs/i18n',
 		'@pinia/nuxt',
@@ -33,6 +34,9 @@ export default defineNuxtConfig({
 			}
 		]
 	],
+	image: {
+		domains: [''] // here need to write domains for external images
+	},
 	routeRules: {
 		'/': { redirect: '/ru', ssr: true }
 	},

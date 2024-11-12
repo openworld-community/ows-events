@@ -51,6 +51,7 @@
   },
   "devDependencies": {
     "@nuxt/eslint-config": "0.1.1",
+    "@nuxt/image": "^1.8.1",
     "@nuxtjs/eslint-module": "4.1.0",
     "@nuxtjs/i18n": "^8.0.0-beta.13",
     "@rushstack/eslint-patch": "1.2.0",

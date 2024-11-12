@@ -56,10 +56,11 @@ const tagArray = computed(() => {
 			class="card__image-container"
 			:itemprop="eventData.image ? undefined : SeoItempropGlobalEnum.IMAGE"
 		>
-			<img
+			<NuxtImg
 				class="card__image"
 				:alt="eventData.image ? $t('home.events.image_alt') : $t('user.image.alt')"
 				:src="eventData.image ? getEventImage(eventData.image) : $t('user.image.no_image')"
+				loading="lazy"
 			/>
 			<CommonUiTag
 				v-if="eventData.isOnline"

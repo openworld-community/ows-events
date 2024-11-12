@@ -12,13 +12,14 @@ defineProps({
 </script>
 <template>
 	<div class="event-image event-image__container">
-		<img
+		<NuxtImg
 			v-if="imageUrl"
 			class="event-image__image"
 			:src="imageUrl"
 			width="350"
 			height="250"
 			:alt="altContent"
+			loading="lazy"
 		/>
 		<img
 			v-else

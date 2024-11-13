@@ -154,14 +154,12 @@ watch(
 			var(--color-accent-background) 0%,
 			var(--color-accent-green-main) 100%
 		);
-		margin-top: 12px;
 
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);
 
 		@media (min-width: 768px) {
 			padding-top: 32px;
-			margin-top: 0;
 		}
 
 		@media (min-width: 1440px) {

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 const height = ref(800);
+const mobile = inject('mobile');
+const desktop = inject('desktop');
+const tablet = inject('tablet');
 
 const updateHeight = () => {
 	const desktop = window.innerHeight * 0.85;
@@ -15,6 +18,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
 	window.removeEventListener('resize', updateHeight);
 });
+const innerModel = ref<string>('');
 </script>
 
 <template>
@@ -41,8 +45,8 @@ onBeforeUnmount(() => {
 			</div>
 		</div>
 
-		<LibraryDialog>
-			<!-- Использование слота для кнопки вызова диалога -->
+		<!-- <LibraryDialog>
+			
 			<template #trigger>
 				<CommonButton
 					:button-text="$t('global.button.more')"
@@ -61,9 +65,43 @@ onBeforeUnmount(() => {
 							src="/img/modal-info/info.webp"
 						/>
 					</LibraryScrollArea>
+					
+				</div>
+				
+			</template>
+			
+		</LibraryDialog> -->
+
+		<LibraryDownsheet v-if="mobile">
+			<template #trigger >
+				<div >
+					
+					<CommonButton
+					:button-text="$t('global.button.more')"
+					class="button__success--filled isRound more"
+					button-kind="success"
+				/>
+				</div>
+				
+			</template>
+			<template #content>
+				<div class="mobile-filter__content" style="display: flex; height: 80vh; overflow-y: scroll">
+					
+
+					
+
+					<div class="mobile-select__buttons buttons">
+						<img
+						style=""
+				
+				src="/img/modal-info/mobile_info.webp"
+		/>
+		
+					</div>
 				</div>
 			</template>
-		</LibraryDialog>
+		</LibraryDownsheet>
+		
 	</div>
 </template>
 

@@ -24,7 +24,7 @@ defineProps({
 <style lang="less" scoped>
 .heading {
 	@media (max-width: 768px) {
-		font-size: var(--font-size-ML);
+		font-size: var(--font-size-L);
 		font-weight: 500;
 		letter-spacing: -0.3px;
 	}

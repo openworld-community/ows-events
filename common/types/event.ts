@@ -1,4 +1,4 @@
-import { PaginationOptions } from '@common/types/pagination';
+import { PaginationOptions } from './pagination';
 import type { Timezone } from './location';
 import { EventTypes } from '../const/eventTypes';
 import { type Tag, Tags } from '../const/tags';

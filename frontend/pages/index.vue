@@ -96,7 +96,7 @@ watch(
 				v-if="pending"
 				:size="mobile ? 'middle' : 'big'"
 			/>
-			<SearchHeading
+			<!-- <SearchHeading
 				v-if="posterEvents && posterEvents.length !== 0"
 				position="up"
 				:title="`${$t('home.headings.up', {
@@ -104,16 +104,17 @@ watch(
 				})}
 			&nbsp;&nbsp;|&nbsp;&nbsp;
 			 ${$t('home.headings.up', { country: `${supportedCountries['ME'][locale]}` })}`"
-			/>
+			/> -->
 			<SearchNotFound
 				v-if="!pending && (!posterEvents || posterEvents.length === 0)"
 				:title="$t('event.filteredEvents.no_events_found')"
 			/>
-			<SearchEventCardsList
+			<!-- <SearchEventCardsList
 				v-if="posterEvents && posterEvents.length !== 0"
 				:events="posterEvents"
-			/>
-			<SearchHeading
+			/> -->
+			<SearchPagination />
+			<!-- <SearchHeading
 				v-if="posterEvents && posterEvents.length !== 0"
 				position="down"
 				:title="`${$t('home.headings.down', {
@@ -121,7 +122,7 @@ watch(
 				})}
 			&nbsp;&nbsp;|&nbsp;&nbsp;
 			 ${$t('home.headings.down', { country: `${supportedCountries['ME'][locale]}` })}`"
-			/>
+			/> -->
 		</SearchCardsWrapper>
 
 		<CommonCreateButton :is-authorized="userStore.isAuthorized" />

@@ -55,7 +55,7 @@ getMeta({
 			<div class="donate-logo__wrapper-image">
 				<img
 					class="donate-logo__image"
-					src="@/public/img/help-Afisha/logo.png"
+					src="/img/help-afisha/logo.png"
 					:itemprop="SeoItempropGlobalEnum.IMAGE"
 				/>
 			</div>

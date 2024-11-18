@@ -149,12 +149,13 @@ watch(
 				v-if="!pending && !posterEvents"
 				:title="$t('event.filteredEvents.no_events_found')"
 			/>
+			<!--			<SearchEventCardsList-->
+			<!--				v-if="posterEvents && posterEvents.length !== 0"-->
+			<!--				:events="posterEvents"-->
+			<!--			/>-->
 			<div class="country-page__divider"></div>
-			<SearchEventCardsList
-				v-if="posterEvents && posterEvents.length !== 0"
-				:events="posterEvents"
-			/>
-			<SearchHeading
+			<SearchPaginationCountry />
+			<!-- <SearchHeading
 				v-if="posterEvents && posterEvents.length !== 0"
 				position="down"
 				:title="
@@ -162,7 +163,7 @@ watch(
 						country: queryToCountryLocaleName[country][locale]
 					})
 				"
-			/>
+			/> -->
 		</SearchCardsWrapper>
 		<CommonCreateButton :is-authorized="userStore.isAuthorized" />
 	</main>

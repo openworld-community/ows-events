@@ -1,9 +1,10 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { AggregatePaginateModel, Schema } from 'mongoose';
+import mongooseAggregatePaginate from 'mongoose-aggregate-paginate-v2';
 import { EventDbEntity, IEventMeta } from '@common/types/event';
 
-export type IEventDocument = EventDbEntity & IEventMeta & Document;
+export type IEventDocument = EventDbEntity & IEventMeta;
 
-const schema = new Schema<IEventDocument>(
+const schema = new Schema(
 	{
 		id: {
 			type: String,
@@ -105,12 +106,6 @@ const schema = new Schema<IEventDocument>(
 	}
 );
 
-schema.index({
-	title: 'text',
-	'description.ru': 'text',
-	'description.en': 'text',
-	'location.city': 'text',
-	'location.country': 'text'
-});
+schema.plugin(mongooseAggregatePaginate);
 
-export const EventModel = mongoose.model<IEventDocument>('Event', schema);
+export const EventModel: AggregatePaginateModel<IEventDocument> = mongoose.model('Event', schema);

@@ -13,31 +13,31 @@ networks:
 
 services:
     frontend:
-        image: ghcr.io/openworld-community/ows-events_frontend:latest
+        image: ghcr.io/openworld-community/ows-events_frontend:prod
         logging: *default-logging
         restart: always
         labels:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
             - 'traefik.http.middlewares.compressor.compress=true'
-            - 'traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https'
-            - 'traefik.http.routers.test_frontend_https.rule=Host(`test.afisha.peredelano.com`)'
-            - 'traefik.http.routers.test_frontend_https.middlewares=sslheader@docker'
-            - 'traefik.http.routers.test_frontend_https.middlewares=compressor@docker'
-            - 'traefik.http.routers.test_frontend_https.entrypoints=http, https'
-            - 'traefik.http.routers.test_frontend_https.tls.certresolver=myresolver'
-            - 'traefik.http.routers.test_frontend_http.rule=Host(`test.afisha.peredelano.com`)'
-            - 'traefik.http.routers.test_frontend_http.middlewares=redirect-to-https@docker'
-            - 'traefik.http.routers.test_frontend_http.entrypoints=http'
+            - 'traefik.http.middlewares.redirect-https.redirectscheme.scheme=https'
+            - 'traefik.http.routers.frontend_https.rule=Host(`afisha.peredelano.com`)'
+            - 'traefik.http.routers.frontend_https.middlewares=sslheader@docker'
+            - 'traefik.http.routers.frontend_https.middlewares=compressor@docker'
+            - 'traefik.http.routers.frontend_https.entrypoints=http, https'
+            - 'traefik.http.routers.frontend_https.tls.certresolver=myresolver'
+            - 'traefik.http.routers.frontend_http.rule=Host(`afisha.peredelano.com`)'
+            - 'traefik.http.routers.frontend_http.middlewares=redirect-to-https@docker'
+            - 'traefik.http.routers.frontend_http.entrypoints=http'
         networks:
             - traefikpublic
         ports:
-            - '3002:3000'
+            - '3000:3000'
         environment:
-            - NUXT_PUBLIC_API_URL=https://api-test.afisha.peredelano.com/api
-            - NUXT_PUBLIC_BASE_URL=https://api-test.afisha.peredelano.com
+            - NUXT_PUBLIC_API_URL=https://api.afisha.peredelano.com/api
+            - NUXT_PUBLIC_BASE_URL=https://api.afisha.peredelano.com
             - NUXT_PUBLIC_TELEGRAM_AUTH_BOT_NAME
-            - NUXT_PUBLIC_DOMAIN=test.afisha.peredelano.com
+            - NUXT_PUBLIC_DOMAIN=afisha.peredelano.com
             - NUXT_PUBLIC_GTAG_ID
             - NUXT_PUBLIC_GOOGLE_SIGN_IN_CLIENT_ID
         deploy:
@@ -50,7 +50,7 @@ services:
                     memory: 150M
 
     backend:
-        image: ghcr.io/openworld-community/ows-events_backend:latest
+        image: ghcr.io/openworld-community/ows-events_backend:prod
         logging: *default-logging
         restart: always
         depends_on:
@@ -61,17 +61,17 @@ services:
             - 'traefik.enable=true'
             - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
             - 'traefik.http.middlewares.redirect-https.redirectscheme.scheme=https'
-            - 'traefik.http.routers.test_backend_https.rule=Host(`api-test.afisha.peredelano.com`)'
-            - 'traefik.http.routers.test_backend_https.middlewares=sslheader@docker'
-            - 'traefik.http.routers.test_backend_https.entrypoints=http, https'
-            - 'traefik.http.routers.test_backend_https.tls.certresolver=myresolver'
-            - 'traefik.http.routers.test_backend_http.rule=Host(`api-test.afisha.peredelano.com`)'
-            - 'traefik.http.routers.test_backend_http.middlewares=redirect-https@docker'
-            - 'traefik.http.routers.test_backend_http.entrypoints=http'
+            - 'traefik.http.routers.backend_https.rule=Host(`api.afisha.peredelano.com`)'
+            - 'traefik.http.routers.backend_https.middlewares=sslheader@docker'
+            - 'traefik.http.routers.backend_https.entrypoints=http, https'
+            - 'traefik.http.routers.backend_https.tls.certresolver=myresolver'
+            - 'traefik.http.routers.backend_http.rule=Host(`api.afisha.peredelano.com`)'
+            - 'traefik.http.routers.backend_http.middlewares=redirect-https@docker'
+            - 'traefik.http.routers.backend_http.entrypoints=http'
         environment:
             - MODE=prod
-            - MONGO_URI=mongodb://mongo:27017/test
-            - FRONTEND_URL=https://test.afisha.peredelano.com
+            - MONGO_URI=mongodb://mongo:27017/prod
+            - FRONTEND_URL=https://afisha.peredelano.com
             - SECRET_KEY
             - LOCALIZATION_API_KEY
             - GITHUB_PARSING_TOKEN
@@ -87,9 +87,9 @@ services:
         networks:
             - traefikpublic
         ports:
-            - '7082:7080'
+            - '7080:7080'
         volumes:
-            - /root/ows-events_test/assets/img:/app/assets/img
+            - /root/ows-events/assets/img:/app/assets/img
         deploy:
             resources:
                 limits:
@@ -104,7 +104,7 @@ services:
         restart: unless-stopped
         command: ['--bind_ip_all']
         ports:
-            - '127.0.0.1:27002:27017'
+            - '127.0.0.1:27000:27017'
         networks:
             - traefikpublic
         healthcheck:
@@ -112,7 +112,7 @@ services:
             interval: 10s
             start_period: 30s
         volumes:
-            - /root/db/test:/data/db
+            - /root/db/prod:/data/db
         deploy:
             resources:
                 limits:

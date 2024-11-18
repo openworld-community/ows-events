@@ -38,7 +38,6 @@ const userData = computed(() => userStore.userInfo);
 	display: flex;
 	width: 100%;
 	flex-direction: column;
-	padding-top: 12px;
 	margin-bottom: 8px;
 
 	@media (min-width: 768px) {

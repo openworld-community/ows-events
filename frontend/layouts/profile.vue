@@ -1,13 +1,11 @@
 <script setup>
 const mobile = inject('mobile');
-const tablet = inject('tablet');
 </script>
 
 <template>
 	<div class="root">
-		<HeaderMobile v-if="mobile" />
-		<HeaderTablet v-if="tablet" />
-		<HeaderDesktop v-if="!mobile && !tablet" />
+		<HeaderCommon :has-back-button="mobile" />
+
 		<slot />
 
 		<FooterCommon v-if="!mobile" />

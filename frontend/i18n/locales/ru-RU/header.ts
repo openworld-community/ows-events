@@ -15,7 +15,7 @@ export default {
 		close: 'Скрыть меню навигации'
 	},
 	navigation: {
-		user: 'Личный кабинет',
+		user: 'Пользователь',
 		authorize: 'Авторизоваться',
 		about: 'О проекте',
 		support: 'Поддержка',

@@ -75,6 +75,7 @@ patchDeleteEventModal({
 
 	@media (min-width: 1440px) {
 		flex-direction: row;
+		width: 167px;
 	}
 
 	&__button-admin {

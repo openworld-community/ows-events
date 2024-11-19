@@ -4,13 +4,6 @@ export default {
 		event: 'Event image'
 	},
 	description_title: 'Event description',
-	poster: {
-		create_title: 'You can also create your own event and gather people around it.',
-		click_button: 'Just click on the button:',
-		button: 'in your personal account',
-		button_plus: 'on the main page'
-	},
-
 	price: {
 		free: 'Free',
 		unknown: 'Price not specified',

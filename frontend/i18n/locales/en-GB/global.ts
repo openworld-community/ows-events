@@ -28,8 +28,7 @@ export default {
 		save: 'Save',
 		search: 'Search',
 		share: 'Share',
-		yes: 'Yes',
-		more: 'More'
+		yes: 'Yes'
 	},
 	notFound: 'Nothing found'
 };

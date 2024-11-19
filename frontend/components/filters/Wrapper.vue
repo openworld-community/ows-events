@@ -74,6 +74,7 @@ watch(
 	async (val) => {
 		const tagsForQuery = val.value.join(', ') || undefined;
 		if (tagsForQuery !== route.query.tags) {
+			console.log('work nawigation tags changed');
 			await navigateTo({
 				query: {
 					...route.query,

@@ -5,7 +5,7 @@ export default {
 		signupText: 'Please sign up to access additional features',
 		continue: 'Continue without authorization',
 		login: 'Already have an account',
-		signup: 'Sign up!'
+		signup: "Don't have an account yet"
 	},
 	greeting: 'Hello',
 	user: 'User',
@@ -27,13 +27,13 @@ export default {
 	},
 	new_event: {
 		title: 'Create your own unique event!'
-	},
-	logout: {
+	}, 
+	logout:	{
 		title: 'Log out',
-		text: 'Are you sure you want to log out?'
+		text: 'Are you sure you want to log out?',
 	},
-	image: {
-		alt: 'Hello from Afisha',
-		no_image: '/img/event/no_image_en.svg'
+	image:{
+		alt:'Hello from Afisha',
+		no_image:'/img/event/no_image_en.svg'
 	}
 };

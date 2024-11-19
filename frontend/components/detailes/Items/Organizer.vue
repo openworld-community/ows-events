@@ -26,7 +26,6 @@ defineProps({
 
 	@media (min-width: 768px) {
 		margin-bottom: 0;
-		margin-top: 10px;
 	}
 }
 </style>

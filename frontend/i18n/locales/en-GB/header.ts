@@ -15,13 +15,13 @@ export default {
 		close: 'Close navigation menu'
 	},
 	navigation: {
-		user: 'Account',
+		user: 'User',
 		authorize: 'Authorize',
 		about: 'About the project',
 		support: 'Support',
 		donation: 'Help Afisha',
 		limitation_of_liability: 'Limitation of liability',
-		cooperation: 'Cooperation'
+		cooperation: 'Cooperation',
 	},
 	subscription_expired: '$t(dates.day.key) until the end of subscription'
 };

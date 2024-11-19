@@ -24,15 +24,6 @@ export const vars = {
 			measurementId: process.env.GA_MEASUREMENT_ID || ''
 		}
 	},
-	s3: {
-		bucket: process.env.S3_BUCKET || '',
-		region: process.env.S3_REGION || '',
-		endpoint: process.env.S3_ENDPOINT || '',
-		secrets: {
-			accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
-			secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || ''
-		}
-	},
 	localization: {
 		url: process.env.LOCALIZATION_URL || 'http://localization:5000'
 	}

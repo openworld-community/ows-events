@@ -4,7 +4,7 @@ const mobile = inject('mobile');
 
 <template>
 	<div class="root">
-		<HeaderMobile v-if="mobile" />
+		<HeaderCommon v-if="mobile" />
 		<slot />
 	</div>
 </template>

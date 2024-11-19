@@ -3,7 +3,6 @@ import { RouteNameEnum } from '../constants/enums/route';
 import { getRouteName } from '../utils';
 const route = useRoute();
 const mobile = inject('mobile');
-const tablet = inject('tablet');
 
 const isMobileFooterVisible = computed(() => {
 	const currentRouteName = getRouteName(route.name);
@@ -20,9 +19,7 @@ const isMobileFooterVisible = computed(() => {
 
 <template>
 	<div class="root">
-		<HeaderMobile v-if="mobile" />
-		<HeaderTablet v-if="tablet" />
-		<HeaderDesktop v-if="!mobile && !tablet" />
+		<HeaderCommon :has-back-button="getRouteName(route.name) === RouteNameEnum.EVENT" />
 		<slot> </slot>
 
 		<FooterCommon v-if="!mobile || (mobile && isMobileFooterVisible)" />

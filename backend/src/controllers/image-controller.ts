@@ -44,12 +44,17 @@ export class FileDbController {
 
 	async deleteImg(path: string) {
 		if (isStorageSetupFull) {
-			await deleteFileOnS3(
-				path.replace(`https://${vars.s3.bucket}.fsn1.your-objectstorage.com/`, '')
-			);
-			return undefined;
+			try {
+				await deleteFileOnS3(
+					path.replace(`https://${vars.s3.bucket}.fsn1.your-objectstorage.com/`, '')
+				);
+				return undefined;
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e);
+			}
 		}
-		const realPath = path.replace('image/', 'assets/img/');
+		const realPath = path.replace('image/', './assets/img/');
 		return fs.unlink(resolve(realPath));
 	}
 }

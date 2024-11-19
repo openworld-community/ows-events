@@ -7,7 +7,7 @@ export const deleteImage: IDeleteImageHandlerProps = async (request) => {
 	if (!filePath) throw new Error(CommonErrorsEnum.NO_IMAGE_TO_DELETE);
 
 	try {
-		await imageController.deleteImg(`.${filePath}`);
+		await imageController.deleteImg(filePath);
 		return undefined;
 	} catch (e) {
 		throw new Error(CommonErrorsEnum.IMAGE_DELETION_ERROR);

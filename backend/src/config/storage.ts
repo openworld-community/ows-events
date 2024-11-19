@@ -13,11 +13,13 @@ if (!isStorageSetupFull) {
 	console.log('S3 credentials not entered correctly');
 }
 
-export const s3Client = new S3Client({
-	region: vars.s3.region,
-	endpoint: vars.s3.endpoint,
-	credentials: {
-		accessKeyId: vars.s3.secrets.accessKeyId,
-		secretAccessKey: vars.s3.secrets.secretAccessKey
-	}
-});
+export const s3Client = isStorageSetupFull
+	? new S3Client({
+			region: vars.s3.region,
+			endpoint: vars.s3.endpoint,
+			credentials: {
+				accessKeyId: vars.s3.secrets.accessKeyId,
+				secretAccessKey: vars.s3.secrets.secretAccessKey
+			}
+	  })
+	: undefined;

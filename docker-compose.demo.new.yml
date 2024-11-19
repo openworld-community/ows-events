@@ -34,10 +34,10 @@ services:
         ports:
             - '3001:3000'
         environment:
-            - NUXT_PUBLIC_API_URL=https://api-test.afisha.peredelano.com/api
-            - NUXT_PUBLIC_BASE_URL=https://api-test.afisha.peredelano.com
+            - NUXT_PUBLIC_API_URL=https://api-demo.afisha.peredelano.com/api
+            - NUXT_PUBLIC_BASE_URL=https://api-demo.afisha.peredelano.com
             - NUXT_PUBLIC_TELEGRAM_AUTH_BOT_NAME
-            - NUXT_PUBLIC_DOMAIN=test.afisha.peredelano.com
+            - NUXT_PUBLIC_DOMAIN=demo.afisha.peredelano.com
             - NUXT_PUBLIC_GTAG_ID
             - NUXT_PUBLIC_GOOGLE_SIGN_IN_CLIENT_ID
         deploy:

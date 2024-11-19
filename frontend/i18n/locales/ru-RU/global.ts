@@ -28,7 +28,8 @@ export default {
 		save: 'Сохранить',
 		search: 'Поиск',
 		share: 'Поделиться',
-		yes: 'Да'
+		yes: 'Да',
+		more: 'Подробнее'
 	},
 	notFound: 'Ничего не найдено'
 };

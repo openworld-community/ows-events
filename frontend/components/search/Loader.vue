@@ -21,15 +21,19 @@ defineProps({
 .loader {
 	display: flex;
 	width: 100%;
-	justify-content: center;
-	align-items: center;
-
+	justify-content: flex-end;
 	position: absolute;
+	align-items: center;
 	top: 0px;
-	left: 0px;
+	right: 2px;
 	z-index: 10;
 	@media (min-width: 768px) {
-		top: 8px;
+		justify-content: flex-end;
+		right: var(--padding-side);
+	}
+	@media (min-width: 1440px) {
+		justify-content: center;
+		right: 0px;
 	}
 }
 </style>

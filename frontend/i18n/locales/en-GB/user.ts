@@ -11,7 +11,11 @@ export default {
 	user: 'User',
 	my_events: {
 		title: 'My events',
-		no_my_events: "You haven't created any events yet"
+		no_my_events: "You haven't created any events yet",
+		buttons: {
+			edit: 'Edit',
+			delete: 'Delete'
+		}
 	},
 	favourites: {
 		title: 'Favourites',

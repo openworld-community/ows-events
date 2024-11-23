@@ -39,6 +39,7 @@ const model = computed({
 <template>
 	<DialogRoot v-model:open="model">
 		<DialogTrigger
+			as-child
 			:disabled="disabled"
 			class="dialog__trigger"
 		>

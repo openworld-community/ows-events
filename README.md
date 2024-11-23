@@ -19,3 +19,6 @@ npm run dev:frontend
 ```bash
 npm run dev:backend
 ```
+
+# Documentation
+ - [Перейти к русскоязычной версии документации](documentation/ru/modal-info.md)

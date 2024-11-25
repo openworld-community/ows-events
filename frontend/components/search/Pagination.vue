@@ -1,128 +1,179 @@
-<script lang="ts">
-import { defineComponent, reactive, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import type { EventOnPoster } from '../../../common/types';
+<script setup lang="ts">
+import { useRoute } from 'vue-router';
 
-interface ResponsiveDevice {
-    value: boolean;
-}
-interface PaginationResponse {
-	docs: EventOnPoster[];
-	totalDocs: number;
-	limit: number;
-	page: number;
-	totalPages: number;
-	hasPrevPage: boolean;
-	hasNextPage: boolean;
-	prevPage: number | null;
-	nextPage: number | null;
-}
+const route = useRoute();
 
-export default defineComponent({
-	setup() {
-		const mobile = inject <ResponsiveDevice>('mobile');
-		const tablet = inject<ResponsiveDevice>('tablet');
-		const desktop = inject<ResponsiveDevice>('desktop');
+const dateStart = computed(() =>
+	dateFromQueryToFilter('first', getFirstQuery(route.query.startDate as string))
+);
+const dateEnd = computed(() => {
+	return dateFromQueryToFilter('second', getFirstQuery(route.query.endDate as string));
+});
+const currentPage = computed(() => {
+	return parseInt(getFirstQuery(route.query.page as string));
+});
 
-		const scrollOnTop = (width) => {
-			console.log(width);
-			window.scrollTo({
-				top: width,
-				behavior: 'smooth'
-			});
-		};
-		const response = reactive<PaginationResponse>({
-			docs: [],
-			totalDocs: 0,
-			limit: 15,
-			page: 1,
-			totalPages: 1,
-			hasPrevPage: false,
-			hasNextPage: false,
-			prevPage: null,
-			nextPage: null
-		});
+const tags = computed(() =>
+	getFirstQuery(route.query.tags)
+		.split(', ')
+		.filter((item) => item !== '')
+);
 
-		const loading = ref(false);
-		const route = useRoute();
-		const router = useRouter();
+const { sendAnalytics } = useSendTrackingEvent();
 
-		const getLimit = () => {
-			return mobile?.value ? 10 : tablet.value ? 14 : 15;
-		};
-
-		const fetchPage = async (page: number | null) => {
-			if (!page || loading.value) return;
-			loading.value = true;
-			try {
-				const res = await fetch('/api/events/find/pagination', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						query: {},
-						options: { page: page, limit: getLimit() }
-					})
-				});
-				if (!res.ok) {
-					throw new Error(`Ошибка запроса: ${res.status}`);
-				}
-				const data: PaginationResponse = await res.json();
-				Object.assign(response, data);
-				// scrollOnTop(mobile?.value ? 150 : tablet?.value ? 250 : 450);
-			} catch (error) {
-				console.error('Ошибка загрузки данных:', error);
-			} finally {
-				loading.value = false;
-			}
-		};
-
-		watch(
-			() => route.query.page,
-			(newPage) => {
-				const page = parseInt(newPage as string, 10) || 1;
-				fetchPage(page);
-			},
-			{ immediate: true }
-		);
-
-		return {
-			response,
-			loading,
-			router,
-			route
-		};
+const {
+	data: posterEvents,
+	error: errorEvents,
+	pending
+} = await apiRouter.filters.findEventsPagination.useQuery({
+	data: {
+		query: {
+			tags,
+			startDate: dateStart,
+			endDate: dateEnd
+		},
+		options: {
+			page: currentPage,
+			limit: 15
+		},
+		watch: [tags.value, dateStart.value, dateEnd.value, currentPage.value]
 	}
 });
+
+watch(
+	() => route.query,
+	(value) => {
+		if (route.query.page) {
+			window.scrollTo({
+				top: 450,
+				behavior: 'smooth'
+			});
+		}
+		if (Object.keys(value).length) {
+			sendAnalytics.search({
+				search_term: route.fullPath.split('?')[1],
+				tags: value.tags ? getFirstQuery(value.tags) : ''
+			});
+		}
+	},
+	{ deep: true }
+);
+
+watch(
+	() => posterEvents,
+	(posterEvents) => {
+		if (posterEvents.value.page > posterEvents.value.totalPages) {
+			const currentParams = { ...route.query, ...{ page: 1 } };
+			navigateTo({ query: currentParams });
+		}
+	},
+	{ deep: true }
+);
+// export default defineComponent({
+// 	setup() {
+// 		const mobile = inject <ResponsiveDevice>('mobile');
+// 		const tablet = inject<ResponsiveDevice>('tablet');
+// 		const desktop = inject<ResponsiveDevice>('desktop');
+//
+// 		const scrollOnTop = (width) => {
+// 			console.log(width);
+// 			window.scrollTo({
+// 				top: width,
+// 				behavior: 'smooth'
+// 			});
+// 		};
+// 		const response = reactive<PaginationResponse>({
+// 			docs: [],`
+// 			totalDocs: 0,
+// 			limit: 15,
+// 			page: 1,
+// 			totalPages: 1,
+// 			hasPrevPage: false,
+// 			hasNextPage: false,
+// 			prevPage: null,
+// 			nextPage: null
+// 		});
+//
+// 		const loading = ref(false);
+// 		const route = useRoute();
+// 		const router = useRouter();
+//
+// 		const getLimit = () => {
+// 			return mobile?.value ? 10 : tablet.value ? 14 : 15;
+// 		};
+//
+// 		const fetchPage = async (page: number | null) => {
+// 			if (!page || loading.value) return;
+// 			loading.value = true;
+// 			try {
+// 				const res = await fetch('/api/events/find/pagination', {
+// 					method: 'POST',
+// 					headers: {
+// 						'Content-Type': 'application/json'
+// 					},
+// 					body: JSON.stringify({
+// 						query: {},
+// 						options: { page: page, limit: getLimit() }
+// 					})
+// 				});
+// 				if (!res.ok) {
+// 					throw new Error(`Ошибка запроса: ${res.status}`);
+// 				}
+// 				const data: PaginationResponse = await res.json();
+// 				Object.assign(response, data);
+// 				// scrollOnTop(mobile?.value ? 150 : tablet?.value ? 250 : 450);
+// 			} catch (error) {
+// 				console.error('Ошибка загрузки данных:', error);
+// 			} finally {
+// 				loading.value = false;
+// 			}
+// 		};
+//
+// 		watch(
+// 			() => route.query.page,
+// 			(newPage) => {
+// 				const page = parseInt(newPage as string, 10) || 1;
+// 				fetchPage(page);
+// 			},
+// 			{ immediate: true }
+// 		);
+//
+// 		return {
+// 			response,
+// 			loading,
+// 			router,
+// 			route
+// 		};
+// 	}
+// });
 </script>
 
 <template>
 	<div class="pagination-container">
 		<!-- Компонент отображения событий -->
 		<SearchEventCardsList
-			v-if="response.docs && response.docs.length !== 0"
-			:events="response.docs"
+			v-if="posterEvents.docs && posterEvents.docs.length !== 0"
+			:events="posterEvents.docs"
 		/>
 
 		<!-- Элементы управления пагинацией -->
 		<div class="pagination-controls">
 			<!-- Первая страница -->
 			<NuxtLink
-				v-if="response.page > 1"
+				v-if="posterEvents.page > 1"
 				:to="{ query: { ...route.query, page: 1 } }"
 				class="pagination-link"
-				:class="{ disabled: loading }"
+				:class="{ disabled: pending }"
 			>
 				{{ '<<' }}
 			</NuxtLink>
 
 			<!-- Кнопка назад -->
 			<NuxtLink
-				v-if="response.hasPrevPage"
-				:to="{ query: { ...route.query, page: response.prevPage } }"
+				v-if="posterEvents.hasPrevPage"
+				:to="{ query: { ...posterEvents.query, page: posterEvents.prevPage } }"
 				class="pagination-link"
-				:class="{ disabled: loading }"
+				:class="{ disabled: pending }"
 			>
 				{{ '<' }}
 			</NuxtLink>
@@ -130,33 +181,33 @@ export default defineComponent({
 			<!-- Текущая и следующая страницы -->
 			<NuxtLink
 				v-for="page in [
-					response.page,
-					response.hasNextPage ? response.nextPage : null
+					posterEvents.page,
+					posterEvents.hasNextPage ? posterEvents.nextPage : null
 				].filter(Boolean)"
 				:key="page"
-				:to="{ query: { ...route.query, page } }"
+				:to="{ query: { ...route.query, ...{ page } } }"
 				class="pagination-link"
-				:class="{ active: response.page === page, disabled: loading }"
+				:class="{ active: posterEvents.page === page, disabled: pending }"
 			>
 				{{ page }}
 			</NuxtLink>
 
 			<!-- Кнопка вперед -->
 			<NuxtLink
-				v-if="response.hasNextPage"
-				:to="{ query: { ...route.query, page: response.nextPage } }"
+				v-if="posterEvents.hasNextPage"
+				:to="{ query: { ...route.query, page: posterEvents.nextPage } }"
 				class="pagination-link"
-				:class="{ disabled: loading }"
+				:class="{ disabled: pending }"
 			>
 				{{ '>' }}
 			</NuxtLink>
 
 			<!-- Последняя страница -->
 			<NuxtLink
-				v-if="response.page < response.totalPages"
-				:to="{ query: { ...route.query, page: response.totalPages } }"
+				v-if="posterEvents.page < posterEvents.totalPages"
+				:to="{ query: { ...route.query, page: posterEvents.totalPages } }"
 				class="pagination-link"
-				:class="{ disabled: loading }"
+				:class="{ disabled: pending }"
 			>
 				{{ '>>' }}
 			</NuxtLink>

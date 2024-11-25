@@ -171,7 +171,7 @@ watch(
 			<!-- Кнопка назад -->
 			<NuxtLink
 				v-if="posterEvents.hasPrevPage"
-				:to="{ query: { ...posterEvents.query, page: posterEvents.prevPage } }"
+				:to="{ query: { ...route.query, page: posterEvents.prevPage } }"
 				class="pagination-link"
 				:class="{ disabled: pending }"
 			>

@@ -113,10 +113,7 @@ watch(
 				v-if="posterEvents && posterEvents.length !== 0"
 				:events="posterEvents"
 			/> -->
-			<SearchPagination
-				v-if="posterEvents && posterEvents.length !== 0"
-				:events="posterEvents"
-			/>
+			<SearchPagination />
 			<SearchHeading
 				v-if="posterEvents && posterEvents.length !== 0"
 				position="down"

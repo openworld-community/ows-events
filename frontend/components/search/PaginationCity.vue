@@ -2,6 +2,7 @@
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
+const city = getFirstParam(route.params.city);
 
 const dateStart = computed(() =>
 	dateFromQueryToFilter('first', getFirstQuery(route.query.startDate as string))
@@ -25,8 +26,9 @@ const {
 	data: posterEvents,
 	error: errorEvents,
 	pending
-} = await apiRouter.filters.findEventsPagination.useQuery({
+} = await apiRouter.filters.findEventsByCityPagination.useQuery({
 	data: {
+		city,
 		query: {
 			tags,
 			startDate: dateStart,

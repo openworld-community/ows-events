@@ -149,10 +149,11 @@ watch(
 				v-if="!pending && !posterEvents"
 				:title="$t('event.filteredEvents.no_events_found')"
 			/>
-			<SearchEventCardsList
-				v-if="posterEvents && posterEvents.length !== 0"
-				:events="posterEvents"
-			/>
+			<!--			<SearchEventCardsList-->
+			<!--				v-if="posterEvents && posterEvents.length !== 0"-->
+			<!--				:events="posterEvents"-->
+			<!--			/>-->
+			<SearchPaginationCountry />
 			<SearchHeading
 				v-if="posterEvents && posterEvents.length !== 0"
 				position="down"

@@ -77,6 +77,51 @@ export const filters = {
 		);
 	}),
 
+	findEventsByCountryPagination: defineQuery<
+		(input: {
+			country: string | string[];
+			query: {
+				tags?: globalThis.ComputedRef<string[]>;
+				startDate: globalThis.ComputedRef<number>;
+				endDate: globalThis.ComputedRef<number>;
+			};
+			options: {
+				page: number;
+				limit: number;
+			};
+			watch: any;
+		}) => PaginatedResponse<EventOnPoster>
+	>((input) => {
+		return useBackendFetch(
+			`events/country/${input.country}/pagination`,
+			{ body: { query: input?.query, options: input?.options } ?? {} },
+			{ watch }
+		);
+	}),
+
+	findEventsByCityPagination: defineQuery<
+		(input?: {
+			city?: string | string[];
+			query: {
+				country?: string;
+				tags?: globalThis.ComputedRef<string[]>;
+				startDate: globalThis.ComputedRef<number>;
+				endDate: globalThis.ComputedRef<number>;
+			};
+			options: {
+				page: number;
+				limit: number;
+			};
+			watch: any;
+		}) => PaginatedResponse<EventOnPoster>
+	>((input) => {
+		return useBackendFetch(
+			`events/city/${input.city}/pagination`,
+			{ body: { query: input?.query, options: input?.options } ?? {} },
+			{ watch }
+		);
+	}),
+
 	getUsedCountries: defineQuery<() => Country[]>(() => useBackendFetch('location/usedCountries')),
 	getUsedCitiesByCountry: defineQuery<(input: { country: Country }) => City[]>((input) =>
 		useBackendFetch(`location/usedCities/${input.country}`)

@@ -12,6 +12,7 @@ const dateEnd = computed(() => {
 const currentPage = computed(() => {
 	return parseInt(getFirstQuery(route.query.page as string));
 });
+const country = getFirstParam(route.params.country);
 
 const tags = computed(() =>
 	getFirstQuery(route.query.tags)
@@ -25,8 +26,9 @@ const {
 	data: posterEvents,
 	error: errorEvents,
 	pending
-} = await apiRouter.filters.findEventsPagination.useQuery({
+} = await apiRouter.filters.findEventsByCountryPagination.useQuery({
 	data: {
+		country,
 		query: {
 			tags,
 			startDate: dateStart,

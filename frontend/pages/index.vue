@@ -109,7 +109,11 @@ watch(
 				v-if="!pending && (!posterEvents || posterEvents.length === 0)"
 				:title="$t('event.filteredEvents.no_events_found')"
 			/>
-			<SearchEventCardsList
+			<!-- <SearchEventCardsList
+				v-if="posterEvents && posterEvents.length !== 0"
+				:events="posterEvents"
+			/> -->
+			<SearchPagination
 				v-if="posterEvents && posterEvents.length !== 0"
 				:events="posterEvents"
 			/>

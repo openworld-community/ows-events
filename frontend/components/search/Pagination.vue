@@ -1,23 +1,11 @@
 <script lang="ts">
-import { defineComponent, reactive, ref, watch, onMounted, onUnmounted } from 'vue';
+import { defineComponent, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { EventOnPoster } from '../../../common/types';
 
-
-const screenWidth = ref<number>(0);
-const updateScreenWidth = () => {
-			if (typeof window !== 'undefined') {
-				screenWidth.value = window.innerWidth;
-				console.log(screenWidth);
-			}
-		};
-const scrollOnTop = () => {
-	window.scrollTo({
-		top: 150,
-		behavior: 'smooth'
-	});
-};
-
+interface ResponsiveDevice {
+    value: boolean;
+}
 interface PaginationResponse {
 	docs: EventOnPoster[];
 	totalDocs: number;
@@ -32,6 +20,17 @@ interface PaginationResponse {
 
 export default defineComponent({
 	setup() {
+		const mobile = inject <ResponsiveDevice>('mobile');
+		const tablet = inject<ResponsiveDevice>('tablet');
+		const desktop = inject<ResponsiveDevice>('desktop');
+
+		const scrollOnTop = (width) => {
+			console.log(width);
+			window.scrollTo({
+				top: width,
+				behavior: 'smooth'
+			});
+		};
 		const response = reactive<PaginationResponse>({
 			docs: [],
 			totalDocs: 0,
@@ -44,32 +43,12 @@ export default defineComponent({
 			nextPage: null
 		});
 
-		
 		const loading = ref(false);
 		const route = useRoute();
 		const router = useRouter();
 
-		
-
-		onMounted(() => {
-			updateScreenWidth();
-			window.addEventListener('resize', updateScreenWidth);
-		});
-
-		onUnmounted(() => {
-			window.removeEventListener('resize', updateScreenWidth);
-		});
-
 		const getLimit = () => {
-			if (screenWidth.value > 768 && screenWidth.value < 1440 ) {
-				console.log(screenWidth.value);
-				return 14;
-			}
-			if (screenWidth.value < 768) {
-				console.log(screenWidth.value);
-				return 10;
-			}
-			return 15; // Desktop
+			return mobile?.value ? 10 : tablet.value ? 14 : 15;
 		};
 
 		const fetchPage = async (page: number | null) => {
@@ -91,7 +70,7 @@ export default defineComponent({
 				}
 				const data: PaginationResponse = await res.json();
 				Object.assign(response, data);
-				scrollOnTop();
+				// scrollOnTop(mobile?.value ? 150 : tablet?.value ? 250 : 450);
 			} catch (error) {
 				console.error('Ошибка загрузки данных:', error);
 			} finally {

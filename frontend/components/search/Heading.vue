@@ -19,10 +19,14 @@ defineProps({
 		]"
 	>
 		{{ title }}
+		<slot />
 	</h3>
 </template>
 <style lang="less" scoped>
 .heading {
+	display: flex;
+	flex-direction:row;
+	justify-content: space-between;
 	@media (max-width: 768px) {
 		font-size: var(--font-size-ML);
 		font-weight: 500;

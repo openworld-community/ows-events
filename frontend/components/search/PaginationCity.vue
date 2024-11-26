@@ -1,6 +1,18 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 
+interface ResponsiveDevice {
+	value: boolean;
+}
+
+const mobile = inject<ResponsiveDevice>('mobile');
+const tablet = inject<ResponsiveDevice>('tablet');
+const desktop = inject<ResponsiveDevice>('desktop');
+
+const getLimit = () => {
+	return mobile?.value ? 10 : tablet.value ? 14 : 15;
+};
+
 const route = useRoute();
 const city = getFirstParam(route.params.city);
 
@@ -36,7 +48,7 @@ const {
 		},
 		options: {
 			page: currentPage,
-			limit: 15
+			limit: getLimit()
 		},
 		watch: [tags.value, dateStart.value, dateEnd.value, currentPage.value]
 	}

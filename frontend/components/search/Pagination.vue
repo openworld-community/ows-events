@@ -1,6 +1,18 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 
+interface ResponsiveDevice {
+	value: boolean;
+}
+
+const mobile = inject<ResponsiveDevice>('mobile');
+const tablet = inject<ResponsiveDevice>('tablet');
+const desktop = inject<ResponsiveDevice>('desktop');
+
+const getLimit = () => {
+	return mobile?.value ? 10 : tablet.value ? 14 : 15;
+};
+
 const route = useRoute();
 
 const dateStart = computed(() =>
@@ -34,7 +46,7 @@ const {
 		},
 		options: {
 			page: currentPage,
-			limit: 15
+			limit: getLimit()
 		},
 		watch: [tags.value, dateStart.value, dateEnd.value, currentPage.value]
 	}
@@ -45,7 +57,7 @@ watch(
 	(value) => {
 		if (route.query.page) {
 			window.scrollTo({
-				top: 450,
+				top: 0,
 				behavior: 'smooth'
 			});
 		}
@@ -149,103 +161,124 @@ watch(
 </script>
 
 <template>
-	<div class="pagination-container">
-		<!-- Компонент отображения событий -->
-		<SearchEventCardsList
-			v-if="posterEvents.docs && posterEvents.docs.length !== 0"
-			:events="posterEvents.docs"
-		/>
+	<!-- Компонент отображения событий -->
+	<SearchEventCardsList
+		v-if="posterEvents.docs && posterEvents.docs.length !== 0"
+		:events="posterEvents.docs"
+	/>
 
-		<!-- Элементы управления пагинацией -->
-		<div class="pagination-controls">
-			<!-- Первая страница -->
-			<NuxtLink
-				v-if="posterEvents.page > 1"
-				:to="{ query: { ...route.query, page: 1 } }"
-				class="pagination-link"
-				:class="{ disabled: pending }"
-			>
-				{{ '<<' }}
-			</NuxtLink>
+	<!-- Элементы управления пагинацией -->
+	<div class="pagination__controls">
+		<!-- Первая страница -->
+		<NuxtLink
+			v-if="posterEvents.page > 1"
+			:to="{ query: { ...route.query, page: 1 } }"
+			class="pagination__element"
+			:class="{ disabled: pending }"
+		>
+			{{ '<<' }}
+		</NuxtLink>
 
-			<!-- Кнопка назад -->
-			<NuxtLink
-				v-if="posterEvents.hasPrevPage"
-				:to="{ query: { ...route.query, page: posterEvents.prevPage } }"
-				class="pagination-link"
-				:class="{ disabled: pending }"
-			>
-				{{ '<' }}
-			</NuxtLink>
+		<!-- Кнопка назад -->
+		<NuxtLink
+			v-if="posterEvents.hasPrevPage"
+			:to="{ query: { ...route.query, page: posterEvents.prevPage } }"
+			class="pagination__element"
+			:class="{ disabled: pending }"
+		>
+			{{ '<' }}
+		</NuxtLink>
 
-			<!-- Текущая и следующая страницы -->
-			<NuxtLink
-				v-for="page in [
-					posterEvents.hasPrevPage ? posterEvents.prevPage : null,
-					posterEvents.page,
-					posterEvents.hasNextPage ? posterEvents.nextPage : null
-				].filter(Boolean)"
-				:key="page"
-				:to="{ query: { ...route.query, ...{ page } } }"
-				class="pagination-link"
-				:class="{ active: posterEvents.page === page, disabled: pending }"
-			>
-				{{ page }}
-			</NuxtLink>
+		<!-- Текущая и следующая страницы -->
+		<NuxtLink
+			v-for="page in [
+				posterEvents.hasPrevPage ? posterEvents.prevPage : null,
+				posterEvents.page,
+				posterEvents.hasNextPage ? posterEvents.nextPage : null
+			].filter(Boolean)"
+			:key="page"
+			:to="{ query: { ...route.query, ...{ page } } }"
+			class="pagination__element"
+			:class="{ active: posterEvents.page === page, disabled: pending }"
+		>
+			{{ page }}
+		</NuxtLink>
 
-			<!-- Кнопка вперед -->
-			<NuxtLink
-				v-if="posterEvents.hasNextPage"
-				:to="{ query: { ...route.query, page: posterEvents.nextPage } }"
-				class="pagination-link"
-				:class="{ disabled: pending }"
-			>
-				{{ '>' }}
-			</NuxtLink>
+		<!-- Кнопка вперед -->
+		<NuxtLink
+			v-if="posterEvents.hasNextPage"
+			:to="{ query: { ...route.query, page: posterEvents.nextPage } }"
+			class="pagination__element"
+			:class="{ disabled: pending }"
+		>
+			{{ '>' }}
+		</NuxtLink>
 
-			<!-- Последняя страница -->
-			<NuxtLink
-				v-if="posterEvents.page < posterEvents.totalPages"
-				:to="{ query: { ...route.query, page: posterEvents.totalPages } }"
-				class="pagination-link"
-				:class="{ disabled: pending }"
-			>
-				{{ '>>' }}
-			</NuxtLink>
-		</div>
+		<!-- Последняя страница -->
+		<NuxtLink
+			v-if="posterEvents.page < posterEvents.totalPages"
+			:to="{ query: { ...route.query, page: posterEvents.totalPages } }"
+			class="pagination__element"
+			:class="{ disabled: pending }"
+		>
+			{{ '>>' }}
+		</NuxtLink>
 	</div>
 </template>
 
 <style lang="less" scoped>
-.pagination-container {
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
-}
+.pagination {
+	&__controls {
+		display: flex;
+		justify-content: center;
+		gap: 8px;
+		margin-top: 20px;
+	}
+	&__element {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 18px;
+		width: 56px;
+		height: 59px;
+		border-radius: 5px;
+		text-decoration: none;
+		color: var(--color-icons);
+		transition: background-color 0.2s;
+		font-weight: 500;
+		opacity: 0.8;
+		transition: box-shadow 0.3s ease;
+		@media (max-width: 768px) {
+			width: 46px;
+			height: 43px;
+		}
 
-.pagination-controls {
-	display: flex;
-	justify-content: center;
-	gap: 8px;
-}
-
-.pagination-link {
-	text-decoration: none;
-	padding: 5px 10px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	color: #333;
-	transition: background-color 0.2s;
-}
-
-.pagination-link.active {
-	font-weight: bold;
-	background-color: #007bff;
-	color: #fff;
-}
-
-.pagination-link.disabled {
-	pointer-events: none;
-	opacity: 0.5;
+		&.active {
+			font-weight: bold;
+			border: 3px solid var(--color-accent-green-main);
+			color: var(--color-icons);
+			opacity: 1;
+			&:hover {
+				outline: none;
+                box-shadow: 0 0 5px var(--color-accent-green-main);
+			}
+			&:focus {
+				box-shadow: 0 0 5px var(--color-accent-green-main);
+			}
+		}
+		&.disabled {
+			pointer-events: none;
+			opacity: 0.5;
+		}
+		&:hover {
+			opacity: 1;
+			box-shadow: 0 0 7px var(--color-accent-green-main), inset 0 0 5px var(--color-accent-green-main);
+			outline: 2px solid var(--color-accent-green-main-70);
+		}
+		&:focus {
+			opacity: 1;
+			box-shadow: 0 0 7px var(--color-accent-green-main-70), inset 0 0 5px var(--color-accent-green-main);
+		}
+	}
 }
 </style>

@@ -70,9 +70,11 @@ export const filters = {
 			watch: any;
 		}) => PaginatedResponse<EventOnPoster>
 	>((input) => {
+		const query = input?.query || {};
+		const options = input?.options || {};
 		return useBackendFetch(
 			'events/find/pagination',
-			{ body: { query: input?.query, options: input?.options } ?? {} },
+			{ body: { query: query ?? {}, options: options ?? {} } },
 			{ watch }
 		);
 	}),
@@ -92,9 +94,11 @@ export const filters = {
 			watch: any;
 		}) => PaginatedResponse<EventOnPoster>
 	>((input) => {
+		const query = input?.query || {};
+		const options = input?.options || {};
 		return useBackendFetch(
 			`events/country/${input.country}/pagination`,
-			{ body: { query: input?.query, options: input?.options } ?? {} },
+			{ body: { query: query ?? {}, options: options ?? {} } },
 			{ watch }
 		);
 	}),
@@ -115,9 +119,11 @@ export const filters = {
 			watch: any;
 		}) => PaginatedResponse<EventOnPoster>
 	>((input) => {
+		const query = input?.query || {};
+		const options = input?.options || {};
 		return useBackendFetch(
 			`events/city/${input.city}/pagination`,
-			{ body: { query: input?.query, options: input?.options } ?? {} },
+			{ body: { query: query ?? {}, options: options ?? {} } },
 			{ watch }
 		);
 	}),

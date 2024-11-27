@@ -1,9 +1,6 @@
 name: 'Deploy demo'
 
 on:
-  push:
-    branches:
-      - demo
   workflow_dispatch:
 
 concurrency: build-and-deploy

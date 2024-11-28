@@ -5,12 +5,13 @@ export default [
 	{ UserAgent: '*' },
 	{
 		Disallow: [
-			RoutePathEnum.USER_PAGE,
-			RoutePathEnum.USER_FAVOURITES,
-			RoutePathEnum.USER_MY_EVENTS,
-			//	RoutePathEnum.EVENT_FORM,
-			RoutePathEnum.EVENT_EDIT,
-			RoutePathEnum.LIMITATION_OF_LIABILITY
+			RoutePathEnum.HOME, //тест
+			// RoutePathEnum.USER_PAGE, //прод
+			// RoutePathEnum.USER_FAVOURITES, //прод
+			// RoutePathEnum.USER_MY_EVENTS, //прод
+			// RoutePathEnum.EVENT_EDIT, //прод
+			// RoutePathEnum.LIMITATION_OF_LIABILITY //прод
+			//		RoutePathEnum.EVENT_FORM, //было закомментировано
 		]
 	}
 ];

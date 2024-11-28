@@ -164,7 +164,7 @@ watch(
 			<!--				v-if="posterEvents && posterEvents.length !== 0"-->
 			<!--				:events="posterEvents"-->
 			<!--			/>-->
-			<SearchPaginationCIty />
+			<SearchPaginationCity />
 			<SearchHeading
 				v-if="posterEvents && posterEvents.length !== 0"
 				position="down"

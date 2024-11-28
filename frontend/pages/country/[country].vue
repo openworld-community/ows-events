@@ -154,7 +154,7 @@ watch(
 			<!--				:events="posterEvents"-->
 			<!--			/>-->
 			<SearchPaginationCountry />
-			<SearchHeading
+			<!-- <SearchHeading
 				v-if="posterEvents && posterEvents.length !== 0"
 				position="down"
 				:title="
@@ -162,7 +162,7 @@ watch(
 						country: queryToCountryLocaleName[country][locale]
 					})
 				"
-			/>
+			/> -->
 		</SearchCardsWrapper>
 		<CommonCreateButton :is-authorized="userStore.isAuthorized" />
 	</main>

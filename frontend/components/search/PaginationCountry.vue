@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { countries as supportedCountries } from '../../../common/const/supportedCountries';
+import {
+	declinationCountries,
+	countries as supportedCountries,
+	queryToCountryLocaleName,
+	queryToCountryCode
+} from '../../../common/const/supportedCountries';
 import { useRoute } from 'vue-router';
 
 const { t, locale } = useI18n();
@@ -257,13 +262,13 @@ watch(
 			</div>
 		</div>
 		<SearchHeading
-			v-if="posterEvents.docs && posterEvents.docs.length !== 0 && desktop"
+			v-if="posterEvents.docs && posterEvents.docs.length !== 0"
 			position="down"
-			:title="`${$t('home.headings.down', {
-				country: `${supportedCountries['RS'][locale]}`
-			})}
-			&nbsp;&nbsp;|&nbsp;&nbsp;
-			 ${$t('home.headings.down', { country: `${supportedCountries['ME'][locale]}` })}`"
+			:title="
+				$t('country.heading', {
+					country: queryToCountryLocaleName[country][locale]
+				})
+			"
 		>
 			<!-- Элементы управления пагинацией -->
 			<div

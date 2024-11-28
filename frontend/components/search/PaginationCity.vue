@@ -16,6 +16,27 @@ const desktop = inject<ResponsiveDevice>('desktop');
 // 	return mobile?.value ? 10 : tablet.value ? 14 : 15;
 // };
 
+const findCurrenCity = (param: string): string => {
+	const englishName = transformFromQuery(param);
+	const currentCity = usedLocales.value.cities.find((city) => city['en'] === englishName);
+	if (!currentCity) return;
+
+	return currentCity[locale.value];
+};
+const findCountryByParam = (param: string): string => {
+	const englishName = transformFromQuery(param);
+	const cityObjectWithCountryCode = usedLocales.value.cities.find(
+		(city) => city['en'] === englishName
+	);
+	if (!cityObjectWithCountryCode) return '';
+	const countryCode = cityObjectWithCountryCode['countryCode'];
+	if (!countryCode) return '';
+
+	const currentCountry = supportedCountries[countryCode][locale.value];
+	return currentCountry;
+};
+const { data: usedLocales } = await apiRouter.filters.getUsedLocations.useQuery({});
+
 const route = useRoute();
 const city = getFirstParam(route.params.city);
 
@@ -257,13 +278,14 @@ watch(
 			</div>
 		</div>
 		<SearchHeading
-			v-if="posterEvents.docs && posterEvents.docs.length !== 0 && desktop"
+			v-if="posterEvents.docs && posterEvents.docs.length !== 0"
 			position="down"
-			:title="`${$t('home.headings.down', {
-				country: `${supportedCountries['RS'][locale]}`
-			})}
-			&nbsp;&nbsp;|&nbsp;&nbsp;
-			 ${$t('home.headings.down', { country: `${supportedCountries['ME'][locale]}` })}`"
+			:title="
+				$t('city.heading', {
+					city: findCurrenCity(city),
+					country: findCountryByParam(city)
+				})
+			"
 		>
 			<!-- Элементы управления пагинацией -->
 			<div

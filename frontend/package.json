@@ -20,7 +20,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxtjs/robots": "^3.0.0",
+    "@nuxtjs/robots": "^5.0.0",
     "@pinia/nuxt": "^0.4.11",
     "@types/uuid": "^9.0.1",
     "@vee-validate/yup": "^4.12.4",

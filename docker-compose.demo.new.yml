@@ -40,6 +40,7 @@ services:
             - NUXT_PUBLIC_DOMAIN=test.afisha.peredelano.com
             - NUXT_PUBLIC_GTAG_ID
             - NUXT_PUBLIC_GOOGLE_SIGN_IN_CLIENT_ID
+            - NUXT_SITE_ENV=staging
         deploy:
             resources:
                 limits:

@@ -32,6 +32,7 @@ services:
             - NUXT_PUBLIC_DOMAIN=localhost
             - NUXT_PUBLIC_GTAG_ID=localhostGtagId
             - NUXT_PUBLIC_GOOGLE_SIGN_IN_CLIENT_ID
+            - NUXT_SITE_ENV=staging
 
     backend:
         build:

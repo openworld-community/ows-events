@@ -65,7 +65,7 @@ const dataPrice = computed(() => {
 
 		<!-- Цена -->
 		<CommonEventDetailesItem
-			icon-name="dollar"
+			icon-name="banknotes"
 			:data="dataPrice"
 			:size="size"
 		/>

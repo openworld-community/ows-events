@@ -93,6 +93,9 @@ const dataPrice = computed(() => {
 	width: 100%;
 	flex-direction: column;
 	overflow: hidden;
-	gap: 12px;
+	gap: 5px;
+	@media (min-width: 768px) {
+		gap: 12px;
+	}
 }
 </style>

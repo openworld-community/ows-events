@@ -53,7 +53,7 @@ defineProps({
 
 	@media (min-width: 768px) {
 		grid-template-columns: 1fr 1fr;
-		row-gap: 40px;
+		row-gap: 20px;
 		column-gap: var(--gap);
 		padding-left: var(--padding-side);
 		padding-right: var(--padding-side);

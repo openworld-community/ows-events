@@ -5,6 +5,7 @@ import { CommonErrorsEnum, SupportedLanguages } from '../../../common/const';
 import { EventModel } from '../models/event.model';
 import { imageController } from './image-controller';
 import { countriesAndCitiesController } from './countries-and-cities.controller';
+import { vars } from '../config/vars';
 
 class EventsStateController {
 	async addEvent(event: EventOnPoster) {
@@ -167,9 +168,14 @@ class EventsStateController {
 		const event = await EventModel.findOne({
 			id
 		});
-		if (event?.image && !event.image.includes('https://') && !event.image.includes('http://'))
+		if (
+			(event?.image &&
+				!event.image.includes('https://') &&
+				!event.image.includes('http://')) ||
+			event?.image.includes(`https://${vars.s3.bucket}.fsn1.your-objectstorage.com/`)
+		)
 			try {
-				await imageController.deleteImg(`.${event.image}`);
+				await imageController.deleteImg(event.image);
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.log(e);

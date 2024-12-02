@@ -89,7 +89,6 @@ const deleteCard = async () => {
 };
 
 const onEditButtonClick = async () => {
-	console.log('EDIT', id);
 	await navigateTo(localePath({ path: `${RoutePathEnum.EVENT_EDIT}${id}` }));
 };
 

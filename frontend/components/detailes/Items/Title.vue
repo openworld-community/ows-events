@@ -44,7 +44,8 @@ defineProps({
 	}
 
 	&__title {
-		word-break: break-all;
+		word-wrap: break-word;
+		word-break: break-word;
 	}
 }
 </style>

@@ -105,8 +105,8 @@ watch(
 				<NuxtLink
 					v-if="posterEvents.page > 1"
 					:to="{ query: { ...route.query, page: 1 } }"
-					class="pagination__element"
-					:class="{ disabled: pending }"
+					:class="['pagination__element__arrow', { disabled: pending }]"
+					@click="$event.target.blur()"
 				>
 					<CommonIcon
 						name="previous-start"
@@ -120,8 +120,8 @@ watch(
 				<NuxtLink
 					v-if="posterEvents.hasPrevPage"
 					:to="{ query: { ...route.query, page: posterEvents.prevPage } }"
-					class="pagination__element"
-					:class="{ disabled: pending }"
+					:class="['pagination__element__arrow', { disabled: pending }]"
+					@click="$event.target.blur()"
 				>
 					<CommonIcon
 						name="previous"
@@ -140,8 +140,10 @@ watch(
 					].filter(Boolean)"
 					:key="page"
 					:to="{ query: { ...route.query, ...{ page } } }"
-					class="pagination__element"
-					:class="{ active: posterEvents.page === page, disabled: pending }"
+					:class="[
+						'pagination__element',
+						{ active: posterEvents.page === page, disabled: pending }
+					]"
 				>
 					{{ page }}
 				</NuxtLink>
@@ -150,8 +152,8 @@ watch(
 				<NuxtLink
 					v-if="posterEvents.hasNextPage"
 					:to="{ query: { ...route.query, page: posterEvents.nextPage } }"
-					class="pagination__element"
-					:class="{ disabled: pending }"
+					:class="['pagination__element__arrow', { disabled: pending }]"
+					@click="$event.target.blur()"
 				>
 					<CommonIcon
 						name="next"
@@ -165,8 +167,8 @@ watch(
 				<NuxtLink
 					v-if="posterEvents.page < posterEvents.totalPages"
 					:to="{ query: { ...route.query, page: posterEvents.totalPages } }"
-					class="pagination__element"
-					:class="{ disabled: pending }"
+					:class="['pagination__element__arrow', { disabled: pending }]"
+					@click="$event.target.blur()"
 				>
 					<CommonIcon
 						name="next-finish"
@@ -189,8 +191,8 @@ watch(
 				<NuxtLink
 					v-if="posterEvents.page > 1"
 					:to="{ query: { ...route.query, page: 1 } }"
-					class="pagination__element"
-					:class="{ disabled: pending }"
+					:class="['pagination__element__arrow', { disabled: pending }]"
+					@click="$event.target.blur()"
 				>
 					<CommonIcon
 						name="previous-start"
@@ -204,8 +206,8 @@ watch(
 				<NuxtLink
 					v-if="posterEvents.hasPrevPage"
 					:to="{ query: { ...route.query, page: posterEvents.prevPage } }"
-					class="pagination__element"
-					:class="{ disabled: pending }"
+					:class="['pagination__element__arrow', { disabled: pending }]"
+					@click="$event.target.blur()"
 				>
 					<CommonIcon
 						name="previous"
@@ -224,8 +226,10 @@ watch(
 					].filter(Boolean)"
 					:key="page"
 					:to="{ query: { ...route.query, ...{ page } } }"
-					class="pagination__element"
-					:class="{ active: posterEvents.page === page, disabled: pending }"
+					:class="[
+						'pagination__element',
+						{ active: posterEvents.page === page, disabled: pending }
+					]"
 				>
 					{{ page }}
 				</NuxtLink>
@@ -234,8 +238,8 @@ watch(
 				<NuxtLink
 					v-if="posterEvents.hasNextPage"
 					:to="{ query: { ...route.query, page: posterEvents.nextPage } }"
-					class="pagination__element"
-					:class="{ disabled: pending }"
+					:class="['pagination__element__arrow', { disabled: pending }]"
+					@click="$event.target.blur()"
 				>
 					<CommonIcon
 						name="next"
@@ -249,8 +253,8 @@ watch(
 				<NuxtLink
 					v-if="posterEvents.page < posterEvents.totalPages"
 					:to="{ query: { ...route.query, page: posterEvents.totalPages } }"
-					class="pagination__element"
-					:class="{ disabled: pending }"
+					:class="['pagination__element__arrow', { disabled: pending }]"
+					@click="$event.target.blur()"
 				>
 					<CommonIcon
 						name="next-finish"
@@ -279,8 +283,8 @@ watch(
 				<NuxtLink
 					v-if="posterEvents.page > 1"
 					:to="{ query: { ...route.query, page: 1 } }"
-					class="pagination__element"
-					:class="{ disabled: pending }"
+					:class="['pagination__element__arrow', { disabled: pending }]"
+					@click="$event.target.blur()"
 				>
 					<CommonIcon
 						name="previous-start"
@@ -294,8 +298,8 @@ watch(
 				<NuxtLink
 					v-if="posterEvents.hasPrevPage"
 					:to="{ query: { ...route.query, page: posterEvents.prevPage } }"
-					class="pagination__element"
-					:class="{ disabled: pending }"
+					:class="['pagination__element__arrow', { disabled: pending }]"
+					@click="$event.target.blur()"
 				>
 					<CommonIcon
 						name="previous"
@@ -314,8 +318,10 @@ watch(
 					].filter(Boolean)"
 					:key="page"
 					:to="{ query: { ...route.query, ...{ page } } }"
-					class="pagination__element"
-					:class="{ active: posterEvents.page === page, disabled: pending }"
+					:class="[
+						'pagination__element',
+						{ active: posterEvents.page === page, disabled: pending }
+					]"
 				>
 					{{ page }}
 				</NuxtLink>
@@ -324,8 +330,8 @@ watch(
 				<NuxtLink
 					v-if="posterEvents.hasNextPage"
 					:to="{ query: { ...route.query, page: posterEvents.nextPage } }"
-					class="pagination__element"
-					:class="{ disabled: pending }"
+					:class="['pagination__element__arrow', { disabled: pending }]"
+					@click="$event.target.blur()"
 				>
 					<CommonIcon
 						name="next"
@@ -339,8 +345,8 @@ watch(
 				<NuxtLink
 					v-if="posterEvents.page < posterEvents.totalPages"
 					:to="{ query: { ...route.query, page: posterEvents.totalPages } }"
-					class="pagination__element"
-					:class="{ disabled: pending }"
+					:class="['pagination__element__arrow', { disabled: pending }]"
+					@click="$event.target.blur()"
 				>
 					<CommonIcon
 						name="next-finish"
@@ -361,11 +367,16 @@ watch(
 		flex-direction: column;
 		gap: 30px;
 	}
+
 	&__controls {
+		width: fit-content;
+		align-self: center;
 		display: flex;
 		justify-content: center;
 		gap: 8px;
+		transition: width 0.5s ease, height 0.5s ease;
 	}
+
 	&__element {
 		display: flex;
 		align-items: center;
@@ -377,10 +388,10 @@ watch(
 		text-decoration: none;
 		color: var(--color-icons);
 		transition: background-color 0.2s;
-		font-weight: 400;
+		font-weight: 500;
 		opacity: 0.8;
 		text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
-		transition: box-shadow 0.3s ease;
+		transition: opacity 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease, color 0.2s ease;
 		@media (min-width: 1440px) {
 			width: 56px;
 			height: 59px;
@@ -391,28 +402,52 @@ watch(
 			border: 3px solid var(--color-accent-green-main);
 			color: var(--color-icons);
 			opacity: 1;
-			&:hover {
-				outline: none;
-				box-shadow: 0 0 5px var(--color-accent-green-main);
-			}
+			transition: box-shadow 0.2s ease, outline 0.2s ease;
+
+			&:hover,
 			&:focus {
-				box-shadow: 0 0 5px var(--color-accent-green-main);
+				outline: none;
+				box-shadow: 0 0 7px var(--color-accent-green-main);
 			}
 		}
+
 		&.disabled {
 			pointer-events: none;
 			opacity: 0.5;
 		}
-		&:hover {
+
+		&:hover,
+		&:focus {
 			opacity: 1;
 			box-shadow: 0 0 7px var(--color-accent-green-main),
 				inset 0 0 5px var(--color-accent-green-main);
+		}
+		&:hover {
 			outline: 2px solid var(--color-accent-green-main-70);
 		}
-		&:focus {
-			opacity: 1;
-			box-shadow: 0 0 7px var(--color-accent-green-main-70),
-				inset 0 0 5px var(--color-accent-green-main);
+		&__arrow {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 17px;
+			height: 43px;
+			color: var(--color-icons);
+			@media (min-width: 1440px) {
+				height: 59px;
+			}
+			&:hover :deep(svg),
+			&:focus :deep(svg) {
+				color: var(--color-accent-green-main);
+				@media (min-width: 1440px) {
+					transform: scale(1.5); /* Увеличивает SVG */
+					transition: transform 0.3s ease, color 0.3s ease;
+				}
+			}
+
+			&:deep(svg) {
+				transition: transform 0.3s ease;
+				transform-origin: center; /* Анимация относительно центра */
+			}
 		}
 	}
 }

@@ -10,10 +10,10 @@ const { t } = useI18n();
 
 const titleOnMobile = computed(() => {
 	if (getRouteName(route.path).includes(RoutePathEnum.USER_MY_EVENTS)) {
-		return t('user.favourites.title');
+		return t('user.my_events.title');
 	}
 	if (getRouteName(route.path).includes(RoutePathEnum.USER_FAVOURITES)) {
-		return t('user.my_events.title');
+		return t('user.favourites.title');
 	}
 	if (getRouteName(route.path).includes(RoutePathEnum.USER_PROFILE)) {
 		return t('user.profile.title');

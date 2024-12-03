@@ -66,6 +66,7 @@ defineProps({
 	&__text {
 		word-wrap: break-word;
 		white-space: pre-line;
+		word-break: break-word;
 	}
 
 	&__html {

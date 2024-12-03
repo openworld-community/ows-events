@@ -77,6 +77,7 @@ watch(
 watch(
 	() => posterEvents,
 	(posterEvents) => {
+		console.log(posterEvents);
 		if (posterEvents.value.page > posterEvents.value.totalPages) {
 			const currentParams = { ...route.query, ...{ page: 1 } };
 			navigateTo({ query: currentParams });
@@ -98,9 +99,9 @@ watch(
 			 ${$t('home.headings.up', { country: `${supportedCountries['ME'][locale]}` })}`"
 		/>
 		<div class="pagination__wrapper">
-			<!-- Компонент отображения событий -->
+			<!-- Компонент отображения событий таблет/мобайл -->
 			<div
-				v-if="tablet || mobile"
+				v-if="posterEvents.docs && posterEvents.docs.length !== 0 && (tablet || mobile)"
 				class="pagination__controls"
 			>
 				<!-- Первая страница -->
@@ -182,9 +183,9 @@ watch(
 				v-if="posterEvents.docs && posterEvents.docs.length !== 0"
 				:events="posterEvents.docs"
 			/>
-			<!-- Элементы управления пагинацией -->
+			<!-- Элементы управления пагинацией таблет/мобайл -->
 			<div
-				v-if="mobile || tablet"
+				v-if="posterEvents.docs && posterEvents.docs.length !== 0 && (mobile || tablet)"
 				class="pagination__controls"
 			>
 				<!-- Первая страница -->
@@ -272,7 +273,7 @@ watch(
 			&nbsp;&nbsp;|&nbsp;&nbsp;
 			 ${$t('home.headings.down', { country: `${supportedCountries['ME'][locale]}` })}`"
 		>
-			<!-- Элементы управления пагинацией -->
+			<!-- Элементы управления пагинацией десктоп -->
 
 			<div
 				v-if="desktop"
@@ -364,6 +365,7 @@ watch(
 		flex-direction: column;
 		gap: 30px;
 	}
+
 	&__controls {
 		width: fit-content;
 		align-self: center;
@@ -372,6 +374,7 @@ watch(
 		gap: 8px;
 		transition: width 0.5s ease, height 0.5s ease;
 	}
+
 	&__element {
 		display: flex;
 		align-items: center;
@@ -397,24 +400,29 @@ watch(
 			border: 3px solid var(--color-accent-green-main);
 			color: var(--color-icons);
 			opacity: 1;
+
 			&:hover {
 				outline: none;
 				box-shadow: 0 0 5px var(--color-accent-green-main);
 			}
+
 			&:focus {
 				box-shadow: 0 0 5px var(--color-accent-green-main);
 			}
 		}
+
 		&.disabled {
 			pointer-events: none;
 			opacity: 0.5;
 		}
+
 		&:hover {
 			opacity: 1;
 			box-shadow: 0 0 7px var(--color-accent-green-main),
 				inset 0 0 5px var(--color-accent-green-main);
 			outline: 2px solid var(--color-accent-green-main-70);
 		}
+
 		&:focus {
 			opacity: 1;
 			box-shadow: 0 0 7px var(--color-accent-green-main-70),

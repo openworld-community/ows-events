@@ -114,7 +114,7 @@ watch(
 		<div class="pagination__wrapper">
 			<!-- Компонент отображения событий -->
 			<div
-				v-if="tablet || mobile"
+				v-if="posterEvents.docs && posterEvents.docs.length !== 0 && (tablet || mobile)"
 				class="pagination__controls"
 			>
 				<!-- Первая страница -->
@@ -198,7 +198,7 @@ watch(
 			/>
 			<!-- Элементы управления пагинацией -->
 			<div
-				v-if="mobile || tablet"
+				v-if="posterEvents.docs && posterEvents.docs.length !== 0 && (mobile || tablet)"
 				class="pagination__controls"
 			>
 				<!-- Первая страница -->

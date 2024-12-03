@@ -53,7 +53,6 @@ if (data.value) favourites.value = data.value;
 	display: flex;
 	width: 100%;
 	height: 100%;
-	display: flex;
 	flex-direction: column;
 	align-items: center;
 	padding-left: var(--padding-side);
@@ -61,7 +60,7 @@ if (data.value) favourites.value = data.value;
 	padding-bottom: var(--padding-vertical);
 
 	@media (min-width: 768px) {
-		justify-content: center;
+		justify-content: flex-start;
 		//height: unset;
 		padding-left: 5px;
 		padding-right: 0;

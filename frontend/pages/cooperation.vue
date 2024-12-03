@@ -56,8 +56,9 @@ getMeta({
 	}
 
 	&__title {
-		@media (min-width: 375px) and (max-width: 768px) {
-			text-align: center;
+		text-align: center;
+		@media (min-width: 1440px) {
+			text-align: left;
 		}
 	}
 

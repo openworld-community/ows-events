@@ -16,12 +16,14 @@ if (data.value) favourites.value = data.value;
 
 <template>
 	<div class="favourites">
-		<h1
+		<div
 			v-if="!mobile"
-			class="favourites__title"
+			class="favourites__title-wrapper"
 		>
-			{{ $t('user.favourites.title') }}
-		</h1>
+			<h1 class="favourites__title">
+				{{ $t('user.favourites.title') }}
+			</h1>
+		</div>
 
 		<ul
 			v-if="favourites.length"
@@ -65,6 +67,14 @@ if (data.value) favourites.value = data.value;
 		padding-left: 5px;
 		padding-right: 0;
 		padding-top: 20px;
+	}
+
+	&__title-wrapper {
+		@media (min-width: 768px) {
+			display: flex;
+			width: 100%;
+			justify-content: center;
+		}
 	}
 
 	&__title {

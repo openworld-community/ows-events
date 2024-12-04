@@ -57,8 +57,6 @@ if (data.value) favourites.value = data.value;
 	height: 100%;
 	flex-direction: column;
 	align-items: center;
-	padding-left: var(--padding-side);
-	padding-right: var(--padding-side);
 	padding-bottom: var(--padding-vertical);
 
 	@media (min-width: 768px) {
@@ -84,13 +82,19 @@ if (data.value) favourites.value = data.value;
 		text-align: left;
 
 		@media (min-width: 768px) {
-			max-width: 820px;
+			width: 100%;
+			font-size: var(--font-size-XL);
+			font-weight: var(--font-weight-regular);
+			text-align: left;
 			margin-bottom: 20px;
 		}
 
 		@media (min-width: 1440px) {
 			font-size: var(--font-size-XXL);
 			line-height: 38px;
+			font-weight: 500;
+			padding-left: 15px;
+			text-align: left;
 		}
 	}
 
@@ -102,7 +106,8 @@ if (data.value) favourites.value = data.value;
 		gap: 12px;
 
 		@media (min-width: 768px) {
-			max-width: 820px;
+			width: 55vw;
+			max-width: 900px;
 		}
 	}
 }
@@ -111,12 +116,7 @@ if (data.value) favourites.value = data.value;
 	display: flex;
 	width: 100%;
 	flex-direction: column;
-	margin-top: 40%;
 	align-items: center;
-
-	@media (min-width: 768px) {
-		margin-top: 5%;
-	}
 
 	&__image {
 		width: 260px;

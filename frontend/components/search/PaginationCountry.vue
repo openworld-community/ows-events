@@ -396,7 +396,6 @@ watch(
 		}
 		&.active {
 			transform: none;
-			color: var(--color-icons);
 		}
 	}
 

@@ -147,8 +147,15 @@ watch(
 						'pagination__element',
 						{ active: posterEvents.page === page, disabled: pending }
 					]"
+					@click="$event.target.blur()"
 				>
-					{{ page }}
+					<span
+						:class="[
+							'pagination__text',
+							{ active: posterEvents.page === page, disabled: pending }
+						]"
+						>{{ page }}
+					</span>
 				</NuxtLink>
 
 				<!-- Кнопка вперед -->
@@ -233,8 +240,15 @@ watch(
 						'pagination__element',
 						{ active: posterEvents.page === page, disabled: pending }
 					]"
+					@click="$event.target.blur()"
 				>
-					{{ page }}
+					<span
+						:class="[
+							'pagination__text',
+							{ active: posterEvents.page === page, disabled: pending }
+						]"
+						>{{ page }}
+					</span>
 				</NuxtLink>
 
 				<!-- Кнопка вперед -->
@@ -326,8 +340,15 @@ watch(
 						'pagination__element',
 						{ active: posterEvents.page === page, disabled: pending }
 					]"
+					@click="$event.target.blur()"
 				>
-					{{ page }}
+					<span
+						:class="[
+							'pagination__text',
+							{ active: posterEvents.page === page, disabled: pending }
+						]"
+						>{{ page }}
+					</span>
 				</NuxtLink>
 
 				<!-- Кнопка вперед -->
@@ -366,6 +387,23 @@ watch(
 
 <style lang="less" scoped>
 .pagination {
+	&__text {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: transform 0.3s ease;
+		text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
+		&:hover {
+			transform: scale(1.2);
+		}
+		&.active {
+			transform: none;
+			color: var(--color-icons);
+		}
+	}
+
 	&__wrapper {
 		display: flex;
 		flex-direction: column;
@@ -377,6 +415,7 @@ watch(
 		align-self: center;
 		display: flex;
 		justify-content: center;
+		align-items: center;
 		gap: 8px;
 		transition: width 0.5s ease, height 0.5s ease;
 	}
@@ -385,32 +424,43 @@ watch(
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 18px;
-		width: 46px;
-		height: 43px;
+		font-size: var(--font-size-L);
+		width: 30px;
 		border-radius: 5px;
 		text-decoration: none;
 		color: var(--color-icons);
 		transition: background-color 0.2s;
 		font-weight: 500;
-		opacity: 0.8;
-		text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
-		transition: opacity 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease, color 0.2s ease;
-		@media (min-width: 1440px) {
-			width: 56px;
-			height: 59px;
-		}
+		opacity: 0.85;
+		transition: background-color 0.2s, width 0.3s ease, height 0.3s ease, opacity 0.2s ease,
+			box-shadow 0.2s ease, outline 0.2s ease, color 0.2s ease;
 
 		&.active {
+			width: 46px;
+			height: 43px;
 			font-weight: 500;
 			border: 3px solid var(--color-accent-green-main);
 			color: var(--color-icons);
 			opacity: 1;
-			transition: box-shadow 0.2s ease, outline 0.2s ease;
+			transition: box-shadow 0.3s ease, outline 0.3s ease;
+			@media (min-width: 1440px) {
+				width: 56px;
+				height: 59px;
+			}
 
 			&:hover,
 			&:focus {
+				transform: none;
+				width: 46px;
+				height: 43px;
 				outline: none;
+				color: var(--color-accent-green-main);
+				@media (min-width: 1440px) {
+					width: 56px;
+					height: 59px;
+				}
+			}
+			&:hover {
 				box-shadow: 0 0 7px var(--color-accent-green-main);
 			}
 		}
@@ -423,28 +473,27 @@ watch(
 		&:hover,
 		&:focus {
 			opacity: 1;
-			box-shadow: 0 0 7px var(--color-accent-green-main),
-				inset 0 0 5px var(--color-accent-green-main);
+			color: var(--color-accent-green-main);
+			transition: transform 0.3s ease;
 		}
-		&:hover {
-			outline: 2px solid var(--color-accent-green-main-70);
+		:hover {
+			text-shadow: 0 0 10px var(--color-accent-green-main-60);
 		}
+
 		&__arrow {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			width: 17px;
-			height: 43px;
+			width: 20px;
 			color: var(--color-icons);
-			@media (min-width: 1440px) {
-				height: 59px;
-			}
+			transition: transform 0.3s ease, color 0.3s ease;
+
 			&:hover :deep(svg),
 			&:focus :deep(svg) {
 				color: var(--color-accent-green-main);
+				transform: scale(1.3);
 				@media (min-width: 1440px) {
 					transform: scale(1.5);
-					transition: transform 0.3s ease, color 0.3s ease;
 				}
 			}
 

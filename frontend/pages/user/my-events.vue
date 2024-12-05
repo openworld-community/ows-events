@@ -119,7 +119,6 @@ const onEditButtonClick = async (id: string) => {
 			font-weight: var(--font-weight-regular);
 			text-align: left;
 			margin-bottom: 20px;
-			text-align: center;
 		}
 
 		@media (min-width: 1440px) {
@@ -163,7 +162,7 @@ const onEditButtonClick = async (id: string) => {
 			max-width: 900px;
 			justify-content: flex-end;
 			background-color: transparent;
-			padding-right: 0px;
+			padding-right: 0;
 			padding-bottom: 0;
 			margin: unset;
 			position: sticky;

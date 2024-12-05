@@ -23,14 +23,7 @@
 				<span class="info-poster__text">{{ $t('event.poster.button_plus') }}</span>
 			</div>
 		</div>
-		<!--
-		
-<CommonButton
-	:button-text="$t('global.button.more')"
-	class="button__success--filled isRound more"
-	button-kind="success"
-/>
--->
+		<DetailesModalInfoPoster />
 	</div>
 </template>
 
@@ -140,24 +133,6 @@
 		background-color: var(--color-accent-green-main);
 		border: 1px solid var(--color-accent-green-main);
 		margin-right: 13px;
-	}
-}
-.more {
-	grid-area: 1 / 1 / 1 / 1;
-	position: relative;
-	top: 135px;
-	right: -210px;
-	width: 120px;
-	z-index: 20;
-
-	@media (min-width: 768px) {
-		font-size: 1.6rem;
-		transform: translate(-40px, 0px);
-	}
-
-	@media (min-width: 1440px) {
-		top: 180px;
-		transform: translate(40px, 0px);
 	}
 }
 </style>

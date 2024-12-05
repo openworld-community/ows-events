@@ -14,7 +14,11 @@ const emit = defineEmits(['update:model-value']);
 const input = ref<HTMLInputElement>();
 const errorLoad = ref('');
 const imageSrc = computed(() =>
-	props.externalImage ? `${config.public.baseUrl}${props.externalImage}` : ''
+	props.externalImage
+		? props.externalImage.includes('http')
+			? props.externalImage
+			: `${config.public.baseUrl}${props.externalImage}`
+		: ''
 );
 
 const loadImage = async (event: Event) => {
@@ -116,14 +120,14 @@ const removeImage = async () => {
 	.image {
 		min-width: unset;
 		width: 248px;
-		aspect-ratio: 2/1.33;
+		aspect-ratio: 16 / 9;
 		overflow: hidden;
 		object-fit: cover;
 		border-radius: 4px;
 
 		@media (min-width: 768px) {
 			width: 248px;
-			aspect-ratio: 2 / 1.25;
+			aspect-ratio: 16 / 9;
 		}
 	}
 

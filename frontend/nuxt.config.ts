@@ -1,6 +1,7 @@
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import { fileURLToPath, URL } from 'node:url';
 import { searchForWorkspaceRoot } from 'vite';
+import { RoutePathEnum } from './constants/enums/route';
 
 const isTest = import.meta.env.VITE_STAGE == 'test' || process.env.VITE_STAGE == 'test';
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -35,6 +36,16 @@ export default defineNuxtConfig({
 	],
 	routeRules: {
 		'/': { redirect: '/ru', ssr: true }
+	},
+	robots: {
+		disallow: [
+			RoutePathEnum.USER_PAGE,
+			RoutePathEnum.USER_FAVOURITES,
+			RoutePathEnum.USER_MY_EVENTS,
+			//	RoutePathEnum.EVENT_FORM,
+			RoutePathEnum.EVENT_EDIT,
+			RoutePathEnum.LIMITATION_OF_LIABILITY
+		]
 	},
 	i18n: {
 		debug: false,

@@ -59,7 +59,7 @@ export type IconName =
 	| 'currency/USD'
 	| 'currency/USDC'
 	| 'currency/USDT'
-	| 'dollar'
+	| 'banknotes'
 	| 'email'
 	| 'next'
 	| 'next-finish'

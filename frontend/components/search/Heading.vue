@@ -28,7 +28,7 @@ defineProps({
 	flex-direction:row;
 	justify-content: space-between;
 	@media (max-width: 768px) {
-		font-size: var(--font-size-ML);
+		font-size: var(--font-size-L);
 		font-weight: 500;
 		letter-spacing: -0.3px;
 	}
@@ -40,16 +40,13 @@ defineProps({
 	}
 
 	&--up {
-		margin-bottom: 20px;
-		@media (max-width: 768px) {
-			margin-left: 11px;
-		}
+		padding-left: var(--padding-side);
+		padding-right: var(--padding-side);
+		margin-top: 23px;
+		margin-bottom: 17px;
 
 		@media (min-width: 768px) {
-			margin-bottom: 28px;
-		}
-
-		@media (min-width: 768px) {
+			margin-top: 40px;
 			margin-bottom: 30px;
 		}
 	}

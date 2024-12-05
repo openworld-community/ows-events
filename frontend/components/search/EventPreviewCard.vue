@@ -214,6 +214,7 @@ const { sendAnalytics } = useSendTrackingEvent();
 			//TODO: пока верстка только мобилки
 			max-width: 480px;
 			overflow-wrap: break-word;
+			word-break: break-word;
 			font-size: var(--font-size-ML);
 			font-weight: var(--font-weight-bold);
 			line-height: 2.4rem;

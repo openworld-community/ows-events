@@ -1,3 +1,4 @@
+import type { PaginationOptions } from './pagination';
 import type { Timezone } from './location';
 import { EventTypes } from '../const/eventTypes';
 import { type Tag, Tags } from '../const/tags';
@@ -100,4 +101,14 @@ export type IEventMeta = {
 			problems: string[];
 		};
 	};
+};
+
+export type PaginationQueryPayload = {
+	query: SearchEventPayload;
+	options: PaginationOptions;
+};
+
+export type PaginationCityQueryPayload = {
+	query: SearchEventCityPayload;
+	options: PaginationOptions;
 };

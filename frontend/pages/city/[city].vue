@@ -160,12 +160,12 @@ watch(
 				v-if="!pending && !posterEvents"
 				:title="$t('event.filteredEvents.no_events_found')"
 			/>
-			<div class="city-page__divider"></div>
-			<SearchEventCardsList
-				v-if="posterEvents && posterEvents.length !== 0"
-				:events="posterEvents"
-			/>
-			<SearchHeading
+			<!--			<SearchEventCardsList-->
+			<!--				v-if="posterEvents && posterEvents.length !== 0"-->
+			<!--				:events="posterEvents"-->
+			<!--			/>-->
+			<SearchPaginationCity />
+			<!-- <SearchHeading
 				v-if="posterEvents && posterEvents.length !== 0"
 				position="down"
 				:title="
@@ -174,7 +174,7 @@ watch(
 						country: findCountryByParam(city)
 					})
 				"
-			/>
+			/> -->
 		</SearchCardsWrapper>
 		<CommonCreateButton :is-authorized="userStore.isAuthorized" />
 	</main>

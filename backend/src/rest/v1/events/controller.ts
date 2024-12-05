@@ -7,8 +7,11 @@ import {
 	IAddEventHandler,
 	IDeleteEventHandler,
 	IFindEventHandler,
+	IFindEventPaginatedHandler,
 	IFindEventsCityHandler,
+	IFindEventsCityPaginatedHandler,
 	IFindEventsCountryHandler,
+	IFindEventsCountryPaginatedHandler,
 	IGetEventHandler,
 	IGetEventsHandler,
 	IGetMyEventsHandler,
@@ -80,6 +83,56 @@ export const updateEvent: IUpdateEventHandler = async (request) => {
 
 	await eventsStateController.updateEvent(request.body.event);
 	return undefined;
+};
+
+export const findEventsPaginated: IFindEventPaginatedHandler = async (request) => {
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	return eventsStateController.getPaginatedEvents(
+		lang,
+		true,
+		request.body.options,
+		request.body.query
+	);
+};
+
+export const findEventsByCityPaginated: IFindEventsCityPaginatedHandler = async (request) => {
+	const city = transformFromQuery(request.params.cityName);
+	const queryObj: SearchEventPayload = {
+		city,
+		...request.body.query
+	};
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	const events = await eventsStateController.getPaginatedEvents(
+		lang,
+		false,
+		request.body.options,
+		queryObj
+	);
+	// eslint-disable-next-line @typescript-eslint/no-throw-literal
+	if (events.length === 0) throw { statusCode: 404, message: CommonErrorsEnum.NO_EVENTS_IN_CITY };
+	return events;
+};
+
+export const findEventsByCountryPaginated: IFindEventsCountryPaginatedHandler = async (request) => {
+	const country = transformFromQuery(request.params.countryName);
+	const queryObj: SearchEventPayload = {
+		country,
+		...request.body.query
+	};
+	const lang =
+		(request.headers['accept-language'] as SupportedLanguages) || SupportedLanguages.ENGLISH;
+	const events = await eventsStateController.getPaginatedEvents(
+		lang,
+		false,
+		request.body.options,
+		queryObj
+	);
+	if (events.length === 0)
+		// eslint-disable-next-line @typescript-eslint/no-throw-literal
+		throw { statusCode: 404, message: CommonErrorsEnum.NO_EVENTS_IN_COUNTRY };
+	return events;
 };
 
 export const findEvents: IFindEventHandler = async (request) => {

@@ -8,6 +8,7 @@ x-logging: &default-logging
 
 networks:
     ows-events_build:
+        driver: bridge
 
 services:
     frontend:
@@ -83,7 +84,7 @@ services:
         restart: unless-stopped
         command: ['--bind_ip_all']
         ports:
-            - '127.0.0.1:27001:27017'
+            - '27020:27017'
         networks:
             - ows-events_build
         healthcheck:

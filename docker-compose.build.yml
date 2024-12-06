@@ -22,7 +22,7 @@ services:
         ports:
             - '80:3000'
         environment:
-            - NUXT_PUBLIC_API_URL=http://127.0.0.1:7080/api
+            - NUXT_PUBLIC_API_URL=http://backend:7080/api
             - NUXT_PUBLIC_BASE_URL=http://127.0.0.1
             - NUXT_PUBLIC_TELEGRAM_AUTH_BOT_NAME
             - NUXT_PUBLIC_DOMAIN=127.0.0.1

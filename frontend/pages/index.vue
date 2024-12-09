@@ -13,12 +13,6 @@ getMeta({
 const route = useRoute();
 const userStore = useUserStore();
 
-const dateStart = computed(() =>
-	dateFromQueryToFilter('first', getFirstQuery(route.query.startDate as string))
-);
-const dateEnd = computed(() => {
-	return dateFromQueryToFilter('second', getFirstQuery(route.query.endDate as string));
-});
 const tags = computed(() =>
 	getFirstQuery(route.query.tags)
 		.split(', ')
@@ -28,20 +22,6 @@ const tags = computed(() =>
 const { data: usedLocations } = await apiRouter.filters.getUsedLocations.useQuery({});
 
 const { data: usedTags } = await apiRouter.filters.getUsedTags.useQuery({});
-const {
-	data: posterEvents,
-	error: errorEvents,
-	pending
-} = await apiRouter.filters.findEvents.useQuery({
-	data: {
-		query: {
-			tags,
-			startDate: dateStart,
-			endDate: dateEnd
-		},
-		watch: [tags.value, dateStart.value, dateEnd.value]
-	}
-});
 
 const filteredCountriesOptions = computed(() => {
 	const usedCountries = usedLocations.value.countries.map((countryName) => {
@@ -92,10 +72,6 @@ watch(
 		</div>
 
 		<SearchCardsWrapper>
-			<SearchLoader
-				v-if="pending"
-				:size="mobile ? 'middle' : 'big'"
-			/>
 			<!-- <SearchHeading
 				v-if="posterEvents && posterEvents.length !== 0"
 				position="up"
@@ -105,10 +81,6 @@ watch(
 			&nbsp;&nbsp;|&nbsp;&nbsp;
 			 ${$t('home.headings.up', { country: `${supportedCountries['ME'][locale]}` })}`"
 			/> -->
-			<SearchNotFound
-				v-if="!pending && (!posterEvents || posterEvents.length === 0)"
-				:title="$t('event.filteredEvents.no_events_found')"
-			/>
 			<!-- <SearchEventCardsList
 				v-if="posterEvents && posterEvents.length !== 0"
 				:events="posterEvents"

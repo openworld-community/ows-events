@@ -200,7 +200,7 @@ watch(
 				:size="mobile ? 'middle' : 'big'"
 			/>
 			<SearchNotFound
-				v-if="!pending && (!posterEvents || posterEvents.length === 0)"
+				v-if="!pending && (!posterEvents || posterEvents.docs.length === 0)"
 				:title="$t('event.filteredEvents.no_events_found')"
 			/>
 			<SearchEventCardsList

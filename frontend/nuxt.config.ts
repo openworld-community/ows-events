@@ -16,6 +16,7 @@ export default defineNuxtConfig({
 	debug: isTest,
 	modules: [
 		'nuxt-icons',
+		'@nuxt/image',
 		'nuxt-vue3-google-signin',
 		'@nuxtjs/i18n',
 		'@pinia/nuxt',
@@ -35,8 +36,24 @@ export default defineNuxtConfig({
 		]
 	],
 	routeRules: {
-		'/': { redirect: '/ru', ssr: true }
-	},
+
+		'/': { redirect: '/ru' },
+		'/ru/about': { prerender: true },
+		'/ru/support': { prerender: true },
+		'/ru/donate': { prerender: true },
+		'/ru/cooperation': { prerender: true },
+		'/ru/user/**': { ssr: false },
+
+		'/en/about': { prerender: true },		
+		'/en/support': { prerender: true },		
+		'/en/donate': { prerender: true },		
+		'/en/cooperation': { prerender: true },
+		'/en/user/**': { ssr: false },
+
+		'/ru': { swr: true }, 
+		'/en' : { swr: true},
+		
+	}, 
 	robots: {
 		disallow: [
 			RoutePathEnum.USER_PAGE,

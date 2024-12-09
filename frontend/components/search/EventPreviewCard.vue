@@ -39,7 +39,7 @@ const { sendAnalytics } = useSendTrackingEvent();
 			class="card__image-container"
 			:itemprop="eventData.image ? undefined : SeoItempropGlobalEnum.IMAGE"
 		>
-			<img
+			<NuxtImg
 				v-if="eventData.image"
 				class="card__image"
 				:src="getEventImage(eventData.image)"
@@ -54,6 +54,7 @@ const { sendAnalytics } = useSendTrackingEvent();
 					)
 				"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
+				loading="lazy"
 			/>
 			<img
 				v-else

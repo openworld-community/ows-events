@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { useUserStore } from '../../stores/user.store';
+import {
+	declinationCountries,
+	countries as supportedCountries
+} from '../../../common/const/supportedCountries';
 
 const route = useRoute();
 
@@ -7,11 +11,6 @@ const userStore = useUserStore();
 
 const { locale, t } = useI18n();
 const mobile = inject('mobile');
-import { CommonErrorsEnum } from '../../../common/const/common-errors';
-import {
-	declinationCountries,
-	countries as supportedCountries
-} from '../../../common/const/supportedCountries';
 
 const { sendAnalytics } = useSendTrackingEvent();
 
@@ -50,44 +49,11 @@ getMeta({
 	})
 });
 
-const dateStart = computed(() =>
-	dateFromQueryToFilter('first', getFirstQuery(route.query.startDate as string))
-);
-const dateEnd = computed(() => {
-	return dateFromQueryToFilter('second', getFirstQuery(route.query.endDate as string));
-});
 const tags = computed(() =>
 	getFirstQuery(route.query.tags)
 		.split(', ')
 		.filter((item) => item !== '')
 );
-const {
-	data: posterEvents,
-	error: errorEvents,
-	pending
-} = await apiRouter.filters.findEventsByCity.useQuery({
-	data: {
-		city,
-		query: {
-			tags,
-			startDate: dateStart,
-			endDate: dateEnd
-		},
-		watch: [tags.value, dateStart.value, dateEnd.value]
-	}
-});
-
-if (errorEvents.value) {
-	if (
-		errorEvents.value.data &&
-		errorEvents.value.data.message === CommonErrorsEnum.CITY_NOT_FOUND
-	) {
-		throw createError({
-			statusCode: 404,
-			data: { message: t(`errors.${CommonErrorsEnum.CITY_NOT_FOUND}`, { city: city }) }
-		});
-	}
-}
 
 export type Option = { label: string; value: string };
 
@@ -118,14 +84,6 @@ const filterCountriesOptions = computed(() => {
 	return filtered;
 });
 
-useHead({
-	script: [
-		posterEvents.value
-			? getJSONEventList(posterEvents.value, locale.value, route.path)
-			: undefined
-	]
-});
-
 watch(
 	() => route.query,
 	(value) => {
@@ -152,14 +110,6 @@ watch(
 		</FiltersHeroWrap>
 
 		<SearchCardsWrapper>
-			<SearchLoader
-				v-if="pending"
-				:size="mobile ? 'middle' : 'big'"
-			/>
-			<SearchNotFound
-				v-if="!pending && !posterEvents"
-				:title="$t('event.filteredEvents.no_events_found')"
-			/>
 			<!--			<SearchEventCardsList-->
 			<!--				v-if="posterEvents && posterEvents.length !== 0"-->
 			<!--				:events="posterEvents"-->

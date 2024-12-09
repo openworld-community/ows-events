@@ -55,6 +55,14 @@ const {
 	}
 });
 
+useHead({
+	script: [
+		posterEvents.value
+			? getJSONEventList(posterEvents.value.docs, locale.value, route.path)
+			: undefined
+	]
+});
+
 watch(
 	() => route.query,
 	(value) => {
@@ -77,7 +85,6 @@ watch(
 watch(
 	() => posterEvents,
 	(posterEvents) => {
-		console.log(posterEvents);
 		if (posterEvents.value.page > posterEvents.value.totalPages) {
 			const currentParams = { ...route.query, ...{ page: 1 } };
 			navigateTo({ query: currentParams });
@@ -188,6 +195,14 @@ watch(
 					/>
 				</NuxtLink>
 			</div>
+			<SearchLoader
+				v-if="pending"
+				:size="mobile ? 'middle' : 'big'"
+			/>
+			<SearchNotFound
+				v-if="!pending && (!posterEvents || posterEvents.length === 0)"
+				:title="$t('event.filteredEvents.no_events_found')"
+			/>
 			<SearchEventCardsList
 				v-if="posterEvents.docs && posterEvents.docs.length !== 0"
 				:events="posterEvents.docs"

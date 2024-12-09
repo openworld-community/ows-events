@@ -5,7 +5,7 @@ export default {
 		second: 'Events Montenegro - Peredelano Afisha'
 	},
 	default_keywords:
-		'best events in Serbia, best events in Montenegro, Belgrade, Cetinje, great variety of events, event poster 2024, schedule, tickets, events, exhibitions, excursions, shows, concerts, rock concerts, festivals, performances, flash mobs, parties, children, scheme, address, photos',
+		'best events in Serbia, best events in Montenegro, Belgrade, Cetinje, great variety of events, event poster 2025, schedule, tickets, events, exhibitions, excursions, shows, concerts, rock concerts, festivals, performances, flash mobs, parties, children, scheme, address, photos',
 	default_description:
 		'The catalog features dozens of events in Serbia, Montenegro across various categories: concerts, meetings, exhibitions, festivals, masterclasses',
 	about_us: {

@@ -43,10 +43,6 @@ useHead({
 			href: '/favicon.ico'
 		},
 		{
-			rel: 'canonical',
-			href: `https://${config.public.domain}/${locale.value}${getPath(route.path)}`
-		},
-		{
 			rel: 'alternate',
 			hreflang: 'x-default',
 			href: `https://${config.public.domain}/ru${getPath(route.path)}`

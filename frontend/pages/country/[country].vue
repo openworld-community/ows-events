@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import { useUserStore } from '../../stores/user.store';
+import {
+	declinationCountries,
+	countries as supportedCountries,
+	queryToCountryLocaleName,
+	queryToCountryCode
+} from '../../../common/const/supportedCountries';
 
 const route = useRoute();
 
@@ -7,14 +13,6 @@ const userStore = useUserStore();
 
 const { locale, t } = useI18n();
 const mobile = inject('mobile');
-
-import { CommonErrorsEnum } from '../../../common/const/common-errors';
-import {
-	declinationCountries,
-	countries as supportedCountries,
-	queryToCountryLocaleName,
-	queryToCountryCode
-} from '../../../common/const/supportedCountries';
 
 const { sendAnalytics } = useSendTrackingEvent();
 
@@ -34,46 +32,11 @@ getMeta({
 	})
 });
 
-const dateStart = computed(() =>
-	dateFromQueryToFilter('first', getFirstQuery(route.query.startDate as string))
-);
-const dateEnd = computed(() => {
-	return dateFromQueryToFilter('second', getFirstQuery(route.query.endDate as string));
-});
 const tags = computed(() =>
 	getFirstQuery(route.query.tags)
 		.split(', ')
 		.filter((item) => item !== '')
 );
-const {
-	data: posterEvents,
-	error: errorEvents,
-	pending
-} = await apiRouter.filters.findEventsByCountry.useQuery({
-	data: {
-		country,
-		query: {
-			tags,
-			startDate: dateStart,
-			endDate: dateEnd
-		},
-		watch: [tags.value, dateStart.value, dateEnd.value]
-	}
-});
-
-if (errorEvents.value) {
-	if (
-		errorEvents.value.data &&
-		errorEvents.value.data.message === CommonErrorsEnum.COUNTRY_NOT_FOUND
-	) {
-		throw createError({
-			statusCode: 404,
-			data: {
-				message: t(`errors.${CommonErrorsEnum.COUNTRY_NOT_FOUND}`, { country: country })
-			}
-		});
-	}
-}
 
 export type Option = { label: string; value: string };
 
@@ -99,14 +62,6 @@ const filterCountriesOptions = computed(() => {
 		})
 		.filter((countryOption) => countryOption.value !== transformFromQuery(country));
 	return filtered;
-});
-
-useHead({
-	script: [
-		posterEvents.value
-			? getJSONEventList(posterEvents.value, locale.value, route.path)
-			: undefined
-	]
 });
 
 watch(
@@ -141,14 +96,6 @@ watch(
 		</FiltersHeroWrap>
 
 		<SearchCardsWrapper>
-			<SearchLoader
-				v-if="pending"
-				:size="mobile ? 'middle' : 'big'"
-			/>
-			<SearchNotFound
-				v-if="!pending && !posterEvents"
-				:title="$t('event.filteredEvents.no_events_found')"
-			/>
 			<!--			<SearchEventCardsList-->
 			<!--				v-if="posterEvents && posterEvents.length !== 0"-->
 			<!--				:events="posterEvents"-->

@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import {
-	declinationCountries,
-	countries as supportedCountries,
-	queryToCountryLocaleName,
-	queryToCountryCode
-} from '../../../common/const/supportedCountries';
+import { queryToCountryLocaleName } from '../../../common/const/supportedCountries';
 import { useRoute } from 'vue-router';
+import { CommonErrorsEnum } from '../../../common/const';
 
 const { t, locale } = useI18n();
 
@@ -60,6 +56,28 @@ const {
 		},
 		watch: [tags.value, dateStart.value, dateEnd.value, currentPage.value]
 	}
+});
+
+if (errorEvents.value) {
+	if (
+		errorEvents.value.data &&
+		errorEvents.value.data.message === CommonErrorsEnum.COUNTRY_NOT_FOUND
+	) {
+		throw createError({
+			statusCode: 404,
+			data: {
+				message: t(`errors.${CommonErrorsEnum.COUNTRY_NOT_FOUND}`, { country: country })
+			}
+		});
+	}
+}
+
+useHead({
+	script: [
+		posterEvents.value
+			? getJSONEventList(posterEvents.value.docs, locale.value, route.path)
+			: undefined
+	]
 });
 
 watch(
@@ -185,6 +203,14 @@ watch(
 					/>
 				</NuxtLink>
 			</div>
+			<SearchLoader
+				v-if="pending"
+				:size="mobile ? 'middle' : 'big'"
+			/>
+			<SearchNotFound
+				v-if="!pending && !posterEvents"
+				:title="$t('event.filteredEvents.no_events_found')"
+			/>
 			<SearchEventCardsList
 				v-if="posterEvents.docs && posterEvents.docs.length !== 0"
 				:events="posterEvents.docs"

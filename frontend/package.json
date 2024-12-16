@@ -20,6 +20,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxt/image": "^1.8.1",
     "@nuxtjs/robots": "^5.0.0",
     "@pinia/nuxt": "^0.4.11",
     "@types/uuid": "^9.0.1",

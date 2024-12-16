@@ -153,6 +153,7 @@ watch(
 			<!--				v-if="posterEvents && posterEvents.length !== 0"-->
 			<!--				:events="posterEvents"-->
 			<!--			/>-->
+			<div class="country-page__divider"></div>
 			<SearchPaginationCountry />
 			<!-- <SearchHeading
 				v-if="posterEvents && posterEvents.length !== 0"

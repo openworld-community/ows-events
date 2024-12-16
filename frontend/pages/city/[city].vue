@@ -164,6 +164,7 @@ watch(
 			<!--				v-if="posterEvents && posterEvents.length !== 0"-->
 			<!--				:events="posterEvents"-->
 			<!--			/>-->
+			<div class="city-page__divider"></div>
 			<SearchPaginationCity />
 			<!-- <SearchHeading
 				v-if="posterEvents && posterEvents.length !== 0"

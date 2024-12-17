@@ -40,7 +40,7 @@ const desktop = inject('desktop');
 					:button-kind="desktop ? 'ordinary' : 'success'"
 					:button-text="$t(desktop ? 'user.donate.button' : 'global.button.new_event')"
 					:icon-name="desktop ? 'donate' : ''"
-					icon-color="var(--color-text-main)"
+					icon-color="var(--color-text-secondary)"
 					:link="desktop ? RoutePathEnum.DONATION : `${RoutePathEnum.EVENT_EDIT}new`"
 				/>
 			</div>

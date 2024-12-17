@@ -14,30 +14,24 @@
 .why-us {
 	display: flex;
 	flex-direction: column;
-	margin-top: 60px;
+	margin-top: 26px;
 	margin-bottom: 30px;
-	@media (max-width: 768px) {
-		margin-top: 26px;
+
+	@media (min-width: 768px) {
+		margin-top: 60px;
 	}
 
 	&__title {
-		padding-bottom: 25px;
-		@media (max-width: 768px) {
-			padding-bottom: 45px;
+		padding-bottom: 45px;
+		text-align: center;
 
-			text-align: center;
-		}
-		@media (max-width: 375px) {
-			padding-bottom: 45px;
-
-			text-align: center;
+		@media (min-width: 1440px) {
+			padding-bottom: 25px;
+			text-align: start;
 		}
 	}
 	&__description {
 		padding-bottom: 15px;
-		@media (max-width: 768px) {
-			padding-bottom: 15px;
-		}
 	}
 }
 </style>

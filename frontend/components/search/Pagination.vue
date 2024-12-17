@@ -410,10 +410,15 @@ watch(
 		justify-content: center;
 		transition: transform 0.3s ease;
 		text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
+		opacity: 0.85;
 		&:hover {
-			transform: scale(1.2);
+			opacity: 1;
+			@media (min-width: 1440px) {
+				transform: scale(1.2);
+			}
 		}
 		&.active {
+			opacity: 1;
 			transform: none;
 		}
 	}
@@ -445,7 +450,6 @@ watch(
 		color: var(--color-icons);
 		transition: background-color 0.2s;
 		font-weight: 500;
-		opacity: 0.85;
 		transition: background-color 0.2s, width 0.3s ease, height 0.3s ease, opacity 0.2s ease,
 			box-shadow 0.2s ease, outline 0.2s ease, color 0.2s ease;
 
@@ -462,21 +466,18 @@ watch(
 				height: 59px;
 			}
 
-			&:hover,
-			&:focus {
+			&:hover {
 				transform: none;
 				width: 46px;
 				height: 43px;
 				outline: none;
-				color: var(--color-accent-green-main);
 				@media (min-width: 1440px) {
+					color: var(--color-icons);
+					box-shadow: 0 0 7px var(--color-accent-green-main);
 					width: 56px;
 					height: 59px;
 				}
-			}
-			&:hover {
-				box-shadow: 0 0 7px var(--color-accent-green-main);
-			}
+			}		
 		}
 
 		&.disabled {
@@ -484,16 +485,15 @@ watch(
 			opacity: 0.5;
 		}
 
-		&:hover,
-		&:focus {
+		&:hover {
 			opacity: 1;
-			color: var(--color-accent-green-main);
-			transition: transform 0.3s ease;
+			@media (min-width: 1440px) {
+				color: var(--color-accent-green-main);
+				transition: transform 0.3s ease;
+				text-shadow: 0 0 10px var(--color-accent-green-main-60);
+			}
 		}
-		:hover {
-			text-shadow: 0 0 10px var(--color-accent-green-main-60);
-		}
-
+		
 		&__arrow {
 			display: flex;
 			align-items: center;
@@ -502,15 +502,12 @@ watch(
 			color: var(--color-icons);
 			transition: transform 0.3s ease, color 0.3s ease;
 
-			&:hover :deep(svg),
-			&:focus :deep(svg) {
-				color: var(--color-accent-green-main);
-				transform: scale(1.3);
+			&:hover :deep(svg) {
 				@media (min-width: 1440px) {
 					transform: scale(1.5);
+					color: var(--color-accent-green-main);
 				}
-			}
-
+			}			
 			&:deep(svg) {
 				transition: transform 0.3s ease;
 				transform-origin: center;

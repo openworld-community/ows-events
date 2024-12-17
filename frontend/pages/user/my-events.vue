@@ -36,18 +36,19 @@ const onEditButtonClick = async (id: string) => {
 
 <template>
 	<div class="my-events">
+		<div
+			v-if="!mobile"
+			class="my-events__title-wrapper"
+		>
+			<h1 class="my-events__title">
+				{{ $t('user.my_events.title') }}
+			</h1>
+		</div>
+
 		<ul
 			v-if="myEvents.length"
 			class="my-events__list"
 		>
-			<div
-				v-if="!mobile"
-				class="my-events__title-wrapper"
-			>
-				<h1 class="my-events__title">
-					{{ $t('user.my_events.title') }}
-				</h1>
-			</div>
 			<li
 				v-for="event in myEvents"
 				:key="event.id"
@@ -96,7 +97,7 @@ const onEditButtonClick = async (id: string) => {
 	padding-bottom: var(--padding-vertical);
 
 	@media (min-width: 768px) {
-		justify-content: center;
+		justify-content: flex-start;
 		//height: unset;
 		padding-left: 5px;
 		padding-right: 0;
@@ -118,7 +119,6 @@ const onEditButtonClick = async (id: string) => {
 			font-weight: var(--font-weight-regular);
 			text-align: left;
 			margin-bottom: 20px;
-			text-align: center;
 		}
 
 		@media (min-width: 1440px) {
@@ -162,7 +162,7 @@ const onEditButtonClick = async (id: string) => {
 			max-width: 900px;
 			justify-content: flex-end;
 			background-color: transparent;
-			padding-right: 0px;
+			padding-right: 0;
 			padding-bottom: 0;
 			margin: unset;
 			position: sticky;

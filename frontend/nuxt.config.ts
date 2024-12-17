@@ -1,7 +1,7 @@
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import { fileURLToPath, URL } from 'node:url';
 import { searchForWorkspaceRoot } from 'vite';
-import { VITE_GOOGLE_OAUTH_KEY } from './constants/url';
+import { RoutePathEnum } from './constants/enums/route';
 
 const isTest = import.meta.env.VITE_STAGE == 'test' || process.env.VITE_STAGE == 'test';
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -37,6 +37,16 @@ export default defineNuxtConfig({
 	routeRules: {
 		'/': { redirect: '/ru', ssr: true }
 	},
+	robots: {
+		disallow: [
+			RoutePathEnum.USER_PAGE,
+			RoutePathEnum.USER_FAVOURITES,
+			RoutePathEnum.USER_MY_EVENTS,
+			//	RoutePathEnum.EVENT_FORM,
+			RoutePathEnum.EVENT_EDIT,
+			RoutePathEnum.LIMITATION_OF_LIABILITY
+		]
+	},
 	i18n: {
 		debug: false,
 		locales: [
@@ -53,7 +63,7 @@ export default defineNuxtConfig({
 	},
 	// https://nuxt.com/modules/gtag
 	gtag: {
-		id: import.meta.env.VITE_GTAG_ID || process.env.VITE_GTAG_ID || ''
+		id: ''
 	},
 	// На случай добавления скриптов:
 	// app: {
@@ -102,6 +112,14 @@ export default defineNuxtConfig({
 		logLevel: isTest ? 'info' : 'warn',
 		resolve: { alias: { '@common': fileURLToPath(new URL('../common', import.meta.url)) } }
 	},
+	runtimeConfig: {
+		public: {
+			telegramAuthBotName: 'test',
+			apiUrl: 'http://127.0.0.1/api',
+			baseUrl: 'http://127.0.0.1',
+			domain: 'http://127.0.0.1'
+		}
+	},
 	// watcher:
 	// на винде очень долго стартует дев-сервер, проблема недавняя
 	// один из авторов Нукста на ГХ посоветовал такое решение
@@ -109,10 +127,10 @@ export default defineNuxtConfig({
 	// appManifest:
 	// Почему-то при билде накст генерит разные buildId для appManifest и entry, пробую отключить
 	// (могут сломаться редиректы по языкам)
-	experimental: { watcher: 'chokidar', appManifest: false },
 	googleSignIn: {
-		clientId: VITE_GOOGLE_OAUTH_KEY
+		clientId: 'localOauthId'
 	},
+	experimental: { watcher: 'chokidar', appManifest: false },
 	app: {
 		head: {
 			link: [

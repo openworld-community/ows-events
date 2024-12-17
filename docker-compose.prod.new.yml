@@ -1,0 +1,124 @@
+version: '3.7'
+
+x-logging: &default-logging
+    driver: json-file
+    options:
+        max-size: '10m'
+        max-file: '5'
+
+networks:
+    traefikpublic:
+        external:
+            name: ows-events_traefikpublic
+
+services:
+    frontend:
+        image: ghcr.io/openworld-community/ows-events_frontend:prod
+        logging: *default-logging
+        restart: always
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
+            - 'traefik.http.middlewares.compressor.compress=true'
+            - 'traefik.http.middlewares.redirect-https.redirectscheme.scheme=https'
+            - 'traefik.http.routers.frontend_https.rule=Host(`afisha.peredelano.com`)'
+            - 'traefik.http.routers.frontend_https.middlewares=sslheader@docker'
+            - 'traefik.http.routers.frontend_https.middlewares=compressor@docker'
+            - 'traefik.http.routers.frontend_https.entrypoints=http, https'
+            - 'traefik.http.routers.frontend_https.tls.certresolver=myresolver'
+            - 'traefik.http.routers.frontend_http.rule=Host(`afisha.peredelano.com`)'
+            - 'traefik.http.routers.frontend_http.middlewares=redirect-to-https@docker'
+            - 'traefik.http.routers.frontend_http.entrypoints=http'
+        networks:
+            - traefikpublic
+        ports:
+            - '3000:3000'
+        environment:
+            - NUXT_PUBLIC_API_URL=https://api.afisha.peredelano.com/api
+            - NUXT_PUBLIC_BASE_URL=https://api.afisha.peredelano.com
+            - NUXT_PUBLIC_TELEGRAM_AUTH_BOT_NAME
+            - NUXT_PUBLIC_DOMAIN=afisha.peredelano.com
+            - NUXT_PUBLIC_GTAG_ID
+            - NUXT_PUBLIC_GOOGLE_SIGN_IN_CLIENT_ID
+            - NUXT_SITE_ENV=production
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.22'
+                    memory: 300M
+                reservations:
+                    cpus: '0.1'
+                    memory: 150M
+
+    backend:
+        image: ghcr.io/openworld-community/ows-events_backend:prod
+        logging: *default-logging
+        restart: always
+        depends_on:
+            - mongo
+        links:
+            - mongo
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https'
+            - 'traefik.http.middlewares.redirect-https.redirectscheme.scheme=https'
+            - 'traefik.http.routers.backend_https.rule=Host(`api.afisha.peredelano.com`)'
+            - 'traefik.http.routers.backend_https.middlewares=sslheader@docker'
+            - 'traefik.http.routers.backend_https.entrypoints=http, https'
+            - 'traefik.http.routers.backend_https.tls.certresolver=myresolver'
+            - 'traefik.http.routers.backend_http.rule=Host(`api.afisha.peredelano.com`)'
+            - 'traefik.http.routers.backend_http.middlewares=redirect-https@docker'
+            - 'traefik.http.routers.backend_http.entrypoints=http'
+        environment:
+            - MODE=prod
+            - MONGO_URI=mongodb://mongo:27017/prod
+            - FRONTEND_URL=https://afisha.peredelano.com
+            - SECRET_KEY
+            - LOCALIZATION_API_KEY
+            - GITHUB_PARSING_TOKEN
+            - PEREDELANOCONF_GOOGLEDOC
+            - NUXT_PUBLIC_GOOGLE_SIGN_IN_CLIENT_ID
+            - GA_API_SECRET
+            - GA_MEASUREMENT_ID
+            - S3_ACCESS_KEY_ID
+            - S3_SECRET_ACCESS_KEY
+            - S3_REGION
+            - S3_BUCKET
+            - S3_ENDPOINT
+        networks:
+            - traefikpublic
+        ports:
+            - '7080:7080'
+        volumes:
+            - /root/ows-events/assets/img:/app/assets/img
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.22'
+                    memory: 300M
+                reservations:
+                    cpus: '0.1'
+                    memory: 150M
+
+    mongo:
+        image: mongo:6.0
+        restart: unless-stopped
+        command: ['--bind_ip_all']
+        ports:
+            - '127.0.0.1:27000:27017'
+        networks:
+            - traefikpublic
+        healthcheck:
+            test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo --quiet) -eq 1
+            interval: 10s
+            start_period: 30s
+        volumes:
+            - /root/db/prod:/data/db
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.4'
+                    memory: 400M
+                reservations:
+                    cpus: '0.2'
+                    memory: 200M

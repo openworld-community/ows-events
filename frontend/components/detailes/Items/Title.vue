@@ -38,16 +38,14 @@ defineProps({
 .event-info-title {
 	display: flex;
 	width: 100%;
-	margin-bottom: 10px;
-	align-items: start;
+	align-items: center;
+	@media (min-width: 768px) {
+		gap: 16px;
+	}
 
 	&__title {
-		word-break: break-all;
-
-		@media (min-width: 768px) {
-			margin-bottom: 12px;
-			margin-right: 16px;
-		}
+		word-wrap: break-word;
+		word-break: break-word;
 	}
 }
 </style>

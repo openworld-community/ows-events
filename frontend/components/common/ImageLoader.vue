@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { BASE_URL } from '@/constants/url';
 import { allowedFormatsToString, isImageFormatAllowed, isImageTooBig } from '../../utils/image';
 import { ALLOWED_IMAGE_EXTENSIONS, ALLOWED_IMAGE_SIZE } from '~/constants/defaultValues/validation';
 
 export type ImageLoaderFile = File | null | 'DELETED';
 
+const config = useRuntimeConfig();
 const props = defineProps<{
 	externalImage?: string;
 }>();
@@ -13,7 +13,13 @@ const emit = defineEmits(['update:model-value']);
 
 const input = ref<HTMLInputElement>();
 const errorLoad = ref('');
-const imageSrc = computed(() => (props.externalImage ? `${BASE_URL}${props.externalImage}` : ''));
+const imageSrc = computed(() =>
+	props.externalImage
+		? props.externalImage.includes('http')
+			? props.externalImage
+			: `${config.public.baseUrl}${props.externalImage}`
+		: ''
+);
 
 const loadImage = async (event: Event) => {
 	errorLoad.value = '';
@@ -114,14 +120,14 @@ const removeImage = async () => {
 	.image {
 		min-width: unset;
 		width: 248px;
-		aspect-ratio: 2/1.33;
+		aspect-ratio: 16 / 9;
 		overflow: hidden;
 		object-fit: cover;
 		border-radius: 4px;
 
 		@media (min-width: 768px) {
 			width: 248px;
-			aspect-ratio: 2 / 1.25;
+			aspect-ratio: 16 / 9;
 		}
 	}
 

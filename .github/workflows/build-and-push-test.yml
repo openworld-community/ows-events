@@ -1,0 +1,96 @@
+name: Build docker images and push to GHCR
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+concurrency: build-and-deploy
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  env_var: ${{ vars.ENV_CONTEXT_VAR }}
+  REGISTRY: ghcr.io
+  TAG_NAME: latest
+  FRONTEND_CACHE_IMAGE_NAME: frontend_buildcache
+  BACKEND_CACHE_IMAGE_NAME: backend_buildcache
+
+jobs:
+  build-and-push:
+    name: Build test image and push it to registry
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Export lowercase image names
+        shell: bash
+        run: |
+          : "${{ env.REGISTRY }}/${{ github.repository }}_frontend:latest"
+          echo "FRONTEND_IMAGE_TAG=${_,,}" | tee -a $GITHUB_ENV
+          : "${{ env.REGISTRY }}/${{ github.repository }}_backend:latest"
+          echo "BACKEND_IMAGE_TAG=${_,,}" | tee -a $GITHUB_ENV
+          : "${{ env.REGISTRY }}/${{ github.repository }}/${{ env.FRONTEND_CACHE_IMAGE_NAME }}:latest"
+          echo "FRONTEND_CACHE_IMAGE_TAG=${_,,}" | tee -a $GITHUB_ENV
+          : "${{ env.REGISTRY }}/${{ github.repository }}/${{ env.BACKEND_CACHE_IMAGE_NAME }}:latest"
+          echo "BACKEND_CACHE_IMAGE_TAG=${_,,}" | tee -a $GITHUB_ENV
+
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and push frontend docker image
+        uses: docker/build-push-action@v3
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          context: ./
+          file: ./frontend/Dockerfile
+          tags: "${{ env.FRONTEND_IMAGE_TAG }}"
+          push: true
+          cache-from: type=registry,ref=${{ env.FRONTEND_CACHE_IMAGE_TAG }}
+          cache-to: type=registry,ref=${{ env.FRONTEND_CACHE_IMAGE_TAG }},mode=max
+
+      - name: Build and push backend docker image
+        uses: docker/build-push-action@v3
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          context: ./
+          file: ./backend/Dockerfile
+          tags: "${{ env.BACKEND_IMAGE_TAG }}"
+          push: true
+          cache-from: type=registry,ref=${{ env.BACKEND_CACHE_IMAGE_TAG }}
+          cache-to: type=registry,ref=${{ env.BACKEND_CACHE_IMAGE_TAG }},mode=max
+
+  deploy-test:
+    name: Connect to server, pull latest test images and deploy it
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: install ssh keys
+        # check this thread to understand why its needed:
+        # https://stackoverflow.com/a/70447517
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+      - name: connect and pull
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ vars.TEST_DIR }} && git checkout ${{ vars.TEST_BRANCH }} && git pull"
+      - name: connect and update traefik
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ vars.TEST_DIR }} && docker compose --compatibility -p ows-events -f docker-compose.traefik.yml up -d --build && exit"
+      - name: connect and  services
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin && export S3_ENDPOINT=${{ secrets.S3_ENDPOINT }} && export S3_SECRET_ACCESS_KEY=${{ secrets.S3_SECRET_KEY }} && export S3_ACCESS_KEY_ID=${{ secrets.S3_ACCESS_KEY }} && export S3_BUCKET=${{ secrets.S3_BUCKET }} && export S3_REGION=${{ secrets.S3_REGION }} && export NUXT_PUBLIC_GOOGLE_SIGN_IN_CLIENT_ID=${{ secrets.TEST_GOOGLE_OAUTH_KEY }} && export PEREDELANOCONF_GOOGLEDOC=${{ secrets.PEREDELANOCONF_GOOGLEDOC_ID }} && export NUXT_PUBLIC_GTAG_ID=${{ secrets.TEST_GTAG_ID }} && export GITHUB_PARSING_TOKEN=${{ secrets.PARSING_TOKEN }} && export SECRET_KEY=${{ secrets.BACKEND_SECRET_KEY }} && export NUXT_PUBLIC_TELEGRAM_AUTH_BOT_NAME=${{ vars.TEST_AUTH_TELEGRAM_BOT_NAME }} && cd ${{ vars.TEST_DIR }} && docker compose --compatibility -p ows-events_test -f docker-compose.test.new.yml up --pull always -d --force-recreate && exit"
+      - name: cleanup
+        run: rm -rf ~/.ssh
+

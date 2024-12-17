@@ -17,7 +17,6 @@ export const SUPORT_EMAIL_NAME = 'support@afisha.peredelano.com';
 
 export const DONATE_PATREON_URL = 'https://patreon.com/afisha_peredelano';
 export const DONATE_BOOSTY_URL = 'https://boosty.to/afisha_prdln';
-export const DONATE_PAYPAL_URL = 'https://paypal.com/afisha_peredelano';
 export const REPO_URL = 'https://github.com/openworld-community/ows-events';
 
 export enum SocialLinks {

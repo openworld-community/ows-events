@@ -131,6 +131,8 @@ getMeta({
 <style lang="less" scoped>
 .donate {
 	width: 100%;
+	max-width: 1440px;
+	align-self: center;
 	padding: 80px 15px 0 15px;
 	@media (min-width: 768px) {
 		padding: 0 43px;
@@ -157,7 +159,7 @@ getMeta({
 
 	@media (min-width: 768px) {
 		display: flex;
-		gap: 30px;
+		justify-content: space-between;
 	}
 	@media (min-width: 1440px) {
 		margin-top: 0px;
@@ -165,6 +167,8 @@ getMeta({
 
 	&__text {
 		text-align: justify;
+		max-width: 750px;
+		margin-right: 30px;
 	}
 	&__wrapper-image {
 		display: flex;
@@ -206,7 +210,14 @@ getMeta({
 		@media (min-width: 768px) {
 			flex-direction: row;
 			align-items: center;
-			justify-content: space-between;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 40px;
+		}
+		@media (min-width: 1440px) {
+			flex-direction: row;
+			align-items: center;
+			justify-content: flex-start;
 			flex-wrap: wrap;
 			gap: 40px;
 		}

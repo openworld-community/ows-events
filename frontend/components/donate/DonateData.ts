@@ -1,4 +1,4 @@
-import { DONATE_PATREON_URL, DONATE_BOOSTY_URL, DONATE_PAYPAL_URL } from '../../constants/url';
+import { DONATE_PATREON_URL, DONATE_BOOSTY_URL} from '../../constants/url';
 import { CryptoWalletEnum } from '../../constants/enums/crypto-wallets';
 
 export type DataDonate = {
@@ -25,11 +25,11 @@ export const ValuesDonate: { [key: string]: DataDonate } = {
 		link: DONATE_BOOSTY_URL,
 		color: '#F16A2B'
 	},
-	paypal: {
-		method: 'donate.method.paypal',
-		link: DONATE_PAYPAL_URL,
-		color: '#5C9AD2'
-	}
+	// paypal: {
+	// 	method: 'donate.method.paypal',
+	// 	link: DONATE_PAYPAL_URL,
+	// 	color: '#5C9AD2'
+	// }
 };
 
 export const ValuesDonateCrypto: Record<string, DataDonateCrypto> = {

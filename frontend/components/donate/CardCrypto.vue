@@ -57,7 +57,9 @@ const { copy, copied } = useClipboard({ source: '', legacy: true });
 	border-radius: 8px;
 	height: 76px;
 	@media (min-width: 768px) {
-		width: 90%;
+		width: 100%;
+		max-width: 740px;
+		align-self: center;
 	}
 
 	@media (min-width: 1440px) {

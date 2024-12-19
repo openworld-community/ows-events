@@ -35,6 +35,7 @@ export const getJSONEventList = (posterEvents: EventOnPoster[], locale: string, 
 };
 
 export const getJSONEvent = (posterEvent: EventOnPoster) => {
+	if (process.server) return;
 	return {
 		type: 'application/ld+json',
 		innerHTML: JSON.stringify({

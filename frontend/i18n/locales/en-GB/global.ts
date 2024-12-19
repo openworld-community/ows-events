@@ -21,7 +21,7 @@ export default {
 		in_favourites: 'In Favourites',
 		logout: 'Logout',
 		new_event: 'Create new event',
-		create_event: 'Create event',
+		create_event: 'Create New Event',
 		register: 'Register',
 		remove_from_favourites: 'Remove from Favorites',
 		reset: 'Reset',

@@ -71,6 +71,7 @@ defineProps({
 <style lang="less" scoped>
 .card {
 	@media (min-width: 768px) {
+		max-width: 350px;
 		width: 47%;
 	}
 

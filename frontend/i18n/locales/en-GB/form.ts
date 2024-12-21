@@ -7,7 +7,7 @@ export default {
 		successEdit: 'Event successfuly edited.'
 	},
 	event: {
-		title: 'Create Event',
+		title: 'Create an Event',
 		title_edit: 'Edit Event',
 		add_image: 'Add image',
 		remove_image: 'Remove image',

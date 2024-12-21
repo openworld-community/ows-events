@@ -36,20 +36,19 @@ export default defineNuxtConfig({
 		]
 	],
 	routeRules: {
-		
-		//static
+				
 		'/': { redirect: '/ru' },
-		'/ru/about': { prerender: true },
-		'/ru/support': { prerender: true },
-		'/ru/donate': { prerender: true },
-		'/ru/cooperation': { prerender: true },		
-
-		'/en/about': { prerender: true },		
-		'/en/support': { prerender: true },		
-		'/en/donate': { prerender: true },		
-		'/en/cooperation': { prerender: true },
-		
 		//client side
+		'/ru/about': { ssr: false },
+		'/ru/support': { ssr: false },
+		'/ru/donate': { ssr: false },
+		'/ru/cooperation': { ssr: false },
+
+		'/en/about': { ssr: false },
+		'/en/support': { ssr: false },
+		'/en/donate': { ssr: false },
+		'/en/cooperation': { ssr: false },
+		
 		'/ru/user/**': { ssr: false },
 		'/en/user/**': { ssr: false },
 		'/en/auth': { ssr: false },

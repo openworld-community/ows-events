@@ -3,7 +3,7 @@ import type { Location } from '../../../common/types/address';
 import type { PropType } from 'vue';
 import type { EventPrice } from '../../../common/types/event';
 import { formatPrice } from '../../utils/prices';
-import { formatDate } from '../../utils/dates';
+import { formatDate, formatDateForEventPage, formatTimeForEventPage } from '../../utils/dates';
 
 import type { Timezone } from '../../../common/types/location';
 import { formatLocation } from '~/utils/location';
@@ -39,6 +39,10 @@ const props = defineProps({
 		type: [Object, null] as PropType<EventPrice | null>,
 		required: true,
 		default: null
+	},
+	isPreview:{
+		type: Boolean,
+		required: true
 	}
 });
 
@@ -58,10 +62,19 @@ const dataPrice = computed(() => {
 	<ul class="details">
 		<!--	Дата	-->
 		<CommonEventDetailesItem
+		  v-if="isPreview"
 			icon-name="calendar"
 			:data="formatDate(date, isOnline, timezone, duration)"
 			:size="size"
 		/>
+		<CommonEventDetailesItem
+		  v-if="!isPreview"
+			icon-name="calendar"
+			:data="formatDateForEventPage(date, isOnline, timezone, duration)"
+			:data-optional="formatTimeForEventPage(date, isOnline, timezone, duration)"
+			:size="size"
+		/>
+	
 
 		<!-- Цена -->
 		<CommonEventDetailesItem

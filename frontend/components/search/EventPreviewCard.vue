@@ -100,6 +100,7 @@ const { sendAnalytics } = useSendTrackingEvent();
 					:is-online="eventData.isOnline"
 					:location="eventData.location"
 					:timezone="eventData.timezone"
+					:is-preview="true"
 				/>
 				<CommonTagList
 					v-if="mobile && eventData.tags"

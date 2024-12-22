@@ -10,6 +10,10 @@ const props = defineProps({
 		type: String,
 		default: ''
 	},
+	dataOptional:{
+		type: String,
+		default: ''
+	},
 	size: {
 		type: String as PropType<'big' | 'small'>,
 		default: 'small'
@@ -47,7 +51,8 @@ const component = computed(() => {
 					}
 				]"
 			>
-				{{ data }}
+				{{ data }}<br>
+				{{ dataOptional }}
 			</span>
 		</component>
 	</li>

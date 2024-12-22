@@ -132,7 +132,6 @@ export const duration = (
 	const start = combineDateTime(dateStart, timeStart).getTime();
 	const end = combineDateTime(dateEnd, timeEnd).getTime();
 	const diff = Math.floor((end - start) / 1000);
-
 	return diff;
 };
 
@@ -209,4 +208,251 @@ export const formatDate = (
 	${convertEventDateToLocaleString(date + duration * 1000, isOnline, timezone)}`;
 	}
 	return convertEventDateToLocaleString(date, isOnline, timezone);
+};
+
+// схемы форматов дат
+
+const dateFormatYear: Intl.DateTimeFormatOptions = {
+	year: 'numeric'
+};
+
+const dateFormatShortMonth: Intl.DateTimeFormatOptions = {
+	month: 'short'
+};
+
+const dateFormatDay: Intl.DateTimeFormatOptions = {
+	day: 'numeric'
+};
+
+const dateFormatTime: Intl.DateTimeFormatOptions = {
+	hour: '2-digit',
+	minute: '2-digit',
+	timeZoneName: 'shortOffset'
+};
+
+// конвертация по схеме
+export const convertDateToLocaleStringForEventPage = (
+	epoch: number,
+	dateFormat: Intl.DateTimeFormatOptions,
+	timezoneName?: string
+) => {
+	const { locale } = useI18n();
+	const date = new Intl.DateTimeFormat(locale.value, {
+		timeZone: timezoneName ?? 'UTC',
+		...dateFormat
+	}).format(epoch);
+	return date;
+};
+
+// конвертация с учётом разницы между часовым поясом мероприятия и пользователя
+export const convertEventDateToLocaleStringForEventPage = (
+	epoch: number,
+	isOnline: boolean,
+	eventTimezone: Timezone,
+	dateFormat: Intl.DateTimeFormatOptions,
+	convertDateToLocaleString: (
+		epoch: number,
+		dateFormat: Intl.DateTimeFormatOptions,
+		timezoneName?: string
+	) => string
+) => {
+	let time: number;
+	if (isOnline) {
+		time = epoch - parseInt(eventTimezone.timezoneOffset) * 1000 * 60 * 60;
+		return convertDateToLocaleString(time, dateFormat, getUserTimezoneName());
+	} else {
+		time = epoch;
+		return convertDateToLocaleString(time, dateFormat);
+	}
+};
+
+export const convertTimeToLocaleStringForEventPage = (epoch: number, timezoneName?: string) => {
+	const { locale } = useI18n();
+	const time = new Intl.DateTimeFormat(locale.value, {
+		hour: '2-digit',
+		minute: '2-digit',
+		timeZone: timezoneName ?? 'UTC',
+		timeZoneName: 'shortOffset'
+	}).format(epoch);
+	return time;
+};
+
+//хэлперы для сравнения дат
+const isEqualTimes = (date, isOnline, timezone, duration) => {
+	const isEqual =
+		convertEventDateToLocaleStringForEventPage(
+			date,
+			isOnline,
+			timezone,
+			dateFormatTime,
+			convertDateToLocaleStringForEventPage
+		) ===
+		convertEventDateToLocaleStringForEventPage(
+			date + duration * 1000,
+			isOnline,
+			timezone,
+			dateFormatTime,
+			convertDateToLocaleStringForEventPage
+		);
+	return isEqual;
+};
+
+const isEqualDays = (date, isOnline, timezone, duration) => {
+	const isEqual =
+		convertEventDateToLocaleStringForEventPage(
+			date,
+			isOnline,
+			timezone,
+			dateFormatDay,
+			convertDateToLocaleStringForEventPage
+		) ===
+		convertEventDateToLocaleStringForEventPage(
+			date + duration * 1000,
+			isOnline,
+			timezone,
+			dateFormatDay,
+			convertDateToLocaleStringForEventPage
+		);
+	return isEqual;
+};
+
+const isEqualMonths = (date, isOnline, timezone, duration) => {
+	const isEqual =
+		convertEventDateToLocaleStringForEventPage(
+			date,
+			isOnline,
+			timezone,
+			dateFormatShortMonth,
+			convertDateToLocaleStringForEventPage
+		) ===
+		convertEventDateToLocaleStringForEventPage(
+			date + duration * 1000,
+			isOnline,
+			timezone,
+			dateFormatShortMonth,
+			convertDateToLocaleStringForEventPage
+		);
+	return isEqual;
+};
+
+const isEqualYears = (date, isOnline, timezone, duration) => {
+	const isEqual =
+		convertEventDateToLocaleStringForEventPage(
+			date,
+			isOnline,
+			timezone,
+			dateFormatYear,
+			convertDateToLocaleStringForEventPage
+		) ===
+		convertEventDateToLocaleStringForEventPage(
+			date + duration * 1000,
+			isOnline,
+			timezone,
+			dateFormatYear,
+			convertDateToLocaleStringForEventPage
+		);
+	return isEqual;
+};
+
+// форматирование для страницы эвента
+export const formatDateForEventPage = (
+	date: number,
+	isOnline: boolean,
+	timezone: Timezone,
+	duration: number
+) => {
+	const isEqualAll =
+		isEqualYears(date, isOnline, timezone, duration) &&
+		isEqualMonths(date, isOnline, timezone, duration) &&
+		isEqualDays(date, isOnline, timezone, duration);
+
+	const dayStart = convertEventDateToLocaleStringForEventPage(
+		date,
+		isOnline,
+		timezone,
+		dateFormatDay,
+		convertDateToLocaleStringForEventPage
+	);
+	const dayEnd = convertEventDateToLocaleStringForEventPage(
+		date + duration * 1000,
+		isOnline,
+		timezone,
+		dateFormatDay,
+		convertDateToLocaleStringForEventPage
+	);
+	const monthStart = convertEventDateToLocaleStringForEventPage(
+		date,
+		isOnline,
+		timezone,
+		dateFormatShortMonth,
+		convertDateToLocaleStringForEventPage
+	);
+	const monthEnd = convertEventDateToLocaleStringForEventPage(
+		date + duration * 1000,
+		isOnline,
+		timezone,
+		dateFormatShortMonth,
+		convertDateToLocaleStringForEventPage
+	);
+	const yearStart = convertEventDateToLocaleStringForEventPage(
+		date,
+		isOnline,
+		timezone,
+		dateFormatYear,
+		convertDateToLocaleStringForEventPage
+	);
+	const yearEnd = convertEventDateToLocaleStringForEventPage(
+		date + duration * 1000,
+		isOnline,
+		timezone,
+		dateFormatYear,
+		convertDateToLocaleStringForEventPage
+	);
+
+	if (duration) {
+		return `
+		${isEqualDays(date, isOnline, timezone, duration) ? '' : dayStart} 
+		${isEqualMonths(date, isOnline, timezone, duration) ? '' : monthStart} 
+		${isEqualYears(date, isOnline, timezone, duration) ? '' : yearStart} 
+		${isEqualAll ? '' : '-'} 
+		${dayEnd} ${monthEnd} ${yearEnd}`;
+	}
+	return `${dayStart} ${monthStart} ${yearStart}`;
+};
+
+export const formatTimeForEventPage = (
+	date: number,
+	isOnline: boolean,
+	timezone: Timezone,
+	duration: number
+) => {
+	const timeStart = convertEventDateToLocaleStringForEventPage(
+		date,
+		isOnline,
+		timezone,
+		dateFormatTime,
+		convertDateToLocaleStringForEventPage
+	).split(' ')[0];
+	const timeEnd = convertEventDateToLocaleStringForEventPage(
+		date + duration * 1000,
+		isOnline,
+		timezone,
+		dateFormatTime,
+		convertDateToLocaleStringForEventPage
+	).split(' ')[0];
+	const timeZoneName = convertEventDateToLocaleStringForEventPage(
+		date,
+		isOnline,
+		timezone,
+		dateFormatTime,
+		convertDateToLocaleStringForEventPage
+	).split(' ')[1];
+
+	if (duration) {
+		return `${
+			isEqualTimes(date, isOnline, timezone, duration) ? '' : timeStart + ' - '
+		}${timeEnd} ${isOnline ? `(${timeZoneName})` : ''}`;
+	}
+
+	return `${timeStart} ${isOnline ? `(${timeZoneName})` : ''}`;
 };

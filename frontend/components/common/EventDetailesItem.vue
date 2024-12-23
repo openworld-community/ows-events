@@ -51,8 +51,8 @@ const component = computed(() => {
 					}
 				]"
 			>
-				{{ data }}<br>
-				{{ dataOptional }}
+				<span>{{ data }}</span>
+				<span>{{ dataOptional }}</span>
 			</span>
 		</component>
 	</li>
@@ -70,6 +70,14 @@ const component = computed(() => {
 	}
 	&__text {
 		vertical-align: center;
+		display: flex;
+    flex-direction: column;
+	}
+	&__text span:nth-child(2) {
+		margin-top: 3px;
+	}
+	&__text span:empty {
+		margin-top: 0px;
 	}
 	&__text-card {
 		font-size: var(--font-size-S);
@@ -77,6 +85,14 @@ const component = computed(() => {
 	}
 	&__text-link {
 		text-decoration: underline;
+	}
+}
+
+@media (min-width: 1440px) {
+	.details {
+		&__text span:nth-child(2) {
+		margin-top: 0px;
+	}
 	}
 }
 </style>

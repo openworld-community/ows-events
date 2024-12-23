@@ -426,27 +426,23 @@ export const formatTimeForEventPage = (
 	timezone: Timezone,
 	duration: number
 ) => {
-	const timeStart = convertEventDateToLocaleStringForEventPage(
+	const timeArrStart = convertEventDateToLocaleStringForEventPage(
 		date,
 		isOnline,
 		timezone,
 		dateFormatTime,
 		convertDateToLocaleStringForEventPage
-	).split(' ')[0];
-	const timeEnd = convertEventDateToLocaleStringForEventPage(
+	).split(' ');
+	const timeArrEnd = convertEventDateToLocaleStringForEventPage(
 		date + duration * 1000,
 		isOnline,
 		timezone,
 		dateFormatTime,
 		convertDateToLocaleStringForEventPage
-	).split(' ')[0];
-	const timeZoneName = convertEventDateToLocaleStringForEventPage(
-		date,
-		isOnline,
-		timezone,
-		dateFormatTime,
-		convertDateToLocaleStringForEventPage
-	).split(' ')[1];
+	).split(' ');
+	const timeZoneName = timeArrStart.slice(-1);
+	const timeStart = timeArrStart.slice(0, -1).join(' ');
+	const timeEnd = timeArrEnd.slice(0, -1).join(' ');
 
 	if (duration) {
 		return `${

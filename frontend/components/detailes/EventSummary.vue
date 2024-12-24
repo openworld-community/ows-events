@@ -49,6 +49,7 @@ defineProps({
 				:is-online="posterEvent.isOnline"
 				:location="posterEvent.location"
 				:timezone="posterEvent.timezone"
+				:is-preview="false"
 				has-link-to-g-maps
 				size="big"
 			/>

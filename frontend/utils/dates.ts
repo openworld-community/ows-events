@@ -216,6 +216,11 @@ const dateFormatYear: Intl.DateTimeFormatOptions = {
 	year: 'numeric'
 };
 
+const dateFormatShortMonthWithDate: Intl.DateTimeFormatOptions = {
+	day: 'numeric',
+	month: 'short'
+};
+
 const dateFormatShortMonth: Intl.DateTimeFormatOptions = {
 	month: 'short'
 };
@@ -384,16 +389,16 @@ export const formatDateForEventPage = (
 		date,
 		isOnline,
 		timezone,
-		dateFormatShortMonth,
+		dateFormatShortMonthWithDate,
 		convertDateToLocaleStringForEventPage
-	);
+	).split(' ').slice(-1);
 	const monthEnd = convertEventDateToLocaleStringForEventPage(
 		date + duration * 1000,
 		isOnline,
 		timezone,
-		dateFormatShortMonth,
+		dateFormatShortMonthWithDate,
 		convertDateToLocaleStringForEventPage
-	);
+	).split(' ').slice(-1);
 	const yearStart = convertEventDateToLocaleStringForEventPage(
 		date,
 		isOnline,

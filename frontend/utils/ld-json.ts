@@ -10,7 +10,7 @@ export const getJSONEventList = (posterEvents: EventOnPoster[], locale: string, 
 		innerHTML: JSON.stringify({
 			'@context': SEO_SCHEMA_BASE_URL,
 
-			'@type': 'BreadcrumbList',
+			'@type': 'ItemList',
 			name: 'Event Items',
 
 			itemListElement: posterEvents.map((event, ind) => {
@@ -35,6 +35,7 @@ export const getJSONEventList = (posterEvents: EventOnPoster[], locale: string, 
 };
 
 export const getJSONEvent = (posterEvent: EventOnPoster) => {
+	if (process.server) return;
 	return {
 		type: 'application/ld+json',
 		innerHTML: JSON.stringify({

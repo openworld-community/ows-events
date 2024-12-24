@@ -1,5 +1,12 @@
 import { EventOnPoster } from '@common/types';
-import { EventParams, SearchEventCityPayload, SearchEventPayload } from '@common/types/event';
+import {
+	EventParams,
+	PaginationCityQueryPayload,
+	PaginationQueryPayload,
+	SearchEventCityPayload,
+	SearchEventPayload
+} from '@common/types/event';
+import { AggregatePaginateResult } from 'mongoose';
 import { SupportedLanguages } from '../../../../../common/const';
 import { IRouteHandler } from '../../types';
 
@@ -78,3 +85,32 @@ type IFindEventsCountryRoute = {
 	Reply: EventOnPoster[];
 };
 type IFindEventsCountryHandler = IRouteHandler<IFindEventsCountryRoute>;
+
+type IFindEventsCountryPaginatedRoute = {
+	Header: {
+		'accept-language': SupportedLanguages;
+	};
+	Body: PaginationCityQueryPayload;
+	Params: { countryName: string };
+	Reply: AggregatePaginateResult<EventOnPoster>;
+};
+type IFindEventsCountryPaginatedHandler = IRouteHandler<IFindEventsCountryPaginatedRoute>;
+
+type IFindEventsCityPaginatedRoute = {
+	Header: {
+		'accept-language': SupportedLanguages;
+	};
+	Body: PaginationCityQueryPayload;
+	Params: { cityName: string };
+	Reply: AggregatePaginateResult<EventOnPoster>;
+};
+type IFindEventsCityPaginatedHandler = IRouteHandler<IFindEventsCityPaginatedRoute>;
+
+type IFindEventPaginatedRoute = {
+	Header: {
+		'accept-language': SupportedLanguages;
+	};
+	Body: PaginationQueryPayload;
+	Reply: AggregatePaginateResult<EventOnPoster>;
+};
+type IFindEventPaginatedHandler = IRouteHandler<IFindEventPaginatedRoute>;

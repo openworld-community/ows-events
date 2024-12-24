@@ -64,12 +64,10 @@ const alignSelf = computed(() => (props.isRevercedText ? 'flex-end' : 'flex-star
 
 	&__header {
 		margin-bottom: 35px;
+		text-align: center;
 
-		@media (min-width: 375px) and (max-width: 768px) {
-			text-align: center;
-		}
-		@media (max-width: 375px) {
-			text-align: start;
+		@media (min-width: 1440px) {
+			text-align: left;
 		}
 	}
 }

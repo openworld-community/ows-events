@@ -59,8 +59,12 @@ export type IconName =
 	| 'currency/USD'
 	| 'currency/USDC'
 	| 'currency/USDT'
-	| 'dollar'
+	| 'banknotes'
 	| 'email'
+	| 'next'
+	| 'next-finish'
+	| 'previous'
+	| 'previous-start'
 	// хак, из-за которого ТС не мерджит этот юнион в просто string, из-за чего и работает автокомплит, и можно указать все равно любую строку
 	| (string & {});
 </script>

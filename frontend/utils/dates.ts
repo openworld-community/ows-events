@@ -391,14 +391,14 @@ export const formatDateForEventPage = (
 		timezone,
 		dateFormatShortMonthWithDate,
 		convertDateToLocaleStringForEventPage
-	).split(' ').slice(-1);
+	).replace(/[0-9]/g, '');
 	const monthEnd = convertEventDateToLocaleStringForEventPage(
 		date + duration * 1000,
 		isOnline,
 		timezone,
 		dateFormatShortMonthWithDate,
 		convertDateToLocaleStringForEventPage
-	).split(' ').slice(-1);
+	).replace(/[0-9]/g, '');
 	const yearStart = convertEventDateToLocaleStringForEventPage(
 		date,
 		isOnline,

@@ -416,8 +416,8 @@ export const formatDateForEventPage = (
 
 	if (duration) {
 		return `
-		${isEqualDays(date, isOnline, timezone, duration) ? '' : dayStart} 
-		${isEqualMonths(date, isOnline, timezone, duration) ? '' : monthStart} 
+		${isEqualAll ? '' : dayStart} 
+		${isEqualMonths(date, isOnline, timezone, duration) && isEqualYears(date, isOnline, timezone, duration) ? '' : monthStart} 
 		${isEqualYears(date, isOnline, timezone, duration) ? '' : yearStart} 
 		${isEqualAll ? '' : '-'} 
 		${dayEnd} ${monthEnd} ${yearEnd}`;

@@ -1,8 +1,9 @@
 import { v4 as uuid } from 'uuid';
-import { FilterQuery, PipelineStage, SortValues } from 'mongoose';
+import { FilterQuery, PipelineStage, SortValues, AggregatePaginateResult } from 'mongoose';
 import { EventDbEntity, EventOnPoster, SearchEventPayload } from '@common/types/event';
+import { PaginationOptions } from '@common/types/pagination';
 import { CommonErrorsEnum, SupportedLanguages } from '../../../common/const';
-import { EventModel } from '../models/event.model';
+import { EventModel, IEventDocument } from '../models/event.model';
 import { imageController } from './image-controller';
 import { countriesAndCitiesController } from './countries-and-cities.controller';
 import { vars } from '../config/vars';
@@ -139,6 +140,100 @@ class EventsStateController {
 		return Promise.all(
 			futureEvents.map(async (event) => this.localizeEventLocation(event, lang))
 		);
+	}
+
+	async getPaginatedEvents(
+		lang: SupportedLanguages,
+		isOnline: boolean,
+		paginationOptions: PaginationOptions,
+		query?: SearchEventPayload | undefined
+	): Promise<AggregatePaginateResult<EventDbEntity>> {
+		const queryObject: FilterQuery<EventOnPoster> = {
+			$and: [],
+			$expr: {
+				$and: [
+					{
+						$gte: [
+							{
+								$add: ['$date', { $multiply: [1000, '$durationInSeconds'] }]
+							},
+							{
+								$toDouble: '$$NOW'
+							}
+						]
+					}
+				]
+			}
+		};
+		const sortObject: string | Record<string, SortValues> | PipelineStage.Sort['$sort'] = {};
+		if (query?.searchLine) {
+			queryObject.$text = { $search: query.searchLine };
+		}
+		if (query?.country) {
+			const englishCountryName = await countriesAndCitiesController.getLocalizedCountryName(
+				query?.country,
+				SupportedLanguages.ENGLISH
+			);
+			const countryQuery = isOnline
+				? { $and: [{ 'location.country': englishCountryName }, { isOnline }] }
+				: { 'location.country': englishCountryName };
+			queryObject.$and?.push(countryQuery);
+			sortObject.isOnline = 'ascending';
+		}
+		if (query?.city) {
+			const englishCityName = await countriesAndCitiesController.getLocalizedCityName(
+				query?.city,
+				SupportedLanguages.ENGLISH
+			);
+			const cityQuery = isOnline
+				? { $or: [{ 'location.city': englishCityName }, { isOnline }] }
+				: { 'location.city': englishCityName };
+			queryObject.$and?.push(cityQuery);
+			sortObject.isOnline = 'ascending';
+		}
+		if (query?.startDate) {
+			const startDateQuery = {
+				$lte: [
+					query.startDate,
+					{ $add: ['$date', { $multiply: [1000, '$durationInSeconds'] }] }
+				]
+			};
+			queryObject.$expr.$and.push(startDateQuery);
+		}
+		if (query?.endDate) {
+			const endDateQuery = {
+				$gte: [query.endDate, '$date']
+			};
+			queryObject.$expr.$and.push(endDateQuery);
+		}
+		if (query?.tags && query?.tags.length !== 0) {
+			queryObject.tags = { $in: query?.tags };
+		}
+		if (queryObject.$and?.length === 0) {
+			delete queryObject.$and;
+		}
+		queryObject['meta.moderation.status'] = { $nin: ['declined', 'in-progress'] };
+
+		sortObject.date = 'ascending';
+
+		const pipeline = [
+			{
+				$match: {
+					...queryObject
+				}
+			}
+		];
+
+		const aggregate = EventModel.aggregate<IEventDocument>(pipeline).sort(sortObject);
+		const futureEvents = await EventModel.aggregatePaginate<EventDbEntity>(
+			aggregate,
+			paginationOptions
+		);
+		const localizedDocs = await Promise.all(
+			futureEvents.docs.map(async (event) => this.localizeEventLocation(event, lang))
+		);
+		futureEvents.docs = localizedDocs;
+		return futureEvents;
 	}
 
 	async getEvent(id: string, lang: SupportedLanguages = SupportedLanguages.ENGLISH) {

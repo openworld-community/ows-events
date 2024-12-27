@@ -4,7 +4,10 @@ import {
 	deleteEvent,
 	findEvents,
 	findEventsByCity,
+	findEventsByCityPaginated,
 	findEventsByCountry,
+	findEventsByCountryPaginated,
+	findEventsPaginated,
 	getEvent,
 	getEvents,
 	getMyEvents,
@@ -13,8 +16,11 @@ import {
 import {
 	IAddEventRoute,
 	IDeleteEventRoute,
+	IFindEventPaginatedRoute,
 	IFindEventRoute,
+	IFindEventsCityPaginatedRoute,
 	IFindEventsCityRoute,
+	IFindEventsCountryPaginatedRoute,
 	IFindEventsCountryRoute,
 	IGetEventRoute,
 	IGetEventsRoute,
@@ -24,8 +30,11 @@ import {
 import {
 	addEventSchema,
 	deleteEventSchema,
+	findEventsByCityPaginatedSchema,
 	findEventsByCitySchema,
+	findEventsByCountryPaginatedSchema,
 	findEventsByCountrySchema,
+	findEventsPaginatedSchema,
 	findEventsSchema,
 	getEventSchema,
 	getEventsSchema,
@@ -97,5 +106,19 @@ export const eventsApi = async (fastify: FastifyInstance) => {
 	fastify.post<IFindEventsCountryRoute>('/country/:countryName', {
 		schema: findEventsByCountrySchema,
 		handler: findEventsByCountry
+	});
+	fastify.post<IFindEventPaginatedRoute>('/find/pagination', {
+		schema: findEventsPaginatedSchema,
+		handler: findEventsPaginated
+	});
+
+	fastify.post<IFindEventsCityPaginatedRoute>('/city/:cityName/pagination', {
+		schema: findEventsByCityPaginatedSchema,
+		handler: findEventsByCityPaginated
+	});
+
+	fastify.post<IFindEventsCountryPaginatedRoute>('/country/:countryName/pagination', {
+		schema: findEventsByCountryPaginatedSchema,
+		handler: findEventsByCountryPaginated
 	});
 };

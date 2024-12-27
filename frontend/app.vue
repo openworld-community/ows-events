@@ -33,7 +33,7 @@ const getPath = (path: string) => {
 const langRefs = locales.value.map((it) => ({
 	rel: 'alternate',
 	hreflang: it.code,
-	href: `${config.public.domain}/${it.code}${getPath(route.path)}`
+	href: `https://${config.public.domain}/${it.code}${getPath(route.path)}`
 }));
 useHead({
 	link: [
@@ -43,18 +43,18 @@ useHead({
 			href: '/favicon.ico'
 		},
 		{
-			rel: 'canonical',
-			href: `${config.public.domain}/${locale.value}${getPath(route.path)}`
-		},
-		{
 			rel: 'alternate',
 			hreflang: 'x-default',
-			href: `${config.public.domain}/ru${getPath(route.path)}`
+			href: `https://${config.public.domain}/ru${getPath(route.path)}`
 		},
 		...langRefs
 	],
 	title: `${t('meta.default_title.first')} | ${t('meta.default_title.second')}`,
 	meta: [
+		{
+			name: 'keywords',
+			content: t('meta.default_keywords')
+		},
 		{
 			name: 'description',
 			content: t('meta.default_description')

@@ -50,6 +50,51 @@ export const ItemEvent = {
 	}
 };
 
+export const PaginatedResponseSchema = {
+	type: 'object',
+	properties: {
+		docs: {
+			type: 'array',
+			items: ItemEvent
+		},
+		totalDocs: { type: 'number' },
+		// used events per page number
+		limit: { type: 'number' },
+		// current page number
+		page: { type: 'number' },
+		// total number of pages for matching events
+		totalPages: { type: 'number' },
+		// is previous page exists (i.e. false for page 1)
+		hasPrevPage: { type: 'number' },
+		// is next page exists (i.e. false for last page)
+		hasNextPage: { type: 'boolean' },
+		// previous page number
+		prevPage: { type: 'number' },
+		// next page number
+		nextPage: { type: 'number' }
+	}
+};
+
+export const EventQuerySchema = {
+	type: 'object',
+	properties: {
+		searchLine: { type: 'string' },
+		city: { type: 'string' },
+		country: { type: 'string' },
+		tags: { type: 'array', items: { type: 'string' } },
+		startDate: { type: 'number' },
+		endDate: { type: 'number' }
+	}
+};
+
+export const PaginationOptionsSchema = {
+	type: 'object',
+	properties: {
+		page: { type: 'number' },
+		limit: { type: 'number' }
+	}
+};
+
 export const getEventsSchema = {
 	description: 'get all events',
 	tags: ['Events'],
@@ -231,6 +276,75 @@ export const findEventsByCountrySchema = {
 			tags: { type: 'array', items: { type: 'string' } },
 			startDate: { type: 'number' },
 			endDate: { type: 'number' }
+		}
+	},
+	security: [{ authJWT: [] }]
+};
+
+export const findEventsPaginatedSchema = {
+	description: 'find events with pagination',
+	tags: ['Events'],
+	summary: 'Find events with pagination',
+	response: {
+		200: PaginatedResponseSchema
+	},
+	body: {
+		type: 'object',
+		properties: {
+			query: EventQuerySchema,
+			options: PaginationOptionsSchema
+		}
+	},
+	security: [{ authJWT: [] }]
+};
+
+export const findEventsByCityPaginatedSchema = {
+	description: 'find events by city with pagination',
+	tags: ['Events'],
+	summary: 'Find events by city with pagination',
+	response: {
+		200: PaginatedResponseSchema
+	},
+	params: {
+		type: 'object',
+		properties: {
+			cityName: {
+				type: 'string',
+				description: 'City in which event hold'
+			}
+		}
+	},
+	body: {
+		type: 'object',
+		properties: {
+			query: EventQuerySchema,
+			options: PaginationOptionsSchema
+		}
+	},
+	security: [{ authJWT: [] }]
+};
+
+export const findEventsByCountryPaginatedSchema = {
+	description: 'find events by country with pagination',
+	tags: ['Events'],
+	summary: 'Find events by country with pagination',
+	response: {
+		200: PaginatedResponseSchema
+	},
+	params: {
+		type: 'object',
+		properties: {
+			countryName: {
+				type: 'string',
+				description: 'Country in which event hold'
+			}
+		}
+	},
+	body: {
+		type: 'object',
+		properties: {
+			query: EventQuerySchema,
+			options: PaginationOptionsSchema
 		}
 	},
 	security: [{ authJWT: [] }]

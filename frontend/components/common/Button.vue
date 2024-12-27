@@ -33,6 +33,11 @@ const props = defineProps({
 		type: String,
 		default: ''
 	},
+	buttonFontSize: {
+		//это костыль если нужно каким то образом изменить станлартный шрифт кнопки через style указывать в px (пример 14px)
+		type: String,
+		default: ''
+	},
 	link: {
 		// если это ссылка
 		type: [String, Object] as PropType<string | LinkObjectType>,
@@ -148,6 +153,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 		<span
 			v-if="!isIcon"
 			class="button__content"
+			:style="{ fontSize: buttonFontSize ? buttonFontSize : '' }"
 		>
 			{{ buttonText }}
 		</span>
@@ -175,7 +181,6 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 
 	&__content {
 		font-size: var(--font-size-M);
-		
 	}
 
 	&__icon {

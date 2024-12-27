@@ -391,14 +391,14 @@ export const formatDateForEventPage = (
 		timezone,
 		dateFormatShortMonthWithDate,
 		convertDateToLocaleStringForEventPage
-	).split(' ').slice(-1);
+	).replace(/[0-9]/g, '');
 	const monthEnd = convertEventDateToLocaleStringForEventPage(
 		date + duration * 1000,
 		isOnline,
 		timezone,
 		dateFormatShortMonthWithDate,
 		convertDateToLocaleStringForEventPage
-	).split(' ').slice(-1);
+	).replace(/[0-9]/g, '');
 	const yearStart = convertEventDateToLocaleStringForEventPage(
 		date,
 		isOnline,
@@ -416,8 +416,8 @@ export const formatDateForEventPage = (
 
 	if (duration) {
 		return `
-		${isEqualDays(date, isOnline, timezone, duration) ? '' : dayStart} 
-		${isEqualMonths(date, isOnline, timezone, duration) ? '' : monthStart} 
+		${isEqualAll ? '' : dayStart} 
+		${isEqualMonths(date, isOnline, timezone, duration) && isEqualYears(date, isOnline, timezone, duration) ? '' : monthStart} 
 		${isEqualYears(date, isOnline, timezone, duration) ? '' : yearStart} 
 		${isEqualAll ? '' : '-'} 
 		${dayEnd} ${monthEnd} ${yearEnd}`;

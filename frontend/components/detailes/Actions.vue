@@ -29,7 +29,10 @@ patchDeleteEventModal({
 });
 </script>
 <template>
-	<div class="event-info-actions">
+	<div
+		v-if="validateEventRole(creatorId, 'edit')"
+		class="event-info-actions"
+	>
 		<CommonButton
 			v-if="validateEventRole(creatorId, 'delete')"
 			class="event-info-actions__button-admin"

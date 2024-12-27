@@ -44,64 +44,7 @@ const innerModel = ref<string>('');
 				<span class="info-poster__text">{{ $t('event.poster.button_plus') }}</span>
 			</div>
 		</div>
-
-		<!-- <LibraryDialog>
-			
-			<template #trigger>
-				<CommonButton
-					:button-text="$t('global.button.more')"
-					class="button__success--filled isRound more"
-					button-kind="success"
-				/>
-			</template>
-			<template #content>
-				<div class="info-poster__dialog">
-					<LibraryScrollArea
-						type="scroll"
-						:height="height"
-					>
-						<img
-							class="info-poster__image"
-							src="/img/modal-info/info.webp"
-						/>
-					</LibraryScrollArea>
-					
-				</div>
-				
-			</template>
-			
-		</LibraryDialog> -->
-
-		<LibraryDownsheet v-if="mobile">
-			<template #trigger >
-				<div >
-					
-					<CommonButton
-					:button-text="$t('global.button.more')"
-					class="button__success--filled isRound more"
-					button-kind="success"
-				/>
-				</div>
-				
-			</template>
-			<template #content>
-				<div class="mobile-filter__content" style="display: flex; height: 80vh; overflow-y: scroll">
-					
-
-					
-
-					<div class="mobile-select__buttons buttons">
-						<img
-						style=""
-				
-				src="/img/modal-info/mobile_info.webp"
-		/>
-		
-					</div>
-				</div>
-			</template>
-		</LibraryDownsheet>
-		
+		<DetailesModalInfoPoster />
 	</div>
 </template>
 

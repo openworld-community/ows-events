@@ -33,10 +33,10 @@ export default defineNuxtConfig({
 					desktop: 1440
 				}
 			}
-		]
+		],
+		'@nuxtjs/sitemap'
 	],
 	routeRules: {
-				
 		'/': { redirect: '/ru' },
 		//client side
 		'/ru/about': { ssr: false },
@@ -48,16 +48,15 @@ export default defineNuxtConfig({
 		'/en/support': { ssr: false },
 		'/en/donate': { ssr: false },
 		'/en/cooperation': { ssr: false },
-		
+
 		'/ru/user/**': { ssr: false },
 		'/en/user/**': { ssr: false },
 		'/en/auth': { ssr: false },
 		'/ru/auth': { ssr: false },
 
-		//server side cached 
-		'/**': { swr: true },	
-		
-	}, 
+		//server side cached
+		'/**': { swr: true }
+	},
 	robots: {
 		disallow: [
 			RoutePathEnum.USER_PAGE,
@@ -161,5 +160,15 @@ export default defineNuxtConfig({
 				}
 			]
 		}
+	},
+	sitemap: {
+		cacheTime: 60000,
+		sources: ['/api/__sitemap__/urls'],
+		excludeAppSources: ['nuxt:route-rules'],
+		xslColumns: [
+			{ label: 'URL', width: '50%' },
+			{ label: 'Last Modified', select: 'sitemap:lastmod', width: '25%' },
+			{ label: 'Hreflangs', select: 'count(xhtml)', width: '25%' }
+		]
 	}
 });

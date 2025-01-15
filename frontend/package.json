@@ -54,6 +54,7 @@
     "@nuxt/eslint-config": "0.1.1",
     "@nuxtjs/eslint-module": "4.1.0",
     "@nuxtjs/i18n": "^8.0.0-beta.13",
+    "@nuxtjs/sitemap": "^7.0.2",
     "@rushstack/eslint-patch": "1.2.0",
     "@tsconfig/node18": "^2.0.1",
     "@types/jsdom": "^21.1.1",

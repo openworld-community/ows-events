@@ -1,6 +1,5 @@
-import { defineSitemapEventHandler } from '#imports';
 import type { SitemapUrl } from '#sitemap/types';
-import { EventOnPoster } from '../../../../common/types';
+import { type EventOnPoster } from '../../../../common/types';
 
 export default defineSitemapEventHandler(async () => {
 	const eventRoutes = await getEventsRoutes();

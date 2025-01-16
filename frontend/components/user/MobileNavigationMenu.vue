@@ -51,6 +51,7 @@ const onLogoutPress = async () => {
 				no-border
 				:button-text="$t('global.button.logout')"
 				icon-name="logout"
+				icon-color="var(--color-accent-red)"
 			/>
 		</LibraryAlert>
 	</div>

@@ -48,10 +48,10 @@ const onLogoutPress = async () => {
 			<CommonButton
 				class="navigation-menu-mobile__logout"
 				button-kind="warning"
-				icon-color="'var(--color-accent-red)'"
 				no-border
 				:button-text="$t('global.button.logout')"
 				icon-name="logout"
+				icon-color="var(--color-accent-red)"
 			/>
 		</LibraryAlert>
 	</div>

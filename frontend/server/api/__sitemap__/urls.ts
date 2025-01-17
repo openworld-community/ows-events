@@ -1,5 +1,5 @@
 import type { SitemapUrl } from '#sitemap/types';
-import {
+import type {
 	ICitySitemapData,
 	ICountrySitemapData,
 	IEventSitemapData

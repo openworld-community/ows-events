@@ -162,9 +162,9 @@ export default defineNuxtConfig({
 		}
 	},
 	sitemap: {
-		cacheTime: 60000,
 		sources: ['/api/__sitemap__/urls'],
 		excludeAppSources: ['nuxt:route-rules'],
+		exclude: ['/ru/auth', '/en/auth', '/ru/event/form', '/en/event/form'],
 		xslColumns: [
 			{ label: 'URL', width: '50%' },
 			{ label: 'Last Modified', select: 'sitemap:lastmod', width: '25%' },

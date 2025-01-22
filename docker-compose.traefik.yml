@@ -11,7 +11,7 @@ networks:
 
 services:
     traefik:
-        image: traefik:v2.4
+        image: traefik:v3.3
         logging: *default-logging
         container_name: 'traefik'
         restart: always
@@ -26,9 +26,23 @@ services:
             - '--providers.docker.exposedbydefault=false'
             - '--entrypoints.http.address=:80'
             - '--entrypoints.https.address=:443'
+            - '--api=true'
+            - '--api.basePath=/traefik'
             - '--accesslog=true'
+            - '--metrics.prometheus=true'
         labels:
             - 'traefik.enable=true'
+            - 'traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_ADMIN_USER}:${TRAEFIK_ADMIN_HASHED_PASSWORD}'
+            - 'traefik.http.routers.dashboard.rule=Host(`afisha.peredelano.com`) && PathPrefix(`/traefik`)'
+            - 'traefik.http.routers.dashboard.service=api@internal'
+            - 'traefik.http.routers.dashboard.entrypoints=https'
+            - 'traefik.http.routers.dashboard.tls.certresolver=myresolver'
+            - 'traefik.http.routers.dashboard.middlewares=auth'
+            - 'traefik.http.routers.metrics.rule=Host(`afisha.peredelano.com`) && PathPrefix(`/prometheus`)'
+            - 'traefik.http.routers.metrics.tls=true'
+            - 'traefik.http.routers.metrics.tls.certresolver=myresolver'
+            - 'traefik.http.routers.metrics.service=prometheus@internal'
+            - 'traefik.http.routers.metrics.middlewares=auth'
         volumes:
             - '/var/run/docker.sock:/var/run/docker.sock'
             - './letsencrypt:/letsencrypt'

@@ -27,6 +27,7 @@ import { migrate as migrateOnlineEvents } from './migrations/online-events-15-01
 import { startSchedule } from './boot/schedule';
 import { migrate as migrateChangeAuth } from './migrations/change-auth-07-11-23';
 import { vars } from './config/vars';
+import { serviceApi } from './rest/v1/service/router';
 
 const server = fastify({
 	logger: true,
@@ -88,6 +89,7 @@ server.register(paymentInfoApi, { prefix: '/api/payment-info' });
 server.register(imageApi, { prefix: '/api/image' });
 server.register(userApi, { prefix: '/api/user' });
 server.register(tagsApi, { prefix: '/api/tags' });
+server.register(serviceApi, { prefix: '/api/service' });
 
 server.setNotFoundHandler((req, reply) => {
 	reply.sendFile('index.html');

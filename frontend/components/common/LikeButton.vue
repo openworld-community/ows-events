@@ -31,6 +31,6 @@ defineProps({
 				? $t('global.button.remove_from_favourites')
 				: $t('global.button.add_to_favourites')
 		"
-		@click="emit('toggleFavourites')"
+		@click="emit('toggleFavourites', $event)"
 	/>
 </template>

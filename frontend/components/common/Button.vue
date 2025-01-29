@@ -135,7 +135,7 @@ const loaderColor = computed(() => loaderColorDict[props.buttonKind] ?? '');
 			}
 		]"
 		:aria-label="alt ? alt : null"
-		@click="!isDisabled ? emit('click') : null"
+		@click="!isDisabled ? emit('click', $event) : null"
 	>
 		<CommonUiLoadSpinner
 			v-if="isLoading"

@@ -4,11 +4,25 @@ import { SeoItempropGlobalEnum } from '../../constants/enums/seo';
 import { RoutePathEnum } from '../../constants/enums/route';
 import { trimString } from '../../utils/trimString';
 import { Tags } from '../../../common/const/tags';
+import { apiRouter } from '../../composables/useApiRouter';
+import { useUserStore } from '../../stores/user.store';
 
-defineProps<{ eventData: EventOnPoster }>();
+const props = defineProps<{ eventData: EventOnPoster }>();
 const { t } = useI18n();
 const mobile = inject('mobile');
 const { sendAnalytics } = useSendTrackingEvent();
+
+const userStore = useUserStore();
+const toggleFavourites = async () => {
+	console.log(event);
+	const { error } = await apiRouter.user.favourites[
+		isInFavourites.value ? 'remove' : 'add'
+	].useMutation({ data: { eventId: props.eventData.id } });
+	if (!error.value) await userStore.getFavouriteIDs();
+};
+const isInFavourites = computed(() => {
+	return userStore.favouriteIDs.includes(props.eventData.id);
+});
 </script>
 
 <template>
@@ -79,12 +93,21 @@ const { sendAnalytics } = useSendTrackingEvent();
 					class="card-description__tags"
 					tag-size="small"
 				/>
-				<h4
-					class="card-description__title"
-					itemprop="name"
-				>
-					{{ eventData.title }}
-				</h4>
+				<div class="card-description__title">
+					<h4
+						class="card-description__title__text"
+						itemprop="name"
+					>
+						{{ eventData.title }}
+					</h4>
+					<CommonLikeButton
+						v-if="userStore.isAuthorized"
+						width="24"
+						height="24"
+						:is-in-favourites="isInFavourites"
+						@toggle-favourites.stop.prevent="toggleFavourites"
+					/>
+				</div>
 				<p
 					v-if="eventData.organizer"
 					class="card-description__author text3"
@@ -213,14 +236,22 @@ const { sendAnalytics } = useSendTrackingEvent();
 		}
 
 		&__title {
-			//TODO: пока верстка только мобилки
-			max-width: 480px;
-			overflow-wrap: break-word;
-			word-break: break-word;
-			font-size: var(--font-size-ML);
-			font-weight: var(--font-weight-bold);
-			line-height: 2.4rem;
+			display: flex;
+			flex-direction: row;
+			align-items: flex-start;
+			justify-content: space-between;
 			margin-bottom: 7px;
+
+			&__text {
+				//TODO: пока верстка только мобилки
+				max-width: 480px;
+				overflow-wrap: break-word;
+				word-break: break-word;
+				font-size: var(--font-size-ML);
+				font-weight: var(--font-weight-bold);
+				line-height: 2.4rem;
+				align-self: center;
+			}
 			@media (min-width: 768px) {
 				margin-bottom: 12px;
 			}

@@ -37,7 +37,7 @@ export default defineNuxtConfig({
 		'@nuxtjs/sitemap'
 	],
 	routeRules: {
-		'/': { redirect: '/ru' },
+		'/': { redirect: { to: '/ru', statusCode: 301 } },
 		//client side
 		'/ru/about': { ssr: false },
 		'/ru/support': { ssr: false },
@@ -75,7 +75,7 @@ export default defineNuxtConfig({
 		],
 		lazy: true,
 		langDir: '.nuxt/i18n',
-		strategy: 'prefix',
+		strategy: 'prefix_and_default',
 		//
 		defaultLocale: 'ru',
 		detectBrowserLanguage: false,

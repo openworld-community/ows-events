@@ -37,7 +37,7 @@ export default defineNuxtConfig({
 		'@nuxtjs/sitemap'
 	],
 	routeRules: {
-		'/': { redirect: '/ru' },
+		'/': { redirect: { to: '/ru', statusCode: 301 } },
 		//client side
 		'/ru/about': { ssr: false },
 		'/ru/support': { ssr: false },

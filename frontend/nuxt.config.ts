@@ -75,7 +75,7 @@ export default defineNuxtConfig({
 		],
 		lazy: true,
 		langDir: '.nuxt/i18n',
-		strategy: 'prefix_and_default',
+		strategy: 'prefix',
 		//
 		defaultLocale: 'ru',
 		detectBrowserLanguage: false,

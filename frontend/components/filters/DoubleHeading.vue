@@ -18,30 +18,33 @@ defineProps({
 </template>
 <style lang="less" scoped>
 .heading {
-	margin-bottom: 24px;
+	margin-bottom: 20px;
 	display: flex;
 	flex-direction: column;
-	gap: 12px;
+	gap: 10px;
 
 	@media (min-width: 768px) {
 		max-width: 600px;
 		padding-top: 0;
-		gap: 16px;
-		margin-bottom: 26px;
-		margin-top: 24px;
+		gap: 5px;
+		//margin-bottom: 26px;
+		//margin-top: 24px;
+		margin-top: 35px;
+		margin-bottom: 35px;
 	}
 
 	@media (min-width: 1440px) {
 		max-width: 1440px;
 		margin-bottom: 40px;
-		margin-top: 61px;
+		margin-top: 70px;
+		gap: 22px;
 	}
 
 	&__title {
 		text-align: center;
 		word-wrap: break-word;
 		color: var(--color-white);
-		padding-top: 28px;
+		padding-top: 20px;
 
 		@media (max-width: 768px) {
 			letter-spacing: -0.3px;
@@ -60,15 +63,13 @@ defineProps({
 	&__subtitle {
 		text-align: center;
 		word-wrap: break-word;
+		font-weight: 500;
+		letter-spacing: -0.03em;
 		color: var(--color-white);
 
-		@media (max-width: 768px) {
-			font-weight: 500;
-			letter-spacing: -0.3px;
-		}
-
-		@media (min-width: 1440px) {
-			letter-spacing: -0.3px;
+		@media (min-width: 768px) {
+			font-weight: 600;
+			// letter-spacing: -0.3px;
 		}
 	}
 }

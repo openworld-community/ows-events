@@ -94,7 +94,7 @@ watch(
 				:filter-countries="filterCountriesOptions"
 			/>
 		</FiltersHeroWrap>
-
+		<div class="country-page__mainwrap">
 		<SearchCardsWrapper>
 			<!--			<SearchEventCardsList-->
 			<!--				v-if="posterEvents && posterEvents.length !== 0"-->
@@ -113,6 +113,7 @@ watch(
 			/> -->
 		</SearchCardsWrapper>
 		<CommonCreateButton :is-authorized="userStore.isAuthorized" />
+	</div>
 	</main>
 </template>
 
@@ -131,8 +132,15 @@ watch(
 	}
 	&__divider {
 		height: 32px;
-		@media (min-width: 768px) {
+		@media (min-width: 1440px) {
 			height: 60px;
+		}
+	}
+	&__mainwrap{
+		display: flex;
+		flex-direction: column;
+		@media (min-width: 1440px) {
+			flex-direction: row;
 		}
 	}
 }

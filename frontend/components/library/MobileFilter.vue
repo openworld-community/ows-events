@@ -164,6 +164,10 @@ const navigate = (to: string) => {
 		margin-bottom: var(--space-subsections);
 	}
 
+	&__text{
+		font-size: var(--font-size-M);
+	}
+
 	&__list {
 		max-height: 200px;
 		overflow-y: scroll;

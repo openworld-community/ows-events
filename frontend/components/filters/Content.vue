@@ -59,6 +59,7 @@ const dates = computed({
 	<div class="main-filters">
 		<FiltersUiLinkSelectWrapper
 			v-if="!mobile"
+			class="main-filters__country"
 			:placeholder="$t('filters.country.placeholder')"
 			:current-text="currentCountry"
 			:disabled="filterCountries.length === 0"
@@ -80,6 +81,7 @@ const dates = computed({
 		/>
 		<FiltersUiLinkSelectWrapper
 			v-if="!mobile"
+			class="main-filters__city"
 			:placeholder="$t('filters.city.placeholder')"
 			:current-text="currentCity"
 			:disabled="filterCities.length === 0"
@@ -106,7 +108,7 @@ const dates = computed({
 			:range="true"
 			is-filter
 			appearance="no-border"
-			class="filter"
+			class="main-filters__date filter"
 			name="date"
 			:placeholder="$t(`filters.date.placeholder`)"
 			:aria-label="$t(`filters.date.aria`)"
@@ -131,23 +133,43 @@ const dates = computed({
 	width: 100%;
 	grid-column: span 3;
 	gap: var(--gap);
-	margin-bottom: 20px;
+	margin-bottom: 25px;
+	
+
 	@media (min-width: 768px) {
 		box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
 		border-radius: 8px;
 		align-items: center;
 		margin-top: 0;
+		margin-bottom: 10px;
 		gap: var(--gap);
-		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-columns: 1fr 1fr;
+	  grid-template-rows: 1fr 1fr;
+		grid-template-areas: "country country" "city date";
 
 		&:deep(.calendar) {
 			max-width: 100%;
 		}
+		&:deep(.popover__trigger--primary) {
+		&:nth-child(1){
+			grid-area: country;
+		}
+		&:nth-child(2){
+			grid-area: city;
+		}
+  }
+
+  &__date{
+		  grid-area: date;
+	}
 	}
 	@media (min-width: 1440px) {
 		background-color: var(--color-white);
 		margin-bottom: 40px;
 		gap: 0;
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-rows: 1fr;
+		grid-template-areas: "country city date";
 
 		&:deep(.input__field),
 		&:deep(.popover__trigger--primary) {

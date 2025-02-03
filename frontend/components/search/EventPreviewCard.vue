@@ -8,6 +8,7 @@ import { Tags } from '../../../common/const/tags';
 defineProps<{ eventData: EventOnPoster }>();
 const { t } = useI18n();
 const mobile = inject('mobile');
+const tablet = inject('tablet');
 const { sendAnalytics } = useSendTrackingEvent();
 </script>
 
@@ -74,7 +75,7 @@ const { sendAnalytics } = useSendTrackingEvent();
 		<div class="card-description">
 			<div class="card-description__top">
 				<CommonTagList
-					v-if="!mobile && eventData.tags"
+					v-if="!mobile && !tablet && eventData.tags"
 					:tag-list="eventData.tags"
 					class="card-description__tags"
 					tag-size="small"
@@ -104,7 +105,7 @@ const { sendAnalytics } = useSendTrackingEvent();
 					:is-preview="true"
 				/>
 				<CommonTagList
-					v-if="mobile && eventData.tags"
+					v-if="(mobile || tablet) && eventData.tags"
 					:tag-list="eventData.tags"
 					class="card-description__tags"
 				/>
@@ -181,14 +182,22 @@ const { sendAnalytics } = useSendTrackingEvent();
 		display: flex;
 		width: 100%;
 		flex-direction: column;
-		padding: 7px 16px 0px;
+		padding: 20px 0px 0px 15px;
 		overflow: hidden;
 
 		@media (min-width: 768px) {
 			height: inherit;
-			padding: 12px;
+			padding: 12px 10px;
 			border-bottom-left-radius: 8px;
 			border-bottom-right-radius: 8px;
+		}
+
+		&__top{
+			padding-left: 10px;
+
+			@media (min-width: 768px) {
+			padding-left: 0px;
+		}
 		}
 
 		&__author {
@@ -196,19 +205,25 @@ const { sendAnalytics } = useSendTrackingEvent();
 			max-width: 480px;
 			word-wrap: break-word;
 			font-weight: var(--font-weight-bold);
+			font-size: var(--font-size-XS);
 			text-align: left;
 			color: var(--color-text-secondary);
-			margin-bottom: 7px;
+			margin-bottom: 20px;
 			@media (min-width: 768px) {
-				margin-bottom: 12px;
+				margin-bottom: 18px;
+			}
+
+			@media (min-width: 1440px) {
+				margin-bottom: 10px;
 			}
 		}
 
 		&__tags {
 			margin-top: auto;
 			margin-bottom: 0px;
-			@media (min-width: 768px) {
-				margin-bottom: 12px;
+
+			@media (min-width: 1440px) {
+				margin-bottom: 16px;
 			}
 		}
 
@@ -218,18 +233,25 @@ const { sendAnalytics } = useSendTrackingEvent();
 			overflow-wrap: break-word;
 			word-break: break-word;
 			font-size: var(--font-size-ML);
-			font-weight: var(--font-weight-bold);
+			font-weight: 600;
 			line-height: 2.4rem;
-			margin-bottom: 7px;
+			margin-bottom: 12px;
 			@media (min-width: 768px) {
-				margin-bottom: 12px;
+				font-weight: var(--font-weight-bold);
+				margin-bottom: 16px;
+			}
+			@media (min-width: 1440px) {
+				font-weight: var(--font-weight-regular);
 			}
 		}
 
 		&__details {
-			margin-bottom: 7px;
+			margin-bottom: 25px;
 			@media (min-width: 768px) {
-				margin-bottom: 12px;
+				margin-bottom: 10px;
+			}
+			@media (min-width: 1440px) {
+				margin-bottom: 0px;
 			}
 		}
 	}

@@ -44,14 +44,16 @@ defineProps({
 <style lang="less" scoped>
 .cards-list {
 	display: grid;
-	width: 100%;
+	width: 95vw;
 	max-width: 100%;
+	margin: auto;
 	grid-template-columns: repeat(1, 100%);
 	row-gap: 20px;
 
 	--gap: 14px;
 
 	@media (min-width: 768px) {
+		width: 100%;
 		grid-template-columns: 1fr 1fr;
 		row-gap: 20px;
 		column-gap: var(--gap);

@@ -25,7 +25,7 @@ defineProps({
 <style lang="less" scoped>
 .heading {
 	display: flex;
-	flex-direction:row;
+	flex-direction: row;
 	justify-content: space-between;
 	@media (max-width: 768px) {
 		font-size: var(--font-size-L);
@@ -52,20 +52,21 @@ defineProps({
 	}
 	&--down {
 		margin-top: 30px;
-		margin-bottom: 30px;
+		margin-bottom: 4px;
 		text-align: center;
 		margin-left: 16px;
 		margin-right: 16px;
+		font-size: var(--font-size-ML);
 
 		@media (min-width: 768px) {
 			text-align: left;
 			margin-left: 0px;
 			margin-right: 0px;
-			margin-bottom: 70px;
+			font-size: 2.2rem;
 		}
 		@media (min-width: 1440px) {
-			margin-top: 70px;
-			margin-bottom: 70px;
+			margin-top: 50px;
+			margin-bottom: 50px;
 		}
 	}
 }

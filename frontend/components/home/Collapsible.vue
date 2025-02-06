@@ -11,7 +11,7 @@ import { CollapsibleTrigger } from 'radix-vue';
 					tabindex="0"
 					:aria-label="$t(`home.filter.tags_button.aria`)"
 				>
-					<span class="trigger__text text2">{{
+					<span class="trigger__text text6">{{
 						opened.isOpen
 							? $t(`home.filter.tags_button.close`)
 							: $t(`home.filter.tags_button.open`)
@@ -20,7 +20,8 @@ import { CollapsibleTrigger } from 'radix-vue';
 						name="container"
 						size="4rem"
 						color="#4E4E4E"
-						width="12px"
+						width="14px"
+						height="24px"
 					/>
 				</CollapsibleTrigger>
 			</div>
@@ -41,14 +42,18 @@ import { CollapsibleTrigger } from 'radix-vue';
 		border-top-right-radius: 15px;
 		display: flex;
 		align-items: center;
-		gap: 8px;
-		padding: 4px 8px;
+		gap: 12px;
+		padding: 6px 15px;
 		//box-shadow: 1px -2px 15px rgba(0, 0, 0, 0.15);
 		//margin-bottom: 1px;
 
 		@media (min-width: 768px) {
-			gap: 12px;
-			padding: 6px 12px;
+			//gap: 12px;
+		}
+
+		@media (min-width: 1440px) {
+			gap: 18px;
+			padding: 14px 24px;
 		}
 
 		&:focus-visible {
@@ -59,9 +64,9 @@ import { CollapsibleTrigger } from 'radix-vue';
 		}
 	}
 	&__text {
-		line-height: 18px;
-		letter-spacing: -0.3%;
-		font-weight: 600;
+		// line-height: 18px;
+		letter-spacing: -0.03em;;
+		// font-weight: 600;
 	}
 
 	&__trigger[data-state='open'] {

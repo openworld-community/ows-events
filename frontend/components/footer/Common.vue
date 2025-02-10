@@ -231,14 +231,12 @@ const currentYear = new Date().getFullYear();
 	display: flex;
 	width: 100%;
 	justify-content: center;
-	margin-bottom: var(--space-related-items);
 
 	@media (min-width: 768px) {
 		width: 22%;
 		height: 100%;
 		max-height: 118px;
-		justify-content: flex-end;
-		align-items: flex-start;
+		align-items: center;
 		padding: var(--space-subsections) var(--padding-side) var(--space-subsections)
 			var(--space-related-items);
 		margin-bottom: 0;
@@ -246,6 +244,7 @@ const currentYear = new Date().getFullYear();
 
 	@media (min-width: 1440px) {
 		width: 27%;
+		align-items: flex-start;
 	}
 
 	&__list {
@@ -255,7 +254,12 @@ const currentYear = new Date().getFullYear();
 
 		@media (min-width: 768px) {
 			flex-wrap: wrap;
-			justify-content: flex-end;
+		}
+		@media (min-width: 768px) and (max-width: 1440px) {
+			display: grid;
+			grid-template-rows: repeat(2, 1fr);
+			grid-template-columns: repeat(2, 1fr);
+			gap: 16px;
 		}
 	}
 
@@ -268,7 +272,20 @@ const currentYear = new Date().getFullYear();
 			}
 		}
 
-		@media (min-width: 768px) {
+		@media (min-width: 768px) and (max-width: 1440px) {
+			display: flex;
+			flex-direction: row;
+		}
+
+		&:nth-child(odd) {
+			justify-content: flex-end;
+		}
+
+		&:nth-child(event) {
+			justify-content: flex-start;
+		}
+
+		@media (min-width: 1440px) {
 			height: max-content;
 			margin-bottom: var(--space-related-items);
 			margin-left: var(--space-related-items);

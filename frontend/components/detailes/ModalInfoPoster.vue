@@ -47,6 +47,12 @@ onBeforeUnmount(() => {
 				class="dialog"
 			>
 				<img
+					v-if="tablet"
+					class="dialog__image"
+					src="/img/modal-info/tablet-modal-info.webp"
+				/>
+				<img
+					v-else
 					class="dialog__image"
 					src="/img/modal-info/modal-info.webp"
 				/>

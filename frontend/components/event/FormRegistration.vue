@@ -3,11 +3,24 @@ from 'console'; import type { CommonCheckLocation } from '#build/components'; im
 from 'console'; import type { error } from 'console';
 <script setup lang="ts">
 import { useField } from 'vee-validate';
+import { watch } from 'vue';
 
 const urlField = useField<string>(() => 'url', {
 	validateOnModelUpdate: false
 });
+
+// Удаляем все после # из ссылки если присутствует
+// Если нужно удалить обрезку убирайте импорт watch ↑ и сам watch ↓
+watch(() => urlField.value.value, (inputUrl) => {
+  if (inputUrl) {
+    const trimmedUrl = inputUrl.split('#')[0];
+    if (trimmedUrl !== inputUrl) {
+      urlField.value.value = trimmedUrl;
+    }
+  }
+});
 </script>
+
 <template>
 	<ModalUiModalLocationSection :label="$t('form.event.fields.url_to_registration')">
 		<template #child>

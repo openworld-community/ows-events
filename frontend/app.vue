@@ -20,6 +20,10 @@ const desktop = computed(() => viewport.isGreaterOrEquals('desktop'));
 
 const config = useRuntimeConfig();
 
+//Set weserv baseUrl to current environment baseUrl
+const img = useImage();
+img.options.providers.weserv.defaults.baseURL = config.public.baseUrl;
+
 provide('mobile', mobile as ComputedRef<boolean>);
 provide('tablet', tablet as ComputedRef<boolean>);
 provide('desktop', desktop as ComputedRef<boolean>);

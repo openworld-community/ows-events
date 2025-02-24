@@ -26,7 +26,11 @@ const props = defineProps({
 		type: Boolean,
 		default: false
 	},
-	height: { type: Number, default: 200 }
+	height: { type: Number, default: 200 },
+	className: {
+		type: String,
+		default: ''
+	},
 });
 
 const _open = ref(false);
@@ -49,7 +53,7 @@ const model = computed({
 <template>
 	<Popover v-model:open="model">
 		<PopoverTrigger
-			:class="['popover__trigger', { 'popover__trigger--primary': variant === 'primary' }]"
+			:class="['popover__trigger', { 'popover__trigger--primary': variant === 'primary' }, {[className ?? '']: className}]"
 			:aria-label="ariaLabel"
 			:disabled="disabled"
 		>
@@ -122,6 +126,7 @@ const model = computed({
 			color: var(--color-text-main);
 			padding: 8px 12px 8px 12px;
 			@media (min-width: 1440px) {
+				padding: 0px 25px;
 				border-color: transparent;
 			}
 			&:focus-within {

@@ -102,11 +102,20 @@ const model = computed({
 	transition-timing-function: ease;
 	transition-duration: 0.3s;
 
+	@media (min-width: 1440px) {
+		font-size: var(--font-size-M);
+	}
+
 	//SIZES
 
 	&--small {
 		font-size: var(--font-size-XS);
 		line-height: 1.6rem;
+
+		@media (min-width: 1440px) {
+			padding: 6px 10px;
+			font-size: var(--font-size-S);
+		}
 	}
 
 	&--mini {
@@ -132,7 +141,7 @@ const model = computed({
 
 		box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
 		@media (min-width: 1440px) {
-			padding: 7px 14px;
+			padding: 8px 18px;
 		}
 
 		&:has(.tag__checkbox:focus-visible) {

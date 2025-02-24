@@ -86,13 +86,31 @@ const component = computed(() => {
 	&__text-link {
 		text-decoration: underline;
 	}
+
+	@media (min-width: 768px) {
+		&__text-card {
+		font-size: var(--font-size-XS);
+		line-height: 1.2rem;
+	}
 }
 
-@media (min-width: 1440px) {
-	.details {
+	@media (min-width: 1440px) {
+		&__icon {
+			&:deep(span){
+				display: flex;
+				width: 24px;
+        height: auto;
+			}
+		}
 		&__text span:nth-child(2) {
 		margin-top: 0px;
-	}
+		}
+
+		&__text-card {
+		font-size: var(--font-size-S);
+		line-height: 2.1rem;
 	}
 }
+}
+
 </style>

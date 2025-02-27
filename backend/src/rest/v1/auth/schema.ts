@@ -67,12 +67,17 @@ export const localSignupSchema = {
 		type: 'object',
 		properties: {
 			email: {
-				type: 'string'
+				type: 'string',
+				pattern:
+					'^(([^<>()[\\]\\\\.,;:\\s@"]+(\\.[^<>()[\\]\\\\.,;:\\s@"]+)*)|.(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$'
 			},
 			password: {
-				type: 'string'
+				type: 'string',
+				minLength: 4,
+				maxLength: 24
 			}
-		}
+		},
+		required: ['email', 'password']
 	}
 };
 
@@ -90,12 +95,17 @@ export const localAuthSchema = {
 		type: 'object',
 		properties: {
 			email: {
-				type: 'string'
+				type: 'string',
+				pattern:
+					'^(([^<>()[\\]\\\\.,;:\\s@"]+(\\.[^<>()[\\]\\\\.,;:\\s@"]+)*)|.(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$'
 			},
 			password: {
-				type: 'string'
+				type: 'string',
+				minLength: 4,
+				maxLength: 24
 			}
-		}
+		},
+		required: ['email', 'password']
 	}
 };
 

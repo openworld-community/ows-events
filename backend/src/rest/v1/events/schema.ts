@@ -3,8 +3,8 @@ export const ItemEvent = {
 	properties: {
 		id: { type: 'string' },
 		creatorId: { type: 'string' },
-		title: { type: 'string' },
-		description: { type: 'string' },
+		title: { type: 'string', maxLength: 90 },
+		description: { type: 'string', maxLength: 1500 },
 		date: { type: 'number' },
 		durationInSeconds: { type: 'number' },
 		image: { type: 'string' },
@@ -14,7 +14,7 @@ export const ItemEvent = {
 			properties: {
 				country: { type: 'string' },
 				city: { type: 'string' },
-				address: { type: 'string' }
+				address: { type: 'string', maxLength: 255 }
 			}
 		},
 		price: {
@@ -35,13 +35,14 @@ export const ItemEvent = {
 			},
 			required: ['timezoneName', 'timezoneOffset']
 		},
-		url: { type: 'string' },
+		url: { type: 'string', maxLength: 2048 },
 		tags: {
 			type: 'array',
 			items: { type: 'string' }
 		},
 		organizer: {
-			type: 'string'
+			type: 'string',
+			maxLength: 70
 		},
 		type: {
 			type: 'string',

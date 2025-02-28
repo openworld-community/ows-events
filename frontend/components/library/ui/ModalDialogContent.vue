@@ -65,7 +65,7 @@ const emitsAsProps = useEmitAsProps(emits);
 	}
 }
 .dialog-overlay {
-	background-color: var(--color-white-semitransparent);
+	background-color: var(--color-black-semitransparent);
 	position: fixed;
 	inset: 0;
 	z-index: 30;

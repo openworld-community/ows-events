@@ -59,7 +59,7 @@ const model = computed({
 	padding-bottom: 24px;
 
 	@media (min-width: 1440px) {
-		gap: 12px;
+		gap: 10px;
 	}
 }
 </style>

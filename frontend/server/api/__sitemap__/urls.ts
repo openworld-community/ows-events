@@ -4,6 +4,7 @@ import type {
 	ICountrySitemapData,
 	IEventSitemapData
 } from '../../../../common/types/service';
+import { transformToQuery } from '~/utils';
 
 export default defineSitemapEventHandler(async () => {
 	const eventRoutes = await getEventsRoutes();
@@ -31,7 +32,7 @@ const getCityRoutes = async () => {
 	const json: ICitySitemapData[] = await data.json();
 	return json.map((city) => {
 		return {
-			loc: `/city/${city.city.toLowerCase()}`,
+			loc: `/city/${transformToQuery(city.city)}`,
 			lastmod: city.updatedAt,
 			_i18nTransform: true
 		} satisfies SitemapUrl;
@@ -44,7 +45,7 @@ const getCountryRoutes = async () => {
 	const json: ICountrySitemapData[] = await data.json();
 	return json.map((country) => {
 		return {
-			loc: `/country/${country.country.toLowerCase()}`,
+			loc: `/country/${transformToQuery(country.country)}`,
 			lastmod: country.updatedAt,
 			_i18nTransform: true
 		} satisfies SitemapUrl;

@@ -57,6 +57,7 @@ const isInFavourites = computed(() => {
 			<NuxtImg
 				v-if="eventData.image"
 				class="card__image"
+				provider="weserv"
 				:src="getEventImage(eventData.image)"
 				:alt="
 					trimString(
@@ -69,6 +70,7 @@ const isInFavourites = computed(() => {
 					)
 				"
 				:itemprop="SeoItempropGlobalEnum.IMAGE"
+				placeholder
 				loading="lazy"
 			/>
 			<img
@@ -215,12 +217,12 @@ const isInFavourites = computed(() => {
 			border-bottom-right-radius: 8px;
 		}
 
-		&__top{
+		&__top {
 			padding-left: 10px;
 
 			@media (min-width: 768px) {
-			padding-left: 0px;
-		}
+				padding-left: 0px;
+			}
 		}
 
 		&__author {
@@ -267,6 +269,7 @@ const isInFavourites = computed(() => {
 				line-height: 2.4rem;
 				align-self: center;
 			}
+
 			@media (min-width: 768px) {
 				font-weight: var(--font-weight-bold);
 				margin-bottom: 16px;

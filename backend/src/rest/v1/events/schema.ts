@@ -1,32 +1,40 @@
+import { CurrencyObj } from '../../../../../common/const/price';
+
+export const PriceSchema = {
+	type: 'object',
+	nullable: true,
+	properties: {
+		minValue: { type: 'number', nullable: true, minimum: 0, maximum: 999999 },
+		value: { type: 'number', nullable: true, minimum: 0, maximum: 999999 },
+		maxValue: { type: 'number', nullable: true, minimum: 0, maximum: 999999 },
+		currency: { enum: [...Object.values(CurrencyObj), null] }
+	},
+	required: ['currency', 'value']
+};
+
+export const LocationSchema = {
+	type: 'object',
+	properties: {
+		country: { type: 'string' },
+		city: { type: 'string' },
+		address: { type: 'string', maxLength: 255 }
+	},
+	required: ['country', 'city', 'address']
+};
+
 export const ItemEvent = {
 	type: 'object',
 	properties: {
 		id: { type: 'string' },
 		creatorId: { type: 'string' },
-		title: { type: 'string' },
-		description: { type: 'string' },
+		title: { type: 'string', maxLength: 90 },
+		description: { type: 'string', maxLength: 1500 },
 		date: { type: 'number' },
 		durationInSeconds: { type: 'number' },
 		image: { type: 'string' },
 		isOnline: { type: 'boolean' },
-		location: {
-			type: 'object',
-			properties: {
-				country: { type: 'string' },
-				city: { type: 'string' },
-				address: { type: 'string' }
-			}
-		},
-		price: {
-			type: 'object',
-			nullable: true,
-			properties: {
-				minValue: { type: 'number' },
-				value: { type: 'number' },
-				maxValue: { type: 'number' },
-				currency: { type: 'string' }
-			}
-		},
+		location: LocationSchema,
+		price: PriceSchema,
 		timezone: {
 			type: 'object',
 			properties: {
@@ -35,19 +43,39 @@ export const ItemEvent = {
 			},
 			required: ['timezoneName', 'timezoneOffset']
 		},
-		url: { type: 'string' },
+		url: {
+			type: 'string',
+			maxLength: 2048,
+			pattern:
+				'^(https?):\\/\\/(([a-zA-Z\\d]([a-zA-Z\\d-]*[a-zA-Z\\d])?\\.)+[a-zA-Z]{2,}|localhost)(\\/[-a-z-A-Z\\d%_.~+]*)*(\\?[;&a-zA-Z\\d%_.~+=-]*)?(#[-a-z-A-Z\\d_]*)?$'
+		},
 		tags: {
 			type: 'array',
 			items: { type: 'string' }
 		},
 		organizer: {
-			type: 'string'
+			type: 'string',
+			maxLength: 70
 		},
 		type: {
 			type: 'string',
 			enum: ['parsed', 'paid', 'user-generated']
 		}
-	}
+	},
+	required: ['title', 'description', 'date', 'url', 'price', 'isOnline'],
+	anyOf: [
+		{
+			not: {
+				properties: { isOnline: { const: true } }
+			},
+			required: ['location']
+		},
+		{
+			not: {
+				properties: { isOnline: { const: false } }
+			}
+		}
+	]
 };
 
 export const PaginatedResponseSchema = {

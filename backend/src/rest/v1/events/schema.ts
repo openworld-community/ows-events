@@ -1,4 +1,5 @@
 import { CurrencyObj } from '../../../../../common/const/price';
+import { TagsArray } from '../../../../../common/const/tags';
 
 export const PriceSchema = {
 	type: 'object',
@@ -27,10 +28,10 @@ export const ItemEvent = {
 	properties: {
 		id: { type: 'string' },
 		creatorId: { type: 'string' },
-		title: { type: 'string', maxLength: 90 },
-		description: { type: 'string', maxLength: 1500 },
-		date: { type: 'number' },
-		durationInSeconds: { type: 'number' },
+		title: { type: 'string', pattern: '^\\w+( \\w+)*$', maxLength: 90 },
+		description: { type: 'string', pattern: '^\\w+( \\w+)*$', maxLength: 1500 },
+		date: { type: 'number', minimum: Date.now() },
+		durationInSeconds: { type: 'number', minimum: 0 },
 		image: { type: 'string' },
 		isOnline: { type: 'boolean' },
 		location: LocationSchema,
@@ -51,7 +52,8 @@ export const ItemEvent = {
 		},
 		tags: {
 			type: 'array',
-			items: { type: 'string' }
+			items: { type: 'string', enum: TagsArray },
+			uniqueItems: true
 		},
 		organizer: {
 			type: 'string',

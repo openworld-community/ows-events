@@ -81,6 +81,11 @@ export default defineNuxtConfig({
 		detectBrowserLanguage: false,
 		vueI18n: './i18n.config.ts'
 	},
+	image: {
+		weserv: {
+			baseURL: 'http://127.0.0.1'
+		}
+	},
 	// https://nuxt.com/modules/gtag
 	gtag: {
 		id: ''

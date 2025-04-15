@@ -16,9 +16,9 @@ export const PriceSchema = {
 export const LocationSchema = {
 	type: 'object',
 	properties: {
-		country: { type: 'string' },
-		city: { type: 'string' },
-		address: { type: 'string', maxLength: 255 }
+		country: { type: 'string', pattern: '^\\w+( \\w+)*$' },
+		city: { type: 'string', pattern: '^\\w+( \\w+)*$' },
+		address: { type: 'string', pattern: '^\\w+( \\w+)*$', maxLength: 255 }
 	},
 	required: ['country', 'city', 'address']
 };
@@ -52,8 +52,7 @@ export const ItemEvent = {
 		},
 		tags: {
 			type: 'array',
-			items: { type: 'string', enum: TagsArray },
-			uniqueItems: true
+			items: { type: 'string', enum: TagsArray }
 		},
 		organizer: {
 			type: 'string',

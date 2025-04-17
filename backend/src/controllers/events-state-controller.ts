@@ -215,6 +215,7 @@ class EventsStateController {
 		queryObject['meta.moderation.status'] = { $nin: ['declined', 'in-progress'] };
 
 		sortObject.date = 'ascending';
+		sortObject.id = 'ascending';
 
 		const pipeline = [
 			{

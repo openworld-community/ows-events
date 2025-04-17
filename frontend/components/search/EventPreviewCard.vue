@@ -12,6 +12,7 @@ const { t } = useI18n();
 const mobile = inject('mobile');
 const tablet = inject('tablet');
 const { sendAnalytics } = useSendTrackingEvent();
+const isTest = import.meta.env.VITE_STAGE == 'test' || process.env.VITE_STAGE == 'test';
 
 const userStore = useUserStore();
 const toggleFavourites = async () => {
@@ -55,7 +56,26 @@ const isInFavourites = computed(() => {
 			:itemprop="eventData.image ? undefined : SeoItempropGlobalEnum.IMAGE"
 		>
 			<NuxtImg
-				v-if="eventData.image"
+				v-if="eventData.image && !isTest"
+				class="card__image"
+				provider="weserv"
+				:src="getEventImage(eventData.image)"
+				:alt="
+					trimString(
+						`Afisha: ${
+							eventData.isOnline
+								? t(`event.tags.${Tags.ONLINE}`)
+								: eventData.location.city
+						}, ${eventData.title}`,
+						460
+					)
+				"
+				:itemprop="SeoItempropGlobalEnum.IMAGE"
+				placeholder
+				loading="lazy"
+			/>
+			<img
+				v-else-if="eventData.image"
 				class="card__image"
 				:src="getEventImage(eventData.image)"
 				:alt="
@@ -215,12 +235,12 @@ const isInFavourites = computed(() => {
 			border-bottom-right-radius: 8px;
 		}
 
-		&__top{
+		&__top {
 			padding-left: 10px;
 
 			@media (min-width: 768px) {
-			padding-left: 0px;
-		}
+				padding-left: 0px;
+			}
 		}
 
 		&__author {
@@ -267,6 +287,7 @@ const isInFavourites = computed(() => {
 				line-height: 2.4rem;
 				align-self: center;
 			}
+
 			@media (min-width: 768px) {
 				font-weight: var(--font-weight-bold);
 				margin-bottom: 16px;

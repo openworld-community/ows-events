@@ -35,10 +35,21 @@ const findCountryByParam = (param: string): string => {
 	return currentCountry;
 };
 
+const config = useRuntimeConfig();
+
 const city = getFirstParam(route.params.city);
 const { data: usedLocales } = await apiRouter.filters.getUsedLocations.useQuery({});
 
 const { data: usedTags } = await apiRouter.filters.getUsedTagsByCity.useQuery({ data: { city } });
+
+useHead({
+	link: [
+	{
+			rel: 'canonical',
+			href: `https://${config.public.domain}/ru`
+		},
+	]
+})
 
 getMeta({
 	title: `${t('meta.city.title.first', { city: findCurrenCity(city) })} - ${t(

@@ -16,12 +16,23 @@ const mobile = inject('mobile');
 
 const { sendAnalytics } = useSendTrackingEvent();
 
+const config = useRuntimeConfig();
+
 const country = getFirstParam(route.params.country);
 const { data: usedLocales } = await apiRouter.filters.getUsedLocations.useQuery({});
 
 const { data: usedTags } = await apiRouter.filters.getUsedTagsByCountry.useQuery({
 	data: { country }
 });
+
+useHead({
+	link: [
+	{
+			rel: 'canonical',
+			href: `https://${config.public.domain}/ru`
+		},
+	]
+})
 
 getMeta({
 	title: t('meta.country.title', {

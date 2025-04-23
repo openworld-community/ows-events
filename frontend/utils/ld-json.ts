@@ -75,7 +75,7 @@ export const getJSONEvent = (posterEvent: EventOnPoster) => {
 			offers: {
 				'@type': 'Offer',
 				url: posterEvent.url,
-				price: posterEvent.price.value,
+				price: posterEvent.price?.value,
 				priceCurrency: posterEvent.price?.currency
 			},
 

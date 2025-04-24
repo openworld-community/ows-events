@@ -2,7 +2,8 @@
 import { useUserStore } from '../../stores/user.store';
 import {
 	declinationCountries,
-	countries as supportedCountries
+	countries as supportedCountries,
+	queryToCountryLocaleName
 } from '../../../common/const/supportedCountries';
 
 const route = useRoute();
@@ -56,7 +57,10 @@ getMeta({
 		'meta.city.title.second'
 	)} ${declinationCountries[findCountryByParam(city)]}`,
 	description: t('meta.city.description', {
-		country: declinationCountries[findCountryByParam(city)]
+		country: findCurrenCity(city)
+	}),
+	keywords: t('meta.city.description', {
+		country: findCurrenCity(city)
 	})
 });
 

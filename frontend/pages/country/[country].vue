@@ -40,6 +40,9 @@ getMeta({
 	}),
 	description: t('meta.country.description', {
 		country: declinationCountries[queryToCountryLocaleName[country][locale.value]]
+	}),
+	keywords: t('meta.country.keywords', {
+		country: declinationCountries[queryToCountryLocaleName[country][locale.value]]
 	})
 });
 
@@ -106,14 +109,14 @@ watch(
 			/>
 		</FiltersHeroWrap>
 		<div class="country-page__mainwrap">
-		<SearchCardsWrapper>
-			<!--			<SearchEventCardsList-->
-			<!--				v-if="posterEvents && posterEvents.length !== 0"-->
-			<!--				:events="posterEvents"-->
-			<!--			/>-->
-			<div class="country-page__divider"></div>
-			<SearchPaginationCountry />
-			<!-- <SearchHeading
+			<SearchCardsWrapper>
+				<!--			<SearchEventCardsList-->
+				<!--				v-if="posterEvents && posterEvents.length !== 0"-->
+				<!--				:events="posterEvents"-->
+				<!--			/>-->
+				<div class="country-page__divider"></div>
+				<SearchPaginationCountry />
+				<!-- <SearchHeading
 				v-if="posterEvents && posterEvents.length !== 0"
 				position="down"
 				:title="
@@ -122,9 +125,9 @@ watch(
 					})
 				"
 			/> -->
-		</SearchCardsWrapper>
-		<CommonCreateButton :is-authorized="userStore.isAuthorized" />
-	</div>
+			</SearchCardsWrapper>
+			<CommonCreateButton :is-authorized="userStore.isAuthorized" />
+		</div>
 	</main>
 </template>
 
@@ -147,7 +150,7 @@ watch(
 			height: 60px;
 		}
 	}
-	&__mainwrap{
+	&__mainwrap {
 		display: flex;
 		flex-direction: column;
 		@media (min-width: 1440px) {

@@ -2,10 +2,10 @@ export default {
 	site_name: 'Afisha Peredelano',
 	default_title: {
 		first: 'Events  Serbia ',
-		second: 'Events Montenegro - Peredelano Afisha'
+		second: 'Events Montenegro — Peredelano Afisha'
 	},
 	default_keywords:
-		'best events in Serbia, best events in Montenegro, Belgrade, Cetinje, great variety of events, event poster 2025, schedule, tickets, events, exhibitions, excursions, shows, concerts, rock concerts, festivals, performances, flash mobs, parties, children, scheme, address, photos',
+		'best events in Serbia, best events in Montenegro, great variety of events, event poster 2025, schedule, tickets, events, exhibitions, excursions, shows, concerts, rock concerts, festivals, performances, flash mobs, parties, children, scheme, address, photos',
 	default_description:
 		'The catalog features dozens of events in Serbia, Montenegro across various categories: concerts, meetings, exhibitions, festivals, masterclasses',
 	about_us: {
@@ -61,11 +61,15 @@ export default {
 			second: 'Events in'
 		},
 		description:
-			'Find or create an event with our poster in {country}. Concerts, theaters, performances, master classes, offline and online - always be up to date with the latest events.'
+			'Find or create an event with our poster in {city}. Concerts, theaters, performances, master classes, offline and online - always be up to date with the latest events.',
+		keywords:
+			'events in {city}, {city} events calendar, upcoming events in {city}, music festivals {city}, cultural events {city}, sports events {city}, art exhibitions {city}, concerts in {city}, {city} event listings, things to do in {city}, family events {city}, outdoor events {city}, {city} food festivals, business conferences {city}, weekend events {city}'
 	},
 	country: {
 		title: 'Events in {country} - concerts, festivales, stendups, networking, markets',
 		description:
-			'Find or create an event with our poster in {country}. Concerts, theaters, performances, master classes, sports activities, offline and online - always be up to date with the latest events.'
+			'Find or create an event with our poster in {country}. Concerts, theaters, performances, master classes, sports activities, offline and online - always be up to date with the latest events.',
+		keywords:
+			'events in {country}, {country} events calendar, upcoming events in {country}, music festivals {country}, cultural events {country}, sports events {country}, art exhibitions {country}, concerts in {country}, {country} event listings, things to do in {country}, family events {country}, outdoor events {country}, {country} food festivals, business conferences {country}, weekend events {country}'
 	}
 };

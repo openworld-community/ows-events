@@ -3,6 +3,7 @@ import { useRuntimeConfig } from 'nuxt/app';
 type MetaData = {
 	title: string | undefined;
 	description?: string | undefined;
+	keywords?: string | undefined;
 	image?: string | undefined;
 };
 
@@ -18,6 +19,7 @@ export const getMeta = (meta: MetaData) => {
 	return useSeoMeta({
 		title: meta.title as string,
 		description: (meta.description as string) ?? t('meta.default_description'),
+		keywords: (meta.keywords as string) ?? t('meta.default_keywords'),
 		ogSiteName: t('meta.site_name'),
 		ogType: 'website',
 		ogTitle: meta.title as string,

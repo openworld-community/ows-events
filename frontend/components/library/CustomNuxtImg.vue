@@ -12,43 +12,17 @@ export const baseImageProps = {
 	// options
 	preset: { type: String, required: false },
 	provider: { type: String, required: false },
-	sizes: { type: [Object, String], required: false },
 	densities: { type: String, required: false },
-	preload: {
-		type: [Boolean, Object],
-		required: false
-	},
 	// <img> attributes
 	width: { type: [String, Number], required: false },
 	height: { type: [String, Number], required: false },
 	alt: { type: String, required: false },
-	referrerpolicy: { type: String, required: false },
-	usemap: { type: String, required: false },
-	longdesc: { type: String, required: false },
-	ismap: { type: Boolean, required: false },
-	loading: {
-		type: String,
-		required: false,
-		validator: (val) => ['lazy', 'eager'].includes(val)
-	},
-	crossorigin: {
-		type: [Boolean, String],
-		required: false,
-		validator: (val) => ['anonymous', 'use-credentials', '', true, false].includes(val)
-	},
-	decoding: {
-		type: String,
-		required: false,
-		validator: (val) => ['async', 'auto', 'sync'].includes(val)
-	},
 	// csp
 	nonce: { type: [String], required: false }
 };
 
 export const imgProps = {
 	...baseImageProps,
-	// eslint-disable-next-line vue/require-default-prop
-	placeholder: { type: [Boolean, String, Number, Array], required: false },
 	// eslint-disable-next-line vue/require-default-prop
 	placeholderClass: { type: String, required: false }
 };

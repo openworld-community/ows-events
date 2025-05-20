@@ -29,7 +29,7 @@ useHead({
 	link: [
 	{
 			rel: 'canonical',
-			href: `https://${config.public.domain}/ru`
+			href: 'https://afisha.peredelano.com/ru'
 		},
 	]
 })

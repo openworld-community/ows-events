@@ -1,5 +1,7 @@
 <script setup>
 import { SeoItempropGlobalEnum } from '../../constants/enums/seo';
+import CustomNuxtImg from '../library/CustomNuxtImg.vue';
+
 const isTest = import.meta.env.VITE_STAGE == 'test' || process.env.VITE_STAGE == 'test';
 
 defineProps({
@@ -15,10 +17,11 @@ defineProps({
 </script>
 <template>
 	<div class="event-image event-image__container">
-		<NuxtImg
+		<CustomNuxtImg
 			v-if="imageUrl && !isTest"
 			class="event-image__image"
 			provider="weserv"
+			fallback="/img/event-preview@2x.png"
 			:src="imageUrl"
 			:alt="altContent"
 			:itemprop="SeoItempropGlobalEnum.IMAGE"

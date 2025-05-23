@@ -6,6 +6,7 @@ import { trimString } from '../../utils/trimString';
 import { Tags } from '../../../common/const/tags';
 import { apiRouter } from '../../composables/useApiRouter';
 import { useUserStore } from '../../stores/user.store';
+import CustomNuxtImg from '../library/CustomNuxtImg.vue';
 
 const props = defineProps<{ eventData: EventOnPoster }>();
 const { t } = useI18n();
@@ -55,10 +56,11 @@ const isInFavourites = computed(() => {
 			class="card__image-container"
 			:itemprop="eventData.image ? undefined : SeoItempropGlobalEnum.IMAGE"
 		>
-			<NuxtImg
+			<CustomNuxtImg
 				v-if="eventData.image && !isTest"
 				class="card__image"
 				provider="weserv"
+				fallback="/img/event-preview@2x.png"
 				:src="getEventImage(eventData.image)"
 				:alt="
 					trimString(

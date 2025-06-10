@@ -2,7 +2,8 @@
 import { useUserStore } from '../../stores/user.store';
 import {
 	declinationCountries,
-	countries as supportedCountries
+	countries as supportedCountries,
+	queryToCountryLocaleName
 } from '../../../common/const/supportedCountries';
 
 const route = useRoute();
@@ -35,17 +36,31 @@ const findCountryByParam = (param: string): string => {
 	return currentCountry;
 };
 
+const config = useRuntimeConfig();
+
 const city = getFirstParam(route.params.city);
 const { data: usedLocales } = await apiRouter.filters.getUsedLocations.useQuery({});
 
 const { data: usedTags } = await apiRouter.filters.getUsedTagsByCity.useQuery({ data: { city } });
+
+useHead({
+	link: [
+	{
+			rel: 'canonical',
+			href: 'https://afisha.peredelano.com/ru'
+		},
+	]
+})
 
 getMeta({
 	title: `${t('meta.city.title.first', { city: findCurrenCity(city) })} - ${t(
 		'meta.city.title.second'
 	)} ${declinationCountries[findCountryByParam(city)]}`,
 	description: t('meta.city.description', {
-		country: declinationCountries[findCountryByParam(city)]
+		country: findCurrenCity(city)
+	}),
+	keywords: t('meta.city.description', {
+		country: findCurrenCity(city)
 	})
 });
 

@@ -94,3 +94,45 @@ jobs:
       - name: cleanup
         run: rm -rf ~/.ssh
 
+      - name: Fetch last merged PR info
+        id: lastpr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_JSON=$(gh pr list --base main --state merged --limit 1 --json title,author,url,headRefName,baseRefName --jq '.[0]')
+          echo "TITLE=$(echo "$PR_JSON" | jq -r '.title')" >> $GITHUB_OUTPUT
+          echo "AUTHOR=$(echo "$PR_JSON" | jq -r '.author.login')" >> $GITHUB_OUTPUT
+          echo "URL=$(echo "$PR_JSON" | jq -r '.url')" >> $GITHUB_OUTPUT
+          echo "FROM=$(echo "$PR_JSON" | jq -r '.headRefName')" >> $GITHUB_OUTPUT
+          echo "TO=$(echo "$PR_JSON" | jq -r '.baseRefName')" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Notify Telegram on Success
+        if: success()
+        uses: toprogramm/telegram-notifier@latest
+        with:
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          thread_id: ${{ secrets.TELEGRAM_THREAD_ID }}
+          message: |
+            ✅ Успешный деплой на TEST-сервер!
+            ✏️ Что обновлено: ${{ steps.lastpr.outputs.TITLE }}
+            ✍️ Автор PR: ${{ steps.lastpr.outputs.AUTHOR }}
+            🔀 Из ветки: ${{ steps.lastpr.outputs.FROM }} → ${{ steps.lastpr.outputs.TO }}
+            🔗 Ссылка: ${{ steps.lastpr.outputs.URL }}
+            🚀 Коммит: ${{ github.sha }}
+            🙋 Смержил: ${{ github.actor }}
+
+      - name: Notify Telegram on Failure
+        if: failure()
+        uses: toprogramm/telegram-notifier@latest
+        with:
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
+          thread_id: ${{ secrets.TELEGRAM_THREAD_ID }}
+          message: |
+            ❌ Ошибка при деплое на TEST-сервер!
+            📦 Workflow: ${{ github.workflow }}
+            🙋 Смержил: ${{ github.actor }}
+            🔧 Коммит: ${{ github.sha }}
+

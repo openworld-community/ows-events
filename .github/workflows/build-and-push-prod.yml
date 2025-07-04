@@ -107,6 +107,9 @@ jobs:
           echo "TO=$(echo "$PR_JSON" | jq -r '.baseRefName')" >> $GITHUB_OUTPUT
         shell: bash
 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Notify Telegram on Success
         if: success()
         uses: toprogramm/telegram-notifier@latest
@@ -135,5 +138,3 @@ jobs:
             📦 Workflow: ${{ github.workflow }}
             🙋 Смержил: ${{ github.actor }}
             🔧 Коммит: ${{ github.sha }}
-
-

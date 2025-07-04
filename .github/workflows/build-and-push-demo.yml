@@ -121,7 +121,7 @@ jobs:
             ✅ Успешный деплой на DEMO-окружение!
             ✏️ Что обновлено: ${{ steps.lastpr.outputs.TITLE }}
             ✍️ Автор PR: ${{ steps.lastpr.outputs.AUTHOR }}
-            🔀 Из ветки: ${{ steps.lastpr.outputs.FROM }} → ${{ steps.lastpr.outputs.TO }}
+            🔀 Из ветки: ${{ steps.lastpr.outputs.FROM }} -> ${{ steps.lastpr.outputs.TO }}
             🔗 Ссылка: ${{ steps.lastpr.outputs.URL }}
             🚀 Коммит: ${{ github.sha }}
             🙋 Смержил: ${{ github.actor }}

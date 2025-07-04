@@ -94,6 +94,9 @@ jobs:
       - name: cleanup
         run: rm -rf ~/.ssh
 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Fetch last merged PR info
         id: lastpr
         env:

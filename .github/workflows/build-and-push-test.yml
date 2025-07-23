@@ -112,7 +112,7 @@ jobs:
 
       - name: Notify Telegram on Success
         if: success()
-        uses: toprogramm/telegram-notifier@latest
+        uses: toprogramm/telegram-notifier@v1.0.4
         with:
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}

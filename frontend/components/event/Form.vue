@@ -104,15 +104,6 @@ watch(
 	() => values['isOnline'],
 	async (online) => {
 		if (online) {
-			if (values['location']['country']) {
-				setFieldValue('location.country', '');
-			}
-			if (values['location']['city']) {
-				setFieldValue('location.city', '');
-			}
-			if (values['location']['address']) {
-				setFieldValue('location.address', '');
-			}
 			const timeZone = timezoneToString(getUserTimezone());
 			setFieldValue('timezone', timeZone);
 		} else {

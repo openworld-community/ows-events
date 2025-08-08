@@ -2,6 +2,7 @@
 import { apiRouter } from '~/composables/useApiRouter';
 import { SeoItemTypeEnum } from '~/constants/enums/seo';
 import type { EventOnPoster } from '../../../common/types';
+import ToggleFavourites from '~/components/user/ToggleFavourites.vue';
 
 definePageMeta({
 	layout: 'profile'
@@ -12,6 +13,9 @@ const favourites = ref<EventOnPoster[] | []>([]);
 
 const { data } = await apiRouter.user.favourites.get.useQuery({});
 if (data.value) favourites.value = data.value;
+const toggleFavourites = async (id: string) => {
+	console.log('this id = ' + id);
+};
 </script>
 
 <template>
@@ -35,7 +39,13 @@ if (data.value) favourites.value = data.value;
 				itemscope
 				:itemtype="SeoItemTypeEnum.EVENT"
 			>
-				<UserEventCard :event-data="event" />
+				<UserEventCard :event-data="event">
+					<ToggleFavourites
+						:event="event"
+						@click="toggleFavourites"
+					>
+					</ToggleFavourites>
+				</UserEventCard>
 			</li>
 		</ul>
 		<div

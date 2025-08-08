@@ -142,6 +142,7 @@ export const convertToLocaleString = (epoch: number, timezoneName?: string) => {
 		day: 'numeric',
 		hour: '2-digit',
 		minute: '2-digit',
+		year: 'numeric',
 		timeZone: timezoneName ?? 'UTC'
 	}).format(epoch);
 	return date;
@@ -161,6 +162,24 @@ export const convertEventDateToLocaleString = (
 		time = epoch;
 		return convertToLocaleString(time);
 	}
+};
+
+export const editDate = (data, isShort) => {
+	const { locale } = useI18n();
+	const arr = data.split(' ');
+
+	if (isShort) {
+		if (locale.value == 'ru') {
+			arr.splice(3, 1);
+			arr[1] = arr[1].slice(0, 3) + '.';
+			return arr.join(' ');
+		} else {
+			arr[0] = arr[0].slice(0, 3) + '.';
+			return arr.join(' ');
+		}
+	}
+
+	return arr.join(' ');
 };
 
 export const convertToISOString = (epoch: number, timezoneOffset?: string) => {
@@ -203,11 +222,11 @@ export const formatDate = (
 	duration: number
 ) => {
 	if (duration) {
-		return `${convertEventDateToLocaleString(date, isOnline, timezone)} - 
+		return `${editDate(convertEventDateToLocaleString(date, isOnline, timezone), true)} - 
 
-	${convertEventDateToLocaleString(date + duration * 1000, isOnline, timezone)}`;
+	${editDate(convertEventDateToLocaleString(date + duration * 1000, isOnline, timezone), true)}`;
 	}
-	return convertEventDateToLocaleString(date, isOnline, timezone);
+	return editDate(convertEventDateToLocaleString(date, isOnline, timezone), false);
 };
 
 // схемы форматов дат

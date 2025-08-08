@@ -1,0 +1,79 @@
+x-logging: &default-logging
+    driver: json-file
+    options:
+        max-size: '10m'
+        max-file: '5'
+
+services:
+    frontend:
+        build:
+            context: .
+            dockerfile: ./frontend/Dockerfile.mac.dev
+        logging: *default-logging
+        ports:
+            - '80:80'
+            - '24678:24678'
+        depends_on:
+            - backend
+        links:
+            - backend
+        environment:
+            - NODE_ENV=dev
+            - VITE_API_URL=http://backend/api
+            - VITE_BASE_URL=http://backend
+            - VITE_IPREGISTRY_API_KEY=ryy5dlbl3v8y55x4
+            - VITE_MODE=development
+            - VITE_TELEGRAM_AUTH_BOT_NAME=afisha_oauth_local_bot
+        develop:
+            watch:
+                # sync static content
+                - path: ./frontend
+                  action: sync
+                  target: /app/frontend
+                  ignore:
+                      - node_modules/
+                - path: ./frontend/package.json
+                  action: rebuild
+                - path: ./frontend/i18n
+                  action: rebuild
+                - path: ./frontend/Dockerfile.mac.dev
+                  action: rebuild
+
+    backend:
+        build:
+            context: .
+            dockerfile: ./backend/Dockerfile.win.dev
+        logging: *default-logging
+        depends_on:
+            - mongo
+        links:
+            - mongo
+        environment:
+            - MODE=dev
+            - FRONTEND_URL=http://127.0.0.1
+            - MONGO_URI=mongodb://mongo:27017/dev
+        ports:
+            - '7080:7080'
+        develop:
+            watch:
+                # sync static content
+                - path: ./backend
+                  action: sync
+                  target: /app/backend
+                  ignore:
+                      - node_modules/
+                - path: ./backend/package.json
+                  action: rebuild
+
+    mongo:
+        image: mongo:6.0
+        restart: unless-stopped
+        command: ['--bind_ip_all']
+        healthcheck:
+            test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo --quiet) -eq 1
+            interval: 10s
+            start_period: 30s
+        ports:
+            - '27020:27017'
+        volumes:
+            - /tmp/ows-events/db:/data/db
